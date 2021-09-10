@@ -59,7 +59,11 @@ export default createStore({
         if (message.topic in state) {
           state[message.topic] = message.payload;
         } else {
-          console.warn("topic not found in state: ", message.topic, " giving up");
+          console.warn(
+            "topic not found in state: ",
+            message.topic,
+            " giving up"
+          );
         }
       }
     },
