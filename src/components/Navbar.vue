@@ -8,10 +8,15 @@
       type="button"
       data-toggle="collapse"
       data-target="#collapsibleNavbar"
+      ref="navbarButton"
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+    <div
+      class="collapse navbar-collapse"
+      id="collapsibleNavbar"
+      ref="collapsibleNavbar"
+    >
       <ul class="navbar-nav">
         <li class="nav-item">
           <router-link to="/" class="nav-link" active-class="active disabled">
@@ -51,5 +56,15 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: "nav-bar",
+  watch: {
+    $route() {
+      // imitate bootstraps close behaviour
+      this.$refs["collapsibleNavbar"].classList.remove("show");
+      this.$refs["navbarButton"].classList.add("collapsed");
+      this.$refs["navbarButton"].setAttribute("aria-expanded", false);
+    },
+  },
+};
 </script>
