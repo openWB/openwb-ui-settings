@@ -11,6 +11,11 @@ GUI for openWB settings v2.0+
 ```
 npm install
 ```
+It may be necessary to increase the number of allowed file watchers.
+Add this line to your `/etc/sysctl.d/local.conf`:
+```
+fs.inotify.max_user_watches=524288
+```
 
 ### Compiles and hot-reloads for development
 ```
