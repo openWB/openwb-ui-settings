@@ -3,6 +3,7 @@ import { createStore } from "vuex";
 export default createStore({
   // strict: process.env.NODE_ENV !== "production",
   state: {
+    mqtt: {},
     text1: "Text...",
     text2: "mail@domain.com",
     text3: "openwb.local",
@@ -42,48 +43,19 @@ export default createStore({
         ],
       },
     ],
-    hierarchy2: [
-      {
-        id: "t1",
-        value: "task 1",
-        children: [
-          {
-            id: "t2",
-            value: "task 2",
-            children: [],
-          },
-        ],
-      },
-      {
-        id: "t3",
-        value: "task 3",
-        children: [
-          {
-            id: "t4",
-            value: "task 4",
-            children: [],
-          },
-        ],
-      },
-      {
-        id: "t5",
-        value: "task 5",
-        children: [],
-      },
-    ],
   },
   mutations: {
     addTopic(state, message) {
-      state[message.topic] = message.payload;
+      state.mqtt[message.topic] = message.payload;
     },
     removeTopic(state, topic) {
-      delete state[topic];
+      delete state.mqtt[topic];
     },
     updateTopic(state, message) {
-      if (message.topic in state) {
-        state[message.topic] = message.payload;
+      if (message.topic in state.mqtt) {
+        state.mqtt[message.topic] = message.payload;
       } else {
-        console.warn("topic not found in state: ", message.topic);
+        console.warn("topic not found in state.mqtt: ", message.topic);
       }
     },
   },
