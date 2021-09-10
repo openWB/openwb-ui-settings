@@ -47,17 +47,17 @@ export default {
   },
   methods: {
     saveValues() {
-      console.log("saving values...");
+      console.debug("saving values...");
     },
     resetValues() {
-      console.log("resetting values...");
+      console.debug("resetting values...");
       // simply unsubscribe and subscribe to broker
     },
     setDefaultValues() {
-      console.log("setting default values...");
+      console.debug("setting default values...");
     },
     createConnection() {
-      console.log("connecting to broker...");
+      console.debug("connecting to broker...");
       // Connect string, and specify the connection method used through protocol
       // ws unencrypted WebSocket connection
       // wss encrypted WebSocket connection
@@ -70,14 +70,14 @@ export default {
       try {
         this.client = mqtt.connect(connectUrl, options);
       } catch (error) {
-        console.log("mqtt.connect error", error);
+        console.error("mqtt.connect error", error);
       }
       this.client.on("connect", () => {
-        console.log("Connection succeeded!");
+        console.debug("Connection succeeded!");
         this.doSubscribe();
       });
       this.client.on("error", (error) => {
-        console.log("Connection failed", error);
+        console.error("Connection failed", error);
       });
       this.client.on("message", (topic, message) => {
         // console.log(`Received message ${message} from topic ${topic}`);
@@ -87,7 +87,7 @@ export default {
             payload: JSON.parse(message.toString()),
           });
         } catch (error) {
-          console.log("Json parsing failed, fallback to string: ", topic);
+          console.debug("Json parsing failed, fallback to string: ", topic);
           this.$store.commit("addTopic", {
             topic: topic,
             payload: message.toString(),
@@ -96,20 +96,20 @@ export default {
       });
     },
     doSubscribe(topics = ["openWB/system/Timestamp"]) {
-      console.log("subscribing to topics...");
+      console.debug("subscribing to topics...");
       this.client.subscribe(topics, {}, (error) => {
         if (error) {
-          console.log("Subscribe to topics error", error);
+          console.error("Subscribe to topics error", error);
           return;
         }
         this.subscribeSuccess = true;
       });
     },
     doUnsubscribe(topics = ["openWB/system/Timestamp"]) {
-      console.log("unsubscribing topics...");
+      console.debug("unsubscribing topics...");
       this.client.unsubscribe(topics, (error) => {
         if (error) {
-          console.log("Unsubscribe error", error);
+          console.error("Unsubscribe error", error);
         }
       });
       topics.forEach((topic) => {
@@ -118,7 +118,7 @@ export default {
     },
   },
   created() {
-    console.log("app created");
+    console.debug("app created");
     this.createConnection();
   },
 };

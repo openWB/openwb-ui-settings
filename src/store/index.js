@@ -16,7 +16,7 @@ export default createStore({
     range1: 6,
     range2: 10,
     select1: 1,
-    select2: 3,
+    select2: "three",
     buttongroup1: 1,
     checkbox1: true,
     json1: { text: "Text", number: 123 },
@@ -55,7 +55,16 @@ export default createStore({
       if (message.topic in state.mqtt) {
         state.mqtt[message.topic] = message.payload;
       } else {
-        console.warn("topic not found in state.mqtt: ", message.topic);
+        console.debug("topic not found in state.mqtt: ", message.topic);
+        if (message.topic in state) {
+          state[message.topic] = message.payload;
+        } else {
+          console.warn(
+            "topic not found in state: ",
+            message.topic,
+            " giving up"
+          );
+        }
       }
     },
   },

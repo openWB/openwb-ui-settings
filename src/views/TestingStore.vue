@@ -274,7 +274,7 @@ export default {
   emits: ["reset", "defaults", "save"],
   methods: {
     updateState(topic, value) {
-      console.log(topic, typeof value, value);
+      console.debug(topic, typeof value, value);
       this.$store.commit({
         type: "updateTopic",
         topic: topic,
@@ -288,11 +288,11 @@ export default {
     };
   },
   beforeMount() {
-    console.log("testing before mount");
+    console.debug("testing-store before mount");
     this.$root.doSubscribe(this.mqttTopicsToSubscribe);
   },
   unmounted() {
-    console.log("testing unmounted");
+    console.debug("testing-store unmounted");
     this.$root.doUnsubscribe(this.mqttTopicsToSubscribe);
   },
 };
