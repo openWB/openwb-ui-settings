@@ -4,12 +4,12 @@
       <card title="Felder mit Verknüpfung zu Topics">
         <text-input
           title="Uptime"
-          :model-value="$store.state['openWB/system/Uptime']"
+          :model-value="$store.state.mqtt['openWB/system/Uptime']"
           @update:model-value="updateState('openWB/system/Uptime', $event)"
         />
         <text-input
           title="Version 2"
-          :model-value="$store.state['openWB/system/Version']"
+          :model-value="$store.state.mqtt['openWB/system/Version']"
           @update:model-value="updateState('openWB/system/Version', $event)"
         />
       </card>

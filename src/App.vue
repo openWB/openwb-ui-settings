@@ -38,7 +38,6 @@ export default {
       subscribeSuccess: false,
       connection: {
         host: location.hostname,
-        // host: "openwb-20.net21",
         port: 9001,
         endpoint: "/",
         connectTimeout: 4000,
