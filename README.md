@@ -1,6 +1,9 @@
 # openwb-ui-settings
 GUI for openWB settings v2.0+
 
+## Recommended Environment
+- npm 14.x
+
 ## Project setup
 ```
 npm install
