@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <HelloWorld msg="Welcome to Your openWB UI settings App" />
   </div>
 </template>
 
