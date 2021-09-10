@@ -2,7 +2,7 @@
 GUI for openWB settings v2.0+
 
 ## Recommended Environment
-- npm 14.x
+- nodejs 14.x
 
 ## Project setup
 ```
