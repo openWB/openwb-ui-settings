@@ -45,13 +45,33 @@ export default {
 			},
 		};
 	},
+	computed: {
+		topicList() {
+			return Object.keys(this.$store.state.mqtt);
+		},
+	},
 	methods: {
 		saveValues() {
 			console.debug("saving values...");
+			// *** may be useful if we implemented authentication ***
+			// let data = JSON.stringify(this.$store.state.mqtt);
+			// console.debug("data:", data);
+			// then post data to server
+			let topics = this.$store.state.mqtt;
+			// console.debug("topics", topics);
+			for (const [topic, payload] of Object.entries(topics)) {
+				let setTopic = topic.replace("openWB/", "openWB/set/");
+				console.debug("saving data:", setTopic, payload);
+				this.doPublish(setTopic, payload);
+			}
 		},
 		resetValues() {
 			console.debug("resetting values...");
 			// simply unsubscribe and subscribe to broker
+			let topics = this.topicList;
+			console.debug("topics: ", topics);
+			this.doUnsubscribe(topics);
+			this.doSubscribe(topics);
 		},
 		setDefaultValues() {
 			console.debug("setting default values...");
@@ -74,7 +94,7 @@ export default {
 			}
 			this.client.on("connect", () => {
 				console.debug("Connection succeeded!");
-				this.doSubscribe();
+				// this.doSubscribe();
 			});
 			this.client.on("error", (error) => {
 				console.error("Connection failed", error);
@@ -98,7 +118,7 @@ export default {
 				}
 			});
 		},
-		doSubscribe(topics = ["openWB/system/Timestamp"]) {
+		doSubscribe(topics) {
 			console.debug("subscribing to topics...");
 			this.client.subscribe(topics, {}, (error) => {
 				if (error) {
@@ -108,7 +128,7 @@ export default {
 				this.subscribeSuccess = true;
 			});
 		},
-		doUnsubscribe(topics = ["openWB/system/Timestamp"]) {
+		doUnsubscribe(topics) {
 			console.debug("unsubscribing topics...");
 			this.client.unsubscribe(topics, (error) => {
 				if (error) {
@@ -118,6 +138,22 @@ export default {
 			topics.forEach((topic) => {
 				this.$store.commit("removeTopic", topic);
 			});
+		},
+		doPublish(topic, payload) {
+			let options = {
+				qos: 2,
+				retain: true,
+			};
+			this.client.publish(
+				topic,
+				JSON.stringify(payload),
+				options,
+				(error) => {
+					if (error) {
+						console.log("Publish error", error);
+					}
+				}
+			);
 		},
 	},
 	created() {

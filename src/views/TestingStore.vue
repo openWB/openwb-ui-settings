@@ -265,6 +265,8 @@
 </template>
 
 <script>
+import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
+
 import Card from "@/components/Card.vue";
 import Alert from "@/components/Alert.vue";
 import Heading from "@/components/Heading.vue";
@@ -279,6 +281,8 @@ import SortableList from "@/components/SortableList.vue";
 import SubmitButtons from "@/components/SubmitButtons.vue";
 
 export default {
+	name: "TestingStore",
+	mixins: [ComponentStateMixin],
 	components: {
 		Card,
 		Alert,
@@ -293,18 +297,6 @@ export default {
 		SortableList,
 		SubmitButtons,
 	},
-	emits: ["reset", "defaults", "save"],
-	methods: {
-		updateState(topic, value, objectPath = undefined) {
-			console.debug(topic, typeof value, value, objectPath);
-			this.$store.commit({
-				type: "updateTopic",
-				topic: topic,
-				objectPath: objectPath,
-				payload: value,
-			});
-		},
-	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
@@ -312,14 +304,6 @@ export default {
 				"openWB/system/Version",
 			],
 		};
-	},
-	beforeMount() {
-		console.debug("testing-store before mount");
-		this.$root.doSubscribe(this.mqttTopicsToSubscribe);
-	},
-	unmounted() {
-		console.debug("testing-store unmounted");
-		this.$root.doUnsubscribe(this.mqttTopicsToSubscribe);
 	},
 };
 </script>
