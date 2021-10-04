@@ -98,7 +98,7 @@ export default {
 		saveSettings() {
 			this.showModalSave = true;
 			this.$emit("save");
-			window.setTimeout(() => (this.showModalSave = false), 5000);
+			window.setTimeout(() => (this.showModalSave = false), 3000);
 		},
 	},
 	components: {

@@ -87,6 +87,8 @@
 </template>
 
 <script>
+import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
+
 import Card from "@/components/Card.vue";
 // import Alert from "@/components/Alert.vue";
 // import Heading from "@/components/Heading.vue";
@@ -102,6 +104,7 @@ import SubmitButtons from "@/components/SubmitButtons.vue";
 
 export default {
 	name: "GeneralChargeConfig",
+	mixins: [ComponentStateMixin],
 	components: {
 		Card,
 		// Alert,
@@ -116,17 +119,6 @@ export default {
 		// SortableList,
 		SubmitButtons,
 	},
-	emits: ["reset", "defaults", "save"],
-	methods: {
-		updateState(topic, value) {
-			console.debug(topic, typeof value, value);
-			this.$store.commit({
-				type: "updateTopic",
-				topic: topic,
-				payload: value,
-			});
-		},
-	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
@@ -135,14 +127,6 @@ export default {
 				"openWB/general/chargemode_config/unbalanced_load_limit",
 			],
 		};
-	},
-	beforeMount() {
-		console.debug("testing-store before mount");
-		this.$root.doSubscribe(this.mqttTopicsToSubscribe);
-	},
-	unmounted() {
-		console.debug("testing-store unmounted");
-		this.$root.doUnsubscribe(this.mqttTopicsToSubscribe);
 	},
 };
 </script>

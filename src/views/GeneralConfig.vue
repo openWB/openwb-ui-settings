@@ -445,6 +445,8 @@
 </template>
 
 <script>
+import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
+
 import Card from "@/components/Card.vue";
 import Alert from "@/components/Alert.vue";
 import Heading from "@/components/Heading.vue";
@@ -460,6 +462,7 @@ import SubmitButtons from "@/components/SubmitButtons.vue";
 
 export default {
 	name: "GeneralConfig",
+	mixins: [ComponentStateMixin],
 	components: {
 		Card,
 		Alert,
@@ -473,18 +476,6 @@ export default {
 		// CheckboxInput,
 		// SortableList,
 		SubmitButtons,
-	},
-	emits: ["reset", "defaults", "save"],
-	methods: {
-		updateState(topic, value, objectPath = undefined) {
-			console.debug(topic, typeof value, value, objectPath);
-			this.$store.commit({
-				type: "updateTopic",
-				topic: topic,
-				objectPath: objectPath,
-				payload: value,
-			});
-		},
 	},
 	data() {
 		return {
@@ -504,14 +495,6 @@ export default {
 				"openWB/general/range_unit",
 			],
 		};
-	},
-	beforeMount() {
-		console.debug("testing-store before mount");
-		this.$root.doSubscribe(this.mqttTopicsToSubscribe);
-	},
-	unmounted() {
-		console.debug("testing-store unmounted");
-		this.$root.doUnsubscribe(this.mqttTopicsToSubscribe);
 	},
 };
 </script>
