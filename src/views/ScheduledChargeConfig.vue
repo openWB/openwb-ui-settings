@@ -2,27 +2,35 @@
 	<div class="scheduledChargeConfig">
 		<form id="myForm">
 			<card title="Phasenumschaltung">
-				<button-group-input
-					title="Anzahl Phasen"
-					:buttons="[
-						{ buttonValue: 1, text: '1' },
-						{ buttonValue: 3, text: 'Maximum' },
-						{ buttonValue: 0, text: 'Automatik' },
-					]"
-					:model-value="
-						$store.state.mqtt[
-							'openWB/general/chargemode_config/scheduled_charging/phases_to_use'
-						]
-					"
-					@update:model-value="
-						updateState(
-							'openWB/general/chargemode_config/scheduled_charging/phases_to_use',
-							$event
-						)
-					"
-				>
-					<template #help>Hilfetext</template>
-				</button-group-input>
+				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+					<alert subtype="info">
+						Diese Einstellungen sind nicht verfügbar, solange sich
+						diese openWB im Modus "Nur Ladepunkt" befindet.
+					</alert>
+				</div>
+				<div v-else>
+					<button-group-input
+						title="Anzahl Phasen"
+						:buttons="[
+							{ buttonValue: 1, text: '1' },
+							{ buttonValue: 3, text: 'Maximum' },
+							{ buttonValue: 0, text: 'Automatik' },
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/chargemode_config/scheduled_charging/phases_to_use'
+							]
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/chargemode_config/scheduled_charging/phases_to_use',
+								$event
+							)
+						"
+					>
+						<template #help>Hilfetext</template>
+					</button-group-input>
+				</div>
 			</card>
 			<submit-buttons
 				@save="$emit('save')"
@@ -37,7 +45,7 @@
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 import Card from "@/components/Card.vue";
-// import Alert from "@/components/Alert.vue";
+import Alert from "@/components/Alert.vue";
 // import Heading from "@/components/Heading.vue";
 // import TextInput from "@/components/TextInput.vue";
 // import NumberInput from "@/components/NumberInput.vue";
@@ -54,7 +62,7 @@ export default {
 	mixins: [ComponentStateMixin],
 	components: {
 		Card,
-		// Alert,
+		Alert,
 		// Heading,
 		// TextInput,
 		// NumberInput,
@@ -69,6 +77,7 @@ export default {
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
+				"openWB/general/extern",
 				"openWB/general/chargemode_config/scheduled_charging/phases_to_use",
 			],
 		};
