@@ -3,5 +3,4 @@ module.exports = {
 	css: {
 		sourceMap: true,
 	},
-	outputDir: '/var/www/html/openWB/web/settings20'
 }
