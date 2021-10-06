@@ -101,6 +101,18 @@ const routes = [
 				"../views/StandbyChargeConfig.vue"
 			),
 	},
+	{
+		path: "/HardwareInstallation",
+		name: "HardwareInstallation",
+		meta: {
+			heading: "Hardware Installation",
+		},
+		component: () =>
+			import(
+				/* webpackChunkName: "HardwareInstallation" */
+				"../views/HardwareInstallation.vue"
+			),
+	},
 	/* examples start here */
 	{
 		path: "/testing",
