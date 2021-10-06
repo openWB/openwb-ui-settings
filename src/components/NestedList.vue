@@ -10,11 +10,26 @@
 		<template #item="{ element }">
 			<li>
 				<div class="element-titel" :class="classes(element)">
-					<font-awesome-icon
-						class="handle"
-						:icon="['fas', 'arrows-alt']"
-					/>
-					{{ element.value }}
+					<span>
+						<font-awesome-icon
+							class="handle"
+							fixed-width
+							:icon="['fas', 'arrows-alt']"
+						/>
+						{{ element.name ? element.name : element.id }}
+					</span>
+					<span class="element-actions">
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'edit']"
+							@click="elementEdit(element.id)"
+						/>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'trash']"
+							@click="elementDelete(element.id)"
+						/>
+					</span>
 				</div>
 				<nested-list v-model="element.children" />
 			</li>
@@ -26,10 +41,14 @@
 import draggable from "vuedraggable";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faArrowsAlt as fasArrowsAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+	faArrowsAlt as fasArrowsAlt,
+	faEdit as fasEdit,
+	faTrash as fasTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasArrowsAlt);
+library.add(fasArrowsAlt, fasEdit, fasTrash);
 
 export default {
 	props: {
@@ -53,6 +72,12 @@ export default {
 				myClasses += "chargepoint";
 			}
 			return myClasses;
+		},
+		elementEdit(id) {
+			console.log("edit Element:", id);
+		},
+		elementDelete(id) {
+			console.log("delete Element:", id);
 		},
 	},
 };
@@ -91,9 +116,12 @@ export default {
 	margin-right: 5px;
 	font-size: 1.1em;
 	color: var(--light);
+	cursor: pointer;
 }
 
 .element-titel {
+	display: flex;
+	justify-content: space-between;
 	padding: 7px;
 	background: var(--info);
 }
@@ -108,5 +136,9 @@ export default {
 
 .element-titel.chargepoint {
 	background-color: var(--primary);
+}
+
+.element-actions {
+	cursor: pointer;
 }
 </style>

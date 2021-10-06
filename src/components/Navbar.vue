@@ -108,6 +108,26 @@
 						data-toggle="dropdown"
 						aria-expanded="false"
 					>
+						Konfiguration
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<router-link
+							to="/HardwareInstallation"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							Hardware Installation
+						</router-link>
+					</div>
+				</li>
+				<li class="nav-item dropdown">
+					<a
+						class="nav-link dropdown-toggle"
+						href="#"
+						role="button"
+						data-toggle="dropdown"
+						aria-expanded="false"
+					>
 						Beispiele
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
