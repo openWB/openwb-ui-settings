@@ -15,7 +15,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.0-4",
     "@popperjs/core": "^2.10.2",
     "bootstrap": "^4.6.0",
-    "core-js": "^3.18.1",
+    "core-js": "^3.18.2",
     "jquery": "^3.6.0",
     "mqtt": "^4.2.8",
     "popper.js": "^1.16.1",
@@ -36,7 +36,7 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-vue": "^7.19.0",
+    "eslint-plugin-vue": "^7.19.1",
     "prettier": "^2.4.1"
   },
   "eslintConfig": {
