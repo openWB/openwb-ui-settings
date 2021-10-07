@@ -14,7 +14,8 @@
 		</label>
 		<div class="col-md-8">
 			<div class="form-row">
-				<nested-list v-model="value" />
+				<nested-list v-if="value !== undefined" v-model="value" />
+				<div v-else>Warte auf Daten...</div>
 			</div>
 			<span v-if="showHelp" class="form-row alert alert-info my-1 small">
 				<slot name="help"></slot>
@@ -53,7 +54,7 @@ export default {
 			},
 			set(newValue) {
 				// this will never happen, as dragable component does not emit updates!
-				console.info("list update", newValue);
+				console.log("update in sortableList", newValue);
 				this.$emit("update:modelValue", newValue);
 			},
 		},

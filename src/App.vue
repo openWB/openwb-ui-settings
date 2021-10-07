@@ -135,9 +135,9 @@ export default {
 					console.error("Unsubscribe error", error);
 				}
 			});
-			topics.forEach((topic) => {
-				this.$store.commit("removeTopic", topic);
-			});
+			// topics.forEach((topic) => {
+			// 	this.$store.commit("removeTopic", topic);
+			// });
 		},
 		doPublish(topic, payload) {
 			let options = {
