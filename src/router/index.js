@@ -145,4 +145,13 @@ const router = createRouter({
 	routes,
 });
 
+router.afterEach((to) => {
+	// change page (or tab) title
+	if (to.meta.heading) {
+		document.title = "openWB | " + to.meta.heading;
+	} else {
+		document.title = "openWB";
+	}
+});
+
 export default router;
