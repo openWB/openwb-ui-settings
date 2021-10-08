@@ -115,18 +115,6 @@ const routes = [
 	},
 	/* examples start here */
 	{
-		path: "/testing",
-		name: "Testing",
-		meta: {
-			heading: "Testseite",
-		},
-		component: () =>
-			import(
-				/* webpackChunkName: "testing" */
-				"../views/Testing.vue"
-			),
-	},
-	{
 		path: "/testing-store",
 		name: "VUEX Store",
 		meta: {
