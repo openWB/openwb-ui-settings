@@ -1,6 +1,6 @@
 <template>
 	<div class="card-text alert" :class="'alert-' + subtype">
-		<slot></slot>
+		<slot />
 	</div>
 </template>
 

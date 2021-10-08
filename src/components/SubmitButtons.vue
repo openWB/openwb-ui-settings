@@ -35,7 +35,7 @@
 				@click="saveSettings"
 			>
 				Speichern
-				<i class="fas fa-check"></i>
+				<font-awesome-icon fixed-width :icon="['fas', 'check']" />
 			</button>
 		</div>
 		<div class="col-md-4 d-flex py-1 justify-content-center">
@@ -46,7 +46,7 @@
 				@click="showResetModal"
 			>
 				Änderungen verwerfen
-				<i class="fas fa-undo"></i>
+				<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
 			</button>
 		</div>
 		<div class="col-md-4 d-flex py-1 justify-content-center">
@@ -57,13 +57,23 @@
 				@click="showDefaultsModal"
 			>
 				Werkseinstellungen
-				<i class="fas fa-times"></i>
+				<font-awesome-icon fixed-width :icon="['fas', 'times']" />
 			</button>
 		</div>
 	</div>
 </template>
 
 <script>
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+	faCheck as fasCheck,
+	faUndo as fasUndo,
+	faTimes as fasTimes,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(fasCheck, fasUndo, fasTimes);
+
 import ModalDialog from "@/components/ModalDialog.vue";
 
 export default {
@@ -103,6 +113,7 @@ export default {
 	},
 	components: {
 		ModalDialog,
+		FontAwesomeIcon,
 	},
 };
 </script>

@@ -150,6 +150,7 @@
 				<hr />
 				<select-input
 					title="1. Select"
+					notSelected="Bitte auswählen"
 					:options="[
 						{ value: 1, text: 'Eins' },
 						{ value: 2, text: 'Zwei' },

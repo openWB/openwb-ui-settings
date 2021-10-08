@@ -132,13 +132,6 @@
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 						<router-link
-							to="/testing"
-							class="dropdown-item"
-							active-class="active disabled"
-						>
-							Testing
-						</router-link>
-						<router-link
 							to="/testing-store"
 							class="dropdown-item"
 							active-class="active disabled"

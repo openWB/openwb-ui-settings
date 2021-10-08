@@ -14,12 +14,24 @@
 		</label>
 		<div class="col-md-8">
 			<div class="form-row">
-				<select class="form-control" v-model="value" v-bind="$attrs">
+				<select
+					class="col form-control"
+					v-model="value"
+					v-bind="$attrs"
+				>
+					<option
+						v-if="notSelected !== undefined"
+						:value="undefined"
+						disabled
+					>
+						-- {{ notSelected }} --
+					</option>
 					<!-- select elements without option groups -->
 					<option
 						v-for="option in options"
 						:key="option.value"
 						:value="option.value"
+						:disabled="option.value === undefined"
 					>
 						{{ option.text }}
 					</option>
@@ -38,9 +50,10 @@
 						</option>
 					</optgroup>
 				</select>
+				<slot name="append" />
 			</div>
 			<span v-if="showHelp" class="form-row alert alert-info my-1 small">
-				<slot name="help"></slot>
+				<slot name="help" />
 			</span>
 		</div>
 	</div>
@@ -62,6 +75,7 @@ export default {
 		modelValue: { type: [String, Number, Array] },
 		groups: Object,
 		options: Object,
+		notSelected: { type: String, default: undefined },
 	},
 	emits: ["update:modelValue"],
 	data() {
