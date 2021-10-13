@@ -54,7 +54,37 @@ export default createStore({
 					text: "Fronius Verbund",
 				},
 			],
-			installedDevices: [],
+			installedDevices: [
+				{
+					id: 0,
+					type: "solaredge",
+					name: "Solaredge Verbund",
+					components: [
+						{
+							id: "0.1",
+							type: "se_wr_1",
+							name: "Wechselrichter 1",
+						},
+					],
+				},
+				{
+					id: 1,
+					type: "fronius",
+					name: "Fronius Verbund",
+					components: [
+						{
+							id: "1.1",
+							type: "fr_wr_1",
+							name: "Wechselrichter 1",
+						},
+						{
+							id: "1.2",
+							type: "fr_sm",
+							name: "SmartMeter",
+						},
+					],
+				},
+			],
 		},
 	},
 	mutations: {

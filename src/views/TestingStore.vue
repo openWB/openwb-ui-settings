@@ -231,6 +231,14 @@
 			</card>
 
 			<card title="Meldungen">
+				<template #header>
+					<span
+						style="text-decoration: underline; font-style: italic"
+					>
+						Styled
+						<span style="font-weight: initial">Header</span> Slot
+					</span>
+				</template>
 				<heading>Das ist eine Überschrift</heading>
 				<alert>Meldung ohne speziellen Subtype.</alert>
 				<alert subtype="info">Infomeldung</alert>

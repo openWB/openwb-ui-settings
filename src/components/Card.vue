@@ -4,7 +4,9 @@
 			<div class="form-group mb-0">
 				<div class="form-row vaRow mb-0">
 					<div class="col">
-						{{ title }}
+						<slot name="header">
+							{{ title }}
+						</slot>
 					</div>
 				</div>
 			</div>

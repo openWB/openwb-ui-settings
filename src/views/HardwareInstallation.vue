@@ -31,6 +31,7 @@
 						Bitte ein System auswählen, das hinzugefügt werden soll.
 					</template>
 				</select-input>
+				<hr v-if="$store.state.examples.installedDevices[0]" />
 				<card
 					v-for="installedDevice in $store.state.examples
 						.installedDevices"
@@ -39,15 +40,36 @@
 					:collapsible="true"
 					:collapsed="false"
 				>
-					<avatar class="bg-success">
-						<font-awesome-icon
-							fixed-width
-							:icon="['fas', 'network-wired']"
-						/>
-					</avatar>
-					Gerät: {{ installedDevice.name }} ({{
-						installedDevice.type
-					}})
+					<template #header>
+						<avatar class="bg-success">
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'network-wired']"
+							/>
+						</avatar>
+						{{ installedDevice.name }} ({{ installedDevice.type }})
+					</template>
+					(Konfiguration...)
+					<card
+						v-for="installedComponent in installedDevice.components"
+						v-bind:key="installedComponent.id"
+						title="Komponente 1"
+						:collapsible="true"
+						:collapsed="true"
+					>
+						<template #header>
+							<avatar class="bg-success">
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'microchip']"
+								/>
+							</avatar>
+							{{ installedComponent.name }} ({{
+								installedComponent.type
+							}})
+						</template>
+						ToDo...
+					</card>
 				</card>
 			</card>
 			<card title="Struktur" :collapsible="true" :collapsed="true">
@@ -89,10 +111,11 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import {
 	faPlus as fasPlus,
 	faNetworkWired as fasNetworfWired,
+	faMicrochip as fasMicrochip,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasPlus, fasNetworfWired);
+library.add(fasPlus, fasNetworfWired, fasMicrochip);
 
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
