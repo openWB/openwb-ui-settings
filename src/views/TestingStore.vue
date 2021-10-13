@@ -1,7 +1,7 @@
 <template>
 	<div class="testing-store">
 		<form id="myForm">
-			<card title="Felder mit Verknüpfung zu Topics">
+			<card title="Felder mit Verknüpfung zu Topics" :collapsible="true">
 				<text-input
 					title="Uptime"
 					disabled="disabled"

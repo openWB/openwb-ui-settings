@@ -1,15 +1,24 @@
 <template>
 	<div class="card" :class="'border-' + subtype">
-		<div class="card-header" :class="'bg-' + subtype">
+		<div class="card-header" :class="'bg-' + subtype" @click="toggleBody">
 			<div class="form-group mb-0">
-				<div class="form-row vaRow mb-1">
+				<div class="form-row vaRow mb-0">
 					<div class="col">
 						{{ title }}
 					</div>
 				</div>
 			</div>
+			<font-awesome-icon
+				v-if="collapsible"
+				fixed-width
+				:icon="
+					isCollapsed
+						? ['fas', 'plus-square']
+						: ['fas', 'minus-square']
+				"
+			/>
 		</div>
-		<div class="card-body">
+		<div class="card-body" v-if="isCollapsed === false">
 			<slot></slot>
 		</div>
 		<div v-if="$slots.footer" class="card-footer">
@@ -19,6 +28,15 @@
 </template>
 
 <script>
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+	faPlusSquare as fasPlusSquare,
+	faMinusSquare as fasMinusSquare,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(fasPlusSquare, fasMinusSquare);
+
 export default {
 	name: "Card",
 	props: {
@@ -40,6 +58,23 @@ export default {
 			},
 			default: "secondary",
 		},
+		collapsible: { type: Boolean, default: false },
+		collapsed: { type: Boolean, default: false },
+	},
+	data() {
+		return {
+			isCollapsed: this.collapsible && this.collapsed,
+		};
+	},
+	methods: {
+		toggleBody() {
+			if (this.collapsible === true) {
+				this.isCollapsed = !this.isCollapsed;
+			}
+		},
+	},
+	components: {
+		FontAwesomeIcon,
 	},
 };
 </script>
@@ -51,6 +86,9 @@ export default {
 
 .card .card-header {
 	font-weight: bold;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .bg-primary,

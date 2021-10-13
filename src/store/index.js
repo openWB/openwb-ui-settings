@@ -45,8 +45,14 @@ export default createStore({
 				},
 			],
 			availableDevices: [
-				{ value: "solaredge", text: "Solaredge Verbund" },
-				{ value: "fronius", text: "Fronius Verbund" },
+				{
+					value: "solaredge",
+					text: "Solaredge Verbund",
+				},
+				{
+					value: "fronius",
+					text: "Fronius Verbund",
+				},
 			],
 			installedDevices: [],
 		},
