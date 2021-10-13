@@ -5,10 +5,21 @@
 	<div role="main" class="container">
 		<div id="content">
 			<h1>{{ $route.meta.heading }}</h1>
+			<command-alert
+				:alertData="
+					$store.state.mqtt[
+						'openWB/command/' +
+							this.$root.client.options.clientId +
+							'/error'
+					]
+				"
+				@dismiss="dismissError"
+			/>
 			<router-view
-				@save="saveValues()"
-				@reset="resetValues()"
-				@defaults="setDefaultValues()"
+				@save="saveValues"
+				@reset="resetValues"
+				@defaults="setDefaultValues"
+				@sendCommand="sendCommand"
 			/>
 		</div>
 		<donation-banner />
@@ -19,6 +30,7 @@
 <script>
 // @ is an alias to /src
 import NavBar from "@/components/Navbar.vue";
+import CommandAlert from "@/components/CommandAlert.vue";
 import PageFooter from "@/components/PageFooter.vue";
 import DonationBanner from "@/components/DonationBanner.vue";
 import mqtt from "mqtt";
@@ -27,6 +39,7 @@ export default {
 	name: "settings-app",
 	components: {
 		NavBar,
+		CommandAlert,
 		PageFooter,
 		DonationBanner,
 	},
@@ -76,6 +89,19 @@ export default {
 		setDefaultValues() {
 			console.debug("setting default values...");
 		},
+		dismissError() {
+			this.doPublish(
+				"openWB/command/" + this.client.options.clientId + "/error",
+				undefined
+			);
+		},
+		sendCommand(event) {
+			console.log("sendCommand event", event);
+			this.doPublish(
+				"openWB/command/" + this.client.options.clientId + "/todo",
+				event
+			);
+		},
 		createConnection() {
 			console.debug("connecting to broker...");
 			// Connect string, and specify the connection method used through protocol
@@ -93,29 +119,37 @@ export default {
 				console.error("mqtt.connect error", error);
 			}
 			this.client.on("connect", () => {
-				console.debug("Connection succeeded!");
-				// this.doSubscribe();
+				console.debug(
+					"Connection succeeded! ClientId: ",
+					this.client.options.clientId
+				);
+				this.doSubscribe([
+					"openWB/command/" + this.client.options.clientId + "/error",
+				]);
 			});
 			this.client.on("error", (error) => {
 				console.error("Connection failed", error);
 			});
 			this.client.on("message", (topic, message) => {
-				// console.log(`Received message ${message} from topic ${topic}`);
-				try {
-					this.$store.commit("addTopic", {
-						topic: topic,
-						payload: JSON.parse(message.toString()),
-					});
-				} catch (error) {
-					console.debug(
-						"Json parsing failed, fallback to string: ",
-						topic
-					);
-					this.$store.commit("addTopic", {
-						topic: topic,
-						payload: message.toString(),
-					});
+				// console.debug(
+				// 	`Received message "${message}" from topic "${topic}"`
+				// );
+				let myPayload = undefined;
+				if (message.toString().length > 0) {
+					try {
+						myPayload = JSON.parse(message.toString());
+					} catch (error) {
+						console.debug(
+							"Json parsing failed, fallback to string: ",
+							topic
+						);
+						myPayload = message.toString();
+					}
 				}
+				this.$store.commit("addTopic", {
+					topic: topic,
+					payload: myPayload,
+				});
 			});
 		},
 		doSubscribe(topics) {

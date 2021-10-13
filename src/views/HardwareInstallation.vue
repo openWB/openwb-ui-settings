@@ -1,9 +1,13 @@
 <template>
-	<div class="hardwware-installation">
+	<div class="hardware-installation">
 		<form id="myForm">
-			<card title="Geräte und Komponenten">
+			<card
+				title="Systeme und Komponenten"
+				:collapsible="true"
+				:collapsed="true"
+			>
 				<select-input
-					title="Verfügbare Geräte"
+					title="Verfügbare Systeme"
 					notSelected="Bitte auswählen"
 					:options="$store.state.examples.availableDevices"
 					:model-value="deviceToAdd"
@@ -24,23 +28,51 @@
 						</span>
 					</template>
 					<template #help>
-						Bitte ein Gerät auswählen, das hinzugefügt werden soll.
+						Bitte ein System auswählen, das hinzugefügt werden soll.
 					</template>
 				</select-input>
-				<hr />
-				<div>
-					<p
-						v-for="installedDevice in $store.state.examples
-							.installedDevices"
-						v-bind:key="installedDevice.type"
+				<hr v-if="$store.state.examples.installedDevices[0]" />
+				<card
+					v-for="installedDevice in $store.state.examples
+						.installedDevices"
+					v-bind:key="installedDevice.type"
+					:title="installedDevice.name"
+					:collapsible="true"
+					:collapsed="false"
+				>
+					<template #header>
+						<avatar class="bg-success">
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'network-wired']"
+							/>
+						</avatar>
+						{{ installedDevice.name }} ({{ installedDevice.type }})
+					</template>
+					(Konfiguration...)
+					<card
+						v-for="installedComponent in installedDevice.components"
+						v-bind:key="installedComponent.id"
+						title="Komponente 1"
+						:collapsible="true"
+						:collapsed="true"
 					>
-						Gerät: {{ installedDevice.name }} ({{
-							installedDevice.type
-						}})
-					</p>
-				</div>
+						<template #header>
+							<avatar class="bg-success">
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'microchip']"
+								/>
+							</avatar>
+							{{ installedComponent.name }} ({{
+								installedComponent.type
+							}})
+						</template>
+						ToDo...
+					</card>
+				</card>
 			</card>
-			<card title="Struktur">
+			<card title="Struktur" :collapsible="true" :collapsed="true">
 				<!-- ToDo: Fix: nested lists bypass store commits! -->
 				<sortable-list
 					title="Anordnung der Komponenten"
@@ -76,10 +108,14 @@
 
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faPlus as fasPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+	faPlus as fasPlus,
+	faNetworkWired as fasNetworfWired,
+	faMicrochip as fasMicrochip,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasPlus);
+library.add(fasPlus, fasNetworfWired, fasMicrochip);
 
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
@@ -93,6 +129,7 @@ import Card from "@/components/Card.vue";
 import SelectInput from "@/components/SelectInput.vue";
 // import ButtonGroupInput from "@/components/ButtonGroupInput.vue";
 import ClickButton from "@/components/ClickButton.vue";
+import Avatar from "@/components/Avatar.vue";
 // import CheckboxInput from "@/components/CheckboxInput.vue";
 import SortableList from "@/components/SortableList.vue";
 import SubmitButtons from "@/components/SubmitButtons.vue";
@@ -100,6 +137,7 @@ import SubmitButtons from "@/components/SubmitButtons.vue";
 export default {
 	name: "HardwareInstallation",
 	mixins: [ComponentStateMixin],
+	emits: ["sendCommand"],
 	components: {
 		Card,
 		// Alert,
@@ -111,6 +149,7 @@ export default {
 		SelectInput,
 		// ButtonGroupInput,
 		ClickButton,
+		Avatar,
 		// CheckboxInput,
 		SortableList,
 		SubmitButtons,
@@ -124,17 +163,12 @@ export default {
 	},
 	methods: {
 		addDevice() {
-			console.log("addDevice:", this.deviceToAdd);
-			let updatedInstalledDevices = JSON.parse(
-				JSON.stringify(this.$store.state.examples.installedDevices)
-			);
-			updatedInstalledDevices.push({
-				// ToDo: we need some ID (backend?)
-				type: this.deviceToAdd,
-				name: this.deviceToAdd,
+			this.$emit("sendCommand", {
+				command: "addDevice",
+				data: {
+					type: this.deviceToAdd,
+				},
 			});
-			console.log(updatedInstalledDevices);
-			this.updateState("installedDevices", updatedInstalledDevices);
 		},
 	},
 };
