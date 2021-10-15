@@ -35,10 +35,11 @@
 				<card
 					v-for="installedDevice in $store.state.examples
 						.installedDevices"
-					v-bind:key="installedDevice.type"
+					:key="installedDevice.type"
 					:title="installedDevice.name"
 					:collapsible="true"
-					:collapsed="false"
+					:collapsed="true"
+					subtype="primary"
 				>
 					<template #header>
 						<avatar class="bg-success">
@@ -52,10 +53,11 @@
 					(Konfiguration...)
 					<card
 						v-for="installedComponent in installedDevice.components"
-						v-bind:key="installedComponent.id"
+						:key="installedComponent.id"
 						title="Komponente 1"
 						:collapsible="true"
 						:collapsed="true"
+						subtype="dark"
 					>
 						<template #header>
 							<avatar class="bg-success">
@@ -110,12 +112,12 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
 	faPlus as fasPlus,
-	faNetworkWired as fasNetworfWired,
+	faNetworkWired as fasNetworkWired,
 	faMicrochip as fasMicrochip,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasPlus, fasNetworfWired, fasMicrochip);
+library.add(fasPlus, fasNetworkWired, fasMicrochip);
 
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 

@@ -32,7 +32,7 @@
 					>
 						<button
 							v-for="button in myButtons"
-							v-bind:key="button.text"
+							:key="button.text"
 							type="button"
 							class="btn"
 							:class="
