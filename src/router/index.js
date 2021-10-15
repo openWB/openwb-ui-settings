@@ -113,6 +113,18 @@ const routes = [
 				"../views/HardwareInstallation.vue"
 			),
 	},
+	{
+		path: "/VehicleConfiguration",
+		name: "VehicleConfiguration",
+		meta: {
+			heading: "Fahrzeugkonfiguration",
+		},
+		component: () =>
+			import(
+				/* webpackChunkName: "VehicleConfiguration" */
+				"../views/VehicleConfig.vue"
+			),
+	},
 	/* examples start here */
 	{
 		path: "/testing-store",

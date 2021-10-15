@@ -116,7 +116,14 @@
 							class="dropdown-item"
 							active-class="active disabled"
 						>
-							Hardware Installation
+							Geräte und Komponenten
+						</router-link>
+						<router-link
+							to="/VehicleConfiguration"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							Fahrzeuge
 						</router-link>
 					</div>
 				</li>

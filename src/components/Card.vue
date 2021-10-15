@@ -96,12 +96,14 @@ export default {
 .bg-primary,
 .bg-secondary,
 .bg-danger,
-.bg-success {
+.bg-success,
+.bg-dark {
 	color: white;
 }
 
 .bg-warning,
-.bg-info {
+.bg-info,
+.bg-light {
 	color: #212529;
 }
 
