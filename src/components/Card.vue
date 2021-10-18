@@ -1,8 +1,12 @@
 <template>
 	<div class="card" :class="'border-' + subtype">
-		<div class="card-header" :class="'bg-' + subtype" @click="toggleBody">
+		<div
+			class="card-header py-1"
+			:class="'bg-' + subtype"
+			@click="toggleBody"
+		>
 			<div class="form-group mb-0">
-				<div class="form-row vaRow mb-0">
+				<div class="form-row vaRow mb-0 py-2">
 					<div class="col">
 						<slot name="header">
 							{{ title }}
@@ -10,15 +14,19 @@
 					</div>
 				</div>
 			</div>
-			<font-awesome-icon
-				v-if="collapsible"
-				fixed-width
-				:icon="
-					isCollapsed
-						? ['fas', 'plus-square']
-						: ['fas', 'minus-square']
-				"
-			/>
+			<span class="card-actions">
+				<slot name="actions"></slot>
+				<font-awesome-icon
+					v-if="collapsible"
+					fixed-width
+					:icon="
+						isCollapsed
+							? ['fas', 'plus-square']
+							: ['fas', 'minus-square']
+					"
+					class="ml-4"
+				/>
+			</span>
 		</div>
 		<div class="card-body" v-if="isCollapsed === false">
 			<slot></slot>
