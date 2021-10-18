@@ -99,7 +99,8 @@ export default {
 			console.log("sendCommand event", event);
 			this.doPublish(
 				"openWB/command/" + this.client.options.clientId + "/todo",
-				event
+				event,
+				false
 			);
 		},
 		createConnection() {
@@ -173,10 +174,10 @@ export default {
 			// 	this.$store.commit("removeTopic", topic);
 			// });
 		},
-		doPublish(topic, payload) {
+		doPublish(topic, payload, retain = true, qos = 2) {
 			let options = {
-				qos: 2,
-				retain: true,
+				qos: qos,
+				retain: retain,
 			};
 			this.client.publish(
 				topic,
