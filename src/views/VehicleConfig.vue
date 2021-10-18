@@ -1,9 +1,8 @@
 <template>
 	<div class="vehicleConfig">
 		<form id="myForm">
-			<card title="Vorlagen">
-				<template #header>
-					Vorlagen
+			<card title="Fahrzeug-Vorlagen">
+				<template #actions>
 					<avatar
 						class="bg-success"
 						v-if="
@@ -32,8 +31,7 @@
 						:collapsed="true"
 						subtype="primary"
 					>
-						<template #header v-if="!key.endsWith('/0')">
-							{{ template.name ? template.name : key }}
+						<template #actions v-if="!key.endsWith('/0')">
 							<avatar
 								class="bg-danger"
 								v-if="
@@ -214,6 +212,105 @@
 					</card>
 				</div>
 			</card>
+			<card title="Fahrzeuge">
+				<template #actions>
+					<avatar
+						class="bg-success"
+						v-if="
+							$store.state.mqtt['openWB/general/extern'] === false
+						"
+						@click="addVehicle"
+					>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'plus']"
+						/>
+					</avatar>
+				</template>
+				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+					<alert subtype="info">
+						Diese Einstellungen sind nicht verfügbar, solange sich
+						diese openWB im Modus "Nur Ladepunkt" befindet.
+					</alert>
+				</div>
+				<div v-else>
+					<card
+						v-for="id in vehicleIndexes"
+						:key="id"
+						:title="getVehicleName(id)"
+						:collapsible="true"
+						:collapsed="true"
+						subtype="primary"
+					>
+						<template #actions v-if="id !== 0">
+							<avatar
+								class="bg-danger"
+								v-if="
+									$store.state.mqtt[
+										'openWB/general/extern'
+									] === false
+								"
+								@click="deleteVehicle(id, $event)"
+							>
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'trash']"
+								/>
+							</avatar>
+						</template>
+						<text-input
+							title="Bezeichnung"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/vehicle/' + id + '/name'
+								]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/vehicle/' + id + '/name',
+									$event
+								)
+							"
+							:disabled="id === 0"
+						>
+							<template #help v-if="id === 0">
+								Das Standard-Fahrzeug kann nicht umbenannt
+								werden.
+							</template>
+						</text-input>
+						<select-input
+							title="Fahrzeug-Vorlage"
+							:options="evTemplateList"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/vehicle/' + id + '/ev_template'
+								]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/vehicle/' + id + '/ev_template',
+									$event
+								)
+							"
+						/>
+						<select-input
+							title="Ladeprofil-Vorlage"
+							:options="chargeTemplateList"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/vehicle/' + id + '/charge_template'
+								]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/vehicle/' + id + '/charge_template',
+									$event
+								)
+							"
+						/>
+					</card>
+				</div>
+			</card>
 			<submit-buttons
 				@save="$emit('save')"
 				@reset="$emit('reset')"
@@ -242,7 +339,7 @@ import TextInput from "@/components/TextInput.vue";
 import NumberInput from "@/components/NumberInput.vue";
 // import TextareaInput from "@/components/TextareaInput.vue";
 import RangeInput from "@/components/RangeInput.vue";
-// import SelectInput from "@/components/SelectInput.vue";
+import SelectInput from "@/components/SelectInput.vue";
 import ButtonGroupInput from "@/components/ButtonGroupInput.vue";
 // import ClickButton from "@/components/ClickButton.vue";
 import Avatar from "@/components/Avatar.vue";
@@ -262,7 +359,7 @@ export default {
 		NumberInput,
 		// TextareaInput,
 		RangeInput,
-		// SelectInput,
+		SelectInput,
 		ButtonGroupInput,
 		// ClickButton,
 		Avatar,
@@ -276,15 +373,60 @@ export default {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
 				"openWB/vehicle/template/ev_template/+",
+				"openWB/vehicle/template/charge_template/+",
+				"openWB/vehicle/+/name",
+				"openWB/vehicle/+/charge_template",
+				"openWB/vehicle/+/ev_template",
 			],
 		};
 	},
 	computed: {
+		vehicleIndexes: {
+			get() {
+				return this.getWildcardIndexList("openWB/vehicle/+/name");
+			},
+		},
 		evTemplates: {
 			get() {
 				return this.getWildcardTopics(
 					"openWB/vehicle/template/ev_template/+"
 				);
+			},
+		},
+		evTemplateList: {
+			get() {
+				let myList = [];
+				Object.keys(this.evTemplates).forEach((key) => {
+					let index = parseInt(key.match(/([0-9]+)$/g)[0]);
+					let name =
+						this.$store.state.mqtt[
+							"openWB/vehicle/template/ev_template/" + index
+						].name;
+					myList.push({ value: index, text: name });
+				});
+				return myList;
+			},
+		},
+		chargeTemplates: {
+			get() {
+				return this.getWildcardTopics(
+					"openWB/vehicle/template/charge_template/+"
+				);
+			},
+		},
+		chargeTemplateList: {
+			get() {
+				let myList = [];
+				Object.keys(this.chargeTemplates).forEach((key) => {
+					let index = parseInt(key.match(/([0-9]+)$/g)[0]);
+					let name =
+						this.$store.state.mqtt[
+							"openWB/vehicle/template/charge_template/" + index
+						].name;
+					console.log(key, index, name);
+					myList.push({ value: index, text: name });
+				});
+				return myList;
 			},
 		},
 	},
@@ -308,6 +450,29 @@ export default {
 				command: "removeEVTemplate",
 				data: { id: index },
 			});
+		},
+		addVehicle(event) {
+			// prevent further processing of the click event
+			event.stopPropagation();
+			console.info("requesting new vehicle...");
+			this.$emit("sendCommand", {
+				command: "addVehicle",
+				data: {},
+			});
+		},
+		deleteVehicle(index, event) {
+			// prevent further processing of the click event
+			event.stopPropagation();
+			console.info("request removal of vehicle '" + index + "'");
+			this.$emit("sendCommand", {
+				command: "removeVehicle",
+				data: { id: index },
+			});
+		},
+		getVehicleName(id) {
+			return this.$store.state.mqtt["openWB/vehicle/" + id + "/name"]
+				? this.$store.state.mqtt["openWB/vehicle/" + id + "/name"]
+				: "Fahrzeug " + id;
 		},
 	},
 };

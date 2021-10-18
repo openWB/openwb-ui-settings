@@ -10,15 +10,19 @@
 					</div>
 				</div>
 			</div>
-			<font-awesome-icon
-				v-if="collapsible"
-				fixed-width
-				:icon="
-					isCollapsed
-						? ['fas', 'plus-square']
-						: ['fas', 'minus-square']
-				"
-			/>
+			<span class="card-actions">
+				<slot name="actions"></slot>
+				<font-awesome-icon
+					v-if="collapsible"
+					fixed-width
+					:icon="
+						isCollapsed
+							? ['fas', 'plus-square']
+							: ['fas', 'minus-square']
+					"
+					class="ml-4"
+				/>
+			</span>
 		</div>
 		<div class="card-body" v-if="isCollapsed === false">
 			<slot></slot>

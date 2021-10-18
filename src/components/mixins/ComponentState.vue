@@ -11,15 +11,43 @@ export default {
 				payload: value,
 			});
 		},
-		getWildcardTopics(baseTopic) {
-			// build a valid regex based on the provided wildcard topic
-			let baseTopicRegex =
-				"^" +
-				baseTopic
-					.replaceAll("/", "\\/")
-					.replaceAll("+", "[^+]+")
-					.replaceAll("#", "[^#]+") +
-				"$";
+		getWildcardIndexList(baseTopic, isRegex = false) {
+			let baseTopicRegex = baseTopic;
+			if (!isRegex) {
+				// build a valid regex based on the provided wildcard topic
+				baseTopicRegex =
+					"^" +
+					baseTopic
+						.replaceAll("/", "\\/")
+						.replaceAll("+", "[^+]+")
+						.replaceAll("#", "[^#]+") +
+					"$";
+			}
+			// filter and return all topics matching our regex
+			let myTopics = Object.keys(this.$store.state.mqtt).filter((key) => {
+				return key.match(baseTopicRegex);
+			});
+			myTopics.forEach((topic, index, array) => {
+				array[index] = parseInt(
+					topic
+						.match(/(?:\/)([0-9]+)(?=\/)/g)[0]
+						.replace(/[^0-9]+/g, "")
+				);
+			});
+			return myTopics;
+		},
+		getWildcardTopics(baseTopic, isRegex = false) {
+			let baseTopicRegex = baseTopic;
+			if (!isRegex) {
+				// build a valid regex based on the provided wildcard topic
+				baseTopicRegex =
+					"^" +
+					baseTopic
+						.replaceAll("/", "\\/")
+						.replaceAll("+", "[^+]+")
+						.replaceAll("#", "[^#]+") +
+					"$";
+			}
 			// filter and return all topics matching our regex
 			return Object.keys(this.$store.state.mqtt)
 				.filter((key) => {
