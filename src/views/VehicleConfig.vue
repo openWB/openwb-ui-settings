@@ -1,7 +1,110 @@
 <template>
 	<div class="vehicleConfig">
 		<form id="myForm">
-			<card title="Fahrzeug-Vorlagen">
+			<card title="Fahrzeuge" :collapsible="true" :collapsed="true">
+				<template #actions>
+					<avatar
+						class="bg-success"
+						v-if="
+							$store.state.mqtt['openWB/general/extern'] === false
+						"
+						@click="addVehicle"
+					>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'plus']"
+						/>
+					</avatar>
+				</template>
+				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+					<alert subtype="info">
+						Diese Einstellungen sind nicht verfügbar, solange sich
+						diese openWB im Modus "Nur Ladepunkt" befindet.
+					</alert>
+				</div>
+				<div v-else>
+					<card
+						v-for="id in vehicleIndexes"
+						:key="id"
+						:title="getVehicleName(id)"
+						:collapsible="true"
+						:collapsed="true"
+						subtype="primary"
+					>
+						<template #actions v-if="id !== 0">
+							<avatar
+								class="bg-danger"
+								v-if="
+									$store.state.mqtt[
+										'openWB/general/extern'
+									] === false
+								"
+								@click="deleteVehicle(id, $event)"
+							>
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'trash']"
+								/>
+							</avatar>
+						</template>
+						<text-input
+							title="Bezeichnung"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/vehicle/' + id + '/name'
+								]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/vehicle/' + id + '/name',
+									$event
+								)
+							"
+							:disabled="id === 0"
+						>
+							<template #help v-if="id === 0">
+								Das Standard-Fahrzeug kann nicht umbenannt
+								werden.
+							</template>
+						</text-input>
+						<select-input
+							title="Fahrzeug-Vorlage"
+							:options="evTemplateList"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/vehicle/' + id + '/ev_template'
+								]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/vehicle/' + id + '/ev_template',
+									$event
+								)
+							"
+						/>
+						<select-input
+							title="Ladeprofil-Vorlage"
+							:options="chargeTemplateList"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/vehicle/' + id + '/charge_template'
+								]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/vehicle/' + id + '/charge_template',
+									$event
+								)
+							"
+						/>
+					</card>
+				</div>
+			</card>
+			<card
+				title="Fahrzeug-Vorlagen"
+				:collapsible="true"
+				:collapsed="true"
+			>
 				<template #actions>
 					<avatar
 						class="bg-success"
@@ -212,105 +315,6 @@
 					</card>
 				</div>
 			</card>
-			<card title="Fahrzeuge">
-				<template #actions>
-					<avatar
-						class="bg-success"
-						v-if="
-							$store.state.mqtt['openWB/general/extern'] === false
-						"
-						@click="addVehicle"
-					>
-						<font-awesome-icon
-							fixed-width
-							:icon="['fas', 'plus']"
-						/>
-					</avatar>
-				</template>
-				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-					<alert subtype="info">
-						Diese Einstellungen sind nicht verfügbar, solange sich
-						diese openWB im Modus "Nur Ladepunkt" befindet.
-					</alert>
-				</div>
-				<div v-else>
-					<card
-						v-for="id in vehicleIndexes"
-						:key="id"
-						:title="getVehicleName(id)"
-						:collapsible="true"
-						:collapsed="true"
-						subtype="primary"
-					>
-						<template #actions v-if="id !== 0">
-							<avatar
-								class="bg-danger"
-								v-if="
-									$store.state.mqtt[
-										'openWB/general/extern'
-									] === false
-								"
-								@click="deleteVehicle(id, $event)"
-							>
-								<font-awesome-icon
-									fixed-width
-									:icon="['fas', 'trash']"
-								/>
-							</avatar>
-						</template>
-						<text-input
-							title="Bezeichnung"
-							:model-value="
-								$store.state.mqtt[
-									'openWB/vehicle/' + id + '/name'
-								]
-							"
-							@update:model-value="
-								updateState(
-									'openWB/vehicle/' + id + '/name',
-									$event
-								)
-							"
-							:disabled="id === 0"
-						>
-							<template #help v-if="id === 0">
-								Das Standard-Fahrzeug kann nicht umbenannt
-								werden.
-							</template>
-						</text-input>
-						<select-input
-							title="Fahrzeug-Vorlage"
-							:options="evTemplateList"
-							:model-value="
-								$store.state.mqtt[
-									'openWB/vehicle/' + id + '/ev_template'
-								]
-							"
-							@update:model-value="
-								updateState(
-									'openWB/vehicle/' + id + '/ev_template',
-									$event
-								)
-							"
-						/>
-						<select-input
-							title="Ladeprofil-Vorlage"
-							:options="chargeTemplateList"
-							:model-value="
-								$store.state.mqtt[
-									'openWB/vehicle/' + id + '/charge_template'
-								]
-							"
-							@update:model-value="
-								updateState(
-									'openWB/vehicle/' + id + '/charge_template',
-									$event
-								)
-							"
-						/>
-					</card>
-				</div>
-			</card>
 			<submit-buttons
 				@save="$emit('save')"
 				@reset="$emit('reset')"
@@ -423,7 +427,6 @@ export default {
 						this.$store.state.mqtt[
 							"openWB/vehicle/template/charge_template/" + index
 						].name;
-					console.log(key, index, name);
 					myList.push({ value: index, text: name });
 				});
 				return myList;
