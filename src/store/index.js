@@ -95,10 +95,26 @@ export default createStore({
 			delete state.mqtt[topic];
 		},
 		updateTopic(state, message) {
+			// helper function to update nested objects py path
+			const setPath = (object, path, value) =>
+				path
+					.split(".")
+					.reduce(
+						(o, p, i) =>
+							(o[p] =
+								path.split(".").length === ++i
+									? value
+									: o[p] || {}),
+						object
+					);
+
 			if (message.topic in state.mqtt) {
 				if (message.objectPath != undefined) {
-					state.mqtt[message.topic][message.objectPath] =
-						message.payload;
+					setPath(
+						state.mqtt[message.topic],
+						message.objectPath,
+						message.payload
+					);
 				} else {
 					state.mqtt[message.topic] = message.payload;
 				}
@@ -106,8 +122,11 @@ export default createStore({
 				console.debug("topic not found in state.mqtt: ", message.topic);
 				if (message.topic in state.examples) {
 					if (message.objectPath != undefined) {
-						state.examples[message.topic][message.objectPath] =
-							message.payload;
+						setPath(
+							state.examples[message.topic],
+							message.objectPath,
+							message.payload
+						);
 					} else {
 						state.examples[message.topic] = message.payload;
 					}

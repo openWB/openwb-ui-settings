@@ -150,10 +150,6 @@
 								/>
 							</avatar>
 						</template>
-						<!-- <alert subtype="info">
-							Daten der Vorlage:
-							<pre>{{ template }}</pre>
-						</alert> -->
 						<text-input
 							title="Bezeichnung"
 							:model-value="template.name"
@@ -315,6 +311,404 @@
 					</card>
 				</div>
 			</card>
+			<card
+				title="Ladeprofil-Vorlagen"
+				:collapsible="true"
+				:collapsed="true"
+			>
+				<template #actions>
+					<avatar
+						class="bg-success"
+						v-if="
+							$store.state.mqtt['openWB/general/extern'] === false
+						"
+						@click="addChargeTemplate"
+					>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'plus']"
+						/>
+					</avatar>
+				</template>
+				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+					<alert subtype="info">
+						Diese Einstellungen sind nicht verfügbar, solange sich
+						diese openWB im Modus "Nur Ladepunkt" befindet.
+					</alert>
+				</div>
+				<div v-else>
+					<card
+						v-for="(template, key) in chargeTemplates"
+						:key="key"
+						:title="template.name ? template.name : key"
+						:collapsible="true"
+						:collapsed="true"
+						subtype="primary"
+					>
+						<template #actions v-if="!key.endsWith('/0')">
+							<avatar
+								class="bg-danger"
+								v-if="
+									$store.state.mqtt[
+										'openWB/general/extern'
+									] === false
+								"
+								@click="deleteChargeTemplate(key, $event)"
+							>
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'trash']"
+								/>
+							</avatar>
+						</template>
+						<text-input
+							title="Bezeichnung"
+							:model-value="template.name"
+							@update:model-value="
+								updateState(key, $event, 'name')
+							"
+							:disabled="key.endsWith('/0')"
+						>
+							<template #help v-if="key.endsWith('/0')">
+								Die Standard-Vorlage kann nicht umbenannt
+								werden.
+							</template>
+						</text-input>
+						<heading>Allgemeine Optionen</heading>
+						<button-group-input
+							title="Priorität"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Nein',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'Ja',
+									class: 'btn-outline-success',
+								},
+							]"
+							:model-value="template.prio"
+							@update:model-value="
+								updateState(key, $event, 'prio')
+							"
+						>
+							<template #help>
+								Fahrzeuge mit Priorität werden bevorzugt
+								geladen. Erst wenn alle priorisierten Fahrzeuge
+								die maximale Ladeleistung bekommen und noch
+								zusätzlicher Überschuss vorhanden ist, werden
+								auch Fahrzeuge ohne Priorität geladen.
+							</template>
+						</button-group-input>
+						<button-group-input
+							title="Automatische Sperre"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Nein',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'Ja',
+									class: 'btn-outline-success',
+								},
+							]"
+							:model-value="template.disable_after_unplug"
+							@update:model-value="
+								updateState(key, $event, 'disable_after_unplug')
+							"
+						>
+							<template #help>
+								Wird ein Fahrzeug mit diesem Profil abgesteckt,
+								dann wird der betroffene Ladepunkt automatisch
+								deaktiviert.
+							</template>
+						</button-group-input>
+						<button-group-input
+							title="Standard nach Abstecken"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Nein',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'Ja',
+									class: 'btn-outline-success',
+								},
+							]"
+							:model-value="template.load_default"
+							@update:model-value="
+								updateState(key, $event, 'load_default')
+							"
+						>
+							<template #help>
+								Falls diese Option aktiviert ist, wird der
+								betroffene Ladepunkt nach dem Abstecken auf das
+								Standard Ladeprofil zurückgesetzt.
+							</template>
+						</button-group-input>
+						<hr />
+						<heading>Sofortladen</heading>
+						<range-input
+							title="Ladestrom"
+							:min="6"
+							:max="32"
+							:step="1"
+							unit="A"
+							:model-value="
+								template.chargemode.instant_charging.current
+							"
+							@update:model-value="
+								updateState(
+									key,
+									$event,
+									'chargemode.instant_charging.current'
+								)
+							"
+						>
+						</range-input>
+						<button-group-input
+							title="Begrenzung"
+							:buttons="[
+								{
+									buttonValue: 'none',
+									text: 'Aus',
+								},
+								{
+									buttonValue: 'soc',
+									text: 'SoC',
+								},
+								{
+									buttonValue: 'amount',
+									text: 'Energie',
+								},
+							]"
+							:model-value="
+								template.chargemode.instant_charging.limit
+									.selected
+							"
+							@update:model-value="
+								updateState(
+									key,
+									$event,
+									'chargemode.instant_charging.limit.selected'
+								)
+							"
+						>
+							<template #help>
+								Sofortladen kann entweder durch den Ladestand
+								der Fahrzeugbatterie (SoC) oder eine
+								Energiemenge in kWh begrenzt werden.
+							</template>
+						</button-group-input>
+						<range-input
+							title="SoC-Limit"
+							:min="5"
+							:max="100"
+							:step="5"
+							unit="%"
+							:model-value="
+								template.chargemode.instant_charging.limit.soc
+							"
+							@update:model-value="
+								updateState(
+									key,
+									$event,
+									'chargemode.instant_charging.limit.soc'
+								)
+							"
+						>
+							<template #help>
+								Um diese Begrenzung nutzen zu können, muss ein
+								SoC-Modul für das jeweilige Fahrzeug
+								eingerichtet werden!
+							</template>
+						</range-input>
+						<number-input
+							title="Energie-Limit"
+							unit="kWh"
+							:min="5"
+							:step="5"
+							:model-value="
+								template.chargemode.instant_charging.limit
+									.amount
+							"
+							@update:model-value="
+								updateState(
+									key,
+									$event,
+									'chargemode.instant_charging.limit.amount'
+								)
+							"
+						>
+						</number-input>
+						<hr />
+						<heading>PV-laden</heading>
+						<range-input
+							title="Mindeststrom"
+							:min="0"
+							:max="11"
+							:step="1"
+							unit="A"
+							:labels="[
+								{ label: 'Aus', value: 0 },
+								{ label: 6, value: 6 },
+								{ label: 7, value: 7 },
+								{ label: 8, value: 8 },
+								{ label: 9, value: 9 },
+								{ label: 10, value: 10 },
+								{ label: 11, value: 11 },
+								{ label: 12, value: 12 },
+								{ label: 13, value: 13 },
+								{ label: 14, value: 14 },
+								{ label: 15, value: 15 },
+								{ label: 16, value: 16 },
+							]"
+							:model-value="
+								template.chargemode.pv_charging.min_current
+							"
+							@update:model-value="
+								updateState(
+									key,
+									$event,
+									'chargemode.pv_charging.min_current'
+								)
+							"
+						>
+							<template #help>
+								ToDo: Beschreibung ergänzen!
+							</template>
+						</range-input>
+						<range-input
+							title="SoC-Limit"
+							:min="0"
+							:max="20"
+							:step="1"
+							unit="%"
+							:labels="[
+								{ label: 5, value: 5 },
+								{ label: 10, value: 10 },
+								{ label: 15, value: 15 },
+								{ label: 20, value: 20 },
+								{ label: 25, value: 25 },
+								{ label: 30, value: 30 },
+								{ label: 35, value: 35 },
+								{ label: 40, value: 40 },
+								{ label: 45, value: 45 },
+								{ label: 50, value: 50 },
+								{ label: 55, value: 55 },
+								{ label: 60, value: 60 },
+								{ label: 65, value: 65 },
+								{ label: 70, value: 70 },
+								{ label: 75, value: 75 },
+								{ label: 80, value: 80 },
+								{ label: 85, value: 85 },
+								{ label: 90, value: 90 },
+								{ label: 95, value: 95 },
+								{ label: 100, value: 100 },
+								{ label: 'Aus', value: 101 },
+							]"
+							:model-value="
+								template.chargemode.pv_charging.max_soc
+							"
+							@update:model-value="
+								updateState(
+									key,
+									$event,
+									'chargemode.pv_charging.max_soc'
+								)
+							"
+						>
+							<template #help>
+								Bei der Einstellung "100%" wird die Ladung mit
+								Erreichen der 100% ebenfalls beendet. Dadurch
+								erfolgt kein Balancing der Batteriezellen. Ist
+								dies gewünscht, muss hier "Aus" gewählt werden,
+								um die Ladung nicht zu beenden.<br />
+								Um diese Begrenzung nutzen zu können, muss ein
+								SoC-Modul für das jeweilige Fahrzeug
+								eingerichtet werden!
+							</template>
+						</range-input>
+						<range-input
+							title="Mindest-SoC"
+							:min="0"
+							:max="19"
+							:step="1"
+							unit="%"
+							:labels="[
+								{ label: 'Aus', value: 0 },
+								{ label: 5, value: 5 },
+								{ label: 10, value: 10 },
+								{ label: 15, value: 15 },
+								{ label: 20, value: 20 },
+								{ label: 25, value: 25 },
+								{ label: 30, value: 30 },
+								{ label: 35, value: 35 },
+								{ label: 40, value: 40 },
+								{ label: 45, value: 45 },
+								{ label: 50, value: 50 },
+								{ label: 55, value: 55 },
+								{ label: 60, value: 60 },
+								{ label: 65, value: 65 },
+								{ label: 70, value: 70 },
+								{ label: 75, value: 75 },
+								{ label: 80, value: 80 },
+								{ label: 85, value: 85 },
+								{ label: 90, value: 90 },
+								{ label: 95, value: 95 },
+							]"
+							:model-value="
+								template.chargemode.pv_charging.min_soc
+							"
+							@update:model-value="
+								updateState(
+									key,
+									$event,
+									'chargemode.pv_charging.min_soc'
+								)
+							"
+						>
+							<template #help>
+								Liegt der Ladestand (SoC) der Fahrzeugbatterie
+								unter dem hier eingestellten Wert, dann wird bis
+								zum Erreichen dieses Wertes mit dem
+								eingestellten "Mindest-SoC-Strom" geladen.<br />
+								Um diese Begrenzung nutzen zu können, muss ein
+								SoC-Modul für das jeweilige Fahrzeug
+								eingerichtet werden!
+							</template>
+						</range-input>
+						<range-input
+							title="Mindest-SoC-Strom"
+							:min="6"
+							:max="32"
+							:step="1"
+							unit="A"
+							:model-value="
+								template.chargemode.pv_charging.min_soc_current
+							"
+							@update:model-value="
+								updateState(
+									key,
+									$event,
+									'chargemode.pv_charging.min_soc_current'
+								)
+							"
+						>
+						</range-input>
+						<hr />
+						<heading>Zielladen</heading>
+						<hr />
+						<heading>Laden nach Zeitplan</heading>
+					</card>
+				</div>
+			</card>
 			<submit-buttons
 				@save="$emit('save')"
 				@reset="$emit('reset')"
@@ -434,6 +828,26 @@ export default {
 		},
 	},
 	methods: {
+		addChargeTemplate(event) {
+			// prevent further processing of the click event
+			event.stopPropagation();
+			console.info("requesting new charge template...");
+			this.$emit("sendCommand", {
+				command: "addChargeTemplate",
+				data: {},
+			});
+		},
+		deleteChargeTemplate(key, event) {
+			// prevent further processing of the click event
+			event.stopPropagation();
+			console.info("request removal of charge template '" + key + "'");
+			// get trailing characters as index
+			let index = key.match(/([^/]+)$/)[0];
+			this.$emit("sendCommand", {
+				command: "removeChargeTemplate",
+				data: { id: index },
+			});
+		},
 		addEvTemplate(event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
