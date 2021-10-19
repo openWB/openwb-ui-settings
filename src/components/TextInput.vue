@@ -56,6 +56,16 @@
 										: ['fas', 'lock']
 								"
 							/>
+							<font-awesome-icon
+								fixed-width
+								v-if="subtype == 'time'"
+								:icon="['fas', 'clock']"
+							/>
+							<font-awesome-icon
+								fixed-width
+								v-if="subtype == 'date'"
+								:icon="['fas', 'calendar-day']"
+							/>
 						</div>
 					</div>
 					<input
@@ -105,6 +115,20 @@
 							/>
 						</div>
 					</div>
+					<input
+						v-if="subtype == 'time'"
+						type="time"
+						class="form-control"
+						v-model="value"
+						v-bind="$attrs"
+					/>
+					<input
+						v-if="subtype == 'date'"
+						type="date"
+						class="form-control"
+						v-model="value"
+						v-bind="$attrs"
+					/>
 				</div>
 			</div>
 			<span v-if="showHelp" class="form-row alert alert-info my-1 small">
@@ -126,6 +150,8 @@ import {
 	faCode as fasCode,
 	faLock as fasLock,
 	faUnlock as fasUnlock,
+	faClock as fasClock,
+	faCalendarDay as fasCalendarDay,
 } from "@fortawesome/free-solid-svg-icons";
 import {
 	faQuestionCircle as farQuestionCircle,
@@ -145,6 +171,8 @@ library.add(
 	fasCode,
 	fasLock,
 	fasUnlock,
+	fasClock,
+	fasCalendarDay,
 	farEye,
 	farEyeSlash
 );
@@ -166,6 +194,8 @@ export default {
 						"user",
 						"json",
 						"password",
+						"time",
+						"date",
 					].indexOf(value) !== -1
 				);
 			},

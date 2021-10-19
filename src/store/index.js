@@ -10,6 +10,8 @@ export default createStore({
 			text3: "openwb.local",
 			text4: "http://www.openwb.de",
 			text5: "Benutzername",
+			text6: "12:34",
+			text7: "2021-10-31",
 			number1: 0,
 			number2: 0,
 			password1: "GeHeiM!",
