@@ -704,6 +704,405 @@
 						</range-input>
 						<hr />
 						<heading>Zielladen</heading>
+						<card
+							v-for="(plan, planIndex) in template.chargemode
+								.scheduled_charging"
+							:key="planIndex"
+							:title="plan.name"
+							:collapsible="true"
+							:collapsed="true"
+						>
+							<template #header v-if="plan.active == true">
+								{{ plan.name }}
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'car-battery']"
+								/>
+								{{ plan.soc }}%
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'clock']"
+								/>
+								{{ plan.time }}
+								<span v-if="plan.frequency.selected == 'once'">
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'calendar-day']"
+									/>
+									{{ formatDate(plan.frequency.once) }}
+								</span>
+								<span v-if="plan.frequency.selected == 'daily'">
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'calendar-alt']"
+									/>
+								</span>
+								<span
+									v-if="plan.frequency.selected == 'weekly'"
+								>
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'calendar-week']"
+									/>
+								</span>
+							</template>
+							<text-input
+								title="Bezeichnung"
+								:model-value="
+									template.chargemode.scheduled_charging[
+										planIndex
+									].name
+								"
+								@update:model-value="
+									updateState(
+										key,
+										$event,
+										'chargemode.scheduled_charging.' +
+											planIndex +
+											'.name'
+									)
+								"
+							>
+							</text-input>
+							<button-group-input
+								title="Zeitpunkt aktiv"
+								:buttons="[
+									{
+										buttonValue: false,
+										text: 'Nein',
+										class: 'btn-outline-danger',
+									},
+									{
+										buttonValue: true,
+										text: 'Ja',
+										class: 'btn-outline-success',
+									},
+								]"
+								:model-value="
+									template.chargemode.scheduled_charging[
+										planIndex
+									].active
+								"
+								@update:model-value="
+									updateState(
+										key,
+										$event,
+										'chargemode.scheduled_charging.' +
+											planIndex +
+											'.active'
+									)
+								"
+							>
+							</button-group-input>
+							<text-input
+								title="Uhrzeit"
+								subtype="time"
+								:model-value="
+									template.chargemode.scheduled_charging[
+										planIndex
+									].time
+								"
+								@update:model-value="
+									updateState(
+										key,
+										$event,
+										'chargemode.scheduled_charging.' +
+											planIndex +
+											'.time'
+									)
+								"
+							>
+							</text-input>
+							<range-input
+								title="Ziel-SoC"
+								:min="5"
+								:max="100"
+								:step="5"
+								unit="%"
+								:model-value="
+									template.chargemode.scheduled_charging[
+										planIndex
+									].soc
+								"
+								@update:model-value="
+									updateState(
+										key,
+										$event,
+										'chargemode.scheduled_charging.' +
+											planIndex +
+											'.soc'
+									)
+								"
+							>
+							</range-input>
+							<button-group-input
+								title="Wiederholungen"
+								:buttons="[
+									{
+										buttonValue: 'once',
+										text: 'Einmalig',
+										class: 'btn-outline-info',
+									},
+									{
+										buttonValue: 'daily',
+										text: 'Täglich',
+										class: 'btn-outline-info',
+									},
+									{
+										buttonValue: 'weekly',
+										text: 'Wöchentlich',
+										class: 'btn-outline-info',
+									},
+								]"
+								:model-value="
+									template.chargemode.scheduled_charging[
+										planIndex
+									].frequency.selected
+								"
+								@update:model-value="
+									updateState(
+										key,
+										$event,
+										'chargemode.scheduled_charging.' +
+											planIndex +
+											'.frequency.selected'
+									)
+								"
+							>
+							</button-group-input>
+							<text-input
+								v-if="plan.frequency.selected == 'once'"
+								title="Datum"
+								subtype="date"
+								:model-value="
+									template.chargemode.scheduled_charging[
+										planIndex
+									].frequency.once
+								"
+								@update:model-value="
+									updateState(
+										key,
+										$event,
+										'chargemode.scheduled_charging.' +
+											planIndex +
+											'.frequency.once'
+									)
+								"
+							>
+							</text-input>
+							<div v-if="plan.frequency.selected == 'weekly'">
+								<button-group-input
+									title="Montag"
+									:buttons="[
+										{
+											buttonValue: false,
+											text: 'Aus',
+											class: 'btn-outline-danger',
+										},
+										{
+											buttonValue: true,
+											text: 'An',
+											class: 'btn-outline-success',
+										},
+									]"
+									:model-value="
+										template.chargemode.scheduled_charging[
+											planIndex
+										].frequency.weekly[0]
+									"
+									@update:model-value="
+										updateState(
+											key,
+											$event,
+											'chargemode.scheduled_charging.' +
+												planIndex +
+												'.frequency.weekly[0]'
+										)
+									"
+								>
+								</button-group-input>
+								<button-group-input
+									title="Dienstag"
+									:buttons="[
+										{
+											buttonValue: false,
+											text: 'Aus',
+											class: 'btn-outline-danger',
+										},
+										{
+											buttonValue: true,
+											text: 'An',
+											class: 'btn-outline-success',
+										},
+									]"
+									:model-value="
+										template.chargemode.scheduled_charging[
+											planIndex
+										].frequency.weekly[1]
+									"
+									@update:model-value="
+										updateState(
+											key,
+											$event,
+											'chargemode.scheduled_charging.' +
+												planIndex +
+												'.frequency.weekly[1]'
+										)
+									"
+								>
+								</button-group-input>
+								<button-group-input
+									title="Mittwoch"
+									:buttons="[
+										{
+											buttonValue: false,
+											text: 'Aus',
+											class: 'btn-outline-danger',
+										},
+										{
+											buttonValue: true,
+											text: 'An',
+											class: 'btn-outline-success',
+										},
+									]"
+									:model-value="
+										template.chargemode.scheduled_charging[
+											planIndex
+										].frequency.weekly[2]
+									"
+									@update:model-value="
+										updateState(
+											key,
+											$event,
+											'chargemode.scheduled_charging.' +
+												planIndex +
+												'.frequency.weekly[2]'
+										)
+									"
+								>
+								</button-group-input>
+								<button-group-input
+									title="Donnerstag"
+									:buttons="[
+										{
+											buttonValue: false,
+											text: 'Aus',
+											class: 'btn-outline-danger',
+										},
+										{
+											buttonValue: true,
+											text: 'An',
+											class: 'btn-outline-success',
+										},
+									]"
+									:model-value="
+										template.chargemode.scheduled_charging[
+											planIndex
+										].frequency.weekly[3]
+									"
+									@update:model-value="
+										updateState(
+											key,
+											$event,
+											'chargemode.scheduled_charging.' +
+												planIndex +
+												'.frequency.weekly[3]'
+										)
+									"
+								>
+								</button-group-input>
+								<button-group-input
+									title="Freitag"
+									:buttons="[
+										{
+											buttonValue: false,
+											text: 'Aus',
+											class: 'btn-outline-danger',
+										},
+										{
+											buttonValue: true,
+											text: 'An',
+											class: 'btn-outline-success',
+										},
+									]"
+									:model-value="
+										template.chargemode.scheduled_charging[
+											planIndex
+										].frequency.weekly[4]
+									"
+									@update:model-value="
+										updateState(
+											key,
+											$event,
+											'chargemode.scheduled_charging.' +
+												planIndex +
+												'.frequency.weekly[4]'
+										)
+									"
+								>
+								</button-group-input>
+								<button-group-input
+									title="Samstag"
+									:buttons="[
+										{
+											buttonValue: false,
+											text: 'Aus',
+											class: 'btn-outline-danger',
+										},
+										{
+											buttonValue: true,
+											text: 'An',
+											class: 'btn-outline-success',
+										},
+									]"
+									:model-value="
+										template.chargemode.scheduled_charging[
+											planIndex
+										].frequency.weekly[5]
+									"
+									@update:model-value="
+										updateState(
+											key,
+											$event,
+											'chargemode.scheduled_charging.' +
+												planIndex +
+												'.frequency.weekly[5]'
+										)
+									"
+								>
+								</button-group-input>
+								<button-group-input
+									title="Sonntag"
+									:buttons="[
+										{
+											buttonValue: false,
+											text: 'Aus',
+											class: 'btn-outline-danger',
+										},
+										{
+											buttonValue: true,
+											text: 'An',
+											class: 'btn-outline-success',
+										},
+									]"
+									:model-value="
+										template.chargemode.scheduled_charging[
+											planIndex
+										].frequency.weekly[6]
+									"
+									@update:model-value="
+										updateState(
+											key,
+											$event,
+											'chargemode.scheduled_charging.' +
+												planIndex +
+												'.frequency.weekly[6]'
+										)
+									"
+								>
+								</button-group-input>
+							</div>
+						</card>
 						<hr />
 						<heading>Laden nach Zeitplan</heading>
 					</card>
@@ -723,10 +1122,23 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import {
 	faPlus as fasPlus,
 	faTrash as fasTrash,
+	faCalendarDay as fasCalendarDay,
+	faCalendarAlt as fasCalendarAlt,
+	faCalendarWeek as fasCalendarWeek,
+	faClock as fasClock,
+	faCarBattery as fasCarBattery,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasPlus, fasTrash);
+library.add(
+	fasPlus,
+	fasTrash,
+	fasCalendarDay,
+	fasCalendarAlt,
+	fasCalendarWeek,
+	fasClock,
+	fasCarBattery
+);
 
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
@@ -890,6 +1302,14 @@ export default {
 			return this.$store.state.mqtt["openWB/vehicle/" + id + "/name"]
 				? this.$store.state.mqtt["openWB/vehicle/" + id + "/name"]
 				: "Fahrzeug " + id;
+		},
+		formatDate(dateString) {
+			let d = new Date(dateString);
+			return d.toLocaleDateString(undefined, {
+				year: "numeric",
+				month: "2-digit",
+				day: "2-digit",
+			});
 		},
 	},
 };

@@ -62,6 +62,22 @@
 				>
 					<template #help>Eingabefeld für Benutzernamen</template>
 				</text-input>
+				<text-input
+					title="6. Text (Time)"
+					subtype="time"
+					:model-value="$store.state.examples.text6"
+					@update:model-value="updateState('text6', $event)"
+				>
+					<template #help>Eingabefeld für Zeiten</template>
+				</text-input>
+				<text-input
+					title="7. Text (Date)"
+					subtype="date"
+					:model-value="$store.state.examples.text7"
+					@update:model-value="updateState('text7', $event)"
+				>
+					<template #help>Eingabefeld für ein Datum</template>
+				</text-input>
 				<hr />
 				<number-input
 					title="1. Zahl"
