@@ -210,6 +210,7 @@
 						</range-input>
 						<number-input
 							title="Erlaubte Stromabweichung"
+							unit="A"
 							:model-value="template.nominal_difference"
 							@update:model-value="
 								updateState(key, $event, 'nominal_difference')
@@ -734,7 +735,7 @@
 								<span v-if="plan.frequency.selected == 'daily'">
 									<font-awesome-icon
 										fixed-width
-										:icon="['fas', 'calendar-alt']"
+										:icon="['fas', 'calendar-week']"
 									/>
 								</span>
 								<span
@@ -742,7 +743,7 @@
 								>
 									<font-awesome-icon
 										fixed-width
-										:icon="['fas', 'calendar-week']"
+										:icon="['fas', 'calendar-alt']"
 									/>
 								</span>
 							</template>
@@ -892,7 +893,9 @@
 							</text-input>
 							<div v-if="plan.frequency.selected == 'weekly'">
 								<button-group-input
-									title="Montag"
+									v-for="(day, dayIndex) in weekdays"
+									:key="dayIndex"
+									:title="day"
 									:buttons="[
 										{
 											buttonValue: false,
@@ -908,7 +911,7 @@
 									:model-value="
 										template.chargemode.scheduled_charging[
 											planIndex
-										].frequency.weekly[0]
+										].frequency.weekly[dayIndex]
 									"
 									@update:model-value="
 										updateState(
@@ -916,187 +919,8 @@
 											$event,
 											'chargemode.scheduled_charging.' +
 												planIndex +
-												'.frequency.weekly[0]'
-										)
-									"
-								>
-								</button-group-input>
-								<button-group-input
-									title="Dienstag"
-									:buttons="[
-										{
-											buttonValue: false,
-											text: 'Aus',
-											class: 'btn-outline-danger',
-										},
-										{
-											buttonValue: true,
-											text: 'An',
-											class: 'btn-outline-success',
-										},
-									]"
-									:model-value="
-										template.chargemode.scheduled_charging[
-											planIndex
-										].frequency.weekly[1]
-									"
-									@update:model-value="
-										updateState(
-											key,
-											$event,
-											'chargemode.scheduled_charging.' +
-												planIndex +
-												'.frequency.weekly[1]'
-										)
-									"
-								>
-								</button-group-input>
-								<button-group-input
-									title="Mittwoch"
-									:buttons="[
-										{
-											buttonValue: false,
-											text: 'Aus',
-											class: 'btn-outline-danger',
-										},
-										{
-											buttonValue: true,
-											text: 'An',
-											class: 'btn-outline-success',
-										},
-									]"
-									:model-value="
-										template.chargemode.scheduled_charging[
-											planIndex
-										].frequency.weekly[2]
-									"
-									@update:model-value="
-										updateState(
-											key,
-											$event,
-											'chargemode.scheduled_charging.' +
-												planIndex +
-												'.frequency.weekly[2]'
-										)
-									"
-								>
-								</button-group-input>
-								<button-group-input
-									title="Donnerstag"
-									:buttons="[
-										{
-											buttonValue: false,
-											text: 'Aus',
-											class: 'btn-outline-danger',
-										},
-										{
-											buttonValue: true,
-											text: 'An',
-											class: 'btn-outline-success',
-										},
-									]"
-									:model-value="
-										template.chargemode.scheduled_charging[
-											planIndex
-										].frequency.weekly[3]
-									"
-									@update:model-value="
-										updateState(
-											key,
-											$event,
-											'chargemode.scheduled_charging.' +
-												planIndex +
-												'.frequency.weekly[3]'
-										)
-									"
-								>
-								</button-group-input>
-								<button-group-input
-									title="Freitag"
-									:buttons="[
-										{
-											buttonValue: false,
-											text: 'Aus',
-											class: 'btn-outline-danger',
-										},
-										{
-											buttonValue: true,
-											text: 'An',
-											class: 'btn-outline-success',
-										},
-									]"
-									:model-value="
-										template.chargemode.scheduled_charging[
-											planIndex
-										].frequency.weekly[4]
-									"
-									@update:model-value="
-										updateState(
-											key,
-											$event,
-											'chargemode.scheduled_charging.' +
-												planIndex +
-												'.frequency.weekly[4]'
-										)
-									"
-								>
-								</button-group-input>
-								<button-group-input
-									title="Samstag"
-									:buttons="[
-										{
-											buttonValue: false,
-											text: 'Aus',
-											class: 'btn-outline-danger',
-										},
-										{
-											buttonValue: true,
-											text: 'An',
-											class: 'btn-outline-success',
-										},
-									]"
-									:model-value="
-										template.chargemode.scheduled_charging[
-											planIndex
-										].frequency.weekly[5]
-									"
-									@update:model-value="
-										updateState(
-											key,
-											$event,
-											'chargemode.scheduled_charging.' +
-												planIndex +
-												'.frequency.weekly[5]'
-										)
-									"
-								>
-								</button-group-input>
-								<button-group-input
-									title="Sonntag"
-									:buttons="[
-										{
-											buttonValue: false,
-											text: 'Aus',
-											class: 'btn-outline-danger',
-										},
-										{
-											buttonValue: true,
-											text: 'An',
-											class: 'btn-outline-success',
-										},
-									]"
-									:model-value="
-										template.chargemode.scheduled_charging[
-											planIndex
-										].frequency.weekly[6]
-									"
-									@update:model-value="
-										updateState(
-											key,
-											$event,
-											'chargemode.scheduled_charging.' +
-												planIndex +
-												'.frequency.weekly[6]'
+												'.frequency.weekly.' +
+												dayIndex
 										)
 									"
 								>
@@ -1187,6 +1011,15 @@ export default {
 				"openWB/vehicle/+/name",
 				"openWB/vehicle/+/charge_template",
 				"openWB/vehicle/+/ev_template",
+			],
+			weekdays: [
+				"Montag",
+				"Dienstag",
+				"Mittwoch",
+				"Donnerstag",
+				"Freitag",
+				"Samstag",
+				"Sonntag",
 			],
 		};
 	},
