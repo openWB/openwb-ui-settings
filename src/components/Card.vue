@@ -8,14 +8,14 @@
 			<div class="form-group mb-0">
 				<div class="form-row vaRow mb-0 py-2">
 					<div class="col">
-						<slot name="header">
+						<slot name="header" :collapsed="isCollapsed">
 							{{ title }}
 						</slot>
 					</div>
 				</div>
 			</div>
 			<span class="card-actions">
-				<slot name="actions"></slot>
+				<slot name="actions" :collapsed="isCollapsed"></slot>
 				<font-awesome-icon
 					v-if="collapsible"
 					fixed-width
@@ -89,7 +89,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .card {
 	margin-bottom: 1rem;
 }
@@ -99,6 +99,21 @@ export default {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+}
+
+.card .card-header .subheader {
+	font-weight: normal;
+	font-size: 75%;
+}
+
+.card-actions {
+	display: flex;
+	align-items: center;
+}
+
+.card-actions .pill {
+	border-radius: 10px;
+	padding: 5px;
 }
 
 .bg-primary,

@@ -713,38 +713,53 @@
 							:collapsible="true"
 							:collapsed="true"
 						>
-							<template #header v-if="plan.active == true">
-								{{ plan.name }}
-								<font-awesome-icon
-									fixed-width
-									:icon="['fas', 'car-battery']"
-								/>
-								{{ plan.soc }}%
-								<font-awesome-icon
-									fixed-width
-									:icon="['fas', 'clock']"
-								/>
-								{{ plan.time }}
-								<span v-if="plan.frequency.selected == 'once'">
-									<font-awesome-icon
-										fixed-width
-										:icon="['fas', 'calendar-day']"
-									/>
-									{{ formatDate(plan.frequency.once) }}
-								</span>
-								<span v-if="plan.frequency.selected == 'daily'">
-									<font-awesome-icon
-										fixed-width
-										:icon="['fas', 'calendar-week']"
-									/>
-								</span>
+							<template #actions="slotProps">
 								<span
-									v-if="plan.frequency.selected == 'weekly'"
+									v-if="slotProps.collapsed == true"
+									class="subheader pill"
+									:class="
+										plan.active ? 'bg-success' : 'bg-danger'
+									"
 								>
 									<font-awesome-icon
 										fixed-width
-										:icon="['fas', 'calendar-alt']"
+										:icon="['fas', 'car-battery']"
 									/>
+									{{ plan.soc }}%
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'clock']"
+									/>
+									{{ plan.time }}
+									<span
+										v-if="plan.frequency.selected == 'once'"
+									>
+										<font-awesome-icon
+											fixed-width
+											:icon="['fas', 'calendar-day']"
+										/>
+										{{ formatDate(plan.frequency.once) }}
+									</span>
+									<span
+										v-if="
+											plan.frequency.selected == 'daily'
+										"
+									>
+										<font-awesome-icon
+											fixed-width
+											:icon="['fas', 'calendar-week']"
+										/>
+									</span>
+									<span
+										v-if="
+											plan.frequency.selected == 'weekly'
+										"
+									>
+										<font-awesome-icon
+											fixed-width
+											:icon="['fas', 'calendar-alt']"
+										/>
+									</span>
 								</span>
 							</template>
 							<text-input
@@ -929,6 +944,268 @@
 						</card>
 						<hr />
 						<heading>Laden nach Zeitplan</heading>
+						<button-group-input
+							title="Aktiviert"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Nein',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'Ja',
+									class: 'btn-outline-success',
+								},
+							]"
+							:model-value="template.time_charging.active"
+							@update:model-value="
+								updateState(key, $event, 'time_charging.active')
+							"
+						>
+						</button-group-input>
+						<card
+							v-for="(plan, planIndex) in template.time_charging
+								.plans"
+							:key="planIndex"
+							:title="plan.name"
+							:collapsible="true"
+							:collapsed="true"
+						>
+							<template #actions="slotProps">
+								<span
+									v-if="slotProps.collapsed == true"
+									class="subheader pill"
+									:class="
+										plan.active ? 'bg-success' : 'bg-danger'
+									"
+								>
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'clock']"
+									/>
+									{{ plan.time[0] }} - {{ plan.time[1] }}
+									<span
+										v-if="plan.frequency.selected == 'once'"
+									>
+										<font-awesome-icon
+											fixed-width
+											:icon="['fas', 'calendar-day']"
+										/>
+										{{ formatDate(plan.frequency.once) }}
+									</span>
+									<span
+										v-if="
+											plan.frequency.selected == 'daily'
+										"
+									>
+										<font-awesome-icon
+											fixed-width
+											:icon="['fas', 'calendar-week']"
+										/>
+									</span>
+									<span
+										v-if="
+											plan.frequency.selected == 'weekly'
+										"
+									>
+										<font-awesome-icon
+											fixed-width
+											:icon="['fas', 'calendar-alt']"
+										/>
+									</span>
+								</span>
+							</template>
+							<text-input
+								title="Bezeichnung"
+								:model-value="
+									template.time_charging.plans[planIndex].name
+								"
+								@update:model-value="
+									updateState(
+										key,
+										$event,
+										'time_charging.plans.' +
+											planIndex +
+											'.name'
+									)
+								"
+							>
+							</text-input>
+							<button-group-input
+								title="Zeitplan aktiv"
+								:buttons="[
+									{
+										buttonValue: false,
+										text: 'Nein',
+										class: 'btn-outline-danger',
+									},
+									{
+										buttonValue: true,
+										text: 'Ja',
+										class: 'btn-outline-success',
+									},
+								]"
+								:model-value="
+									template.time_charging.plans[planIndex]
+										.active
+								"
+								@update:model-value="
+									updateState(
+										key,
+										$event,
+										'time_charging.plans.' +
+											planIndex +
+											'.active'
+									)
+								"
+							>
+							</button-group-input>
+							<range-input
+								title="Ladestrom"
+								:min="6"
+								:max="32"
+								:step="1"
+								unit="A"
+								:model-value="
+									template.time_charging.plans[planIndex]
+										.current
+								"
+								@update:model-value="
+									updateState(
+										key,
+										$event,
+										'time_charging.plans.' +
+											planIndex +
+											'.current'
+									)
+								"
+							>
+							</range-input>
+							<text-input
+								title="Beginn"
+								subtype="time"
+								:model-value="
+									template.time_charging.plans[planIndex]
+										.time[0]
+								"
+								@update:model-value="
+									updateState(
+										key,
+										$event,
+										'time_charging.plans.' +
+											planIndex +
+											'.time.0'
+									)
+								"
+							>
+							</text-input>
+							<text-input
+								title="Ende"
+								subtype="time"
+								:model-value="
+									template.time_charging.plans[planIndex]
+										.time[1]
+								"
+								@update:model-value="
+									updateState(
+										key,
+										$event,
+										'time_charging.plans.' +
+											planIndex +
+											'.time.1'
+									)
+								"
+							>
+							</text-input>
+							<button-group-input
+								title="Wiederholungen"
+								:buttons="[
+									{
+										buttonValue: 'once',
+										text: 'Einmalig',
+										class: 'btn-outline-info',
+									},
+									{
+										buttonValue: 'daily',
+										text: 'Täglich',
+										class: 'btn-outline-info',
+									},
+									{
+										buttonValue: 'weekly',
+										text: 'Wöchentlich',
+										class: 'btn-outline-info',
+									},
+								]"
+								:model-value="
+									template.time_charging.plans[planIndex]
+										.frequency.selected
+								"
+								@update:model-value="
+									updateState(
+										key,
+										$event,
+										'time_charging.plans.' +
+											planIndex +
+											'.frequency.selected'
+									)
+								"
+							>
+							</button-group-input>
+							<text-input
+								v-if="plan.frequency.selected == 'once'"
+								title="Datum"
+								subtype="date"
+								:model-value="
+									template.time_charging.plans[planIndex]
+										.frequency.once
+								"
+								@update:model-value="
+									updateState(
+										key,
+										$event,
+										'time_charging.plans.' +
+											planIndex +
+											'.frequency.once'
+									)
+								"
+							>
+							</text-input>
+							<div v-if="plan.frequency.selected == 'weekly'">
+								<button-group-input
+									v-for="(day, dayIndex) in weekdays"
+									:key="dayIndex"
+									:title="day"
+									:buttons="[
+										{
+											buttonValue: false,
+											text: 'Aus',
+											class: 'btn-outline-danger',
+										},
+										{
+											buttonValue: true,
+											text: 'An',
+											class: 'btn-outline-success',
+										},
+									]"
+									:model-value="
+										template.time_charging.plans[planIndex]
+											.frequency.weekly[dayIndex]
+									"
+									@update:model-value="
+										updateState(
+											key,
+											$event,
+											'time_charging.plans.' +
+												planIndex +
+												'.frequency.weekly.' +
+												dayIndex
+										)
+									"
+								>
+								</button-group-input>
+							</div>
+						</card>
 					</card>
 				</div>
 			</card>
