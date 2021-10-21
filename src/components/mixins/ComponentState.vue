@@ -30,7 +30,7 @@ export default {
 			myTopics.forEach((topic, index, array) => {
 				array[index] = parseInt(
 					topic
-						.match(/(?:\/)([0-9]+)(?=\/)/g)[0]
+						.match(/(?:\/)([0-9]+)(?=\/)*/g)[0]
 						.replace(/[^0-9]+/g, "")
 				);
 			});
@@ -79,7 +79,17 @@ export default {
 		console.debug("unmounted");
 		this.$root.doUnsubscribe(this.mqttTopicsToSubscribe);
 		this.mqttTopicsToSubscribe.forEach((topic) => {
-			this.$store.commit("removeTopic", topic);
+			if (topic.includes("#") || topic.includes("+")) {
+				console.debug("expanding wildcard topic:", topic);
+				Object.keys(this.getWildcardTopics(topic)).forEach(
+					(wildcardTopic) => {
+						console.debug("removing wildcardTopic:", wildcardTopic);
+						this.$store.commit("removeTopic", wildcardTopic);
+					}
+				);
+			} else {
+				this.$store.commit("removeTopic", topic);
+			}
 		});
 	},
 };

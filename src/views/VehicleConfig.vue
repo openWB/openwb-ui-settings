@@ -1,6 +1,7 @@
 <template>
 	<div class="vehicleConfig">
 		<form id="myForm">
+			<!-- vehicle card -->
 			<card title="Fahrzeuge" :collapsible="true" :collapsed="true">
 				<template #actions>
 					<avatar
@@ -34,12 +35,7 @@
 						<template #actions v-if="id !== 0">
 							<avatar
 								class="bg-danger"
-								v-if="
-									$store.state.mqtt[
-										'openWB/general/extern'
-									] === false
-								"
-								@click="deleteVehicle(id, $event)"
+								@click="removeVehicle(id, $event)"
 							>
 								<font-awesome-icon
 									fixed-width
@@ -100,6 +96,7 @@
 					</card>
 				</div>
 			</card>
+			<!-- vehicle template card -->
 			<card
 				title="Fahrzeug-Vorlagen"
 				:collapsible="true"
@@ -142,7 +139,7 @@
 										'openWB/general/extern'
 									] === false
 								"
-								@click="deleteEvTemplate(key, $event)"
+								@click="removeEvTemplate(key, $event)"
 							>
 								<font-awesome-icon
 									fixed-width
@@ -312,6 +309,7 @@
 					</card>
 				</div>
 			</card>
+			<!-- charge template card -->
 			<card
 				title="Ladeprofil-Vorlagen"
 				:collapsible="true"
@@ -339,22 +337,19 @@
 				</div>
 				<div v-else>
 					<card
-						v-for="(template, key) in chargeTemplates"
-						:key="key"
-						:title="template.name ? template.name : key"
+						v-for="(template, templateKey) in chargeTemplates"
+						:key="templateKey"
+						:title="template.name ? template.name : templateKey"
 						:collapsible="true"
 						:collapsed="true"
 						subtype="primary"
 					>
-						<template #actions v-if="!key.endsWith('/0')">
+						<template #actions v-if="!templateKey.endsWith('/0')">
 							<avatar
 								class="bg-danger"
-								v-if="
-									$store.state.mqtt[
-										'openWB/general/extern'
-									] === false
+								@click="
+									removeChargeTemplate(templateKey, $event)
 								"
-								@click="deleteChargeTemplate(key, $event)"
 							>
 								<font-awesome-icon
 									fixed-width
@@ -366,11 +361,11 @@
 							title="Bezeichnung"
 							:model-value="template.name"
 							@update:model-value="
-								updateState(key, $event, 'name')
+								updateState(templateKey, $event, 'name')
 							"
-							:disabled="key.endsWith('/0')"
+							:disabled="templateKey.endsWith('/0')"
 						>
-							<template #help v-if="key.endsWith('/0')">
+							<template #help v-if="templateKey.endsWith('/0')">
 								Die Standard-Vorlage kann nicht umbenannt
 								werden.
 							</template>
@@ -392,7 +387,7 @@
 							]"
 							:model-value="template.prio"
 							@update:model-value="
-								updateState(key, $event, 'prio')
+								updateState(templateKey, $event, 'prio')
 							"
 						>
 							<template #help>
@@ -419,7 +414,11 @@
 							]"
 							:model-value="template.disable_after_unplug"
 							@update:model-value="
-								updateState(key, $event, 'disable_after_unplug')
+								updateState(
+									templateKey,
+									$event,
+									'disable_after_unplug'
+								)
 							"
 						>
 							<template #help>
@@ -444,7 +443,7 @@
 							]"
 							:model-value="template.load_default"
 							@update:model-value="
-								updateState(key, $event, 'load_default')
+								updateState(templateKey, $event, 'load_default')
 							"
 						>
 							<template #help>
@@ -466,7 +465,7 @@
 							"
 							@update:model-value="
 								updateState(
-									key,
+									templateKey,
 									$event,
 									'chargemode.instant_charging.current'
 								)
@@ -495,7 +494,7 @@
 							"
 							@update:model-value="
 								updateState(
-									key,
+									templateKey,
 									$event,
 									'chargemode.instant_charging.limit.selected'
 								)
@@ -518,7 +517,7 @@
 							"
 							@update:model-value="
 								updateState(
-									key,
+									templateKey,
 									$event,
 									'chargemode.instant_charging.limit.soc'
 								)
@@ -541,7 +540,7 @@
 							"
 							@update:model-value="
 								updateState(
-									key,
+									templateKey,
 									$event,
 									'chargemode.instant_charging.limit.amount'
 								)
@@ -575,7 +574,7 @@
 							"
 							@update:model-value="
 								updateState(
-									key,
+									templateKey,
 									$event,
 									'chargemode.pv_charging.min_current'
 								)
@@ -619,7 +618,7 @@
 							"
 							@update:model-value="
 								updateState(
-									key,
+									templateKey,
 									$event,
 									'chargemode.pv_charging.max_soc'
 								)
@@ -669,7 +668,7 @@
 							"
 							@update:model-value="
 								updateState(
-									key,
+									templateKey,
 									$event,
 									'chargemode.pv_charging.min_soc'
 								)
@@ -696,7 +695,7 @@
 							"
 							@update:model-value="
 								updateState(
-									key,
+									templateKey,
 									$event,
 									'chargemode.pv_charging.min_soc_current'
 								)
@@ -704,7 +703,25 @@
 						>
 						</range-input>
 						<hr />
-						<heading>Zielladen</heading>
+						<heading>
+							Zielladen
+							<template #actions>
+								<avatar
+									class="bg-success"
+									@click="
+										addChargeTemplateSchedulePlan(
+											templateKey,
+											$event
+										)
+									"
+								>
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'plus']"
+									/>
+								</avatar>
+							</template>
+						</heading>
 						<card
 							v-for="(plan, planIndex) in template.chargemode
 								.scheduled_charging"
@@ -761,6 +778,22 @@
 										/>
 									</span>
 								</span>
+								<avatar
+									v-if="slotProps.collapsed == false"
+									class="bg-danger"
+									@click="
+										removeChargeTemplateSchedulePlan(
+											templateKey,
+											planIndex,
+											$event
+										)
+									"
+								>
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'trash']"
+									/>
+								</avatar>
 							</template>
 							<text-input
 								title="Bezeichnung"
@@ -771,7 +804,7 @@
 								"
 								@update:model-value="
 									updateState(
-										key,
+										templateKey,
 										$event,
 										'chargemode.scheduled_charging.' +
 											planIndex +
@@ -801,7 +834,7 @@
 								"
 								@update:model-value="
 									updateState(
-										key,
+										templateKey,
 										$event,
 										'chargemode.scheduled_charging.' +
 											planIndex +
@@ -820,7 +853,7 @@
 								"
 								@update:model-value="
 									updateState(
-										key,
+										templateKey,
 										$event,
 										'chargemode.scheduled_charging.' +
 											planIndex +
@@ -842,7 +875,7 @@
 								"
 								@update:model-value="
 									updateState(
-										key,
+										templateKey,
 										$event,
 										'chargemode.scheduled_charging.' +
 											planIndex +
@@ -877,7 +910,7 @@
 								"
 								@update:model-value="
 									updateState(
-										key,
+										templateKey,
 										$event,
 										'chargemode.scheduled_charging.' +
 											planIndex +
@@ -897,7 +930,7 @@
 								"
 								@update:model-value="
 									updateState(
-										key,
+										templateKey,
 										$event,
 										'chargemode.scheduled_charging.' +
 											planIndex +
@@ -930,7 +963,7 @@
 									"
 									@update:model-value="
 										updateState(
-											key,
+											templateKey,
 											$event,
 											'chargemode.scheduled_charging.' +
 												planIndex +
@@ -943,7 +976,25 @@
 							</div>
 						</card>
 						<hr />
-						<heading>Laden nach Zeitplan</heading>
+						<heading>
+							Laden nach Zeitplan
+							<template #actions>
+								<avatar
+									class="bg-success"
+									@click="
+										addChargeTemplateTimeChargingPlan(
+											templateKey,
+											$event
+										)
+									"
+								>
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'plus']"
+									/>
+								</avatar>
+							</template>
+						</heading>
 						<button-group-input
 							title="Aktiviert"
 							:buttons="[
@@ -1015,6 +1066,22 @@
 										/>
 									</span>
 								</span>
+								<avatar
+									v-if="slotProps.collapsed == false"
+									class="bg-danger"
+									@click="
+										removeChargeTemplateTimeChargingPlan(
+											templateKey,
+											planIndex,
+											$event
+										)
+									"
+								>
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'trash']"
+									/>
+								</avatar>
 							</template>
 							<text-input
 								title="Bezeichnung"
@@ -1023,7 +1090,7 @@
 								"
 								@update:model-value="
 									updateState(
-										key,
+										templateKey,
 										$event,
 										'time_charging.plans.' +
 											planIndex +
@@ -1052,7 +1119,7 @@
 								"
 								@update:model-value="
 									updateState(
-										key,
+										templateKey,
 										$event,
 										'time_charging.plans.' +
 											planIndex +
@@ -1073,7 +1140,7 @@
 								"
 								@update:model-value="
 									updateState(
-										key,
+										templateKey,
 										$event,
 										'time_charging.plans.' +
 											planIndex +
@@ -1091,7 +1158,7 @@
 								"
 								@update:model-value="
 									updateState(
-										key,
+										templateKey,
 										$event,
 										'time_charging.plans.' +
 											planIndex +
@@ -1109,7 +1176,7 @@
 								"
 								@update:model-value="
 									updateState(
-										key,
+										templateKey,
 										$event,
 										'time_charging.plans.' +
 											planIndex +
@@ -1143,7 +1210,7 @@
 								"
 								@update:model-value="
 									updateState(
-										key,
+										templateKey,
 										$event,
 										'time_charging.plans.' +
 											planIndex +
@@ -1162,7 +1229,7 @@
 								"
 								@update:model-value="
 									updateState(
-										key,
+										templateKey,
 										$event,
 										'time_charging.plans.' +
 											planIndex +
@@ -1194,7 +1261,7 @@
 									"
 									@update:model-value="
 										updateState(
-											key,
+											templateKey,
 											$event,
 											'time_charging.plans.' +
 												planIndex +
@@ -1350,46 +1417,6 @@ export default {
 		},
 	},
 	methods: {
-		addChargeTemplate(event) {
-			// prevent further processing of the click event
-			event.stopPropagation();
-			console.info("requesting new charge template...");
-			this.$emit("sendCommand", {
-				command: "addChargeTemplate",
-				data: {},
-			});
-		},
-		deleteChargeTemplate(key, event) {
-			// prevent further processing of the click event
-			event.stopPropagation();
-			console.info("request removal of charge template '" + key + "'");
-			// get trailing characters as index
-			let index = key.match(/([^/]+)$/)[0];
-			this.$emit("sendCommand", {
-				command: "removeChargeTemplate",
-				data: { id: index },
-			});
-		},
-		addEvTemplate(event) {
-			// prevent further processing of the click event
-			event.stopPropagation();
-			console.info("requesting new ev template...");
-			this.$emit("sendCommand", {
-				command: "addEVTemplate",
-				data: {},
-			});
-		},
-		deleteEvTemplate(key, event) {
-			// prevent further processing of the click event
-			event.stopPropagation();
-			console.info("request removal of ev template '" + key + "'");
-			// get trailing characters as index
-			let index = key.match(/([^/]+)$/)[0];
-			this.$emit("sendCommand", {
-				command: "removeEVTemplate",
-				data: { id: index },
-			});
-		},
 		addVehicle(event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
@@ -1399,7 +1426,7 @@ export default {
 				data: {},
 			});
 		},
-		deleteVehicle(index, event) {
+		removeVehicle(index, event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
 			console.info("request removal of vehicle '" + index + "'");
@@ -1412,6 +1439,106 @@ export default {
 			return this.$store.state.mqtt["openWB/vehicle/" + id + "/name"]
 				? this.$store.state.mqtt["openWB/vehicle/" + id + "/name"]
 				: "Fahrzeug " + id;
+		},
+		addEvTemplate(event) {
+			// prevent further processing of the click event
+			event.stopPropagation();
+			console.info("requesting new ev template...");
+			this.$emit("sendCommand", {
+				command: "addEVTemplate",
+				data: {},
+			});
+		},
+		removeEvTemplate(key, event) {
+			// prevent further processing of the click event
+			event.stopPropagation();
+			console.info("request removal of ev template '" + key + "'");
+			// get trailing characters as index
+			let index = key.match(/([^/]+)$/)[0];
+			this.$emit("sendCommand", {
+				command: "removeEVTemplate",
+				data: { id: index },
+			});
+		},
+		addChargeTemplate(event) {
+			// prevent further processing of the click event
+			event.stopPropagation();
+			console.info("requesting new charge template...");
+			this.$emit("sendCommand", {
+				command: "addChargeTemplate",
+				data: {},
+			});
+		},
+		removeChargeTemplate(template, event) {
+			// prevent further processing of the click event
+			event.stopPropagation();
+			console.info(
+				"request removal of charge template '" + template + "'"
+			);
+			// get trailing characters as index
+			let index = template.match(/([^/]+)$/)[0];
+			this.$emit("sendCommand", {
+				command: "removeChargeTemplate",
+				data: { id: index },
+			});
+		},
+		addChargeTemplateSchedulePlan(template, event) {
+			// prevent further processing of the click event
+			event.stopPropagation();
+			console.info("requesting new charge template schedule plan...");
+			// get trailing characters as index
+			let index = template.match(/([^/]+)$/)[0];
+			this.$emit("sendCommand", {
+				command: "addChargeTemplateSchedulePlan",
+				data: { template: index },
+			});
+		},
+		removeChargeTemplateSchedulePlan(template, plan, event) {
+			// prevent further processing of the click event
+			event.stopPropagation();
+			console.info(
+				"request removal of charge template '" +
+					template +
+					"' schedule plan '" +
+					plan +
+					"'"
+			);
+			// get trailing characters as index
+			let index = template.match(/([^/]+)$/)[0];
+			this.$emit("sendCommand", {
+				command: "removeChargeTemplateSchedulePlan",
+				data: { template: index, plan: plan },
+			});
+		},
+		addChargeTemplateTimeChargingPlan(template, event) {
+			// prevent further processing of the click event
+			event.stopPropagation();
+			console.info(
+				"requesting new charge template time charging plan..."
+			);
+			// get trailing characters as index
+			let index = template.match(/([^/]+)$/)[0];
+			this.$emit("sendCommand", {
+				command: "addChargeTemplateTimeChargingPlan",
+				data: { template: index },
+			});
+		},
+		removeChargeTemplateTimeChargingPlan(template, plan, event) {
+			// prevent further processing of the click event
+			event.stopPropagation();
+			console.info(
+				"request removal of charge template '" +
+					template +
+					"' time charging plan '" +
+					plan +
+					"'"
+			);
+			// get trailing characters as index
+			let index = template.match(/([^/]+)$/)[0];
+			this.$emit("sendCommand", {
+				command: "removeChargeTemplateTimeChargingPlan",
+				data: { template: index, plan: plan },
+			});
 		},
 		formatDate(dateString) {
 			let d = new Date(dateString);
