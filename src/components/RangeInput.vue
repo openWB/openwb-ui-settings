@@ -135,9 +135,12 @@ export default {
 						this.modelValue !== undefined
 					) {
 						console.warn(
-							"sliderValue: not found in values: " +
-								this.modelValue
+							"sliderValue: not found in values: ",
+							this.modelValue,
+							"using min as default: ",
+							this.min
 						);
+						return this.min;
 					} else {
 						return myValue;
 					}
