@@ -50,10 +50,26 @@ export default createStore({
 				{
 					value: "solaredge",
 					text: "Solaredge Verbund",
+					components: [
+						{
+							value: "wr",
+							text: "Wechselrichter",
+						},
+					],
 				},
 				{
 					value: "fronius",
 					text: "Fronius Verbund",
+					components: [
+						{
+							value: "wr",
+							text: "Symo Wechselrichter",
+						},
+						{
+							value: "smartmeter",
+							text: "SmartMeter",
+						},
+					],
 				},
 			],
 			installedDevices: [

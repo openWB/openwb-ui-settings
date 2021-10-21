@@ -9,14 +9,18 @@
 				<select-input
 					title="Verfügbare Systeme"
 					notSelected="Bitte auswählen"
-					:options="$store.state.examples.availableDevices"
+					:options="getDeviceList()"
 					:model-value="deviceToAdd"
 					@update:model-value="deviceToAdd = $event"
 				>
 					<template #append>
 						<span class="col-1">
 							<click-button
-								class="btn-success"
+								:class="
+									deviceToAdd === undefined
+										? 'btn-outline-success'
+										: 'btn-success'
+								"
 								:disabled="deviceToAdd === undefined"
 								@click="addDevice"
 							>
@@ -51,10 +55,51 @@
 						{{ installedDevice.name }} ({{ installedDevice.type }})
 					</template>
 					(Konfiguration...)
+					<select-input
+						title="Verfügbare Komponenten"
+						notSelected="Bitte auswählen"
+						:options="getComponentList(installedDevice.type)"
+						:model-value="componentToAdd[installedDevice.type]"
+						@update:model-value="
+							componentToAdd[installedDevice.type] = $event
+						"
+					>
+						<template #append>
+							<span class="col-1">
+								<click-button
+									:class="
+										componentToAdd[installedDevice.type] ===
+										undefined
+											? 'btn-outline-success'
+											: 'btn-success'
+									"
+									:disabled="
+										componentToAdd[installedDevice.type] ===
+										undefined
+									"
+									@click="
+										addComponent(
+											installedDevice.type,
+											componentToAdd[installedDevice.type]
+										)
+									"
+								>
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'plus']"
+									/>
+								</click-button>
+							</span>
+						</template>
+						<template #help>
+							Bitte eine Komponente auswählen, die hinzugefügt
+							werden soll.
+						</template>
+					</select-input>
 					<card
 						v-for="installedComponent in installedDevice.components"
 						:key="installedComponent.id"
-						title="Komponente 1"
+						:title="installedComponent.name"
 						:collapsible="true"
 						:collapsed="true"
 						subtype="dark"
@@ -161,6 +206,7 @@ export default {
 		return {
 			mqttTopicsToSubscribe: ["openWB/counter/get/hierarchy"],
 			deviceToAdd: undefined,
+			componentToAdd: [],
 		};
 	},
 	methods: {
@@ -171,6 +217,25 @@ export default {
 					type: this.deviceToAdd,
 				},
 			});
+		},
+		getDeviceList() {
+			return this.$store.state.examples.availableDevices;
+		},
+		addComponent(deviceId, componentType) {
+			this.$emit("sendCommand", {
+				command: "addComponent",
+				data: {
+					device: deviceId,
+					type: componentType,
+				},
+			});
+		},
+		getComponentList(deviceType) {
+			console.log("finding components for '" + deviceType + "'");
+			let myDevice = this.$store.state.examples.availableDevices.find(
+				(device) => device.value === deviceType
+			);
+			return myDevice.components;
 		},
 	},
 };
