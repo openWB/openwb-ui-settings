@@ -19,8 +19,8 @@ export default {
 					"^" +
 					baseTopic
 						.replaceAll("/", "\\/")
-						.replaceAll("+", "[^+]+")
-						.replaceAll("#", "[^#]+") +
+						.replaceAll("+", "[^+/]+")
+						.replaceAll("#", "[^#/]+") +
 					"$";
 			}
 			// filter and return all topics matching our regex
@@ -44,8 +44,8 @@ export default {
 					"^" +
 					baseTopic
 						.replaceAll("/", "\\/")
-						.replaceAll("+", "[^+]+")
-						.replaceAll("#", "[^#]+") +
+						.replaceAll("+", "[^+/]+")
+						.replaceAll("#", "[^#/]+") +
 					"$";
 			}
 			// filter and return all topics matching our regex
