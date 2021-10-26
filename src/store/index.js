@@ -48,43 +48,24 @@ export default createStore({
 			],
 			availableDevices: [
 				{
-					value: "solaredge",
-					text: "Solaredge Verbund",
-				},
-				{
-					value: "fronius",
-					text: "Fronius Verbund",
+					value: "openwb_flex",
+					text: "openWB Flex Kit",
+					components: [
+						{
+							value: "counter",
+							text: "Zähler",
+						},
+					],
 				},
 			],
-			installedDevices: [
+			availableChargepoints: [
 				{
-					id: 0,
-					type: "solaredge",
-					name: "Solaredge Verbund",
-					components: [
-						{
-							id: "0.1",
-							type: "se_wr_1",
-							name: "Wechselrichter 1",
-						},
-					],
+					value: "openwb_standard",
+					text: "openWB Standard",
 				},
 				{
-					id: 1,
-					type: "fronius",
-					name: "Fronius Verbund",
-					components: [
-						{
-							id: "1.1",
-							type: "fr_wr_1",
-							name: "Wechselrichter 1",
-						},
-						{
-							id: "1.2",
-							type: "fr_sm",
-							name: "SmartMeter",
-						},
-					],
+					value: "openwb_standard_plus",
+					text: "openWB Standard+",
 				},
 			],
 		},

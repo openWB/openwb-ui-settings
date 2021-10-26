@@ -98,7 +98,7 @@ export default {
 		sendCommand(event) {
 			console.log("sendCommand event", event);
 			this.doPublish(
-				"openWB/command/" + this.client.options.clientId + "/todo",
+				"openWB/set/command/" + this.client.options.clientId + "/todo",
 				event,
 				false
 			);

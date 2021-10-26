@@ -9,14 +9,18 @@
 				<select-input
 					title="Verfügbare Systeme"
 					notSelected="Bitte auswählen"
-					:options="$store.state.examples.availableDevices"
+					:options="getDeviceList()"
 					:model-value="deviceToAdd"
 					@update:model-value="deviceToAdd = $event"
 				>
 					<template #append>
 						<span class="col-1">
 							<click-button
-								class="btn-success"
+								:class="
+									deviceToAdd === undefined
+										? 'btn-outline-success'
+										: 'btn-success'
+								"
 								:disabled="deviceToAdd === undefined"
 								@click="addDevice"
 							>
@@ -31,12 +35,12 @@
 						Bitte ein System auswählen, das hinzugefügt werden soll.
 					</template>
 				</select-input>
-				<hr v-if="$store.state.examples.installedDevices[0]" />
+				<hr v-if="$store.state.mqtt['openWB/system/device/0/config']" />
 				<card
-					v-for="installedDevice in $store.state.examples
-						.installedDevices"
-					:key="installedDevice.type"
-					:title="installedDevice.name"
+					v-for="(
+						installedDevice, installedDeviceKey
+					) in installedDevices"
+					:key="installedDevice.id"
 					:collapsible="true"
 					:collapsed="true"
 					subtype="primary"
@@ -48,13 +52,87 @@
 								:icon="['fas', 'network-wired']"
 							/>
 						</avatar>
-						{{ installedDevice.name }} ({{ installedDevice.type }})
+						{{ installedDevice.name }}
 					</template>
-					(Konfiguration...)
+					<template #actions>
+						<avatar
+							class="bg-danger"
+							@click="removeDevice(installedDevice.id, $event)"
+						>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'trash']"
+							/>
+						</avatar>
+					</template>
+					<text-input
+						title="Konfiguration"
+						subtype="json"
+						:model-value="installedDevice.configuration"
+						@update:model-value="
+							updateState(
+								installedDeviceKey,
+								$event,
+								'configuration'
+							)
+						"
+					>
+						<template #help>JSON Objekt</template>
+					</text-input>
+					<hr />
+					<select-input
+						v-if="getComponentList(installedDevice.type).length"
+						title="Verfügbare Komponenten"
+						notSelected="Bitte auswählen"
+						:options="getComponentList(installedDevice.type)"
+						:model-value="componentToAdd[installedDevice.id]"
+						@update:model-value="
+							componentToAdd[installedDevice.id] = $event
+						"
+					>
+						<template #append>
+							<span class="col-1">
+								<click-button
+									:class="
+										componentToAdd[installedDevice.id] ===
+										undefined
+											? 'btn-outline-success'
+											: 'btn-success'
+									"
+									:disabled="
+										componentToAdd[installedDevice.id] ===
+										undefined
+									"
+									@click="
+										addComponent(
+											installedDevice.id,
+											installedDevice.type,
+											componentToAdd[installedDevice.id]
+										)
+									"
+								>
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'plus']"
+									/>
+								</click-button>
+							</span>
+						</template>
+						<template #help>
+							Bitte eine Komponente auswählen, die hinzugefügt
+							werden soll.
+						</template>
+					</select-input>
+					<alert v-else subtype="info">
+						Dieses System bietet keine Komponenten zur Installation
+						an.
+					</alert>
 					<card
-						v-for="installedComponent in installedDevice.components"
+						v-for="(
+							installedComponent, installedComponentKey
+						) in getMyInstalledComponents(installedDevice.id)"
 						:key="installedComponent.id"
-						title="Komponente 1"
+						:title="installedComponent.name"
 						:collapsible="true"
 						:collapsed="true"
 						subtype="dark"
@@ -66,11 +144,39 @@
 									:icon="['fas', 'microchip']"
 								/>
 							</avatar>
-							{{ installedComponent.name }} ({{
-								installedComponent.type
-							}})
+							{{ installedComponent.name }}
 						</template>
-						ToDo...
+						<template #actions>
+							<avatar
+								class="bg-danger"
+								@click="
+									removeComponent(
+										installedDevice.id,
+										installedComponent.id,
+										$event
+									)
+								"
+							>
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'trash']"
+								/>
+							</avatar>
+						</template>
+						<text-input
+							title="Konfiguration"
+							subtype="json"
+							:model-value="installedComponent.configuration"
+							@update:model-value="
+								updateState(
+									installedComponentKey,
+									$event,
+									'configuration'
+								)
+							"
+						>
+							<template #help>JSON Objekt</template>
+						</text-input>
 					</card>
 				</card>
 			</card>
@@ -122,9 +228,9 @@ library.add(fasPlus, fasNetworkWired, fasMicrochip);
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 import Card from "@/components/Card.vue";
-// import Alert from "@/components/Alert.vue";
+import Alert from "@/components/Alert.vue";
 // import Heading from "@/components/Heading.vue";
-// import TextInput from "@/components/TextInput.vue";
+import TextInput from "@/components/TextInput.vue";
 // import NumberInput from "@/components/NumberInput.vue";
 // import TextareaInput from "@/components/TextareaInput.vue";
 // import RangeInput from "@/components/RangeInput.vue";
@@ -142,9 +248,9 @@ export default {
 	emits: ["sendCommand"],
 	components: {
 		Card,
-		// Alert,
+		Alert,
 		// Heading,
-		// TextInput,
+		TextInput,
 		// NumberInput,
 		// TextareaInput,
 		// RangeInput,
@@ -159,11 +265,35 @@ export default {
 	},
 	data() {
 		return {
-			mqttTopicsToSubscribe: ["openWB/counter/get/hierarchy"],
+			mqttTopicsToSubscribe: [
+				"openWB/counter/get/hierarchy",
+				"openWB/system/device/+/config",
+				"openWB/system/device/+/component/#",
+			],
 			deviceToAdd: undefined,
+			componentToAdd: [],
 		};
 	},
+	computed: {
+		installedDevices: {
+			get() {
+				return this.getWildcardTopics("openWB/system/device/+/config");
+			},
+		},
+		installedComponents: {
+			get() {
+				return this.getWildcardTopics(
+					"openWB/system/device/+/component/+/config"
+				);
+			},
+		},
+	},
 	methods: {
+		getMyInstalledComponents(deviceId) {
+			return this.getWildcardTopics(
+				"openWB/system/device/" + deviceId + "/component/+/config"
+			);
+		},
 		addDevice() {
 			this.$emit("sendCommand", {
 				command: "addDevice",
@@ -171,6 +301,56 @@ export default {
 					type: this.deviceToAdd,
 				},
 			});
+		},
+		removeDevice(index, event) {
+			// prevent further processing of the click event
+			event.stopPropagation();
+			console.info("request removal of device '" + index + "'");
+			this.$emit("sendCommand", {
+				command: "removeDevice",
+				data: { id: index },
+			});
+		},
+		getDeviceList() {
+			return this.$store.state.examples.availableDevices;
+		},
+		addComponent(deviceId, deviceType, componentType) {
+			this.$emit("sendCommand", {
+				command: "addComponent",
+				data: {
+					deviceId: deviceId,
+					deviceType: deviceType,
+					type: componentType,
+				},
+			});
+		},
+		removeComponent(deviceId, componentId, event) {
+			// prevent further processing of the click event
+			event.stopPropagation();
+			console.info(
+				"request removal of component '" +
+					componentId +
+					"' from device '" +
+					deviceId +
+					"'"
+			);
+			this.$emit("sendCommand", {
+				command: "removeComponent",
+				data: {
+					deviceId: deviceId,
+					id: componentId,
+				},
+			});
+		},
+		getComponentList(deviceType) {
+			if (deviceType === undefined) {
+				return [];
+			}
+			console.log("finding components for '" + deviceType + "'");
+			let myDevice = this.$store.state.examples.availableDevices.find(
+				(device) => device.value === deviceType
+			);
+			return myDevice.components;
 		},
 	},
 };
