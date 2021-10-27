@@ -7,5 +7,5 @@ files.keys().forEach((key) => {
 	// add any other file
 	modules[key.replace(/(\.\/|\.vue)/g, "")] = files(key).default;
 });
-console.debug("installed modules:", modules);
+console.debug("installed component modules:", modules);
 export default modules;

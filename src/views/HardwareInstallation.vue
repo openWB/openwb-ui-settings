@@ -288,7 +288,7 @@ export default {
 			mqttTopicsToSubscribe: [
 				"openWB/counter/get/hierarchy",
 				"openWB/system/device/+/config",
-				"openWB/system/device/+/component/#",
+				"openWB/system/device/+/component/+/config",
 			],
 			deviceToAdd: undefined,
 			componentToAdd: [],
