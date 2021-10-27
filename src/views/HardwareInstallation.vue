@@ -66,19 +66,24 @@
 						</avatar>
 					</template>
 					<text-input
-						title="Konfiguration"
-						subtype="json"
-						:model-value="installedDevice.configuration"
+						title="Bezeichnung"
+						subtype="text"
+						:model-value="installedDevice.name"
 						@update:model-value="
-							updateState(
+							updateState(installedDeviceKey, $event, 'name')
+						"
+					/>
+					<hr />
+					<device-config
+						:deviceType="installedDevice.type"
+						:configuration="installedDevice.configuration"
+						@update:configuration="
+							updateDeviceConfiguration(
 								installedDeviceKey,
-								$event,
-								'configuration'
+								$event
 							)
 						"
-					>
-						<template #help>JSON Objekt</template>
-					</text-input>
+					/>
 					<hr />
 					<select-input
 						v-if="getComponentList(installedDevice.type).length"
@@ -132,7 +137,6 @@
 							installedComponent, installedComponentKey
 						) in getMyInstalledComponents(installedDevice.id)"
 						:key="installedComponent.id"
-						:title="installedComponent.name"
 						:collapsible="true"
 						:collapsed="true"
 						subtype="dark"
@@ -163,6 +167,19 @@
 								/>
 							</avatar>
 						</template>
+						<text-input
+							title="Bezeichnung"
+							subtype="text"
+							:model-value="installedComponent.name"
+							@update:model-value="
+								updateState(
+									installedComponentKey,
+									$event,
+									'name'
+								)
+							"
+						/>
+						<hr />
 						<text-input
 							title="Konfiguration"
 							subtype="json"
@@ -242,6 +259,8 @@ import Avatar from "@/components/Avatar.vue";
 import SortableList from "@/components/SortableList.vue";
 import SubmitButtons from "@/components/SubmitButtons.vue";
 
+import DeviceConfig from "@/components/DeviceConfig.vue";
+
 export default {
 	name: "HardwareInstallation",
 	mixins: [ComponentStateMixin],
@@ -262,6 +281,7 @@ export default {
 		SortableList,
 		SubmitButtons,
 		FontAwesomeIcon,
+		DeviceConfig,
 	},
 	data() {
 		return {
@@ -346,11 +366,15 @@ export default {
 			if (deviceType === undefined) {
 				return [];
 			}
-			console.log("finding components for '" + deviceType + "'");
+			console.debug("finding components for '" + deviceType + "'");
 			let myDevice = this.$store.state.examples.availableDevices.find(
 				(device) => device.value === deviceType
 			);
 			return myDevice.components;
+		},
+		updateDeviceConfiguration(deviceKey, event) {
+			console.debug("updateDeviceConfiguration", event);
+			this.updateState(deviceKey, event.value, event.object);
 		},
 	},
 };
