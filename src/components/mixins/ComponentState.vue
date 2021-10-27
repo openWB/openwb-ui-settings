@@ -62,7 +62,6 @@ export default {
 		},
 	},
 	mounted() {
-		console.debug("mounted");
 		this.mqttTopicsToSubscribe.forEach((topic) => {
 			if (topic.includes("#") || topic.includes("+")) {
 				console.debug("skipping init of wildcard topic:", topic);
@@ -76,7 +75,6 @@ export default {
 		this.$root.doSubscribe(this.mqttTopicsToSubscribe);
 	},
 	unmounted() {
-		console.debug("unmounted");
 		this.$root.doUnsubscribe(this.mqttTopicsToSubscribe);
 		this.mqttTopicsToSubscribe.forEach((topic) => {
 			if (topic.includes("#") || topic.includes("+")) {
