@@ -16,9 +16,7 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.ip_address')
 			"
-		>
-			<template #help>Eingabefeld für Hosts (IP oder Namen)</template>
-		</text-input>
+		/>
 		<number-input
 			title="Port"
 			:model-value="configuration.port"
