@@ -77,7 +77,11 @@ export default {
 			},
 			set(newValue) {
 				if (this.subtype == "json") {
-					this.$emit("update:modelValue", JSON.parse(newValue));
+					try {
+						this.$emit("update:modelValue", JSON.parse(newValue));
+					} catch (e) {
+						console.error("parsing JSON failed: " + newValue);
+					}
 				} else {
 					this.$emit("update:modelValue", newValue);
 				}

@@ -135,8 +135,8 @@ export default {
 				// console.debug(
 				// 	`Received message "${message}" from topic "${topic}"`
 				// );
-				let myPayload = undefined;
 				if (message.toString().length > 0) {
+					let myPayload = undefined;
 					try {
 						myPayload = JSON.parse(message.toString());
 					} catch (error) {
@@ -146,15 +146,16 @@ export default {
 						);
 						myPayload = message.toString();
 					}
+					this.$store.commit("addTopic", {
+						topic: topic,
+						payload: myPayload,
+					});
+				} else {
+					this.$store.commit("removeTopic", topic);
 				}
-				this.$store.commit("addTopic", {
-					topic: topic,
-					payload: myPayload,
-				});
 			});
 		},
 		doSubscribe(topics) {
-			console.debug("subscribing to topics...");
 			this.client.subscribe(topics, {}, (error) => {
 				if (error) {
 					console.error("Subscribe to topics error", error);
@@ -164,15 +165,11 @@ export default {
 			});
 		},
 		doUnsubscribe(topics) {
-			console.debug("unsubscribing topics...");
 			this.client.unsubscribe(topics, (error) => {
 				if (error) {
 					console.error("Unsubscribe error", error);
 				}
 			});
-			// topics.forEach((topic) => {
-			// 	this.$store.commit("removeTopic", topic);
-			// });
 		},
 		doPublish(topic, payload, retain = true, qos = 2) {
 			let options = {
@@ -192,7 +189,6 @@ export default {
 		},
 	},
 	created() {
-		console.debug("app created");
 		this.createConnection();
 	},
 };
