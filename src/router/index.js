@@ -102,6 +102,18 @@ const routes = [
 			),
 	},
 	{
+		path: "/ChargepointInstallation",
+		name: "ChargepointInstallation",
+		meta: {
+			heading: "Ladepunkt Installation",
+		},
+		component: () =>
+			import(
+				/* webpackChunkName: "ChargepointInstallation" */
+				"../views/ChargepointInstallation.vue"
+			),
+	},
+	{
 		path: "/HardwareInstallation",
 		name: "HardwareInstallation",
 		meta: {

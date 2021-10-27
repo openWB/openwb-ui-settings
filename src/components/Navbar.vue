@@ -112,6 +112,13 @@
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 						<router-link
+							to="/ChargepointInstallation"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							Ladepunkte
+						</router-link>
+						<router-link
 							to="/HardwareInstallation"
 							class="dropdown-item"
 							active-class="active disabled"
