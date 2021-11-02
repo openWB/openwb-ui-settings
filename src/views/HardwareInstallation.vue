@@ -180,7 +180,7 @@
 							"
 						/>
 						<hr />
-						<text-input
+						<!-- <text-input
 							title="Konfiguration"
 							subtype="json"
 							:model-value="installedComponent.configuration"
@@ -193,7 +193,18 @@
 							"
 						>
 							<template #help>JSON Objekt</template>
-						</text-input>
+						</text-input> -->
+						<component-config
+							:deviceType="installedDevice.type"
+							:componentType="installedComponent.type"
+							:configuration="installedComponent.configuration"
+							@update:configuration="
+								updateComponentConfiguration(
+									installedComponentKey,
+									$event
+								)
+							"
+						/>
 					</card>
 				</card>
 			</card>
@@ -260,6 +271,7 @@ import SortableList from "@/components/SortableList.vue";
 import SubmitButtons from "@/components/SubmitButtons.vue";
 
 import DeviceConfig from "@/components/DeviceConfig.vue";
+import ComponentConfig from "@/components/ComponentConfig.vue";
 
 export default {
 	name: "HardwareInstallation",
@@ -282,6 +294,7 @@ export default {
 		SubmitButtons,
 		FontAwesomeIcon,
 		DeviceConfig,
+		ComponentConfig,
 	},
 	data() {
 		return {

@@ -57,6 +57,42 @@ export default createStore({
 						},
 					],
 				},
+				{
+					value: "mqtt",
+					text: "MQTT",
+					components: [
+						{
+							value: "grid",
+							text: "EVU",
+						},
+						{
+							value: "bat",
+							text: "Speicher",
+						},
+						{
+							value: "inverter",
+							text: "Wechselrichter",
+						},
+					],
+				},
+				{
+					value: "alpha_ess",
+					text: "Alpha ESS",
+					components: [
+						{
+							value: "counter",
+							text: "Zähler",
+						},
+						{
+							value: "bat",
+							text: "Speicher",
+						},
+						{
+							value: "inverter",
+							text: "Wechselrichter",
+						},
+					],
+				},
 			],
 			availableChargepoints: [
 				{

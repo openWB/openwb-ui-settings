@@ -1,14 +1,14 @@
 <template>
 	<component
-		v-if="deviceComponentLoaded"
-		:is="deviceType"
+		v-if="deviceComponentTemplateFound"
+		:is="myDeviceComponent"
 		:configuration="configuration"
 		@update:configuration="updateConfiguration($event)"
 	/>
 	<div v-else>
-		<alert subtype="danger">
-			Es wurde keine Konfigurationsseite für den Gerätetyp "{{
-				deviceType
+		<alert subtype="warning">
+			Es wurde keine Konfigurationsseite für den Komponententyp "{{
+				componentType
 			}}" gefunden. Die Einstellungen können als JSON direkt bearbeitet
 			werden.
 		</alert>
@@ -31,27 +31,44 @@
 </template>
 
 <script>
-import devices from "@/components/devices";
 import Alert from "@/components/Alert.vue";
-import TextInput from "@/components/TextInput.vue";
 import TextareaInput from "@/components/TextareaInput.vue";
+import { defineAsyncComponent } from "@vue/runtime-core";
 
 export default {
-	name: "DeviceConfig",
+	name: "ComponentConfig",
 	components: {
 		Alert,
-		TextInput,
 		TextareaInput,
-		...devices,
 	},
 	emits: ["update:configuration"],
 	props: {
 		deviceType: { type: String, required: true },
+		componentType: { type: String, required: true },
 		configuration: { type: Object, required: true },
 	},
+	data() {
+		return {
+			deviceComponentTemplateFound: true,
+		};
+	},
 	computed: {
+		myDeviceComponent() {
+			console.log(
+				`loading device component: ${this.deviceType} / ${this.componentType}`
+			);
+			return defineAsyncComponent(() =>
+				import(
+					`@/components/devices/${this.deviceType}/${this.componentType}.vue`
+				).catch((error) => {
+					console.log("ERROR:", error);
+					this.deviceComponentTemplateFound = false;
+				})
+			);
+		},
 		deviceComponentLoaded() {
-			return this.$.components[this.deviceType] !== undefined;
+			console.log(this);
+			return this.$.components["test"] !== undefined;
 		},
 	},
 	methods: {
