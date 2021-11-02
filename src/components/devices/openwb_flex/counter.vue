@@ -1,23 +1,16 @@
 <template>
 	<div class="device-openwb-flex">
 		<heading>
-			Einstellungen für openWB-Flex (Modul: {{ $options.name }})
+			Einstellungen für openWB-Flex Zähler (Modul: {{ $options.name }})
 		</heading>
 		<text-input
-			title="IP oder Hostname"
-			subtype="host"
-			:model-value="configuration.ip_address"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.ip_address')
-			"
-		/>
-		<number-input
-			title="Port"
-			:model-value="configuration.port"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.port')
-			"
-		/>
+			title="Konfiguration"
+			subtype="json"
+			disabled
+			:model-value="configuration"
+		>
+			<template #help>Temporär nur als JSON Objekt zur Info</template>
+		</text-input>
 	</div>
 </template>
 
@@ -25,7 +18,7 @@
 // import Alert from "@/components/Alert.vue";
 import Heading from "@/components/Heading.vue";
 import TextInput from "@/components/TextInput.vue";
-import NumberInput from "@/components/NumberInput.vue";
+// import NumberInput from "@/components/NumberInput.vue";
 // import TextareaInput from "@/components/TextareaInput.vue";
 // import RangeInput from "@/components/RangeInput.vue";
 // import SelectInput from "@/components/SelectInput.vue";
@@ -35,7 +28,7 @@ import NumberInput from "@/components/NumberInput.vue";
 // import CheckboxInput from "@/components/CheckboxInput.vue";
 
 export default {
-	name: "DeviceOpenwbFlex",
+	name: "DeviceOpenwbFlexCounter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
@@ -44,7 +37,7 @@ export default {
 		// Alert,
 		Heading,
 		TextInput,
-		NumberInput,
+		// NumberInput,
 		// TextareaInput,
 		// RangeInput,
 		// SelectInput,
