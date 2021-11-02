@@ -723,9 +723,12 @@
 							</template>
 						</heading>
 						<card
-							v-for="(plan, planIndex) in template.chargemode
-								.scheduled_charging"
-							:key="planIndex"
+							v-for="(
+								plan, planKey
+							) in getChargeTemplateScheduledChargingPlans(
+								templateKey
+							)"
+							:key="planKey"
 							:title="plan.name"
 							:collapsible="true"
 							:collapsed="true"
@@ -784,7 +787,7 @@
 									@click="
 										removeChargeTemplateSchedulePlan(
 											templateKey,
-											planIndex,
+											planKey,
 											$event
 										)
 									"
@@ -797,19 +800,9 @@
 							</template>
 							<text-input
 								title="Bezeichnung"
-								:model-value="
-									template.chargemode.scheduled_charging[
-										planIndex
-									].name
-								"
+								:model-value="plan.name"
 								@update:model-value="
-									updateState(
-										templateKey,
-										$event,
-										'chargemode.scheduled_charging.' +
-											planIndex +
-											'.name'
-									)
+									updateState(planKey, $event, 'name')
 								"
 							>
 							</text-input>
@@ -827,38 +820,18 @@
 										class: 'btn-outline-success',
 									},
 								]"
-								:model-value="
-									template.chargemode.scheduled_charging[
-										planIndex
-									].active
-								"
+								:model-value="plan.active"
 								@update:model-value="
-									updateState(
-										templateKey,
-										$event,
-										'chargemode.scheduled_charging.' +
-											planIndex +
-											'.active'
-									)
+									updateState(planKey, $event, 'active')
 								"
 							>
 							</button-group-input>
 							<text-input
 								title="Uhrzeit"
 								subtype="time"
-								:model-value="
-									template.chargemode.scheduled_charging[
-										planIndex
-									].time
-								"
+								:model-value="plan.time"
 								@update:model-value="
-									updateState(
-										templateKey,
-										$event,
-										'chargemode.scheduled_charging.' +
-											planIndex +
-											'.time'
-									)
+									updateState(planKey, $event, 'time')
 								"
 							>
 							</text-input>
@@ -868,19 +841,9 @@
 								:max="100"
 								:step="5"
 								unit="%"
-								:model-value="
-									template.chargemode.scheduled_charging[
-										planIndex
-									].soc
-								"
+								:model-value="plan.soc"
 								@update:model-value="
-									updateState(
-										templateKey,
-										$event,
-										'chargemode.scheduled_charging.' +
-											planIndex +
-											'.soc'
-									)
+									updateState(planKey, $event, 'soc')
 								"
 							>
 							</range-input>
@@ -903,18 +866,12 @@
 										class: 'btn-outline-info',
 									},
 								]"
-								:model-value="
-									template.chargemode.scheduled_charging[
-										planIndex
-									].frequency.selected
-								"
+								:model-value="plan.frequency.selected"
 								@update:model-value="
 									updateState(
-										templateKey,
+										planKey,
 										$event,
-										'chargemode.scheduled_charging.' +
-											planIndex +
-											'.frequency.selected'
+										'frequency.selected'
 									)
 								"
 							>
@@ -923,18 +880,12 @@
 								v-if="plan.frequency.selected == 'once'"
 								title="Datum"
 								subtype="date"
-								:model-value="
-									template.chargemode.scheduled_charging[
-										planIndex
-									].frequency.once
-								"
+								:model-value="plan.frequency.once"
 								@update:model-value="
 									updateState(
-										templateKey,
+										planKey,
 										$event,
-										'chargemode.scheduled_charging.' +
-											planIndex +
-											'.frequency.once'
+										'frequency.once'
 									)
 								"
 							>
@@ -957,18 +908,13 @@
 										},
 									]"
 									:model-value="
-										template.chargemode.scheduled_charging[
-											planIndex
-										].frequency.weekly[dayIndex]
+										plan.frequency.weekly[dayIndex]
 									"
 									@update:model-value="
 										updateState(
-											templateKey,
+											planKey,
 											$event,
-											'chargemode.scheduled_charging.' +
-												planIndex +
-												'.frequency.weekly.' +
-												dayIndex
+											'frequency.weekly.' + dayIndex
 										)
 									"
 								>
@@ -1016,9 +962,12 @@
 						>
 						</button-group-input>
 						<card
-							v-for="(plan, planIndex) in template.time_charging
-								.plans"
-							:key="planIndex"
+							v-for="(
+								plan, planKey
+							) in getChargeTemplateTimeChargingPlans(
+								templateKey
+							)"
+							:key="planKey"
 							:title="plan.name"
 							:collapsible="true"
 							:collapsed="true"
@@ -1072,7 +1021,7 @@
 									@click="
 										removeChargeTemplateTimeChargingPlan(
 											templateKey,
-											planIndex,
+											planKey,
 											$event
 										)
 									"
@@ -1085,17 +1034,9 @@
 							</template>
 							<text-input
 								title="Bezeichnung"
-								:model-value="
-									template.time_charging.plans[planIndex].name
-								"
+								:model-value="plan.name"
 								@update:model-value="
-									updateState(
-										templateKey,
-										$event,
-										'time_charging.plans.' +
-											planIndex +
-											'.name'
-									)
+									updateState(planKey, $event, 'name')
 								"
 							>
 							</text-input>
@@ -1113,18 +1054,9 @@
 										class: 'btn-outline-success',
 									},
 								]"
-								:model-value="
-									template.time_charging.plans[planIndex]
-										.active
-								"
+								:model-value="plan.active"
 								@update:model-value="
-									updateState(
-										templateKey,
-										$event,
-										'time_charging.plans.' +
-											planIndex +
-											'.active'
-									)
+									updateState(planKey, $event, 'active')
 								"
 							>
 							</button-group-input>
@@ -1134,54 +1066,27 @@
 								:max="32"
 								:step="1"
 								unit="A"
-								:model-value="
-									template.time_charging.plans[planIndex]
-										.current
-								"
+								:model-value="plan.current"
 								@update:model-value="
-									updateState(
-										templateKey,
-										$event,
-										'time_charging.plans.' +
-											planIndex +
-											'.current'
-									)
+									updateState(planKey, $event, 'current')
 								"
 							>
 							</range-input>
 							<text-input
 								title="Beginn"
 								subtype="time"
-								:model-value="
-									template.time_charging.plans[planIndex]
-										.time[0]
-								"
+								:model-value="plan.time[0]"
 								@update:model-value="
-									updateState(
-										templateKey,
-										$event,
-										'time_charging.plans.' +
-											planIndex +
-											'.time.0'
-									)
+									updateState(planKey, $event, 'time.0')
 								"
 							>
 							</text-input>
 							<text-input
 								title="Ende"
 								subtype="time"
-								:model-value="
-									template.time_charging.plans[planIndex]
-										.time[1]
-								"
+								:model-value="plan.time[1]"
 								@update:model-value="
-									updateState(
-										templateKey,
-										$event,
-										'time_charging.plans.' +
-											planIndex +
-											'.time.1'
-									)
+									updateState(planKey, $event, 'time.1')
 								"
 							>
 							</text-input>
@@ -1204,17 +1109,12 @@
 										class: 'btn-outline-info',
 									},
 								]"
-								:model-value="
-									template.time_charging.plans[planIndex]
-										.frequency.selected
-								"
+								:model-value="plan.frequency.selected"
 								@update:model-value="
 									updateState(
-										templateKey,
+										planKey,
 										$event,
-										'time_charging.plans.' +
-											planIndex +
-											'.frequency.selected'
+										'frequency.selected'
 									)
 								"
 							>
@@ -1223,17 +1123,12 @@
 								v-if="plan.frequency.selected == 'once'"
 								title="Datum"
 								subtype="date"
-								:model-value="
-									template.time_charging.plans[planIndex]
-										.frequency.once
-								"
+								:model-value="plan.frequency.once"
 								@update:model-value="
 									updateState(
-										templateKey,
+										planKey,
 										$event,
-										'time_charging.plans.' +
-											planIndex +
-											'.frequency.once'
+										'frequency.once'
 									)
 								"
 							>
@@ -1256,17 +1151,13 @@
 										},
 									]"
 									:model-value="
-										template.time_charging.plans[planIndex]
-											.frequency.weekly[dayIndex]
+										plan.frequency.weekly[dayIndex]
 									"
 									@update:model-value="
 										updateState(
-											templateKey,
+											planKey,
 											$event,
-											'time_charging.plans.' +
-												planIndex +
-												'.frequency.weekly.' +
-												dayIndex
+											'frequency.weekly.' + dayIndex
 										)
 									"
 								>
@@ -1352,6 +1243,8 @@ export default {
 				"openWB/general/extern",
 				"openWB/vehicle/template/ev_template/+",
 				"openWB/vehicle/template/charge_template/+",
+				"openWB/vehicle/template/charge_template/+/chargemode/scheduled_charging/plans/+",
+				"openWB/vehicle/template/charge_template/+/time_charging/plans/+",
 				"openWB/vehicle/+/name",
 				"openWB/vehicle/+/charge_template",
 				"openWB/vehicle/+/ev_template",
@@ -1417,6 +1310,28 @@ export default {
 		},
 	},
 	methods: {
+		getChargeTemplateScheduledChargingPlans(chargeTemplate) {
+			// get trailing characters as index
+			let index = chargeTemplate.match(/([^/]+)$/)[0];
+			let result = this.getWildcardTopics(
+				"openWB/vehicle/template/charge_template/" +
+					index +
+					"/chargemode/scheduled_charging/plans/+"
+			);
+			console.log(chargeTemplate, index, result);
+			return result;
+		},
+		getChargeTemplateTimeChargingPlans(chargeTemplate) {
+			// get trailing characters as index
+			let index = chargeTemplate.match(/([^/]+)$/)[0];
+			let result = this.getWildcardTopics(
+				"openWB/vehicle/template/charge_template/" +
+					index +
+					"/time_charging/plans/+"
+			);
+			console.log(chargeTemplate, index, result);
+			return result;
+		},
 		addVehicle(event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
@@ -1426,13 +1341,13 @@ export default {
 				data: {},
 			});
 		},
-		removeVehicle(index, event) {
+		removeVehicle(vehicleIndex, event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
-			console.info("request removal of vehicle '" + index + "'");
+			console.info("request removal of vehicle '" + vehicleIndex + "'");
 			this.$emit("sendCommand", {
 				command: "removeVehicle",
-				data: { id: index },
+				data: { id: vehicleIndex },
 			});
 		},
 		getVehicleName(id) {
@@ -1449,15 +1364,15 @@ export default {
 				data: {},
 			});
 		},
-		removeEvTemplate(key, event) {
+		removeEvTemplate(evTemplate, event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
-			console.info("request removal of ev template '" + key + "'");
+			console.info("request removal of ev template '" + evTemplate + "'");
 			// get trailing characters as index
-			let index = key.match(/([^/]+)$/)[0];
+			let evTemplateIndex = evTemplate.match(/([^/]+)$/)[0];
 			this.$emit("sendCommand", {
 				command: "removeEVTemplate",
-				data: { id: index },
+				data: { id: evTemplateIndex },
 			});
 		},
 		addChargeTemplate(event) {
@@ -1476,10 +1391,10 @@ export default {
 				"request removal of charge template '" + template + "'"
 			);
 			// get trailing characters as index
-			let index = template.match(/([^/]+)$/)[0];
+			let templateIndex = template.match(/([^/]+)$/)[0];
 			this.$emit("sendCommand", {
 				command: "removeChargeTemplate",
-				data: { id: index },
+				data: { id: templateIndex },
 			});
 		},
 		addChargeTemplateSchedulePlan(template, event) {
@@ -1487,10 +1402,10 @@ export default {
 			event.stopPropagation();
 			console.info("requesting new charge template schedule plan...");
 			// get trailing characters as index
-			let index = template.match(/([^/]+)$/)[0];
+			let templateIndex = template.match(/([^/]+)$/)[0];
 			this.$emit("sendCommand", {
 				command: "addChargeTemplateSchedulePlan",
-				data: { template: index },
+				data: { template: templateIndex },
 			});
 		},
 		removeChargeTemplateSchedulePlan(template, plan, event) {
@@ -1504,10 +1419,11 @@ export default {
 					"'"
 			);
 			// get trailing characters as index
-			let index = template.match(/([^/]+)$/)[0];
+			let templateIndex = template.match(/([^/]+)$/)[0];
+			let planIndex = plan.match(/([^/]+)$/)[0];
 			this.$emit("sendCommand", {
 				command: "removeChargeTemplateSchedulePlan",
-				data: { template: index, plan: plan },
+				data: { template: templateIndex, plan: planIndex },
 			});
 		},
 		addChargeTemplateTimeChargingPlan(template, event) {
@@ -1517,10 +1433,10 @@ export default {
 				"requesting new charge template time charging plan..."
 			);
 			// get trailing characters as index
-			let index = template.match(/([^/]+)$/)[0];
+			let templateIndex = template.match(/([^/]+)$/)[0];
 			this.$emit("sendCommand", {
 				command: "addChargeTemplateTimeChargingPlan",
-				data: { template: index },
+				data: { template: templateIndex },
 			});
 		},
 		removeChargeTemplateTimeChargingPlan(template, plan, event) {
@@ -1534,10 +1450,11 @@ export default {
 					"'"
 			);
 			// get trailing characters as index
-			let index = template.match(/([^/]+)$/)[0];
+			let templateIndex = template.match(/([^/]+)$/)[0];
+			let planIndex = plan.match(/([^/]+)$/)[0];
 			this.$emit("sendCommand", {
 				command: "removeChargeTemplateTimeChargingPlan",
-				data: { template: index, plan: plan },
+				data: { template: templateIndex, plan: planIndex },
 			});
 		},
 		formatDate(dateString) {
