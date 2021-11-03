@@ -1,7 +1,8 @@
 <template>
 	<div class="device-openwb-flex">
 		<heading>
-			Einstellungen für openWB-Flex (Modul: {{ $options.name }})
+			Einstellungen für openWB-Flex
+			<span class="small">(Modul: {{ $options.name }})</span>
 		</heading>
 		<text-input
 			title="IP oder Hostname"

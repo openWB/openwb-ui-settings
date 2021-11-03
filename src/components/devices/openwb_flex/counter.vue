@@ -1,16 +1,9 @@
 <template>
 	<div class="device-openwb-flex-counter">
 		<heading>
-			Einstellungen für openWB-Flex Zähler (Modul: {{ $options.name }})
+			Einstellungen für openWB-Flex Zähler
+			<span class="small">(Modul: {{ $options.name }})</span>
 		</heading>
-		<text-input
-			title="Konfiguration"
-			subtype="json"
-			disabled
-			:model-value="configuration"
-		>
-			<template #help>Temporär nur als JSON Objekt zur Info</template>
-		</text-input>
 		<select-input
 			title="Zählermodell"
 			notSelected="Bitte auswählen"
@@ -39,7 +32,7 @@
 <script>
 // import Alert from "@/components/Alert.vue";
 import Heading from "@/components/Heading.vue";
-import TextInput from "@/components/TextInput.vue";
+// import TextInput from "@/components/TextInput.vue";
 import NumberInput from "@/components/NumberInput.vue";
 // import TextareaInput from "@/components/TextareaInput.vue";
 // import RangeInput from "@/components/RangeInput.vue";
@@ -58,7 +51,7 @@ export default {
 	components: {
 		// Alert,
 		Heading,
-		TextInput,
+		// TextInput,
 		NumberInput,
 		// TextareaInput,
 		// RangeInput,

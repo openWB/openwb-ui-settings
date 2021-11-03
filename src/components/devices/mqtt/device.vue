@@ -1,6 +1,9 @@
 <template>
 	<div class="device-mqtt">
-		<heading>Einstellungen für MQTT (Modul: {{ $options.name }})</heading>
+		<heading>
+			Einstellungen für MQTT
+			<span class="small">(Modul: {{ $options.name }})</span>
+		</heading>
 		<alert subtype="info">
 			Das MQTT Modul stellt keine aktive Verbindung her, sondern erwartet,
 			dass die Daten an spezielle Topics im Broker gesendet werden.
