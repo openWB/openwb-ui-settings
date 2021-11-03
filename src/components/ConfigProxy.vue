@@ -47,7 +47,7 @@ export default {
 	emits: ["update:configuration"],
 	props: {
 		deviceType: { type: String, required: true },
-		componentType: { type: String, required: false, default: undefined },
+		componentType: { type: String, default: undefined },
 		configuration: { type: Object, required: true },
 	},
 	data() {
@@ -60,25 +60,16 @@ export default {
 			console.log(
 				`loading component: ${this.deviceType} / ${this.componentType}`
 			);
-			if (this.componentType !== undefined) {
-				return defineAsyncComponent(() =>
-					import(
-						`@/components/devices/${this.deviceType}/${this.componentType}.vue`
-					).catch((error) => {
-						console.log("ERROR:", error);
-						this.componentTemplateFound = false;
-					})
-				);
-			} else {
-				return defineAsyncComponent(() =>
-					import(`@/components/devices/${this.deviceType}.vue`).catch(
-						(error) => {
-							console.log("ERROR:", error);
-							this.componentTemplateFound = false;
-						}
-					)
-				);
-			}
+			return defineAsyncComponent(() =>
+				import(
+					`@/components/devices/${this.deviceType}${
+						this.componentType ? `/${this.componentType}` : ""
+					}.vue`
+				).catch((error) => {
+					console.log("ERROR:", error);
+					this.componentTemplateFound = false;
+				})
+			);
 		},
 	},
 	methods: {
