@@ -63,7 +63,9 @@ export default {
 			return defineAsyncComponent(() =>
 				import(
 					`@/components/devices/${this.deviceType}${
-						this.componentType ? `/${this.componentType}` : ""
+						this.componentType
+							? `/${this.componentType}`
+							: "/device"
 					}.vue`
 				).catch((error) => {
 					console.log("ERROR:", error);
