@@ -48,7 +48,6 @@ export default {
 			client: {
 				connected: false,
 			},
-			subscribeSuccess: false,
 			connection: {
 				host: location.hostname,
 				port: 9001,
@@ -66,7 +65,7 @@ export default {
 	methods: {
 		saveValues() {
 			console.debug("saving values...");
-			// *** may be useful if we implemented authentication ***
+			// *** may be useful if we implement authentication ***
 			// let data = JSON.stringify(this.$store.state.mqtt);
 			// console.debug("data:", data);
 			// then post data to server
@@ -87,7 +86,7 @@ export default {
 			this.doSubscribe(topics);
 		},
 		setDefaultValues() {
-			console.debug("setting default values...");
+			console.debug("setting default values... (ToDo)");
 		},
 		dismissError() {
 			this.doPublish(
@@ -161,7 +160,6 @@ export default {
 					console.error("Subscribe to topics error", error);
 					return;
 				}
-				this.subscribeSuccess = true;
 			});
 		},
 		doUnsubscribe(topics) {

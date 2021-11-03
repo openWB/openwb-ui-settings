@@ -108,6 +108,7 @@ export default {
 		saveSettings() {
 			this.showModalSave = true;
 			this.$emit("save");
+			// ToDo: find a better way to hide modal
 			window.setTimeout(() => (this.showModalSave = false), 3000);
 		},
 	},

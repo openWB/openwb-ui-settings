@@ -7,6 +7,7 @@
 				:collapsed="true"
 			>
 				<select-input
+					class="mb-2"
 					title="Verfügbare Systeme"
 					notSelected="Bitte auswählen"
 					:options="getDeviceList()"
@@ -35,7 +36,6 @@
 						Bitte ein System auswählen, das hinzugefügt werden soll.
 					</template>
 				</select-input>
-				<hr v-if="$store.state.mqtt['openWB/system/device/0/config']" />
 				<card
 					v-for="(
 						installedDevice, installedDeviceKey
@@ -83,6 +83,7 @@
 					/>
 					<hr />
 					<select-input
+						class="mb-2"
 						v-if="getComponentList(installedDevice.type).length"
 						title="Verfügbare Komponenten"
 						notSelected="Bitte auswählen"

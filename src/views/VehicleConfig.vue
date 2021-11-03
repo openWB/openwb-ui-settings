@@ -1360,7 +1360,7 @@ export default {
 			event.stopPropagation();
 			console.info("requesting new ev template...");
 			this.$emit("sendCommand", {
-				command: "addEVTemplate",
+				command: "addEvTemplate",
 				data: {},
 			});
 		},
@@ -1369,9 +1369,9 @@ export default {
 			event.stopPropagation();
 			console.info("request removal of ev template '" + evTemplate + "'");
 			// get trailing characters as index
-			let evTemplateIndex = evTemplate.match(/([^/]+)$/)[0];
+			let evTemplateIndex = parseInt(evTemplate.match(/([^/]+)$/)[0]);
 			this.$emit("sendCommand", {
-				command: "removeEVTemplate",
+				command: "removeEvTemplate",
 				data: { id: evTemplateIndex },
 			});
 		},
@@ -1391,7 +1391,7 @@ export default {
 				"request removal of charge template '" + template + "'"
 			);
 			// get trailing characters as index
-			let templateIndex = template.match(/([^/]+)$/)[0];
+			let templateIndex = parseInt(template.match(/([^/]+)$/)[0]);
 			this.$emit("sendCommand", {
 				command: "removeChargeTemplate",
 				data: { id: templateIndex },
@@ -1402,7 +1402,7 @@ export default {
 			event.stopPropagation();
 			console.info("requesting new charge template schedule plan...");
 			// get trailing characters as index
-			let templateIndex = template.match(/([^/]+)$/)[0];
+			let templateIndex = parseInt(template.match(/([^/]+)$/)[0]);
 			this.$emit("sendCommand", {
 				command: "addChargeTemplateSchedulePlan",
 				data: { template: templateIndex },
@@ -1419,8 +1419,8 @@ export default {
 					"'"
 			);
 			// get trailing characters as index
-			let templateIndex = template.match(/([^/]+)$/)[0];
-			let planIndex = plan.match(/([^/]+)$/)[0];
+			let templateIndex = parseInt(template.match(/([^/]+)$/)[0]);
+			let planIndex = parseInt(plan.match(/([^/]+)$/)[0]);
 			this.$emit("sendCommand", {
 				command: "removeChargeTemplateSchedulePlan",
 				data: { template: templateIndex, plan: planIndex },
@@ -1433,7 +1433,7 @@ export default {
 				"requesting new charge template time charging plan..."
 			);
 			// get trailing characters as index
-			let templateIndex = template.match(/([^/]+)$/)[0];
+			let templateIndex = parseInt(template.match(/([^/]+)$/)[0]);
 			this.$emit("sendCommand", {
 				command: "addChargeTemplateTimeChargingPlan",
 				data: { template: templateIndex },
@@ -1450,8 +1450,8 @@ export default {
 					"'"
 			);
 			// get trailing characters as index
-			let templateIndex = template.match(/([^/]+)$/)[0];
-			let planIndex = plan.match(/([^/]+)$/)[0];
+			let templateIndex = parseInt(template.match(/([^/]+)$/)[0]);
+			let planIndex = parseInt(plan.match(/([^/]+)$/)[0]);
 			this.$emit("sendCommand", {
 				command: "removeChargeTemplateTimeChargingPlan",
 				data: { template: templateIndex, plan: planIndex },
