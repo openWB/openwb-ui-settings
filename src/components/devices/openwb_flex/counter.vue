@@ -1,5 +1,5 @@
 <template>
-	<div class="device-openwb-flex">
+	<div class="device-openwb-flex-counter">
 		<heading>
 			Einstellungen für openWB-Flex Zähler (Modul: {{ $options.name }})
 		</heading>
