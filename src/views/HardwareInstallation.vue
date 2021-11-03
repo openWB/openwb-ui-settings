@@ -74,7 +74,7 @@
 						"
 					/>
 					<hr />
-					<device-config
+					<config-proxy
 						:deviceType="installedDevice.type"
 						:configuration="installedDevice.configuration"
 						@update:configuration="
@@ -180,21 +180,7 @@
 							"
 						/>
 						<hr />
-						<!-- <text-input
-							title="Konfiguration"
-							subtype="json"
-							:model-value="installedComponent.configuration"
-							@update:model-value="
-								updateState(
-									installedComponentKey,
-									$event,
-									'configuration'
-								)
-							"
-						>
-							<template #help>JSON Objekt</template>
-						</text-input> -->
-						<component-config
+						<config-proxy
 							:deviceType="installedDevice.type"
 							:componentType="installedComponent.type"
 							:configuration="installedComponent.configuration"
@@ -270,8 +256,7 @@ import Avatar from "@/components/Avatar.vue";
 import SortableList from "@/components/SortableList.vue";
 import SubmitButtons from "@/components/SubmitButtons.vue";
 
-import DeviceConfig from "@/components/DeviceConfig.vue";
-import ComponentConfig from "@/components/ComponentConfig.vue";
+import ConfigProxy from "@/components/ConfigProxy.vue";
 
 export default {
 	name: "HardwareInstallation",
@@ -293,8 +278,7 @@ export default {
 		SortableList,
 		SubmitButtons,
 		FontAwesomeIcon,
-		DeviceConfig,
-		ComponentConfig,
+		ConfigProxy,
 	},
 	data() {
 		return {

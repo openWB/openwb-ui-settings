@@ -1,15 +1,18 @@
 <template>
 	<component
-		v-if="deviceComponentTemplateFound"
-		:is="myDeviceComponent"
+		v-if="componentTemplateFound"
+		:is="myComponent"
 		:configuration="configuration"
 		@update:configuration="updateConfiguration($event)"
 	/>
 	<div v-else>
 		<alert subtype="warning">
-			Es wurde keine Konfigurationsseite für den Komponententyp "{{
-				componentType
-			}}" gefunden. Die Einstellungen können als JSON direkt bearbeitet
+			Es wurde keine Konfigurationsseite für den
+			<span v-if="componentType">
+				Komponententyp "{{ componentType }}"
+			</span>
+			<span v-else>Gerätetyp "{{ deviceType }}"</span>
+			gefunden. Die Einstellungen können als JSON direkt bearbeitet
 			werden.
 		</alert>
 		<textarea-input
@@ -36,7 +39,7 @@ import TextareaInput from "@/components/TextareaInput.vue";
 import { defineAsyncComponent } from "@vue/runtime-core";
 
 export default {
-	name: "ComponentConfig",
+	name: "ConfigProxy",
 	components: {
 		Alert,
 		TextareaInput,
@@ -44,31 +47,38 @@ export default {
 	emits: ["update:configuration"],
 	props: {
 		deviceType: { type: String, required: true },
-		componentType: { type: String, required: true },
+		componentType: { type: String, required: false, default: undefined },
 		configuration: { type: Object, required: true },
 	},
 	data() {
 		return {
-			deviceComponentTemplateFound: true,
+			componentTemplateFound: true,
 		};
 	},
 	computed: {
-		myDeviceComponent() {
+		myComponent() {
 			console.log(
-				`loading device component: ${this.deviceType} / ${this.componentType}`
+				`loading component: ${this.deviceType} / ${this.componentType}`
 			);
-			return defineAsyncComponent(() =>
-				import(
-					`@/components/devices/${this.deviceType}/${this.componentType}.vue`
-				).catch((error) => {
-					console.log("ERROR:", error);
-					this.deviceComponentTemplateFound = false;
-				})
-			);
-		},
-		deviceComponentLoaded() {
-			console.log(this);
-			return this.$.components["test"] !== undefined;
+			if (this.componentType !== undefined) {
+				return defineAsyncComponent(() =>
+					import(
+						`@/components/devices/${this.deviceType}/${this.componentType}.vue`
+					).catch((error) => {
+						console.log("ERROR:", error);
+						this.componentTemplateFound = false;
+					})
+				);
+			} else {
+				return defineAsyncComponent(() =>
+					import(`@/components/devices/${this.deviceType}.vue`).catch(
+						(error) => {
+							console.log("ERROR:", error);
+							this.componentTemplateFound = false;
+						}
+					)
+				);
+			}
 		},
 	},
 	methods: {
