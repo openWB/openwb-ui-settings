@@ -57,7 +57,7 @@ export default {
 	},
 	computed: {
 		myComponent() {
-			console.log(
+			console.debug(
 				`loading component: ${this.deviceType} / ${this.componentType}`
 			);
 			return defineAsyncComponent(() =>
@@ -67,10 +67,15 @@ export default {
 							? `/${this.componentType}`
 							: "/device"
 					}.vue`
-				).catch((error) => {
-					console.log("ERROR:", error);
-					this.componentTemplateFound = false;
-				})
+				)
+					.then((value) => {
+						this.componentTemplateFound = true;
+						return value;
+					})
+					.catch((error) => {
+						console.warn("component template not found", error);
+						this.componentTemplateFound = false;
+					})
 			);
 		},
 	},

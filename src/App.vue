@@ -48,7 +48,6 @@ export default {
 			client: {
 				connected: false,
 			},
-			subscribeSuccess: false,
 			connection: {
 				host: location.hostname,
 				port: 9001,
@@ -161,7 +160,6 @@ export default {
 					console.error("Subscribe to topics error", error);
 					return;
 				}
-				this.subscribeSuccess = true;
 			});
 		},
 		doUnsubscribe(topics) {
