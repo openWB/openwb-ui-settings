@@ -1,18 +1,32 @@
 <template>
-	<div class="device-mqtt">
-		<heading>Einstellungen für MQTT (Modul: {{ $options.name }})</heading>
-		<alert subtype="info">
-			Das MQTT Modul stellt keine aktive Verbindung her, sondern erwartet,
-			dass die Daten an spezielle Topics im Broker gesendet werden.
-		</alert>
+	<div class="device-openwb-flex">
+		<heading>
+			Einstellungen für openWB-Flex
+			<span class="small">(Modul: {{ $options.name }})</span>
+		</heading>
+		<text-input
+			title="IP oder Hostname"
+			subtype="host"
+			:model-value="configuration.ip_address"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.ip_address')
+			"
+		/>
+		<number-input
+			title="Port"
+			:model-value="configuration.port"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.port')
+			"
+		/>
 	</div>
 </template>
 
 <script>
-import Alert from "@/components/Alert.vue";
+// import Alert from "@/components/Alert.vue";
 import Heading from "@/components/Heading.vue";
-// import TextInput from "@/components/TextInput.vue";
-// import NumberInput from "@/components/NumberInput.vue";
+import TextInput from "@/components/TextInput.vue";
+import NumberInput from "@/components/NumberInput.vue";
 // import TextareaInput from "@/components/TextareaInput.vue";
 // import RangeInput from "@/components/RangeInput.vue";
 // import SelectInput from "@/components/SelectInput.vue";
@@ -22,17 +36,17 @@ import Heading from "@/components/Heading.vue";
 // import CheckboxInput from "@/components/CheckboxInput.vue";
 
 export default {
-	name: "DeviceMqtt",
+	name: "DeviceOpenwbFlex",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
 	},
 	components: {
-		Alert,
+		// Alert,
 		Heading,
-		// TextInput,
-		// NumberInput,
-		// // TextareaInput,
+		TextInput,
+		NumberInput,
+		// TextareaInput,
 		// RangeInput,
 		// SelectInput,
 		// ButtonGroupInput,

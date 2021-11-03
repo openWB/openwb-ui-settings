@@ -1,15 +1,18 @@
 <template>
 	<component
-		v-if="deviceComponentLoaded"
-		:is="deviceType"
+		v-if="componentTemplateFound"
+		:is="myComponent"
 		:configuration="configuration"
 		@update:configuration="updateConfiguration($event)"
 	/>
 	<div v-else>
-		<alert subtype="danger">
-			Es wurde keine Konfigurationsseite für den Gerätetyp "{{
-				deviceType
-			}}" gefunden. Die Einstellungen können als JSON direkt bearbeitet
+		<alert subtype="warning">
+			Es wurde keine Konfigurationsseite für den
+			<span v-if="componentType">
+				Komponententyp "{{ componentType }}"
+			</span>
+			<span v-else>Gerätetyp "{{ deviceType }}"</span>
+			gefunden. Die Einstellungen können als JSON direkt bearbeitet
 			werden.
 		</alert>
 		<textarea-input
@@ -31,27 +34,44 @@
 </template>
 
 <script>
-import devices from "@/components/devices";
 import Alert from "@/components/Alert.vue";
-import TextInput from "@/components/TextInput.vue";
 import TextareaInput from "@/components/TextareaInput.vue";
+import { defineAsyncComponent } from "@vue/runtime-core";
 
 export default {
-	name: "DeviceConfig",
+	name: "ConfigProxy",
 	components: {
 		Alert,
-		TextInput,
 		TextareaInput,
-		...devices,
 	},
 	emits: ["update:configuration"],
 	props: {
 		deviceType: { type: String, required: true },
+		componentType: { type: String, default: undefined },
 		configuration: { type: Object, required: true },
 	},
+	data() {
+		return {
+			componentTemplateFound: true,
+		};
+	},
 	computed: {
-		deviceComponentLoaded() {
-			return this.$.components[this.deviceType] !== undefined;
+		myComponent() {
+			console.log(
+				`loading component: ${this.deviceType} / ${this.componentType}`
+			);
+			return defineAsyncComponent(() =>
+				import(
+					`@/components/devices/${this.deviceType}${
+						this.componentType
+							? `/${this.componentType}`
+							: "/device"
+					}.vue`
+				).catch((error) => {
+					console.log("ERROR:", error);
+					this.componentTemplateFound = false;
+				})
+			);
 		},
 	},
 	methods: {

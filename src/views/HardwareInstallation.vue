@@ -74,14 +74,11 @@
 						"
 					/>
 					<hr />
-					<device-config
+					<config-proxy
 						:deviceType="installedDevice.type"
 						:configuration="installedDevice.configuration"
 						@update:configuration="
-							updateDeviceConfiguration(
-								installedDeviceKey,
-								$event
-							)
+							updateConfiguration(installedDeviceKey, $event)
 						"
 					/>
 					<hr />
@@ -180,26 +177,12 @@
 							"
 						/>
 						<hr />
-						<!-- <text-input
-							title="Konfiguration"
-							subtype="json"
-							:model-value="installedComponent.configuration"
-							@update:model-value="
-								updateState(
-									installedComponentKey,
-									$event,
-									'configuration'
-								)
-							"
-						>
-							<template #help>JSON Objekt</template>
-						</text-input> -->
-						<component-config
+						<config-proxy
 							:deviceType="installedDevice.type"
 							:componentType="installedComponent.type"
 							:configuration="installedComponent.configuration"
 							@update:configuration="
-								updateComponentConfiguration(
+								updateConfiguration(
 									installedComponentKey,
 									$event
 								)
@@ -270,8 +253,7 @@ import Avatar from "@/components/Avatar.vue";
 import SortableList from "@/components/SortableList.vue";
 import SubmitButtons from "@/components/SubmitButtons.vue";
 
-import DeviceConfig from "@/components/DeviceConfig.vue";
-import ComponentConfig from "@/components/ComponentConfig.vue";
+import ConfigProxy from "@/components/ConfigProxy.vue";
 
 export default {
 	name: "HardwareInstallation",
@@ -293,8 +275,7 @@ export default {
 		SortableList,
 		SubmitButtons,
 		FontAwesomeIcon,
-		DeviceConfig,
-		ComponentConfig,
+		ConfigProxy,
 	},
 	data() {
 		return {
@@ -385,9 +366,9 @@ export default {
 			);
 			return myDevice.components;
 		},
-		updateDeviceConfiguration(deviceKey, event) {
-			console.debug("updateDeviceConfiguration", event);
-			this.updateState(deviceKey, event.value, event.object);
+		updateConfiguration(key, event) {
+			console.debug("updateConfiguration", event);
+			this.updateState(key, event.value, event.object);
 		},
 	},
 };
