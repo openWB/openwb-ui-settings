@@ -11,6 +11,28 @@
 		>
 			<template #help>Temporär nur als JSON Objekt zur Info</template>
 		</text-input>
+		<select-input
+			title="Zählermodell"
+			notSelected="Bitte auswählen"
+			:options="[
+				{ value: 0, text: 'MPM3PM' },
+				{ value: 1, text: 'Lovato' },
+				{ value: 2, text: 'SDM630' },
+			]"
+			:model-value="configuration.version"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.version')
+			"
+		/>
+		<number-input
+			title="Modbus-ID"
+			:min="1"
+			:max="255"
+			:model-value="configuration.id"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.id')
+			"
+		/>
 	</div>
 </template>
 
@@ -18,10 +40,10 @@
 // import Alert from "@/components/Alert.vue";
 import Heading from "@/components/Heading.vue";
 import TextInput from "@/components/TextInput.vue";
-// import NumberInput from "@/components/NumberInput.vue";
+import NumberInput from "@/components/NumberInput.vue";
 // import TextareaInput from "@/components/TextareaInput.vue";
 // import RangeInput from "@/components/RangeInput.vue";
-// import SelectInput from "@/components/SelectInput.vue";
+import SelectInput from "@/components/SelectInput.vue";
 // import ButtonGroupInput from "@/components/ButtonGroupInput.vue";
 // import ClickButton from "@/components/ClickButton.vue";
 // import Avatar from "@/components/Avatar.vue";
@@ -37,10 +59,10 @@ export default {
 		// Alert,
 		Heading,
 		TextInput,
-		// NumberInput,
+		NumberInput,
 		// TextareaInput,
 		// RangeInput,
-		// SelectInput,
+		SelectInput,
 		// ButtonGroupInput,
 		// ClickButton,
 		// Avatar,
