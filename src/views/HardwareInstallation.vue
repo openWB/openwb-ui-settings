@@ -78,10 +78,7 @@
 						:deviceType="installedDevice.type"
 						:configuration="installedDevice.configuration"
 						@update:configuration="
-							updateDeviceConfiguration(
-								installedDeviceKey,
-								$event
-							)
+							updateConfiguration(installedDeviceKey, $event)
 						"
 					/>
 					<hr />
@@ -185,7 +182,7 @@
 							:componentType="installedComponent.type"
 							:configuration="installedComponent.configuration"
 							@update:configuration="
-								updateComponentConfiguration(
+								updateConfiguration(
 									installedComponentKey,
 									$event
 								)
@@ -369,9 +366,9 @@ export default {
 			);
 			return myDevice.components;
 		},
-		updateDeviceConfiguration(deviceKey, event) {
-			console.debug("updateDeviceConfiguration", event);
-			this.updateState(deviceKey, event.value, event.object);
+		updateConfiguration(key, event) {
+			console.debug("updateConfiguration", event);
+			this.updateState(key, event.value, event.object);
 		},
 	},
 };
