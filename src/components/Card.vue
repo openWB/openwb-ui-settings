@@ -23,8 +23,8 @@
 					fixed-width
 					:icon="
 						isCollapsed
-							? ['fas', 'plus-square']
-							: ['fas', 'minus-square']
+							? ['fas', 'chevron-right']
+							: ['fas', 'chevron-down']
 					"
 				/>
 			</span>
@@ -41,12 +41,12 @@
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-	faPlusSquare as fasPlusSquare,
-	faMinusSquare as fasMinusSquare,
+	faChevronRight as fasChevronRight,
+	faChevronDown as fasChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasPlusSquare, fasMinusSquare);
+library.add(fasChevronRight, fasChevronDown);
 
 export default {
 	name: "Card",
