@@ -1,29 +1,117 @@
 <template>
 	<div class="hardware-installation">
-		<form id="myForm">
+		<card
+			title="Systeme und Komponenten"
+			:collapsible="true"
+			:collapsed="true"
+		>
+			<select-input
+				class="mb-2"
+				title="Verfügbare Systeme"
+				notSelected="Bitte auswählen"
+				:options="getDeviceList()"
+				:model-value="deviceToAdd"
+				@update:model-value="deviceToAdd = $event"
+			>
+				<template #append>
+					<span class="col-1">
+						<click-button
+							:class="
+								deviceToAdd === undefined
+									? 'btn-outline-success'
+									: 'btn-success'
+							"
+							:disabled="deviceToAdd === undefined"
+							@click="addDevice"
+						>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'plus']"
+							/>
+						</click-button>
+					</span>
+				</template>
+				<template #help>
+					Bitte ein System auswählen, das hinzugefügt werden soll.
+				</template>
+			</select-input>
 			<card
-				title="Systeme und Komponenten"
+				v-for="(
+					installedDevice, installedDeviceKey
+				) in installedDevices"
+				:key="installedDevice.id"
 				:collapsible="true"
 				:collapsed="true"
+				subtype="primary"
 			>
+				<template #header>
+					<avatar class="bg-success">
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'network-wired']"
+						/>
+					</avatar>
+					{{ installedDevice.name }}
+				</template>
+				<template #actions>
+					<avatar
+						class="bg-danger"
+						@click="removeDevice(installedDevice.id, $event)"
+					>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'trash']"
+						/>
+					</avatar>
+				</template>
+				<text-input
+					title="Bezeichnung"
+					subtype="text"
+					:model-value="installedDevice.name"
+					@update:model-value="
+						updateState(installedDeviceKey, $event, 'name')
+					"
+				/>
+				<hr />
+				<config-proxy
+					:deviceType="installedDevice.type"
+					:configuration="installedDevice.configuration"
+					@update:configuration="
+						updateConfiguration(installedDeviceKey, $event)
+					"
+				/>
+				<hr />
 				<select-input
 					class="mb-2"
-					title="Verfügbare Systeme"
+					v-if="getComponentList(installedDevice.type).length"
+					title="Verfügbare Komponenten"
 					notSelected="Bitte auswählen"
-					:options="getDeviceList()"
-					:model-value="deviceToAdd"
-					@update:model-value="deviceToAdd = $event"
+					:options="getComponentList(installedDevice.type)"
+					:model-value="componentToAdd[installedDevice.id]"
+					@update:model-value="
+						componentToAdd[installedDevice.id] = $event
+					"
 				>
 					<template #append>
 						<span class="col-1">
 							<click-button
 								:class="
-									deviceToAdd === undefined
+									componentToAdd[installedDevice.id] ===
+									undefined
 										? 'btn-outline-success'
 										: 'btn-success'
 								"
-								:disabled="deviceToAdd === undefined"
-								@click="addDevice"
+								:disabled="
+									componentToAdd[installedDevice.id] ===
+									undefined
+								"
+								@click="
+									addComponent(
+										installedDevice.id,
+										installedDevice.type,
+										componentToAdd[installedDevice.id]
+									)
+								"
 							>
 								<font-awesome-icon
 									fixed-width
@@ -33,31 +121,41 @@
 						</span>
 					</template>
 					<template #help>
-						Bitte ein System auswählen, das hinzugefügt werden soll.
+						Bitte eine Komponente auswählen, die hinzugefügt werden
+						soll.
 					</template>
 				</select-input>
+				<alert v-else subtype="info">
+					Dieses System bietet keine Komponenten zur Installation an.
+				</alert>
 				<card
 					v-for="(
-						installedDevice, installedDeviceKey
-					) in installedDevices"
-					:key="installedDevice.id"
+						installedComponent, installedComponentKey
+					) in getMyInstalledComponents(installedDevice.id)"
+					:key="installedComponent.id"
 					:collapsible="true"
 					:collapsed="true"
-					subtype="primary"
+					subtype="dark"
 				>
 					<template #header>
 						<avatar class="bg-success">
 							<font-awesome-icon
 								fixed-width
-								:icon="['fas', 'network-wired']"
+								:icon="['fas', 'microchip']"
 							/>
 						</avatar>
-						{{ installedDevice.name }}
+						{{ installedComponent.name }}
 					</template>
 					<template #actions>
 						<avatar
 							class="bg-danger"
-							@click="removeDevice(installedDevice.id, $event)"
+							@click="
+								removeComponent(
+									installedDevice.id,
+									installedComponent.id,
+									$event
+								)
+							"
 						>
 							<font-awesome-icon
 								fixed-width
@@ -68,161 +166,49 @@
 					<text-input
 						title="Bezeichnung"
 						subtype="text"
-						:model-value="installedDevice.name"
+						:model-value="installedComponent.name"
 						@update:model-value="
-							updateState(installedDeviceKey, $event, 'name')
+							updateState(installedComponentKey, $event, 'name')
 						"
 					/>
 					<hr />
 					<config-proxy
 						:deviceType="installedDevice.type"
-						:configuration="installedDevice.configuration"
+						:componentType="installedComponent.type"
+						:configuration="installedComponent.configuration"
 						@update:configuration="
-							updateConfiguration(installedDeviceKey, $event)
+							updateConfiguration(installedComponentKey, $event)
 						"
 					/>
-					<hr />
-					<select-input
-						class="mb-2"
-						v-if="getComponentList(installedDevice.type).length"
-						title="Verfügbare Komponenten"
-						notSelected="Bitte auswählen"
-						:options="getComponentList(installedDevice.type)"
-						:model-value="componentToAdd[installedDevice.id]"
-						@update:model-value="
-							componentToAdd[installedDevice.id] = $event
-						"
-					>
-						<template #append>
-							<span class="col-1">
-								<click-button
-									:class="
-										componentToAdd[installedDevice.id] ===
-										undefined
-											? 'btn-outline-success'
-											: 'btn-success'
-									"
-									:disabled="
-										componentToAdd[installedDevice.id] ===
-										undefined
-									"
-									@click="
-										addComponent(
-											installedDevice.id,
-											installedDevice.type,
-											componentToAdd[installedDevice.id]
-										)
-									"
-								>
-									<font-awesome-icon
-										fixed-width
-										:icon="['fas', 'plus']"
-									/>
-								</click-button>
-							</span>
-						</template>
-						<template #help>
-							Bitte eine Komponente auswählen, die hinzugefügt
-							werden soll.
-						</template>
-					</select-input>
-					<alert v-else subtype="info">
-						Dieses System bietet keine Komponenten zur Installation
-						an.
-					</alert>
-					<card
-						v-for="(
-							installedComponent, installedComponentKey
-						) in getMyInstalledComponents(installedDevice.id)"
-						:key="installedComponent.id"
-						:collapsible="true"
-						:collapsed="true"
-						subtype="dark"
-					>
-						<template #header>
-							<avatar class="bg-success">
-								<font-awesome-icon
-									fixed-width
-									:icon="['fas', 'microchip']"
-								/>
-							</avatar>
-							{{ installedComponent.name }}
-						</template>
-						<template #actions>
-							<avatar
-								class="bg-danger"
-								@click="
-									removeComponent(
-										installedDevice.id,
-										installedComponent.id,
-										$event
-									)
-								"
-							>
-								<font-awesome-icon
-									fixed-width
-									:icon="['fas', 'trash']"
-								/>
-							</avatar>
-						</template>
-						<text-input
-							title="Bezeichnung"
-							subtype="text"
-							:model-value="installedComponent.name"
-							@update:model-value="
-								updateState(
-									installedComponentKey,
-									$event,
-									'name'
-								)
-							"
-						/>
-						<hr />
-						<config-proxy
-							:deviceType="installedDevice.type"
-							:componentType="installedComponent.type"
-							:configuration="installedComponent.configuration"
-							@update:configuration="
-								updateConfiguration(
-									installedComponentKey,
-									$event
-								)
-							"
-						/>
-					</card>
 				</card>
 			</card>
-			<card title="Struktur" :collapsible="true" :collapsed="true">
-				<!-- ToDo: Fix: nested lists bypass store commits! -->
-				<sortable-list
-					title="Anordnung der Komponenten"
-					:model-value="
-						$store.state.mqtt['openWB/counter/get/hierarchy']
-					"
-					@update:model-value="
-						updateState('openWB/counter/get/hierarchy', $event)
-					"
-				>
-					<template #help>
-						<pre>{{
-							JSON.stringify(
-								$store.state.mqtt[
-									"openWB/counter/get/hierarchy"
-								],
-								undefined,
-								2
-							)
-						}}</pre>
-					</template>
-				</sortable-list>
-			</card>
+		</card>
+		<card title="Struktur" :collapsible="true" :collapsed="true">
+			<!-- ToDo: Fix: nested lists bypass store commits! -->
+			<sortable-list
+				title="Anordnung der Komponenten"
+				:model-value="$store.state.mqtt['openWB/counter/get/hierarchy']"
+				@update:model-value="
+					updateState('openWB/counter/get/hierarchy', $event)
+				"
+			>
+				<template #help>
+					<pre>{{
+						JSON.stringify(
+							$store.state.mqtt["openWB/counter/get/hierarchy"],
+							undefined,
+							2
+						)
+					}}</pre>
+				</template>
+			</sortable-list>
+		</card>
 
-			<submit-buttons
-				@save="$emit('save')"
-				@reset="$emit('reset')"
-				@defaults="$emit('defaults')"
-			/>
-		</form>
+		<submit-buttons
+			@save="$emit('save')"
+			@reset="$emit('reset')"
+			@defaults="$emit('defaults')"
+		/>
 	</div>
 </template>
 
@@ -284,6 +270,7 @@ export default {
 				"openWB/counter/get/hierarchy",
 				"openWB/system/device/+/config",
 				"openWB/system/device/+/component/+/config",
+				"openWB/system/configurable/devices_components",
 			],
 			deviceToAdd: undefined,
 			componentToAdd: [],
@@ -327,7 +314,9 @@ export default {
 			});
 		},
 		getDeviceList() {
-			return this.$store.state.examples.availableDevices;
+			return this.$store.state.mqtt[
+				"openWB/system/configurable/devices_components"
+			];
 		},
 		addComponent(deviceId, deviceType, componentType) {
 			this.$emit("sendCommand", {
@@ -362,10 +351,10 @@ export default {
 				return [];
 			}
 			console.debug("finding components for '" + deviceType + "'");
-			let myDevice = this.$store.state.examples.availableDevices.find(
-				(device) => device.value === deviceType
-			);
-			return myDevice.components;
+			let myDevice = this.$store.state.mqtt[
+				"openWB/system/configurable/devices_components"
+			].find((device) => device.value === deviceType);
+			return myDevice.component;
 		},
 		updateConfiguration(key, event) {
 			console.debug("updateConfiguration", event);

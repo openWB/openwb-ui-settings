@@ -69,7 +69,17 @@
 						</div>
 					</div>
 					<input
-						v-if="['text', 'user', 'json'].includes(subtype)"
+						v-if="['text', 'user'].includes(subtype)"
+						type="text"
+						class="form-control"
+						:class="{ invalid: inputInvalid }"
+						v-model="value"
+						v-bind="$attrs"
+						:pattern="pattern"
+					/>
+					<input
+						v-if="subtype == 'json'"
+						ref="jsonInput"
 						type="text"
 						class="form-control"
 						v-model="value"
@@ -208,22 +218,39 @@ export default {
 		return {
 			showHelp: false,
 			showPassword: false,
+			inputInvalid: false,
+			tempValue: this.modelValue,
 		};
 	},
 	computed: {
 		value: {
 			get() {
 				if (this.subtype == "json") {
-					return JSON.stringify(this.modelValue);
+					if (this.inputInvalid) {
+						console.log("returning invalid String");
+						return this.tempValue;
+					} else {
+						console.log("returning valid JSON");
+						return JSON.stringify(this.tempValue);
+					}
 				}
 				return this.modelValue;
 			},
 			set(newValue) {
 				if (this.subtype == "json") {
 					try {
-						this.$emit("update:modelValue", JSON.parse(newValue));
+						let myNewJsonValue = JSON.parse(newValue);
+						this.inputInvalid = false;
+						this.$refs.jsonInput.setCustomValidity("");
+						this.tempValue = myNewJsonValue;
+						this.$emit("update:modelValue", myNewJsonValue);
 					} catch (e) {
 						console.error("parsing JSON failed: " + newValue);
+						this.inputInvalid = true;
+						this.$refs.jsonInput.setCustomValidity(
+							"Ungültiger JSON Ausdruck!"
+						);
+						this.tempValue = newValue;
 					}
 				} else {
 					this.$emit("update:modelValue", newValue);
@@ -244,3 +271,9 @@ export default {
 	},
 };
 </script>
+
+<style scoped>
+input:invalid {
+	border: 2px solid var(--danger);
+}
+</style>

@@ -13,25 +13,43 @@
 			/>
 		</label>
 		<div class="col-md-8">
-			<div class="form-row justify-content-end">
-				<textarea
-					v-if="subtype === 'json'"
-					class="form-control"
-					v-model="value"
-					v-bind="$attrs"
-				></textarea>
-				<textarea
-					v-else
-					class="form-control"
-					v-model="value"
-					v-bind="$attrs"
-				></textarea>
-				<small
-					v-if="$attrs.maxlength"
-					class="form-text text-muted text-right"
-				>
-					{{ length }} / {{ $attrs.maxlength }}
-				</small>
+			<div class="form-row">
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<div class="input-group-text">
+							<font-awesome-icon
+								fixed-width
+								v-if="subtype == 'text'"
+								:icon="['fas', 'keyboard']"
+							/>
+							<font-awesome-icon
+								fixed-width
+								v-if="subtype == 'json'"
+								:icon="['fas', 'code']"
+							/>
+						</div>
+					</div>
+					<textarea
+						ref="jsonInput"
+						v-if="subtype === 'json'"
+						class="form-control"
+						v-model.lazy="value"
+						v-bind="$attrs"
+					></textarea>
+					<textarea
+						v-else
+						class="form-control"
+						v-model="value"
+						v-bind="$attrs"
+					></textarea>
+					<div v-if="$attrs.maxlength" class="input-group-append">
+						<div class="input-group-text">
+							<small class="form-text text-muted text-right">
+								{{ length }} / {{ $attrs.maxlength }}
+							</small>
+						</div>
+					</div>
+				</div>
 			</div>
 			<span v-if="showHelp" class="form-row alert alert-info my-1 small">
 				<slot name="help"></slot>
@@ -65,22 +83,39 @@ export default {
 	data() {
 		return {
 			showHelp: false,
+			inputInvalid: false,
+			tempValue: this.modelValue,
 		};
 	},
 	computed: {
 		value: {
 			get() {
 				if (this.subtype == "json") {
-					return JSON.stringify(this.modelValue, undefined, 2);
+					if (this.inputInvalid) {
+						console.log("returning invalid String");
+						return this.tempValue;
+					} else {
+						console.log("returning valid JSON");
+						return JSON.stringify(this.tempValue, undefined, 2);
+					}
 				}
 				return this.modelValue;
 			},
 			set(newValue) {
 				if (this.subtype == "json") {
 					try {
-						this.$emit("update:modelValue", JSON.parse(newValue));
+						let myNewJsonValue = JSON.parse(newValue);
+						this.inputInvalid = false;
+						this.$refs.jsonInput.setCustomValidity("");
+						this.tempValue = myNewJsonValue;
+						this.$emit("update:modelValue", myNewJsonValue);
 					} catch (e) {
-						console.error("parsing JSON failed: " + newValue);
+						console.warn("parsing JSON failed: " + newValue);
+						this.inputInvalid = true;
+						this.$refs.jsonInput.setCustomValidity(
+							"Ungültiger JSON Ausdruck!"
+						);
+						this.tempValue = newValue;
 					}
 				} else {
 					this.$emit("update:modelValue", newValue);
@@ -107,3 +142,9 @@ export default {
 	},
 };
 </script>
+
+<style scoped>
+textarea:invalid {
+	border: 2px solid var(--danger);
+}
+</style>

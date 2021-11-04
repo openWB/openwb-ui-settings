@@ -1,354 +1,739 @@
 <template>
 	<div class="vehicleConfig">
-		<form id="myForm">
-			<!-- vehicle card -->
-			<card title="Fahrzeuge" :collapsible="true" :collapsed="true">
-				<template #actions>
-					<avatar
-						class="bg-success"
-						v-if="
-							$store.state.mqtt['openWB/general/extern'] === false
-						"
-						@click="addVehicle"
-					>
-						<font-awesome-icon
-							fixed-width
-							:icon="['fas', 'plus']"
-						/>
-					</avatar>
-				</template>
-				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-					<alert subtype="info">
-						Diese Einstellungen sind nicht verfügbar, solange sich
-						diese openWB im Modus "Nur Ladepunkt" befindet.
-					</alert>
-				</div>
-				<div v-else>
-					<card
-						v-for="id in vehicleIndexes"
-						:key="id"
-						:title="getVehicleName(id)"
-						:collapsible="true"
-						:collapsed="true"
-						subtype="primary"
-					>
-						<template #actions v-if="id !== 0">
-							<avatar
-								class="bg-danger"
-								@click="removeVehicle(id, $event)"
-							>
-								<font-awesome-icon
-									fixed-width
-									:icon="['fas', 'trash']"
-								/>
-							</avatar>
-						</template>
-						<text-input
-							title="Bezeichnung"
-							:model-value="
-								$store.state.mqtt[
-									'openWB/vehicle/' + id + '/name'
-								]
-							"
-							@update:model-value="
-								updateState(
-									'openWB/vehicle/' + id + '/name',
-									$event
-								)
-							"
-							:disabled="id === 0"
+		<!-- vehicle card -->
+		<card title="Fahrzeuge" :collapsible="true" :collapsed="true">
+			<template #actions>
+				<avatar
+					class="bg-success"
+					v-if="$store.state.mqtt['openWB/general/extern'] === false"
+					@click="addVehicle"
+				>
+					<font-awesome-icon fixed-width :icon="['fas', 'plus']" />
+				</avatar>
+			</template>
+			<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+				<alert subtype="info">
+					Diese Einstellungen sind nicht verfügbar, solange sich diese
+					openWB im Modus "Nur Ladepunkt" befindet.
+				</alert>
+			</div>
+			<div v-else>
+				<card
+					v-for="id in vehicleIndexes"
+					:key="id"
+					:title="getVehicleName(id)"
+					:collapsible="true"
+					:collapsed="true"
+					subtype="primary"
+				>
+					<template #actions v-if="id !== 0">
+						<avatar
+							class="bg-danger"
+							@click="removeVehicle(id, $event)"
 						>
-							<template #help v-if="id === 0">
-								Das Standard-Fahrzeug kann nicht umbenannt
-								werden.
-							</template>
-						</text-input>
-						<select-input
-							title="Fahrzeug-Vorlage"
-							:options="evTemplateList"
-							:model-value="
-								$store.state.mqtt[
-									'openWB/vehicle/' + id + '/ev_template'
-								]
-							"
-							@update:model-value="
-								updateState(
-									'openWB/vehicle/' + id + '/ev_template',
-									$event
-								)
-							"
-						/>
-						<select-input
-							title="Ladeprofil-Vorlage"
-							:options="chargeTemplateList"
-							:model-value="
-								$store.state.mqtt[
-									'openWB/vehicle/' + id + '/charge_template'
-								]
-							"
-							@update:model-value="
-								updateState(
-									'openWB/vehicle/' + id + '/charge_template',
-									$event
-								)
-							"
-						/>
-					</card>
-				</div>
-			</card>
-			<!-- vehicle template card -->
-			<card
-				title="Fahrzeug-Vorlagen"
-				:collapsible="true"
-				:collapsed="true"
-			>
-				<template #actions>
-					<avatar
-						class="bg-success"
-						v-if="
-							$store.state.mqtt['openWB/general/extern'] === false
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'trash']"
+							/>
+						</avatar>
+					</template>
+					<text-input
+						title="Bezeichnung"
+						:model-value="
+							$store.state.mqtt['openWB/vehicle/' + id + '/name']
 						"
-						@click="addEvTemplate"
+						@update:model-value="
+							updateState(
+								'openWB/vehicle/' + id + '/name',
+								$event
+							)
+						"
+						:disabled="id === 0"
 					>
-						<font-awesome-icon
-							fixed-width
-							:icon="['fas', 'plus']"
-						/>
-					</avatar>
-				</template>
-				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-					<alert subtype="info">
-						Diese Einstellungen sind nicht verfügbar, solange sich
-						diese openWB im Modus "Nur Ladepunkt" befindet.
-					</alert>
-				</div>
-				<div v-else>
-					<card
-						v-for="(template, key) in evTemplates"
-						:key="key"
-						:title="template.name ? template.name : key"
-						:collapsible="true"
-						:collapsed="true"
-						subtype="primary"
+						<template #help v-if="id === 0">
+							Das Standard-Fahrzeug kann nicht umbenannt werden.
+						</template>
+					</text-input>
+					<select-input
+						title="Fahrzeug-Vorlage"
+						:options="evTemplateList"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/vehicle/' + id + '/ev_template'
+							]
+						"
+						@update:model-value="
+							updateState(
+								'openWB/vehicle/' + id + '/ev_template',
+								$event
+							)
+						"
+					/>
+					<select-input
+						title="Ladeprofil-Vorlage"
+						:options="chargeTemplateList"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/vehicle/' + id + '/charge_template'
+							]
+						"
+						@update:model-value="
+							updateState(
+								'openWB/vehicle/' + id + '/charge_template',
+								$event
+							)
+						"
+					/>
+				</card>
+			</div>
+		</card>
+		<!-- vehicle template card -->
+		<card title="Fahrzeug-Vorlagen" :collapsible="true" :collapsed="true">
+			<template #actions>
+				<avatar
+					class="bg-success"
+					v-if="$store.state.mqtt['openWB/general/extern'] === false"
+					@click="addEvTemplate"
+				>
+					<font-awesome-icon fixed-width :icon="['fas', 'plus']" />
+				</avatar>
+			</template>
+			<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+				<alert subtype="info">
+					Diese Einstellungen sind nicht verfügbar, solange sich diese
+					openWB im Modus "Nur Ladepunkt" befindet.
+				</alert>
+			</div>
+			<div v-else>
+				<card
+					v-for="(template, key) in evTemplates"
+					:key="key"
+					:title="template.name ? template.name : key"
+					:collapsible="true"
+					:collapsed="true"
+					subtype="primary"
+				>
+					<template #actions v-if="!key.endsWith('/0')">
+						<avatar
+							class="bg-danger"
+							v-if="
+								$store.state.mqtt['openWB/general/extern'] ===
+								false
+							"
+							@click="removeEvTemplate(key, $event)"
+						>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'trash']"
+							/>
+						</avatar>
+					</template>
+					<text-input
+						title="Bezeichnung"
+						:model-value="template.name"
+						@update:model-value="updateState(key, $event, 'name')"
+						:disabled="key.endsWith('/0')"
 					>
-						<template #actions v-if="!key.endsWith('/0')">
+						<template #help v-if="key.endsWith('/0')">
+							Die Standard-Vorlage kann nicht umbenannt werden.
+						</template>
+					</text-input>
+					<heading>Angaben zum Ladestrom</heading>
+					<range-input
+						title="Mindeststrom"
+						:min="6"
+						:max="16"
+						:step="1"
+						unit="A"
+						:model-value="template.min_current"
+						@update:model-value="
+							updateState(key, $event, 'min_current')
+						"
+					>
+					</range-input>
+					<range-input
+						title="Maximalstrom 1-phasig"
+						:min="6"
+						:max="32"
+						:step="1"
+						unit="A"
+						:model-value="template.max_current_one_phase"
+						@update:model-value="
+							updateState(key, $event, 'max_current_one_phase')
+						"
+					>
+					</range-input>
+					<range-input
+						title="Maximalstrom mehr-phasig"
+						:min="6"
+						:max="32"
+						:step="1"
+						unit="A"
+						:model-value="template.max_current_multi_phases"
+						@update:model-value="
+							updateState(key, $event, 'max_current_multi_phases')
+						"
+					>
+					</range-input>
+					<number-input
+						title="Erlaubte Stromabweichung"
+						unit="A"
+						:model-value="template.nominal_difference"
+						@update:model-value="
+							updateState(key, $event, 'nominal_difference')
+						"
+					>
+					</number-input>
+					<heading>Angaben zur Batterie</heading>
+					<number-input
+						title="Kapazität der Batterie"
+						unit="kWh"
+						:min="10"
+						:step="1"
+						:model-value="template.battery_capacity"
+						@update:model-value="
+							updateState(key, $event, 'battery_capacity')
+						"
+					>
+					</number-input>
+					<number-input
+						title="Durchschnittsverbrauch"
+						unit="kWh&nbsp;/&nbsp;100km"
+						:min="0"
+						:step="0.1"
+						:model-value="template.average_consump"
+						@update:model-value="
+							updateState(key, $event, 'average_consump')
+						"
+					>
+					</number-input>
+					<heading>Angaben zur Handhabung von Phasen</heading>
+					<button-group-input
+						title="Unterstützte Phasen"
+						:buttons="[
+							{ buttonValue: 1, text: '1' },
+							{ buttonValue: 2, text: '2' },
+							{ buttonValue: 3, text: '3' },
+						]"
+						:model-value="template.max_phases"
+						@update:model-value="
+							updateState(key, $event, 'max_phases')
+						"
+					>
+					</button-group-input>
+					<button-group-input
+						title="CP-Unterbrechung"
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Aus',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'An',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="template.control_pilot_interruption"
+						@update:model-value="
+							updateState(
+								key,
+								$event,
+								'control_pilot_interruption'
+							)
+						"
+					>
+					</button-group-input>
+					<button-group-input
+						title="Phasenumschaltung blockieren"
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Aus',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'An',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="template.prevent_switch_stop"
+						@update:model-value="
+							updateState(key, $event, 'prevent_switch_stop')
+						"
+					>
+					</button-group-input>
+					<number-input
+						title="Pause bei Phasenumschaltung"
+						unit="s"
+						:min="2"
+						:step="1"
+						:model-value="template.phase_switch_pause"
+						@update:model-value="
+							updateState(key, $event, 'phase_switch_pause')
+						"
+					>
+					</number-input>
+				</card>
+			</div>
+		</card>
+		<!-- charge template card -->
+		<card title="Ladeprofil-Vorlagen" :collapsible="true" :collapsed="true">
+			<template #actions>
+				<avatar
+					class="bg-success"
+					v-if="$store.state.mqtt['openWB/general/extern'] === false"
+					@click="addChargeTemplate"
+				>
+					<font-awesome-icon fixed-width :icon="['fas', 'plus']" />
+				</avatar>
+			</template>
+			<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+				<alert subtype="info">
+					Diese Einstellungen sind nicht verfügbar, solange sich diese
+					openWB im Modus "Nur Ladepunkt" befindet.
+				</alert>
+			</div>
+			<div v-else>
+				<card
+					v-for="(template, templateKey) in chargeTemplates"
+					:key="templateKey"
+					:title="template.name ? template.name : templateKey"
+					:collapsible="true"
+					:collapsed="true"
+					subtype="primary"
+				>
+					<template #actions v-if="!templateKey.endsWith('/0')">
+						<avatar
+							class="bg-danger"
+							@click="removeChargeTemplate(templateKey, $event)"
+						>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'trash']"
+							/>
+						</avatar>
+					</template>
+					<text-input
+						title="Bezeichnung"
+						:model-value="template.name"
+						@update:model-value="
+							updateState(templateKey, $event, 'name')
+						"
+						:disabled="templateKey.endsWith('/0')"
+					>
+						<template #help v-if="templateKey.endsWith('/0')">
+							Die Standard-Vorlage kann nicht umbenannt werden.
+						</template>
+					</text-input>
+					<heading>Allgemeine Optionen</heading>
+					<button-group-input
+						title="Priorität"
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="template.prio"
+						@update:model-value="
+							updateState(templateKey, $event, 'prio')
+						"
+					>
+						<template #help>
+							Fahrzeuge mit Priorität werden bevorzugt geladen.
+							Erst wenn alle priorisierten Fahrzeuge die maximale
+							Ladeleistung bekommen und noch zusätzlicher
+							Überschuss vorhanden ist, werden auch Fahrzeuge ohne
+							Priorität geladen.
+						</template>
+					</button-group-input>
+					<button-group-input
+						title="Automatische Sperre"
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="template.disable_after_unplug"
+						@update:model-value="
+							updateState(
+								templateKey,
+								$event,
+								'disable_after_unplug'
+							)
+						"
+					>
+						<template #help>
+							Wird ein Fahrzeug mit diesem Profil abgesteckt, dann
+							wird der betroffene Ladepunkt automatisch
+							deaktiviert.
+						</template>
+					</button-group-input>
+					<button-group-input
+						title="Standard nach Abstecken"
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="template.load_default"
+						@update:model-value="
+							updateState(templateKey, $event, 'load_default')
+						"
+					>
+						<template #help>
+							Falls diese Option aktiviert ist, wird der
+							betroffene Ladepunkt nach dem Abstecken auf das
+							Standard Ladeprofil zurückgesetzt.
+						</template>
+					</button-group-input>
+					<hr />
+					<heading>Sofortladen</heading>
+					<range-input
+						title="Ladestrom"
+						:min="6"
+						:max="32"
+						:step="1"
+						unit="A"
+						:model-value="
+							template.chargemode.instant_charging.current
+						"
+						@update:model-value="
+							updateState(
+								templateKey,
+								$event,
+								'chargemode.instant_charging.current'
+							)
+						"
+					>
+					</range-input>
+					<button-group-input
+						title="Begrenzung"
+						:buttons="[
+							{
+								buttonValue: 'none',
+								text: 'Aus',
+							},
+							{
+								buttonValue: 'soc',
+								text: 'SoC',
+							},
+							{
+								buttonValue: 'amount',
+								text: 'Energie',
+							},
+						]"
+						:model-value="
+							template.chargemode.instant_charging.limit.selected
+						"
+						@update:model-value="
+							updateState(
+								templateKey,
+								$event,
+								'chargemode.instant_charging.limit.selected'
+							)
+						"
+					>
+						<template #help>
+							Sofortladen kann entweder durch den Ladestand der
+							Fahrzeugbatterie (SoC) oder eine Energiemenge in kWh
+							begrenzt werden.
+						</template>
+					</button-group-input>
+					<range-input
+						title="SoC-Limit"
+						:min="5"
+						:max="100"
+						:step="5"
+						unit="%"
+						:model-value="
+							template.chargemode.instant_charging.limit.soc
+						"
+						@update:model-value="
+							updateState(
+								templateKey,
+								$event,
+								'chargemode.instant_charging.limit.soc'
+							)
+						"
+					>
+						<template #help>
+							Um diese Begrenzung nutzen zu können, muss ein
+							SoC-Modul für das jeweilige Fahrzeug eingerichtet
+							werden!
+						</template>
+					</range-input>
+					<number-input
+						title="Energie-Limit"
+						unit="kWh"
+						:min="5"
+						:step="5"
+						:model-value="
+							template.chargemode.instant_charging.limit.amount
+						"
+						@update:model-value="
+							updateState(
+								templateKey,
+								$event,
+								'chargemode.instant_charging.limit.amount'
+							)
+						"
+					>
+					</number-input>
+					<hr />
+					<heading>PV-laden</heading>
+					<range-input
+						title="Mindeststrom"
+						:min="0"
+						:max="11"
+						:step="1"
+						unit="A"
+						:labels="[
+							{ label: 'Aus', value: 0 },
+							{ label: 6, value: 6 },
+							{ label: 7, value: 7 },
+							{ label: 8, value: 8 },
+							{ label: 9, value: 9 },
+							{ label: 10, value: 10 },
+							{ label: 11, value: 11 },
+							{ label: 12, value: 12 },
+							{ label: 13, value: 13 },
+							{ label: 14, value: 14 },
+							{ label: 15, value: 15 },
+							{ label: 16, value: 16 },
+						]"
+						:model-value="
+							template.chargemode.pv_charging.min_current
+						"
+						@update:model-value="
+							updateState(
+								templateKey,
+								$event,
+								'chargemode.pv_charging.min_current'
+							)
+						"
+					>
+						<template #help>
+							ToDo: Beschreibung ergänzen!
+						</template>
+					</range-input>
+					<range-input
+						title="SoC-Limit"
+						:min="0"
+						:max="20"
+						:step="1"
+						unit="%"
+						:labels="[
+							{ label: 5, value: 5 },
+							{ label: 10, value: 10 },
+							{ label: 15, value: 15 },
+							{ label: 20, value: 20 },
+							{ label: 25, value: 25 },
+							{ label: 30, value: 30 },
+							{ label: 35, value: 35 },
+							{ label: 40, value: 40 },
+							{ label: 45, value: 45 },
+							{ label: 50, value: 50 },
+							{ label: 55, value: 55 },
+							{ label: 60, value: 60 },
+							{ label: 65, value: 65 },
+							{ label: 70, value: 70 },
+							{ label: 75, value: 75 },
+							{ label: 80, value: 80 },
+							{ label: 85, value: 85 },
+							{ label: 90, value: 90 },
+							{ label: 95, value: 95 },
+							{ label: 100, value: 100 },
+							{ label: 'Aus', value: 101 },
+						]"
+						:model-value="template.chargemode.pv_charging.max_soc"
+						@update:model-value="
+							updateState(
+								templateKey,
+								$event,
+								'chargemode.pv_charging.max_soc'
+							)
+						"
+					>
+						<template #help>
+							Bei der Einstellung "100%" wird die Ladung mit
+							Erreichen der 100% ebenfalls beendet. Dadurch
+							erfolgt kein Balancing der Batteriezellen. Ist dies
+							gewünscht, muss hier "Aus" gewählt werden, um die
+							Ladung nicht zu beenden.<br />
+							Um diese Begrenzung nutzen zu können, muss ein
+							SoC-Modul für das jeweilige Fahrzeug eingerichtet
+							werden!
+						</template>
+					</range-input>
+					<range-input
+						title="Mindest-SoC"
+						:min="0"
+						:max="19"
+						:step="1"
+						unit="%"
+						:labels="[
+							{ label: 'Aus', value: 0 },
+							{ label: 5, value: 5 },
+							{ label: 10, value: 10 },
+							{ label: 15, value: 15 },
+							{ label: 20, value: 20 },
+							{ label: 25, value: 25 },
+							{ label: 30, value: 30 },
+							{ label: 35, value: 35 },
+							{ label: 40, value: 40 },
+							{ label: 45, value: 45 },
+							{ label: 50, value: 50 },
+							{ label: 55, value: 55 },
+							{ label: 60, value: 60 },
+							{ label: 65, value: 65 },
+							{ label: 70, value: 70 },
+							{ label: 75, value: 75 },
+							{ label: 80, value: 80 },
+							{ label: 85, value: 85 },
+							{ label: 90, value: 90 },
+							{ label: 95, value: 95 },
+						]"
+						:model-value="template.chargemode.pv_charging.min_soc"
+						@update:model-value="
+							updateState(
+								templateKey,
+								$event,
+								'chargemode.pv_charging.min_soc'
+							)
+						"
+					>
+						<template #help>
+							Liegt der Ladestand (SoC) der Fahrzeugbatterie unter
+							dem hier eingestellten Wert, dann wird bis zum
+							Erreichen dieses Wertes mit dem eingestellten
+							"Mindest-SoC-Strom" geladen.<br />
+							Um diese Begrenzung nutzen zu können, muss ein
+							SoC-Modul für das jeweilige Fahrzeug eingerichtet
+							werden!
+						</template>
+					</range-input>
+					<range-input
+						title="Mindest-SoC-Strom"
+						:min="6"
+						:max="32"
+						:step="1"
+						unit="A"
+						:model-value="
+							template.chargemode.pv_charging.min_soc_current
+						"
+						@update:model-value="
+							updateState(
+								templateKey,
+								$event,
+								'chargemode.pv_charging.min_soc_current'
+							)
+						"
+					>
+					</range-input>
+					<hr />
+					<heading>
+						Zielladen
+						<template #actions>
 							<avatar
-								class="bg-danger"
-								v-if="
-									$store.state.mqtt[
-										'openWB/general/extern'
-									] === false
+								class="bg-success"
+								@click="
+									addChargeTemplateSchedulePlan(
+										templateKey,
+										$event
+									)
 								"
-								@click="removeEvTemplate(key, $event)"
 							>
 								<font-awesome-icon
 									fixed-width
-									:icon="['fas', 'trash']"
+									:icon="['fas', 'plus']"
 								/>
 							</avatar>
 						</template>
-						<text-input
-							title="Bezeichnung"
-							:model-value="template.name"
-							@update:model-value="
-								updateState(key, $event, 'name')
-							"
-							:disabled="key.endsWith('/0')"
-						>
-							<template #help v-if="key.endsWith('/0')">
-								Die Standard-Vorlage kann nicht umbenannt
-								werden.
-							</template>
-						</text-input>
-						<heading>Angaben zum Ladestrom</heading>
-						<range-input
-							title="Mindeststrom"
-							:min="6"
-							:max="16"
-							:step="1"
-							unit="A"
-							:model-value="template.min_current"
-							@update:model-value="
-								updateState(key, $event, 'min_current')
-							"
-						>
-						</range-input>
-						<range-input
-							title="Maximalstrom 1-phasig"
-							:min="6"
-							:max="32"
-							:step="1"
-							unit="A"
-							:model-value="template.max_current_one_phase"
-							@update:model-value="
-								updateState(
-									key,
-									$event,
-									'max_current_one_phase'
-								)
-							"
-						>
-						</range-input>
-						<range-input
-							title="Maximalstrom mehr-phasig"
-							:min="6"
-							:max="32"
-							:step="1"
-							unit="A"
-							:model-value="template.max_current_multi_phases"
-							@update:model-value="
-								updateState(
-									key,
-									$event,
-									'max_current_multi_phases'
-								)
-							"
-						>
-						</range-input>
-						<number-input
-							title="Erlaubte Stromabweichung"
-							unit="A"
-							:model-value="template.nominal_difference"
-							@update:model-value="
-								updateState(key, $event, 'nominal_difference')
-							"
-						>
-						</number-input>
-						<heading>Angaben zur Batterie</heading>
-						<number-input
-							title="Kapazität der Batterie"
-							unit="kWh"
-							:min="10"
-							:step="1"
-							:model-value="template.battery_capacity"
-							@update:model-value="
-								updateState(key, $event, 'battery_capacity')
-							"
-						>
-						</number-input>
-						<number-input
-							title="Durchschnittsverbrauch"
-							unit="kWh&nbsp;/&nbsp;100km"
-							:min="0"
-							:step="0.1"
-							:model-value="template.average_consump"
-							@update:model-value="
-								updateState(key, $event, 'average_consump')
-							"
-						>
-						</number-input>
-						<heading>Angaben zur Handhabung von Phasen</heading>
-						<button-group-input
-							title="Unterstützte Phasen"
-							:buttons="[
-								{ buttonValue: 1, text: '1' },
-								{ buttonValue: 2, text: '2' },
-								{ buttonValue: 3, text: '3' },
-							]"
-							:model-value="template.max_phases"
-							@update:model-value="
-								updateState(key, $event, 'max_phases')
-							"
-						>
-						</button-group-input>
-						<button-group-input
-							title="CP-Unterbrechung"
-							:buttons="[
-								{
-									buttonValue: false,
-									text: 'Aus',
-									class: 'btn-outline-danger',
-								},
-								{
-									buttonValue: true,
-									text: 'An',
-									class: 'btn-outline-success',
-								},
-							]"
-							:model-value="template.control_pilot_interruption"
-							@update:model-value="
-								updateState(
-									key,
-									$event,
-									'control_pilot_interruption'
-								)
-							"
-						>
-						</button-group-input>
-						<button-group-input
-							title="Phasenumschaltung blockieren"
-							:buttons="[
-								{
-									buttonValue: false,
-									text: 'Aus',
-									class: 'btn-outline-danger',
-								},
-								{
-									buttonValue: true,
-									text: 'An',
-									class: 'btn-outline-success',
-								},
-							]"
-							:model-value="template.prevent_switch_stop"
-							@update:model-value="
-								updateState(key, $event, 'prevent_switch_stop')
-							"
-						>
-						</button-group-input>
-						<number-input
-							title="Pause bei Phasenumschaltung"
-							unit="s"
-							:min="2"
-							:step="1"
-							:model-value="template.phase_switch_pause"
-							@update:model-value="
-								updateState(key, $event, 'phase_switch_pause')
-							"
-						>
-						</number-input>
-					</card>
-				</div>
-			</card>
-			<!-- charge template card -->
-			<card
-				title="Ladeprofil-Vorlagen"
-				:collapsible="true"
-				:collapsed="true"
-			>
-				<template #actions>
-					<avatar
-						class="bg-success"
-						v-if="
-							$store.state.mqtt['openWB/general/extern'] === false
-						"
-						@click="addChargeTemplate"
-					>
-						<font-awesome-icon
-							fixed-width
-							:icon="['fas', 'plus']"
-						/>
-					</avatar>
-				</template>
-				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-					<alert subtype="info">
-						Diese Einstellungen sind nicht verfügbar, solange sich
-						diese openWB im Modus "Nur Ladepunkt" befindet.
-					</alert>
-				</div>
-				<div v-else>
+					</heading>
 					<card
-						v-for="(template, templateKey) in chargeTemplates"
-						:key="templateKey"
-						:title="template.name ? template.name : templateKey"
+						v-for="(
+							plan, planKey
+						) in getChargeTemplateScheduledChargingPlans(
+							templateKey
+						)"
+						:key="planKey"
+						:title="plan.name"
 						:collapsible="true"
 						:collapsed="true"
-						subtype="primary"
 					>
-						<template #actions v-if="!templateKey.endsWith('/0')">
+						<template #actions="slotProps">
+							<span
+								v-if="slotProps.collapsed == true"
+								class="subheader pill"
+								:class="
+									plan.active ? 'bg-success' : 'bg-danger'
+								"
+							>
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'car-battery']"
+								/>
+								{{ plan.soc }}%
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'clock']"
+								/>
+								{{ plan.time }}
+								<span v-if="plan.frequency.selected == 'once'">
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'calendar-day']"
+									/>
+									{{ formatDate(plan.frequency.once) }}
+								</span>
+								<span v-if="plan.frequency.selected == 'daily'">
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'calendar-week']"
+									/>
+								</span>
+								<span
+									v-if="plan.frequency.selected == 'weekly'"
+								>
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'calendar-alt']"
+									/>
+								</span>
+							</span>
 							<avatar
+								v-if="slotProps.collapsed == false"
 								class="bg-danger"
 								@click="
-									removeChargeTemplate(templateKey, $event)
+									removeChargeTemplateSchedulePlan(
+										templateKey,
+										planKey,
+										$event
+									)
 								"
 							>
 								<font-awesome-icon
@@ -359,20 +744,14 @@
 						</template>
 						<text-input
 							title="Bezeichnung"
-							:model-value="template.name"
+							:model-value="plan.name"
 							@update:model-value="
-								updateState(templateKey, $event, 'name')
+								updateState(planKey, $event, 'name')
 							"
-							:disabled="templateKey.endsWith('/0')"
 						>
-							<template #help v-if="templateKey.endsWith('/0')">
-								Die Standard-Vorlage kann nicht umbenannt
-								werden.
-							</template>
 						</text-input>
-						<heading>Allgemeine Optionen</heading>
 						<button-group-input
-							title="Priorität"
+							title="Zeitpunkt aktiv"
 							:buttons="[
 								{
 									buttonValue: false,
@@ -385,50 +764,212 @@
 									class: 'btn-outline-success',
 								},
 							]"
-							:model-value="template.prio"
+							:model-value="plan.active"
 							@update:model-value="
-								updateState(templateKey, $event, 'prio')
+								updateState(planKey, $event, 'active')
 							"
 						>
-							<template #help>
-								Fahrzeuge mit Priorität werden bevorzugt
-								geladen. Erst wenn alle priorisierten Fahrzeuge
-								die maximale Ladeleistung bekommen und noch
-								zusätzlicher Überschuss vorhanden ist, werden
-								auch Fahrzeuge ohne Priorität geladen.
-							</template>
 						</button-group-input>
+						<text-input
+							title="Uhrzeit"
+							subtype="time"
+							:model-value="plan.time"
+							@update:model-value="
+								updateState(planKey, $event, 'time')
+							"
+						>
+						</text-input>
+						<range-input
+							title="Ziel-SoC"
+							:min="5"
+							:max="100"
+							:step="5"
+							unit="%"
+							:model-value="plan.soc"
+							@update:model-value="
+								updateState(planKey, $event, 'soc')
+							"
+						>
+						</range-input>
 						<button-group-input
-							title="Automatische Sperre"
+							title="Wiederholungen"
 							:buttons="[
 								{
-									buttonValue: false,
-									text: 'Nein',
-									class: 'btn-outline-danger',
+									buttonValue: 'once',
+									text: 'Einmalig',
+									class: 'btn-outline-info',
 								},
 								{
-									buttonValue: true,
-									text: 'Ja',
-									class: 'btn-outline-success',
+									buttonValue: 'daily',
+									text: 'Täglich',
+									class: 'btn-outline-info',
+								},
+								{
+									buttonValue: 'weekly',
+									text: 'Wöchentlich',
+									class: 'btn-outline-info',
 								},
 							]"
-							:model-value="template.disable_after_unplug"
+							:model-value="plan.frequency.selected"
 							@update:model-value="
 								updateState(
-									templateKey,
+									planKey,
 									$event,
-									'disable_after_unplug'
+									'frequency.selected'
 								)
 							"
 						>
-							<template #help>
-								Wird ein Fahrzeug mit diesem Profil abgesteckt,
-								dann wird der betroffene Ladepunkt automatisch
-								deaktiviert.
-							</template>
 						</button-group-input>
+						<text-input
+							v-if="plan.frequency.selected == 'once'"
+							title="Datum"
+							subtype="date"
+							:model-value="plan.frequency.once"
+							@update:model-value="
+								updateState(planKey, $event, 'frequency.once')
+							"
+						>
+						</text-input>
+						<div v-if="plan.frequency.selected == 'weekly'">
+							<button-group-input
+								v-for="(day, dayIndex) in weekdays"
+								:key="dayIndex"
+								:title="day"
+								:buttons="[
+									{
+										buttonValue: false,
+										text: 'Aus',
+										class: 'btn-outline-danger',
+									},
+									{
+										buttonValue: true,
+										text: 'An',
+										class: 'btn-outline-success',
+									},
+								]"
+								:model-value="plan.frequency.weekly[dayIndex]"
+								@update:model-value="
+									updateState(
+										planKey,
+										$event,
+										'frequency.weekly.' + dayIndex
+									)
+								"
+							>
+							</button-group-input>
+						</div>
+					</card>
+					<hr />
+					<heading>
+						Laden nach Zeitplan
+						<template #actions>
+							<avatar
+								class="bg-success"
+								@click="
+									addChargeTemplateTimeChargingPlan(
+										templateKey,
+										$event
+									)
+								"
+							>
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'plus']"
+								/>
+							</avatar>
+						</template>
+					</heading>
+					<button-group-input
+						title="Aktiviert"
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="template.time_charging.active"
+						@update:model-value="
+							updateState(key, $event, 'time_charging.active')
+						"
+					>
+					</button-group-input>
+					<card
+						v-for="(
+							plan, planKey
+						) in getChargeTemplateTimeChargingPlans(templateKey)"
+						:key="planKey"
+						:title="plan.name"
+						:collapsible="true"
+						:collapsed="true"
+					>
+						<template #actions="slotProps">
+							<span
+								v-if="slotProps.collapsed == true"
+								class="subheader pill"
+								:class="
+									plan.active ? 'bg-success' : 'bg-danger'
+								"
+							>
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'clock']"
+								/>
+								{{ plan.time[0] }} - {{ plan.time[1] }}
+								<span v-if="plan.frequency.selected == 'once'">
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'calendar-day']"
+									/>
+									{{ formatDate(plan.frequency.once) }}
+								</span>
+								<span v-if="plan.frequency.selected == 'daily'">
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'calendar-week']"
+									/>
+								</span>
+								<span
+									v-if="plan.frequency.selected == 'weekly'"
+								>
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'calendar-alt']"
+									/>
+								</span>
+							</span>
+							<avatar
+								v-if="slotProps.collapsed == false"
+								class="bg-danger"
+								@click="
+									removeChargeTemplateTimeChargingPlan(
+										templateKey,
+										planKey,
+										$event
+									)
+								"
+							>
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'trash']"
+								/>
+							</avatar>
+						</template>
+						<text-input
+							title="Bezeichnung"
+							:model-value="plan.name"
+							@update:model-value="
+								updateState(planKey, $event, 'name')
+							"
+						>
+						</text-input>
 						<button-group-input
-							title="Standard nach Abstecken"
+							title="Zeitplan aktiv"
 							:buttons="[
 								{
 									buttonValue: false,
@@ -441,738 +982,118 @@
 									class: 'btn-outline-success',
 								},
 							]"
-							:model-value="template.load_default"
+							:model-value="plan.active"
 							@update:model-value="
-								updateState(templateKey, $event, 'load_default')
+								updateState(planKey, $event, 'active')
 							"
 						>
-							<template #help>
-								Falls diese Option aktiviert ist, wird der
-								betroffene Ladepunkt nach dem Abstecken auf das
-								Standard Ladeprofil zurückgesetzt.
-							</template>
 						</button-group-input>
-						<hr />
-						<heading>Sofortladen</heading>
 						<range-input
 							title="Ladestrom"
 							:min="6"
 							:max="32"
 							:step="1"
 							unit="A"
-							:model-value="
-								template.chargemode.instant_charging.current
-							"
+							:model-value="plan.current"
 							@update:model-value="
-								updateState(
-									templateKey,
-									$event,
-									'chargemode.instant_charging.current'
-								)
+								updateState(planKey, $event, 'current')
 							"
 						>
 						</range-input>
+						<text-input
+							title="Beginn"
+							subtype="time"
+							:model-value="plan.time[0]"
+							@update:model-value="
+								updateState(planKey, $event, 'time.0')
+							"
+						>
+						</text-input>
+						<text-input
+							title="Ende"
+							subtype="time"
+							:model-value="plan.time[1]"
+							@update:model-value="
+								updateState(planKey, $event, 'time.1')
+							"
+						>
+						</text-input>
 						<button-group-input
-							title="Begrenzung"
+							title="Wiederholungen"
 							:buttons="[
 								{
-									buttonValue: 'none',
-									text: 'Aus',
+									buttonValue: 'once',
+									text: 'Einmalig',
+									class: 'btn-outline-info',
 								},
 								{
-									buttonValue: 'soc',
-									text: 'SoC',
+									buttonValue: 'daily',
+									text: 'Täglich',
+									class: 'btn-outline-info',
 								},
 								{
-									buttonValue: 'amount',
-									text: 'Energie',
+									buttonValue: 'weekly',
+									text: 'Wöchentlich',
+									class: 'btn-outline-info',
 								},
 							]"
-							:model-value="
-								template.chargemode.instant_charging.limit
-									.selected
-							"
+							:model-value="plan.frequency.selected"
 							@update:model-value="
 								updateState(
-									templateKey,
+									planKey,
 									$event,
-									'chargemode.instant_charging.limit.selected'
+									'frequency.selected'
 								)
 							"
 						>
-							<template #help>
-								Sofortladen kann entweder durch den Ladestand
-								der Fahrzeugbatterie (SoC) oder eine
-								Energiemenge in kWh begrenzt werden.
-							</template>
 						</button-group-input>
-						<range-input
-							title="SoC-Limit"
-							:min="5"
-							:max="100"
-							:step="5"
-							unit="%"
-							:model-value="
-								template.chargemode.instant_charging.limit.soc
-							"
+						<text-input
+							v-if="plan.frequency.selected == 'once'"
+							title="Datum"
+							subtype="date"
+							:model-value="plan.frequency.once"
 							@update:model-value="
-								updateState(
-									templateKey,
-									$event,
-									'chargemode.instant_charging.limit.soc'
-								)
+								updateState(planKey, $event, 'frequency.once')
 							"
 						>
-							<template #help>
-								Um diese Begrenzung nutzen zu können, muss ein
-								SoC-Modul für das jeweilige Fahrzeug
-								eingerichtet werden!
-							</template>
-						</range-input>
-						<number-input
-							title="Energie-Limit"
-							unit="kWh"
-							:min="5"
-							:step="5"
-							:model-value="
-								template.chargemode.instant_charging.limit
-									.amount
-							"
-							@update:model-value="
-								updateState(
-									templateKey,
-									$event,
-									'chargemode.instant_charging.limit.amount'
-								)
-							"
-						>
-						</number-input>
-						<hr />
-						<heading>PV-laden</heading>
-						<range-input
-							title="Mindeststrom"
-							:min="0"
-							:max="11"
-							:step="1"
-							unit="A"
-							:labels="[
-								{ label: 'Aus', value: 0 },
-								{ label: 6, value: 6 },
-								{ label: 7, value: 7 },
-								{ label: 8, value: 8 },
-								{ label: 9, value: 9 },
-								{ label: 10, value: 10 },
-								{ label: 11, value: 11 },
-								{ label: 12, value: 12 },
-								{ label: 13, value: 13 },
-								{ label: 14, value: 14 },
-								{ label: 15, value: 15 },
-								{ label: 16, value: 16 },
-							]"
-							:model-value="
-								template.chargemode.pv_charging.min_current
-							"
-							@update:model-value="
-								updateState(
-									templateKey,
-									$event,
-									'chargemode.pv_charging.min_current'
-								)
-							"
-						>
-							<template #help>
-								ToDo: Beschreibung ergänzen!
-							</template>
-						</range-input>
-						<range-input
-							title="SoC-Limit"
-							:min="0"
-							:max="20"
-							:step="1"
-							unit="%"
-							:labels="[
-								{ label: 5, value: 5 },
-								{ label: 10, value: 10 },
-								{ label: 15, value: 15 },
-								{ label: 20, value: 20 },
-								{ label: 25, value: 25 },
-								{ label: 30, value: 30 },
-								{ label: 35, value: 35 },
-								{ label: 40, value: 40 },
-								{ label: 45, value: 45 },
-								{ label: 50, value: 50 },
-								{ label: 55, value: 55 },
-								{ label: 60, value: 60 },
-								{ label: 65, value: 65 },
-								{ label: 70, value: 70 },
-								{ label: 75, value: 75 },
-								{ label: 80, value: 80 },
-								{ label: 85, value: 85 },
-								{ label: 90, value: 90 },
-								{ label: 95, value: 95 },
-								{ label: 100, value: 100 },
-								{ label: 'Aus', value: 101 },
-							]"
-							:model-value="
-								template.chargemode.pv_charging.max_soc
-							"
-							@update:model-value="
-								updateState(
-									templateKey,
-									$event,
-									'chargemode.pv_charging.max_soc'
-								)
-							"
-						>
-							<template #help>
-								Bei der Einstellung "100%" wird die Ladung mit
-								Erreichen der 100% ebenfalls beendet. Dadurch
-								erfolgt kein Balancing der Batteriezellen. Ist
-								dies gewünscht, muss hier "Aus" gewählt werden,
-								um die Ladung nicht zu beenden.<br />
-								Um diese Begrenzung nutzen zu können, muss ein
-								SoC-Modul für das jeweilige Fahrzeug
-								eingerichtet werden!
-							</template>
-						</range-input>
-						<range-input
-							title="Mindest-SoC"
-							:min="0"
-							:max="19"
-							:step="1"
-							unit="%"
-							:labels="[
-								{ label: 'Aus', value: 0 },
-								{ label: 5, value: 5 },
-								{ label: 10, value: 10 },
-								{ label: 15, value: 15 },
-								{ label: 20, value: 20 },
-								{ label: 25, value: 25 },
-								{ label: 30, value: 30 },
-								{ label: 35, value: 35 },
-								{ label: 40, value: 40 },
-								{ label: 45, value: 45 },
-								{ label: 50, value: 50 },
-								{ label: 55, value: 55 },
-								{ label: 60, value: 60 },
-								{ label: 65, value: 65 },
-								{ label: 70, value: 70 },
-								{ label: 75, value: 75 },
-								{ label: 80, value: 80 },
-								{ label: 85, value: 85 },
-								{ label: 90, value: 90 },
-								{ label: 95, value: 95 },
-							]"
-							:model-value="
-								template.chargemode.pv_charging.min_soc
-							"
-							@update:model-value="
-								updateState(
-									templateKey,
-									$event,
-									'chargemode.pv_charging.min_soc'
-								)
-							"
-						>
-							<template #help>
-								Liegt der Ladestand (SoC) der Fahrzeugbatterie
-								unter dem hier eingestellten Wert, dann wird bis
-								zum Erreichen dieses Wertes mit dem
-								eingestellten "Mindest-SoC-Strom" geladen.<br />
-								Um diese Begrenzung nutzen zu können, muss ein
-								SoC-Modul für das jeweilige Fahrzeug
-								eingerichtet werden!
-							</template>
-						</range-input>
-						<range-input
-							title="Mindest-SoC-Strom"
-							:min="6"
-							:max="32"
-							:step="1"
-							unit="A"
-							:model-value="
-								template.chargemode.pv_charging.min_soc_current
-							"
-							@update:model-value="
-								updateState(
-									templateKey,
-									$event,
-									'chargemode.pv_charging.min_soc_current'
-								)
-							"
-						>
-						</range-input>
-						<hr />
-						<heading>
-							Zielladen
-							<template #actions>
-								<avatar
-									class="bg-success"
-									@click="
-										addChargeTemplateSchedulePlan(
-											templateKey,
-											$event
-										)
-									"
-								>
-									<font-awesome-icon
-										fixed-width
-										:icon="['fas', 'plus']"
-									/>
-								</avatar>
-							</template>
-						</heading>
-						<card
-							v-for="(
-								plan, planKey
-							) in getChargeTemplateScheduledChargingPlans(
-								templateKey
-							)"
-							:key="planKey"
-							:title="plan.name"
-							:collapsible="true"
-							:collapsed="true"
-						>
-							<template #actions="slotProps">
-								<span
-									v-if="slotProps.collapsed == true"
-									class="subheader pill"
-									:class="
-										plan.active ? 'bg-success' : 'bg-danger'
-									"
-								>
-									<font-awesome-icon
-										fixed-width
-										:icon="['fas', 'car-battery']"
-									/>
-									{{ plan.soc }}%
-									<font-awesome-icon
-										fixed-width
-										:icon="['fas', 'clock']"
-									/>
-									{{ plan.time }}
-									<span
-										v-if="plan.frequency.selected == 'once'"
-									>
-										<font-awesome-icon
-											fixed-width
-											:icon="['fas', 'calendar-day']"
-										/>
-										{{ formatDate(plan.frequency.once) }}
-									</span>
-									<span
-										v-if="
-											plan.frequency.selected == 'daily'
-										"
-									>
-										<font-awesome-icon
-											fixed-width
-											:icon="['fas', 'calendar-week']"
-										/>
-									</span>
-									<span
-										v-if="
-											plan.frequency.selected == 'weekly'
-										"
-									>
-										<font-awesome-icon
-											fixed-width
-											:icon="['fas', 'calendar-alt']"
-										/>
-									</span>
-								</span>
-								<avatar
-									v-if="slotProps.collapsed == false"
-									class="bg-danger"
-									@click="
-										removeChargeTemplateSchedulePlan(
-											templateKey,
-											planKey,
-											$event
-										)
-									"
-								>
-									<font-awesome-icon
-										fixed-width
-										:icon="['fas', 'trash']"
-									/>
-								</avatar>
-							</template>
-							<text-input
-								title="Bezeichnung"
-								:model-value="plan.name"
-								@update:model-value="
-									updateState(planKey, $event, 'name')
-								"
-							>
-							</text-input>
+						</text-input>
+						<div v-if="plan.frequency.selected == 'weekly'">
 							<button-group-input
-								title="Zeitpunkt aktiv"
+								v-for="(day, dayIndex) in weekdays"
+								:key="dayIndex"
+								:title="day"
 								:buttons="[
 									{
 										buttonValue: false,
-										text: 'Nein',
+										text: 'Aus',
 										class: 'btn-outline-danger',
 									},
 									{
 										buttonValue: true,
-										text: 'Ja',
+										text: 'An',
 										class: 'btn-outline-success',
 									},
 								]"
-								:model-value="plan.active"
-								@update:model-value="
-									updateState(planKey, $event, 'active')
-								"
-							>
-							</button-group-input>
-							<text-input
-								title="Uhrzeit"
-								subtype="time"
-								:model-value="plan.time"
-								@update:model-value="
-									updateState(planKey, $event, 'time')
-								"
-							>
-							</text-input>
-							<range-input
-								title="Ziel-SoC"
-								:min="5"
-								:max="100"
-								:step="5"
-								unit="%"
-								:model-value="plan.soc"
-								@update:model-value="
-									updateState(planKey, $event, 'soc')
-								"
-							>
-							</range-input>
-							<button-group-input
-								title="Wiederholungen"
-								:buttons="[
-									{
-										buttonValue: 'once',
-										text: 'Einmalig',
-										class: 'btn-outline-info',
-									},
-									{
-										buttonValue: 'daily',
-										text: 'Täglich',
-										class: 'btn-outline-info',
-									},
-									{
-										buttonValue: 'weekly',
-										text: 'Wöchentlich',
-										class: 'btn-outline-info',
-									},
-								]"
-								:model-value="plan.frequency.selected"
+								:model-value="plan.frequency.weekly[dayIndex]"
 								@update:model-value="
 									updateState(
 										planKey,
 										$event,
-										'frequency.selected'
+										'frequency.weekly.' + dayIndex
 									)
 								"
 							>
 							</button-group-input>
-							<text-input
-								v-if="plan.frequency.selected == 'once'"
-								title="Datum"
-								subtype="date"
-								:model-value="plan.frequency.once"
-								@update:model-value="
-									updateState(
-										planKey,
-										$event,
-										'frequency.once'
-									)
-								"
-							>
-							</text-input>
-							<div v-if="plan.frequency.selected == 'weekly'">
-								<button-group-input
-									v-for="(day, dayIndex) in weekdays"
-									:key="dayIndex"
-									:title="day"
-									:buttons="[
-										{
-											buttonValue: false,
-											text: 'Aus',
-											class: 'btn-outline-danger',
-										},
-										{
-											buttonValue: true,
-											text: 'An',
-											class: 'btn-outline-success',
-										},
-									]"
-									:model-value="
-										plan.frequency.weekly[dayIndex]
-									"
-									@update:model-value="
-										updateState(
-											planKey,
-											$event,
-											'frequency.weekly.' + dayIndex
-										)
-									"
-								>
-								</button-group-input>
-							</div>
-						</card>
-						<hr />
-						<heading>
-							Laden nach Zeitplan
-							<template #actions>
-								<avatar
-									class="bg-success"
-									@click="
-										addChargeTemplateTimeChargingPlan(
-											templateKey,
-											$event
-										)
-									"
-								>
-									<font-awesome-icon
-										fixed-width
-										:icon="['fas', 'plus']"
-									/>
-								</avatar>
-							</template>
-						</heading>
-						<button-group-input
-							title="Aktiviert"
-							:buttons="[
-								{
-									buttonValue: false,
-									text: 'Nein',
-									class: 'btn-outline-danger',
-								},
-								{
-									buttonValue: true,
-									text: 'Ja',
-									class: 'btn-outline-success',
-								},
-							]"
-							:model-value="template.time_charging.active"
-							@update:model-value="
-								updateState(key, $event, 'time_charging.active')
-							"
-						>
-						</button-group-input>
-						<card
-							v-for="(
-								plan, planKey
-							) in getChargeTemplateTimeChargingPlans(
-								templateKey
-							)"
-							:key="planKey"
-							:title="plan.name"
-							:collapsible="true"
-							:collapsed="true"
-						>
-							<template #actions="slotProps">
-								<span
-									v-if="slotProps.collapsed == true"
-									class="subheader pill"
-									:class="
-										plan.active ? 'bg-success' : 'bg-danger'
-									"
-								>
-									<font-awesome-icon
-										fixed-width
-										:icon="['fas', 'clock']"
-									/>
-									{{ plan.time[0] }} - {{ plan.time[1] }}
-									<span
-										v-if="plan.frequency.selected == 'once'"
-									>
-										<font-awesome-icon
-											fixed-width
-											:icon="['fas', 'calendar-day']"
-										/>
-										{{ formatDate(plan.frequency.once) }}
-									</span>
-									<span
-										v-if="
-											plan.frequency.selected == 'daily'
-										"
-									>
-										<font-awesome-icon
-											fixed-width
-											:icon="['fas', 'calendar-week']"
-										/>
-									</span>
-									<span
-										v-if="
-											plan.frequency.selected == 'weekly'
-										"
-									>
-										<font-awesome-icon
-											fixed-width
-											:icon="['fas', 'calendar-alt']"
-										/>
-									</span>
-								</span>
-								<avatar
-									v-if="slotProps.collapsed == false"
-									class="bg-danger"
-									@click="
-										removeChargeTemplateTimeChargingPlan(
-											templateKey,
-											planKey,
-											$event
-										)
-									"
-								>
-									<font-awesome-icon
-										fixed-width
-										:icon="['fas', 'trash']"
-									/>
-								</avatar>
-							</template>
-							<text-input
-								title="Bezeichnung"
-								:model-value="plan.name"
-								@update:model-value="
-									updateState(planKey, $event, 'name')
-								"
-							>
-							</text-input>
-							<button-group-input
-								title="Zeitplan aktiv"
-								:buttons="[
-									{
-										buttonValue: false,
-										text: 'Nein',
-										class: 'btn-outline-danger',
-									},
-									{
-										buttonValue: true,
-										text: 'Ja',
-										class: 'btn-outline-success',
-									},
-								]"
-								:model-value="plan.active"
-								@update:model-value="
-									updateState(planKey, $event, 'active')
-								"
-							>
-							</button-group-input>
-							<range-input
-								title="Ladestrom"
-								:min="6"
-								:max="32"
-								:step="1"
-								unit="A"
-								:model-value="plan.current"
-								@update:model-value="
-									updateState(planKey, $event, 'current')
-								"
-							>
-							</range-input>
-							<text-input
-								title="Beginn"
-								subtype="time"
-								:model-value="plan.time[0]"
-								@update:model-value="
-									updateState(planKey, $event, 'time.0')
-								"
-							>
-							</text-input>
-							<text-input
-								title="Ende"
-								subtype="time"
-								:model-value="plan.time[1]"
-								@update:model-value="
-									updateState(planKey, $event, 'time.1')
-								"
-							>
-							</text-input>
-							<button-group-input
-								title="Wiederholungen"
-								:buttons="[
-									{
-										buttonValue: 'once',
-										text: 'Einmalig',
-										class: 'btn-outline-info',
-									},
-									{
-										buttonValue: 'daily',
-										text: 'Täglich',
-										class: 'btn-outline-info',
-									},
-									{
-										buttonValue: 'weekly',
-										text: 'Wöchentlich',
-										class: 'btn-outline-info',
-									},
-								]"
-								:model-value="plan.frequency.selected"
-								@update:model-value="
-									updateState(
-										planKey,
-										$event,
-										'frequency.selected'
-									)
-								"
-							>
-							</button-group-input>
-							<text-input
-								v-if="plan.frequency.selected == 'once'"
-								title="Datum"
-								subtype="date"
-								:model-value="plan.frequency.once"
-								@update:model-value="
-									updateState(
-										planKey,
-										$event,
-										'frequency.once'
-									)
-								"
-							>
-							</text-input>
-							<div v-if="plan.frequency.selected == 'weekly'">
-								<button-group-input
-									v-for="(day, dayIndex) in weekdays"
-									:key="dayIndex"
-									:title="day"
-									:buttons="[
-										{
-											buttonValue: false,
-											text: 'Aus',
-											class: 'btn-outline-danger',
-										},
-										{
-											buttonValue: true,
-											text: 'An',
-											class: 'btn-outline-success',
-										},
-									]"
-									:model-value="
-										plan.frequency.weekly[dayIndex]
-									"
-									@update:model-value="
-										updateState(
-											planKey,
-											$event,
-											'frequency.weekly.' + dayIndex
-										)
-									"
-								>
-								</button-group-input>
-							</div>
-						</card>
+						</div>
 					</card>
-				</div>
-			</card>
-			<submit-buttons
-				@save="$emit('save')"
-				@reset="$emit('reset')"
-				@defaults="$emit('defaults')"
-			/>
-		</form>
+				</card>
+			</div>
+		</card>
+		<submit-buttons
+			@save="$emit('save')"
+			@reset="$emit('reset')"
+			@defaults="$emit('defaults')"
+		/>
 	</div>
 </template>
 

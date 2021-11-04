@@ -26,9 +26,6 @@
 					<input
 						type="number"
 						class="form-control"
-						:min="min"
-						:max="max"
-						:step="step"
 						v-model.number="value"
 						v-bind="$attrs"
 					/>
@@ -64,9 +61,6 @@ export default {
 		title: String,
 		modelValue: { type: Number },
 		unit: String,
-		min: Number,
-		max: Number,
-		step: Number,
 	},
 	emits: ["update:modelValue"],
 	data() {
@@ -94,3 +88,10 @@ export default {
 	},
 };
 </script>
+
+<style scoped>
+input.invalid,
+input:invalid {
+	border: 2px solid var(--danger);
+}
+</style>
