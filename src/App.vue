@@ -15,12 +15,14 @@
 				"
 				@dismiss="dismissError"
 			/>
-			<router-view
-				@save="saveValues"
-				@reset="resetValues"
-				@defaults="setDefaultValues"
-				@sendCommand="sendCommand"
-			/>
+			<form id="myForm" ref="myForm">
+				<router-view
+					@save="saveValues"
+					@reset="resetValues"
+					@defaults="setDefaultValues"
+					@sendCommand="sendCommand"
+				/>
+			</form>
 		</div>
 		<donation-banner />
 	</div>

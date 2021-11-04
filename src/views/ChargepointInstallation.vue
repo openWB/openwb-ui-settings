@@ -1,45 +1,43 @@
 <template>
 	<div class="chargepoint-installation">
-		<form id="myForm">
-			<card title="Ladepunkte" :collapsible="true" :collapsed="true">
-				<select-input
-					title="Verfügbare Ladepunkte"
-					notSelected="Bitte auswählen"
-					:options="getChargepointList()"
-					:model-value="chargepointToAdd"
-					@update:model-value="chargepointToAdd = $event"
-				>
-					<template #append>
-						<span class="col-1">
-							<click-button
-								:class="
-									chargepointToAdd === undefined
-										? 'btn-outline-success'
-										: 'btn-success'
-								"
-								:disabled="chargepointToAdd === undefined"
-								@click="addChargepoint"
-							>
-								<font-awesome-icon
-									fixed-width
-									:icon="['fas', 'plus']"
-								/>
-							</click-button>
-						</span>
-					</template>
-					<template #help>
-						Bitte einen Ladepunkt auswählen, der hinzugefügt werden
-						soll.
-					</template>
-				</select-input>
-			</card>
+		<card title="Ladepunkte" :collapsible="true" :collapsed="true">
+			<select-input
+				title="Verfügbare Ladepunkte"
+				notSelected="Bitte auswählen"
+				:options="getChargepointList()"
+				:model-value="chargepointToAdd"
+				@update:model-value="chargepointToAdd = $event"
+			>
+				<template #append>
+					<span class="col-1">
+						<click-button
+							:class="
+								chargepointToAdd === undefined
+									? 'btn-outline-success'
+									: 'btn-success'
+							"
+							:disabled="chargepointToAdd === undefined"
+							@click="addChargepoint"
+						>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'plus']"
+							/>
+						</click-button>
+					</span>
+				</template>
+				<template #help>
+					Bitte einen Ladepunkt auswählen, der hinzugefügt werden
+					soll.
+				</template>
+			</select-input>
+		</card>
 
-			<submit-buttons
-				@save="$emit('save')"
-				@reset="$emit('reset')"
-				@defaults="$emit('defaults')"
-			/>
-		</form>
+		<submit-buttons
+			@save="$emit('save')"
+			@reset="$emit('reset')"
+			@defaults="$emit('defaults')"
+		/>
 	</div>
 </template>
 

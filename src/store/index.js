@@ -12,8 +12,8 @@ export default createStore({
 			text5: "Benutzername",
 			text6: "12:34",
 			text7: "2021-10-31",
-			number1: 0,
-			number2: 0,
+			number1: 5,
+			number2: 10,
 			password1: "GeHeiM!",
 			textarea1: "Langer Text...",
 			range1: 6,
@@ -42,54 +42,6 @@ export default createStore({
 							id: "cp3",
 							value: "Ladepunkt 3",
 							children: [],
-						},
-					],
-				},
-			],
-			availableDevices: [
-				{
-					value: "openwb_flex",
-					text: "openWB Flex Kit",
-					components: [
-						{
-							value: "counter",
-							text: "Zähler",
-						},
-					],
-				},
-				{
-					value: "mqtt",
-					text: "MQTT",
-					components: [
-						{
-							value: "grid",
-							text: "EVU",
-						},
-						{
-							value: "bat",
-							text: "Speicher",
-						},
-						{
-							value: "inverter",
-							text: "Wechselrichter",
-						},
-					],
-				},
-				{
-					value: "alpha_ess",
-					text: "Alpha ESS",
-					components: [
-						{
-							value: "counter",
-							text: "Zähler",
-						},
-						{
-							value: "bat",
-							text: "Speicher",
-						},
-						{
-							value: "inverter",
-							text: "Wechselrichter",
 						},
 					],
 				},
