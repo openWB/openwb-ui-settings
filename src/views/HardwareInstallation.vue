@@ -270,6 +270,7 @@ export default {
 				"openWB/counter/get/hierarchy",
 				"openWB/system/device/+/config",
 				"openWB/system/device/+/component/+/config",
+				"openWB/system/configurable/devices_components",
 			],
 			deviceToAdd: undefined,
 			componentToAdd: [],
@@ -313,7 +314,9 @@ export default {
 			});
 		},
 		getDeviceList() {
-			return this.$store.state.examples.availableDevices;
+			return this.$store.state.mqtt[
+				"openWB/system/configurable/devices_components"
+			];
 		},
 		addComponent(deviceId, deviceType, componentType) {
 			this.$emit("sendCommand", {
@@ -348,10 +351,10 @@ export default {
 				return [];
 			}
 			console.debug("finding components for '" + deviceType + "'");
-			let myDevice = this.$store.state.examples.availableDevices.find(
-				(device) => device.value === deviceType
-			);
-			return myDevice.components;
+			let myDevice = this.$store.state.mqtt[
+				"openWB/system/configurable/devices_components"
+			].find((device) => device.value === deviceType);
+			return myDevice.component;
 		},
 		updateConfiguration(key, event) {
 			console.debug("updateConfiguration", event);
