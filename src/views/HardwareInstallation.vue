@@ -1,11 +1,11 @@
 <template>
 	<div class="hardware-installation">
-		<card
+		<openwb-base-card
 			title="Systeme und Komponenten"
 			:collapsible="true"
 			:collapsed="true"
 		>
-			<select-input
+			<openwb-base-select-input
 				class="mb-2"
 				title="Verfügbare Systeme"
 				notSelected="Bitte auswählen"
@@ -15,7 +15,7 @@
 			>
 				<template #append>
 					<span class="col-1">
-						<click-button
+						<openwb-base-click-button
 							:class="
 								deviceToAdd === undefined
 									? 'btn-outline-success'
@@ -28,14 +28,14 @@
 								fixed-width
 								:icon="['fas', 'plus']"
 							/>
-						</click-button>
+						</openwb-base-click-button>
 					</span>
 				</template>
 				<template #help>
 					Bitte ein System auswählen, das hinzugefügt werden soll.
 				</template>
-			</select-input>
-			<card
+			</openwb-base-select-input>
+			<openwb-base-card
 				v-for="(
 					installedDevice, installedDeviceKey
 				) in installedDevices"
@@ -45,16 +45,16 @@
 				subtype="primary"
 			>
 				<template #header>
-					<avatar class="bg-success">
+					<openwb-base-avatar class="bg-success">
 						<font-awesome-icon
 							fixed-width
 							:icon="['fas', 'network-wired']"
 						/>
-					</avatar>
+					</openwb-base-avatar>
 					{{ installedDevice.name }}
 				</template>
 				<template #actions>
-					<avatar
+					<openwb-base-avatar
 						class="bg-danger"
 						@click="removeDevice(installedDevice.id, $event)"
 					>
@@ -62,9 +62,9 @@
 							fixed-width
 							:icon="['fas', 'trash']"
 						/>
-					</avatar>
+					</openwb-base-avatar>
 				</template>
-				<text-input
+				<openwb-base-text-input
 					title="Bezeichnung"
 					subtype="text"
 					:model-value="installedDevice.name"
@@ -81,7 +81,7 @@
 					"
 				/>
 				<hr />
-				<select-input
+				<openwb-base-select-input
 					class="mb-2"
 					v-if="getComponentList(installedDevice.type).length"
 					title="Verfügbare Komponenten"
@@ -94,7 +94,7 @@
 				>
 					<template #append>
 						<span class="col-1">
-							<click-button
+							<openwb-base-click-button
 								:class="
 									componentToAdd[installedDevice.id] ===
 									undefined
@@ -117,18 +117,18 @@
 									fixed-width
 									:icon="['fas', 'plus']"
 								/>
-							</click-button>
+							</openwb-base-click-button>
 						</span>
 					</template>
 					<template #help>
 						Bitte eine Komponente auswählen, die hinzugefügt werden
 						soll.
 					</template>
-				</select-input>
-				<alert v-else subtype="info">
+				</openwb-base-select-input>
+				<openwb-base-alert v-else subtype="info">
 					Dieses System bietet keine Komponenten zur Installation an.
-				</alert>
-				<card
+				</openwb-base-alert>
+				<openwb-base-card
 					v-for="(
 						installedComponent, installedComponentKey
 					) in getMyInstalledComponents(installedDevice.id)"
@@ -138,16 +138,16 @@
 					subtype="dark"
 				>
 					<template #header>
-						<avatar class="bg-success">
+						<openwb-base-avatar class="bg-success">
 							<font-awesome-icon
 								fixed-width
 								:icon="['fas', 'microchip']"
 							/>
-						</avatar>
+						</openwb-base-avatar>
 						{{ installedComponent.name }}
 					</template>
 					<template #actions>
-						<avatar
+						<openwb-base-avatar
 							class="bg-danger"
 							@click="
 								removeComponent(
@@ -161,9 +161,9 @@
 								fixed-width
 								:icon="['fas', 'trash']"
 							/>
-						</avatar>
+						</openwb-base-avatar>
 					</template>
-					<text-input
+					<openwb-base-text-input
 						title="Bezeichnung"
 						subtype="text"
 						:model-value="installedComponent.name"
@@ -180,10 +180,14 @@
 							updateConfiguration(installedComponentKey, $event)
 						"
 					/>
-				</card>
-			</card>
-		</card>
-		<card title="Struktur" :collapsible="true" :collapsed="true">
+				</openwb-base-card>
+			</openwb-base-card>
+		</openwb-base-card>
+		<openwb-base-card
+			title="Struktur"
+			:collapsible="true"
+			:collapsed="true"
+		>
 			<!-- ToDo: Fix: nested lists bypass store commits! -->
 			<sortable-list
 				title="Anordnung der Komponenten"
@@ -202,9 +206,9 @@
 					}}</pre>
 				</template>
 			</sortable-list>
-		</card>
+		</openwb-base-card>
 
-		<submit-buttons
+		<openwb-base-submit-buttons
 			@save="$emit('save')"
 			@reset="$emit('reset')"
 			@defaults="$emit('defaults')"
@@ -225,21 +229,7 @@ library.add(fasPlus, fasNetworkWired, fasMicrochip);
 
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
-import Card from "@/components/Card.vue";
-import Alert from "@/components/Alert.vue";
-// import Heading from "@/components/Heading.vue";
-import TextInput from "@/components/TextInput.vue";
-// import NumberInput from "@/components/NumberInput.vue";
-// import TextareaInput from "@/components/TextareaInput.vue";
-// import RangeInput from "@/components/RangeInput.vue";
-import SelectInput from "@/components/SelectInput.vue";
-// import ButtonGroupInput from "@/components/ButtonGroupInput.vue";
-import ClickButton from "@/components/ClickButton.vue";
-import Avatar from "@/components/Avatar.vue";
-// import CheckboxInput from "@/components/CheckboxInput.vue";
 import SortableList from "@/components/SortableList.vue";
-import SubmitButtons from "@/components/SubmitButtons.vue";
-
 import ConfigProxy from "@/components/ConfigProxy.vue";
 
 export default {
@@ -247,20 +237,7 @@ export default {
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
 	components: {
-		Card,
-		Alert,
-		// Heading,
-		TextInput,
-		// NumberInput,
-		// TextareaInput,
-		// RangeInput,
-		SelectInput,
-		// ButtonGroupInput,
-		ClickButton,
-		Avatar,
-		// CheckboxInput,
 		SortableList,
-		SubmitButtons,
 		FontAwesomeIcon,
 		ConfigProxy,
 	},

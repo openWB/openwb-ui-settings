@@ -1,7 +1,7 @@
 <template>
 	<div class="optionalComponents">
-		<card title="RFID">
-			<button-group-input
+		<openwb-base-card title="RFID">
+			<openwb-base-button-group-input
 				title="RFID aktivieren"
 				:model-value="$store.state.mqtt['openWB/optional/rfid/active']"
 				@update:model-value="
@@ -24,13 +24,13 @@
 			<div
 				v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true"
 			>
-				<alert subtype="info">
+				<openwb-base-alert subtype="info">
 					ToDo: Hilfetext und Konfiguration
-				</alert>
+				</openwb-base-alert>
 			</div>
-		</card>
-		<card title="LED-Ausgänge">
-			<button-group-input
+		</openwb-base-card>
+		<openwb-base-card title="LED-Ausgänge">
+			<openwb-base-button-group-input
 				title="LED-Ausgänge aktivieren"
 				:model-value="$store.state.mqtt['openWB/optional/led/active']"
 				@update:model-value="
@@ -53,23 +53,25 @@
 			<div
 				v-if="$store.state.mqtt['openWB/optional/led/active'] === true"
 			>
-				<alert subtype="info">
+				<openwb-base-alert subtype="info">
 					ToDo: Informationen zu den verwendeten GPOIs ergänzen!
-				</alert>
+				</openwb-base-alert>
 				<hr />
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-					<alert subtype="info">
+					<openwb-base-alert subtype="info">
 						Diese Einstellungen sind nicht verfügbar, solange sich
 						diese openWB im Modus "Nur Ladepunkt" befindet.<br />
 						Das Verhalten der LEDs wird durch die übergeordnete
 						openWB festgelegt.
-					</alert>
+					</openwb-base-alert>
 				</div>
 				<div
 					v-if="$store.state.mqtt['openWB/general/extern'] === false"
 				>
-					<heading>Ladung nicht freigegeben</heading>
-					<select-input
+					<openwb-base-heading>
+						Ladung nicht freigegeben
+					</openwb-base-heading>
+					<openwb-base-select-input
 						title="Sofortladen"
 						:model-value="
 							$store.state.mqtt[
@@ -157,7 +159,7 @@
 							},
 						]"
 					/>
-					<select-input
+					<openwb-base-select-input
 						title="PV-Laden"
 						:model-value="
 							$store.state.mqtt['ToDo/optional/led/pv_blocked']
@@ -240,7 +242,7 @@
 							},
 						]"
 					/>
-					<select-input
+					<openwb-base-select-input
 						title="Zielladen"
 						:model-value="
 							$store.state.mqtt[
@@ -328,7 +330,7 @@
 							},
 						]"
 					/>
-					<select-input
+					<openwb-base-select-input
 						title="Standby"
 						:model-value="
 							$store.state.mqtt[
@@ -416,7 +418,7 @@
 							},
 						]"
 					/>
-					<select-input
+					<openwb-base-select-input
 						title="Stop"
 						:model-value="
 							$store.state.mqtt['ToDo/optional/led/stop_blocked']
@@ -503,8 +505,10 @@
 						]"
 					/>
 					<hr />
-					<heading>Ladung freigegeben</heading>
-					<select-input
+					<openwb-base-heading>
+						Ladung freigegeben
+					</openwb-base-heading>
+					<openwb-base-select-input
 						title="Sofortladen"
 						:model-value="
 							$store.state.mqtt['ToDo/optional/led/instant']
@@ -587,7 +591,7 @@
 							},
 						]"
 					/>
-					<select-input
+					<openwb-base-select-input
 						title="PV-Laden"
 						:model-value="$store.state.mqtt['ToDo/optional/led/pv']"
 						@update:model-value="
@@ -668,7 +672,7 @@
 							},
 						]"
 					/>
-					<select-input
+					<openwb-base-select-input
 						title="Zielladen"
 						:model-value="
 							$store.state.mqtt['ToDo/optional/led/scheduled']
@@ -751,7 +755,7 @@
 							},
 						]"
 					/>
-					<select-input
+					<openwb-base-select-input
 						title="Standby"
 						:model-value="
 							$store.state.mqtt['ToDo/optional/led/standby']
@@ -834,7 +838,7 @@
 							},
 						]"
 					/>
-					<select-input
+					<openwb-base-select-input
 						title="Stop"
 						:model-value="
 							$store.state.mqtt['ToDo/optional/led/stop']
@@ -919,16 +923,16 @@
 					/>
 				</div>
 			</div>
-		</card>
-		<card title="Display (intern oder extern)">
+		</openwb-base-card>
+		<openwb-base-card title="Display (intern oder extern)">
 			<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-				<alert subtype="info">
+				<openwb-base-alert subtype="info">
 					Diese Einstellungen sind nicht verfügbar, solange sich diese
 					openWB im Modus "Nur Ladepunkt" befindet.
-				</alert>
+				</openwb-base-alert>
 			</div>
 			<div v-else>
-				<button-group-input
+				<openwb-base-button-group-input
 					title="Integriertes Display"
 					:model-value="
 						$store.state.mqtt['openWB/optional/int_display/active']
@@ -960,8 +964,8 @@
 					"
 				>
 					<hr />
-					<heading>Display Standby</heading>
-					<range-input
+					<openwb-base-heading>Display Standby</openwb-base-heading>
+					<openwb-base-range-input
 						title="Ausschaltzeit"
 						:min="0"
 						:max="12"
@@ -1033,7 +1037,7 @@
 							},
 						]"
 					/>
-					<button-group-input
+					<openwb-base-button-group-input
 						v-if="
 							$store.state.mqtt[
 								'openWB/optional/int_display/standby'
@@ -1069,11 +1073,11 @@
 							das Display automatisch ein, wenn ein Fahrzeug
 							angesteckt wird.
 						</template>
-					</button-group-input>
+					</openwb-base-button-group-input>
 				</div>
 				<hr />
-				<heading>PIN-Sperre</heading>
-				<button-group-input
+				<openwb-base-heading>PIN-Sperre</openwb-base-heading>
+				<openwb-base-button-group-input
 					title="Display mit PIN schützen"
 					:model-value="
 						$store.state.mqtt[
@@ -1106,7 +1110,7 @@
 						] == true
 					"
 				>
-					<text-input
+					<openwb-base-text-input
 						title="PIN-Code"
 						:model-value="
 							$store.state.mqtt[
@@ -1126,10 +1130,10 @@
 							Der PIN-Code muss vierstellig sein und darf nur
 							Zahlen enthalten.
 						</template>
-					</text-input>
+					</openwb-base-text-input>
 				</div>
 				<hr />
-				<select-input
+				<openwb-base-select-input
 					title="Theme des Displays"
 					:model-value="
 						$store.state.mqtt['openWB/optional/int_display/theme']
@@ -1159,9 +1163,9 @@
 						] == 'cards'
 					"
 				>
-					<alert subtype="info">
+					<openwb-base-alert subtype="info">
 						ToDo: Optionen für das Cards-Theme...
-					</alert>
+					</openwb-base-alert>
 				</div>
 				<div
 					v-if="
@@ -1170,9 +1174,9 @@
 						] == 'gauges'
 					"
 				>
-					<alert subtype="info">
+					<openwb-base-alert subtype="info">
 						ToDo: Optionen für das Gauges-Theme...
-					</alert>
+					</openwb-base-alert>
 				</div>
 				<div
 					v-if="
@@ -1181,21 +1185,21 @@
 						] == 'slave'
 					"
 				>
-					<alert subtype="info">
+					<openwb-base-alert subtype="info">
 						Das Theme "Nur Ladeleistung" bietet keine Optionen.
-					</alert>
+					</openwb-base-alert>
 				</div>
 			</div>
-		</card>
-		<card title="Loadsharing">
+		</openwb-base-card>
+		<openwb-base-card title="Loadsharing">
 			<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-				<alert subtype="info">
+				<openwb-base-alert subtype="info">
 					Diese Einstellungen sind nicht verfügbar, solange sich diese
 					openWB im Modus "Nur Ladepunkt" befindet.
-				</alert>
+				</openwb-base-alert>
 			</div>
 			<div v-else>
-				<button-group-input
+				<openwb-base-button-group-input
 					title="Loadsharing aktivieren"
 					:model-value="
 						$store.state.mqtt['openWB/optional/load_sharing/active']
@@ -1230,7 +1234,7 @@
 							werden!
 						</span>
 					</template>
-				</button-group-input>
+				</openwb-base-button-group-input>
 				<div
 					v-if="
 						$store.state.mqtt[
@@ -1238,7 +1242,7 @@
 						] == true
 					"
 				>
-					<range-input
+					<openwb-base-range-input
 						title="Maximaler Strom"
 						:min="16"
 						:max="32"
@@ -1301,19 +1305,19 @@
 								Geschwindigkeit laden können.
 							</p>
 						</template>
-					</range-input>
+					</openwb-base-range-input>
 				</div>
 			</div>
-		</card>
-		<card title="Variable Stromtarife">
+		</openwb-base-card>
+		<openwb-base-card title="Variable Stromtarife">
 			<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-				<alert subtype="info">
+				<openwb-base-alert subtype="info">
 					Diese Einstellungen sind nicht verfügbar, solange sich diese
 					openWB im Modus "Nur Ladepunkt" befindet.
-				</alert>
+				</openwb-base-alert>
 			</div>
 			<div v-else>
-				<button-group-input
+				<openwb-base-button-group-input
 					title="Stromtarife aktivieren"
 					:model-value="
 						$store.state.mqtt['openWB/optional/et/active']
@@ -1339,7 +1343,7 @@
 						$store.state.mqtt['openWB/optional/et/active'] == true
 					"
 				>
-					<text-input
+					<openwb-base-text-input
 						title="Anbieter"
 						subtype="json"
 						disabled="disabled"
@@ -1356,8 +1360,8 @@
 						"
 					>
 						<template #help>Nur zur Info.</template>
-					</text-input>
-					<range-input
+					</openwb-base-text-input>
+					<openwb-base-range-input
 						title="Maximaler Strompreis"
 						:min="-30"
 						:max="30"
@@ -1377,8 +1381,8 @@
 					/>
 				</div>
 			</div>
-		</card>
-		<submit-buttons
+		</openwb-base-card>
+		<openwb-base-submit-buttons
 			@save="$emit('save')"
 			@reset="$emit('reset')"
 			@defaults="$emit('defaults')"
@@ -1389,36 +1393,9 @@
 <script>
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
-import Card from "@/components/Card.vue";
-import Alert from "@/components/Alert.vue";
-import Heading from "@/components/Heading.vue";
-import TextInput from "@/components/TextInput.vue";
-// import NumberInput from "@/components/NumberInput.vue";
-// import TextareaInput from "@/components/TextareaInput.vue";
-import RangeInput from "@/components/RangeInput.vue";
-import SelectInput from "@/components/SelectInput.vue";
-import ButtonGroupInput from "@/components/ButtonGroupInput.vue";
-// import CheckboxInput from "@/components/CheckboxInput.vue";
-// import SortableList from "@/components/SortableList.vue";
-import SubmitButtons from "@/components/SubmitButtons.vue";
-
 export default {
 	name: "OptionalComponents",
 	mixins: [ComponentStateMixin],
-	components: {
-		Card,
-		Alert,
-		Heading,
-		TextInput,
-		// NumberInput,
-		// TextareaInput,
-		RangeInput,
-		SelectInput,
-		ButtonGroupInput,
-		// CheckboxInput,
-		// SortableList,
-		SubmitButtons,
-	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [

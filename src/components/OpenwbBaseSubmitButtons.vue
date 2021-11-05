@@ -1,13 +1,13 @@
 <template>
-	<modal-dialog
+	<openwb-base-modal-dialog
 		:show="showModalSave"
 		title="Speichern"
 		subtype="success"
 		:preventClose="true"
 	>
 		Einstellungen werden gespeichert...
-	</modal-dialog>
-	<modal-dialog
+	</openwb-base-modal-dialog>
+	<openwb-base-modal-dialog
 		:show="showModalReset"
 		title="Änderungen verwerfen"
 		subtype="warning"
@@ -15,8 +15,8 @@
 		@modal-result="handleModalReset"
 	>
 		Wollen Sie die nicht gespeicherten Änderungen wirklich verwerfen?
-	</modal-dialog>
-	<modal-dialog
+	</openwb-base-modal-dialog>
+	<openwb-base-modal-dialog
 		:show="showModalDefaults"
 		title="Werkseinstellungen"
 		subtype="danger"
@@ -25,7 +25,7 @@
 	>
 		Wollen Sie wirklich alle Werte dieser Seite auf die Werkseinstellungen
 		zurücksetzen?
-	</modal-dialog>
+	</openwb-base-modal-dialog>
 	<div class="row justify-content-center">
 		<div class="col-md-4 d-flex py-1 justify-content-center">
 			<button
@@ -74,10 +74,11 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasCheck, fasUndo, fasTimes);
 
-import ModalDialog from "@/components/ModalDialog.vue";
-
 export default {
 	name: "SubmitButtons",
+	components: {
+		FontAwesomeIcon,
+	},
 	data() {
 		return {
 			showModalSave: false,
@@ -113,10 +114,6 @@ export default {
 				window.setTimeout(() => (this.showModalSave = false), 3000);
 			}
 		},
-	},
-	components: {
-		ModalDialog,
-		FontAwesomeIcon,
 	},
 };
 </script>

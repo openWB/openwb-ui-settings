@@ -6,7 +6,7 @@
 		@update:configuration="updateConfiguration($event)"
 	/>
 	<div v-else>
-		<alert subtype="warning">
+		<openwb-base-alert subtype="warning">
 			Es wurde keine Konfigurationsseite für den
 			<span v-if="componentType">
 				Komponententyp "{{ componentType }}"
@@ -14,8 +14,8 @@
 			<span v-else>Gerätetyp "{{ deviceType }}"</span>
 			gefunden. Die Einstellungen können als JSON direkt bearbeitet
 			werden.
-		</alert>
-		<textarea-input
+		</openwb-base-alert>
+		<openwb-base-textarea
 			title="Konfiguration"
 			subtype="json"
 			:model-value="configuration"
@@ -26,24 +26,18 @@
 			<template #help>
 				Bitte prüfen Sie, ob die Eingaben richtig interpretiert werden.
 			</template>
-		</textarea-input>
-		<alert subtype="info">
+		</openwb-base-textarea>
+		<openwb-base-alert subtype="info">
 			<pre>{{ JSON.stringify(configuration, undefined, 2) }}</pre>
-		</alert>
+		</openwb-base-alert>
 	</div>
 </template>
 
 <script>
-import Alert from "@/components/Alert.vue";
-import TextareaInput from "@/components/TextareaInput.vue";
 import { defineAsyncComponent } from "@vue/runtime-core";
 
 export default {
 	name: "ConfigProxy",
-	components: {
-		Alert,
-		TextareaInput,
-	},
 	emits: ["update:configuration"],
 	props: {
 		deviceType: { type: String, required: true },

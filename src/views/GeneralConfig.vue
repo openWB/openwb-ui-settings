@@ -1,7 +1,7 @@
 <template>
 	<div class="generalConfig">
-		<card title="openWB">
-			<button-group-input
+		<openwb-base-card title="openWB">
+			<openwb-base-button-group-input
 				title="openWB ist nur ein Ladepunkt"
 				:buttons="[
 					{
@@ -32,8 +32,8 @@
 					An der Haupt openWB wird als Ladepunkt "externe openWB"
 					gewählt und die IP Adresse eingetragen.
 				</template>
-			</button-group-input>
-			<select-input
+			</openwb-base-button-group-input>
+			<openwb-base-select-input
 				v-if="$store.state.mqtt['openWB/general/extern'] === true"
 				title="Display-Theme"
 				:options="[
@@ -60,17 +60,17 @@
 					dann ist die Darstellung identisch zum Display der regelnden
 					openWB. Alle Anzeigen und Änderungen sind möglich.
 				</template>
-			</select-input>
-		</card>
-		<card title="Hardware">
+			</openwb-base-select-input>
+		</openwb-base-card>
+		<openwb-base-card title="Hardware">
 			<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-				<alert subtype="info">
+				<openwb-base-alert subtype="info">
 					Diese Einstellungen sind nicht verfügbar, solange sich diese
 					openWB im Modus "Nur Ladepunkt" befindet.
-				</alert>
+				</openwb-base-alert>
 			</div>
 			<div v-else>
-				<button-group-input
+				<openwb-base-button-group-input
 					title="Geschwindigkeit Regelintervall"
 					:buttons="[
 						{
@@ -115,8 +115,8 @@
 							Normal gewählt werden.
 						</span>
 					</template>
-				</button-group-input>
-				<button-group-input
+				</openwb-base-button-group-input>
+				<openwb-base-button-group-input
 					title="Netzschutz"
 					:buttons="[
 						{
@@ -162,8 +162,8 @@
 							unterstützt dies.
 						</span>
 					</template>
-				</button-group-input>
-				<button-group-input
+				</openwb-base-button-group-input>
+				<openwb-base-button-group-input
 					title="Taster-Eingänge"
 					:model-value="
 						$store.state.mqtt['openWB/general/external_buttons_hw']
@@ -203,18 +203,18 @@
 							<li>Taster 5: Pin 40 / GPIO 21</li>
 						</ul>
 					</template>
-				</button-group-input>
+				</openwb-base-button-group-input>
 			</div>
-		</card>
-		<card title="Benachrichtigungen">
+		</openwb-base-card>
+		<openwb-base-card title="Benachrichtigungen">
 			<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-				<alert subtype="info">
+				<openwb-base-alert subtype="info">
 					Diese Einstellungen sind nicht verfügbar, solange sich diese
 					openWB im Modus "Nur Ladepunkt" befindet.
-				</alert>
+				</openwb-base-alert>
 			</div>
 			<div v-else>
-				<select-input
+				<openwb-base-select-input
 					title="Anbieter"
 					:model-value="
 						$store.state.mqtt[
@@ -239,7 +239,7 @@
 						] == 'pushover'
 					"
 				>
-					<alert subtype="info">
+					<openwb-base-alert subtype="info">
 						Zur Nutzung von Pushover muss ein Konto auf Pushover.net
 						bestehen. Zudem muss im Pushover-Nutzerkonto eine
 						Applikation openWB eingerichtet werden, um den
@@ -247,8 +247,8 @@
 						Wenn Pushover eingeschaltet ist, werden die Zählerstände
 						aller konfigurierten Ladepunkte immer zum 1. des Monats
 						gepusht.
-					</alert>
-					<text-input
+					</openwb-base-alert>
+					<openwb-base-text-input
 						title="Einstellungen"
 						subtype="json"
 						disabled="disabled"
@@ -265,8 +265,8 @@
 						"
 					>
 						<template #help>Nur zur Info!</template>
-					</text-input>
-					<text-input
+					</openwb-base-text-input>
+					<openwb-base-text-input
 						title="Pushover User Key"
 						:model-value="
 							$store.state.mqtt[
@@ -282,7 +282,7 @@
 						"
 						subtype="user"
 					/>
-					<text-input
+					<openwb-base-text-input
 						title="Pushover API-Token/Key"
 						subtype="password"
 						:model-value="
@@ -307,8 +307,10 @@
 					"
 				>
 					<hr />
-					<heading>Benachrichtigungen</heading>
-					<button-group-input
+					<openwb-base-heading>
+						Benachrichtigungen
+					</openwb-base-heading>
+					<openwb-base-button-group-input
 						title="Beim Starten der Ladung"
 						:model-value="
 							$store.state.mqtt[
@@ -334,7 +336,7 @@
 							},
 						]"
 					/>
-					<button-group-input
+					<openwb-base-button-group-input
 						title="Beim Stoppen der Ladung"
 						:model-value="
 							$store.state.mqtt[
@@ -360,7 +362,7 @@
 							},
 						]"
 					/>
-					<button-group-input
+					<openwb-base-button-group-input
 						title="Beim Einstecken eines Fahrzeugs"
 						:model-value="
 							$store.state.mqtt[
@@ -386,7 +388,7 @@
 							},
 						]"
 					/>
-					<button-group-input
+					<openwb-base-button-group-input
 						title="Bei Triggern von Smart Home Aktionen"
 						:model-value="
 							$store.state.mqtt[
@@ -414,16 +416,16 @@
 					/>
 				</div>
 			</div>
-		</card>
-		<card title="Ladelog">
+		</openwb-base-card>
+		<openwb-base-card title="Ladelog">
 			<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-				<alert subtype="info">
+				<openwb-base-alert subtype="info">
 					Diese Einstellungen sind nicht verfügbar, solange sich diese
 					openWB im Modus "Nur Ladepunkt" befindet.
-				</alert>
+				</openwb-base-alert>
 			</div>
 			<div v-else>
-				<number-input
+				<openwb-base-number-input
 					title="Preis je kWh"
 					:min="0"
 					:step="0.0001"
@@ -437,8 +439,8 @@
 						Dient zur Berechnung der Ladekosten im Ladelog.<br />
 						Es können bis zu 4 Nachkommastellen genutzt werden.
 					</template>
-				</number-input>
-				<button-group-input
+				</openwb-base-number-input>
+				<openwb-base-button-group-input
 					title="Einheit für Entfernungen"
 					:model-value="
 						$store.state.mqtt['openWB/general/range_unit']
@@ -452,8 +454,8 @@
 					]"
 				/>
 			</div>
-		</card>
-		<submit-buttons
+		</openwb-base-card>
+		<openwb-base-submit-buttons
 			@save="$emit('save')"
 			@reset="$emit('reset')"
 			@defaults="$emit('defaults')"
@@ -464,36 +466,9 @@
 <script>
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
-import Card from "@/components/Card.vue";
-import Alert from "@/components/Alert.vue";
-import Heading from "@/components/Heading.vue";
-import TextInput from "@/components/TextInput.vue";
-import NumberInput from "@/components/NumberInput.vue";
-// import TextareaInput from "@/components/TextareaInput.vue";
-// import RangeInput from "@/components/RangeInput.vue";
-import SelectInput from "@/components/SelectInput.vue";
-import ButtonGroupInput from "@/components/ButtonGroupInput.vue";
-// import CheckboxInput from "@/components/CheckboxInput.vue";
-// import SortableList from "@/components/SortableList.vue";
-import SubmitButtons from "@/components/SubmitButtons.vue";
-
 export default {
 	name: "GeneralConfig",
 	mixins: [ComponentStateMixin],
-	components: {
-		Card,
-		Alert,
-		Heading,
-		TextInput,
-		NumberInput,
-		// TextareaInput,
-		// RangeInput,
-		SelectInput,
-		ButtonGroupInput,
-		// CheckboxInput,
-		// SortableList,
-		SubmitButtons,
-	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [

@@ -1,14 +1,14 @@
 <template>
 	<div class="standbyChargeConfig">
-		<card title="Phasenumschaltung">
+		<openwb-base-card title="Phasenumschaltung">
 			<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-				<alert subtype="info">
+				<openwb-base-alert subtype="info">
 					Diese Einstellungen sind nicht verfügbar, solange sich diese
 					openWB im Modus "Nur Ladepunkt" befindet.
-				</alert>
+				</openwb-base-alert>
 			</div>
 			<div v-else>
-				<button-group-input
+				<openwb-base-button-group-input
 					title="Anzahl Phasen"
 					:buttons="[
 						{ buttonValue: 1, text: '1' },
@@ -27,10 +27,10 @@
 					"
 				>
 					<template #help>Hilfetext</template>
-				</button-group-input>
+				</openwb-base-button-group-input>
 			</div>
-		</card>
-		<submit-buttons
+		</openwb-base-card>
+		<openwb-base-submit-buttons
 			@save="$emit('save')"
 			@reset="$emit('reset')"
 			@defaults="$emit('defaults')"
@@ -41,36 +41,9 @@
 <script>
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
-import Card from "@/components/Card.vue";
-import Alert from "@/components/Alert.vue";
-// import Heading from "@/components/Heading.vue";
-// import TextInput from "@/components/TextInput.vue";
-// import NumberInput from "@/components/NumberInput.vue";
-// import TextareaInput from "@/components/TextareaInput.vue";
-// import RangeInput from "@/components/RangeInput.vue";
-// import SelectInput from "@/components/SelectInput.vue";
-import ButtonGroupInput from "@/components/ButtonGroupInput.vue";
-// import CheckboxInput from "@/components/CheckboxInput.vue";
-// import SortableList from "@/components/SortableList.vue";
-import SubmitButtons from "@/components/SubmitButtons.vue";
-
 export default {
 	name: "StandbyChargeConfig",
 	mixins: [ComponentStateMixin],
-	components: {
-		Card,
-		Alert,
-		// Heading,
-		// TextInput,
-		// NumberInput,
-		// TextareaInput,
-		// RangeInput,
-		// SelectInput,
-		ButtonGroupInput,
-		// CheckboxInput,
-		// SortableList,
-		SubmitButtons,
-	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [

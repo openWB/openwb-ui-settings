@@ -1,14 +1,14 @@
 <template>
 	<div class="pvChargeConfig">
-		<card title="Regelparameter">
+		<openwb-base-card title="Regelparameter">
 			<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-				<alert subtype="info">
+				<openwb-base-alert subtype="info">
 					Diese Einstellungen sind nicht verfügbar, solange sich diese
 					openWB im Modus "Nur Ladepunkt" befindet.
-				</alert>
+				</openwb-base-alert>
 			</div>
 			<div v-else>
-				<button-group-input
+				<openwb-base-button-group-input
 					title="Regelmodus"
 					:buttons="[
 						{ buttonValue: 'export', text: 'Einspeisung' },
@@ -19,8 +19,8 @@
 					@update:model-value="setControlMode($event)"
 				>
 					<template #help>Hilfetext</template>
-				</button-group-input>
-				<text-input
+				</openwb-base-button-group-input>
+				<openwb-base-text-input
 					title="Regelbereich"
 					subtype="json"
 					disabled
@@ -37,8 +37,8 @@
 					"
 				>
 					<template #help>JSON Objekt zum Debuggen</template>
-				</text-input>
-				<number-input
+				</openwb-base-text-input>
+				<openwb-base-number-input
 					v-if="calculateControlMode() === 'individual'"
 					title="Minimum"
 					unit="W"
@@ -58,8 +58,8 @@
 					<template #help>
 						Untere Grenze des Gegelbereichs.
 					</template>
-				</number-input>
-				<number-input
+				</openwb-base-number-input>
+				<openwb-base-number-input
 					v-if="calculateControlMode() === 'individual'"
 					title="Minimum"
 					unit="W"
@@ -77,8 +77,8 @@
 					"
 				>
 					<template #help>Obere Grenze des Gegelbereichs.</template>
-				</number-input>
-				<number-input
+				</openwb-base-number-input>
+				<openwb-base-number-input
 					title="Regelpunkt Einspeisegrenze"
 					:min="0"
 					:step="50"
@@ -105,9 +105,9 @@
 						Wechselrichter und Smartmeter verbaut ist welches eine
 						dynamische Begrenzung der Einspeiseleistung bietet.
 					</template>
-				</number-input>
+				</openwb-base-number-input>
 				<hr />
-				<number-input
+				<openwb-base-number-input
 					title="Einschaltschwelle"
 					:min="0"
 					:step="50"
@@ -125,8 +125,8 @@
 					"
 				>
 					<template #help>Hilfetext</template>
-				</number-input>
-				<number-input
+				</openwb-base-number-input>
+				<openwb-base-number-input
 					title="Einschaltverzögerung"
 					:min="0"
 					:step="1"
@@ -144,9 +144,9 @@
 					"
 				>
 					<template #help>Hilfetext</template>
-				</number-input>
+				</openwb-base-number-input>
 				<hr />
-				<number-input
+				<openwb-base-number-input
 					title="Abschaltschwelle"
 					:min="0"
 					:step="50"
@@ -164,8 +164,8 @@
 					"
 				>
 					<template #help>Hilfetext</template>
-				</number-input>
-				<number-input
+				</openwb-base-number-input>
+				<openwb-base-number-input
 					title="Abschaltverzögerung"
 					:min="0"
 					:step="1"
@@ -183,18 +183,18 @@
 					"
 				>
 					<template #help>Hilfetext</template>
-				</number-input>
+				</openwb-base-number-input>
 			</div>
-		</card>
-		<card title="Phasenumschaltung">
+		</openwb-base-card>
+		<openwb-base-card title="Phasenumschaltung">
 			<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-				<alert subtype="info">
+				<openwb-base-alert subtype="info">
 					Diese Einstellungen sind nicht verfügbar, solange sich diese
 					openWB im Modus "Nur Ladepunkt" befindet.
-				</alert>
+				</openwb-base-alert>
 			</div>
 			<div v-else>
-				<button-group-input
+				<openwb-base-button-group-input
 					title="Anzahl Phasen"
 					:buttons="[
 						{ buttonValue: 1, text: '1' },
@@ -214,18 +214,18 @@
 					"
 				>
 					<template #help>Hilfetext</template>
-				</button-group-input>
+				</openwb-base-button-group-input>
 			</div>
-		</card>
-		<card title="Speicher-Beachtung">
+		</openwb-base-card>
+		<openwb-base-card title="Speicher-Beachtung">
 			<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-				<alert subtype="info">
+				<openwb-base-alert subtype="info">
 					Diese Einstellungen sind nicht verfügbar, solange sich diese
 					openWB im Modus "Nur Ladepunkt" befindet.
-				</alert>
+				</openwb-base-alert>
 			</div>
 			<div v-else>
-				<button-group-input
+				<openwb-base-button-group-input
 					title="Priorisierung"
 					:buttons="[
 						{ buttonValue: false, text: 'Fahrzeuge' },
@@ -244,8 +244,8 @@
 					"
 				>
 					<template #help>Hilfetext</template>
-				</button-group-input>
-				<range-input
+				</openwb-base-button-group-input>
+				<openwb-base-range-input
 					title="Einschalt-SoC"
 					:min="0"
 					:max="19"
@@ -286,8 +286,8 @@
 					"
 				>
 					<template #help>Hilfetext</template>
-				</range-input>
-				<range-input
+				</openwb-base-range-input>
+				<openwb-base-range-input
 					title="Ausschalt-SoC"
 					:min="0"
 					:max="19"
@@ -328,8 +328,8 @@
 					"
 				>
 					<template #help>Hilfetext</template>
-				</range-input>
-				<number-input
+				</openwb-base-range-input>
+				<openwb-base-number-input
 					title="Reservierte Ladeleistung"
 					:min="0"
 					:step="100"
@@ -347,8 +347,8 @@
 					"
 				>
 					<template #help>Zahl mit Einheit</template>
-				</number-input>
-				<number-input
+				</openwb-base-number-input>
+				<openwb-base-number-input
 					title="Erlaubte Entladeleistung"
 					:min="0"
 					:step="100"
@@ -366,8 +366,8 @@
 					"
 				>
 					<template #help>Zahl mit Einheit</template>
-				</number-input>
-				<range-input
+				</openwb-base-number-input>
+				<openwb-base-range-input
 					title="Minimaler Entlade-SoC"
 					:min="0"
 					:max="20"
@@ -409,10 +409,10 @@
 					"
 				>
 					<template #help>Hilfetext</template>
-				</range-input>
+				</openwb-base-range-input>
 			</div>
-		</card>
-		<submit-buttons
+		</openwb-base-card>
+		<openwb-base-submit-buttons
 			@save="$emit('save')"
 			@reset="$emit('reset')"
 			@defaults="$emit('defaults')"
@@ -423,36 +423,9 @@
 <script>
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
-import Card from "@/components/Card.vue";
-import Alert from "@/components/Alert.vue";
-// import Heading from "@/components/Heading.vue";
-import TextInput from "@/components/TextInput.vue";
-import NumberInput from "@/components/NumberInput.vue";
-// import TextareaInput from "@/components/TextareaInput.vue";
-import RangeInput from "@/components/RangeInput.vue";
-// import SelectInput from "@/components/SelectInput.vue";
-import ButtonGroupInput from "@/components/ButtonGroupInput.vue";
-// import CheckboxInput from "@/components/CheckboxInput.vue";
-// import SortableList from "@/components/SortableList.vue";
-import SubmitButtons from "@/components/SubmitButtons.vue";
-
 export default {
 	name: "PVChargeConfig",
 	mixins: [ComponentStateMixin],
-	components: {
-		Card,
-		Alert,
-		// Heading,
-		TextInput,
-		NumberInput,
-		// TextareaInput,
-		RangeInput,
-		// SelectInput,
-		ButtonGroupInput,
-		// CheckboxInput,
-		// SortableList,
-		SubmitButtons,
-	},
 	methods: {
 		calculateControlMode() {
 			const topic =

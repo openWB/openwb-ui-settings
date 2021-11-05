@@ -1,5 +1,5 @@
 <template>
-	<alert
+	<openwb-base-alert
 		v-if="alertData"
 		subtype="danger"
 		class="command-alert alert-dismissible"
@@ -14,15 +14,12 @@
 		<button type="button" class="close" aria-label="Close" @click="dismiss">
 			<span aria-hidden="true">&times;</span>
 		</button>
-	</alert>
+	</openwb-base-alert>
 </template>
 
 <script>
-import Alert from "@/components/Alert.vue";
-
 export default {
 	name: "CommandAlert",
-	components: { Alert },
 	emits: ["dismiss"],
 	props: {
 		alertData: { type: Object, default: undefined },
