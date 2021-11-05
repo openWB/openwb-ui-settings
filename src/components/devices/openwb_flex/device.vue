@@ -1,10 +1,10 @@
 <template>
 	<div class="device-openwb-flex">
-		<heading>
+		<openwb-base-heading>
 			Einstellungen für openWB-Flex
 			<span class="small">(Modul: {{ $options.name }})</span>
-		</heading>
-		<text-input
+		</openwb-base-heading>
+		<openwb-base-text-input
 			title="IP oder Hostname"
 			subtype="host"
 			:model-value="configuration.ip_address"
@@ -23,36 +23,11 @@
 </template>
 
 <script>
-// import Alert from "@/components/Alert.vue";
-import Heading from "@/components/Heading.vue";
-import TextInput from "@/components/TextInput.vue";
-import NumberInput from "@/components/NumberInput.vue";
-// import TextareaInput from "@/components/TextareaInput.vue";
-// import RangeInput from "@/components/RangeInput.vue";
-// import SelectInput from "@/components/SelectInput.vue";
-// import ButtonGroupInput from "@/components/ButtonGroupInput.vue";
-// import ClickButton from "@/components/ClickButton.vue";
-// import Avatar from "@/components/Avatar.vue";
-// import CheckboxInput from "@/components/CheckboxInput.vue";
-
 export default {
 	name: "DeviceOpenwbFlex",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
-	},
-	components: {
-		// Alert,
-		Heading,
-		TextInput,
-		NumberInput,
-		// TextareaInput,
-		// RangeInput,
-		// SelectInput,
-		// ButtonGroupInput,
-		// ClickButton,
-		// Avatar,
-		// CheckboxInput,
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {

@@ -1,7 +1,11 @@
 <template>
 	<div class="chargepoint-installation">
-		<card title="Ladepunkte" :collapsible="true" :collapsed="true">
-			<select-input
+		<openwb-base-card
+			title="Ladepunkte"
+			:collapsible="true"
+			:collapsed="true"
+		>
+			<openwb-base-select-input
 				title="Verfügbare Ladepunkte"
 				notSelected="Bitte auswählen"
 				:options="getChargepointList()"
@@ -10,7 +14,7 @@
 			>
 				<template #append>
 					<span class="col-1">
-						<click-button
+						<openwb-base-click-button
 							:class="
 								chargepointToAdd === undefined
 									? 'btn-outline-success'
@@ -23,17 +27,17 @@
 								fixed-width
 								:icon="['fas', 'plus']"
 							/>
-						</click-button>
+						</openwb-base-click-button>
 					</span>
 				</template>
 				<template #help>
 					Bitte einen Ladepunkt auswählen, der hinzugefügt werden
 					soll.
 				</template>
-			</select-input>
-		</card>
+			</openwb-base-select-input>
+		</openwb-base-card>
 
-		<submit-buttons
+		<openwb-base-submit-buttons
 			@save="$emit('save')"
 			@reset="$emit('reset')"
 			@defaults="$emit('defaults')"
@@ -50,40 +54,11 @@ library.add(fasPlus);
 
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
-import Card from "@/components/Card.vue";
-// import Alert from "@/components/Alert.vue";
-// import Heading from "@/components/Heading.vue";
-// import TextInput from "@/components/TextInput.vue";
-// import NumberInput from "@/components/NumberInput.vue";
-// import TextareaInput from "@/components/TextareaInput.vue";
-// import RangeInput from "@/components/RangeInput.vue";
-import SelectInput from "@/components/SelectInput.vue";
-// import ButtonGroupInput from "@/components/ButtonGroupInput.vue";
-import ClickButton from "@/components/ClickButton.vue";
-// import Avatar from "@/components/Avatar.vue";
-// import CheckboxInput from "@/components/CheckboxInput.vue";
-// import SortableList from "@/components/SortableList.vue";
-import SubmitButtons from "@/components/SubmitButtons.vue";
-
 export default {
 	name: "ChargepointInstallation",
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
 	components: {
-		Card,
-		// Alert,
-		// Heading,
-		// TextInput,
-		// NumberInput,
-		// TextareaInput,
-		// RangeInput,
-		SelectInput,
-		// ButtonGroupInput,
-		ClickButton,
-		// Avatar,
-		// CheckboxInput,
-		// SortableList,
-		SubmitButtons,
 		FontAwesomeIcon,
 	},
 	data() {

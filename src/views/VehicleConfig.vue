@@ -1,24 +1,28 @@
 <template>
 	<div class="vehicleConfig">
 		<!-- vehicle card -->
-		<card title="Fahrzeuge" :collapsible="true" :collapsed="true">
+		<openwb-base-card
+			title="Fahrzeuge"
+			:collapsible="true"
+			:collapsed="true"
+		>
 			<template #actions>
-				<avatar
+				<openwb-base-avatar
 					class="bg-success"
 					v-if="$store.state.mqtt['openWB/general/extern'] === false"
 					@click="addVehicle"
 				>
 					<font-awesome-icon fixed-width :icon="['fas', 'plus']" />
-				</avatar>
+				</openwb-base-avatar>
 			</template>
 			<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-				<alert subtype="info">
+				<openwb-base-alert subtype="info">
 					Diese Einstellungen sind nicht verfügbar, solange sich diese
 					openWB im Modus "Nur Ladepunkt" befindet.
-				</alert>
+				</openwb-base-alert>
 			</div>
 			<div v-else>
-				<card
+				<openwb-base-card
 					v-for="id in vehicleIndexes"
 					:key="id"
 					:title="getVehicleName(id)"
@@ -27,7 +31,7 @@
 					subtype="primary"
 				>
 					<template #actions v-if="id !== 0">
-						<avatar
+						<openwb-base-avatar
 							class="bg-danger"
 							@click="removeVehicle(id, $event)"
 						>
@@ -35,9 +39,9 @@
 								fixed-width
 								:icon="['fas', 'trash']"
 							/>
-						</avatar>
+						</openwb-base-avatar>
 					</template>
-					<text-input
+					<openwb-base-text-input
 						title="Bezeichnung"
 						:model-value="
 							$store.state.mqtt['openWB/vehicle/' + id + '/name']
@@ -53,8 +57,8 @@
 						<template #help v-if="id === 0">
 							Das Standard-Fahrzeug kann nicht umbenannt werden.
 						</template>
-					</text-input>
-					<select-input
+					</openwb-base-text-input>
+					<openwb-base-select-input
 						title="Fahrzeug-Vorlage"
 						:options="evTemplateList"
 						:model-value="
@@ -69,7 +73,7 @@
 							)
 						"
 					/>
-					<select-input
+					<openwb-base-select-input
 						title="Ladeprofil-Vorlage"
 						:options="chargeTemplateList"
 						:model-value="
@@ -84,28 +88,32 @@
 							)
 						"
 					/>
-				</card>
+				</openwb-base-card>
 			</div>
-		</card>
+		</openwb-base-card>
 		<!-- vehicle template card -->
-		<card title="Fahrzeug-Vorlagen" :collapsible="true" :collapsed="true">
+		<openwb-base-card
+			title="Fahrzeug-Vorlagen"
+			:collapsible="true"
+			:collapsed="true"
+		>
 			<template #actions>
-				<avatar
+				<openwb-base-avatar
 					class="bg-success"
 					v-if="$store.state.mqtt['openWB/general/extern'] === false"
 					@click="addEvTemplate"
 				>
 					<font-awesome-icon fixed-width :icon="['fas', 'plus']" />
-				</avatar>
+				</openwb-base-avatar>
 			</template>
 			<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-				<alert subtype="info">
+				<openwb-base-alert subtype="info">
 					Diese Einstellungen sind nicht verfügbar, solange sich diese
 					openWB im Modus "Nur Ladepunkt" befindet.
-				</alert>
+				</openwb-base-alert>
 			</div>
 			<div v-else>
-				<card
+				<openwb-base-card
 					v-for="(template, key) in evTemplates"
 					:key="key"
 					:title="template.name ? template.name : key"
@@ -114,7 +122,7 @@
 					subtype="primary"
 				>
 					<template #actions v-if="!key.endsWith('/0')">
-						<avatar
+						<openwb-base-avatar
 							class="bg-danger"
 							v-if="
 								$store.state.mqtt['openWB/general/extern'] ===
@@ -126,9 +134,9 @@
 								fixed-width
 								:icon="['fas', 'trash']"
 							/>
-						</avatar>
+						</openwb-base-avatar>
 					</template>
-					<text-input
+					<openwb-base-text-input
 						title="Bezeichnung"
 						:model-value="template.name"
 						@update:model-value="updateState(key, $event, 'name')"
@@ -137,9 +145,11 @@
 						<template #help v-if="key.endsWith('/0')">
 							Die Standard-Vorlage kann nicht umbenannt werden.
 						</template>
-					</text-input>
-					<heading>Angaben zum Ladestrom</heading>
-					<range-input
+					</openwb-base-text-input>
+					<openwb-base-heading>
+						Angaben zum Ladestrom
+					</openwb-base-heading>
+					<openwb-base-range-input
 						title="Mindeststrom"
 						:min="6"
 						:max="16"
@@ -150,8 +160,8 @@
 							updateState(key, $event, 'min_current')
 						"
 					>
-					</range-input>
-					<range-input
+					</openwb-base-range-input>
+					<openwb-base-range-input
 						title="Maximalstrom 1-phasig"
 						:min="6"
 						:max="32"
@@ -162,8 +172,8 @@
 							updateState(key, $event, 'max_current_one_phase')
 						"
 					>
-					</range-input>
-					<range-input
+					</openwb-base-range-input>
+					<openwb-base-range-input
 						title="Maximalstrom mehr-phasig"
 						:min="6"
 						:max="32"
@@ -174,8 +184,8 @@
 							updateState(key, $event, 'max_current_multi_phases')
 						"
 					>
-					</range-input>
-					<number-input
+					</openwb-base-range-input>
+					<openwb-base-number-input
 						title="Erlaubte Stromabweichung"
 						unit="A"
 						:model-value="template.nominal_difference"
@@ -183,9 +193,11 @@
 							updateState(key, $event, 'nominal_difference')
 						"
 					>
-					</number-input>
-					<heading>Angaben zur Batterie</heading>
-					<number-input
+					</openwb-base-number-input>
+					<openwb-base-heading>
+						Angaben zur Batterie
+					</openwb-base-heading>
+					<openwb-base-number-input
 						title="Kapazität der Batterie"
 						unit="kWh"
 						:min="10"
@@ -195,8 +207,8 @@
 							updateState(key, $event, 'battery_capacity')
 						"
 					>
-					</number-input>
-					<number-input
+					</openwb-base-number-input>
+					<openwb-base-number-input
 						title="Durchschnittsverbrauch"
 						unit="kWh&nbsp;/&nbsp;100km"
 						:min="0"
@@ -206,9 +218,11 @@
 							updateState(key, $event, 'average_consump')
 						"
 					>
-					</number-input>
-					<heading>Angaben zur Handhabung von Phasen</heading>
-					<button-group-input
+					</openwb-base-number-input>
+					<openwb-base-heading>
+						Angaben zur Handhabung von Phasen
+					</openwb-base-heading>
+					<openwb-base-button-group-input
 						title="Unterstützte Phasen"
 						:buttons="[
 							{ buttonValue: 1, text: '1' },
@@ -220,8 +234,8 @@
 							updateState(key, $event, 'max_phases')
 						"
 					>
-					</button-group-input>
-					<button-group-input
+					</openwb-base-button-group-input>
+					<openwb-base-button-group-input
 						title="CP-Unterbrechung"
 						:buttons="[
 							{
@@ -244,8 +258,8 @@
 							)
 						"
 					>
-					</button-group-input>
-					<button-group-input
+					</openwb-base-button-group-input>
+					<openwb-base-button-group-input
 						title="Phasenumschaltung blockieren"
 						:buttons="[
 							{
@@ -264,8 +278,8 @@
 							updateState(key, $event, 'prevent_switch_stop')
 						"
 					>
-					</button-group-input>
-					<number-input
+					</openwb-base-button-group-input>
+					<openwb-base-number-input
 						title="Pause bei Phasenumschaltung"
 						unit="s"
 						:min="2"
@@ -275,29 +289,33 @@
 							updateState(key, $event, 'phase_switch_pause')
 						"
 					>
-					</number-input>
-				</card>
+					</openwb-base-number-input>
+				</openwb-base-card>
 			</div>
-		</card>
+		</openwb-base-card>
 		<!-- charge template card -->
-		<card title="Ladeprofil-Vorlagen" :collapsible="true" :collapsed="true">
+		<openwb-base-card
+			title="Ladeprofil-Vorlagen"
+			:collapsible="true"
+			:collapsed="true"
+		>
 			<template #actions>
-				<avatar
+				<openwb-base-avatar
 					class="bg-success"
 					v-if="$store.state.mqtt['openWB/general/extern'] === false"
 					@click="addChargeTemplate"
 				>
 					<font-awesome-icon fixed-width :icon="['fas', 'plus']" />
-				</avatar>
+				</openwb-base-avatar>
 			</template>
 			<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-				<alert subtype="info">
+				<openwb-base-alert subtype="info">
 					Diese Einstellungen sind nicht verfügbar, solange sich diese
 					openWB im Modus "Nur Ladepunkt" befindet.
-				</alert>
+				</openwb-base-alert>
 			</div>
 			<div v-else>
-				<card
+				<openwb-base-card
 					v-for="(template, templateKey) in chargeTemplates"
 					:key="templateKey"
 					:title="template.name ? template.name : templateKey"
@@ -306,7 +324,7 @@
 					subtype="primary"
 				>
 					<template #actions v-if="!templateKey.endsWith('/0')">
-						<avatar
+						<openwb-base-avatar
 							class="bg-danger"
 							@click="removeChargeTemplate(templateKey, $event)"
 						>
@@ -314,9 +332,9 @@
 								fixed-width
 								:icon="['fas', 'trash']"
 							/>
-						</avatar>
+						</openwb-base-avatar>
 					</template>
-					<text-input
+					<openwb-base-text-input
 						title="Bezeichnung"
 						:model-value="template.name"
 						@update:model-value="
@@ -327,9 +345,11 @@
 						<template #help v-if="templateKey.endsWith('/0')">
 							Die Standard-Vorlage kann nicht umbenannt werden.
 						</template>
-					</text-input>
-					<heading>Allgemeine Optionen</heading>
-					<button-group-input
+					</openwb-base-text-input>
+					<openwb-base-heading>
+						Allgemeine Optionen
+					</openwb-base-heading>
+					<openwb-base-button-group-input
 						title="Priorität"
 						:buttons="[
 							{
@@ -355,8 +375,8 @@
 							Überschuss vorhanden ist, werden auch Fahrzeuge ohne
 							Priorität geladen.
 						</template>
-					</button-group-input>
-					<button-group-input
+					</openwb-base-button-group-input>
+					<openwb-base-button-group-input
 						title="Automatische Sperre"
 						:buttons="[
 							{
@@ -384,8 +404,8 @@
 							wird der betroffene Ladepunkt automatisch
 							deaktiviert.
 						</template>
-					</button-group-input>
-					<button-group-input
+					</openwb-base-button-group-input>
+					<openwb-base-button-group-input
 						title="Standard nach Abstecken"
 						:buttons="[
 							{
@@ -409,10 +429,10 @@
 							betroffene Ladepunkt nach dem Abstecken auf das
 							Standard Ladeprofil zurückgesetzt.
 						</template>
-					</button-group-input>
+					</openwb-base-button-group-input>
 					<hr />
-					<heading>Sofortladen</heading>
-					<range-input
+					<openwb-base-heading>Sofortladen</openwb-base-heading>
+					<openwb-base-range-input
 						title="Ladestrom"
 						:min="6"
 						:max="32"
@@ -429,8 +449,8 @@
 							)
 						"
 					>
-					</range-input>
-					<button-group-input
+					</openwb-base-range-input>
+					<openwb-base-button-group-input
 						title="Begrenzung"
 						:buttons="[
 							{
@@ -462,8 +482,8 @@
 							Fahrzeugbatterie (SoC) oder eine Energiemenge in kWh
 							begrenzt werden.
 						</template>
-					</button-group-input>
-					<range-input
+					</openwb-base-button-group-input>
+					<openwb-base-range-input
 						title="SoC-Limit"
 						:min="5"
 						:max="100"
@@ -485,8 +505,8 @@
 							SoC-Modul für das jeweilige Fahrzeug eingerichtet
 							werden!
 						</template>
-					</range-input>
-					<number-input
+					</openwb-base-range-input>
+					<openwb-base-number-input
 						title="Energie-Limit"
 						unit="kWh"
 						:min="5"
@@ -502,10 +522,10 @@
 							)
 						"
 					>
-					</number-input>
+					</openwb-base-number-input>
 					<hr />
-					<heading>PV-laden</heading>
-					<range-input
+					<openwb-base-heading>PV-laden</openwb-base-heading>
+					<openwb-base-range-input
 						title="Mindeststrom"
 						:min="0"
 						:max="11"
@@ -539,8 +559,8 @@
 						<template #help>
 							ToDo: Beschreibung ergänzen!
 						</template>
-					</range-input>
-					<range-input
+					</openwb-base-range-input>
+					<openwb-base-range-input
 						title="SoC-Limit"
 						:min="0"
 						:max="20"
@@ -588,8 +608,8 @@
 							SoC-Modul für das jeweilige Fahrzeug eingerichtet
 							werden!
 						</template>
-					</range-input>
-					<range-input
+					</openwb-base-range-input>
+					<openwb-base-range-input
 						title="Mindest-SoC"
 						:min="0"
 						:max="19"
@@ -635,8 +655,8 @@
 							SoC-Modul für das jeweilige Fahrzeug eingerichtet
 							werden!
 						</template>
-					</range-input>
-					<range-input
+					</openwb-base-range-input>
+					<openwb-base-range-input
 						title="Mindest-SoC-Strom"
 						:min="6"
 						:max="32"
@@ -653,12 +673,12 @@
 							)
 						"
 					>
-					</range-input>
+					</openwb-base-range-input>
 					<hr />
-					<heading>
+					<openwb-base-heading>
 						Zielladen
 						<template #actions>
-							<avatar
+							<openwb-base-avatar
 								class="bg-success"
 								@click="
 									addChargeTemplateSchedulePlan(
@@ -671,10 +691,10 @@
 									fixed-width
 									:icon="['fas', 'plus']"
 								/>
-							</avatar>
+							</openwb-base-avatar>
 						</template>
-					</heading>
-					<card
+					</openwb-base-heading>
+					<openwb-base-card
 						v-for="(
 							plan, planKey
 						) in getChargeTemplateScheduledChargingPlans(
@@ -725,7 +745,7 @@
 									/>
 								</span>
 							</span>
-							<avatar
+							<openwb-base-avatar
 								v-if="slotProps.collapsed == false"
 								class="bg-danger"
 								@click="
@@ -740,17 +760,17 @@
 									fixed-width
 									:icon="['fas', 'trash']"
 								/>
-							</avatar>
+							</openwb-base-avatar>
 						</template>
-						<text-input
+						<openwb-base-text-input
 							title="Bezeichnung"
 							:model-value="plan.name"
 							@update:model-value="
 								updateState(planKey, $event, 'name')
 							"
 						>
-						</text-input>
-						<button-group-input
+						</openwb-base-text-input>
+						<openwb-base-button-group-input
 							title="Zeitpunkt aktiv"
 							:buttons="[
 								{
@@ -769,8 +789,8 @@
 								updateState(planKey, $event, 'active')
 							"
 						>
-						</button-group-input>
-						<text-input
+						</openwb-base-button-group-input>
+						<openwb-base-text-input
 							title="Uhrzeit"
 							subtype="time"
 							:model-value="plan.time"
@@ -778,8 +798,8 @@
 								updateState(planKey, $event, 'time')
 							"
 						>
-						</text-input>
-						<range-input
+						</openwb-base-text-input>
+						<openwb-base-range-input
 							title="Ziel-SoC"
 							:min="5"
 							:max="100"
@@ -790,8 +810,8 @@
 								updateState(planKey, $event, 'soc')
 							"
 						>
-						</range-input>
-						<button-group-input
+						</openwb-base-range-input>
+						<openwb-base-button-group-input
 							title="Wiederholungen"
 							:buttons="[
 								{
@@ -819,8 +839,8 @@
 								)
 							"
 						>
-						</button-group-input>
-						<text-input
+						</openwb-base-button-group-input>
+						<openwb-base-text-input
 							v-if="plan.frequency.selected == 'once'"
 							title="Datum"
 							subtype="date"
@@ -829,9 +849,9 @@
 								updateState(planKey, $event, 'frequency.once')
 							"
 						>
-						</text-input>
+						</openwb-base-text-input>
 						<div v-if="plan.frequency.selected == 'weekly'">
-							<button-group-input
+							<openwb-base-button-group-input
 								v-for="(day, dayIndex) in weekdays"
 								:key="dayIndex"
 								:title="day"
@@ -856,14 +876,14 @@
 									)
 								"
 							>
-							</button-group-input>
+							</openwb-base-button-group-input>
 						</div>
-					</card>
+					</openwb-base-card>
 					<hr />
-					<heading>
+					<openwb-base-heading>
 						Laden nach Zeitplan
 						<template #actions>
-							<avatar
+							<openwb-base-avatar
 								class="bg-success"
 								@click="
 									addChargeTemplateTimeChargingPlan(
@@ -876,10 +896,10 @@
 									fixed-width
 									:icon="['fas', 'plus']"
 								/>
-							</avatar>
+							</openwb-base-avatar>
 						</template>
-					</heading>
-					<button-group-input
+					</openwb-base-heading>
+					<openwb-base-button-group-input
 						title="Aktiviert"
 						:buttons="[
 							{
@@ -898,8 +918,8 @@
 							updateState(key, $event, 'time_charging.active')
 						"
 					>
-					</button-group-input>
-					<card
+					</openwb-base-button-group-input>
+					<openwb-base-card
 						v-for="(
 							plan, planKey
 						) in getChargeTemplateTimeChargingPlans(templateKey)"
@@ -943,7 +963,7 @@
 									/>
 								</span>
 							</span>
-							<avatar
+							<openwb-base-avatar
 								v-if="slotProps.collapsed == false"
 								class="bg-danger"
 								@click="
@@ -958,17 +978,17 @@
 									fixed-width
 									:icon="['fas', 'trash']"
 								/>
-							</avatar>
+							</openwb-base-avatar>
 						</template>
-						<text-input
+						<openwb-base-text-input
 							title="Bezeichnung"
 							:model-value="plan.name"
 							@update:model-value="
 								updateState(planKey, $event, 'name')
 							"
 						>
-						</text-input>
-						<button-group-input
+						</openwb-base-text-input>
+						<openwb-base-button-group-input
 							title="Zeitplan aktiv"
 							:buttons="[
 								{
@@ -987,8 +1007,8 @@
 								updateState(planKey, $event, 'active')
 							"
 						>
-						</button-group-input>
-						<range-input
+						</openwb-base-button-group-input>
+						<openwb-base-range-input
 							title="Ladestrom"
 							:min="6"
 							:max="32"
@@ -999,8 +1019,8 @@
 								updateState(planKey, $event, 'current')
 							"
 						>
-						</range-input>
-						<text-input
+						</openwb-base-range-input>
+						<openwb-base-text-input
 							title="Beginn"
 							subtype="time"
 							:model-value="plan.time[0]"
@@ -1008,8 +1028,8 @@
 								updateState(planKey, $event, 'time.0')
 							"
 						>
-						</text-input>
-						<text-input
+						</openwb-base-text-input>
+						<openwb-base-text-input
 							title="Ende"
 							subtype="time"
 							:model-value="plan.time[1]"
@@ -1017,8 +1037,8 @@
 								updateState(planKey, $event, 'time.1')
 							"
 						>
-						</text-input>
-						<button-group-input
+						</openwb-base-text-input>
+						<openwb-base-button-group-input
 							title="Wiederholungen"
 							:buttons="[
 								{
@@ -1046,8 +1066,8 @@
 								)
 							"
 						>
-						</button-group-input>
-						<text-input
+						</openwb-base-button-group-input>
+						<openwb-base-text-input
 							v-if="plan.frequency.selected == 'once'"
 							title="Datum"
 							subtype="date"
@@ -1056,9 +1076,9 @@
 								updateState(planKey, $event, 'frequency.once')
 							"
 						>
-						</text-input>
+						</openwb-base-text-input>
 						<div v-if="plan.frequency.selected == 'weekly'">
-							<button-group-input
+							<openwb-base-button-group-input
 								v-for="(day, dayIndex) in weekdays"
 								:key="dayIndex"
 								:title="day"
@@ -1083,17 +1103,13 @@
 									)
 								"
 							>
-							</button-group-input>
+							</openwb-base-button-group-input>
 						</div>
-					</card>
-				</card>
+					</openwb-base-card>
+				</openwb-base-card>
 			</div>
-		</card>
-		<submit-buttons
-			@save="$emit('save')"
-			@reset="$emit('reset')"
-			@defaults="$emit('defaults')"
-		/>
+		</openwb-base-card>
+		<openwb-base-submit-buttons />
 	</div>
 </template>
 
@@ -1122,40 +1138,11 @@ library.add(
 
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
-import Card from "@/components/Card.vue";
-import Alert from "@/components/Alert.vue";
-import Heading from "@/components/Heading.vue";
-import TextInput from "@/components/TextInput.vue";
-import NumberInput from "@/components/NumberInput.vue";
-// import TextareaInput from "@/components/TextareaInput.vue";
-import RangeInput from "@/components/RangeInput.vue";
-import SelectInput from "@/components/SelectInput.vue";
-import ButtonGroupInput from "@/components/ButtonGroupInput.vue";
-// import ClickButton from "@/components/ClickButton.vue";
-import Avatar from "@/components/Avatar.vue";
-// import CheckboxInput from "@/components/CheckboxInput.vue";
-// import SortableList from "@/components/SortableList.vue";
-import SubmitButtons from "@/components/SubmitButtons.vue";
-
 export default {
 	name: "VehicleConfig",
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
 	components: {
-		Card,
-		Alert,
-		Heading,
-		TextInput,
-		NumberInput,
-		// TextareaInput,
-		RangeInput,
-		SelectInput,
-		ButtonGroupInput,
-		// ClickButton,
-		Avatar,
-		// CheckboxInput,
-		// SortableList,
-		SubmitButtons,
 		FontAwesomeIcon,
 	},
 	data() {
@@ -1239,7 +1226,6 @@ export default {
 					index +
 					"/chargemode/scheduled_charging/plans/+"
 			);
-			console.log(chargeTemplate, index, result);
 			return result;
 		},
 		getChargeTemplateTimeChargingPlans(chargeTemplate) {
@@ -1250,7 +1236,6 @@ export default {
 					index +
 					"/time_charging/plans/+"
 			);
-			console.log(chargeTemplate, index, result);
 			return result;
 		},
 		addVehicle(event) {
