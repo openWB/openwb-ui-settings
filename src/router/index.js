@@ -126,6 +126,18 @@ const routes = [
 			),
 	},
 	{
+		path: "/LoadManagementConfiguration",
+		name: "LoadManagementConfiguration",
+		meta: {
+			heading: "Konfiguration Lastmanagement",
+		},
+		component: () =>
+			import(
+				/* webpackChunkName: "LoadManagementConfiguration" */
+				"../views/LoadManagementConfig.vue"
+			),
+	},
+	{
 		path: "/VehicleConfiguration",
 		name: "VehicleConfiguration",
 		meta: {

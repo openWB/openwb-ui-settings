@@ -1,4 +1,82 @@
 <template>
+	<!-- modal dialogs -->
+	<openwb-base-modal-dialog
+		:show="showVehicleModal"
+		title="Fahrzeug löschen"
+		subtype="danger"
+		:buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
+		@modal-result="removeVehicle(modalVehicleIndex, $event)"
+	>
+		Wollen Sie das Fahrzeug "{{ getVehicleName(modalVehicleIndex) }}"
+		wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht werden!
+	</openwb-base-modal-dialog>
+	<openwb-base-modal-dialog
+		:show="showEvTemplateModal"
+		title="Fahrzeug-Vorlage löschen"
+		subtype="danger"
+		:buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
+		@modal-result="removeEvTemplate(modalEvTemplateIndex, $event)"
+	>
+		Wollen Sie die Fahrzeug-Vorlage "{{
+			getEvTemplateName(modalEvTemplateIndex)
+		}}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht
+		werden!
+	</openwb-base-modal-dialog>
+	<openwb-base-modal-dialog
+		:show="showChargeTemplateModal"
+		title="Ladeprofil-Vorlage löschen"
+		subtype="danger"
+		:buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
+		@modal-result="removeChargeTemplate(modalChargeTemplateIndex, $event)"
+	>
+		Wollen Sie die Ladeprofil-Vorlage "{{
+			getChargeTemplateName(modalChargeTemplateIndex)
+		}}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht
+		werden!
+	</openwb-base-modal-dialog>
+	<openwb-base-modal-dialog
+		:show="showChargeTemplateSchedulePlanModal"
+		title="Zielladen Zeitplan löschen"
+		subtype="danger"
+		:buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
+		@modal-result="
+			removeChargeTemplateSchedulePlan(
+				modalChargeTemplateIndex,
+				modalChargeTemplateSchedulePlanIndex,
+				$event
+			)
+		"
+	>
+		Wollen Sie den Zielladen Zeitplan "{{
+			getChargeTemplateSchedulePlanName(
+				modalChargeTemplateIndex,
+				modalChargeTemplateSchedulePlanIndex
+			)
+		}}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht
+		werden!
+	</openwb-base-modal-dialog>
+	<openwb-base-modal-dialog
+		:show="showChargeTemplateTimeChargingPlanModal"
+		title="Zeitladen Zeitplan löschen"
+		subtype="danger"
+		:buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
+		@modal-result="
+			removeChargeTemplateTimeChargingPlan(
+				modalChargeTemplateIndex,
+				modalChargeTemplateTimeChargingPlanIndex,
+				$event
+			)
+		"
+	>
+		Wollen Sie den Zeitladen Zeitplan "{{
+			getChargeTemplateTimeChargingPlanName(
+				modalChargeTemplateIndex,
+				modalChargeTemplateTimeChargingPlanIndex
+			)
+		}}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht
+		werden!
+	</openwb-base-modal-dialog>
+	<!-- main content -->
 	<div class="vehicleConfig">
 		<!-- vehicle card -->
 		<openwb-base-card
@@ -33,7 +111,7 @@
 					<template #actions v-if="id !== 0">
 						<openwb-base-avatar
 							class="bg-danger"
-							@click="removeVehicle(id, $event)"
+							@click="removeVehicleModal(id, $event)"
 						>
 							<font-awesome-icon
 								fixed-width
@@ -128,7 +206,7 @@
 								$store.state.mqtt['openWB/general/extern'] ===
 								false
 							"
-							@click="removeEvTemplate(key, $event)"
+							@click="removeEvTemplateModal(key, $event)"
 						>
 							<font-awesome-icon
 								fixed-width
@@ -326,7 +404,9 @@
 					<template #actions v-if="!templateKey.endsWith('/0')">
 						<openwb-base-avatar
 							class="bg-danger"
-							@click="removeChargeTemplate(templateKey, $event)"
+							@click="
+								removeChargeTemplateModal(templateKey, $event)
+							"
 						>
 							<font-awesome-icon
 								fixed-width
@@ -749,7 +829,7 @@
 								v-if="slotProps.collapsed == false"
 								class="bg-danger"
 								@click="
-									removeChargeTemplateSchedulePlan(
+									removeChargeTemplateSchedulePlanModal(
 										templateKey,
 										planKey,
 										$event
@@ -967,7 +1047,7 @@
 								v-if="slotProps.collapsed == false"
 								class="bg-danger"
 								@click="
-									removeChargeTemplateTimeChargingPlan(
+									removeChargeTemplateTimeChargingPlanModal(
 										templateKey,
 										planKey,
 										$event
@@ -1109,7 +1189,11 @@
 				</openwb-base-card>
 			</div>
 		</openwb-base-card>
-		<openwb-base-submit-buttons />
+		<openwb-base-submit-buttons
+			@save="$emit('save')"
+			@reset="$emit('reset')"
+			@defaults="$emit('defaults')"
+		/>
 	</div>
 </template>
 
@@ -1157,6 +1241,16 @@ export default {
 				"openWB/vehicle/+/charge_template",
 				"openWB/vehicle/+/ev_template",
 			],
+			showVehicleModal: false,
+			modalVehicleIndex: undefined,
+			showEvTemplateModal: false,
+			modalEvTemplateIndex: undefined,
+			showChargeTemplateModal: false,
+			modalChargeTemplateIndex: undefined,
+			showChargeTemplateSchedulePlanModal: false,
+			modalChargeTemplateSchedulePlanIndex: undefined,
+			showChargeTemplateTimeChargingPlanModal: false,
+			modalChargeTemplateTimeChargingPlanIndex: undefined,
 			weekdays: [
 				"Montag",
 				"Dienstag",
@@ -1247,14 +1341,23 @@ export default {
 				data: {},
 			});
 		},
-		removeVehicle(vehicleIndex, event) {
+		removeVehicleModal(vehicleIndex, event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
-			console.info("request removal of vehicle '" + vehicleIndex + "'");
-			this.$emit("sendCommand", {
-				command: "removeVehicle",
-				data: { id: vehicleIndex },
-			});
+			this.modalVehicleIndex = vehicleIndex;
+			this.showVehicleModal = true;
+		},
+		removeVehicle(vehicleIndex, event) {
+			this.showVehicleModal = false;
+			if (event == "confirm") {
+				console.info(
+					"request removal of vehicle '" + vehicleIndex + "'"
+				);
+				this.$emit("sendCommand", {
+					command: "removeVehicle",
+					data: { id: vehicleIndex },
+				});
+			}
 		},
 		getVehicleName(id) {
 			return this.$store.state.mqtt["openWB/vehicle/" + id + "/name"]
@@ -1270,16 +1373,35 @@ export default {
 				data: {},
 			});
 		},
-		removeEvTemplate(evTemplate, event) {
+		removeEvTemplateModal(evTemplate, event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
-			console.info("request removal of ev template '" + evTemplate + "'");
 			// get trailing characters as index
-			let evTemplateIndex = parseInt(evTemplate.match(/([^/]+)$/)[0]);
-			this.$emit("sendCommand", {
-				command: "removeEvTemplate",
-				data: { id: evTemplateIndex },
-			});
+			this.modalEvTemplateIndex = parseInt(
+				evTemplate.match(/([^/]+)$/)[0]
+			);
+			this.showEvTemplateModal = true;
+		},
+		removeEvTemplate(evTemplateIndex, event) {
+			this.showEvTemplateModal = false;
+			if (event == "confirm") {
+				console.info(
+					"request removal of ev template '" + evTemplateIndex + "'"
+				);
+				this.$emit("sendCommand", {
+					command: "removeEvTemplate",
+					data: { id: evTemplateIndex },
+				});
+			}
+		},
+		getEvTemplateName(id) {
+			return this.$store.state.mqtt[
+				"openWB/vehicle/template/ev_template/" + id
+			]
+				? this.$store.state.mqtt[
+						"openWB/vehicle/template/ev_template/" + id
+				  ].name
+				: "Fahrzeug-Vorlage " + id;
 		},
 		addChargeTemplate(event) {
 			// prevent further processing of the click event
@@ -1290,18 +1412,52 @@ export default {
 				data: {},
 			});
 		},
-		removeChargeTemplate(template, event) {
+		removeChargeTemplateModal(chargeTemplate, event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
-			console.info(
-				"request removal of charge template '" + template + "'"
-			);
 			// get trailing characters as index
-			let templateIndex = parseInt(template.match(/([^/]+)$/)[0]);
-			this.$emit("sendCommand", {
-				command: "removeChargeTemplate",
-				data: { id: templateIndex },
-			});
+			this.modalChargeTemplateIndex = parseInt(
+				chargeTemplate.match(/([^/]+)$/)[0]
+			);
+			this.showChargeTemplateModal = true;
+		},
+		removeChargeTemplate(chargeTemplateIndex, event) {
+			this.showChargeTemplateModal = false;
+			if (event == "confirm") {
+				console.info(
+					"request removal of charge template '" +
+						chargeTemplateIndex +
+						"'"
+				);
+				this.$emit("sendCommand", {
+					command: "removeChargeTemplate",
+					data: { id: chargeTemplateIndex },
+				});
+			}
+		},
+		getChargeTemplateName(id) {
+			return this.$store.state.mqtt[
+				"openWB/vehicle/template/charge_template/" + id
+			]
+				? this.$store.state.mqtt[
+						"openWB/vehicle/template/charge_template/" + id
+				  ].name
+				: "Ladeprofil-Vorlage " + id;
+		},
+		getChargeTemplateSchedulePlanName(templateIndex, planIndex) {
+			return this.$store.state.mqtt[
+				"openWB/vehicle/template/charge_template/" +
+					templateIndex +
+					"/chargemode/scheduled_charging/plans/" +
+					planIndex
+			]
+				? this.$store.state.mqtt[
+						"openWB/vehicle/template/charge_template/" +
+							templateIndex +
+							"/chargemode/scheduled_charging/plans/" +
+							planIndex
+				  ].name
+				: "Zielladen Zeitplan " + templateIndex + "/" + planIndex;
 		},
 		addChargeTemplateSchedulePlan(template, event) {
 			// prevent further processing of the click event
@@ -1314,23 +1470,48 @@ export default {
 				data: { template: templateIndex },
 			});
 		},
-		removeChargeTemplateSchedulePlan(template, plan, event) {
+		removeChargeTemplateSchedulePlanModal(chargeTemplate, plan, event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
-			console.info(
-				"request removal of charge template '" +
-					template +
-					"' schedule plan '" +
-					plan +
-					"'"
-			);
 			// get trailing characters as index
-			let templateIndex = parseInt(template.match(/([^/]+)$/)[0]);
-			let planIndex = parseInt(plan.match(/([^/]+)$/)[0]);
-			this.$emit("sendCommand", {
-				command: "removeChargeTemplateSchedulePlan",
-				data: { template: templateIndex, plan: planIndex },
-			});
+			this.modalChargeTemplateIndex = parseInt(
+				chargeTemplate.match(/([^/]+)$/)[0]
+			);
+			this.modalChargeTemplateSchedulePlanIndex = parseInt(
+				plan.match(/([^/]+)$/)[0]
+			);
+			this.showChargeTemplateSchedulePlanModal = true;
+		},
+		removeChargeTemplateSchedulePlan(templateIndex, planIndex, event) {
+			this.showChargeTemplateSchedulePlanModal = false;
+			if (event == "confirm") {
+				console.info(
+					"request removal of charge template '" +
+						templateIndex +
+						"' schedule plan '" +
+						planIndex +
+						"'"
+				);
+				this.$emit("sendCommand", {
+					command: "removeChargeTemplateSchedulePlan",
+					data: { template: templateIndex, plan: planIndex },
+				});
+			}
+		},
+		getChargeTemplateTimeChargingPlanName(templateIndex, planIndex) {
+			return this.$store.state.mqtt[
+				"openWB/vehicle/template/charge_template/" +
+					templateIndex +
+					"/time_charging/plans/" +
+					planIndex
+			]
+				? this.$store.state.mqtt[
+						"openWB/vehicle/template/charge_template/" +
+							templateIndex +
+							"/time_charging/plans/" +
+							planIndex
+				  ].name
+				: "Zeitladen Zeitplan " + templateIndex + "/" + planIndex;
 		},
 		addChargeTemplateTimeChargingPlan(template, event) {
 			// prevent further processing of the click event
@@ -1345,23 +1526,33 @@ export default {
 				data: { template: templateIndex },
 			});
 		},
-		removeChargeTemplateTimeChargingPlan(template, plan, event) {
+		removeChargeTemplateTimeChargingPlanModal(chargeTemplate, plan, event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
-			console.info(
-				"request removal of charge template '" +
-					template +
-					"' time charging plan '" +
-					plan +
-					"'"
-			);
 			// get trailing characters as index
-			let templateIndex = parseInt(template.match(/([^/]+)$/)[0]);
-			let planIndex = parseInt(plan.match(/([^/]+)$/)[0]);
-			this.$emit("sendCommand", {
-				command: "removeChargeTemplateTimeChargingPlan",
-				data: { template: templateIndex, plan: planIndex },
-			});
+			this.modalChargeTemplateIndex = parseInt(
+				chargeTemplate.match(/([^/]+)$/)[0]
+			);
+			this.modalChargeTemplateTimeChargingPlanIndex = parseInt(
+				plan.match(/([^/]+)$/)[0]
+			);
+			this.showChargeTemplateTimeChargingPlanModal = true;
+		},
+		removeChargeTemplateTimeChargingPlan(templateIndex, planIndex, event) {
+			this.showChargeTemplateTimeChargingPlanModal = false;
+			if (event == "confirm") {
+				console.info(
+					"request removal of charge template '" +
+						templateIndex +
+						"' time charging plan '" +
+						planIndex +
+						"'"
+				);
+				this.$emit("sendCommand", {
+					command: "removeChargeTemplateTimeChargingPlan",
+					data: { template: templateIndex, plan: planIndex },
+				});
+			}
 		},
 		formatDate(dateString) {
 			let d = new Date(dateString);

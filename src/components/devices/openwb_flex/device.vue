@@ -12,7 +12,7 @@
 				updateConfiguration($event, 'configuration.ip_address')
 			"
 		/>
-		<number-input
+		<openwb-base-number-input
 			title="Port"
 			:model-value="configuration.port"
 			@update:model-value="

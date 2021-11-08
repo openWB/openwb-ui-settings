@@ -112,18 +112,25 @@
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 						<router-link
-							to="/ChargepointInstallation"
-							class="dropdown-item"
-							active-class="active disabled"
-						>
-							Ladepunkte
-						</router-link>
-						<router-link
 							to="/HardwareInstallation"
 							class="dropdown-item"
 							active-class="active disabled"
 						>
 							Geräte und Komponenten
+						</router-link>
+						<router-link
+							to="/LoadManagementConfiguration"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							Lastmanagement
+						</router-link>
+						<router-link
+							to="/ChargepointInstallation"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							Ladepunkte
 						</router-link>
 						<router-link
 							to="/VehicleConfiguration"
@@ -180,7 +187,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasExternalLinkAlt);
 
 export default {
-	name: "nav-bar",
+	name: "NavBar",
 	components: {
 		FontAwesomeIcon,
 	},

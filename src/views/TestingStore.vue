@@ -270,7 +270,7 @@
 <script>
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
-import SortableList from "@/components/SortableList.vue";
+import SortableList from "@/components/OpenwbSortableList.vue";
 
 export default {
 	name: "TestingStore",
