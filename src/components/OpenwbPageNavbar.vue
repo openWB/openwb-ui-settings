@@ -141,7 +141,7 @@
 						</router-link>
 					</div>
 				</li>
-				<li class="nav-item dropdown">
+				<li v-if="nodeEnv !== 'production'" class="nav-item dropdown">
 					<a
 						class="nav-link dropdown-toggle"
 						href="#"
@@ -190,6 +190,11 @@ export default {
 	name: "NavBar",
 	components: {
 		FontAwesomeIcon,
+	},
+	computed: {
+		nodeEnv() {
+			return this.$root.nodeEnv;
+		},
 	},
 	watch: {
 		$route() {

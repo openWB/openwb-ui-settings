@@ -63,6 +63,9 @@ export default {
 		topicList() {
 			return Object.keys(this.$store.state.mqtt);
 		},
+		nodeEnv() {
+			return process.env.NODE_ENV;
+		},
 	},
 	methods: {
 		saveValues() {

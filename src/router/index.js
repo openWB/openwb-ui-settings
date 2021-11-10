@@ -149,8 +149,10 @@ const routes = [
 				"../views/VehicleConfig.vue"
 			),
 	},
-	/* examples start here */
-	{
+];
+/* examples for development only start here */
+if (process.env.NODE_ENV !== "production") {
+	routes.push({
 		path: "/testing-store",
 		name: "VUEX Store",
 		meta: {
@@ -161,8 +163,8 @@ const routes = [
 				/* webpackChunkName: "testingStore" */
 				"../views/TestingStore.vue"
 			),
-	},
-];
+	});
+}
 
 const router = createRouter({
 	history: createWebHashHistory(),
