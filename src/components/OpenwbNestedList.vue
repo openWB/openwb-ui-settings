@@ -18,7 +18,7 @@
 						/>
 						{{ element.name ? element.name : element.id }}
 					</span>
-					<span class="element-actions">
+					<!-- <span class="element-actions">
 						<font-awesome-icon
 							fixed-width
 							:icon="['fas', 'edit']"
@@ -29,9 +29,9 @@
 							:icon="['fas', 'trash']"
 							@click="elementDelete(element.id)"
 						/>
-					</span>
+					</span> -->
 				</div>
-				<nested-list v-model="element.children" />
+				<openwb-nested-list v-model="element.children" />
 			</li>
 		</template>
 	</draggable>
@@ -41,16 +41,13 @@
 import draggable from "vuedraggable";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-	faArrowsAlt as fasArrowsAlt,
-	faEdit as fasEdit,
-	faTrash as fasTrash,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowsAlt as fasArrowsAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasArrowsAlt, fasEdit, fasTrash);
+library.add(fasArrowsAlt);
 
 export default {
+	name: "OpenwbNestedList",
 	props: {
 		list: {
 			type: Object,
@@ -60,7 +57,6 @@ export default {
 		draggable,
 		FontAwesomeIcon,
 	},
-	name: "nested-list",
 	methods: {
 		classes(element) {
 			var myClasses = "";
@@ -73,12 +69,12 @@ export default {
 			}
 			return myClasses;
 		},
-		elementEdit(id) {
-			console.log("edit Element:", id);
-		},
-		elementDelete(id) {
-			console.log("delete Element:", id);
-		},
+		// elementEdit(id) {
+		// 	console.log("edit Element:", id);
+		// },
+		// elementDelete(id) {
+		// 	console.log("delete Element:", id);
+		// },
 	},
 };
 </script>

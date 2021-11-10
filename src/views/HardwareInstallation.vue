@@ -1,10 +1,6 @@
 <template>
 	<div class="hardware-installation">
-		<openwb-base-card
-			title="Systeme und Komponenten"
-			:collapsible="true"
-			:collapsed="true"
-		>
+		<openwb-base-card title="Systeme und Komponenten">
 			<openwb-base-select-input
 				class="mb-2"
 				title="Verfügbare Systeme"
@@ -73,7 +69,7 @@
 					"
 				/>
 				<hr />
-				<config-proxy
+				<openwb-config-proxy
 					:deviceType="installedDevice.type"
 					:configuration="installedDevice.configuration"
 					@update:configuration="
@@ -172,7 +168,7 @@
 						"
 					/>
 					<hr />
-					<config-proxy
+					<openwb-config-proxy
 						:deviceType="installedDevice.type"
 						:componentType="installedComponent.type"
 						:configuration="installedComponent.configuration"
@@ -182,30 +178,6 @@
 					/>
 				</openwb-base-card>
 			</openwb-base-card>
-		</openwb-base-card>
-		<openwb-base-card
-			title="Struktur"
-			:collapsible="true"
-			:collapsed="true"
-		>
-			<!-- ToDo: Fix: nested lists bypass store commits! -->
-			<sortable-list
-				title="Anordnung der Komponenten"
-				:model-value="$store.state.mqtt['openWB/counter/get/hierarchy']"
-				@update:model-value="
-					updateState('openWB/counter/get/hierarchy', $event)
-				"
-			>
-				<template #help>
-					<pre>{{
-						JSON.stringify(
-							$store.state.mqtt["openWB/counter/get/hierarchy"],
-							undefined,
-							2
-						)
-					}}</pre>
-				</template>
-			</sortable-list>
 		</openwb-base-card>
 
 		<openwb-base-submit-buttons
@@ -220,26 +192,25 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
 	faPlus as fasPlus,
+	faTrash as fasTrash,
 	faNetworkWired as fasNetworkWired,
 	faMicrochip as fasMicrochip,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasPlus, fasNetworkWired, fasMicrochip);
+library.add(fasPlus, fasNetworkWired, fasMicrochip, fasTrash);
 
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
-import SortableList from "@/components/SortableList.vue";
-import ConfigProxy from "@/components/ConfigProxy.vue";
+import OpenwbConfigProxy from "@/components/OpenwbConfigProxy.vue";
 
 export default {
 	name: "HardwareInstallation",
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
 	components: {
-		SortableList,
 		FontAwesomeIcon,
-		ConfigProxy,
+		OpenwbConfigProxy,
 	},
 	data() {
 		return {

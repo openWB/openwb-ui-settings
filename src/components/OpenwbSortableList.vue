@@ -14,7 +14,10 @@
 		</label>
 		<div class="col-md-8">
 			<div class="form-row">
-				<nested-list v-if="value !== undefined" v-model="value" />
+				<openwb-nested-list
+					v-if="value !== undefined"
+					v-model="value"
+				/>
 				<div v-else>Warte auf Daten...</div>
 			</div>
 			<span v-if="showHelp" class="form-row alert alert-info my-1 small">
@@ -25,7 +28,7 @@
 </template>
 
 <script>
-import NestedList from "@/components/NestedList.vue";
+import OpenwbNestedList from "@/components/OpenwbNestedList.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faQuestionCircle as fasQuestionCircle } from "@fortawesome/free-solid-svg-icons";
@@ -35,13 +38,17 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasQuestionCircle, farQuestionCircle);
 
 export default {
-	name: "sortable-list",
+	name: "OpenwbSortableList",
 	props: {
 		id: String,
 		title: String,
 		modelValue: Object,
 	},
 	emits: ["update:modelValue"],
+	components: {
+		FontAwesomeIcon,
+		OpenwbNestedList,
+	},
 	data() {
 		return {
 			showHelp: false,
@@ -63,10 +70,6 @@ export default {
 		toggleHelp() {
 			this.showHelp = !this.showHelp && this.$slots.help !== undefined;
 		},
-	},
-	components: {
-		FontAwesomeIcon,
-		NestedList,
 	},
 };
 </script>

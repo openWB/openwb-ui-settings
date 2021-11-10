@@ -31,10 +31,10 @@
 
 <script>
 // @ is an alias to /src
-import NavBar from "@/components/Navbar.vue";
-import CommandAlert from "@/components/CommandAlert.vue";
-import PageFooter from "@/components/PageFooter.vue";
-import DonationBanner from "@/components/DonationBanner.vue";
+import NavBar from "@/components/OpenwbPageNavbar.vue";
+import CommandAlert from "@/components/OpenwbPageCommandAlert.vue";
+import PageFooter from "@/components/OpenwbPageFooter.vue";
+import DonationBanner from "@/components/OpenwbPageDonationBanner.vue";
 import mqtt from "mqtt";
 
 export default {
@@ -62,6 +62,9 @@ export default {
 	computed: {
 		topicList() {
 			return Object.keys(this.$store.state.mqtt);
+		},
+		nodeEnv() {
+			return process.env.NODE_ENV;
 		},
 	},
 	methods: {
