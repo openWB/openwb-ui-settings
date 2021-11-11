@@ -16,7 +16,7 @@
 			</div>
 			<span class="card-actions ml-4">
 				<span v-if="$slots.actions" class="card-actions mr-4">
-					<slot name="actions" :collapsed="isCollapsed"></slot>
+					<slot name="actions" :collapsed="isCollapsed" />
 				</span>
 				<font-awesome-icon
 					v-if="collapsible"

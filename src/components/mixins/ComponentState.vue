@@ -1,6 +1,19 @@
 <script>
 export default {
 	emits: ["reset", "defaults", "save"],
+	computed: {
+		weekdays() {
+			return [
+				"Montag",
+				"Dienstag",
+				"Mittwoch",
+				"Donnerstag",
+				"Freitag",
+				"Samstag",
+				"Sonntag",
+			];
+		},
+	},
 	methods: {
 		updateState(topic, value, objectPath = undefined) {
 			console.debug("updateState:", topic, value, objectPath);
@@ -59,6 +72,13 @@ export default {
 						[key]: this.$store.state.mqtt[key],
 					};
 				}, {});
+		},
+		formatDate(
+			dateString,
+			format = { year: "numeric", month: "2-digit", day: "2-digit" }
+		) {
+			let date = new Date(dateString);
+			return date.toLocaleDateString(undefined, format);
 		},
 	},
 	mounted() {

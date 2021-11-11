@@ -1251,15 +1251,6 @@ export default {
 			modalChargeTemplateSchedulePlanIndex: undefined,
 			showChargeTemplateTimeChargingPlanModal: false,
 			modalChargeTemplateTimeChargingPlanIndex: undefined,
-			weekdays: [
-				"Montag",
-				"Dienstag",
-				"Mittwoch",
-				"Donnerstag",
-				"Freitag",
-				"Samstag",
-				"Sonntag",
-			],
 		};
 	},
 	computed: {
@@ -1553,14 +1544,6 @@ export default {
 					data: { template: templateIndex, plan: planIndex },
 				});
 			}
-		},
-		formatDate(dateString) {
-			let d = new Date(dateString);
-			return d.toLocaleDateString(undefined, {
-				year: "numeric",
-				month: "2-digit",
-				day: "2-digit",
-			});
 		},
 	},
 };
