@@ -55,11 +55,37 @@
 			:collapsible="true"
 			:collapsed="true"
 		>
-			<template #actions>
-				<openwb-base-avatar class="bg-success" @click="addChargepoint">
-					<font-awesome-icon fixed-width :icon="['fas', 'plus']" />
-				</openwb-base-avatar>
-			</template>
+			<openwb-base-select-input
+				class="mb-2"
+				title="Verfügbare Ladepunkte"
+				notSelected="Bitte auswählen"
+				:options="getChargepointList()"
+				:model-value="chargepointToAdd"
+				@update:model-value="chargepointToAdd = $event"
+			>
+				<template #append>
+					<span class="col-1">
+						<openwb-base-click-button
+							:class="
+								chargepointToAdd === undefined
+									? 'btn-outline-success'
+									: 'btn-success'
+							"
+							:disabled="chargepointToAdd === undefined"
+							@click="addChargepoint"
+						>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'plus']"
+							/>
+						</openwb-base-click-button>
+					</span>
+				</template>
+				<template #help>
+					Bitte einen Ladepunkt auswählen, der hinzugefügt werden
+					soll.
+				</template>
+			</openwb-base-select-input>
 			<openwb-base-card
 				v-for="(
 					installedChargepoint, installedChargepointKey
@@ -105,6 +131,111 @@
 					"
 				/>
 				<hr />
+				<openwb-base-text-input
+					title="Verbindungsmodul"
+					subtype="text"
+					:model-value="
+						installedChargepoint.connection_module.selected
+					"
+					@update:model-value="
+						updateState(
+							installedChargepointKey,
+							$event,
+							'connection_module.selected'
+						)
+					"
+					disabled
+				/>
+				<openwb-base-text-input
+					title="Leistungsmodul"
+					subtype="text"
+					:model-value="installedChargepoint.power_module.selected"
+					@update:model-value="
+						updateState(
+							installedChargepointKey,
+							$event,
+							'power_module.selected'
+						)
+					"
+					disabled
+				/>
+				<hr />
+				<openwb-base-heading>Hardware-Optionen</openwb-base-heading>
+				<openwb-base-button-group-input
+					title="1/3-Phasenumschaltung vorhanden"
+					:buttons="[
+						{ buttonValue: false, text: 'Nein' },
+						{ buttonValue: true, text: 'Ja' },
+					]"
+					:model-value="installedChargepoint.auto_phase_switch_hw"
+					@update:model-value="
+						updateState(
+							installedChargepointKey,
+							$event,
+							'auto_phase_switch_hw'
+						)
+					"
+				/>
+				<openwb-base-button-group-input
+					title="Control-Pilot-Unterbrechung vorhanden"
+					:buttons="[
+						{ buttonValue: false, text: 'Nein' },
+						{ buttonValue: true, text: 'Ja' },
+					]"
+					:model-value="
+						installedChargepoint.control_pilot_interruption_hw
+					"
+					@update:model-value="
+						updateState(
+							installedChargepointKey,
+							$event,
+							'control_pilot_interruption_hw'
+						)
+					"
+				/>
+				<openwb-base-heading>
+					Elektrischer Anschluss
+				</openwb-base-heading>
+				<openwb-base-button-group-input
+					title="Anzahl angeschlossener Phasen"
+					:buttons="[
+						{ buttonValue: 1, text: '1' },
+						{ buttonValue: 2, text: '2' },
+						{ buttonValue: 3, text: '3' },
+					]"
+					:model-value="installedChargepoint.connected_phases"
+					@update:model-value="
+						updateState(
+							installedChargepointKey,
+							$event,
+							'connected_phases'
+						)
+					"
+				/>
+				<openwb-base-button-group-input
+					title="Phase 1"
+					:buttons="[
+						{ buttonValue: 1, text: 'EVU L1' },
+						{ buttonValue: 2, text: 'EVU L2' },
+						{ buttonValue: 3, text: 'EVU L3' },
+					]"
+					:model-value="installedChargepoint.phase_1"
+					@update:model-value="
+						updateState(installedChargepointKey, $event, 'phase_1')
+					"
+				>
+					<template #help>
+						Hier ist anzugeben, an welcher Phase am Hausanschluss
+						die Phase 1 dieses Ladepunktes angeschlossen ist. Diese
+						Information wird für das Lastmanagement benötigt, um bei
+						einer Schieflast gezielt einzelne Ladepunkte zu
+						drosseln.<br />
+						Bei mehreren Ladepunkten macht es Sinn, die Phasen
+						rotierend anzuschließen, damit mehrere nicht dreiphasig
+						ladende Fahrzeuge mit optimaler Leistung laden können,
+						bevor das Lastmanagement eingreift.
+					</template>
+				</openwb-base-button-group-input>
 			</openwb-base-card>
 		</openwb-base-card>
 		<!-- chargepoint template card -->
@@ -506,7 +637,9 @@ export default {
 				"openWB/chargepoint/+/config",
 				"openWB/chargepoint/template/+",
 				"openWB/chargepoint/template/+/autolock/+",
+				"openWB/system/configurable/chargepoints",
 			],
+			chargepointToAdd: undefined,
 			showChargepointModal: false,
 			modalChargepointIndex: undefined,
 			showChargepointTemplateModal: false,
@@ -574,7 +707,9 @@ export default {
 			}
 		},
 		getChargepointList() {
-			return this.$store.state.examples.availableChargepoints;
+			return this.$store.state.mqtt[
+				"openWB/system/configurable/chargepoints"
+			];
 		},
 		getChargepointName(chargepointIndex) {
 			return this.$store.state.mqtt[
