@@ -70,6 +70,7 @@
 				/>
 				<hr />
 				<openwb-config-proxy
+					:deviceId="installedDevice.id"
 					:deviceType="installedDevice.type"
 					:configuration="installedDevice.configuration"
 					@update:configuration="
@@ -169,7 +170,9 @@
 					/>
 					<hr />
 					<openwb-config-proxy
+						:deviceId="installedDevice.id"
 						:deviceType="installedDevice.type"
+						:componentId="installedComponent.id"
 						:componentType="installedComponent.type"
 						:configuration="installedComponent.configuration"
 						@update:configuration="
