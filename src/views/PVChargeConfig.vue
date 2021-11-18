@@ -149,7 +149,7 @@
 				<openwb-base-number-input
 					title="Abschaltschwelle"
 					:min="0"
-					:step="50"
+					:step="5"
 					unit="W"
 					:model-value="
 						$store.state.mqtt[
