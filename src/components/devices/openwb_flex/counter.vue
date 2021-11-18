@@ -35,6 +35,8 @@ export default {
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
+		deviceId: { default: undefined },
+		componentId: { required: true },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {

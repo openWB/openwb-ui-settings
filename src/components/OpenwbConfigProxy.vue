@@ -3,6 +3,8 @@
 		v-if="componentTemplateFound"
 		:is="myComponent"
 		:configuration="configuration"
+		:deviceId="deviceId"
+		:componentId="componentId"
 		@update:configuration="updateConfiguration($event)"
 	/>
 	<div v-else>
@@ -40,7 +42,9 @@ export default {
 	name: "ConfigProxy",
 	emits: ["update:configuration"],
 	props: {
+		deviceId: { required: true },
 		deviceType: { type: String, required: true },
+		componentId: { default: undefined },
 		componentType: { type: String, default: undefined },
 		configuration: { type: Object, required: true },
 	},
