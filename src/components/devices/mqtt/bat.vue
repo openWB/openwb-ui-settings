@@ -5,7 +5,39 @@
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
-			{{ deviceId }} / {{ componentId }}
+			DeviceId: {{ deviceId }} / ComponentId: {{ componentId }}<br />
+			Alle Zahlen mit Nachkommastellen sind mit einem Punkt als
+			Dezimaltrenner zu senden!
+			<ul>
+				<li>
+					<span class="text-info"
+						>openWB/set/bat/{{ componentId }}/power</span
+					><br />
+					Speicherleistung in Watt, ohne Nachkommastellen (Integer),
+					positiv Ladung, negativ Entladung
+				</li>
+				<li>
+					<span class="text-info"
+						>openWB/set/bat/{{ componentId }}/imported</span
+					><br />
+					Geladene Energie in Wh, mit Nachkommastellen (Float), nur
+					positiv
+				</li>
+				<li>
+					<span class="text-info"
+						>openWB/set/bat/{{ componentId }}/exported</span
+					><br />
+					Entladene Energie in Wh, mit Nachkommastellen (Float), nur
+					positiv
+				</li>
+				<li>
+					<span class="text-info"
+						>openWB/set/bat/{{ componentId }}/soc</span
+					><br />
+					Ladestand des Speichers, ohne Nachkommastellen (Integer),
+					Gültige Werte 0 bis 100
+				</li>
+			</ul>
 		</openwb-base-alert>
 	</div>
 </template>
