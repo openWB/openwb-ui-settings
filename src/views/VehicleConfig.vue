@@ -995,7 +995,11 @@
 						]"
 						:model-value="template.time_charging.active"
 						@update:model-value="
-							updateState(key, $event, 'time_charging.active')
+							updateState(
+								templateKey,
+								$event,
+								'time_charging.active'
+							)
 						"
 					>
 					</openwb-base-button-group-input>
@@ -1026,7 +1030,16 @@
 										fixed-width
 										:icon="['fas', 'calendar-day']"
 									/>
-									{{ formatDate(plan.frequency.once) }}
+									{{
+										formatDate(plan.frequency.once[0]) ==
+										formatDate(plan.frequency.once[1])
+											? formatDate(plan.frequency.once[0])
+											: formatDate(
+													plan.frequency.once[0]
+											  ) +
+											  "-" +
+											  formatDate(plan.frequency.once[1])
+									}}
 								</span>
 								<span v-if="plan.frequency.selected == 'daily'">
 									<font-awesome-icon
@@ -1149,14 +1162,23 @@
 						</openwb-base-button-group-input>
 						<openwb-base-text-input
 							v-if="plan.frequency.selected == 'once'"
-							title="Datum"
+							title="Gültig ab"
 							subtype="date"
-							:model-value="plan.frequency.once"
+							:model-value="plan.frequency.once[0]"
 							@update:model-value="
-								updateState(planKey, $event, 'frequency.once')
+								updateState(planKey, $event, 'frequency.once.0')
 							"
-						>
-						</openwb-base-text-input>
+						/>
+						<openwb-base-text-input
+							v-if="plan.frequency.selected == 'once'"
+							title="Gültig bis"
+							subtype="date"
+							:min="plan.frequency.once[0]"
+							:model-value="plan.frequency.once[1]"
+							@update:model-value="
+								updateState(planKey, $event, 'frequency.once.1')
+							"
+						/>
 						<div v-if="plan.frequency.selected == 'weekly'">
 							<openwb-base-button-group-input
 								v-for="(day, dayIndex) in weekdays"
