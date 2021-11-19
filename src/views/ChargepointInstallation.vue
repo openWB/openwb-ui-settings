@@ -215,6 +215,7 @@
 				<openwb-base-button-group-input
 					title="Phase 1"
 					:buttons="[
+						{ buttonValue: 0, text: 'unbekannt' },
 						{ buttonValue: 1, text: 'EVU L1' },
 						{ buttonValue: 2, text: 'EVU L2' },
 						{ buttonValue: 3, text: 'EVU L3' },
@@ -290,7 +291,14 @@
 						updateState(chargepointTemplateKey, $event, 'name')
 					"
 					:disabled="chargepointTemplateKey.endsWith('/0')"
-				/>
+				>
+					<template
+						#help
+						v-if="chargepointTemplateKey.endsWith('/0')"
+					>
+						Die Standard-Vorlage kann nicht umbenannt werden.
+					</template>
+				</openwb-base-text-input>
 				<hr />
 				<openwb-base-heading>RFID</openwb-base-heading>
 				<openwb-base-button-group-input
