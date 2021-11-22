@@ -9,7 +9,7 @@ describe("Card.vue", () => {
 		});
 		const card = wrapper.find("div.card");
 		expect(card.classes()).toContain("border-" + subtype);
-		const cardHeader = wrapper.find("div.card-header")
+		const cardHeader = wrapper.find("div.card-header");
 		expect(cardHeader.classes()).toContain("bg-" + subtype);
 	});
 	it("render title when no header slot is passed", () => {
@@ -49,7 +49,7 @@ describe("Card.vue", () => {
 				collapsible,
 			},
 		});
-		const cardHeader = wrapper.find("div.card-header")
+		const cardHeader = wrapper.find("div.card-header");
 		expect(cardHeader.html()).toContain("chevron-down");
 	});
 	it("do not render card body when collapsed", async () => {
