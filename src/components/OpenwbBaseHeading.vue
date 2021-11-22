@@ -1,8 +1,8 @@
 <template>
 	<div class="card-text card-text-heading">
-		<slot></slot>
+		<slot />
 		<span v-if="$slots.actions" class="actions">
-			<slot name="actions"></slot>
+			<slot name="actions" />
 		</span>
 	</div>
 </template>

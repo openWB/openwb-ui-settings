@@ -65,7 +65,6 @@ export default {
 		title: String,
 		modelValue: { type: [String, Number, Boolean] },
 		buttons: Object,
-		// linkedComponent: String,
 	},
 	emits: ["update:modelValue"],
 	data() {
@@ -82,16 +81,6 @@ export default {
 				this.$emit("update:modelValue", newValue);
 			},
 		},
-		// linkedComponentValue: {
-		//   get() {
-		//     for (let index = 0; index < this.buttons.length; index++) {
-		//       if (this.buttons[index].buttonValue == this.modelValue) {
-		//         return this.buttons[index].linkedComponentValue;
-		//       }
-		//     }
-		//     return undefined;
-		//   },
-		// },
 	},
 	methods: {
 		toggleHelp() {
