@@ -5,9 +5,10 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "build-prod": "vue-cli-service --mode=production --dest=/var/www/html/openWB/web/settings20 build",
+    "test:unit": "vue-cli-service test:unit",
+    "lint": "vue-cli-service lint",
     "build-dev": "vue-cli-service --mode=development --dest=/var/www/html/openWB/web/settings20 build",
-    "lint": "vue-cli-service lint"
+    "build-prod": "vue-cli-service --mode=production --dest=/var/www/html/openWB/web/settings20 build"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
@@ -33,15 +34,19 @@
     "@vue/cli-plugin-babel": "^4.5.15",
     "@vue/cli-plugin-eslint": "^4.5.15",
     "@vue/cli-plugin-router": "^4.5.15",
+    "@vue/cli-plugin-unit-jest": "^4.5.15",
     "@vue/cli-plugin-vuex": "^4.5.15",
     "@vue/cli-service": "^4.5.15",
     "@vue/compiler-sfc": "^3.2.22",
     "@vue/eslint-config-prettier": "^6.0.0",
+    "@vue/test-utils": "^2.0.0-0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^7.20.0",
-    "prettier": "^2.4.1"
+    "prettier": "^2.4.1",
+    "typescript": "~3.9.3",
+    "vue-jest": "^5.0.0-0"
   },
   "eslintConfig": {
     "root": true,
@@ -56,7 +61,18 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {},
+    "overrides": [
+      {
+        "files": [
+          "**/__tests__/*.{j,t}s?(x)",
+          "**/tests/unit/**/*.spec.{j,t}s?(x)"
+        ],
+        "env": {
+          "jest": true
+        }
+      }
+    ]
   },
   "browserslist": [
     "> 1%",
