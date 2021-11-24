@@ -1,5 +1,13 @@
 <template>
 	<div class="hardware-installation">
+		<openwb-base-alert subtype="info">
+			Wenn neue Komponenten - insbesondere Zähler - konfiguriert wurden,
+			ist auch das
+			<router-link to="/LoadManagementConfiguration">
+				Lastmanagement
+			</router-link>
+			zu prüfen!
+		</openwb-base-alert>
 		<openwb-base-card title="Systeme und Komponenten">
 			<openwb-base-select-input
 				class="mb-2"
