@@ -158,6 +158,7 @@
 								removeComponent(
 									installedDevice.id,
 									installedComponent.id,
+									installedComponent.type,
 									$event
 								)
 							"
@@ -287,7 +288,7 @@ export default {
 				},
 			});
 		},
-		removeComponent(deviceId, componentId, event) {
+		removeComponent(deviceId, componentId, componentType, event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
 			console.info(
@@ -295,6 +296,8 @@ export default {
 					componentId +
 					"' from device '" +
 					deviceId +
+					"' type '" +
+					componentType +
 					"'"
 			);
 			this.$emit("sendCommand", {
@@ -302,6 +305,7 @@ export default {
 				data: {
 					deviceId: deviceId,
 					id: componentId,
+					type: componentType,
 				},
 			});
 		},
