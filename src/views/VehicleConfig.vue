@@ -1277,7 +1277,7 @@ export default {
 				"openWB/vehicle/+/name",
 				"openWB/vehicle/+/charge_template",
 				"openWB/vehicle/+/ev_template",
-				"openWB/vehicle/+/tag_id"
+				"openWB/vehicle/+/tag_id",
 			],
 			showVehicleModal: false,
 			modalVehicleIndex: undefined,

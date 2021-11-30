@@ -149,6 +149,18 @@ const routes = [
 				"../views/VehicleConfig.vue"
 			),
 	},
+	{
+		path: "/Support",
+		name: "Support",
+		meta: {
+			heading: "Support",
+		},
+		component: () =>
+			import(
+				/* webpackChunkName: "Support" */
+				"../views/Support.vue"
+			),
+	},
 ];
 /* examples for development only start here */
 if (process.env.NODE_ENV !== "production") {

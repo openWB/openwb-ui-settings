@@ -141,6 +141,26 @@
 						</router-link>
 					</div>
 				</li>
+				<li class="nav-item dropdown">
+					<a
+						class="nav-link dropdown-toggle"
+						href="#"
+						role="button"
+						data-toggle="dropdown"
+						aria-expanded="false"
+					>
+						System
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<router-link
+							to="/Support"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							Support
+						</router-link>
+					</div>
+				</li>
 				<li v-if="nodeEnv !== 'production'" class="nav-item dropdown">
 					<a
 						class="nav-link dropdown-toggle"
