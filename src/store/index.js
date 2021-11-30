@@ -58,6 +58,7 @@ if (process.env.NODE_ENV !== "production") {
 				text: "openWB Standard+",
 			},
 		],
+		tags: ["1234", "2345", "3456"],
 	};
 }
 

@@ -221,6 +221,17 @@
 			>
 				<template #help>Zahl im JSON Objekt</template>
 			</openwb-base-number-input>
+			<openwb-base-array-input
+				title="Tag Array"
+				:model-value="$store.state.examples.tags"
+				@update:model-value="updateState('tags', $event)"
+			>
+				<template #help>
+					<pre>{{
+						JSON.stringify($store.state.examples.tags, undefined, 2)
+					}}</pre>
+				</template>
+			</openwb-base-array-input>
 		</openwb-base-card>
 
 		<openwb-base-card title="Meldungen">
@@ -280,10 +291,7 @@ export default {
 	},
 	data() {
 		return {
-			mqttTopicsToSubscribe: [
-				"openWB/system/Uptime",
-				"openWB/system/Version",
-			],
+			mqttTopicsToSubscribe: [],
 		};
 	},
 };
