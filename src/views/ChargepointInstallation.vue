@@ -316,9 +316,9 @@
 						)
 					"
 				/>
-				<openwb-base-text-input
+				<openwb-base-array-input
 					title="Zugeordnete Tags"
-					subtype="json"
+					noElementsMessage="Keine Tags zugeordnet."
 					:model-value="chargepointTemplate.valid_tags"
 					@update:model-value="
 						updateState(
@@ -327,11 +327,7 @@
 							'valid_tags'
 						)
 					"
-				>
-					<template #help>
-						ToDo: Array besser darstellen/bearbeiten
-					</template>
-				</openwb-base-text-input>
+				/>
 				<hr />
 				<openwb-base-heading>Autolock</openwb-base-heading>
 				<openwb-base-button-group-input
