@@ -166,6 +166,21 @@
 							)
 						"
 					/>
+					<hr />
+					<openwb-base-array-input
+						title="Zugeordnete Tags"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/vehicle/' + id + '/tag_id'
+							]
+						"
+						@update:model-value="
+							updateState(
+								'openWB/vehicle/' + id + '/tag_id',
+								$event
+							)
+						"
+					/>
 				</openwb-base-card>
 			</div>
 		</openwb-base-card>
@@ -1262,6 +1277,7 @@ export default {
 				"openWB/vehicle/+/name",
 				"openWB/vehicle/+/charge_template",
 				"openWB/vehicle/+/ev_template",
+				"openWB/vehicle/+/tag_id"
 			],
 			showVehicleModal: false,
 			modalVehicleIndex: undefined,
