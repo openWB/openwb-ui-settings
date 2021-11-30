@@ -34,12 +34,12 @@
 					<div class="input-group-append">
 						<div
 							class="input-group-text"
-							:class="newTagValid ? 'bg-success' : ''"
+							:class="newTagValid ? 'bg-success clickable' : ''"
+							@click="addTag"
 						>
 							<font-awesome-icon
 								fixed-width
 								:icon="['fas', 'plus']"
-								@click="addTag"
 							/>
 						</div>
 					</div>
@@ -58,6 +58,7 @@
 					<font-awesome-icon :icon="['fas', 'tag']" />
 					{{ tag }}
 					<font-awesome-icon
+						class="clickable"
 						:icon="['fas', 'times-circle']"
 						@click="removeTag(index)"
 					/>
@@ -161,6 +162,10 @@ export default {
 </script>
 
 <style scoped>
+.clickable {
+	cursor: pointer;
+}
+
 input.invalid,
 input:invalid {
 	border: 2px solid var(--danger);

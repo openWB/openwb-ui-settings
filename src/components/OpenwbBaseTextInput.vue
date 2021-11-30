@@ -111,7 +111,7 @@
 					/>
 					<div
 						v-if="subtype == 'password'"
-						class="input-group-append"
+						class="input-group-append clickable"
 						@click="togglePassword"
 					>
 						<div class="input-group-text">
@@ -227,10 +227,9 @@ export default {
 			get() {
 				if (this.subtype == "json") {
 					if (this.inputInvalid) {
-						console.log("returning invalid String");
+						console.warn("returning invalid String");
 						return this.tempValue;
 					} else {
-						console.log("returning valid JSON");
 						return JSON.stringify(this.tempValue);
 					}
 				}
@@ -273,6 +272,10 @@ export default {
 </script>
 
 <style scoped>
+.clickable {
+	cursor: pointer;
+}
+
 input:invalid {
 	border: 2px solid var(--danger);
 }
