@@ -85,10 +85,10 @@ export default {
 	methods: {
 		sendDebugMessage() {
 			if (this.$root.$refs.myForm.reportValidity()) {
-				// this.$emit("sendCommand", {
-				// 	command: "sendDebug",
-				// 	data: this.sendDebugData,
-				// });
+				this.$emit("sendCommand", {
+					command: "sendDebug",
+					data: this.sendDebugData,
+				});
 				this.enableSendDebugButton = false;
 			}
 		},
