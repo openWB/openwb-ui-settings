@@ -6,7 +6,10 @@
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
 			Das MQTT Modul stellt keine aktive Verbindung her, sondern erwartet,
-			dass die Daten an spezielle Topics im Broker gesendet werden.
+			dass die Daten an spezielle Topics im Broker gesendet werden.<br />
+			Alle Daten sind als gültiges JSON zu senden! Zahlen mit
+			Nachkommastellen (Float) müssen einen Punkt als Dezimaltrenner
+			verwenden (internationales Format).
 		</openwb-base-alert>
 	</div>
 </template>

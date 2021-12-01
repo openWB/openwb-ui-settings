@@ -173,6 +173,18 @@ const routes = [
 				"../views/Debugging.vue"
 			),
 	},
+	{
+		path: "/System/Dataprotection",
+		name: "Dataprotection",
+		meta: {
+			heading: "Datenschutzerklärung",
+		},
+		component: () =>
+			import(
+				/* webpackChunkName: "Dataprotection" */
+				"../views/Dataprotection.vue"
+			),
+	},
 ];
 /* examples for development only start here */
 if (process.env.NODE_ENV !== "production") {

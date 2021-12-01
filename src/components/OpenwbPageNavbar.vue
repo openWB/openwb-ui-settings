@@ -166,6 +166,13 @@
 						>
 							Support
 						</router-link>
+						<router-link
+							to="/System/Dataprotection"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							Datenschutz
+						</router-link>
 					</div>
 				</li>
 				<li v-if="nodeEnv !== 'production'" class="nav-item dropdown">
@@ -225,7 +232,7 @@ export default {
 	},
 	watch: {
 		$route() {
-			// imitate bootstraps close behaviour
+			// imitate bootstraps close behavior
 			this.$refs["collapsibleNavbar"].classList.remove("show");
 			this.$refs["navbarButton"].classList.add("collapsed");
 			this.$refs["navbarButton"].setAttribute("aria-expanded", false);
