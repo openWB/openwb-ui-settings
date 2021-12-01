@@ -144,6 +144,6 @@ export default {
 
 <style scoped>
 textarea:invalid {
-	border: 2px solid var(--danger);
+	background-color: pink;
 }
 </style>
