@@ -38,7 +38,10 @@
 				<font-awesome-icon fixed-width :icon="['fas', 'check']" />
 			</button>
 		</div>
-		<div class="col-md-4 d-flex py-1 justify-content-center">
+		<div
+			v-if="!hideReset"
+			class="col-md-4 d-flex py-1 justify-content-center"
+		>
 			<button
 				id="modalResetBtn"
 				type="button"
@@ -49,7 +52,10 @@
 				<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
 			</button>
 		</div>
-		<div class="col-md-4 d-flex py-1 justify-content-center">
+		<div
+			v-if="!hideDefaults"
+			class="col-md-4 d-flex py-1 justify-content-center"
+		>
 			<button
 				id="modalDefaultsBtn"
 				type="button"
@@ -78,6 +84,11 @@ export default {
 	name: "SubmitButtons",
 	components: {
 		FontAwesomeIcon,
+	},
+	props: {
+		hideReset: { type: Boolean, default: false },
+		// set to defaults not implemented yet
+		hideDefaults: { type: Boolean, default: true },
 	},
 	data() {
 		return {

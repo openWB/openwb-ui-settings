@@ -34,7 +34,11 @@
 					<div class="input-group-append">
 						<div
 							class="input-group-text"
-							:class="newTagValid ? 'bg-success clickable' : ''"
+							:class="
+								newTagValid
+									? 'bg-success clickable'
+									: 'notClickable'
+							"
 							@click="addTag"
 						>
 							<font-awesome-icon
@@ -164,6 +168,10 @@ export default {
 <style scoped>
 .clickable {
 	cursor: pointer;
+}
+
+.notClickable {
+	cursor: not-allowed;
 }
 
 input.invalid,
