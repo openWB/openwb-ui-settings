@@ -2,9 +2,7 @@
 	<teleport to="body">
 		<div :class="modalClasses" role="dialog" @click="handleClick">
 			<div
-				class="
-					modal-dialog modal-dialog-centered modal-dialog-scrollable
-				"
+				class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
 				role="document"
 			>
 				<div class="modal-content">

@@ -92,6 +92,6 @@ export default {
 <style scoped>
 input.invalid,
 input:invalid {
-	border: 2px solid var(--danger);
+	background-color: pink;
 }
 </style>

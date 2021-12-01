@@ -277,6 +277,6 @@ export default {
 }
 
 input:invalid {
-	border: 2px solid var(--danger);
+	background-color: pink;
 }
 </style>

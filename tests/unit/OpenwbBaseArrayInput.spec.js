@@ -40,12 +40,12 @@ describe("OpenwbBaseNumberInput.vue", () => {
 	});
 	// check initial value
 	it("display initial value", () => {
-		const modelValue = ["1234","2345"];
+		const modelValue = ["1234", "2345"];
 		const wrapper = shallowMount(OpenwbBaseArrayInput, {
 			props: { modelValue },
 		});
 		const renderedTagList = wrapper.find(".tagList");
-		modelValue.forEach(element => {
+		modelValue.forEach((element) => {
 			expect(renderedTagList.html()).toContain(element);
 		});
 	});
@@ -55,8 +55,12 @@ describe("OpenwbBaseNumberInput.vue", () => {
 		const wrapper = shallowMount(OpenwbBaseArrayInput, {});
 		const renderedTextInput = wrapper.find("input[type=text]");
 		await renderedTextInput.setValue(newTag);
-		const renderedAddButton = wrapper.find(".input-group-append font-awesome-icon-stub");
+		const renderedAddButton = wrapper.find(
+			".input-group-append font-awesome-icon-stub"
+		);
 		await renderedAddButton.trigger("click");
-		expect(wrapper.emitted("update:modelValue")[0]).toStrictEqual([[newTag]]);
+		expect(wrapper.emitted("update:modelValue")[0]).toStrictEqual([
+			[newTag],
+		]);
 	});
 });
