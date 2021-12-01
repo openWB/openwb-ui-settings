@@ -8,29 +8,53 @@
 				</openwb-base-alert>
 			</div>
 			<div v-else>
-				<openwb-base-alert subtype="info">
-					Das Sammeln der Systemparameter für die Fehlermeldung kann
-					einige Zeit in Anspruch nehmen. Es werden keine
-					Benutzernamen oder Passwörter aus der Konfigurationsdatei
-					übertragen! Der Debug Modus muss nicht verstellt werden.
-				</openwb-base-alert>
-				<openwb-base-text-input
-					title="E-Mail"
-					required
-					subtype="email"
-					v-model="sendDebugData.mail"
-				/>
-				<openwb-base-textarea
-					title="Fehlerbeschreibung"
-					required
-					minlength="20"
-					maxlength="500"
-					v-model="sendDebugData.message"
-				/>
+				<div
+					v-if="
+						$store.state.mqtt[
+							'openWB/system/dataprotection_acknowledged'
+						] !== true
+					"
+				>
+					<openwb-base-alert subtype="danger">
+						Sie müssen der Datenschutzerklärung zustimmen, um einen
+						Fehlerbericht senden zu können.
+					</openwb-base-alert>
+				</div>
+				<div v-else>
+					<openwb-base-alert subtype="success">
+						Sie haben der Datenschutzerklärung zugestimmt und können
+						Fehlerberichte senden.
+					</openwb-base-alert>
+					<openwb-base-alert subtype="info">
+						Das Sammeln der Systemparameter für die Fehlermeldung
+						kann einige Zeit in Anspruch nehmen. Es werden keine
+						Benutzernamen oder Passwörter aus der
+						Konfigurationsdatei übertragen! Der Debug Modus muss
+						nicht verstellt werden.
+					</openwb-base-alert>
+					<openwb-base-text-input
+						title="E-Mail"
+						required
+						subtype="email"
+						v-model="sendDebugData.mail"
+					/>
+					<openwb-base-textarea
+						title="Fehlerbeschreibung"
+						required
+						minlength="20"
+						maxlength="500"
+						v-model="sendDebugData.message"
+					/>
+				</div>
 			</div>
 			<template
 				#footer
-				v-if="$store.state.mqtt['openWB/general/extern'] === false"
+				v-if="
+					$store.state.mqtt['openWB/general/extern'] === false &&
+					$store.state.mqtt[
+						'openWB/system/dataprotection_acknowledged'
+					] === true
+				"
 			>
 				<div class="row justify-content-center">
 					<openwb-base-click-button
@@ -74,7 +98,10 @@ export default {
 	},
 	data() {
 		return {
-			mqttTopicsToSubscribe: ["openWB/general/extern"],
+			mqttTopicsToSubscribe: [
+				"openWB/general/extern",
+				"openWB/system/dataprotection_acknowledged",
+			],
 			sendDebugData: {
 				mail: "",
 				message: "",

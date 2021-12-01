@@ -66,6 +66,9 @@ export default {
 		nodeEnv() {
 			return process.env.NODE_ENV;
 		},
+		publicPath() {
+			return process.env.BASE_URL;
+		},
 	},
 	methods: {
 		saveValues() {
@@ -110,9 +113,9 @@ export default {
 		createConnection() {
 			console.debug("connecting to broker...");
 			// Connect string, and specify the connection method used through protocol
-			// ws unencrypted WebSocket connection
+			// ws not encrypted WebSocket connection
 			// wss encrypted WebSocket connection
-			// mqtt unencrypted TCP connection
+			// mqtt not encrypted TCP connection
 			// mqtts encrypted TCP connection
 			// wxs WeChat mini app connection
 			// alis Alipay mini app connection
