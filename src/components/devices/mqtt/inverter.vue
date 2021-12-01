@@ -5,9 +5,6 @@
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
-			DeviceId: {{ deviceId }} / ComponentId: {{ componentId }}<br />
-			Alle Zahlen mit Nachkommastellen sind mit einem Punkt als
-			Dezimaltrenner zu senden!
 			<ul>
 				<li>
 					<span class="text-info"
