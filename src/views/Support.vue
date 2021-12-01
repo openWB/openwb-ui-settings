@@ -36,7 +36,7 @@
 						title="E-Mail"
 						required
 						subtype="email"
-						v-model="sendDebugData.mail"
+						v-model="sendDebugData.email"
 					/>
 					<openwb-base-textarea
 						title="Fehlerbeschreibung"
@@ -103,7 +103,7 @@ export default {
 				"openWB/system/dataprotection_acknowledged",
 			],
 			sendDebugData: {
-				mail: "",
+				email: "",
 				message: "",
 			},
 			enableSendDebugButton: true,
