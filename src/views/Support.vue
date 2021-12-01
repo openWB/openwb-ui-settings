@@ -18,7 +18,7 @@
 					title="E-Mail"
 					required
 					subtype="email"
-					v-model="sendDebugData.email"
+					v-model="sendDebugData.mail"
 				/>
 				<openwb-base-textarea
 					title="Fehlerbeschreibung"
@@ -76,7 +76,7 @@ export default {
 		return {
 			mqttTopicsToSubscribe: ["openWB/general/extern"],
 			sendDebugData: {
-				email: "",
+				mail: "",
 				message: "",
 			},
 			enableSendDebugButton: true,
