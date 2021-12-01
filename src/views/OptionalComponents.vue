@@ -1191,124 +1191,6 @@
 				</div>
 			</div>
 		</openwb-base-card>
-		<openwb-base-card title="Loadsharing">
-			<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-				<openwb-base-alert subtype="info">
-					Diese Einstellungen sind nicht verfügbar, solange sich diese
-					openWB im Modus "Nur Ladepunkt" befindet.
-				</openwb-base-alert>
-			</div>
-			<div v-else>
-				<openwb-base-button-group-input
-					title="Loadsharing aktivieren"
-					:model-value="
-						$store.state.mqtt['openWB/optional/load_sharing/active']
-					"
-					@update:model-value="
-						updateState(
-							'openWB/optional/load_sharing/active',
-							$event
-						)
-					"
-					:buttons="[
-						{
-							buttonValue: false,
-							text: 'Aus',
-							class: 'btn-outline-danger',
-						},
-						{
-							buttonValue: true,
-							text: 'An',
-							class: 'btn-outline-success',
-						},
-					]"
-				>
-					<template #help>
-						Wenn Ladepunkt 1 und 2 sich eine Zuleitung teilen, diese
-						Option aktivieren. Sie stellt in jedem Lademodus sicher,
-						dass nicht mehr als die eingestellte Stromstärke je
-						Phase in der Summe von Ladepunkt 1 und 2 genutzt
-						werden.<br />
-						<span class="text-danger">
-							Bei der OpenWB Duo muss diese Option aktiviert
-							werden!
-						</span>
-					</template>
-				</openwb-base-button-group-input>
-				<div
-					v-if="
-						$store.state.mqtt[
-							'openWB/optional/load_sharing/active'
-						] == true
-					"
-				>
-					<openwb-base-range-input
-						title="Maximaler Strom"
-						:min="16"
-						:max="32"
-						:step="1"
-						:model-value="
-							$store.state.mqtt[
-								'openWB/optional/load_sharing/max_current'
-							]
-						"
-						@update:model-value="
-							updateState(
-								'openWB/optional/load_sharing/max_current',
-								$event
-							)
-						"
-						unit="A"
-					>
-						<template #help>
-							<p class="text-danger">
-								Der richtige Anschluss ist zu gewährleisten!
-							</p>
-							<div class="row">
-								<div class="col-md-4">Ladepunkt 1:</div>
-								<div class="col">
-									<ul>
-										<li>Zuleitung Phase 1 = Phase 1</li>
-										<li>Zuleitung Phase 2 = Phase 2</li>
-										<li>Zuleitung Phase 3 = Phase 3</li>
-									</ul>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-4">Ladepunkt 2:</div>
-								<div class="col">
-									<ul>
-										<li>
-											Zuleitung Phase 1 =
-											<span class="text-danger">
-												Phase 2
-											</span>
-										</li>
-										<li>
-											Zuleitung Phase 2 =
-											<span class="text-danger">
-												Phase 3
-											</span>
-										</li>
-										<li>
-											Zuleitung Phase 3 =
-											<span class="text-danger">
-												Phase 1
-											</span>
-										</li>
-									</ul>
-								</div>
-							</div>
-							<p>
-								Durch das Drehen der Phasen ist sichergestellt,
-								dass 2 einphasige Autos mit voller
-								Geschwindigkeit laden können.
-							</p>
-						</template>
-					</openwb-base-range-input>
-				</div>
-			</div>
-		</openwb-base-card>
 		<openwb-base-card title="Variable Stromtarife">
 			<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 				<openwb-base-alert subtype="info">
@@ -1418,8 +1300,6 @@ export default {
 				"openWB/optional/int_display/pin_active",
 				"openWB/optional/int_display/pin_code",
 				"openWB/optional/int_display/theme",
-				"openWB/optional/load_sharing/active",
-				"openWB/optional/load_sharing/max_current",
 				"openWB/optional/et/active",
 				"openWB/optional/et/config/provider",
 				"openWB/optional/et/config/max_price",

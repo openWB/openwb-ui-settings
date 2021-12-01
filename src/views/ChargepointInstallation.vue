@@ -215,10 +215,26 @@
 				<openwb-base-button-group-input
 					title="Phase 1"
 					:buttons="[
-						{ buttonValue: 0, text: 'unbekannt' },
-						{ buttonValue: 1, text: 'EVU L1' },
-						{ buttonValue: 2, text: 'EVU L2' },
-						{ buttonValue: 3, text: 'EVU L3' },
+						{
+							buttonValue: 0,
+							text: 'unbekannt',
+							class: 'btn-outline-danger',
+						},
+						{
+							buttonValue: 1,
+							text: 'EVU L1',
+							class: 'btn-outline-success',
+						},
+						{
+							buttonValue: 2,
+							text: 'EVU L2',
+							class: 'btn-outline-success',
+						},
+						{
+							buttonValue: 3,
+							text: 'EVU L3',
+							class: 'btn-outline-success',
+						},
 					]"
 					:model-value="installedChargepoint.phase_1"
 					@update:model-value="
