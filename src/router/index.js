@@ -150,7 +150,7 @@ const routes = [
 			),
 	},
 	{
-		path: "/Support",
+		path: "/System/Support",
 		name: "Support",
 		meta: {
 			heading: "Support",
@@ -159,6 +159,18 @@ const routes = [
 			import(
 				/* webpackChunkName: "Support" */
 				"../views/Support.vue"
+			),
+	},
+	{
+		path: "/System/Debugging",
+		name: "Debugging",
+		meta: {
+			heading: "Fehlersuche",
+		},
+		component: () =>
+			import(
+				/* webpackChunkName: "Debugging" */
+				"../views/Debugging.vue"
 			),
 	},
 ];

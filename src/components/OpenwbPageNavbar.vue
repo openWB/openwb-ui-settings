@@ -153,7 +153,14 @@
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 						<router-link
-							to="/Support"
+							to="/System/Debugging"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							Fehlersuche
+						</router-link>
+						<router-link
+							to="/System/Support"
 							class="dropdown-item"
 							active-class="active disabled"
 						>
