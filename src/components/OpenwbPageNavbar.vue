@@ -153,6 +153,20 @@
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 						<router-link
+							to="/System/CloudConfiguration"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							Cloud
+						</router-link>
+						<router-link
+							to="/System/MqttBridgeConfiguration"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							MQTT-Brücken
+						</router-link>
+						<router-link
 							to="/System/DebugConfiguration"
 							class="dropdown-item"
 							active-class="active disabled"

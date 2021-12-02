@@ -185,6 +185,30 @@ const routes = [
 				"../views/Dataprotection.vue"
 			),
 	},
+	{
+		path: "/System/MqttBridgeConfiguration",
+		name: "MqttBridgeConfig",
+		meta: {
+			heading: "MQTT-Brücken",
+		},
+		component: () =>
+			import(
+				/* webpackChunkName: "MqttBridgeConfig" */
+				"../views/MqttBridgeConfig.vue"
+			),
+	},
+	{
+		path: "/System/CloudConfiguration",
+		name: "CloudConfig",
+		meta: {
+			heading: "openWB Cloud",
+		},
+		component: () =>
+			import(
+				/* webpackChunkName: "CloudConfig" */
+				"../views/CloudConfig.vue"
+			),
+	},
 ];
 /* examples for development only start here */
 if (process.env.NODE_ENV !== "production") {
