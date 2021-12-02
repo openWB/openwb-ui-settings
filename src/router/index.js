@@ -162,15 +162,15 @@ const routes = [
 			),
 	},
 	{
-		path: "/System/Debugging",
+		path: "/System/DebugConfiguration",
 		name: "Debugging",
 		meta: {
 			heading: "Fehlersuche",
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "Debugging" */
-				"../views/Debugging.vue"
+				/* webpackChunkName: "DebugConfig" */
+				"../views/DebugConfig.vue"
 			),
 	},
 	{

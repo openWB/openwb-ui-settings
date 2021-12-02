@@ -153,7 +153,7 @@
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 						<router-link
-							to="/System/Debugging"
+							to="/System/DebugConfiguration"
 							class="dropdown-item"
 							active-class="active disabled"
 						>
