@@ -28,6 +28,7 @@
 							type="radio"
 							v-model="value"
 							:value="button.buttonValue"
+							v-bind="$attrs"
 						/>
 						{{ button.text }}
 						<font-awesome-icon
@@ -61,6 +62,7 @@ library.add(fasQuestionCircle, farQuestionCircle, fasCheck);
 
 export default {
 	name: "ButtonGroupInput",
+	inheritAttrs: false,
 	props: {
 		title: String,
 		modelValue: { type: [String, Number, Boolean] },

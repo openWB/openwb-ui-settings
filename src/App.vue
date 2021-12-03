@@ -60,6 +60,9 @@ export default {
 		};
 	},
 	computed: {
+		/**
+		 * @return {Array} - Array of topics (String)
+		 */
 		topicList() {
 			return Object.keys(this.$store.state.mqtt);
 		},
@@ -71,13 +74,28 @@ export default {
 		},
 	},
 	methods: {
-		saveValues() {
+		/**
+		 * @param {Array} topicsToSave - The topics to save
+		 * Send topics to broker
+		 */
+		saveValues(topicsToSave = undefined) {
 			console.debug("saving values...");
-			// *** may be useful if we implement authentication ***
-			// let data = JSON.stringify(this.$store.state.mqtt);
-			// console.debug("data:", data);
-			// then post data to server
-			let topics = this.$store.state.mqtt;
+			console.log(topicsToSave);
+			// collect data
+			let topics = {};
+			if (topicsToSave === undefined) {
+				// no topics defined, so save everything we have in store
+				topics = this.$store.state.mqtt;
+			} else {
+				if (Array.isArray(topicsToSave)) {
+					topicsToSave.forEach((topicToSave) => {
+						topics[topicToSave] =
+							this.$store.state.mqtt[topicToSave];
+					});
+				} else {
+					console.error("expected array, got ", typeof topicsToSave);
+				}
+			}
 			// console.debug("topics", topics);
 			for (const [topic, payload] of Object.entries(topics)) {
 				let setTopic = topic.replace("openWB/", "openWB/set/");
@@ -85,14 +103,20 @@ export default {
 				this.doPublish(setTopic, payload);
 			}
 		},
-		resetValues() {
+		/**
+		 * @param {Array} topicsToReset - The topics to reset
+		 * Reload topics from broker
+		 */
+		resetValues(topicsToReset = this.topicList) {
 			console.debug("resetting values...");
+			console.debug("topics: ", topicsToReset);
 			// simply unsubscribe and subscribe to broker
-			let topics = this.topicList;
-			console.debug("topics: ", topics);
-			this.doUnsubscribe(topics);
-			this.doSubscribe(topics);
+			this.doUnsubscribe(topicsToReset);
+			this.doSubscribe(topicsToReset);
 		},
+		/**
+		 * ToDo
+		 */
 		setDefaultValues() {
 			console.debug("setting default values... (ToDo)");
 		},

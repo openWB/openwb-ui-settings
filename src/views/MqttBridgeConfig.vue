@@ -14,6 +14,15 @@
 	</openwb-base-modal-dialog>
 	<!-- main content -->
 	<div class="mqtt-bridge-configuration">
+		<openwb-base-alert subtype="danger">
+			ACHTUNG: Die Konfiguration einer MQTT-Brücke erlaubt allen Nutzern
+			mit Zugang zum entfernten MQTT-Server alle weitergeleiteten Daten
+			dieser openWB einzusehen!<br />
+			Es wird dringend empfohlen, dies nur für nicht-öffentliche
+			MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS)
+			mit persönlichem Login und strenger Zugriffskontrolle (zumindest für
+			die MQTT-Thema unterhalb von "Entfernter Präfix") zu aktivieren!
+		</openwb-base-alert>
 		<openwb-base-card title="Konfigurierte MQTT-Brücken">
 			<template #actions>
 				<openwb-base-avatar
@@ -46,6 +55,7 @@
 				<openwb-base-text-input
 					title="Bezeichnung"
 					subtype="text"
+					required
 					pattern="[A-Za-z0-9\-]+"
 					:model-value="mqttBridge.name"
 					@update:model-value="
@@ -83,6 +93,7 @@
 				<openwb-base-text-input
 					title="Entfernter Server"
 					subtype="host"
+					required
 					:model-value="mqttBridge.remote.host"
 					@update:model-value="
 						updateState(mqttBridgeKey, $event, 'remote.host')
@@ -90,6 +101,7 @@
 				/>
 				<openwb-base-number-input
 					title="Entfernter Port"
+					required
 					:min="1"
 					:max="65535"
 					:model-value="mqttBridge.remote.port"
@@ -100,6 +112,7 @@
 				<openwb-base-text-input
 					title="Benutzername"
 					subtype="user"
+					required
 					:model-value="mqttBridge.remote.user"
 					@update:model-value="
 						updateState(mqttBridgeKey, $event, 'remote.user')
@@ -108,6 +121,7 @@
 				<openwb-base-text-input
 					title="Passwort"
 					subtype="password"
+					required
 					:model-value="mqttBridge.remote.password"
 					@update:model-value="
 						updateState(mqttBridgeKey, $event, 'remote.password')
@@ -131,6 +145,7 @@
 				<openwb-base-text-input
 					title="Client ID"
 					subtype="text"
+					required
 					pattern="[A-Za-z0-9\-]+"
 					:model-value="mqttBridge.remote.client_id"
 					@update:model-value="
@@ -139,6 +154,7 @@
 				/>
 				<openwb-base-button-group-input
 					title="MQTT Protokoll"
+					required="required"
 					:buttons="[
 						{
 							buttonValue: 'mqttv31',
@@ -177,10 +193,12 @@
 						{
 							buttonValue: false,
 							text: 'Aus',
+							class: 'btn-outline-danger',
 						},
 						{
 							buttonValue: true,
 							text: 'An',
+							class: 'btn-outline-success',
 						},
 					]"
 					:model-value="mqttBridge.remote.try_private"
@@ -275,6 +293,13 @@
 				>
 					<template #help>ToDo...</template>
 				</openwb-base-button-group-input>
+				<template #footer>
+					<openwb-base-submit-buttons
+						:hideDefaults="true"
+						@save="$emit('save', [mqttBridgeKey])"
+						@reset="$emit('reset', [mqttBridgeKey])"
+					/>
+				</template>
 			</openwb-base-card>
 		</openwb-base-card>
 	</div>

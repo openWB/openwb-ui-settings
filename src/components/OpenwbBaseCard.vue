@@ -32,7 +32,7 @@
 		<div class="card-body" v-if="isCollapsed === false">
 			<slot></slot>
 		</div>
-		<div v-if="$slots.footer" class="card-footer">
+		<div v-if="$slots.footer && isCollapsed === false" class="card-footer">
 			<slot name="footer"></slot>
 		</div>
 	</div>
@@ -50,6 +50,9 @@ library.add(fasChevronRight, fasChevronDown);
 
 export default {
 	name: "Card",
+	components: {
+		FontAwesomeIcon,
+	},
 	props: {
 		title: { type: String, default: "# no title set #" },
 		subtype: {
@@ -83,9 +86,6 @@ export default {
 				this.isCollapsed = !this.isCollapsed;
 			}
 		},
-	},
-	components: {
-		FontAwesomeIcon,
 	},
 };
 </script>
