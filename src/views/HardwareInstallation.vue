@@ -23,7 +23,7 @@
 							:class="
 								deviceToAdd === undefined
 									? 'btn-outline-success'
-									: 'btn-success'
+									: 'btn-success clickable'
 							"
 							:disabled="deviceToAdd === undefined"
 							@click="addDevice"
@@ -59,7 +59,7 @@
 				</template>
 				<template #actions>
 					<openwb-base-avatar
-						class="bg-danger"
+						class="bg-danger clickable"
 						@click="removeDevice(installedDevice.id, $event)"
 					>
 						<font-awesome-icon
@@ -104,7 +104,7 @@
 									componentToAdd[installedDevice.id] ===
 									undefined
 										? 'btn-outline-success'
-										: 'btn-success'
+										: 'btn-success clickable'
 								"
 								:disabled="
 									componentToAdd[installedDevice.id] ===
@@ -153,7 +153,7 @@
 					</template>
 					<template #actions>
 						<openwb-base-avatar
-							class="bg-danger"
+							class="bg-danger clickable"
 							@click="
 								removeComponent(
 									installedDevice.id,
@@ -327,4 +327,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.clickable {
+	cursor: pointer;
+}
+</style>

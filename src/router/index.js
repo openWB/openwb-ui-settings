@@ -162,15 +162,15 @@ const routes = [
 			),
 	},
 	{
-		path: "/System/Debugging",
+		path: "/System/DebugConfiguration",
 		name: "Debugging",
 		meta: {
 			heading: "Fehlersuche",
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "Debugging" */
-				"../views/Debugging.vue"
+				/* webpackChunkName: "DebugConfig" */
+				"../views/DebugConfig.vue"
 			),
 	},
 	{
@@ -183,6 +183,30 @@ const routes = [
 			import(
 				/* webpackChunkName: "Dataprotection" */
 				"../views/Dataprotection.vue"
+			),
+	},
+	{
+		path: "/System/MqttBridgeConfiguration",
+		name: "MqttBridgeConfig",
+		meta: {
+			heading: "MQTT-Brücken",
+		},
+		component: () =>
+			import(
+				/* webpackChunkName: "MqttBridgeConfig" */
+				"../views/MqttBridgeConfig.vue"
+			),
+	},
+	{
+		path: "/System/CloudConfiguration",
+		name: "CloudConfig",
+		meta: {
+			heading: "openWB Cloud",
+		},
+		component: () =>
+			import(
+				/* webpackChunkName: "CloudConfig" */
+				"../views/CloudConfig.vue"
 			),
 	},
 ];

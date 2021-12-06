@@ -86,7 +86,7 @@
 		>
 			<template #actions>
 				<openwb-base-avatar
-					class="bg-success"
+					class="bg-success clickable"
 					v-if="$store.state.mqtt['openWB/general/extern'] === false"
 					@click="addVehicle"
 				>
@@ -110,7 +110,7 @@
 				>
 					<template #actions v-if="id !== 0">
 						<openwb-base-avatar
-							class="bg-danger"
+							class="bg-danger clickable"
 							@click="removeVehicleModal(id, $event)"
 						>
 							<font-awesome-icon
@@ -192,7 +192,7 @@
 		>
 			<template #actions>
 				<openwb-base-avatar
-					class="bg-success"
+					class="bg-success clickable"
 					v-if="$store.state.mqtt['openWB/general/extern'] === false"
 					@click="addEvTemplate"
 				>
@@ -216,7 +216,7 @@
 				>
 					<template #actions v-if="!key.endsWith('/0')">
 						<openwb-base-avatar
-							class="bg-danger"
+							class="bg-danger clickable"
 							v-if="
 								$store.state.mqtt['openWB/general/extern'] ===
 								false
@@ -394,7 +394,7 @@
 		>
 			<template #actions>
 				<openwb-base-avatar
-					class="bg-success"
+					class="bg-success clickable"
 					v-if="$store.state.mqtt['openWB/general/extern'] === false"
 					@click="addChargeTemplate"
 				>
@@ -418,7 +418,7 @@
 				>
 					<template #actions v-if="!templateKey.endsWith('/0')">
 						<openwb-base-avatar
-							class="bg-danger"
+							class="bg-danger clickable"
 							@click="
 								removeChargeTemplateModal(templateKey, $event)
 							"
@@ -774,7 +774,7 @@
 						Zielladen
 						<template #actions>
 							<openwb-base-avatar
-								class="bg-success"
+								class="bg-success clickable"
 								@click="
 									addChargeTemplateSchedulePlan(
 										templateKey,
@@ -842,7 +842,7 @@
 							</span>
 							<openwb-base-avatar
 								v-if="slotProps.collapsed == false"
-								class="bg-danger"
+								class="bg-danger clickable"
 								@click="
 									removeChargeTemplateSchedulePlanModal(
 										templateKey,
@@ -979,7 +979,7 @@
 						Laden nach Zeitplan
 						<template #actions>
 							<openwb-base-avatar
-								class="bg-success"
+								class="bg-success clickable"
 								@click="
 									addChargeTemplateTimeChargingPlan(
 										templateKey,
@@ -1073,7 +1073,7 @@
 							</span>
 							<openwb-base-avatar
 								v-if="slotProps.collapsed == false"
-								class="bg-danger"
+								class="bg-danger clickable"
 								@click="
 									removeChargeTemplateTimeChargingPlanModal(
 										templateKey,
@@ -1586,3 +1586,9 @@ export default {
 	},
 };
 </script>
+
+<style scoped>
+.clickable {
+	cursor: pointer;
+}
+</style>

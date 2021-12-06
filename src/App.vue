@@ -60,24 +60,48 @@ export default {
 		};
 	},
 	computed: {
+		/**
+		 * @return {Array} - Array of topics (String)
+		 */
 		topicList() {
 			return Object.keys(this.$store.state.mqtt);
 		},
+		/**
+		 * @return {String} - NODE_ENV
+		 */
 		nodeEnv() {
 			return process.env.NODE_ENV;
 		},
+		/**
+		 * @return {String} - BASE_URL
+		 */
 		publicPath() {
 			return process.env.BASE_URL;
 		},
 	},
 	methods: {
-		saveValues() {
+		/**
+		 * Send topics to broker
+		 * @param {Array} topicsToSave - The topics to save
+		 */
+		saveValues(topicsToSave = undefined) {
 			console.debug("saving values...");
-			// *** may be useful if we implement authentication ***
-			// let data = JSON.stringify(this.$store.state.mqtt);
-			// console.debug("data:", data);
-			// then post data to server
-			let topics = this.$store.state.mqtt;
+			console.log(topicsToSave);
+			// collect data
+			let topics = {};
+			if (topicsToSave === undefined) {
+				// no topics defined, so save everything we have in store
+				topics = this.$store.state.mqtt;
+			} else {
+				if (Array.isArray(topicsToSave)) {
+					topicsToSave.forEach((topicToSave) => {
+						topics[topicToSave] =
+							this.$store.state.mqtt[topicToSave];
+					});
+				} else {
+					console.error("expected array, got ", typeof topicsToSave);
+				}
+			}
 			// console.debug("topics", topics);
 			for (const [topic, payload] of Object.entries(topics)) {
 				let setTopic = topic.replace("openWB/", "openWB/set/");
@@ -85,23 +109,36 @@ export default {
 				this.doPublish(setTopic, payload);
 			}
 		},
-		resetValues() {
+		/**
+		 * Reload topics from broker
+		 * @param {Array} topicsToReset - The topics to reset
+		 */
+		resetValues(topicsToReset = this.topicList) {
 			console.debug("resetting values...");
+			console.debug("topics: ", topicsToReset);
 			// simply unsubscribe and subscribe to broker
-			let topics = this.topicList;
-			console.debug("topics: ", topics);
-			this.doUnsubscribe(topics);
-			this.doSubscribe(topics);
+			this.doUnsubscribe(topicsToReset);
+			this.doSubscribe(topicsToReset);
 		},
+		/**
+		 * ToDo
+		 */
 		setDefaultValues() {
 			console.debug("setting default values... (ToDo)");
 		},
+		/**
+		 * Removes client specific error topic from broker
+		 */
 		dismissError() {
 			this.doPublish(
 				"openWB/command/" + this.client.options.clientId + "/error",
 				undefined
 			);
 		},
+		/**
+		 * Sends a command via broker to the backend
+		 * @param {Object} event - Command object to send
+		 */
 		sendCommand(event) {
 			console.log("sendCommand event", event);
 			this.doPublish(
@@ -110,6 +147,9 @@ export default {
 				false
 			);
 		},
+		/**
+		 * Establishes a connection to the configured broker
+		 */
 		createConnection() {
 			console.debug("connecting to broker...");
 			// Connect string, and specify the connection method used through protocol

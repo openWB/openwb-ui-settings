@@ -18,3 +18,9 @@ export default {
 	},
 };
 </script>
+
+<style scoped>
+button:not(:disabled) {
+	cursor: pointer;
+}
+</style>

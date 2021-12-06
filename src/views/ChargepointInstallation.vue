@@ -98,7 +98,7 @@
 			>
 				<template #actions>
 					<openwb-base-avatar
-						class="bg-danger"
+						class="bg-danger clickable"
 						@click="
 							removeChargepointModal(
 								installedChargepointKey,
@@ -215,10 +215,26 @@
 				<openwb-base-button-group-input
 					title="Phase 1"
 					:buttons="[
-						{ buttonValue: 0, text: 'unbekannt' },
-						{ buttonValue: 1, text: 'EVU L1' },
-						{ buttonValue: 2, text: 'EVU L2' },
-						{ buttonValue: 3, text: 'EVU L3' },
+						{
+							buttonValue: 0,
+							text: 'unbekannt',
+							class: 'btn-outline-danger',
+						},
+						{
+							buttonValue: 1,
+							text: 'EVU L1',
+							class: 'btn-outline-success',
+						},
+						{
+							buttonValue: 2,
+							text: 'EVU L2',
+							class: 'btn-outline-success',
+						},
+						{
+							buttonValue: 3,
+							text: 'EVU L3',
+							class: 'btn-outline-success',
+						},
 					]"
 					:model-value="installedChargepoint.phase_1"
 					@update:model-value="
@@ -247,7 +263,7 @@
 		>
 			<template #actions>
 				<openwb-base-avatar
-					class="bg-success"
+					class="bg-success clickable"
 					v-if="$store.state.mqtt['openWB/general/extern'] === false"
 					@click="addChargepointTemplate"
 				>
@@ -269,7 +285,7 @@
 					v-if="!chargepointTemplateKey.endsWith('/0')"
 				>
 					<openwb-base-avatar
-						class="bg-danger"
+						class="bg-danger clickable"
 						@click="
 							removeChargepointTemplateModal(
 								chargepointTemplateKey,
@@ -366,7 +382,7 @@
 					Autolock Zeitpläne
 					<template #actions>
 						<openwb-base-avatar
-							class="bg-success"
+							class="bg-success clickable"
 							@click="
 								addChargepointTemplateAutolockPlan(
 									chargepointTemplateKey,
@@ -453,7 +469,7 @@
 						</span>
 						<openwb-base-avatar
 							v-if="slotProps.collapsed == false"
-							class="bg-danger"
+							class="bg-danger clickable"
 							@click="
 								removeChargepointTemplateAutolockPlanModal(
 									chargepointTemplateKey,
@@ -686,7 +702,7 @@ export default {
 			event.stopPropagation();
 			this.$emit("sendCommand", {
 				command: "addChargepoint",
-				data: {},
+				data: { type: this.chargepointToAdd },
 			});
 		},
 		removeChargepointModal(chargepoint, event) {
@@ -850,4 +866,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.clickable {
+	cursor: pointer;
+}
+</style>

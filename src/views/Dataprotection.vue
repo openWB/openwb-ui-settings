@@ -48,12 +48,14 @@
 					nicht mehr möglich!
 				</openwb-base-alert>
 			</div>
+			<template #footer>
+				<openwb-base-submit-buttons
+					:hideReset="true"
+					:hideDefaults="true"
+					@save="$emit('save')"
+				/>
+			</template>
 		</openwb-base-card>
-		<openwb-base-submit-buttons
-			@save="$emit('save')"
-			@reset="$emit('reset')"
-			@defaults="$emit('defaults')"
-		/>
 	</div>
 </template>
 
