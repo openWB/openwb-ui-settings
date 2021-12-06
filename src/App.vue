@@ -66,17 +66,23 @@ export default {
 		topicList() {
 			return Object.keys(this.$store.state.mqtt);
 		},
+		/**
+		 * @return {String} - NODE_ENV
+		 */
 		nodeEnv() {
 			return process.env.NODE_ENV;
 		},
+		/**
+		 * @return {String} - BASE_URL
+		 */
 		publicPath() {
 			return process.env.BASE_URL;
 		},
 	},
 	methods: {
 		/**
-		 * @param {Array} topicsToSave - The topics to save
 		 * Send topics to broker
+		 * @param {Array} topicsToSave - The topics to save
 		 */
 		saveValues(topicsToSave = undefined) {
 			console.debug("saving values...");
@@ -104,8 +110,8 @@ export default {
 			}
 		},
 		/**
-		 * @param {Array} topicsToReset - The topics to reset
 		 * Reload topics from broker
+		 * @param {Array} topicsToReset - The topics to reset
 		 */
 		resetValues(topicsToReset = this.topicList) {
 			console.debug("resetting values...");
@@ -120,12 +126,19 @@ export default {
 		setDefaultValues() {
 			console.debug("setting default values... (ToDo)");
 		},
+		/**
+		 * Removes client specific error topic from broker
+		 */
 		dismissError() {
 			this.doPublish(
 				"openWB/command/" + this.client.options.clientId + "/error",
 				undefined
 			);
 		},
+		/**
+		 * Sends a command via broker to the backend
+		 * @param {Object} event - Command object to send
+		 */
 		sendCommand(event) {
 			console.log("sendCommand event", event);
 			this.doPublish(
@@ -134,6 +147,9 @@ export default {
 				false
 			);
 		},
+		/**
+		 * Establishes a connection to the configured broker
+		 */
 		createConnection() {
 			console.debug("connecting to broker...");
 			// Connect string, and specify the connection method used through protocol
