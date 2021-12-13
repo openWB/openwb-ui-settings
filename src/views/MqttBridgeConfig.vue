@@ -13,7 +13,7 @@
 		werden!
 	</openwb-base-modal-dialog>
 	<!-- main content -->
-	<div class="mqtt-bridge-configuration">
+	<div class="mqttBridgeConfiguration">
 		<openwb-base-alert subtype="danger">
 			ACHTUNG: Die Konfiguration einer MQTT-Brücke erlaubt allen Nutzern
 			mit Zugang zum entfernten MQTT-Server alle weitergeleiteten Daten
@@ -46,305 +46,337 @@
 				>
 					Es wurde noch keine MQTT Brücke konfiguriert.
 				</openwb-base-alert>
-				<openwb-base-card
+				<form
 					v-for="(mqttBridge, mqttBridgeKey) in configuredMqttBridges"
 					:key="mqttBridgeKey"
-					:title="mqttBridge.name"
-					:collapsible="true"
-					:collapsed="true"
-					subtype="primary"
+					:name="
+						'mqttBridgeConfigurationForm' +
+						getMqttBridgeIndex(mqttBridgeKey)
+					"
 				>
-					<template #actions>
-						<openwb-base-avatar
-							class="bg-danger clickable"
-							@click="
-								removeMqttBridgeModal(mqttBridgeKey, $event)
+					<openwb-base-card
+						:title="mqttBridge.name"
+						:collapsible="true"
+						:collapsed="true"
+						subtype="primary"
+					>
+						<template #actions>
+							<openwb-base-avatar
+								class="bg-danger clickable"
+								@click="
+									removeMqttBridgeModal(mqttBridgeKey, $event)
+								"
+							>
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'trash']"
+								/>
+							</openwb-base-avatar>
+						</template>
+						<openwb-base-text-input
+							title="Bezeichnung"
+							subtype="text"
+							required
+							pattern="[A-Za-z0-9]+"
+							:model-value="mqttBridge.name"
+							@update:model-value="
+								updateState(mqttBridgeKey, $event, 'name')
 							"
 						>
-							<font-awesome-icon
-								fixed-width
-								:icon="['fas', 'trash']"
-							/>
-						</openwb-base-avatar>
-					</template>
-					<openwb-base-text-input
-						title="Bezeichnung"
-						subtype="text"
-						required
-						pattern="[A-Za-z0-9]+"
-						:model-value="mqttBridge.name"
-						@update:model-value="
-							updateState(mqttBridgeKey, $event, 'name')
-						"
-					>
-						<template #help>
-							Die Bezeichnung darf nur aus Buchstaben ohne Umlaute
-							und Zahlen bestehen.
-						</template>
-					</openwb-base-text-input>
-					<openwb-base-button-group-input
-						title="Brücke aktivieren"
-						:buttons="[
-							{
-								buttonValue: false,
-								text: 'Nein',
-								class: 'btn-outline-danger',
-							},
-							{
-								buttonValue: true,
-								text: 'Ja',
-								class: 'btn-outline-success',
-							},
-						]"
-						:model-value="mqttBridge.active"
-						@update:model-value="
-							updateState(mqttBridgeKey, $event, 'active')
-						"
-					/>
-					<hr />
-					<openwb-base-heading>
-						Einstellungen zur Verbindung
-					</openwb-base-heading>
-					<openwb-base-text-input
-						title="Entfernter Server"
-						subtype="host"
-						required
-						:model-value="mqttBridge.remote.host"
-						@update:model-value="
-							updateState(mqttBridgeKey, $event, 'remote.host')
-						"
-					/>
-					<openwb-base-number-input
-						title="Entfernter Port"
-						required
-						:min="1"
-						:max="65535"
-						:model-value="mqttBridge.remote.port"
-						@update:model-value="
-							updateState(mqttBridgeKey, $event, 'remote.port')
-						"
-					/>
-					<openwb-base-text-input
-						title="Benutzername"
-						subtype="user"
-						required
-						pattern="[a-zA-Z0-9_\-+.]+"
-						:model-value="mqttBridge.remote.user"
-						@update:model-value="
-							updateState(mqttBridgeKey, $event, 'remote.user')
-						"
-					/>
-					<openwb-base-text-input
-						title="Passwort"
-						subtype="password"
-						required
-						:model-value="mqttBridge.remote.password"
-						@update:model-value="
-							updateState(
-								mqttBridgeKey,
-								$event,
-								'remote.password'
-							)
-						"
-					/>
-					<openwb-base-text-input
-						title="Präfix"
-						subtype="text"
-						pattern="[A-Za-z0-9_\-]+(\/[A-Za-z0-9_\-]+)?\/"
-						:model-value="mqttBridge.remote.prefix"
-						@update:model-value="
-							updateState(mqttBridgeKey, $event, 'remote.prefix')
-						"
-					>
-						<template #help>
-							Das Präfix darf nur aus Buchstaben ohne Umlaute,
-							Zahlen, Binde- und Unterstrichen bestehen. Optional
-							kann mit einem Schrägstrich "/" eine Topic-Struktur
-							abgebildet werden. Am Ende des Präfix muss ein
-							Schrägstrich "/" stehen.
-						</template>
-					</openwb-base-text-input>
-					<openwb-base-text-input
-						title="Client ID"
-						subtype="text"
-						required
-						pattern="[A-Za-z0-9_\-]+"
-						:model-value="mqttBridge.remote.client_id"
-						@update:model-value="
-							updateState(
-								mqttBridgeKey,
-								$event,
-								'remote.client_id'
-							)
-						"
-					>
-						<template #help>
-							Die Client ID darf nur aus Buchstaben ohne Umlaute,
-							Zahlen, Binde- und Unterstrichen bestehen.
-						</template>
-					</openwb-base-text-input>
-					<openwb-base-button-group-input
-						title="MQTT Protokoll"
-						required="required"
-						:buttons="[
-							{
-								buttonValue: 'mqttv31',
-								text: 'v3.1',
-							},
-							{
-								buttonValue: 'mqttv311',
-								text: 'v3.1.1',
-							},
-						]"
-						:model-value="mqttBridge.remote.protocol"
-						@update:model-value="
-							updateState(
-								mqttBridgeKey,
-								$event,
-								'remote.protocol'
-							)
-						"
-					/>
-					<openwb-base-button-group-input
-						title="TLS Version"
-						:buttons="[
-							{
-								buttonValue: 'tlsv1.2',
-								text: 'v1.2',
-							},
-							{
-								buttonValue: 'tlsv1.3',
-								text: 'v1.3',
-							},
-						]"
-						:model-value="mqttBridge.remote.tls_version"
-						@update:model-value="
-							updateState(
-								mqttBridgeKey,
-								$event,
-								'remote.tls_version'
-							)
-						"
-					/>
-					<openwb-base-button-group-input
-						title="Brücke signalisieren"
-						:buttons="[
-							{
-								buttonValue: false,
-								text: 'Aus',
-								class: 'btn-outline-danger',
-							},
-							{
-								buttonValue: true,
-								text: 'An',
-								class: 'btn-outline-success',
-							},
-						]"
-						:model-value="mqttBridge.remote.try_private"
-						@update:model-value="
-							updateState(
-								mqttBridgeKey,
-								$event,
-								'remote.try_private'
-							)
-						"
-					>
-						<template #help>
-							Aktiviert eine proprietäre Protokoll-Erweiterung des
-							Mosquitto Brokers, welche dem entfernten Broker
-							signalisiert dass es sich um eine MQTT Brücke
-							handelt. Ergibt bessere Leistung mit
-							Mosquitto-Brokern, ist jedoch inkompatibel mit
-							vielen anderen MQTT-Brokern. Daher bitte nur
-							aktivieren, wenn der Ziel-Broker sicher ein
-							Mosquitto-Broker ist.
-						</template>
-					</openwb-base-button-group-input>
-					<hr />
-					<openwb-base-heading>Datenübertragung</openwb-base-heading>
-					<openwb-base-button-group-input
-						title="Alle Statusdaten"
-						:buttons="[
-							{
-								buttonValue: false,
-								text: 'Aus',
-								class: 'btn-outline-danger',
-							},
-							{
-								buttonValue: true,
-								text: 'An',
-								class: 'btn-outline-success',
-							},
-						]"
-						:model-value="mqttBridge.data_transfer.status"
-						@update:model-value="
-							updateState(
-								mqttBridgeKey,
-								$event,
-								'data_transfer.status'
-							)
-						"
-					>
-						<template #help>ToDo...</template>
-					</openwb-base-button-group-input>
-					<openwb-base-button-group-input
-						title="Datenserien für Diagramme"
-						:buttons="[
-							{
-								buttonValue: false,
-								text: 'Aus',
-								class: 'btn-outline-danger',
-							},
-							{
-								buttonValue: true,
-								text: 'An',
-								class: 'btn-outline-success',
-							},
-						]"
-						:model-value="mqttBridge.data_transfer.graph"
-						@update:model-value="
-							updateState(
-								mqttBridgeKey,
-								$event,
-								'data_transfer.graph'
-							)
-						"
-					>
-						<template #help>ToDo...</template>
-					</openwb-base-button-group-input>
-					<openwb-base-button-group-input
-						title="Fernkonfiguration ermöglichen"
-						:buttons="[
-							{
-								buttonValue: false,
-								text: 'Aus',
-								class: 'btn-outline-danger',
-							},
-							{
-								buttonValue: true,
-								text: 'An',
-								class: 'btn-outline-success',
-							},
-						]"
-						:model-value="mqttBridge.data_transfer.configuration"
-						@update:model-value="
-							updateState(
-								mqttBridgeKey,
-								$event,
-								'data_transfer.configuration'
-							)
-						"
-					>
-						<template #help>ToDo...</template>
-					</openwb-base-button-group-input>
-					<template #footer>
-						<openwb-base-submit-buttons
-							:hideDefaults="true"
-							@save="$emit('save', [mqttBridgeKey])"
-							@reset="$emit('reset', [mqttBridgeKey])"
+							<template #help>
+								Die Bezeichnung darf nur aus Buchstaben ohne
+								Umlaute und Zahlen bestehen.
+							</template>
+						</openwb-base-text-input>
+						<openwb-base-button-group-input
+							title="Brücke aktivieren"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Nein',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'Ja',
+									class: 'btn-outline-success',
+								},
+							]"
+							:model-value="mqttBridge.active"
+							@update:model-value="
+								updateState(mqttBridgeKey, $event, 'active')
+							"
 						/>
-					</template>
-				</openwb-base-card>
+						<hr />
+						<openwb-base-heading>
+							Einstellungen zur Verbindung
+						</openwb-base-heading>
+						<openwb-base-text-input
+							title="Entfernter Server"
+							subtype="host"
+							required
+							:model-value="mqttBridge.remote.host"
+							@update:model-value="
+								updateState(
+									mqttBridgeKey,
+									$event,
+									'remote.host'
+								)
+							"
+						/>
+						<openwb-base-number-input
+							title="Entfernter Port"
+							required
+							:min="1"
+							:max="65535"
+							:model-value="mqttBridge.remote.port"
+							@update:model-value="
+								updateState(
+									mqttBridgeKey,
+									$event,
+									'remote.port'
+								)
+							"
+						/>
+						<openwb-base-text-input
+							title="Benutzername"
+							subtype="user"
+							required
+							pattern="[a-zA-Z0-9_\-+.]+"
+							:model-value="mqttBridge.remote.user"
+							@update:model-value="
+								updateState(
+									mqttBridgeKey,
+									$event,
+									'remote.user'
+								)
+							"
+						/>
+						<openwb-base-text-input
+							title="Passwort"
+							subtype="password"
+							required
+							:model-value="mqttBridge.remote.password"
+							@update:model-value="
+								updateState(
+									mqttBridgeKey,
+									$event,
+									'remote.password'
+								)
+							"
+						/>
+						<openwb-base-text-input
+							title="Präfix"
+							subtype="text"
+							pattern="[A-Za-z0-9_\-]+(\/[A-Za-z0-9_\-]+)?\/"
+							:model-value="mqttBridge.remote.prefix"
+							@update:model-value="
+								updateState(
+									mqttBridgeKey,
+									$event,
+									'remote.prefix'
+								)
+							"
+						>
+							<template #help>
+								Das Präfix darf nur aus Buchstaben ohne Umlaute,
+								Zahlen, Binde- und Unterstrichen bestehen.
+								Optional kann mit einem Schrägstrich "/" eine
+								Topic-Struktur abgebildet werden. Am Ende des
+								Präfix muss ein Schrägstrich "/" stehen.
+							</template>
+						</openwb-base-text-input>
+						<openwb-base-text-input
+							title="Client ID"
+							subtype="text"
+							required
+							pattern="[A-Za-z0-9_\-]+"
+							:model-value="mqttBridge.remote.client_id"
+							@update:model-value="
+								updateState(
+									mqttBridgeKey,
+									$event,
+									'remote.client_id'
+								)
+							"
+						>
+							<template #help>
+								Die Client ID darf nur aus Buchstaben ohne
+								Umlaute, Zahlen, Binde- und Unterstrichen
+								bestehen.
+							</template>
+						</openwb-base-text-input>
+						<openwb-base-button-group-input
+							title="MQTT Protokoll"
+							required="required"
+							:buttons="[
+								{
+									buttonValue: 'mqttv31',
+									text: 'v3.1',
+								},
+								{
+									buttonValue: 'mqttv311',
+									text: 'v3.1.1',
+								},
+							]"
+							:model-value="mqttBridge.remote.protocol"
+							@update:model-value="
+								updateState(
+									mqttBridgeKey,
+									$event,
+									'remote.protocol'
+								)
+							"
+						/>
+						<openwb-base-button-group-input
+							title="TLS Version"
+							:buttons="[
+								{
+									buttonValue: 'tlsv1.2',
+									text: 'v1.2',
+								},
+								{
+									buttonValue: 'tlsv1.3',
+									text: 'v1.3',
+								},
+							]"
+							:model-value="mqttBridge.remote.tls_version"
+							@update:model-value="
+								updateState(
+									mqttBridgeKey,
+									$event,
+									'remote.tls_version'
+								)
+							"
+						/>
+						<openwb-base-button-group-input
+							title="Brücke signalisieren"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Aus',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'An',
+									class: 'btn-outline-success',
+								},
+							]"
+							:model-value="mqttBridge.remote.try_private"
+							@update:model-value="
+								updateState(
+									mqttBridgeKey,
+									$event,
+									'remote.try_private'
+								)
+							"
+						>
+							<template #help>
+								Aktiviert eine proprietäre Protokoll-Erweiterung
+								des Mosquitto Brokers, welche dem entfernten
+								Broker signalisiert dass es sich um eine MQTT
+								Brücke handelt. Ergibt bessere Leistung mit
+								Mosquitto-Brokern, ist jedoch inkompatibel mit
+								vielen anderen MQTT-Brokern. Daher bitte nur
+								aktivieren, wenn der Ziel-Broker sicher ein
+								Mosquitto-Broker ist.
+							</template>
+						</openwb-base-button-group-input>
+						<hr />
+						<openwb-base-heading
+							>Datenübertragung</openwb-base-heading
+						>
+						<openwb-base-button-group-input
+							title="Alle Statusdaten"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Aus',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'An',
+									class: 'btn-outline-success',
+								},
+							]"
+							:model-value="mqttBridge.data_transfer.status"
+							@update:model-value="
+								updateState(
+									mqttBridgeKey,
+									$event,
+									'data_transfer.status'
+								)
+							"
+						>
+							<template #help>ToDo...</template>
+						</openwb-base-button-group-input>
+						<openwb-base-button-group-input
+							title="Datenserien für Diagramme"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Aus',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'An',
+									class: 'btn-outline-success',
+								},
+							]"
+							:model-value="mqttBridge.data_transfer.graph"
+							@update:model-value="
+								updateState(
+									mqttBridgeKey,
+									$event,
+									'data_transfer.graph'
+								)
+							"
+						>
+							<template #help>ToDo...</template>
+						</openwb-base-button-group-input>
+						<openwb-base-button-group-input
+							title="Fernkonfiguration ermöglichen"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Aus',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'An',
+									class: 'btn-outline-success',
+								},
+							]"
+							:model-value="
+								mqttBridge.data_transfer.configuration
+							"
+							@update:model-value="
+								updateState(
+									mqttBridgeKey,
+									$event,
+									'data_transfer.configuration'
+								)
+							"
+						>
+							<template #help>ToDo...</template>
+						</openwb-base-button-group-input>
+						<template #footer>
+							<openwb-base-submit-buttons
+								:formName="
+									'mqttBridgeConfigurationForm' +
+									getMqttBridgeIndex(mqttBridgeKey)
+								"
+								:hideDefaults="true"
+								@save="$emit('save', [mqttBridgeKey])"
+								@reset="$emit('reset', [mqttBridgeKey])"
+							/>
+						</template>
+					</openwb-base-card>
+				</form>
 			</div>
 		</openwb-base-card>
 	</div>
@@ -396,13 +428,14 @@ export default {
 				data: {},
 			});
 		},
+		getMqttBridgeIndex(bridgeKey) {
+			return parseInt(bridgeKey.match(/(?:\/)(\d+)$/)[1]);
+		},
 		removeMqttBridgeModal(mqttBridge, event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
 			console.log("removeMqttBridgeModal", mqttBridge);
-			this.modalMqttBridgeIndex = parseInt(
-				mqttBridge.match(/(?:\/)(\d+)$/)[1]
-			);
+			this.modalMqttBridgeIndex = this.getMqttBridgeIndex(mqttBridge);
 			this.showMqttBridgeModal = true;
 		},
 		removeMqttBridge(mqttBridgeIndex, event) {

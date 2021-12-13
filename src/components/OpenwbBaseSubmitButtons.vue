@@ -86,6 +86,7 @@ export default {
 		FontAwesomeIcon,
 	},
 	props: {
+		formName: { type: String, default: undefined },
 		hideReset: { type: Boolean, default: false },
 		// set to defaults not implemented yet
 		hideDefaults: { type: Boolean, default: true },
@@ -118,12 +119,19 @@ export default {
 			}
 		},
 		saveSettings() {
-			if (this.$root.$refs.myForm.reportValidity()) {
-				this.showModalSave = true;
-				this.$emit("save");
-				// ToDo: find a better way to hide modal
-				window.setTimeout(() => (this.showModalSave = false), 3000);
+			if (this.formName) {
+				let myForm = document.forms[this.formName];
+				if (!myForm.reportValidity()) {
+					console.debug("form invalid");
+					return;
+				}
+			} else {
+				console.debug("no form to validate");
 			}
+			this.showModalSave = true;
+			this.$emit("save");
+			// ToDo: find a better way to hide modal
+			window.setTimeout(() => (this.showModalSave = false), 3000);
 		},
 	},
 };
