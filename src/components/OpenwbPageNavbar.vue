@@ -126,7 +126,7 @@
 							Lastmanagement
 						</router-link>
 						<router-link
-							to="/ChargepointInstallation"
+							to="/ChargePointInstallation"
 							class="dropdown-item"
 							active-class="active disabled"
 						>
@@ -181,7 +181,7 @@
 							Support
 						</router-link>
 						<router-link
-							to="/System/Dataprotection"
+							to="/System/DataProtection"
 							class="dropdown-item"
 							active-class="active disabled"
 						>

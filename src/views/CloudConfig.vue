@@ -1,4 +1,16 @@
 <template>
+	<!-- modal dialogs -->
+	<openwb-base-modal-dialog
+		:show="showCloudRemoveModal"
+		title="Cloud Zugang löschen"
+		subtype="danger"
+		:buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
+		@modal-result="removeCloud($event)"
+	>
+		Wollen Sie den vorhandenen Cloud Zugang wirklich entfernen? Dieser
+		Vorgang kann nicht rückgängig gemacht werden!
+	</openwb-base-modal-dialog>
+	<!-- main content -->
 	<div class="support">
 		<openwb-base-alert
 			v-if="
@@ -9,7 +21,7 @@
 			subtype="danger"
 		>
 			Sie müssen der
-			<router-link to="/System/Dataprotection">
+			<router-link to="/System/DataProtection">
 				Datenschutzerklärung
 			</router-link>
 			zustimmen, um die openWB Cloud nutzen zu können.
@@ -17,12 +29,19 @@
 		<div v-else>
 			<openwb-base-alert subtype="success">
 				Sie haben der
-				<router-link to="/System/Dataprotection">
+				<router-link to="/System/DataProtection">
 					Datenschutzerklärung
 				</router-link>
 				zugestimmt und können die openWB Cloud nutzen.
 			</openwb-base-alert>
-			<form name="cloudConfigCreateForm">
+			<openwb-base-alert
+				v-if="!enableRemoveCloudButton"
+				subtype="warning"
+			>
+				Der Zugang wurde entfernt. Bitte starten Sie die openWB neu, um
+				die Änderungen anzuwenden!
+			</openwb-base-alert>
+			<form v-if="!cloudBridgeKey" name="cloudConfigCreateForm">
 				<openwb-base-card title="Neuen Zugang erstellen">
 					<div
 						v-if="
@@ -76,12 +95,16 @@
 						</div>
 					</template>
 				</openwb-base-card>
-				<openwb-base-alert v-if="!enableNewCloudButton" subtype="info">
+				<openwb-base-alert
+					v-if="!enableNewCloudButton"
+					subtype="info"
+					class="mb-2"
+				>
 					Der neue Zugang wird eingerichtet. Dieser Vorgang kann bis
-					zu einer Minute dauern.
+					zu einer Minute dauern. Bitte warten.
 				</openwb-base-alert>
 			</form>
-			<form name="cloudConfigConnectForm">
+			<form v-if="!cloudBridgeKey" name="cloudConfigConnectForm">
 				<openwb-base-card title="Vorhandenen Zugang einrichten">
 					<div
 						v-if="
@@ -134,13 +157,54 @@
 						</div>
 					</template>
 				</openwb-base-card>
+			</form>
+			<form v-if="cloudBridgeKey" name="cloudConfigured">
 				<openwb-base-alert
-					v-if="!enableCloudConnectButton"
-					subtype="info"
+					v-if="!enableCloudConnectButton || !enableNewCloudButton"
+					subtype="warning"
 				>
-					Der Zugang wird eingerichtet. Dieser Vorgang kann bis zu
-					einer Minute dauern.
+					Der Zugang wurde eingerichtet. Bitte starten Sie die openWB
+					neu, um die Änderungen anzuwenden!
 				</openwb-base-alert>
+				<openwb-base-card title="Vorhandener Cloud Zugang">
+					<openwb-base-heading>
+						<span>
+							Mit diesen Zugangsdaten können Sie sich in der
+							<a href="https://web.openwb.de/">openWB Cloud </a>
+							anmelden.
+						</span>
+					</openwb-base-heading>
+					<openwb-base-text-input
+						title="Benutzername"
+						required
+						subtype="user"
+						v-model="getCloudCredentials().username"
+						disabled
+					/>
+					<openwb-base-text-input
+						title="Passwort"
+						required
+						subtype="password"
+						v-model="getCloudCredentials().password"
+						disabled
+					/>
+					<template #footer>
+						<div class="row justify-content-center">
+							<openwb-base-click-button
+								class="col-4"
+								:class="
+									enableRemoveCloudButton
+										? 'btn-danger'
+										: 'btn-outline-danger'
+								"
+								:disabled="!enableRemoveCloudButton"
+								@click="removeCloudModal($event)"
+							>
+								Zugang löschen
+							</openwb-base-click-button>
+						</div>
+					</template>
+				</openwb-base-card>
 			</form>
 		</div>
 	</div>
@@ -158,7 +222,7 @@ export default {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
 				"openWB/system/dataprotection_acknowledged",
-				"openWB/system/cloud",
+				"openWB/system/mqtt/bridge/+",
 			],
 			enableNewCloudButton: true,
 			newCloudData: {
@@ -170,11 +234,47 @@ export default {
 				username: "",
 				password: "",
 			},
+			enableRemoveCloudButton: true,
+			showCloudRemoveModal: false,
 		};
 	},
+	computed: {
+		cloudBridge: {
+			get() {
+				let bridges = this.getWildcardTopics(
+					"openWB/system/mqtt/bridge/+"
+				);
+				for (const [key, value] of Object.entries(bridges)) {
+					if (!value.remote.is_openwb_cloud) {
+						delete bridges[key];
+					}
+				}
+				return bridges;
+			},
+		},
+		cloudBridgeKey: {
+			get() {
+				for (const [key, value] of Object.entries(this.cloudBridge)) {
+					if (value.remote.is_openwb_cloud) {
+						return key;
+					}
+				}
+				return undefined;
+			},
+		},
+	},
 	methods: {
+		getCloudCredentials() {
+			return {
+				username: this.cloudBridge[this.cloudBridgeKey].remote.username,
+				password: this.cloudBridge[this.cloudBridgeKey].remote.password,
+			};
+		},
+		getMqttBridgeIndex(bridgeKey) {
+			return parseInt(bridgeKey.match(/(?:\/)(\d+)$/)[1]);
+		},
 		createCloud() {
-			if (this.$refs.cloudConfigCreateForm.reportValidity()) {
+			if (document.forms.cloudConfigCreateForm.reportValidity()) {
 				this.$emit("sendCommand", {
 					command: "initCloud",
 					data: this.newCloudData,
@@ -183,12 +283,29 @@ export default {
 			}
 		},
 		connectCloud() {
-			if (this.$refs.cloudConfigConnectForm.reportValidity()) {
+			if (document.forms.cloudConfigConnectForm.reportValidity()) {
 				this.$emit("sendCommand", {
 					command: "connectCloud",
 					data: this.connectCloudData,
 				});
 				this.enableCloudConnectButton = false;
+			}
+		},
+		removeCloudModal(event) {
+			// prevent further processing of the click event
+			event.stopPropagation();
+			this.showCloudRemoveModal = true;
+		},
+		removeCloud(event) {
+			this.showCloudRemoveModal = false;
+			if (event == "confirm") {
+				console.info("request removal of cloud");
+				this.$emit("sendCommand", {
+					command: "removeMqttBridge",
+					data: {
+						bridge: this.getMqttBridgeIndex(this.cloudBridgeKey),
+					},
+				});
 			}
 		},
 	},

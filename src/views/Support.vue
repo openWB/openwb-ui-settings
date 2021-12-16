@@ -10,7 +10,7 @@
 				subtype="danger"
 			>
 				Sie müssen der
-				<router-link to="/System/Dataprotection">
+				<router-link to="/System/DataProtection">
 					Datenschutzerklärung
 				</router-link>
 				zustimmen, um einen Fehlerbericht senden zu können.
@@ -18,7 +18,7 @@
 			<div v-else>
 				<openwb-base-alert subtype="success">
 					Sie haben der
-					<router-link to="/System/Dataprotection">
+					<router-link to="/System/DataProtection">
 						Datenschutzerklärung
 					</router-link>
 					zugestimmt und können Fehlerberichte senden.

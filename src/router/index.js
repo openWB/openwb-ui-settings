@@ -102,15 +102,15 @@ const routes = [
 			),
 	},
 	{
-		path: "/ChargepointInstallation",
-		name: "ChargepointInstallation",
+		path: "/ChargePointInstallation",
+		name: "ChargePointInstallation",
 		meta: {
 			heading: "Ladepunkt Installation",
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "ChargepointInstallation" */
-				"../views/ChargepointInstallation.vue"
+				/* webpackChunkName: "ChargePointInstallation" */
+				"../views/ChargePointInstallation.vue"
 			),
 	},
 	{
@@ -174,15 +174,15 @@ const routes = [
 			),
 	},
 	{
-		path: "/System/Dataprotection",
-		name: "Dataprotection",
+		path: "/System/DataProtection",
+		name: "DataProtection",
 		meta: {
 			heading: "Datenschutzerklärung",
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "Dataprotection" */
-				"../views/Dataprotection.vue"
+				/* webpackChunkName: "DataProtection" */
+				"../views/DataProtection.vue"
 			),
 	},
 	{

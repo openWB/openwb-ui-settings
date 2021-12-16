@@ -232,12 +232,23 @@
 							title="TLS Version"
 							:buttons="[
 								{
-									buttonValue: 'tlsv1.2',
-									text: 'v1.2',
+									buttonValue: 'auto',
+									text: 'Automatisch',
+									class: 'btn-outline-success',
 								},
 								{
-									buttonValue: 'tlsv1.3',
-									text: 'v1.3',
+									buttonValue: 'tlsv1.0',
+									text: 'v1.0',
+									class: 'btn-outline-warning',
+								},
+								{
+									buttonValue: 'tlsv1.1',
+									text: 'v1.1',
+									class: 'btn-outline-warning',
+								},
+								{
+									buttonValue: 'tlsv1.2',
+									text: 'v1.2',
 								},
 							]"
 							:model-value="mqttBridge.remote.tls_version"
@@ -248,7 +259,16 @@
 									'remote.tls_version'
 								)
 							"
-						/>
+						>
+							<template #help>
+								In der Einstellung "Automatisch" wird die
+								Version zwischen Client und Server ausgehandelt.
+								Wenn erforderlich, kann eine spezielle Version
+								erzwungen werden. Versionen kleiner 1.2 gelten
+								als veraltet und sollten nicht mehr verwendet
+								werden.
+							</template>
+						</openwb-base-button-group-input>
 						<openwb-base-button-group-input
 							title="Brücke signalisieren"
 							:buttons="[
@@ -414,8 +434,16 @@ export default {
 	computed: {
 		configuredMqttBridges: {
 			get() {
-				// ToDo: filter openWB cloud
-				return this.getWildcardTopics("openWB/system/mqtt/bridge/+");
+				let bridges = this.getWildcardTopics(
+					"openWB/system/mqtt/bridge/+"
+				);
+				for (const [key, value] of Object.entries(bridges)) {
+					if (value.remote.is_openwb_cloud) {
+						console.log("filtering bridge " + key, value);
+						delete bridges[key];
+					}
+				}
+				return bridges;
 			},
 		},
 	},
