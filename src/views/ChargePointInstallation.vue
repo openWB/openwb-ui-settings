@@ -167,7 +167,6 @@
 								'connection_module.configuration'
 							)
 						"
-						disabled
 					/>
 					<openwb-base-text-input
 						title="Leistungsmodul"
