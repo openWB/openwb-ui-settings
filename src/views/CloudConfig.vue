@@ -95,7 +95,11 @@
 						</div>
 					</template>
 				</openwb-base-card>
-				<openwb-base-alert v-if="!enableNewCloudButton" subtype="info" class="mb-2">
+				<openwb-base-alert
+					v-if="!enableNewCloudButton"
+					subtype="info"
+					class="mb-2"
+				>
 					Der neue Zugang wird eingerichtet. Dieser Vorgang kann bis
 					zu einer Minute dauern. Bitte warten.
 				</openwb-base-alert>
