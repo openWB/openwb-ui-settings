@@ -99,6 +99,9 @@
 				>
 					<template #actions>
 						<openwb-base-avatar
+							v-if="
+								!installedChargepointKey.endsWith('/0/config')
+							"
 							class="bg-danger clickable"
 							@click="
 								removeChargepointModal(
@@ -140,13 +143,28 @@
 						title="Verbindungsmodul"
 						subtype="text"
 						:model-value="
-							installedChargepoint.connection_module.selected
+							installedChargepoint.connection_module.type
 						"
 						@update:model-value="
 							updateState(
 								installedChargepointKey,
 								$event,
-								'connection_module.selected'
+								'connection_module.type'
+							)
+						"
+						disabled
+					/>
+					<openwb-base-text-input
+						title="Verbindung"
+						subtype="json"
+						:model-value="
+							installedChargepoint.connection_module.configuration
+						"
+						@update:model-value="
+							updateState(
+								installedChargepointKey,
+								$event,
+								'connection_module.configuration'
 							)
 						"
 						disabled
@@ -154,14 +172,12 @@
 					<openwb-base-text-input
 						title="Leistungsmodul"
 						subtype="text"
-						:model-value="
-							installedChargepoint.power_module.selected
-						"
+						:model-value="installedChargepoint.power_module.type"
 						@update:model-value="
 							updateState(
 								installedChargepointKey,
 								$event,
-								'power_module.selected'
+								'power_module.type'
 							)
 						"
 						disabled

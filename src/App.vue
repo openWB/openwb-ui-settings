@@ -84,7 +84,6 @@ export default {
 		 */
 		saveValues(topicsToSave = undefined) {
 			console.debug("saving values...");
-			console.log(topicsToSave);
 			// collect data
 			let topics = {};
 			if (topicsToSave === undefined) {
@@ -138,7 +137,7 @@ export default {
 		 * @param {Object} event - Command object to send
 		 */
 		sendCommand(event) {
-			console.log("sendCommand event", event);
+			console.debug("sendCommand event", event);
 			this.doPublish(
 				"openWB/set/command/" + this.client.options.clientId + "/todo",
 				event,
