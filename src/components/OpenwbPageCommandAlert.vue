@@ -10,7 +10,7 @@
 			alertData.data
 		}}</span>
 		' ist ein Fehler aufgetreten:<br />
-		<span class="font-weight-bold">{{ alertData.error }}</span>
+		<pre class="font-weight-bold">{{ alertData.error }}</pre>
 		<button type="button" class="close" aria-label="Close" @click="dismiss">
 			<span aria-hidden="true">&times;</span>
 		</button>
