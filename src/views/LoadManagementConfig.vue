@@ -200,6 +200,7 @@ export default {
 				"openWB/system/device/+/component/+/config",
 				"openWB/counter/+/config/max_current",
 				"openWB/counter/+/config/max_total_power",
+				"openWB/chargepoint/+/config",
 			],
 		};
 	},
