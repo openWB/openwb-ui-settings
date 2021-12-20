@@ -1,6 +1,6 @@
 <template>
-	<div class="dataprotection">
-		<form name="dataprotectionForm">
+	<div class="dataProtection">
+		<form name="dataProtectionForm">
 			<openwb-base-card title="Fehlerbericht">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
@@ -52,7 +52,7 @@
 				</div>
 				<template #footer>
 					<openwb-base-submit-buttons
-						formName="dataprotectionForm"
+						formName="dataProtectionForm"
 						:hideReset="true"
 						:hideDefaults="true"
 						@save="$emit('save')"
@@ -67,7 +67,7 @@
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
-	name: "Dataprotection",
+	name: "DataProtection",
 	mixins: [ComponentStateMixin],
 	data() {
 		return {

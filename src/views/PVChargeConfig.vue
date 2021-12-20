@@ -57,7 +57,7 @@
 						"
 					>
 						<template #help>
-							Untere Grenze des Gegelbereichs.
+							Untere Grenze des Regelbereichs.
 						</template>
 					</openwb-base-number-input>
 					<openwb-base-number-input
@@ -78,7 +78,7 @@
 						"
 					>
 						<template #help
-							>Obere Grenze des Gegelbereichs.</template
+							>Obere Grenze des Regelbereichs.</template
 						>
 					</openwb-base-number-input>
 					<openwb-base-number-input
@@ -105,7 +105,7 @@
 							Wert sollte zur optimalen Eigenverbrauchssteuerung
 							70% der installierten Generatorleistung betragen.<br />
 							Die Nutzung dieser Option ergibt nur Sinn wenn ein
-							Wechselrichter und Smartmeter verbaut ist welches
+							Wechselrichter und Smart-Meter verbaut ist welches
 							eine dynamische Begrenzung der Einspeiseleistung
 							bietet.
 						</template>

@@ -25,7 +25,7 @@ export default {
 	line-height: 30px;
 	/* vertically center the text there */
 	z-index: 1030;
-	/* same as menue */
+	/* same as menu */
 }
 
 .container {

@@ -187,8 +187,8 @@
 						{ buttonValue: 1, text: 'Eins' },
 						{ buttonValue: 2, text: 'Zwei' },
 					]"
-					:model-value="$store.state.examples.buttongroup1"
-					@update:model-value="updateState('buttongroup1', $event)"
+					:model-value="$store.state.examples.buttonGroup1"
+					@update:model-value="updateState('buttonGroup1', $event)"
 				>
 					<template #help>Hilfetext</template>
 				</openwb-base-button-group-input>

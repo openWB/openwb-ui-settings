@@ -22,7 +22,7 @@ if (process.env.NODE_ENV !== "production") {
 		range2: 10,
 		select1: 1,
 		select2: "three",
-		buttongroup1: 1,
+		buttonGroup1: 1,
 		checkbox1: true,
 		json1: { text: "Text", number: 123 },
 		hierarchy1: [

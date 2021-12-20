@@ -273,7 +273,7 @@
 						>
 						</openwb-base-range-input>
 						<openwb-base-range-input
-							title="Maximalstrom 1-phasig"
+							title="Maximalstrom bei einer Phase"
 							:min="6"
 							:max="32"
 							:step="1"
@@ -289,7 +289,7 @@
 						>
 						</openwb-base-range-input>
 						<openwb-base-range-input
-							title="Maximalstrom mehr-phasig"
+							title="Maximalstrom mehrere Phasen"
 							:min="6"
 							:max="32"
 							:step="1"

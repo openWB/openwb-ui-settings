@@ -213,7 +213,7 @@ const routes = [
 /* examples for development only start here */
 if (process.env.NODE_ENV !== "production") {
 	routes.push({
-		path: "/testing-store",
+		path: "/TestingStore",
 		name: "VUEX Store",
 		meta: {
 			heading: "Testseite VUEX Store",

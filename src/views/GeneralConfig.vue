@@ -122,8 +122,8 @@
 								insgesamt träger. Ebenso können eingestellte
 								Verzögerungen um den Faktor der Änderung
 								langsamer ausgeführt werden. Solange es keinen
-								triftiten Grund gibt sollte immer Normal gewählt
-								werden.
+								triftigen Grund gibt, sollte immer Normal
+								gewählt werden.
 							</span>
 						</template>
 					</openwb-base-button-group-input>
@@ -165,7 +165,7 @@
 							bei Überschreiten von 51,8 Hz unterbrochen. Dies ist
 							dann der Fall, wenn der Energieversorger
 							Wartungsarbeiten am (Teil-)Netz durchführt und auf
-							einen vorübergehenden Generatorbetrieb umschaltet.
+							einen vorübergehenden Generator-Betrieb umschaltet.
 							Die Erhöhung der Frequenz wird durchgeführt, um die
 							PV Anlagen abzuschalten.<br />
 							<span class="text-danger">
@@ -432,7 +432,7 @@
 					</div>
 				</div>
 			</openwb-base-card>
-			<openwb-base-card title="Ladelog">
+			<openwb-base-card title="Lade-Log">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
 						Diese Einstellungen sind nicht verfügbar, solange sich
@@ -453,7 +453,7 @@
 						"
 					>
 						<template #help>
-							Dient zur Berechnung der Ladekosten im Ladelog.<br />
+							Dient zur Berechnung der Ladekosten im Lade-Log.<br />
 							Es können bis zu 4 Nachkommastellen genutzt werden.
 						</template>
 					</openwb-base-number-input>

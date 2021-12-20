@@ -63,7 +63,7 @@ export default {
 			if (element.id.startsWith("counter")) {
 				myClasses += "counter";
 			} else if (element.id.startsWith("cp")) {
-				myClasses += "chargepoint";
+				myClasses += "charge-point";
 			} else if (element.id.startsWith("bat")) {
 				myClasses += "battery";
 			} else if (element.id.startsWith("inverter")) {
@@ -184,7 +184,7 @@ export default {
 	background-color: var(--danger);
 }
 
-.element-titel.chargepoint {
+.element-titel.charge-point {
 	background-color: var(--primary);
 }
 

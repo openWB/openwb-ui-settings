@@ -16,7 +16,7 @@ vApp.use(store).use(router);
 const requireComponent = require.context(
 	// The relative path of the components folder
 	"@/components",
-	// Whether or not to look in subfolders
+	// Whether or not to look in sub folders
 	false,
 	// The regular expression used to match base component filenames
 	/OpenwbBase[A-Za-z]+\.(vue)$/
