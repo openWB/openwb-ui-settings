@@ -1,7 +1,9 @@
 <template>
 	<div class="status">
+		<!-- all charge points -->
 		<openwb-base-card
 			title="Alle Ladepunkte"
+			v-if="numChargePointsInstalled > 1"
 			subtype="primary"
 			:collapsible="true"
 			:collapsed="true"
@@ -27,6 +29,7 @@
 				"
 			/>
 		</openwb-base-card>
+		<!-- individual charge points -->
 		<openwb-base-card
 			v-for="(
 				installedChargePoint, installedChargePointKey
@@ -213,6 +216,7 @@
 				"
 			/>
 		</openwb-base-card>
+		<!-- counters -->
 		<openwb-base-card
 			v-for="counter in counterConfigs"
 			:key="counter.id"
@@ -320,8 +324,10 @@
 				"
 			/>
 		</openwb-base-card>
+		<!-- all inverters -->
 		<openwb-base-card
 			title="Alle Wechselrichter"
+			v-if="numInvertersInstalled > 1"
 			subtype="success"
 			:collapsible="true"
 			:collapsed="true"
@@ -368,6 +374,7 @@
 				:model-value="$store.state.mqtt['openWB/pv/get/yearly_yield']"
 			/>
 		</openwb-base-card>
+		<!-- individual inverters -->
 		<openwb-base-card
 			v-for="inverter in inverterConfigs"
 			:key="inverter.id"
@@ -399,8 +406,10 @@
 				"
 			/>
 		</openwb-base-card>
+		<!-- all batteries -->
 		<openwb-base-card
 			title="Alle Speicher"
+			v-if="numBatteriesInstalled > 1"
 			subtype="warning"
 			:collapsible="true"
 			:collapsed="true"
@@ -460,6 +469,7 @@
 				:model-value="$store.state.mqtt['openWB/bat/get/soc']"
 			/>
 		</openwb-base-card>
+		<!-- individual batteries -->
 		<openwb-base-card
 			v-for="battery in batteryConfigs"
 			:key="battery.id"
@@ -553,6 +563,11 @@ export default {
 				return this.getWildcardTopics("openWB/chargepoint/+/config");
 			},
 		},
+		numChargePointsInstalled: {
+			get() {
+				return Object.keys(this.installedChargePoints).length;
+			},
+		},
 		counterConfigs: {
 			get() {
 				return this.filterComponentsByType(
@@ -563,6 +578,11 @@ export default {
 				);
 			},
 		},
+		numInvertersInstalled: {
+			get() {
+				return Object.keys(this.inverterConfigs).length;
+			},
+		},
 		inverterConfigs: {
 			get() {
 				return this.filterComponentsByType(
@@ -571,6 +591,11 @@ export default {
 					),
 					"inverter"
 				);
+			},
+		},
+		numBatteriesInstalled: {
+			get() {
+				return Object.keys(this.batteryConfigs).length;
 			},
 		},
 		batteryConfigs: {
