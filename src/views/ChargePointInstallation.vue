@@ -1,56 +1,56 @@
 <template>
 	<!-- modal dialogs -->
 	<openwb-base-modal-dialog
-		:show="showChargepointModal"
+		:show="showChargePointModal"
 		title="Ladepunkt löschen"
 		subtype="danger"
 		:buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
-		@modal-result="removeChargepoint(modalChargepointIndex, $event)"
+		@modal-result="removeChargePoint(modalChargePointIndex, $event)"
 	>
 		Wollen Sie den Ladepunkt "{{
-			getChargepointName(modalChargepointIndex)
+			getChargePointName(modalChargePointIndex)
 		}}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht
 		werden!
 	</openwb-base-modal-dialog>
 	<openwb-base-modal-dialog
-		:show="showChargepointTemplateModal"
+		:show="showChargePointTemplateModal"
 		title="Ladepunkt-Vorlage löschen"
 		subtype="danger"
 		:buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
 		@modal-result="
-			removeChargepointTemplate(modalChargepointTemplateIndex, $event)
+			removeChargePointTemplate(modalChargePointTemplateIndex, $event)
 		"
 	>
 		Wollen Sie die Ladepunkt-Vorlage "{{
-			getChargepointTemplateName(modalChargepointTemplateIndex)
+			getChargePointTemplateName(modalChargePointTemplateIndex)
 		}}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht
 		werden!
 	</openwb-base-modal-dialog>
 	<openwb-base-modal-dialog
-		:show="showChargepointTemplateAutolockPlanModal"
+		:show="showChargePointTemplateAutolockPlanModal"
 		title="Autolock Zeitplan löschen"
 		subtype="danger"
 		:buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
 		@modal-result="
-			removeChargepointTemplateAutolockPlan(
-				modalChargepointTemplateIndex,
-				modalChargepointTemplateAutolockPlanIndex,
+			removeChargePointTemplateAutolockPlan(
+				modalChargePointTemplateIndex,
+				modalChargePointTemplateAutolockPlanIndex,
 				$event
 			)
 		"
 	>
 		Wollen Sie den Autolock Zeitplan "{{
-			getChargepointTemplateAutolockPlanName(
-				modalChargepointTemplateIndex,
-				modalChargepointTemplateAutolockPlanIndex
+			getChargePointTemplateAutolockPlanName(
+				modalChargePointTemplateIndex,
+				modalChargePointTemplateAutolockPlanIndex
 			)
 		}}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht
 		werden!
 	</openwb-base-modal-dialog>
 	<!-- main content -->
-	<div class="chargepointInstallation">
-		<form name="chargepointInstallationForm">
-			<!-- chargepoint card -->
+	<div class="chargePointInstallation">
+		<form name="chargePointInstallationForm">
+			<!-- charge point card -->
 			<openwb-base-card
 				title="Ladepunkte"
 				:collapsible="true"
@@ -60,20 +60,20 @@
 					class="mb-2"
 					title="Verfügbare Ladepunkte"
 					notSelected="Bitte auswählen"
-					:options="getChargepointList()"
-					:model-value="chargepointToAdd"
-					@update:model-value="chargepointToAdd = $event"
+					:options="getChargePointList()"
+					:model-value="chargePointToAdd"
+					@update:model-value="chargePointToAdd = $event"
 				>
 					<template #append>
 						<span class="col-1">
 							<openwb-base-click-button
 								:class="
-									chargepointToAdd === undefined
+									chargePointToAdd === undefined
 										? 'btn-outline-success'
 										: 'btn-success'
 								"
-								:disabled="chargepointToAdd === undefined"
-								@click="addChargepoint"
+								:disabled="chargePointToAdd === undefined"
+								@click="addChargePoint"
 							>
 								<font-awesome-icon
 									fixed-width
@@ -89,10 +89,10 @@
 				</openwb-base-select-input>
 				<openwb-base-card
 					v-for="(
-						installedChargepoint, installedChargepointKey
-					) in installedChargepoints"
-					:key="installedChargepointKey"
-					:title="installedChargepoint.name"
+						installedChargePoint, installedChargePointKey
+					) in installedChargePoints"
+					:key="installedChargePointKey"
+					:title="installedChargePoint.name"
 					:collapsible="true"
 					:collapsed="true"
 					subtype="primary"
@@ -100,12 +100,12 @@
 					<template #actions>
 						<openwb-base-avatar
 							v-if="
-								!installedChargepointKey.endsWith('/0/config')
+								!installedChargePointKey.endsWith('/0/config')
 							"
 							class="bg-danger clickable"
 							@click="
-								removeChargepointModal(
-									installedChargepointKey,
+								removeChargePointModal(
+									installedChargePointKey,
 									$event
 								)
 							"
@@ -119,20 +119,20 @@
 					<openwb-base-text-input
 						title="Bezeichnung"
 						subtype="text"
-						:model-value="installedChargepoint.name"
+						:model-value="installedChargePoint.name"
 						@update:model-value="
-							updateState(installedChargepointKey, $event, 'name')
+							updateState(installedChargePointKey, $event, 'name')
 						"
 					/>
 					<openwb-base-select-input
 						title="Ladepunkt-Vorlage"
-						:options="chargepointTemplateList"
+						:options="chargePointTemplateList"
 						:model-value="
-							$store.state.mqtt[installedChargepointKey].template
+							$store.state.mqtt[installedChargePointKey].template
 						"
 						@update:model-value="
 							updateState(
-								installedChargepointKey,
+								installedChargePointKey,
 								$event,
 								'template'
 							)
@@ -143,11 +143,11 @@
 						title="Verbindungsmodul"
 						subtype="text"
 						:model-value="
-							installedChargepoint.connection_module.type
+							installedChargePoint.connection_module.type
 						"
 						@update:model-value="
 							updateState(
-								installedChargepointKey,
+								installedChargePointKey,
 								$event,
 								'connection_module.type'
 							)
@@ -158,11 +158,11 @@
 						title="Verbindung"
 						subtype="json"
 						:model-value="
-							installedChargepoint.connection_module.configuration
+							installedChargePoint.connection_module.configuration
 						"
 						@update:model-value="
 							updateState(
-								installedChargepointKey,
+								installedChargePointKey,
 								$event,
 								'connection_module.configuration'
 							)
@@ -171,10 +171,10 @@
 					<openwb-base-text-input
 						title="Leistungsmodul"
 						subtype="text"
-						:model-value="installedChargepoint.power_module.type"
+						:model-value="installedChargePoint.power_module.type"
 						@update:model-value="
 							updateState(
-								installedChargepointKey,
+								installedChargePointKey,
 								$event,
 								'power_module.type'
 							)
@@ -189,10 +189,10 @@
 							{ buttonValue: false, text: 'Nein' },
 							{ buttonValue: true, text: 'Ja' },
 						]"
-						:model-value="installedChargepoint.auto_phase_switch_hw"
+						:model-value="installedChargePoint.auto_phase_switch_hw"
 						@update:model-value="
 							updateState(
-								installedChargepointKey,
+								installedChargePointKey,
 								$event,
 								'auto_phase_switch_hw'
 							)
@@ -205,11 +205,11 @@
 							{ buttonValue: true, text: 'Ja' },
 						]"
 						:model-value="
-							installedChargepoint.control_pilot_interruption_hw
+							installedChargePoint.control_pilot_interruption_hw
 						"
 						@update:model-value="
 							updateState(
-								installedChargepointKey,
+								installedChargePointKey,
 								$event,
 								'control_pilot_interruption_hw'
 							)
@@ -225,10 +225,10 @@
 							{ buttonValue: 2, text: '2' },
 							{ buttonValue: 3, text: '3' },
 						]"
-						:model-value="installedChargepoint.connected_phases"
+						:model-value="installedChargePoint.connected_phases"
 						@update:model-value="
 							updateState(
-								installedChargepointKey,
+								installedChargePointKey,
 								$event,
 								'connected_phases'
 							)
@@ -258,10 +258,10 @@
 								class: 'btn-outline-success',
 							},
 						]"
-						:model-value="installedChargepoint.phase_1"
+						:model-value="installedChargePoint.phase_1"
 						@update:model-value="
 							updateState(
-								installedChargepointKey,
+								installedChargePointKey,
 								$event,
 								'phase_1'
 							)
@@ -281,7 +281,7 @@
 					</openwb-base-button-group-input>
 				</openwb-base-card>
 			</openwb-base-card>
-			<!-- chargepoint template card -->
+			<!-- charge point template card -->
 			<openwb-base-card
 				title="Ladepunkt-Vorlagen"
 				:collapsible="true"
@@ -293,7 +293,7 @@
 						v-if="
 							$store.state.mqtt['openWB/general/extern'] === false
 						"
-						@click="addChargepointTemplate"
+						@click="addChargePointTemplate"
 					>
 						<font-awesome-icon
 							fixed-width
@@ -303,23 +303,23 @@
 				</template>
 				<openwb-base-card
 					v-for="(
-						chargepointTemplate, chargepointTemplateKey
-					) in chargepointTemplates"
-					:key="chargepointTemplateKey"
-					:title="chargepointTemplate.name"
+						chargePointTemplate, chargePointTemplateKey
+					) in chargePointTemplates"
+					:key="chargePointTemplateKey"
+					:title="chargePointTemplate.name"
 					:collapsible="true"
 					:collapsed="true"
 					subtype="primary"
 				>
 					<template
 						#actions
-						v-if="!chargepointTemplateKey.endsWith('/0')"
+						v-if="!chargePointTemplateKey.endsWith('/0')"
 					>
 						<openwb-base-avatar
 							class="bg-danger clickable"
 							@click="
-								removeChargepointTemplateModal(
-									chargepointTemplateKey,
+								removeChargePointTemplateModal(
+									chargePointTemplateKey,
 									$event
 								)
 							"
@@ -333,15 +333,15 @@
 					<openwb-base-text-input
 						title="Bezeichnung"
 						subtype="text"
-						:model-value="chargepointTemplate.name"
+						:model-value="chargePointTemplate.name"
 						@update:model-value="
-							updateState(chargepointTemplateKey, $event, 'name')
+							updateState(chargePointTemplateKey, $event, 'name')
 						"
-						:disabled="chargepointTemplateKey.endsWith('/0')"
+						:disabled="chargePointTemplateKey.endsWith('/0')"
 					>
 						<template
 							#help
-							v-if="chargepointTemplateKey.endsWith('/0')"
+							v-if="chargePointTemplateKey.endsWith('/0')"
 						>
 							Die Standard-Vorlage kann nicht umbenannt werden.
 						</template>
@@ -354,10 +354,10 @@
 							{ buttonValue: false, text: 'Nein' },
 							{ buttonValue: true, text: 'Ja' },
 						]"
-						:model-value="chargepointTemplate.rfid_enabling"
+						:model-value="chargePointTemplate.rfid_enabling"
 						@update:model-value="
 							updateState(
-								chargepointTemplateKey,
+								chargePointTemplateKey,
 								$event,
 								'rfid_enabling'
 							)
@@ -366,10 +366,10 @@
 					<openwb-base-array-input
 						title="Zugeordnete Tags"
 						noElementsMessage="Keine Tags zugeordnet."
-						:model-value="chargepointTemplate.valid_tags"
+						:model-value="chargePointTemplate.valid_tags"
 						@update:model-value="
 							updateState(
-								chargepointTemplateKey,
+								chargePointTemplateKey,
 								$event,
 								'valid_tags'
 							)
@@ -383,10 +383,10 @@
 							{ buttonValue: false, text: 'Nein' },
 							{ buttonValue: true, text: 'Ja' },
 						]"
-						:model-value="chargepointTemplate.autolock.active"
+						:model-value="chargePointTemplate.autolock.active"
 						@update:model-value="
 							updateState(
-								chargepointTemplateKey,
+								chargePointTemplateKey,
 								$event,
 								'autolock.active'
 							)
@@ -399,11 +399,11 @@
 							{ buttonValue: true, text: 'Ja' },
 						]"
 						:model-value="
-							chargepointTemplate.autolock.wait_for_charging_end
+							chargePointTemplate.autolock.wait_for_charging_end
 						"
 						@update:model-value="
 							updateState(
-								chargepointTemplateKey,
+								chargePointTemplateKey,
 								$event,
 								'autolock.wait_for_charging_end'
 							)
@@ -415,8 +415,8 @@
 							<openwb-base-avatar
 								class="bg-success clickable"
 								@click="
-									addChargepointTemplateAutolockPlan(
-										chargepointTemplateKey,
+									addChargePointTemplateAutolockPlan(
+										chargePointTemplateKey,
 										$event
 									)
 								"
@@ -431,8 +431,8 @@
 					<openwb-base-card
 						v-for="(
 							autolockPlan, autolockPlanKey
-						) in getChargepointTemplateAutolockPlans(
-							chargepointTemplateKey
+						) in getChargePointTemplateAutolockPlans(
+							chargePointTemplateKey
 						)"
 						:key="autolockPlanKey"
 						:title="autolockPlan.name"
@@ -514,8 +514,8 @@
 								v-if="slotProps.collapsed == false"
 								class="bg-danger clickable"
 								@click="
-									removeChargepointTemplateAutolockPlanModal(
-										chargepointTemplateKey,
+									removeChargePointTemplateAutolockPlanModal(
+										chargePointTemplateKey,
 										autolockPlanKey,
 										$event
 									)
@@ -664,7 +664,7 @@
 			</openwb-base-card>
 
 			<openwb-base-submit-buttons
-				formName="chargepointInstallationForm"
+				formName="chargePointInstallationForm"
 				@save="$emit('save')"
 				@reset="$emit('reset')"
 				@defaults="$emit('defaults')"
@@ -689,7 +689,7 @@ library.add(fasPlus, fasTrash, fasCalendarDay, fasCalendarAlt, fasCalendarWeek);
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
-	name: "ChargepointInstallation",
+	name: "ChargePointInstallation",
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
 	components: {
@@ -704,30 +704,30 @@ export default {
 				"openWB/chargepoint/template/+/autolock/+",
 				"openWB/system/configurable/chargepoints",
 			],
-			chargepointToAdd: undefined,
-			showChargepointModal: false,
-			modalChargepointIndex: undefined,
-			showChargepointTemplateModal: false,
-			modalChargepointTemplateIndex: undefined,
-			showChargepointTemplateAutolockPlanModal: false,
-			modalChargepointTemplateAutolockPlanIndex: undefined,
+			chargePointToAdd: undefined,
+			showChargePointModal: false,
+			modalChargePointIndex: undefined,
+			showChargePointTemplateModal: false,
+			modalChargePointTemplateIndex: undefined,
+			showChargePointTemplateAutolockPlanModal: false,
+			modalChargePointTemplateAutolockPlanIndex: undefined,
 		};
 	},
 	computed: {
-		installedChargepoints: {
+		installedChargePoints: {
 			get() {
 				return this.getWildcardTopics("openWB/chargepoint/+/config");
 			},
 		},
-		chargepointTemplates: {
+		chargePointTemplates: {
 			get() {
 				return this.getWildcardTopics("openWB/chargepoint/template/+");
 			},
 		},
-		chargepointTemplateList: {
+		chargePointTemplateList: {
 			get() {
 				let myList = [];
-				Object.keys(this.chargepointTemplates).forEach((key) => {
+				Object.keys(this.chargePointTemplates).forEach((key) => {
 					// console.log(key);
 					let index = parseInt(key.match(/([0-9]+)/g)[0]);
 					let name =
@@ -742,60 +742,59 @@ export default {
 		},
 	},
 	methods: {
-		addChargepoint(event) {
+		addChargePoint(event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
 			this.$emit("sendCommand", {
 				command: "addChargepoint",
-				data: { type: this.chargepointToAdd },
+				data: { type: this.chargePointToAdd },
 			});
 		},
-		removeChargepointModal(chargepoint, event) {
+		removeChargePointModal(chargePoint, event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
-			console.log("removeChargepointModal");
-			this.modalChargepointIndex = parseInt(
-				chargepoint.match(/(?:\/)(\d+)(?=\/)/)[1]
+			this.modalChargePointIndex = parseInt(
+				chargePoint.match(/(?:\/)(\d+)(?=\/)/)[1]
 			);
-			this.showChargepointModal = true;
+			this.showChargePointModal = true;
 		},
-		removeChargepoint(chargepointIndex, event) {
-			this.showChargepointModal = false;
+		removeChargePoint(chargePointIndex, event) {
+			this.showChargePointModal = false;
 			if (event == "confirm") {
 				console.info(
-					"request removal of chargepoint '" + chargepointIndex + "'"
+					"request removal of charge point '" + chargePointIndex + "'"
 				);
 				this.$emit("sendCommand", {
 					command: "removeChargepoint",
-					data: { id: chargepointIndex },
+					data: { id: chargePointIndex },
 				});
 			}
 		},
-		getChargepointList() {
+		getChargePointList() {
 			return this.$store.state.mqtt[
 				"openWB/system/configurable/chargepoints"
 			];
 		},
-		getChargepointName(chargepointIndex) {
+		getChargePointName(chargePointIndex) {
 			return this.$store.state.mqtt[
-				"openWB/chargepoint/" + chargepointIndex
+				"openWB/chargepoint/" + chargePointIndex
 			]
 				? this.$store.state.mqtt[
-						"openWB/chargepoint/" + chargepointIndex
+						"openWB/chargepoint/" + chargePointIndex
 				  ].name
-				: "Ladepunkt " + chargepointIndex;
+				: "Ladepunkt " + chargePointIndex;
 		},
-		getChargepointTemplateName(chargepointTemplateIndex) {
+		getChargePointTemplateName(chargePointTemplateIndex) {
 			return this.$store.state.mqtt[
-				"openWB/chargepoint/template/" + chargepointTemplateIndex
+				"openWB/chargepoint/template/" + chargePointTemplateIndex
 			]
 				? this.$store.state.mqtt[
 						"openWB/chargepoint/template/" +
-							chargepointTemplateIndex
+							chargePointTemplateIndex
 				  ].name
-				: "Vorlage " + chargepointTemplateIndex;
+				: "Vorlage " + chargePointTemplateIndex;
 		},
-		addChargepointTemplate(event) {
+		addChargePointTemplate(event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
 			this.$emit("sendCommand", {
@@ -803,71 +802,70 @@ export default {
 				data: {},
 			});
 		},
-		removeChargepointTemplateModal(chargepointTemplate, event) {
+		removeChargePointTemplateModal(chargePointTemplate, event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
-			console.log("removeChargepointTemplateModal");
 			// get trailing characters as index
-			this.modalChargepointTemplateIndex = parseInt(
-				chargepointTemplate.match(/([^/]+)$/)[0]
+			this.modalChargePointTemplateIndex = parseInt(
+				chargePointTemplate.match(/([^/]+)$/)[0]
 			);
-			this.showChargepointTemplateModal = true;
+			this.showChargePointTemplateModal = true;
 		},
-		removeChargepointTemplate(chargepointTemplateIndex, event) {
-			this.showChargepointTemplateModal = false;
+		removeChargePointTemplate(chargePointTemplateIndex, event) {
+			this.showChargePointTemplateModal = false;
 			if (event == "confirm") {
 				console.info(
-					"request removal of chargepoint template '" +
-						chargepointTemplateIndex +
+					"request removal of chargePoint template '" +
+						chargePointTemplateIndex +
 						"'"
 				);
 				this.$emit("sendCommand", {
 					command: "removeChargepointTemplate",
-					data: { id: chargepointTemplateIndex },
+					data: { id: chargePointTemplateIndex },
 				});
 			}
 		},
-		addChargepointTemplateAutolockPlan(chargepointTemplate, event) {
+		addChargePointTemplateAutolockPlan(chargePointTemplate, event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
 			console.info(
-				"requesting new chargepoint template autolock plan..."
+				"requesting new charge point template autolock plan..."
 			);
 			// get trailing characters as index
-			let chargepointTemplateIndex = parseInt(
-				chargepointTemplate.match(/([^/]+)$/)[0]
+			let chargePointTemplateIndex = parseInt(
+				chargePointTemplate.match(/([^/]+)$/)[0]
 			);
 			this.$emit("sendCommand", {
 				command: "addAutolockPlan",
-				data: { template: chargepointTemplateIndex },
+				data: { template: chargePointTemplateIndex },
 			});
 		},
-		removeChargepointTemplateAutolockPlanModal(
-			chargepointTemplate,
+		removeChargePointTemplateAutolockPlanModal(
+			chargePointTemplate,
 			autolockPlan,
 			event
 		) {
 			// prevent further processing of the click event
 			event.stopPropagation();
 			// get trailing characters as index
-			this.modalChargepointTemplateIndex = parseInt(
-				chargepointTemplate.match(/([^/]+)$/)[0]
+			this.modalChargePointTemplateIndex = parseInt(
+				chargePointTemplate.match(/([^/]+)$/)[0]
 			);
-			this.modalChargepointTemplateAutolockPlanIndex = parseInt(
+			this.modalChargePointTemplateAutolockPlanIndex = parseInt(
 				autolockPlan.match(/([^/]+)$/)[0]
 			);
-			this.showChargepointTemplateAutolockPlanModal = true;
+			this.showChargePointTemplateAutolockPlanModal = true;
 		},
-		removeChargepointTemplateAutolockPlan(
-			chargepointTemplateIndex,
+		removeChargePointTemplateAutolockPlan(
+			chargePointTemplateIndex,
 			autolockPlanIndex,
 			event
 		) {
-			this.showChargepointTemplateAutolockPlanModal = false;
+			this.showChargePointTemplateAutolockPlanModal = false;
 			if (event == "confirm") {
 				console.info(
-					"request removal of chargepoint template '" +
-						chargepointTemplateIndex +
+					"request removal of chargePoint template '" +
+						chargePointTemplateIndex +
 						"' autolock plan '" +
 						autolockPlanIndex +
 						"'"
@@ -875,13 +873,13 @@ export default {
 				this.$emit("sendCommand", {
 					command: "removeAutolockPlan",
 					data: {
-						template: chargepointTemplateIndex,
+						template: chargePointTemplateIndex,
 						plan: autolockPlanIndex,
 					},
 				});
 			}
 		},
-		getChargepointTemplateAutolockPlanName(templateIndex, planIndex) {
+		getChargePointTemplateAutolockPlanName(templateIndex, planIndex) {
 			return this.$store.state.mqtt[
 				"openWB/chargepoint/template/" +
 					templateIndex +
@@ -896,13 +894,13 @@ export default {
 				  ].name
 				: "Autolock Zeitplan " + templateIndex + "/" + planIndex;
 		},
-		getChargepointTemplateAutolockPlans(chargepointTemplate) {
+		getChargePointTemplateAutolockPlans(chargePointTemplate) {
 			// get trailing characters as index
-			let chargepointTemplateIndex =
-				chargepointTemplate.match(/([^/]+)$/)[0];
+			let chargePointTemplateIndex =
+				chargePointTemplate.match(/([^/]+)$/)[0];
 			let result = this.getWildcardTopics(
 				"openWB/chargepoint/template/" +
-					chargepointTemplateIndex +
+					chargePointTemplateIndex +
 					"/autolock/+"
 			);
 			return result;

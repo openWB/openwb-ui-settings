@@ -16,7 +16,7 @@
 							fixed-width
 							:icon="['fas', 'arrows-alt']"
 						/>
-						{{ getElementName(element) }}
+						{{ getElementLabel(element.id) }}
 					</span>
 					<!-- <span class="element-actions">
 						<font-awesome-icon
@@ -31,7 +31,10 @@
 						/>
 					</span> -->
 				</div>
-				<openwb-nested-list v-model="element.children" />
+				<openwb-nested-list
+					v-model="element.children"
+					:labels="labels"
+				/>
 			</li>
 		</template>
 	</draggable>
@@ -49,9 +52,8 @@ library.add(fasArrowsAlt);
 export default {
 	name: "OpenwbNestedList",
 	props: {
-		list: {
-			type: Object,
-		},
+		list: { type: Object },
+		labels: { type: Object },
 	},
 	components: {
 		draggable,
@@ -63,7 +65,7 @@ export default {
 			if (element.id.startsWith("counter")) {
 				myClasses += "counter";
 			} else if (element.id.startsWith("cp")) {
-				myClasses += "chargepoint";
+				myClasses += "charge-point";
 			} else if (element.id.startsWith("bat")) {
 				myClasses += "battery";
 			} else if (element.id.startsWith("inverter")) {
@@ -71,61 +73,11 @@ export default {
 			}
 			return myClasses;
 		},
-		getElementName(element) {
-			if (
-				element.id.startsWith("counter") ||
-				element.id.startsWith("bat") ||
-				element.id.startsWith("inverter")
-			) {
-				let component = this.getComponent(
-					this.getComponentIndex(element.id)
-				);
-				console.log(component);
-				return component.name;
+		getElementLabel(elementId) {
+			if (this.labels && elementId in this.labels) {
+				return this.labels[elementId];
 			}
-			if (element.id.startsWith("cp")) {
-				let chargepoint = this.getChargepoint(
-					this.getComponentIndex(element.id)
-				);
-				console.log(chargepoint);
-				return chargepoint.name;
-			}
-			return element.id;
-		},
-		getComponentIndex(id) {
-			let index = parseInt(id.match(/(\d+)$/)[0]);
-			console.log("getComponentIndex", index);
-			return index;
-		},
-		getComponent(componentIndex) {
-			let myComponent = undefined;
-			Object.keys(this.$store.state.mqtt).forEach((value) => {
-				console.log("getComponent", componentIndex, value);
-				if (
-					value.match(
-						"^openWB/system/device/[0-9]+/component/" +
-							componentIndex +
-							"/config$"
-					)
-				) {
-					myComponent = this.$store.state.mqtt[value];
-				}
-			});
-			return myComponent;
-		},
-		getChargepoint(componentIndex) {
-			let myChargepoint = undefined;
-			Object.keys(this.$store.state.mqtt).forEach((value) => {
-				console.log("getChargepoint", componentIndex, value);
-				if (
-					value.match(
-						"^openWB/chargepoint/" + componentIndex + "/config$"
-					)
-				) {
-					myChargepoint = this.$store.state.mqtt[value];
-				}
-			});
-			return myChargepoint;
+			return elementId;
 		},
 		// elementEdit(id) {
 		// 	console.log("edit Element:", id);
@@ -184,7 +136,7 @@ export default {
 	background-color: var(--danger);
 }
 
-.element-titel.chargepoint {
+.element-titel.charge-point {
 	background-color: var(--primary);
 }
 

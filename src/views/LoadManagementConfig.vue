@@ -155,6 +155,7 @@
 						@update:model-value="
 							updateState('openWB/counter/get/hierarchy', $event)
 						"
+						:labels="hierarchyLabels"
 					>
 						<template #help>
 							<pre>{{
@@ -223,6 +224,68 @@ export default {
 						};
 					}, {});
 			},
+		},
+		hierarchyLabels: {
+			get() {
+				// ToDo!
+				let labels = {};
+				for (const element of Object.values(
+					this.$store.state.mqtt["openWB/counter/get/hierarchy"]
+				)) {
+					labels = { ...this.getElementTreeNames(element) };
+				}
+				return labels;
+			},
+		},
+	},
+	methods: {
+		getElementTreeNames(element) {
+			let myNames = {};
+			if (element.id.startsWith("cp")) {
+				myNames[element.id] = this.getChargePoint(
+					this.getComponentIndex(element.id)
+				).name;
+			} else {
+				myNames[element.id] = this.getComponent(
+					this.getComponentIndex(element.id)
+				).name;
+			}
+			element.children.forEach((child) => {
+				myNames = { ...myNames, ...this.getElementTreeNames(child) };
+			});
+			return myNames;
+		},
+		getComponentIndex(id) {
+			let index = parseInt(id.match(/(\d+)$/)[0]);
+			return index;
+		},
+		getComponent(componentIndex) {
+			let myComponent = undefined;
+			Object.keys(this.$store.state.mqtt).forEach((value) => {
+				if (
+					value.match(
+						"^openWB/system/device/[0-9]+/component/" +
+							componentIndex +
+							"/config$"
+					)
+				) {
+					myComponent = this.$store.state.mqtt[value];
+				}
+			});
+			return myComponent;
+		},
+		getChargePoint(chargePointIndex) {
+			let myChargePoint = undefined;
+			Object.keys(this.$store.state.mqtt).forEach((value) => {
+				if (
+					value.match(
+						"^openWB/chargepoint/" + chargePointIndex + "/config$"
+					)
+				) {
+					myChargePoint = this.$store.state.mqtt[value];
+				}
+			});
+			return myChargePoint;
 		},
 	},
 };

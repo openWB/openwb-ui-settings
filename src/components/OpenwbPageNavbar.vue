@@ -201,7 +201,7 @@
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 						<router-link
-							to="/testing-store"
+							to="/TestingStore"
 							class="dropdown-item"
 							active-class="active disabled"
 						>

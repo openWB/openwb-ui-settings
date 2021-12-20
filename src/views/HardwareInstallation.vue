@@ -1,4 +1,26 @@
 <template>
+	<!-- modal dialogs -->
+	<openwb-base-modal-dialog
+		:show="showDeviceRemoveModal"
+		title="Gerät löschen"
+		subtype="danger"
+		:buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
+		@modal-result="removeDevice"
+	>
+		Wollen Sie das Gerät "{{ modalDeviceName }}" inklusive aller Komponenten
+		wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht werden!
+	</openwb-base-modal-dialog>
+	<openwb-base-modal-dialog
+		:show="showComponentRemoveModal"
+		title="Komponente löschen"
+		subtype="danger"
+		:buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
+		@modal-result="removeComponent"
+	>
+		Wollen Sie die Komponente "{{ modalComponentName }}" wirklich entfernen?
+		Dieser Vorgang kann nicht rückgängig gemacht werden!
+	</openwb-base-modal-dialog>
+	<!-- main content -->
 	<div class="hardwareInstallation">
 		<form name="hardwareInstallationForm">
 			<openwb-base-alert subtype="info">
@@ -61,7 +83,13 @@
 					<template #actions>
 						<openwb-base-avatar
 							class="bg-danger clickable"
-							@click="removeDevice(installedDevice.id, $event)"
+							@click="
+								removeDeviceModal(
+									installedDevice.id,
+									installedDevice.name,
+									$event
+								)
+							"
 						>
 							<font-awesome-icon
 								fixed-width
@@ -157,10 +185,11 @@
 							<openwb-base-avatar
 								class="bg-danger clickable"
 								@click="
-									removeComponent(
+									removeComponentModal(
 										installedDevice.id,
 										installedComponent.id,
 										installedComponent.type,
+										installedComponent.name,
 										$event
 									)
 								"
@@ -244,7 +273,13 @@ export default {
 				"openWB/system/configurable/devices_components",
 			],
 			deviceToAdd: undefined,
+			showDeviceRemoveModal: false,
+			modalDevice: undefined,
+			modalDeviceName: "",
 			componentToAdd: [],
+			showComponentRemoveModal: false,
+			modalComponent: undefined,
+			modalComponentName: "",
 		};
 	},
 	computed: {
@@ -275,14 +310,24 @@ export default {
 				},
 			});
 		},
-		removeDevice(index, event) {
+		removeDeviceModal(index, name, event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
-			console.info("request removal of device '" + index + "'");
-			this.$emit("sendCommand", {
-				command: "removeDevice",
-				data: { id: index },
-			});
+			this.modalDevice = index;
+			this.modalDeviceName = name;
+			this.showDeviceRemoveModal = true;
+		},
+		removeDevice(event) {
+			this.showDeviceRemoveModal = false;
+			if (event == "confirm") {
+				console.info(
+					"request removal of device '" + this.modalDevice + "'"
+				);
+				this.$emit("sendCommand", {
+					command: "removeDevice",
+					data: { id: this.modalDevice },
+				});
+			}
 		},
 		getDeviceList() {
 			return this.$store.state.mqtt[
@@ -299,26 +344,40 @@ export default {
 				},
 			});
 		},
-		removeComponent(deviceId, componentId, componentType, event) {
+		removeComponentModal(
+			deviceId,
+			componentId,
+			componentType,
+			componentName,
+			event
+		) {
 			// prevent further processing of the click event
 			event.stopPropagation();
-			console.info(
-				"request removal of component '" +
-					componentId +
-					"' from device '" +
-					deviceId +
-					"' type '" +
-					componentType +
-					"'"
-			);
-			this.$emit("sendCommand", {
-				command: "removeComponent",
-				data: {
-					deviceId: deviceId,
-					id: componentId,
-					type: componentType,
-				},
-			});
+			this.modalComponent = {
+				deviceId: deviceId,
+				id: componentId,
+				type: componentType,
+			};
+			this.modalComponentName = componentName;
+			this.showComponentRemoveModal = true;
+		},
+		removeComponent(event) {
+			this.showComponentRemoveModal = false;
+			if (event == "confirm") {
+				console.info(
+					"request removal of component '" +
+						this.modalComponent.id +
+						"' from device '" +
+						this.modalComponent.deviceId +
+						"' type '" +
+						this.modalComponent.type +
+						"'"
+				);
+				this.$emit("sendCommand", {
+					command: "removeComponent",
+					data: this.modalComponent,
+				});
+			}
 		},
 		getComponentList(deviceType) {
 			if (deviceType === undefined) {

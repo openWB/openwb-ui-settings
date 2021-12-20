@@ -17,6 +17,7 @@
 				<openwb-nested-list
 					v-if="value !== undefined"
 					v-model="value"
+					:labels="labels"
 				/>
 				<div v-else>Warte auf Daten...</div>
 			</div>
@@ -43,6 +44,7 @@ export default {
 		id: String,
 		title: String,
 		modelValue: Object,
+		labels: { type: Object, default: undefined },
 	},
 	emits: ["update:modelValue"],
 	components: {
