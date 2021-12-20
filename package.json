@@ -18,12 +18,12 @@
     "@fortawesome/vue-fontawesome": "^3.0.0-5",
     "@popperjs/core": "^2.11.0",
     "bootstrap": "^4.6.1",
-    "core-js": "^3.19.2",
+    "core-js": "^3.20.0",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "mqtt": "^4.2.8",
     "popper.js": "^1.16.1",
-    "vue": "^3.2.23",
+    "vue": "^3.2.26",
     "vue-loader": "^15.9.8",
     "vue-router": "^4.0.12",
     "vuedraggable": "^4.1.0",
@@ -37,14 +37,14 @@
     "@vue/cli-plugin-unit-jest": "^4.5.15",
     "@vue/cli-plugin-vuex": "^4.5.15",
     "@vue/cli-service": "^4.5.15",
-    "@vue/compiler-sfc": "^3.2.23",
-    "@vue/eslint-config-prettier": "^6.0.0",
+    "@vue/compiler-sfc": "^3.2.26",
     "@vue/test-utils": "^2.0.0-rc.17",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^7.20.0",
-    "prettier": "^2.5.0",
+    "prettier": "^2.5.1",
     "typescript": "~3.9.3",
     "vue-jest": "^5.0.0-0"
   },
@@ -56,12 +56,31 @@
     "extends": [
       "plugin:vue/vue3-essential",
       "eslint:recommended",
-      "@vue/prettier"
+      "plugin:prettier/recommended"
     ],
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {},
+    "rules": {
+      "vue/max-len": [
+        "warn",
+        {
+          "code": 120,
+          "template": 120,
+          "tabWidth": 4,
+          "comments": 120,
+          "ignorePattern": "",
+          "ignoreComments": false,
+          "ignoreTrailingComments": false,
+          "ignoreUrls": false,
+          "ignoreStrings": false,
+          "ignoreTemplateLiterals": false,
+          "ignoreRegExpLiterals": false,
+          "ignoreHTMLAttributeValues": false,
+          "ignoreHTMLTextContents": false
+        }
+      ]
+    },
     "overrides": [
       {
         "files": [
