@@ -209,6 +209,21 @@ const routes = [
 				"../views/CloudConfig.vue"
 			),
 	},
+	{
+		path: "/Status",
+		name: "Status",
+		meta: {
+			heading: "Status",
+		},
+		// route level code-splitting
+		// this generates a separate chunk (about.[hash].js) for this route
+		// which is lazy-loaded when the route is visited.
+		component: () =>
+			import(
+				/* webpackChunkName: "Status" */
+				"../views/Status.vue"
+			),
+	},
 ];
 /* examples for development only start here */
 if (process.env.NODE_ENV !== "production") {

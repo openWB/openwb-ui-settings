@@ -189,6 +189,15 @@
 						</router-link>
 					</div>
 				</li>
+				<li class="nav-item">
+					<router-link
+						to="/Status"
+						class="nav-link"
+						active-class="active disabled"
+					>
+						Status
+					</router-link>
+				</li>
 				<li v-if="nodeEnv !== 'production'" class="nav-item dropdown">
 					<a
 						class="nav-link dropdown-toggle"
