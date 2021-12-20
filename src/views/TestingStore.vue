@@ -273,6 +273,7 @@
 				<sortable-list
 					title="Liste 1"
 					v-model="$store.state.examples.hierarchy1"
+					:labels="$store.state.examples.hierarchy1Labels"
 				>
 					<template #help>
 						<pre>{{

@@ -28,36 +28,28 @@ if (process.env.NODE_ENV !== "production") {
 		hierarchy1: [
 			{
 				id: "counter0",
-				value: "EVU",
 				children: [
 					{
 						id: "cp1",
-						value: "Ladepunkt 1",
 						children: [],
 					},
 					{
 						id: "cp2",
-						value: "Ladepunkt 2",
 						children: [],
 					},
 					{
 						id: "cp3",
-						value: "Ladepunkt 3",
 						children: [],
 					},
 				],
 			},
 		],
-		availableChargepoints: [
-			{
-				value: "openwb_standard",
-				text: "openWB Standard",
-			},
-			{
-				value: "openwb_standard_plus",
-				text: "openWB Standard+",
-			},
-		],
+		hierarchy1Labels: {
+			counter0: "EVU",
+			cp1: "Ladepunkt 1",
+			cp2: "Ladepunkt 2",
+			// cp3 without label for testing
+		},
 		tags: ["1234", "2345", "3456"],
 	};
 }
