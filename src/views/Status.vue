@@ -9,6 +9,16 @@
 			:collapsed="true"
 		>
 			<openwb-base-number-input
+				title="Leistung"
+				readonly
+				class="text-right text-monospace"
+				step="0.001"
+				unit="W"
+				:model-value="
+					$store.state.mqtt['openWB/chargepoint/get/power_all']
+				"
+			/>
+			<openwb-base-number-input
 				title="Zählerstand"
 				readonly
 				class="text-right text-monospace"
@@ -18,14 +28,15 @@
 					$store.state.mqtt['openWB/chargepoint/get/counter_all']
 				"
 			/>
+			<openwb-base-heading>Historie</openwb-base-heading>
 			<openwb-base-number-input
-				title="Leistung"
+				title="Heute"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="W"
+				unit="Wh"
 				:model-value="
-					$store.state.mqtt['openWB/chargepoint/get/power_all']
+					$store.state.mqtt['openWB/chargepoint/get/daily_yield']
 				"
 			/>
 		</openwb-base-card>
@@ -540,6 +551,7 @@ export default {
 				// charge points total
 				"openWB/chargepoint/get/power_all",
 				"openWB/chargepoint/get/counter_all",
+				"openWB/chargepoint/get/daily_yield",
 				// individual charge points
 				"openWB/chargepoint/+/config",
 				"openWB/chargepoint/+/get/+",
