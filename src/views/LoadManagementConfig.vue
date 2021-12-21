@@ -227,12 +227,14 @@ export default {
 		},
 		hierarchyLabels: {
 			get() {
-				// ToDo!
 				let labels = {};
 				for (const element of Object.values(
 					this.$store.state.mqtt["openWB/counter/get/hierarchy"]
 				)) {
-					labels = { ...this.getElementTreeNames(element) };
+					labels = {
+						...labels,
+						...this.getElementTreeNames(element),
+					};
 				}
 				return labels;
 			},
