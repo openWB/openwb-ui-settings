@@ -97,7 +97,21 @@
 					$store.state.mqtt[
 						'openWB/chargepoint/' +
 							getChargePointIndex(installedChargePointKey) +
-							'/get/counter_all'
+							'/get/counter'
+					]
+				"
+			/>
+			<openwb-base-number-input
+				title="Heute geladen"
+				readonly
+				class="text-right text-monospace"
+				step="0.001"
+				unit="Wh"
+				:model-value="
+					$store.state.mqtt[
+						'openWB/chargepoint/' +
+							getChargePointIndex(installedChargePointKey) +
+							'/get/daily_yield'
 					]
 				"
 			/>
@@ -180,49 +194,6 @@
 						'openWB/chargepoint/' +
 							getChargePointIndex(installedChargePointKey) +
 							'/get/phases_in_use'
-					]
-				"
-			/>
-			<openwb-base-heading>Historie</openwb-base-heading>
-			<openwb-base-number-input
-				title="Heute"
-				readonly
-				class="text-right text-monospace"
-				step="0.001"
-				unit="Wh"
-				:model-value="
-					$store.state.mqtt[
-						'openWB/chargepoint/' +
-							getChargePointIndex(installedChargePointKey) +
-							'/get/daily_yield'
-					]
-				"
-			/>
-			<openwb-base-number-input
-				title="Dieser Monat"
-				readonly
-				class="text-right text-monospace"
-				step="0.001"
-				unit="Wh"
-				:model-value="
-					$store.state.mqtt[
-						'openWB/chargepoint/' +
-							getChargePointIndex(installedChargePointKey) +
-							'/get/monthly_yield'
-					]
-				"
-			/>
-			<openwb-base-number-input
-				title="Dieses Jahr"
-				readonly
-				class="text-right text-monospace"
-				step="0.001"
-				unit="Wh"
-				:model-value="
-					$store.state.mqtt[
-						'openWB/chargepoint/' +
-							getChargePointIndex(installedChargePointKey) +
-							'/get/yearly_yield'
 					]
 				"
 			/>
@@ -556,6 +527,7 @@ export default {
 				"openWB/chargepoint/+/config",
 				"openWB/chargepoint/+/get/+",
 				"openWB/chargepoint/+/get/connected_vehicle/info",
+				"openWB/chargepoint/+/set/+",
 				// components
 				"openWB/system/device/+/component/+/config",
 				// counter
