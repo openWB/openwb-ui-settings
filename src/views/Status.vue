@@ -97,7 +97,7 @@
 					$store.state.mqtt[
 						'openWB/chargepoint/' +
 							getChargePointIndex(installedChargePointKey) +
-							'/get/counter_all'
+							'/get/counter'
 					]
 				"
 			/>
@@ -556,6 +556,7 @@ export default {
 				"openWB/chargepoint/+/config",
 				"openWB/chargepoint/+/get/+",
 				"openWB/chargepoint/+/get/connected_vehicle/info",
+				"openWB/chargepoint/+/set/+",
 				// components
 				"openWB/system/device/+/component/+/config",
 				// counter
