@@ -7,8 +7,8 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "build-dev": "vue-cli-service --mode=development --dest=/var/www/html/openWB/web/settings20 build",
-    "build-prod": "vue-cli-service --mode=production --dest=/var/www/html/openWB/web/settings20 build"
+    "build-dev": "vue-cli-service --mode=development --dest=/var/www/html/openWB/web/settings build",
+    "build-prod": "vue-cli-service --mode=production --dest=/var/www/html/openWB/web/settings build"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.36",

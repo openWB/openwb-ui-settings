@@ -1,5 +1,5 @@
 module.exports = {
-	publicPath: "/openWB/web/settings20/",
+	publicPath: "/openWB/web/settings/",
 	css: {
 		sourceMap: true,
 	},
