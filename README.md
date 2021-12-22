@@ -1,5 +1,8 @@
 # openwb-ui-settings
-GUI for openWB settings v2.0+
+GUI for openWB v2.0+
+
+## License
+This project is licensed under GPLv3. Any commercial use must be authorized by openWB GmbH & Co. KG.
 
 ## Recommended Dev Environment
 - VS Code
