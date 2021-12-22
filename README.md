@@ -43,12 +43,12 @@ npm run lint
 npm run test:unit
 ```
 
-### Compiles a development build with /var/www/html/openWB/ as target
+### Compiles a development build with /var/www/html/openWB/web/settings/ as target
 ```
 npm run build-dev
 ```
 
-### Compiles a production build with /var/www/html/openWB/ as target
+### Compiles a production build with /var/www/html/openWB/web/settings/ as target
 ```
 npm run build-prod
 ```
