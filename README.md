@@ -38,5 +38,20 @@ npm run build
 npm run lint
 ```
 
+### Run provided unit tests
+```
+npm run test:unit
+```
+
+### Compiles a development build with /var/www/html/openWB/ as target
+```
+npm run build-dev
+```
+
+### Compiles a production build with /var/www/html/openWB/ as target
+```
+npm run build-prod
+```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
