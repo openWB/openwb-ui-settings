@@ -12,9 +12,9 @@
 					<openwb-base-button-group-input
 						title="Debug Level"
 						:buttons="[
-							{ buttonValue: 0, text: 'Aus (0)' },
-							{ buttonValue: 1, text: 'Info (1)' },
-							{ buttonValue: 2, text: 'Details (2)' },
+							{ buttonValue: 30, text: 'Aus (0)' },
+							{ buttonValue: 20, text: 'Info (1)' },
+							{ buttonValue: 10, text: 'Details (2)' },
 						]"
 						:model-value="
 							$store.state.mqtt['openWB/system/debug_level']
