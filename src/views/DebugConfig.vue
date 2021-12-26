@@ -27,8 +27,8 @@
 							Wenn der Debug Level auf "Info" oder "Details"
 							gesetzt wird, werden mehr Informationen in die
 							Logdateien geschrieben. Im normalen Betrieb sollte
-							immer "Aus" gewählt werden, um die Schreibvorgänge
-							auf der SD-Karte zu reduzieren.
+							immer "Warnungen und Fehler" gewählt werden, um die
+							Schreibvorgänge auf der SD-Karte zu reduzieren.
 						</template>
 					</openwb-base-button-group-input>
 				</div>
