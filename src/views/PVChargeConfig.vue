@@ -44,7 +44,7 @@
 					</openwb-base-number-input>
 					<openwb-base-number-input
 						v-if="calculateControlMode() === 'individual'"
-						title="Minimum"
+						title="Maximum"
 						unit="W"
 						:model-value="
 							$store.state.mqtt[
