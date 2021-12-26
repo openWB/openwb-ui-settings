@@ -21,24 +21,6 @@
 					>
 						<template #help>Hilfetext</template>
 					</openwb-base-button-group-input>
-					<openwb-base-text-input
-						title="Regelbereich"
-						subtype="json"
-						disabled
-						:model-value="
-							$store.state.mqtt[
-								'openWB/general/chargemode_config/pv_charging/control_range'
-							]
-						"
-						@update:model-value="
-							updateState(
-								'openWB/general/chargemode_config/pv_charging/control_range',
-								$event
-							)
-						"
-					>
-						<template #help>JSON Objekt zum Debuggen</template>
-					</openwb-base-text-input>
 					<openwb-base-number-input
 						v-if="calculateControlMode() === 'individual'"
 						title="Minimum"
@@ -52,7 +34,7 @@
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/control_range',
 								$event,
-								0
+								'0'
 							)
 						"
 					>
@@ -73,7 +55,7 @@
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/control_range',
 								$event,
-								1
+								'1'
 							)
 						"
 					>
@@ -451,7 +433,7 @@ export default {
 		setControlMode(newMode) {
 			const topic =
 				"openWB/general/chargemode_config/pv_charging/control_range";
-			console.log("set controlMode", newMode);
+			console.debug("set controlMode", newMode);
 			switch (newMode) {
 				case "export":
 					this.updateState(topic, [-230, 0]);
