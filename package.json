@@ -1,6 +1,6 @@
 {
   "name": "openwb-ui-settings",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -18,10 +18,10 @@
     "@fortawesome/vue-fontawesome": "^3.0.0-5",
     "@popperjs/core": "^2.11.0",
     "bootstrap": "^4.6.1",
-    "core-js": "^3.20.1",
+    "core-js": "^3.20.2",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
-    "mqtt": "^4.3.1",
+    "mqtt": "^4.3.2",
     "popper.js": "^1.16.1",
     "vue": "^3.2.26",
     "vue-loader": "^15.9.8",
