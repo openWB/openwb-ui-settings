@@ -63,7 +63,7 @@
 							/>
 							<font-awesome-icon
 								fixed-width
-								v-if="subtype == 'date'"
+								v-if="subtype == 'date' || subtype == 'month'"
 								:icon="['fas', 'calendar-day']"
 							/>
 						</div>
@@ -138,6 +138,13 @@
 						v-model="value"
 						v-bind="$attrs"
 					/>
+					<input
+						v-if="subtype == 'month'"
+						type="month"
+						class="form-control"
+						v-model="value"
+						v-bind="$attrs"
+					/>
 				</div>
 			</div>
 			<span v-if="showHelp" class="form-row alert alert-info my-1 small">
@@ -205,6 +212,7 @@ export default {
 						"password",
 						"time",
 						"date",
+						"month",
 					].indexOf(value) !== -1
 				);
 			},

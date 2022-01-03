@@ -215,13 +215,22 @@ const routes = [
 		meta: {
 			heading: "Status",
 		},
-		// route level code-splitting
-		// this generates a separate chunk (about.[hash].js) for this route
-		// which is lazy-loaded when the route is visited.
 		component: () =>
 			import(
 				/* webpackChunkName: "Status" */
 				"../views/Status.vue"
+			),
+	},
+	{
+		path: "/Logging/ChargeLog",
+		name: "ChargeLog",
+		meta: {
+			heading: "Ladeprotokoll",
+		},
+		component: () =>
+			import(
+				/* webpackChunkName: "ChargeLog" */
+				"../views/ChargeLog.vue"
 			),
 	},
 ];
