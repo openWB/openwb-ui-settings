@@ -99,9 +99,6 @@
 				>
 					<template #actions>
 						<openwb-base-avatar
-							v-if="
-								!installedChargePointKey.endsWith('/0/config')
-							"
 							class="bg-danger clickable"
 							@click="
 								removeChargePointModal(

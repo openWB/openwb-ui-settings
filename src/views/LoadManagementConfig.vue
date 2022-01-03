@@ -244,13 +244,19 @@ export default {
 		getElementTreeNames(element) {
 			let myNames = {};
 			if (element.id.startsWith("cp")) {
-				myNames[element.id] = this.getChargePoint(
+				let chargePoint = this.getChargePoint(
 					this.getComponentIndex(element.id)
-				).name;
+				);
+				if (chargePoint) {
+					myNames[element.id] = chargePoint.name;
+				}
 			} else {
-				myNames[element.id] = this.getComponent(
+				let component = this.getComponent(
 					this.getComponentIndex(element.id)
-				).name;
+				);
+				if (component) {
+					myNames[element.id] = component.name;
+				}
 			}
 			element.children.forEach((child) => {
 				myNames = { ...myNames, ...this.getElementTreeNames(child) };
