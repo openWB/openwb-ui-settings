@@ -172,6 +172,19 @@
 					]
 				"
 			/>
+			<openwb-base-text-input
+				title="Leistungsfaktor"
+				readonly
+				class="text-right text-monospace"
+				subtype="json"
+				:model-value="
+					$store.state.mqtt[
+						'openWB/chargepoint/' +
+							getChargePointIndex(installedChargePointKey) +
+							'/get/power_factor'
+					]
+				"
+			/>
 			<openwb-base-heading>Phasen</openwb-base-heading>
 			<openwb-base-number-input
 				title="Vorgabe"
