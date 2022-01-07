@@ -14,9 +14,7 @@
 				class="text-right text-monospace"
 				step="0.001"
 				unit="W"
-				:model-value="
-					$store.state.mqtt['openWB/chargepoint/get/power_all']
-				"
+				:model-value="$store.state.mqtt['openWB/chargepoint/get/power']"
 			/>
 			<openwb-base-number-input
 				title="Zählerstand"
@@ -25,7 +23,7 @@
 				step="0.001"
 				unit="Wh"
 				:model-value="
-					$store.state.mqtt['openWB/chargepoint/get/counter_all']
+					$store.state.mqtt['openWB/chargepoint/get/counter']
 				"
 			/>
 			<openwb-base-heading>Historie</openwb-base-heading>
@@ -125,7 +123,7 @@
 					$store.state.mqtt[
 						'openWB/chargepoint/' +
 							getChargePointIndex(installedChargePointKey) +
-							'/get/power_all'
+							'/get/power'
 					]
 				"
 			/>
@@ -154,7 +152,7 @@
 					$store.state.mqtt[
 						'openWB/chargepoint/' +
 							getChargePointIndex(installedChargePointKey) +
-							'/get/voltage'
+							'/get/voltages'
 					]
 				"
 			/>
@@ -168,7 +166,7 @@
 					$store.state.mqtt[
 						'openWB/chargepoint/' +
 							getChargePointIndex(installedChargePointKey) +
-							'/get/current'
+							'/get/currents'
 					]
 				"
 			/>
@@ -181,7 +179,7 @@
 					$store.state.mqtt[
 						'openWB/chargepoint/' +
 							getChargePointIndex(installedChargePointKey) +
-							'/get/power_factor'
+							'/get/power_factors'
 					]
 				"
 			/>
@@ -254,7 +252,7 @@
 				unit="W"
 				:model-value="
 					$store.state.mqtt[
-						'openWB/counter/' + counter.id + '/get/power_all'
+						'openWB/counter/' + counter.id + '/get/power'
 					]
 				"
 			/>
@@ -279,7 +277,7 @@
 				unit="V"
 				:model-value="
 					$store.state.mqtt[
-						'openWB/counter/' + counter.id + '/get/voltage'
+						'openWB/counter/' + counter.id + '/get/voltages'
 					]
 				"
 			/>
@@ -291,7 +289,7 @@
 				unit="A"
 				:model-value="
 					$store.state.mqtt[
-						'openWB/counter/' + counter.id + '/get/current'
+						'openWB/counter/' + counter.id + '/get/currents'
 					]
 				"
 			/>
@@ -303,7 +301,7 @@
 				unit="W"
 				:model-value="
 					$store.state.mqtt[
-						'openWB/counter/' + counter.id + '/get/power_phase'
+						'openWB/counter/' + counter.id + '/get/powers'
 					]
 				"
 			/>
@@ -314,7 +312,7 @@
 				subtype="json"
 				:model-value="
 					$store.state.mqtt[
-						'openWB/counter/' + counter.id + '/get/power_factor'
+						'openWB/counter/' + counter.id + '/get/power_factors'
 					]
 				"
 			/>
@@ -533,8 +531,8 @@ export default {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
 				// charge points total
-				"openWB/chargepoint/get/power_all",
-				"openWB/chargepoint/get/counter_all",
+				"openWB/chargepoint/get/power",
+				"openWB/chargepoint/get/counter",
 				"openWB/chargepoint/get/daily_yield",
 				// individual charge points
 				"openWB/chargepoint/+/config",
