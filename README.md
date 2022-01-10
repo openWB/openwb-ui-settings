@@ -6,7 +6,7 @@ This project is licensed under GPLv3. Any commercial use must be authorized by o
 
 ## Recommended Dev Environment
 - VS Code
-- VS Code Remote SSH Extension for developement on the target system
+- VS Code Remote SSH Extension for development on the target system
 - nodejs 14.x
 - Vue.js devtools browser extension for debugging
 
@@ -15,9 +15,13 @@ This project is licensed under GPLv3. Any commercial use must be authorized by o
 npm install
 ```
 It may be necessary to increase the number of allowed file watchers.
-Add this line to your `/etc/sysctl.d/local.conf` and reboot your system:
+Add this line to your `/etc/sysctl.d/99-local.conf`:
 ```
 fs.inotify.max_user_watches=524288
+```
+Then reboot your system or update sysctl:
+```
+sudo sysctl --system -p
 ```
 
 ### Compiles and hot-reloads for development
