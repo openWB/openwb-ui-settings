@@ -54,7 +54,55 @@
 			:collapsed="true"
 			subtype="primary"
 		>
+			<openwb-base-alert
+				:subtype="
+					statusLevel[
+						$store.state.mqtt[
+							'openWB/chargepoint/' +
+								getChargePointIndex(installedChargePointKey) +
+								'/get/fault_state'
+						]
+					]
+				"
+			>
+				<font-awesome-icon
+					v-if="
+						$store.state.mqtt[
+							'openWB/chargepoint/' +
+								getChargePointIndex(installedChargePointKey) +
+								'/get/fault_state'
+						] == 1
+					"
+					fixed-width
+					:icon="['fas', 'exclamation-triangle']"
+				/>
+				<font-awesome-icon
+					v-else-if="
+						$store.state.mqtt[
+							'openWB/chargepoint/' +
+								getChargePointIndex(installedChargePointKey) +
+								'/get/fault_state'
+						] == 2
+					"
+					fixed-width
+					:icon="['fas', 'times-circle']"
+				/>
+				<font-awesome-icon
+					v-else
+					fixed-width
+					:icon="['fas', 'check-circle']"
+				/>
+				Modulmeldung:<br />
+				{{
+					$store.state.mqtt[
+						"openWB/chargepoint/" +
+							getChargePointIndex(installedChargePointKey) +
+							"/get/fault_str"
+					]
+				}}
+			</openwb-base-alert>
 			<openwb-base-alert subtype="info">
+				Statusmeldung:<br />
 				{{
 					$store.state.mqtt[
 						"openWB/chargepoint/" +
@@ -218,6 +266,45 @@
 			:collapsed="true"
 			subtype="danger"
 		>
+			<openwb-base-alert
+				:subtype="
+					statusLevel[
+						$store.state.mqtt[
+							'openWB/counter/' + counter.id + '/get/fault_state'
+						]
+					]
+				"
+			>
+				<font-awesome-icon
+					v-if="
+						$store.state.mqtt[
+							'openWB/counter/' + counter.id + '/get/fault_state'
+						] == 1
+					"
+					fixed-width
+					:icon="['fas', 'exclamation-triangle']"
+				/>
+				<font-awesome-icon
+					v-else-if="
+						$store.state.mqtt[
+							'openWB/counter/' + counter.id + '/get/fault_state'
+						] == 2
+					"
+					fixed-width
+					:icon="['fas', 'times-circle']"
+				/>
+				<font-awesome-icon
+					v-else
+					fixed-width
+					:icon="['fas', 'check-circle']"
+				/>
+				Modulmeldung:<br />
+				{{
+					$store.state.mqtt[
+						"openWB/counter/" + counter.id + "/get/fault_str"
+					]
+				}}
+			</openwb-base-alert>
 			<openwb-base-heading>Zählerstände</openwb-base-heading>
 			<openwb-base-number-input
 				title="Export"
@@ -376,6 +463,45 @@
 			:collapsed="true"
 			subtype="success"
 		>
+			<openwb-base-alert
+				:subtype="
+					statusLevel[
+						$store.state.mqtt[
+							'openWB/pv/' + inverter.id + '/get/fault_state'
+						]
+					]
+				"
+			>
+				<font-awesome-icon
+					v-if="
+						$store.state.mqtt[
+							'openWB/pv/' + inverter.id + '/get/fault_state'
+						] == 1
+					"
+					fixed-width
+					:icon="['fas', 'exclamation-triangle']"
+				/>
+				<font-awesome-icon
+					v-else-if="
+						$store.state.mqtt[
+							'openWB/pv/' + inverter.id + '/get/fault_state'
+						] == 2
+					"
+					fixed-width
+					:icon="['fas', 'times-circle']"
+				/>
+				<font-awesome-icon
+					v-else
+					fixed-width
+					:icon="['fas', 'check-circle']"
+				/>
+				Modulmeldung:<br />
+				{{
+					$store.state.mqtt[
+						"openWB/pv/" + inverter.id + "/get/fault_str"
+					]
+				}}
+			</openwb-base-alert>
 			<openwb-base-number-input
 				title="Zählerstand"
 				readonly
@@ -471,6 +597,45 @@
 			:collapsed="true"
 			subtype="warning"
 		>
+			<openwb-base-alert
+				:subtype="
+					statusLevel[
+						$store.state.mqtt[
+							'openWB/bat/' + battery.id + '/get/fault_state'
+						]
+					]
+				"
+			>
+				<font-awesome-icon
+					v-if="
+						$store.state.mqtt[
+							'openWB/bat/' + battery.id + '/get/fault_state'
+						] == 1
+					"
+					fixed-width
+					:icon="['fas', 'exclamation-triangle']"
+				/>
+				<font-awesome-icon
+					v-else-if="
+						$store.state.mqtt[
+							'openWB/bat/' + battery.id + '/get/fault_state'
+						] == 2
+					"
+					fixed-width
+					:icon="['fas', 'times-circle']"
+				/>
+				<font-awesome-icon
+					v-else
+					fixed-width
+					:icon="['fas', 'check-circle']"
+				/>
+				Modulmeldung:<br />
+				{{
+					$store.state.mqtt[
+						"openWB/bat/" + battery.id + "/get/fault_str"
+					]
+				}}
+			</openwb-base-alert>
 			<openwb-base-heading>Aktuelle Werte</openwb-base-heading>
 			<openwb-base-number-input
 				title="Leistung"
@@ -521,11 +686,24 @@
 </template>
 
 <script>
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+	faCheckCircle as fasCheckCircle,
+	faExclamationTriangle as fasExclamationTriangle,
+	faTimesCircle as fasTimesCircle,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(fasCheckCircle, fasExclamationTriangle, fasTimesCircle);
+
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
 	name: "Status",
 	mixins: [ComponentStateMixin],
+	components: {
+		FontAwesomeIcon,
+	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
@@ -550,6 +728,7 @@ export default {
 				"openWB/bat/get/+",
 				"openWB/bat/+/get/+",
 			],
+			statusLevel: ["success", "warning", "danger"],
 		};
 	},
 	computed: {
