@@ -8,9 +8,7 @@
 			<ul>
 				<li>
 					<span class="text-info"
-						>openWB/set/counter/{{
-							componentId
-						}}/get/power_all</span
+						>openWB/set/counter/{{ componentId }}/get/power</span
 					><br />
 					Bezugsleistung in Watt, mit Nachkommastellen (Float),
 					positiv Bezug, negativ Einspeisung
@@ -39,7 +37,7 @@
 				</li>
 				<li>
 					<span class="text-info"
-						>openWB/set/counter/{{ componentId }}/get/current</span
+						>openWB/set/counter/{{ componentId }}/get/currents</span
 					><br />
 					Array mit den Strömen je Phase in Ampere, mit
 					Nachkommastellen (Float), positiv Bezug, negativ Einspeisung
@@ -47,16 +45,14 @@
 				</li>
 				<li>
 					<span class="text-info"
-						>openWB/set/counter/{{ componentId }}/get/voltage</span
+						>openWB/set/counter/{{ componentId }}/get/voltages</span
 					><br />
 					Array mit den Spannungen je Phase in Volt, mit
 					Nachkommastellen (Float) "[V1,V2,V3]"
 				</li>
 				<li>
 					<span class="text-info"
-						>openWB/set/counter/{{
-							componentId
-						}}/get/power_phase</span
+						>openWB/set/counter/{{ componentId }}/get/powers</span
 					><br />
 					Array mit den Leistungen je Phase in Watt, mit
 					Nachkommastellen (Float) "[P1,P2,P3]"
@@ -65,7 +61,7 @@
 					<span class="text-info"
 						>openWB/set/counter/{{
 							componentId
-						}}/get/power_factor</span
+						}}/get/power_factors</span
 					><br />
 					Array mit den Leistungsfaktoren je Phase, mit
 					Nachkommastellen (Float), Wertebereich 0 bis 1 "[r1,r2,r3]"
