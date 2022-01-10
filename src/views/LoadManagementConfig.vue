@@ -59,14 +59,14 @@
 								$store.state.mqtt[
 									'openWB/counter/' +
 										counter.id +
-										'/config/max_current'
+										'/config/max_currents'
 								][0]
 							"
 							@update:model-value="
 								updateState(
 									'openWB/counter/' +
 										counter.id +
-										'/config/max_current',
+										'/config/max_currents',
 									$event,
 									'0'
 								)
@@ -86,14 +86,14 @@
 								$store.state.mqtt[
 									'openWB/counter/' +
 										counter.id +
-										'/config/max_current'
+										'/config/max_currents'
 								][1]
 							"
 							@update:model-value="
 								updateState(
 									'openWB/counter/' +
 										counter.id +
-										'/config/max_current',
+										'/config/max_currents',
 									$event,
 									'1'
 								)
@@ -113,14 +113,14 @@
 								$store.state.mqtt[
 									'openWB/counter/' +
 										counter.id +
-										'/config/max_current'
+										'/config/max_currents'
 								][2]
 							"
 							@update:model-value="
 								updateState(
 									'openWB/counter/' +
 										counter.id +
-										'/config/max_current',
+										'/config/max_currents',
 									$event,
 									'2'
 								)
@@ -199,7 +199,7 @@ export default {
 			mqttTopicsToSubscribe: [
 				"openWB/counter/get/hierarchy",
 				"openWB/system/device/+/component/+/config",
-				"openWB/counter/+/config/max_current",
+				"openWB/counter/+/config/max_currents",
 				"openWB/counter/+/config/max_total_power",
 				"openWB/chargepoint/+/config",
 			],
