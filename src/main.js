@@ -9,8 +9,11 @@ import camelCase from "lodash/camelCase";
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+import axios from "axios";
+import VueAxios from "vue-axios";
+
 const vApp = createApp(App);
-vApp.use(store).use(router);
+vApp.use(store).use(router).use(VueAxios, axios);
 
 // automatic global registering of our base components
 const requireComponent = require.context(
