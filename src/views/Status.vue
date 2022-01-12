@@ -787,7 +787,7 @@ export default {
 		filterComponentsByType(components, type) {
 			return Object.keys(components)
 				.filter((key) => {
-					return components[key].type === type;
+					return components[key].type.includes(type);
 				})
 				.reduce((obj, key) => {
 					return {

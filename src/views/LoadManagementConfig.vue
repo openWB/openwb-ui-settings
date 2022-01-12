@@ -213,8 +213,8 @@ export default {
 				);
 				return Object.keys(installedComponentsConfigs)
 					.filter((key) => {
-						return (
-							installedComponentsConfigs[key].type === "counter"
+						return installedComponentsConfigs[key].type.includes(
+							"counter"
 						);
 					})
 					.reduce((obj, key) => {
