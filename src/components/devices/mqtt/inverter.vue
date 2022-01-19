@@ -8,14 +8,14 @@
 			<ul>
 				<li>
 					<span class="text-info"
-						>openWB/set/pv/{{ componentId }}/power</span
+						>openWB/set/pv/{{ componentId }}/get/power</span
 					><br />
 					PV-Leistung in Watt, ohne Nachkommastellen (Integer), nur
 					negativ!
 				</li>
 				<li>
 					<span class="text-info"
-						>openWB/set/pv/{{ componentId }}/counter</span
+						>openWB/set/pv/{{ componentId }}/get/counter</span
 					><br />
 					Erzeugte Energie in Wh, mit Nachkommastellen (Float), nur
 					positiv

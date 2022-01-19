@@ -8,28 +8,28 @@
 			<ul>
 				<li>
 					<span class="text-info"
-						>openWB/set/bat/{{ componentId }}/power</span
+						>openWB/set/bat/{{ componentId }}/get/power</span
 					><br />
 					Speicherleistung in Watt, ohne Nachkommastellen (Integer),
 					positiv Ladung, negativ Entladung
 				</li>
 				<li>
 					<span class="text-info"
-						>openWB/set/bat/{{ componentId }}/imported</span
+						>openWB/set/bat/{{ componentId }}/get/imported</span
 					><br />
 					Geladene Energie in Wh, mit Nachkommastellen (Float), nur
 					positiv
 				</li>
 				<li>
 					<span class="text-info"
-						>openWB/set/bat/{{ componentId }}/exported</span
+						>openWB/set/bat/{{ componentId }}/get/exported</span
 					><br />
 					Entladene Energie in Wh, mit Nachkommastellen (Float), nur
 					positiv
 				</li>
 				<li>
 					<span class="text-info"
-						>openWB/set/bat/{{ componentId }}/soc</span
+						>openWB/set/bat/{{ componentId }}/get/soc</span
 					><br />
 					Ladestand des Speichers, ohne Nachkommastellen (Integer),
 					Gültige Werte 0 bis 100
