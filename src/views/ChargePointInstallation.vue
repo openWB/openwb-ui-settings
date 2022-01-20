@@ -9,8 +9,8 @@
 	>
 		Wollen Sie den Ladepunkt "{{
 			getChargePointName(modalChargePointIndex)
-		}}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht
-		werden!
+		}}" (ID: {{ modalChargePointIndex }}) wirklich entfernen? Dieser Vorgang
+		kann nicht rückgängig gemacht werden!
 	</openwb-base-modal-dialog>
 	<openwb-base-modal-dialog
 		:show="showChargePointTemplateModal"
@@ -23,8 +23,8 @@
 	>
 		Wollen Sie die Ladepunkt-Vorlage "{{
 			getChargePointTemplateName(modalChargePointTemplateIndex)
-		}}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht
-		werden!
+		}}" (ID: {{ modalChargePointTemplateIndex }}) wirklich entfernen? Dieser
+		Vorgang kann nicht rückgängig gemacht werden!
 	</openwb-base-modal-dialog>
 	<openwb-base-modal-dialog
 		:show="showChargePointTemplateAutolockPlanModal"
@@ -92,7 +92,12 @@
 						installedChargePoint, installedChargePointKey
 					) in installedChargePoints"
 					:key="installedChargePointKey"
-					:title="installedChargePoint.name"
+					:title="
+						installedChargePoint.name +
+						' (ID: ' +
+						installedChargePoint.id +
+						')'
+					"
 					:collapsible="true"
 					:collapsed="true"
 					subtype="primary"
@@ -133,6 +138,13 @@
 								$event,
 								'template'
 							)
+						"
+					/>
+					<openwb-base-text-input
+						title="Ladepunkt-Typ"
+						readonly
+						:model-value="
+							$store.state.mqtt[installedChargePointKey].type
 						"
 					/>
 					<hr />
@@ -303,7 +315,12 @@
 						chargePointTemplate, chargePointTemplateKey
 					) in chargePointTemplates"
 					:key="chargePointTemplateKey"
-					:title="chargePointTemplate.name"
+					:title="
+						chargePointTemplate.name +
+						' (ID: ' +
+						getChargePointTemplateIndex(chargePointTemplateKey) +
+						')'
+					"
 					:collapsible="true"
 					:collapsed="true"
 					subtype="primary"
@@ -774,10 +791,10 @@ export default {
 		},
 		getChargePointName(chargePointIndex) {
 			return this.$store.state.mqtt[
-				"openWB/chargepoint/" + chargePointIndex
+				"openWB/chargepoint/" + chargePointIndex + "/config"
 			]
 				? this.$store.state.mqtt[
-						"openWB/chargepoint/" + chargePointIndex
+						"openWB/chargepoint/" + chargePointIndex + "/config"
 				  ].name
 				: "Ladepunkt " + chargePointIndex;
 		},
@@ -799,13 +816,15 @@ export default {
 				data: {},
 			});
 		},
+		getChargePointTemplateIndex(chargePointTemplate) {
+			// get trailing characters as index
+			return parseInt(chargePointTemplate.match(/([^/]+)$/)[0]);
+		},
 		removeChargePointTemplateModal(chargePointTemplate, event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
-			// get trailing characters as index
-			this.modalChargePointTemplateIndex = parseInt(
-				chargePointTemplate.match(/([^/]+)$/)[0]
-			);
+			this.modalChargePointTemplateIndex =
+				this.getChargePointTemplateIndex(chargePointTemplate);
 			this.showChargePointTemplateModal = true;
 		},
 		removeChargePointTemplate(chargePointTemplateIndex, event) {
@@ -828,10 +847,8 @@ export default {
 			console.info(
 				"requesting new charge point template autolock plan..."
 			);
-			// get trailing characters as index
-			let chargePointTemplateIndex = parseInt(
-				chargePointTemplate.match(/([^/]+)$/)[0]
-			);
+			let chargePointTemplateIndex =
+				this.getChargePointTemplateIndex(chargePointTemplate);
 			this.$emit("sendCommand", {
 				command: "addAutolockPlan",
 				data: { template: chargePointTemplateIndex },
@@ -844,10 +861,8 @@ export default {
 		) {
 			// prevent further processing of the click event
 			event.stopPropagation();
-			// get trailing characters as index
-			this.modalChargePointTemplateIndex = parseInt(
-				chargePointTemplate.match(/([^/]+)$/)[0]
-			);
+			this.modalChargePointTemplateIndex =
+				this.getChargePointTemplateIndex(chargePointTemplate);
 			this.modalChargePointTemplateAutolockPlanIndex = parseInt(
 				autolockPlan.match(/([^/]+)$/)[0]
 			);
@@ -892,9 +907,8 @@ export default {
 				: "Autolock Zeitplan " + templateIndex + "/" + planIndex;
 		},
 		getChargePointTemplateAutolockPlans(chargePointTemplate) {
-			// get trailing characters as index
 			let chargePointTemplateIndex =
-				chargePointTemplate.match(/([^/]+)$/)[0];
+				this.getChargePointTemplateIndex(chargePointTemplate);
 			let result = this.getWildcardTopics(
 				"openWB/chargepoint/template/" +
 					chargePointTemplateIndex +

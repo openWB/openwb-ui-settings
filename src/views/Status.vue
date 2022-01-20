@@ -46,7 +46,7 @@
 			:key="installedChargePointKey"
 			:title="
 				installedChargePoint.name +
-				' (Ladepunkt ' +
+				' (ID: ' +
 				getChargePointIndex(installedChargePointKey) +
 				')'
 			"
