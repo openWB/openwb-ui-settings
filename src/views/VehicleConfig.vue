@@ -641,7 +641,7 @@
 							title="Energie-Limit"
 							unit="kWh"
 							:min="5"
-							:step="5"
+							:step="1"
 							:model-value="
 								template.chargemode.instant_charging.limit
 									.amount
