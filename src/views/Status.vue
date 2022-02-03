@@ -305,6 +305,21 @@
 					]
 				}}
 			</openwb-base-alert>
+			<openwb-base-alert
+				v-if="
+					$store.state.mqtt[
+						'openWB/counter/' + counter.id + '/get/state_str'
+					] != undefined
+				"
+				subtype="info"
+			>
+				Statusmeldung:<br />
+				{{
+					$store.state.mqtt[
+						"openWB/counter/" + counter.id + "/get/state_str"
+					]
+				}}
+			</openwb-base-alert>
 			<openwb-base-heading>Zählerstände</openwb-base-heading>
 			<openwb-base-number-input
 				title="Export"
