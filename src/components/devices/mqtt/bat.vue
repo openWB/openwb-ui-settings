@@ -1,5 +1,5 @@
 <template>
-	<div class="device-mqtt">
+	<div class="device-mqtt-bat">
 		<openwb-base-heading>
 			Einstellungen für MQTT Batteriespeicher
 			<span class="small">(Modul: {{ $options.name }})</span>
@@ -32,7 +32,7 @@
 						>openWB/set/bat/{{ componentId }}/get/soc</span
 					><br />
 					Ladestand des Speichers, ohne Nachkommastellen (Integer),
-					Gültige Werte 0 bis 100
+					gültige Werte 0 bis 100
 				</li>
 			</ul>
 		</openwb-base-alert>
