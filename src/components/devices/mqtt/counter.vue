@@ -1,5 +1,5 @@
 <template>
-	<div class="device-mqtt">
+	<div class="device-mqtt-counter">
 		<openwb-base-heading>
 			Einstellungen für MQTT Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>

@@ -1,33 +1,18 @@
 <template>
-	<div class="device-mqtt-inverter">
+	<div class="device-sonnenbatterie-bat">
 		<openwb-base-heading>
-			Einstellungen für MQTT Wechselrichter
+			Einstellungen für SonnenBatterie Speicher
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
-			<ul>
-				<li>
-					<span class="text-info"
-						>openWB/set/pv/{{ componentId }}/get/power</span
-					><br />
-					PV-Leistung in Watt, ohne Nachkommastellen (Integer), nur
-					negativ!
-				</li>
-				<li>
-					<span class="text-info"
-						>openWB/set/pv/{{ componentId }}/get/counter</span
-					><br />
-					Erzeugte Energie in Wh, mit Nachkommastellen (Float), nur
-					positiv
-				</li>
-			</ul>
+			Diese Komponente erfordert keine Einstellungen.
 		</openwb-base-alert>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceMqttInverter",
+	name: "DeviceSonnenbatterieBat",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
