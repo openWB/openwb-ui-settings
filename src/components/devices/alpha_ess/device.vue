@@ -1,32 +1,26 @@
 <template>
-	<div class="device-fronius-inverter">
+	<div class="device-alphaess">
 		<openwb-base-heading>
-			Einstellungen für Fronius Wechselrichter
+			Einstellungen für Alpha ESS
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-text-input
-			title="IP oder Hostname 2. WR"
-			subtype="host"
-			:model-value="configuration.ip_address2"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.ip_address2')
-			"
-		/>
+		<openwb-base-alert subtype="info">
+			Für dieses Gerät gibt es keine Einstellungen.
+		</openwb-base-alert>
 		<openwb-base-alert subtype="warning">
-			ToDo: Einstellung "IP address 2" entfernen. Stattdessen eine zweite
-			Komponente anlegen.
+			ToDo: Einstellung "Version" von den Komponenten in das Gerät
+			verschieben!
 		</openwb-base-alert>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceFroniusInverter",
+	name: "DeviceAlphaess",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
 		deviceId: { default: undefined },
-		componentId: { required: true },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {

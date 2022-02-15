@@ -12,6 +12,19 @@
 				updateConfiguration($event, 'configuration.ip_address')
 			"
 		/>
+		<openwb-base-number-input
+			title="Meter ID"
+			:model-value="configuration.meter_id"
+			min="0"
+			max="1"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.meter_id')
+			"
+		/>
+		<openwb-base-alert subtype="warning">
+			ToDo: Einstellung "Meter ID" ist nur für Zähler relevant. In diese
+			Komponenten verschieben.
+		</openwb-base-alert>
 	</div>
 </template>
 

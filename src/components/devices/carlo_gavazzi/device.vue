@@ -12,6 +12,9 @@
 				updateConfiguration($event, 'configuration.ip_address')
 			"
 		/>
+		<openwb-base-alert subtype="warning">
+			ToDo: Einstellungen für "Port" ergänzen.
+		</openwb-base-alert>
 	</div>
 </template>
 

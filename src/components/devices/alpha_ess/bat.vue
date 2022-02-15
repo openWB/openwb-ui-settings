@@ -1,27 +1,27 @@
 <template>
-	<div class="device-fronius-inverter">
+	<div class="device-alphaess-bat">
 		<openwb-base-heading>
-			Einstellungen für Fronius Wechselrichter
+			Einstellungen für Alpha ESS Batteriespeicher
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-text-input
-			title="IP oder Hostname 2. WR"
-			subtype="host"
-			:model-value="configuration.ip_address2"
+		<openwb-base-select-input
+			title="Version"
+			notSelected="Bitte auswählen"
+			:options="[
+				{ value: 0, text: 'EMS älter als 1.23V' },
+				{ value: 1, text: 'EMS 1.23V oder neuer' },
+			]"
+			:model-value="configuration.version"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.ip_address2')
+				updateConfiguration($event, 'configuration.version')
 			"
 		/>
-		<openwb-base-alert subtype="warning">
-			ToDo: Einstellung "IP address 2" entfernen. Stattdessen eine zweite
-			Komponente anlegen.
-		</openwb-base-alert>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceFroniusInverter",
+	name: "DeviceAlphaessBat",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

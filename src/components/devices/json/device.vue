@@ -1,31 +1,29 @@
 <template>
-	<div class="device-fronius-inverter">
+	<div class="device-json">
 		<openwb-base-heading>
-			Einstellungen für Fronius Wechselrichter
+			Einstellungen für JSON
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
-			title="IP oder Hostname 2. WR"
+			title="IP oder Hostname"
 			subtype="host"
-			:model-value="configuration.ip_address2"
+			:model-value="configuration.ip_address"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.ip_address2')
+				updateConfiguration($event, 'configuration.ip_address')
 			"
 		/>
 		<openwb-base-alert subtype="warning">
-			ToDo: Einstellung "IP address 2" entfernen. Stattdessen eine zweite
-			Komponente anlegen.
+			ToDo: Einstellung "Protokoll" und "Port" ergänzen.
 		</openwb-base-alert>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceFroniusInverter",
+	name: "DeviceJson",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
 		componentId: { required: true },
 	},
 	methods: {
