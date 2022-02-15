@@ -16,14 +16,17 @@
 		<openwb-base-select-input
 			title="Protokoll"
 			:options="[
-				{ value: 'http', text: 'http://' },
-				{ value: 'https', text: 'https://' },
+				{ value: 'http', text: 'Unverschlüsselt (http://)' },
+				{ value: 'https', text: 'Verschlüsselt (https://)' },
 			]"
 			:model-value="configuration.protocol"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.protocol')
 			"
 		/>
+		<openwb-base-alert subtype="warning">
+			ToDo: Einstellung "Port" ergänzen.
+		</openwb-base-alert>
 	</div>
 </template>
 

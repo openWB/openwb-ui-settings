@@ -1,27 +1,23 @@
 <template>
-	<div class="device-fronius-inverter">
+	<div class="device-siemens-inverter">
 		<openwb-base-heading>
-			Einstellungen für Fronius Wechselrichter
+			Einstellungen für Siemens Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
-			title="IP oder Hostname 2. WR"
+			title="IP oder Hostname"
 			subtype="host"
-			:model-value="configuration.ip_address2"
+			:model-value="configuration.ip_address"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.ip_address2')
+				updateConfiguration($event, 'configuration.ip_address')
 			"
 		/>
-		<openwb-base-alert subtype="warning">
-			ToDo: Einstellung "IP address 2" entfernen. Stattdessen eine zweite
-			Komponente anlegen.
-		</openwb-base-alert>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceFroniusInverter",
+	name: "DeviceSiemensInverter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

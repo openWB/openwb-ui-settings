@@ -7,6 +7,9 @@
 		<openwb-base-alert subtype="info">
 			Ausgelesen wird ID 1 auf Port 502. ModbusTCP muss aktiviert sein.
 		</openwb-base-alert>
+		<openwb-base-alert subtype="warning">
+			ToDo: Einstellungen für "ID" ergänzen.
+		</openwb-base-alert>
 	</div>
 </template>
 
