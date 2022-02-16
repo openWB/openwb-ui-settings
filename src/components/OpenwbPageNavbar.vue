@@ -198,6 +198,33 @@
 						Status
 					</router-link>
 				</li>
+				<li class="nav-item dropdown">
+					<a
+						class="nav-link dropdown-toggle"
+						href="#"
+						role="button"
+						data-toggle="dropdown"
+						aria-expanded="false"
+					>
+						Auswertungen
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<router-link
+							to="/Logging/ChargeLog"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							Ladeprotokoll
+						</router-link>
+						<router-link
+							to="/Logging/DailyGraph"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							Tagesauswertung
+						</router-link>
+					</div>
+				</li>
 				<li v-if="nodeEnv !== 'production'" class="nav-item dropdown">
 					<a
 						class="nav-link dropdown-toggle"

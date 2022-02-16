@@ -233,6 +233,18 @@ const routes = [
 				"../views/ChargeLog.vue"
 			),
 	},
+	{
+		path: "/Logging/DailyGraph",
+		name: "DailyGraph",
+		meta: {
+			heading: "Tagesauswertung",
+		},
+		component: () =>
+			import(
+				/* webpackChunkName: "DailyGraph" */
+				"../views/DailyGraph.vue"
+			),
+	},
 ];
 /* examples for development only start here */
 if (process.env.NODE_ENV !== "production") {
