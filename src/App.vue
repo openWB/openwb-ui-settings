@@ -59,6 +59,16 @@ export default {
 	},
 	computed: {
 		/**
+		 * @return {Str} - Mqtt client id of our connection
+		 */
+		mqttClientId() {
+			try {
+				return this.client.options.clientId;
+			} catch (error) {
+				return undefined;
+			}
+		},
+		/**
 		 * @return {Array} - Array of topics (String)
 		 */
 		topicList() {

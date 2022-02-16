@@ -6,7 +6,7 @@
 					title="Zeitraum"
 					subtype="month"
 					min="2018-01"
-					max="2021-12"
+					max="2022-12"
 					v-model="chargeLogDate"
 				/>
 				<openwb-base-card
@@ -33,6 +33,15 @@
 				</template>
 			</openwb-base-card>
 			<openwb-base-card title="Ladeprotokoll"></openwb-base-card>
+			<openwb-base-alert subtype="info">
+				<pre>{{
+					JSON.stringify(
+						$store.state.mqtt[
+							"openWB/log/" + mqttClientId + "/data"
+						]
+					)
+				}}</pre>
+			</openwb-base-alert>
 		</form>
 	</div>
 </template>

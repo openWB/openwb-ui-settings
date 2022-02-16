@@ -13,6 +13,9 @@ export default {
 				"Sonntag",
 			];
 		},
+		mqttClientId() {
+			return this.$root.mqttClientId;
+		},
 	},
 	methods: {
 		updateState(topic, value, objectPath = undefined) {
@@ -82,6 +85,9 @@ export default {
 		},
 	},
 	mounted() {
+		this.mqttTopicsToSubscribe.push(
+			"openWB/log/" + this.mqttClientId + "/data"
+		);
 		this.mqttTopicsToSubscribe.forEach((topic) => {
 			if (topic.includes("#") || topic.includes("+")) {
 				console.debug("skipping init of wildcard topic:", topic);
