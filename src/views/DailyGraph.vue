@@ -6,7 +6,7 @@
 					title="Datum"
 					subtype="date"
 					min="2018-01-01"
-					max="2022-12-31"
+					:max="currentDay"
 					v-model="dailyGraphDate"
 				/>
 				<template #footer>
@@ -20,11 +20,17 @@
 					</div>
 				</template>
 			</openwb-base-card>
-			<openwb-base-card title="Tages-Diagramm"></openwb-base-card>
-			<openwb-base-alert subtype="info">
-				Graph Dataset:<br />
-				<pre>{{ dailyGraphDataset }}</pre>
+			<openwb-base-alert v-if="!chartDataRead" subtype="info">
+				Es wurden noch keine Daten abgerufen.
 			</openwb-base-alert>
+			<div v-else>
+				<openwb-base-alert v-if="!chartDataHasEntries" subtype="info">
+					Es konnten keine Einträge für dieses Datum gefunden werden.
+				</openwb-base-alert>
+				<openwb-base-card v-else title="Demo-Diagramm">
+					<LineChart :chartData="testData" />
+				</openwb-base-card>
+			</div>
 		</form>
 	</div>
 </template>
@@ -32,8 +38,30 @@
 <script>
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
+import { LineChart } from "vue-chart-3";
+import {
+	Chart,
+	Tooltip,
+	Legend,
+	LineController,
+	LineElement,
+	PointElement,
+	CategoryScale,
+	LinearScale,
+} from "chart.js";
+Chart.register(
+	Tooltip,
+	Legend,
+	LineController,
+	LineElement,
+	PointElement,
+	CategoryScale,
+	LinearScale
+);
+
 export default {
 	name: "DailyGraph",
+	components: { LineChart },
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
 	data() {
@@ -42,10 +70,27 @@ export default {
 				"openWB/general/extern",
 				"openWB/log/daily/#",
 			],
+			currentDay: "",
 			dailyGraphRequestData: {
 				day: "01",
 				month: "01",
 				year: "2022",
+			},
+			testData: {
+				labels: ["00:00", "00:01", "00:02", "00:03", "00:04"],
+				datasets: [
+					{
+						label: "Datenreihe 1",
+						data: [123, 54, -13, -27, 5],
+						backgroundColor: [
+							"#77CEFF",
+							"#0079AF",
+							"#123E6B",
+							"#97B0C4",
+							"#A5C8ED",
+						],
+					},
+				],
 			},
 		};
 	},
@@ -77,11 +122,25 @@ export default {
 				};
 			},
 		},
-		dailyGraphDataset: {
+		chartDataset: {
 			get() {
 				return this.$store.state.mqtt[
 					"openWB/log/daily/" + this.commandData.day
 				];
+			},
+		},
+		chartDataRead: {
+			get() {
+				return this.chartDataset != undefined;
+			},
+		},
+		chartDataHasEntries: {
+			get() {
+				if (this.chartDataset == undefined) {
+					return false;
+				} else {
+					return this.chartDataset.length > 0;
+				}
 			},
 		},
 	},
@@ -99,6 +158,16 @@ export default {
 				});
 			}
 		},
+	},
+	mounted() {
+		const today = new Date();
+		this.currentDay = this.dailyGraphDate =
+			today.getFullYear() +
+			"-" +
+			String(today.getMonth() + 1).padStart(2, "0") +
+			"-" +
+			String(today.getDate()).padStart(2, "0");
+		this.requestDailyGraph();
 	},
 };
 </script>
