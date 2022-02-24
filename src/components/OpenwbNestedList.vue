@@ -62,14 +62,16 @@ export default {
 	methods: {
 		classes(element) {
 			var myClasses = "";
-			if (element.id.startsWith("counter")) {
-				myClasses += "counter";
-			} else if (element.id.startsWith("cp")) {
-				myClasses += "charge-point";
-			} else if (element.id.startsWith("bat")) {
-				myClasses += "battery";
-			} else if (element.id.startsWith("inverter")) {
-				myClasses += "inverter";
+			switch (element.type) {
+				case "bat":
+					myClasses += "battery";
+					break;
+				case "cp":
+					myClasses += "charge-point";
+					break;
+				default:
+					myClasses += element.type;
+					break;
 			}
 			return myClasses;
 		},
@@ -146,6 +148,7 @@ export default {
 
 .element-titel.battery {
 	background-color: var(--warning);
+	color: var(--dark);
 }
 
 .element-actions {
