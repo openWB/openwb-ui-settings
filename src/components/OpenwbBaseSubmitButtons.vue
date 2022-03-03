@@ -81,7 +81,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasCheck, fasUndo, fasTimes);
 
 export default {
-	name: "SubmitButtons",
+	name: "OpenwbSubmitButtons",
 	components: {
 		FontAwesomeIcon,
 	},

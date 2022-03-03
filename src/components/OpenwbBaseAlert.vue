@@ -6,7 +6,7 @@
 
 <script>
 export default {
-	name: "Alert",
+	name: "OpenwbAlert",
 	props: {
 		subtype: {
 			validator: function (value) {

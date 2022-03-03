@@ -67,7 +67,7 @@
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
-	name: "DataProtection",
+	name: "OpenwbDataProtection",
 	mixins: [ComponentStateMixin],
 	data() {
 		return {

@@ -102,7 +102,7 @@ import Vue3TableLite from "vue3-table-lite";
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
-	name: "ChargeLog",
+	name: "OpenwbChargeLog",
 	components: { Vue3TableLite },
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],

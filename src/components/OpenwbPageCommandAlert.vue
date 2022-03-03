@@ -19,7 +19,7 @@
 
 <script>
 export default {
-	name: "CommandAlert",
+	name: "OpenwbCommandAlert",
 	emits: ["dismiss"],
 	props: {
 		alertData: { type: Object, default: undefined },

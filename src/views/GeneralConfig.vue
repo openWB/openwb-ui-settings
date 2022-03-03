@@ -486,7 +486,7 @@
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
-	name: "GeneralConfig",
+	name: "OpenwbGeneralConfig",
 	mixins: [ComponentStateMixin],
 	data() {
 		return {

@@ -45,7 +45,7 @@
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
-	name: "InstantChargeConfig",
+	name: "OpenwbInstantChargeConfig",
 	mixins: [ComponentStateMixin],
 	data() {
 		return {

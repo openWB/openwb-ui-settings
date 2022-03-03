@@ -6,7 +6,7 @@
 
 <script>
 export default {
-	name: "ClickButton",
+	name: "OpenwbClickButton",
 	props: {
 		title: String,
 	},

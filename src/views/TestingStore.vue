@@ -303,7 +303,7 @@ import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 import SortableList from "@/components/OpenwbSortableList.vue";
 
 export default {
-	name: "TestingStore",
+	name: "OpenwbTestingStore",
 	mixins: [ComponentStateMixin],
 	components: {
 		SortableList,

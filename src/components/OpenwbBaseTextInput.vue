@@ -194,7 +194,7 @@ library.add(
 );
 
 export default {
-	name: "TextInput",
+	name: "OpenwbTextInput",
 	inheritAttrs: false,
 	props: {
 		title: String,

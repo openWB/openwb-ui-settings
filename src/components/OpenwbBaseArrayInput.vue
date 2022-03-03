@@ -97,7 +97,7 @@ library.add(
 );
 
 export default {
-	name: "ArrayInput",
+	name: "OpenwbArrayInput",
 	inheritAttrs: false,
 	props: {
 		title: String,

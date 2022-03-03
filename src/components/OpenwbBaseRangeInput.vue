@@ -70,7 +70,7 @@ library.add(
 );
 
 export default {
-	name: "RangeInput",
+	name: "OpenwbRangeInput",
 	inheritAttrs: false,
 	props: {
 		title: String,

@@ -415,7 +415,7 @@ library.add(fasPlus, fasTrash);
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
-	name: "MqttBridgeConfiguration",
+	name: "OpenwbMqttBridgeConfiguration",
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
 	components: {

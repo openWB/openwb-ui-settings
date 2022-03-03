@@ -271,7 +271,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasExternalLinkAlt);
 
 export default {
-	name: "NavBar",
+	name: "OpenwbNavBar",
 	components: {
 		FontAwesomeIcon,
 	},

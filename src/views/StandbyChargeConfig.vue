@@ -45,7 +45,7 @@
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
-	name: "StandbyChargeConfig",
+	name: "OpenwbStandbyChargeConfig",
 	mixins: [ComponentStateMixin],
 	data() {
 		return {

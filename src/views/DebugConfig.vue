@@ -91,7 +91,7 @@ library.add(fasFileDownload);
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
-	name: "Debugging",
+	name: "OpenwbDebugging",
 	mixins: [ComponentStateMixin],
 	components: {
 		FontAwesomeIcon,

@@ -257,7 +257,7 @@ import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 import OpenwbConfigProxy from "@/components/OpenwbConfigProxy.vue";
 
 export default {
-	name: "HardwareInstallation",
+	name: "OpenwbHardwareInstallation",
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
 	components: {

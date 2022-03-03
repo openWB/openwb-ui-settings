@@ -214,7 +214,7 @@
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
-	name: "CloudConfig",
+	name: "OpenwbCloudConfig",
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
 	data() {
