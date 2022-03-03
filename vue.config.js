@@ -1,4 +1,4 @@
-const webpack = require('webpack');
+const webpack = require("webpack");
 
 module.exports = {
 	publicPath: "/openWB/web/settings/",
@@ -8,14 +8,14 @@ module.exports = {
 	configureWebpack: {
 		resolve: {
 			fallback: {
-				"buffer": require.resolve("buffer/"),
-				"process": require.resolve("process/browser"),
+				buffer: require.resolve("buffer/"),
+				process: require.resolve("process/browser"),
 			},
 		},
 		plugins: [
 			new webpack.ProvidePlugin({
-				Buffer: ['buffer', 'Buffer'],
-				process: 'process/browser',
+				Buffer: ["buffer", "Buffer"],
+				process: "process/browser",
 			}),
 		],
 	},
