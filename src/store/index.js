@@ -27,28 +27,38 @@ if (process.env.NODE_ENV !== "production") {
 		json1: { text: "Text", number: 123 },
 		hierarchy1: [
 			{
-				id: "counter0",
+				id: 0,
+				type: "counter",
 				children: [
 					{
-						id: "cp1",
+						id: 3,
+						type: "inverter",
 						children: [],
 					},
 					{
-						id: "cp2",
+						id: 4,
+						type: "bat",
 						children: [],
 					},
 					{
-						id: "cp3",
+						id: 1,
+						type: "cp",
+						children: [],
+					},
+					{
+						id: 2,
+						type: "cp",
 						children: [],
 					},
 				],
 			},
 		],
 		hierarchy1Labels: {
-			counter0: "EVU",
-			cp1: "Ladepunkt 1",
-			cp2: "Ladepunkt 2",
-			// cp3 without label for testing
+			0: "EVU",
+			1: "Ladepunkt 1",
+			2: "Ladepunkt 2",
+			3: "Wechselrichter",
+			4: "Batteriespeicher",
 		},
 		tags: ["1234", "2345", "3456"],
 	};
