@@ -11,7 +11,7 @@
 
 <script>
 export default {
-	name: "PageFooter",
+	name: "OpenwbPageFooter",
 };
 </script>
 

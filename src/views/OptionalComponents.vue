@@ -1317,7 +1317,7 @@
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
-	name: "OptionalComponents",
+	name: "OpenwbOptionalComponents",
 	mixins: [ComponentStateMixin],
 	data() {
 		return {

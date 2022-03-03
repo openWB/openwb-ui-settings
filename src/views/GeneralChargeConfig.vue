@@ -99,7 +99,7 @@
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
-	name: "GeneralChargeConfig",
+	name: "OpenwbGeneralChargeConfig",
 	mixins: [ComponentStateMixin],
 	data() {
 		return {

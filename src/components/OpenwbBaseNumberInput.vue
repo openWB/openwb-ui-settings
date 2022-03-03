@@ -55,7 +55,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasQuestionCircle, farQuestionCircle, fasCalculator);
 
 export default {
-	name: "NumberInput",
+	name: "OpenwbNumberInput",
 	inheritAttrs: false,
 	props: {
 		title: String,

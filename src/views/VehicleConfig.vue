@@ -1343,7 +1343,7 @@ library.add(
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
-	name: "VehicleConfig",
+	name: "OpenwbVehicleConfig",
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
 	components: {

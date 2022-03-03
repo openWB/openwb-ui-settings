@@ -39,7 +39,7 @@
 import { defineAsyncComponent } from "@vue/runtime-core";
 
 export default {
-	name: "ConfigProxy",
+	name: "OpenwbConfigProxy",
 	emits: ["update:configuration"],
 	props: {
 		deviceId: { required: true },

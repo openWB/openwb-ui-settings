@@ -46,7 +46,7 @@
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
-	name: "ScheduledChargeConfig",
+	name: "OpenwbScheduledChargeConfig",
 	mixins: [ComponentStateMixin],
 	data() {
 		return {

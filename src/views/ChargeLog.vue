@@ -14,6 +14,52 @@
 					:collapsible="true"
 					:collapsed="true"
 				>
+					<openwb-base-button-group-input
+						title="Priorität"
+						:buttons="[
+							{ buttonValue: undefined, text: 'Egal' },
+							{ buttonValue: false, text: 'Aus' },
+							{ buttonValue: true, text: 'An' },
+						]"
+						v-model="chargeLogRequestData.filter.vehicle.prio"
+					/>
+					<openwb-base-button-group-input
+						title="Lademodus"
+						:buttons="[
+							{
+								buttonValue: undefined,
+								text: 'Alle',
+							},
+							{
+								buttonValue: 'instant_charging',
+								text: 'Sofort',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: 'pv_charging',
+								text: 'PV',
+								class: 'btn-outline-success',
+							},
+							{
+								buttonValue: 'scheduled_charging',
+								text: 'Zielladen',
+								class: 'btn-outline-primary',
+							},
+							{
+								buttonValue: 'standby',
+								text: 'Standby',
+								class: 'btn-outline-secondary',
+							},
+							{
+								buttonValue: 'stop',
+								text: 'Stop',
+								class: 'btn-outline-dark',
+							},
+						]"
+						v-model="
+							chargeLogRequestData.filter.vehicle.chargemode[0]
+						"
+					/>
 					<openwb-base-textarea
 						title="Filter Objekt"
 						subtype="json"
@@ -36,7 +82,7 @@
 			</openwb-base-alert>
 			<div v-else>
 				<vue3-table-lite
-					id="charge-log-table"
+					class="charge-log-table"
 					:is-static-mode="true"
 					:columns="table.columns"
 					:rows="chargeLogDataset"
@@ -56,7 +102,7 @@ import Vue3TableLite from "vue3-table-lite";
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
-	name: "ChargeLog",
+	name: "OpenwbChargeLog",
 	components: { Vue3TableLite },
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
@@ -69,13 +115,13 @@ export default {
 				year: "",
 				filter: {
 					chargepoint: {
-						id: [],
+						id: undefined,
 					},
 					vehicle: {
-						id: [],
-						rfid: [],
+						id: undefined,
+						rfid: undefined,
 						chargemode: [],
-						prio: [],
+						prio: undefined,
 					},
 				},
 			},
@@ -86,6 +132,7 @@ export default {
 					gotoPageLabel: " Gehe zu:",
 					noDataAvailable: "Keine Einträge gefunden.",
 				},
+				"is-hide-paging": true,
 				pageOptions: [
 					{ value: 5, text: "5" },
 					{ value: 10, text: "10" },
@@ -97,50 +144,69 @@ export default {
 					{
 						label: "Beginn",
 						field: "time_begin",
-						width: "15%",
 						sortable: true,
 					},
 					{
 						label: "Ende",
 						field: "time_end",
-						width: "15%",
 						sortable: true,
 					},
 					{
 						label: "Fahrzeug",
 						field: "vehicle_name",
-						width: "10%",
-						sortable: true,
 					},
 					{
 						label: "Dauer",
 						field: "time_time_charged",
-						width: "15%",
 						sortable: true,
+						display: (row) => {
+							return this.alignEnd(row.time_time_charged);
+						},
 					},
 					{
-						label: "Geladen [kWh]",
+						label: "Energie",
 						field: "data_charged_since_plugged_counter",
-						width: "15%",
 						sortable: true,
+						display: (row) => {
+							return this.alignEnd(
+								this.formatNumber(
+									row.data_charged_since_plugged_counter /
+										1000,
+									2
+								) + "&nbsp;kWh"
+							);
+						},
 					},
 					{
 						label: "Kosten",
 						field: "data_costs",
-						width: "15%",
 						sortable: true,
+						display: (row) => {
+							return this.alignEnd(
+								this.formatNumber(row.data_costs / 1000, 2) +
+									"&nbsp;€"
+							);
+						},
 					},
 					{
 						label: "Lademodus",
 						field: "vehicle_chargemode",
-						width: "15%",
-						sortable: true,
+						display: (row) => {
+							return this.translateChargeMode(
+								row.vehicle_chargemode
+							);
+						},
 					},
 					{
 						label: "Ladepunkt",
 						field: "chargepoint_name",
-						width: "3%",
-						sortable: true,
+					},
+					{
+						label: "Priorität",
+						field: "vehicle_prio",
+						display: (row) => {
+							return this.translateBool(row.vehicle_prio);
+						},
 					},
 				],
 				sortable: {
@@ -240,6 +306,60 @@ export default {
 				});
 			}
 		},
+		alignEnd(content) {
+			return '<div class="td-end">' + content + "</div>";
+		},
+		alignCenter(content) {
+			return '<div class="td-center">' + content + "</div>";
+		},
+		translateBool(value) {
+			let text = "Nein";
+			let myClass = "bg-danger";
+			if (value) {
+				text = "Ja";
+				myClass = "bg-success";
+			}
+			return (
+				'<div class="td-center tag ' + myClass + '">' + text + "</div>"
+			);
+		},
+		translateChargeMode(value) {
+			let myClass = "bg-light";
+			let text = value;
+			switch (value) {
+				case "instant_charging":
+					myClass = "bg-danger";
+					text = "Sofort";
+					break;
+				case "pv_charging":
+					myClass = "bg-success";
+					text = "PV";
+					break;
+				case "scheduled_charging":
+					myClass = "bg-primary";
+					text = "Zielladen";
+					break;
+				case "standby":
+					myClass = "bg-secondary";
+					text = "Standby";
+					break;
+				case "stop":
+					myClass = "bg-dark";
+					text = "Stop";
+					break;
+				default:
+					console.warn("unknown charge mode:", value);
+			}
+			return (
+				'<div class="td-center tag ' + myClass + '">' + text + "</div>"
+			);
+		},
+		formatNumber(value, minNumDigits = 0, maxNumDigit = minNumDigits) {
+			return value.toLocaleString(undefined, {
+				minimumFractionDigits: minNumDigits,
+				maximumFractionDigits: maxNumDigit,
+			});
+		},
 	},
 	mounted() {
 		const today = new Date();
@@ -253,19 +373,23 @@ export default {
 </script>
 
 <style scoped>
-#charge-log-table {
+.charge-log-table {
 	border: none;
 	padding: 0;
 }
 
-#charge-log-table :deep(.card-body) {
+.charge-log-table :deep(.card-body) {
 	padding: 0;
 }
 
 :deep(.vtl-table .vtl-thead .vtl-thead-th) {
 	color: var(--light);
-	background-color: var(--primary);
-	border-color: var(--light);
+	background-color: var(--dark);
+	border-color: var(--dark);
+}
+
+:deep(.table-bordered td) {
+	border-color: var(--secondary);
 }
 
 :deep(.vtl-table .vtl-tbody .vtl-tbody-tr:hover) {
@@ -286,5 +410,18 @@ export default {
 
 :deep(.vtl-paging-change-div) {
 	text-align: center;
+}
+
+:deep(.vtl-tbody-td .td-end) {
+	text-align: end;
+}
+
+:deep(.vtl-tbody-td .td-center) {
+	text-align: center;
+}
+
+:deep(.tag) {
+	border-radius: 10px;
+	padding: 2px 5px;
 }
 </style>

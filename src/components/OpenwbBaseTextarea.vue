@@ -67,7 +67,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasQuestionCircle, farQuestionCircle);
 
 export default {
-	name: "TextareaInput",
+	name: "OpenwbTextareaInput",
 	inheritAttrs: false,
 	props: {
 		title: String,

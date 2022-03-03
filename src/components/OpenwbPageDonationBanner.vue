@@ -29,7 +29,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(faPaypal);
 
 export default {
-	name: "DonationBanner",
+	name: "OpenwbDonationBanner",
 	components: {
 		FontAwesomeIcon,
 	},

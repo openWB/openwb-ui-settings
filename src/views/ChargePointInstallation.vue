@@ -703,7 +703,7 @@ library.add(fasPlus, fasTrash, fasCalendarDay, fasCalendarAlt, fasCalendarWeek);
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
-	name: "ChargePointInstallation",
+	name: "OpenwbChargePointInstallation",
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
 	components: {

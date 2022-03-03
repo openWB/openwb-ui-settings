@@ -37,7 +37,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasQuestionCircle, farQuestionCircle);
 
 export default {
-	name: "CheckboxInput",
+	name: "OpenwbCheckboxInput",
 	inheritAttrs: false,
 	props: {
 		title: String,

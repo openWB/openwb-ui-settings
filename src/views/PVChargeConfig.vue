@@ -412,7 +412,7 @@
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
-	name: "PVChargeConfig",
+	name: "OpenwbPVChargeConfig",
 	mixins: [ComponentStateMixin],
 	methods: {
 		calculateControlMode() {

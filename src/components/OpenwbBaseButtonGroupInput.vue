@@ -61,7 +61,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasQuestionCircle, farQuestionCircle, fasCheck);
 
 export default {
-	name: "ButtonGroupInput",
+	name: "OpenwbButtonGroupInput",
 	inheritAttrs: false,
 	props: {
 		title: String,

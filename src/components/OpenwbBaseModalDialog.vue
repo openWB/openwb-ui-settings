@@ -53,7 +53,7 @@
 
 <script>
 export default {
-	name: "modal-dialog",
+	name: "OpenwbModalDialog",
 	emits: ["modal-result"],
 	props: {
 		title: String,

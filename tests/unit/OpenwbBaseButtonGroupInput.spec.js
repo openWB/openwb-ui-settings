@@ -62,8 +62,8 @@ describe("OpenwbBaseButtonGroupInput.vue", () => {
 		const wrapper = shallowMount(OpenwbBaseButtonGroupInput, {
 			props: { buttons, modelValue },
 		});
-		const renderedButtons = wrapper.findAll("label.btn");
-		await renderedButtons[0].trigger("click");
+		const renderedButtons = wrapper.findAll("input[type=radio]");
+		await renderedButtons[0].setValue(1);
 		expect(wrapper.emitted("update:modelValue")[0]).toStrictEqual([1]);
 	});
 });

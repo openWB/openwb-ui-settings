@@ -714,7 +714,7 @@ library.add(fasCheckCircle, fasExclamationTriangle, fasTimesCircle);
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
-	name: "Status",
+	name: "OpenwbStatus",
 	mixins: [ComponentStateMixin],
 	components: {
 		FontAwesomeIcon,

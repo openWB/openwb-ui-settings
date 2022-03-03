@@ -54,7 +54,7 @@ describe("OpenwbBaseCheckboxInput.vue", () => {
 			props: { modelValue },
 		});
 		const renderedCheckbox = wrapper.find("input[type=checkbox]");
-		await renderedCheckbox.trigger("click");
+		await renderedCheckbox.setValue(true);
 		expect(wrapper.emitted("update:modelValue")[0]).toStrictEqual([true]);
 	});
 });

@@ -49,7 +49,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasChevronRight, fasChevronDown);
 
 export default {
-	name: "Card",
+	name: "OpenwbCard",
 	components: {
 		FontAwesomeIcon,
 	},

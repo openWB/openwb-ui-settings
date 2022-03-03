@@ -115,7 +115,7 @@ library.add(fasCheck);
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
-	name: "Support",
+	name: "OpenwbSupport",
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
 	components: {

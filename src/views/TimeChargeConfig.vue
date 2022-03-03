@@ -45,7 +45,7 @@
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
-	name: "TimeChargeConfig",
+	name: "OpenwbTimeChargeConfig",
 	mixins: [ComponentStateMixin],
 	data() {
 		return {

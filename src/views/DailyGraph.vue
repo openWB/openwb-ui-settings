@@ -60,7 +60,7 @@ Chart.register(
 );
 
 export default {
-	name: "DailyGraph",
+	name: "OpenwbDailyGraph",
 	components: { LineChart },
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
