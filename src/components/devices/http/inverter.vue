@@ -17,13 +17,15 @@
 			<template #help>
 				Diese Angabe wird an die IP bzw. den Hostnamen angehängt und
 				muss mit einem Schrägstrich "/" beginnen.<br />
-				Es wird vom Server eine ganze Zahl (Integer) erwartet, welche
-				die aktuelle Leistung in Watt darstellt.
+				Es wird vom Server eine Zahl (Float mit Punkt als
+				Dezimaltrennzeichen oder Integer) erwartet, welche die aktuelle
+				Leistung in Watt darstellt.
 			</template>
 		</openwb-base-text-input>
 		<openwb-base-text-input
 			title="Pfad für Zählerstand Bezug"
 			subtype="text"
+			required
 			pattern="^/[-a-zA-Z0-9@:%_\+.~#?&/=]*"
 			:model-value="configuration.counter_path"
 			@update:model-value="
@@ -33,9 +35,10 @@
 			<template #help>
 				Diese Angabe wird an die IP bzw. den Hostnamen angehängt und
 				muss mit einem Schrägstrich "/" beginnen.<br />
-				Es wird vom Server eine Zahl (Float) erwartet, welche den
-				aktuellen absoluten Zählerstand in kWh darstellt.<br />
-				Wenn dieses Feld leer ist, wird der Zählerstand intern
+				Es wird vom Server eine Zahl (Float mit Punkt als
+				Dezimaltrennzeichen oder Integer) erwartet, welche den aktuellen
+				absoluten Zählerstand in kWh darstellt.<br />
+				Wird hier "none" eingetragen, wird der Zählerstand intern
 				simuliert.
 			</template>
 		</openwb-base-text-input>
