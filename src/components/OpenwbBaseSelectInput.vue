@@ -31,7 +31,6 @@
 						v-for="option in options"
 						:key="option.value"
 						:value="option.value"
-						:disabled="option.value === undefined"
 					>
 						{{ option.text }}
 					</option>
