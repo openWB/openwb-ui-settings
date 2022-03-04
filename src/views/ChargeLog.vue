@@ -17,9 +17,20 @@
 					<openwb-base-button-group-input
 						title="Priorität"
 						:buttons="[
-							{ buttonValue: undefined, text: 'Egal' },
-							{ buttonValue: false, text: 'Aus' },
-							{ buttonValue: true, text: 'An' },
+							{
+								buttonValue: undefined,
+								text: 'Alle',
+							},
+							{
+								buttonValue: false,
+								text: 'Aus',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'An',
+								class: 'btn-outline-success',
+							},
 						]"
 						v-model="chargeLogRequestData.filter.vehicle.prio"
 					/>
@@ -60,11 +71,21 @@
 							chargeLogRequestData.filter.vehicle.chargemode[0]
 						"
 					/>
-					<openwb-base-textarea
-						title="Filter Objekt"
-						subtype="json"
-						v-model="chargeLogRequestData.filter"
+					<openwb-base-select-input
+						title="Ladepunkt"
+						multiple
+						:options="chargePointList"
+						v-model="chargeLogRequestData.filter.chargepoint.id"
 					/>
+					<openwb-base-select-input
+						title="Fahrzeug"
+						multiple
+						:options="vehicleList"
+						v-model="chargeLogRequestData.filter.vehicle.id"
+					/>
+					<openwb-base-alert>
+						{{ chargeLogRequestData.filter }}
+					</openwb-base-alert>
 				</openwb-base-card>
 				<template #footer>
 					<div class="row justify-content-center">
@@ -108,18 +129,22 @@ export default {
 	emits: ["sendCommand"],
 	data() {
 		return {
-			mqttTopicsToSubscribe: ["openWB/general/extern"],
+			mqttTopicsToSubscribe: [
+				"openWB/general/extern",
+				"openWB/chargepoint/+/config",
+				"openWB/vehicle/+/name",
+			],
 			currentMonth: "",
 			chargeLogRequestData: {
 				month: "",
 				year: "",
 				filter: {
 					chargepoint: {
-						id: undefined,
+						id: [],
 					},
 					vehicle: {
-						id: undefined,
-						rfid: undefined,
+						id: [],
+						// rfid: [],  // still required?
 						chargemode: [],
 						prio: undefined,
 					},
@@ -173,7 +198,13 @@ export default {
 									row.data_charged_since_plugged_counter /
 										1000,
 									2
-								) + "&nbsp;kWh"
+								) +
+									"&nbsp;kWh / " +
+									this.formatNumber(
+										row.data_range_charged / 1000,
+										0
+									) +
+									"&nbspkm"
 							);
 						},
 					},
@@ -291,15 +322,54 @@ export default {
 		totalRecordCount() {
 			return this.chargeLogDataset.length;
 		},
+		chargePointList() {
+			let chargePoints = this.getWildcardTopics(
+				"openWB/chargepoint/+/config"
+			);
+			var chargePointList = [{ value: undefined, text: "Alle" }];
+			for (const [, element] of Object.entries(chargePoints)) {
+				chargePointList.push({ value: element.id, text: element.name });
+			}
+			return chargePointList;
+		},
+		vehicleList() {
+			let vehicles = this.getWildcardTopics("openWB/vehicle/+/name");
+			var vehicleList = [{ value: undefined, text: "Alle" }];
+			for (const [key, element] of Object.entries(vehicles)) {
+				let index = parseInt(key.match(/\/([0-9]+)\/name$/)[1]);
+				vehicleList.push({ value: index, text: element });
+			}
+			return vehicleList;
+		},
 	},
 	methods: {
+		cleanRequestData() {
+			if ("id" in this.chargeLogRequestData.filter.chargepoint) {
+				this.chargeLogRequestData.filter.chargepoint.id =
+					this.chargeLogRequestData.filter.chargepoint.id.filter(
+						(element) => element != undefined
+					);
+			}
+			if ("chargemode" in this.chargeLogRequestData.filter.vehicle) {
+				this.chargeLogRequestData.filter.vehicle.chargemode =
+					this.chargeLogRequestData.filter.vehicle.chargemode.filter(
+						(element) => element != undefined
+					);
+			}
+			if ("id" in this.chargeLogRequestData.filter.vehicle) {
+				this.chargeLogRequestData.filter.vehicle.id =
+					this.chargeLogRequestData.filter.vehicle.id.filter(
+						(element) => element != undefined
+					);
+			}
+		},
 		requestChargeLog() {
 			let myForm = document.forms["chargeLogForm"];
 			if (!myForm.reportValidity()) {
 				console.log("form invalid");
 				return;
 			} else {
-				console.log(this.chargeLogRequestData);
+				this.cleanRequestData();
 				this.$emit("sendCommand", {
 					command: "getChargeLog",
 					data: this.chargeLogRequestData,
