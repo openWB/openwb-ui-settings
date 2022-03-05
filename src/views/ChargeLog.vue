@@ -113,6 +113,16 @@
 					:page-options="table.pageOptions"
 					:limit="25"
 				/>
+				<h2>Summe</h2>
+				<!-- ToDo: build a table component -->
+				<vue3-table-lite
+					class="charge-log-table"
+					:is-static-mode="true"
+					:is-hide-paging="true"
+					:columns="totals.columns"
+					:rows="chargeLogTotals"
+					:total="1"
+				/>
 			</div>
 		</form>
 	</div>
@@ -157,7 +167,6 @@ export default {
 					gotoPageLabel: " Gehe zu:",
 					noDataAvailable: "Keine Einträge gefunden.",
 				},
-				"is-hide-paging": true,
 				pageOptions: [
 					{ value: 5, text: "5" },
 					{ value: 10, text: "10" },
@@ -179,6 +188,7 @@ export default {
 					{
 						label: "Fahrzeug",
 						field: "vehicle_name",
+						sortable: true,
 					},
 					{
 						label: "Dauer",
@@ -222,15 +232,23 @@ export default {
 					{
 						label: "Lademodus",
 						field: "vehicle_chargemode",
+						sortable: true,
 						display: (row) => {
-							return this.translateChargeMode(
-								row.vehicle_chargemode
+							return (
+								'<div class="td-center tag ' +
+								this.getChargeModeClass(
+									row.vehicle_chargemode
+								) +
+								'">' +
+								row.vehicle_chargemode +
+								"</div>"
 							);
 						},
 					},
 					{
 						label: "Ladepunkt",
 						field: "chargepoint_name",
+						sortable: true,
 					},
 					{
 						label: "Priorität",
@@ -244,6 +262,53 @@ export default {
 					order: "time_begin",
 					sort: "asc",
 				},
+			},
+			totals: {
+				columns: [
+					{
+						label: "Dauer",
+						field: "time_charged",
+						sortable: false,
+						display: (row) => {
+							return this.alignEnd(row.time_charged);
+						},
+					},
+					{
+						label: "Energie",
+						field: "charged_since_plugged_counter",
+						sortable: false,
+						display: (row) => {
+							return this.alignEnd(
+								this.formatNumber(
+									row.charged_since_plugged_counter / 1000,
+									2
+								) + "&nbsp;kWh"
+							);
+						},
+					},
+					{
+						label: "Reichweite",
+						field: "range_charged",
+						sortable: false,
+						display: (row) => {
+							return this.alignEnd(
+								this.formatNumber(row.range_charged / 1000, 0) +
+									"&nbspkm"
+							);
+						},
+					},
+					{
+						label: "Kosten",
+						field: "costs",
+						sortable: false,
+						display: (row) => {
+							return this.alignEnd(
+								this.formatNumber(row.costs / 1000, 2) +
+									"&nbsp;€"
+							);
+						},
+					},
+				],
 			},
 		};
 	},
@@ -261,6 +326,21 @@ export default {
 				this.chargeLogRequestData.year = splitDate[0];
 				this.chargeLogRequestData.month = splitDate[1];
 			},
+		},
+		chargeLogTotals() {
+			if (
+				this.$store.state.mqtt[
+					"openWB/log/" + this.mqttClientId + "/data"
+				]
+			) {
+				return [
+					this.$store.state.mqtt[
+						"openWB/log/" + this.mqttClientId + "/data"
+					]["totals"],
+				];
+			} else {
+				return [];
+			}
 		},
 		chargeLogDataset: {
 			get() {
@@ -281,7 +361,9 @@ export default {
 							chargepoint_name: entry["chargepoint"]["name"],
 							vehicle_id: entry["vehicle"]["id"],
 							vehicle_name: entry["vehicle"]["name"],
-							vehicle_chargemode: entry["vehicle"]["chargemode"],
+							vehicle_chargemode: this.translateChargeMode(
+								entry["vehicle"]["chargemode"]
+							),
 							vehicle_rfid: entry["vehicle"]["rfid"],
 							vehicle_prio: entry["vehicle"]["prio"],
 							time_begin: dateTimeFormat.format(
@@ -393,36 +475,58 @@ export default {
 				'<div class="td-center tag ' + myClass + '">' + text + "</div>"
 			);
 		},
-		translateChargeMode(value) {
-			let myClass = "bg-light";
-			let text = value;
+		getChargeModeClass(value) {
 			switch (value) {
-				case "instant_charging":
-					myClass = "bg-danger";
-					text = "Sofort";
-					break;
-				case "pv_charging":
-					myClass = "bg-success";
-					text = "PV";
-					break;
-				case "scheduled_charging":
-					myClass = "bg-primary";
-					text = "Zielladen";
-					break;
-				case "standby":
-					myClass = "bg-secondary";
-					text = "Standby";
-					break;
-				case "stop":
-					myClass = "bg-dark";
-					text = "Stop";
-					break;
+				case "Sofort":
+					return "bg-danger";
+				case "PV":
+					return "bg-success";
+				case "Zielladen":
+					return "bg-primary";
+				case "Standby":
+					return "bg-secondary";
+				case "Stop":
+					return "bg-dark";
 				default:
 					console.warn("unknown charge mode:", value);
+					return "bg-light";
 			}
-			return (
-				'<div class="td-center tag ' + myClass + '">' + text + "</div>"
-			);
+		},
+		translateChargeMode(value) {
+			switch (value) {
+				case "instant_charging":
+					return "Sofort";
+				case "pv_charging":
+					return "PV";
+				case "scheduled_charging":
+					return "Zielladen";
+				case "standby":
+					return "Standby";
+				case "stop":
+					return "Stop";
+				default:
+					console.warn("unknown charge mode:", value);
+					return value;
+			}
+		},
+		translateHeading(value) {
+			switch (value) {
+				case "time_charged":
+					return "Dauer";
+				case "range_charged":
+					return "Reichweite";
+				case "charged_since_mode_switch":
+					return "Energie im Lademodus";
+				case "charged_since_plugged_counter":
+					return "Energie seit Anstecken";
+				case "power":
+					return "Leistung";
+				case "costs":
+					return "Kosten";
+				default:
+					console.warn("unknown heading:", value);
+					return value;
+			}
 		},
 		formatNumber(value, minNumDigits = 0, maxNumDigit = minNumDigits) {
 			return value.toLocaleString(undefined, {
