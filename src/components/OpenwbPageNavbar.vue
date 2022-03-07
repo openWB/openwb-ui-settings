@@ -187,6 +187,13 @@
 						>
 							Datenschutz
 						</router-link>
+						<router-link
+							to="/System/Power"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							System
+						</router-link>
 					</div>
 				</li>
 				<li class="nav-item">
