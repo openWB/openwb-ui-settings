@@ -1,6 +1,7 @@
 <template>
-	<teleport to="body">
-		<div :class="modalClasses" role="dialog" @click="handleClick">
+	<teleport to="body" v-if="show">
+		<div class="modal-backdrop fade show" />
+		<div class="modal fade d-block show" role="dialog" @click="handleClick">
 			<div
 				class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
 				role="document"
@@ -58,6 +59,7 @@ export default {
 	props: {
 		title: String,
 		subtype: {
+			type: String,
 			validator: function (value) {
 				return (
 					[
@@ -74,8 +76,9 @@ export default {
 			},
 			default: "secondary",
 		},
-		buttons: undefined,
+		buttons: { type: Array, default: undefined },
 		footerAlignment: {
+			type: String,
 			validator: function (value) {
 				return (
 					["around", "between", "center", "end", "start"].indexOf(
@@ -89,13 +92,6 @@ export default {
 		show: { type: Boolean, default: false },
 	},
 	computed: {
-		modalClasses() {
-			let classes = ["modal", "fade"];
-			if (this.show) {
-				classes.push("d-block", "show");
-			}
-			return classes;
-		},
 		myButtons() {
 			var buttons = [];
 			if (this.buttons !== undefined) {
@@ -107,23 +103,8 @@ export default {
 			return buttons;
 		},
 	},
-	watch: {
-		show(newState) {
-			if (newState === true) {
-				// show backdrop
-				let backdrop = document.createElement("div");
-				backdrop.classList = "modal-backdrop fade show";
-				document.body.appendChild(backdrop);
-			} else {
-				// hide backdrop
-				let backdrop = document.querySelector(".modal-backdrop");
-				document.body.removeChild(backdrop);
-			}
-		},
-	},
 	methods: {
 		handleClick(event) {
-			// console.log(event);
 			event.stopPropagation();
 			let data = event.target.getAttribute("data-event");
 			if (data === null) {
