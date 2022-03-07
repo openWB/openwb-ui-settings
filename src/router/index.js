@@ -210,6 +210,18 @@ const routes = [
 			),
 	},
 	{
+		path: "/System/Power",
+		name: "Power",
+		meta: {
+			heading: "System",
+		},
+		component: () =>
+			import(
+				/* webpackChunkName: "Power" */
+				"../views/Power.vue"
+			),
+	},
+	{
 		path: "/Status",
 		name: "Status",
 		meta: {
