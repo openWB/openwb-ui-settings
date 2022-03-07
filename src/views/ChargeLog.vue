@@ -14,6 +14,13 @@
 					:collapsible="true"
 					:collapsed="true"
 				>
+					<template #header>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'filter']"
+						/>
+						Erweiterte Optionen
+					</template>
 					<openwb-base-button-group-input
 						title="Priorität"
 						:buttons="[
@@ -34,58 +41,39 @@
 						]"
 						v-model="chargeLogRequestData.filter.vehicle.prio"
 					/>
-					<openwb-base-button-group-input
+					<openwb-base-select-input
 						title="Lademodus"
-						:buttons="[
-							{
-								buttonValue: undefined,
-								text: 'Alle',
-							},
-							{
-								buttonValue: 'instant_charging',
-								text: 'Sofort',
-								class: 'btn-outline-danger',
-							},
-							{
-								buttonValue: 'pv_charging',
-								text: 'PV',
-								class: 'btn-outline-success',
-							},
-							{
-								buttonValue: 'scheduled_charging',
-								text: 'Zielladen',
-								class: 'btn-outline-primary',
-							},
-							{
-								buttonValue: 'standby',
-								text: 'Standby',
-								class: 'btn-outline-secondary',
-							},
-							{
-								buttonValue: 'stop',
-								text: 'Stop',
-								class: 'btn-outline-dark',
-							},
-						]"
-						v-model="
-							chargeLogRequestData.filter.vehicle.chargemode[0]
-						"
-					/>
+						multiple
+						:options="chargeModeList"
+						v-model="chargeLogRequestData.filter.vehicle.chargemode"
+					>
+						<template #help>
+							Es können mehrere Elemente mit Strg ausgewählt
+							werden.
+						</template>
+					</openwb-base-select-input>
 					<openwb-base-select-input
 						title="Ladepunkt"
 						multiple
 						:options="chargePointList"
 						v-model="chargeLogRequestData.filter.chargepoint.id"
-					/>
+					>
+						<template #help>
+							Es können mehrere Elemente mit Strg ausgewählt
+							werden.
+						</template>
+					</openwb-base-select-input>
 					<openwb-base-select-input
 						title="Fahrzeug"
 						multiple
 						:options="vehicleList"
 						v-model="chargeLogRequestData.filter.vehicle.id"
-					/>
-					<openwb-base-alert>
-						{{ chargeLogRequestData.filter }}
-					</openwb-base-alert>
+					>
+						<template #help>
+							Es können mehrere Elemente mit Strg ausgewählt
+							werden.
+						</template>
+					</openwb-base-select-input>
 				</openwb-base-card>
 				<template #footer>
 					<div class="row justify-content-center">
@@ -113,28 +101,39 @@
 					:page-options="table.pageOptions"
 					:limit="25"
 				/>
-				<h2>Summe</h2>
-				<!-- ToDo: build a table component -->
-				<vue3-table-lite
-					class="charge-log-table"
-					:is-static-mode="true"
-					:is-hide-paging="true"
-					:columns="totals.columns"
-					:rows="chargeLogTotals"
-					:total="1"
-				/>
+				<div v-if="totalRecordCount > 0">
+					<h2>Summe</h2>
+					<!-- ToDo: build a table component -->
+					<vue3-table-lite
+						class="charge-log-totals"
+						:is-static-mode="true"
+						:is-hide-paging="true"
+						:columns="totals.columns"
+						:rows="chargeLogTotals"
+						:total="1"
+					/>
+				</div>
 			</div>
 		</form>
 	</div>
 </template>
 
 <script>
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faFilter as fasFilter } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(fasFilter);
+
 import Vue3TableLite from "vue3-table-lite";
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
 	name: "OpenwbChargeLog",
-	components: { Vue3TableLite },
+	components: {
+		Vue3TableLite,
+		FontAwesomeIcon,
+	},
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
 	data() {
@@ -404,6 +403,19 @@ export default {
 		totalRecordCount() {
 			return this.chargeLogDataset.length;
 		},
+		chargeModeList() {
+			let chargeModeList = this.chargeModes.map((mode) => {
+				return {
+					value: mode,
+					text: this.translateChargeMode(mode),
+				};
+			});
+			chargeModeList.unshift({
+				value: undefined,
+				text: "Alle",
+			});
+			return chargeModeList;
+		},
 		chargePointList() {
 			let chargePoints = this.getWildcardTopics(
 				"openWB/chargepoint/+/config"
@@ -492,23 +504,6 @@ export default {
 					return "bg-light";
 			}
 		},
-		translateChargeMode(value) {
-			switch (value) {
-				case "instant_charging":
-					return "Sofort";
-				case "pv_charging":
-					return "PV";
-				case "scheduled_charging":
-					return "Zielladen";
-				case "standby":
-					return "Standby";
-				case "stop":
-					return "Stop";
-				default:
-					console.warn("unknown charge mode:", value);
-					return value;
-			}
-		},
 		translateHeading(value) {
 			switch (value) {
 				case "time_charged":
@@ -528,12 +523,6 @@ export default {
 					return value;
 			}
 		},
-		formatNumber(value, minNumDigits = 0, maxNumDigit = minNumDigits) {
-			return value.toLocaleString(undefined, {
-				minimumFractionDigits: minNumDigits,
-				maximumFractionDigits: maxNumDigit,
-			});
-		},
 	},
 	mounted() {
 		const today = new Date();
@@ -547,13 +536,19 @@ export default {
 </script>
 
 <style scoped>
-.charge-log-table {
+.charge-log-table,
+.charge-log-totals {
 	border: none;
 	padding: 0;
 }
 
-.charge-log-table :deep(.card-body) {
+.charge-log-table :deep(.card-body),
+.charge-log-totals :deep(.card-body) {
 	padding: 0;
+}
+
+.charge-log-table :deep(.dataTables_wrapper .row:nth-child(even)) {
+	overflow-x: scroll;
 }
 
 :deep(.vtl-table .vtl-thead .vtl-thead-th) {

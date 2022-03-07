@@ -13,6 +13,15 @@ export default {
 				"Sonntag",
 			];
 		},
+		chargeModes() {
+			return [
+				"instant_charging",
+				"pv_charging",
+				"scheduled_charging",
+				"standby",
+				"stop",
+			];
+		},
 		mqttClientId() {
 			return this.$root.mqttClientId;
 		},
@@ -82,6 +91,29 @@ export default {
 		) {
 			let date = new Date(dateString);
 			return date.toLocaleDateString(undefined, format);
+		},
+		formatNumber(value, minNumDigits = 0, maxNumDigit = minNumDigits) {
+			return value.toLocaleString(undefined, {
+				minimumFractionDigits: minNumDigits,
+				maximumFractionDigits: maxNumDigit,
+			});
+		},
+		translateChargeMode(value) {
+			switch (value) {
+				case "instant_charging":
+					return "Sofort";
+				case "pv_charging":
+					return "PV";
+				case "scheduled_charging":
+					return "Zielladen";
+				case "standby":
+					return "Standby";
+				case "stop":
+					return "Stop";
+				default:
+					console.warn("unknown charge mode:", value);
+					return value;
+			}
 		},
 	},
 	mounted() {
