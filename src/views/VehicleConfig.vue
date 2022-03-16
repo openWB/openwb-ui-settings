@@ -378,6 +378,24 @@
 							"
 						>
 						</openwb-base-button-group-input>
+						<openwb-base-number-input
+							title="Dauer der CP-Unterbrechung"
+							v-if="template.control_pilot_interruption"
+							:min="4"
+							:step="1"
+							unit="s"
+							:model-value="
+								template.control_pilot_interruption_duration
+							"
+							@update:model-value="
+								updateState(
+									key,
+									$event,
+									'control_pilot_interruption_duration'
+								)
+							"
+						>
+						</openwb-base-number-input>
 						<openwb-base-button-group-input
 							title="Phasenumschaltung blockieren"
 							:buttons="[
