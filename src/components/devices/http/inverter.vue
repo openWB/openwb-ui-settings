@@ -23,10 +23,10 @@
 			</template>
 		</openwb-base-text-input>
 		<openwb-base-text-input
-			title="Pfad für Zählerstand Bezug"
+			title="Pfad für Zählerstand Erzeugung"
 			subtype="text"
 			required
-			pattern="^/[-a-zA-Z0-9@:%_\+.~#?&/=]*"
+			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)|none"
 			:model-value="configuration.counter_path"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.counter_path')

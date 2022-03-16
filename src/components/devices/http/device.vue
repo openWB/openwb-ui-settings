@@ -12,7 +12,13 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.domain')
 			"
-		/>
+		>
+			<template #help>
+				An die IP bzw. den Hostnamen kann optional ein Port angehängt
+				werden. Beispiel: "192.168.1.1:8080". Ist kein Port angegeben,
+				so wird je nach Protokoll 80 (http) bzw. 443 (https) genutzt.
+			</template>
+		</openwb-base-text-input>
 		<openwb-base-select-input
 			title="Protokoll"
 			:options="[
@@ -24,9 +30,6 @@
 				updateConfiguration($event, 'configuration.protocol')
 			"
 		/>
-		<openwb-base-alert subtype="warning">
-			ToDo: Einstellung "Port" ergänzen.
-		</openwb-base-alert>
 	</div>
 </template>
 

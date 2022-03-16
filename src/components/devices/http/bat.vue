@@ -26,7 +26,7 @@
 			title="Pfad für Zählerstand laden"
 			subtype="text"
 			required
-			pattern="^/[-a-zA-Z0-9@:%_\+.~#?&/=]*"
+			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)|none"
 			:model-value="configuration.imported_path"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.imported_path')
@@ -46,7 +46,7 @@
 			title="Pfad für Zählerstand entladen"
 			subtype="text"
 			required
-			pattern="^/[-a-zA-Z0-9@:%_\+.~#?&/=]*"
+			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)|none"
 			:model-value="configuration.exported_path"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.exported_path')
