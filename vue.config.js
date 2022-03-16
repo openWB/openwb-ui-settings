@@ -18,5 +18,9 @@ module.exports = {
 				process: "process/browser",
 			}),
 		],
+		output: {
+			filename: process.env.VUE_CLI_MODERN_BUILD ? 'js/[name].[contenthash:8].js' : 'js/[name]-legacy.[contenthash:8].js',
+			chunkFilename: process.env.VUE_CLI_MODERN_BUILD ? 'js/[name].[contenthash:8].js' : 'js/[name]-legacy.[contenthash:8].js',
+		},
 	},
 };
