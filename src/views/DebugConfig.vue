@@ -78,6 +78,25 @@
 			</template>
 			<pre>{{ mqttLog }}</pre>
 		</openwb-base-card>
+		<openwb-base-card
+			title="Protokoll des letzten Updates"
+			class="mt-3"
+			:collapsible="true"
+			:collapsed="true"
+		>
+			<template #actions>
+				<openwb-base-avatar
+					class="bg-success clickable"
+					@click="loadUpdateLog($event)"
+				>
+					<font-awesome-icon
+						fixed-width
+						:icon="['fas', 'file-download']"
+					/>
+				</openwb-base-avatar>
+			</template>
+			<pre>{{ updateLog }}</pre>
+		</openwb-base-card>
 	</div>
 </template>
 
@@ -104,74 +123,57 @@ export default {
 			],
 			mainLog: "-- noch nicht geladen --",
 			mqttLog: "-- noch nicht geladen --",
+			updateLog: "-- noch nicht geladen --",
 		};
 	},
 	methods: {
-		loadMainLog(event) {
-			event.stopPropagation();
-			this.mainLog = "wird aktualisiert...";
-			console.log("Loading main.log...");
-			this.axios
-				.get(
-					location.protocol +
-						"//" +
-						location.host +
-						"/openWB/ramdisk/" +
-						"main.log"
-				)
+		async getFilePromise(myFile) {
+			return this.axios
+				.get(location.protocol + "//" + location.host + myFile)
 				.then((response) => {
-					this.mainLog = response.data;
+					return response.data;
 				})
 				.catch((error) => {
 					if (error.response) {
 						// The request was made and the server responded with a status code
 						// that falls out of the range of 2xx
-						this.mainLog =
+						return (
 							"A 404 is expected if running node.js dev server!\n" +
-							error.response.data;
+							error.response.data
+						);
 					} else if (error.request) {
 						// The request was made but no response was received
 						// `error.request` is an instance of XMLHttpRequest in the browser and an instance of
 						// http.ClientRequest in node.js
-						this.mainLog = error.request;
+						return error.request;
 					} else {
 						// Something happened in setting up the request that triggered an Error
-						this.mainLog = error.message;
+						return error.message;
 					}
 				});
+		},
+		loadMainLog(event) {
+			event.stopPropagation();
+			this.mainLog = "wird aktualisiert...";
+			this.getFilePromise("/openWB/ramdisk/main.log").then((result) => {
+				this.mainLog = result;
+			});
 		},
 		loadMqttLog(event) {
 			event.stopPropagation();
 			this.mqttLog = "wird aktualisiert...";
-			console.log("Loading mqtt.log...");
-			this.axios
-				.get(
-					location.protocol +
-						"//" +
-						location.host +
-						"/openWB/ramdisk/" +
-						"mqtt.log"
-				)
-				.then((response) => {
-					this.mqttLog = response.data;
-				})
-				.catch((error) => {
-					if (error.response) {
-						// The request was made and the server responded with a status code
-						// that falls out of the range of 2xx
-						this.mqttLog =
-							"A 404 is expected if running node.js dev server!\n" +
-							error.response.data;
-					} else if (error.request) {
-						// The request was made but no response was received
-						// `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-						// http.ClientRequest in node.js
-						this.mqttLog = error.request;
-					} else {
-						// Something happened in setting up the request that triggered an Error
-						this.mqttLog = error.message;
-					}
-				});
+			this.getFilePromise("/openWB/ramdisk/mqtt.log").then((result) => {
+				this.mqttLog = result;
+			});
+		},
+		loadUpdateLog(event) {
+			event.stopPropagation();
+			this.updateLog = "wird aktualisiert...";
+			this.getFilePromise("/openWB/data/log/update.log").then(
+				(result) => {
+					this.updateLog = result;
+				}
+			);
 		},
 	},
 };
