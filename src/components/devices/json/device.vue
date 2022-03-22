@@ -5,16 +5,20 @@
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
-			title="IP oder Hostname"
+			title="URL"
 			subtype="host"
+			required
 			:model-value="configuration.ip_address"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.ip_address')
 			"
-		/>
-		<openwb-base-alert subtype="warning">
-			ToDo: Einstellung "Protokoll" und "Port" ergänzen.
-		</openwb-base-alert>
+		>
+			<template #help>
+				Es wird eine komplette URL erwartet mit Angaben zum Protokoll,
+				IP oder Hostnamen, optional einem Port und einem Pfad.<br />
+				Beispiel: "http://192.168.1.1:8080/json?data=1"
+			</template>
+		</openwb-base-text-input>
 	</div>
 </template>
 

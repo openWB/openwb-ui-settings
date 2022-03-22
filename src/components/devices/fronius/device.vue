@@ -16,7 +16,7 @@
 			title="Meter ID"
 			:model-value="configuration.meter_id"
 			min="0"
-			max="1"
+			max="65535"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.meter_id')
 			"
