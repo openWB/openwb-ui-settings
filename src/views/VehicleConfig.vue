@@ -190,6 +190,66 @@
 								)
 							"
 						/>
+						<hr />
+						<openwb-base-select-input
+							class="mb-2"
+							title="SoC-Modul"
+							:options="getSocModuleList()"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/vehicle/' +
+										id +
+										'/soc_module/config'
+								].type
+							"
+							@update:model-value="
+								updateState(
+									'openWB/vehicle/' +
+										id +
+										'/soc_module/config',
+									$event,
+									'type'
+								)
+							"
+						>
+							<template #help>
+								Mit einem SoC-Modul kann der Ladestand des
+								Fahrzeugs ermittelt werden.
+							</template>
+						</openwb-base-select-input>
+						<openwb-config-proxy
+							v-if="
+								$store.state.mqtt[
+									'openWB/vehicle/' +
+										id +
+										'/soc_module/config'
+								].type
+							"
+							:deviceId="id"
+							:deviceType="
+								$store.state.mqtt[
+									'openWB/vehicle/' +
+										id +
+										'/soc_module/config'
+								].type
+							"
+							componentType="vehicle_soc"
+							:configuration="
+								$store.state.mqtt[
+									'openWB/vehicle/' +
+										id +
+										'/soc_module/config'
+								].configuration
+							"
+							@update:configuration="
+								updateConfiguration(
+									'openWB/vehicle/' +
+										id +
+										'/soc_module/config',
+									$event
+								)
+							"
+						/>
 					</openwb-base-card>
 				</div>
 			</openwb-base-card>
@@ -1359,6 +1419,7 @@ library.add(
 );
 
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
+import OpenwbConfigProxy from "@/components/OpenwbConfigProxy.vue";
 
 export default {
 	name: "OpenwbVehicleConfig",
@@ -1366,6 +1427,7 @@ export default {
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,
+		OpenwbConfigProxy,
 	},
 	data() {
 		return {
@@ -1379,6 +1441,8 @@ export default {
 				"openWB/vehicle/+/charge_template",
 				"openWB/vehicle/+/ev_template",
 				"openWB/vehicle/+/tag_id",
+				"openWB/system/configurable/soc_modules",
+				"openWB/vehicle/+/soc_module/config",
 			],
 			showVehicleModal: false,
 			modalVehicleIndex: undefined,
@@ -1493,6 +1557,15 @@ export default {
 			return this.$store.state.mqtt["openWB/vehicle/" + id + "/name"]
 				? this.$store.state.mqtt["openWB/vehicle/" + id + "/name"]
 				: "Fahrzeug " + id;
+		},
+		getSocModuleList() {
+			return this.$store.state.mqtt[
+				"openWB/system/configurable/soc_modules"
+			];
+		},
+		updateConfiguration(key, event) {
+			console.debug("updateConfiguration", key, event);
+			this.updateState(key, event.value, event.object);
 		},
 		addEvTemplate(event) {
 			// prevent further processing of the click event
