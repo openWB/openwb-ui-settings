@@ -107,17 +107,17 @@
 				</div>
 				<div v-else>
 					<openwb-base-card
-						v-for="id in vehicleIndexes"
-						:key="id"
-						:title="getVehicleName(id)"
+						v-for="vehicleId in vehicleIndexes"
+						:key="vehicleId"
+						:title="getVehicleName(vehicleId)"
 						:collapsible="true"
 						:collapsed="true"
 						subtype="primary"
 					>
-						<template #actions v-if="id !== 0">
+						<template #actions v-if="vehicleId !== 0">
 							<openwb-base-avatar
 								class="bg-danger clickable"
-								@click="removeVehicleModal(id, $event)"
+								@click="removeVehicleModal(vehicleId, $event)"
 							>
 								<font-awesome-icon
 									fixed-width
@@ -129,18 +129,18 @@
 							title="Bezeichnung"
 							:model-value="
 								$store.state.mqtt[
-									'openWB/vehicle/' + id + '/name'
+									'openWB/vehicle/' + vehicleId + '/name'
 								]
 							"
 							@update:model-value="
 								updateState(
-									'openWB/vehicle/' + id + '/name',
+									'openWB/vehicle/' + vehicleId + '/name',
 									$event
 								)
 							"
-							:disabled="id === 0"
+							:disabled="vehicleId === 0"
 						>
-							<template #help v-if="id === 0">
+							<template #help v-if="vehicleId === 0">
 								Das Standard-Fahrzeug kann nicht umbenannt
 								werden.
 							</template>
@@ -150,12 +150,16 @@
 							:options="evTemplateList"
 							:model-value="
 								$store.state.mqtt[
-									'openWB/vehicle/' + id + '/ev_template'
+									'openWB/vehicle/' +
+										vehicleId +
+										'/ev_template'
 								]
 							"
 							@update:model-value="
 								updateState(
-									'openWB/vehicle/' + id + '/ev_template',
+									'openWB/vehicle/' +
+										vehicleId +
+										'/ev_template',
 									$event
 								)
 							"
@@ -165,12 +169,16 @@
 							:options="chargeTemplateList"
 							:model-value="
 								$store.state.mqtt[
-									'openWB/vehicle/' + id + '/charge_template'
+									'openWB/vehicle/' +
+										vehicleId +
+										'/charge_template'
 								]
 							"
 							@update:model-value="
 								updateState(
-									'openWB/vehicle/' + id + '/charge_template',
+									'openWB/vehicle/' +
+										vehicleId +
+										'/charge_template',
 									$event
 								)
 							"
@@ -180,12 +188,12 @@
 							title="Zugeordnete Tags"
 							:model-value="
 								$store.state.mqtt[
-									'openWB/vehicle/' + id + '/tag_id'
+									'openWB/vehicle/' + vehicleId + '/tag_id'
 								]
 							"
 							@update:model-value="
 								updateState(
-									'openWB/vehicle/' + id + '/tag_id',
+									'openWB/vehicle/' + vehicleId + '/tag_id',
 									$event
 								)
 							"
@@ -194,22 +202,16 @@
 						<openwb-base-select-input
 							class="mb-2"
 							title="SoC-Modul"
-							:options="getSocModuleList()"
+							:options="socModuleList"
 							:model-value="
 								$store.state.mqtt[
 									'openWB/vehicle/' +
-										id +
+										vehicleId +
 										'/soc_module/config'
 								].type
 							"
 							@update:model-value="
-								updateState(
-									'openWB/vehicle/' +
-										id +
-										'/soc_module/config',
-									$event,
-									'type'
-								)
+								updateSelectedSocModule(vehicleId, $event)
 							"
 						>
 							<template #help>
@@ -221,15 +223,15 @@
 							v-if="
 								$store.state.mqtt[
 									'openWB/vehicle/' +
-										id +
+										vehicleId +
 										'/soc_module/config'
 								].type
 							"
-							:deviceId="id"
+							:deviceId="vehicleId"
 							:deviceType="
 								$store.state.mqtt[
 									'openWB/vehicle/' +
-										id +
+										vehicleId +
 										'/soc_module/config'
 								].type
 							"
@@ -237,14 +239,14 @@
 							:configuration="
 								$store.state.mqtt[
 									'openWB/vehicle/' +
-										id +
+										vehicleId +
 										'/soc_module/config'
 								].configuration
 							"
 							@update:configuration="
 								updateConfiguration(
 									'openWB/vehicle/' +
-										id +
+										vehicleId +
 										'/soc_module/config',
 									$event
 								)
@@ -1504,6 +1506,13 @@ export default {
 				return myList;
 			},
 		},
+		socModuleList: {
+			get() {
+				return this.$store.state.mqtt[
+					"openWB/system/configurable/soc_modules"
+				];
+			},
+		},
 	},
 	methods: {
 		getChargeTemplateScheduledChargingPlans(chargeTemplate) {
@@ -1558,10 +1567,30 @@ export default {
 				? this.$store.state.mqtt["openWB/vehicle/" + id + "/name"]
 				: "Fahrzeug " + id;
 		},
-		getSocModuleList() {
-			return this.$store.state.mqtt[
-				"openWB/system/configurable/soc_modules"
-			];
+		getSocDefaultConfiguration(socType) {
+			const socDefaults = this.socModuleList.find(
+				(element) => element.value == socType
+			);
+			if (Object.prototype.hasOwnProperty.call(socDefaults, "defaults")) {
+				return { ...socDefaults.defaults.configuration };
+			}
+			console.warn(
+				"no default configuration found for soc type!",
+				socType
+			);
+			return {};
+		},
+		updateSelectedSocModule(vehicleId, $event) {
+			this.updateState(
+				"openWB/vehicle/" + vehicleId + "/soc_module/config",
+				$event,
+				"type"
+			);
+			this.updateState(
+				"openWB/vehicle/" + vehicleId + "/soc_module/config",
+				this.getSocDefaultConfiguration($event),
+				"configuration"
+			);
 		},
 		updateConfiguration(key, event) {
 			console.debug("updateConfiguration", key, event);
