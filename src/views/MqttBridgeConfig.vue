@@ -143,12 +143,12 @@
 							subtype="user"
 							required
 							pattern="[a-zA-Z0-9_\-+.]+"
-							:model-value="mqttBridge.remote.user"
+							:model-value="mqttBridge.remote.username"
 							@update:model-value="
 								updateState(
 									mqttBridgeKey,
 									$event,
-									'remote.user'
+									'remote.username'
 								)
 							"
 						/>

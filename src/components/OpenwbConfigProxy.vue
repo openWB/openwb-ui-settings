@@ -11,7 +11,7 @@
 		<openwb-base-alert subtype="warning">
 			Es wurde keine Konfigurationsseite für den
 			<span v-if="componentType">
-				Komponententyp "{{ componentType }}"
+				Komponenten-Typ "{{ componentType }}"
 			</span>
 			<span v-else>Gerätetyp "{{ deviceType }}"</span>
 			gefunden. Die Einstellungen können als JSON direkt bearbeitet
