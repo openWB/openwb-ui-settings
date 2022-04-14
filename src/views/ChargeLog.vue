@@ -102,7 +102,24 @@
 					:limit="25"
 				/>
 				<div v-if="totalRecordCount > 0">
-					<h2>Summe</h2>
+					<div class="row justify-content-center">
+						<openwb-base-click-button
+							class="col-4 btn-success"
+							@click="downloadChargeLog()"
+						>
+							Als CSV exportieren
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'download']"
+							/>
+						</openwb-base-click-button>
+						<a class="hide" ref="downloadChargeLogLink"></a>
+					</div>
+					<div class="row">
+						<div class="col">
+							<h2>Summe</h2>
+						</div>
+					</div>
 					<!-- ToDo: build a table component -->
 					<vue3-table-lite
 						class="charge-log-totals"
@@ -120,10 +137,13 @@
 
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faFilter as fasFilter } from "@fortawesome/free-solid-svg-icons";
+import {
+	faFilter as fasFilter,
+	faDownload as fasDownload,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasFilter);
+library.add(fasFilter, fasDownload);
 
 import Vue3TableLite from "vue3-table-lite";
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
@@ -159,6 +179,7 @@ export default {
 					},
 				},
 			},
+			downloadFile: null,
 			table: {
 				messages: {
 					pagingInfo: "Einträge {0}-{1} von {2}",
@@ -386,6 +407,48 @@ export default {
 				}
 			},
 		},
+		chargeLogCsv: {
+			get() {
+				const csvString = [
+					[
+						"Ladepunkt-ID",
+						"Ladepunkt",
+						"Fahrzeug-ID",
+						"Fahrzeug",
+						"Lademodus",
+						"Priorität",
+						"Beginn",
+						"Ende",
+						"Dauer",
+						"Leistung",
+						"Energie",
+						"Reichweite",
+						"Kosten",
+					],
+					...this.chargeLogDataset.map((row) => [
+						row.chargepoint_id,
+						'"' + row.chargepoint_name + '"',
+						row.vehicle_id,
+						'"' + row.vehicle_name + '"',
+						'"' + row.vehicle_chargemode + '"',
+						'"' + this.translateBool(row.vehicle_prio, false) + '"',
+						'"' + row.time_begin + '"',
+						'"' + row.time_end + '"',
+						'"' + row.time_time_charged + '"',
+						this.formatNumber(row.data_power / 1000, 3),
+						this.formatNumber(
+							row.data_charged_since_plugged_counter / 1000,
+							2
+						),
+						this.formatNumber(row.data_range_charged / 1000, 0),
+						this.formatNumber(row.data_costs / 1000, 2),
+					]),
+				]
+					.map((element) => element.join(";"))
+					.join("\n");
+				return csvString;
+			},
+		},
 		chargeLogRead: {
 			get() {
 				return this.chargeLogDataset != undefined;
@@ -470,22 +533,52 @@ export default {
 				});
 			}
 		},
+		makeTextFile(content) {
+			var data = new Blob([content], { type: "text/csv" });
+			// If we are replacing a previously generated file we need to
+			// manually revoke the object URL to avoid memory leaks.
+			if (this.downloadFile !== null) {
+				window.URL.revokeObjectURL(this.downloadFile);
+			}
+			this.downloadFile = window.URL.createObjectURL(data);
+			return this.downloadFile;
+		},
+		downloadChargeLog() {
+			// based on: http://jsfiddle.net/k56eezxp/
+			this.$refs.downloadChargeLogLink.setAttribute(
+				"download",
+				"Ladeprotokoll-" + this.chargeLogDate + ".csv"
+			);
+			this.$refs.downloadChargeLogLink.href = this.makeTextFile(
+				this.chargeLogCsv
+			);
+			this.$refs.downloadChargeLogLink.dispatchEvent(
+				new MouseEvent("click")
+			);
+		},
 		alignEnd(content) {
 			return '<div class="td-end">' + content + "</div>";
 		},
 		alignCenter(content) {
 			return '<div class="td-center">' + content + "</div>";
 		},
-		translateBool(value) {
+		translateBool(value, withDiv = true) {
 			let text = "Nein";
 			let myClass = "bg-danger";
 			if (value) {
 				text = "Ja";
 				myClass = "bg-success";
 			}
-			return (
-				'<div class="td-center tag ' + myClass + '">' + text + "</div>"
-			);
+			if (withDiv) {
+				return (
+					'<div class="td-center tag ' +
+					myClass +
+					'">' +
+					text +
+					"</div>"
+				);
+			}
+			return text;
 		},
 		getChargeModeClass(value) {
 			switch (value) {
@@ -536,6 +629,10 @@ export default {
 </script>
 
 <style scoped>
+.hide {
+	display: none;
+}
+
 .charge-log-table,
 .charge-log-totals {
 	border: none;
