@@ -28,7 +28,7 @@
 					Es konnten keine Einträge für dieses Datum gefunden werden.
 				</openwb-base-alert>
 				<openwb-base-card v-else title="Demo-Diagramm">
-					<LineChart :chartData="testData" />
+					<LineChart :chartData="chartData" :options="chartOptions" />
 				</openwb-base-card>
 			</div>
 		</form>
@@ -39,6 +39,9 @@
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 import { LineChart } from "vue-chart-3";
+import "chartjs-adapter-luxon";
+import "hammerjs";
+import ZoomPlugin from "chartjs-plugin-zoom";
 import {
 	Chart,
 	Tooltip,
@@ -46,8 +49,9 @@ import {
 	LineController,
 	LineElement,
 	PointElement,
-	CategoryScale,
+	// CategoryScale,
 	LinearScale,
+	TimeScale,
 } from "chart.js";
 Chart.register(
 	Tooltip,
@@ -55,8 +59,10 @@ Chart.register(
 	LineController,
 	LineElement,
 	PointElement,
-	CategoryScale,
-	LinearScale
+	// CategoryScale,
+	LinearScale,
+	TimeScale,
+	ZoomPlugin
 );
 
 export default {
@@ -72,25 +78,233 @@ export default {
 			],
 			currentDay: "",
 			dailyGraphRequestData: {
-				day: "01",
-				month: "01",
-				year: "2022",
+				day: "",
+				month: "",
+				year: "",
 			},
-			testData: {
-				labels: ["00:00", "00:01", "00:02", "00:03", "00:04"],
-				datasets: [
-					{
-						label: "Datenreihe 1",
-						data: [123, 54, -13, -27, 5],
-						backgroundColor: [
-							"#77CEFF",
-							"#0079AF",
-							"#123E6B",
-							"#97B0C4",
-							"#A5C8ED",
-						],
+			datasetTemplates: {
+				"counter-power": {
+					label: "Zähler",
+					jsonKey: null,
+					borderColor: "rgba(255, 0, 0, 0.7)",
+					backgroundColor: "rgba(255, 10, 13, 0.3)",
+					fill: true,
+					lineTension: 0.2,
+					// hidden: boolDisplayPv,
+					borderWidth: 1,
+					data: null,
+					yAxisID: "y1",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
 					},
-				],
+				},
+				"pv-power": {
+					label: "PV",
+					jsonKey: null,
+					borderColor: "rgba(0, 255, 0, 0.7)",
+					backgroundColor: "rgba(10, 255, 13, 0.3)",
+					fill: true,
+					lineTension: 0.2,
+					// hidden: boolDisplayPv,
+					borderWidth: 1,
+					data: null,
+					yAxisID: "y1",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
+				"bat-power": {
+					label: "Speicher",
+					jsonKey: null,
+					borderColor: "rgba(255, 153, 13, 0.7)",
+					backgroundColor: "rgba(200, 255, 13, 0.3)",
+					fill: true,
+					lineTension: 0.2,
+					// hidden: boolDisplayPv,
+					borderWidth: 1,
+					data: null,
+					yAxisID: "y1",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
+				"bat-soc": {
+					label: "Speicher SoC",
+					jsonKey: null,
+					borderColor: "rgba(255, 153, 13, 0.7)",
+					backgroundColor: "rgba(200, 255, 13, 0.3)",
+					borderDash: [10, 5],
+					hidden: false,
+					fill: false,
+					lineTension: 0.2,
+					borderWidth: 2,
+					data: null,
+					yAxisID: "y2",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
+				"cp-power": {
+					label: "Ladepunkt",
+					jsonKey: null,
+					borderColor: "rgba(0, 0, 255, 0.7)",
+					backgroundColor: "rgba(0, 0, 255, 0.7)",
+					fill: true,
+					lineTension: 0.2,
+					// hidden: boolDisplayPv,
+					borderWidth: 1,
+					data: null,
+					yAxisID: "y1",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
+				"ev-soc": {
+					label: "Fahrzeug SoC",
+					jsonKey: null,
+					borderColor: "rgba(0, 0, 255, 0.5)",
+					backgroundColor: "rgba(0, 0, 255, 0.7)",
+					borderDash: [10, 5],
+					hidden: false,
+					fill: false,
+					lineTension: 0.2,
+					borderWidth: 2,
+					data: null,
+					yAxisID: "y2",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
+			},
+			chartOptions: {
+				plugins: {
+					title: {
+						display: false,
+					},
+					tooltip: {
+						enabled: true,
+					},
+					legend: {
+						display: true,
+					},
+					zoom: {
+						// Container for pan options
+						pan: {
+							// Boolean to enable panning
+							enabled: true,
+							// Panning directions. Remove the appropriate direction to disable
+							// Eg. 'y' would only allow panning in the y direction
+							mode: "x",
+							threshold: 5,
+						},
+						// Container for zoom options
+						zoom: {
+							// Boolean to enable zooming
+							wheel: {
+								enabled: true,
+							},
+							pinch: {
+								enabled: true,
+							},
+							// Zooming directions. Remove the appropriate direction to disable
+							// Eg. 'y' would only allow zooming in the y direction
+							mode: "x",
+						},
+					},
+				},
+				elements: {
+					point: {
+						radius: 0,
+					},
+				},
+				responsive: true,
+				maintainAspectRatio: false,
+				scales: {
+					x: {
+						type: "time",
+						time: {
+							unit: "minute",
+							tooltipFormat: "DD T",
+						},
+						display: true,
+						title: {
+							display: true,
+							text: "Zeit",
+						},
+						ticks: {
+							source: "timestamp",
+							font: {
+								size: 12,
+							},
+							// color: tickColor,
+							maxTicksLimit: 15,
+						},
+						grid: {
+							// color: xGridColor,
+						},
+					},
+					y1: {
+						// horizontal line for values displayed on the left side (power, kW)
+						position: "left",
+						type: "linear",
+						display: "auto",
+						suggestedMin: 0,
+						suggestedMax: 0,
+						title: {
+							font: {
+								size: 12,
+							},
+							display: true,
+							text: "Leistung [kW]",
+							// color: fontColor
+						},
+						grid: {
+							// color: gridColor
+						},
+						ticks: {
+							font: {
+								size: 12,
+							},
+							stepSize: 0.2,
+							maxTicksLimit: 10,
+							// color: tickColor
+						},
+					},
+					y2: {
+						// horizontal line for values displayed on the right side (SoC, %)
+						position: "right",
+						type: "linear",
+						display: "auto",
+						suggestedMin: 0,
+						suggestedMax: 100,
+						title: {
+							font: {
+								size: 12,
+							},
+							display: true,
+							text: "SoC [%]",
+							// color: fontColor
+						},
+						grid: {
+							// color: gridSocColor,
+						},
+						ticks: {
+							font: {
+								size: 12,
+							},
+							// color: tickColor
+						},
+					},
+				},
+			},
+			chartDatasets: {
+				datasets: [],
 			},
 		};
 	},
@@ -122,35 +336,213 @@ export default {
 				};
 			},
 		},
-		chartDataset: {
-			get() {
-				return this.$store.state.mqtt[
-					"openWB/log/daily/" + this.commandData.day
-				];
-			},
-		},
 		chartDataRead: {
 			get() {
-				return this.chartDataset != undefined;
+				return this.chartDataObject != undefined;
 			},
 		},
 		chartDataHasEntries: {
 			get() {
-				if (this.chartDataset == undefined) {
-					return false;
-				} else {
-					return this.chartDataset.length > 0;
-				}
+				return this.chartDataObject.length > 0;
 			},
+		},
+		chartDataObject() {
+			if (
+				this.$store.state.mqtt[
+					"openWB/log/daily/" + this.commandData.day
+				]
+			) {
+				var lastRow = undefined;
+				var myData = JSON.parse(
+					JSON.stringify(
+						this.$store.state.mqtt[
+							"openWB/log/daily/" + this.commandData.day
+						]
+					)
+				).map((row) => {
+					row.timestamp = row.timestamp * 1000;
+					if (lastRow) {
+						const timeDiff = row.timestamp - lastRow.timestamp;
+						var baseObjectsToProcess = [
+							"pv",
+							"counter",
+							"bat",
+							"cp",
+						];
+						baseObjectsToProcess.forEach((baseObject) => {
+							Object.entries(row[baseObject]).forEach(
+								([key, value]) => {
+									Object.keys(value).forEach(() => {
+										switch (baseObject) {
+											case "pv":
+												row[baseObject][key].power =
+													Math.floor(
+														(row[baseObject][key]
+															.imported -
+															lastRow[baseObject][
+																key
+															].imported) /
+															(timeDiff /
+																1000 /
+																3600)
+													);
+												break;
+											case "counter":
+												row[baseObject][key].power =
+													Math.floor(
+														(row[baseObject][key]
+															.imported -
+															lastRow[baseObject][
+																key
+															].imported -
+															(row[baseObject][
+																key
+															].exported -
+																lastRow[
+																	baseObject
+																][key]
+																	.exported)) /
+															(timeDiff /
+																1000 /
+																3600)
+													);
+												break;
+											case "bat":
+												row[baseObject][key].power =
+													Math.floor(
+														(row[baseObject][key]
+															.imported -
+															lastRow[baseObject][
+																key
+															].imported -
+															(row[baseObject][
+																key
+															].exported -
+																lastRow[
+																	baseObject
+																][key]
+																	.exported)) /
+															(timeDiff /
+																1000 /
+																3600)
+													);
+												break;
+											case "cp":
+												row[baseObject][key].power =
+													Math.floor(
+														(row[baseObject][key]
+															.counter -
+															lastRow[baseObject][
+																key
+															].counter) /
+															(timeDiff /
+																1000 /
+																3600)
+													);
+												break;
+										}
+									});
+								}
+							);
+						});
+
+						lastRow = row;
+						return row;
+					} else {
+						lastRow = row;
+						return;
+					}
+				});
+				myData.shift();
+				return myData;
+			}
+			return [];
+		},
+		chartData() {
+			// add all datasets available in the last entry
+			var baseObjectsToProcess = ["pv", "counter", "bat", "cp", "ev"];
+			const lastElement =
+				this.chartDataObject[this.chartDataObject.length - 1];
+			if (lastElement) {
+				baseObjectsToProcess.forEach((baseObject) => {
+					Object.entries(lastElement[baseObject]).forEach(
+						([key, value]) => {
+							Object.keys(value).forEach((entryKey) => {
+								this.initDataset(baseObject, key, entryKey);
+							});
+						}
+					);
+				});
+			}
+			return this.chartDatasets;
 		},
 	},
 	methods: {
+		getDatasetIndex(datasetKey) {
+			let index = this.chartDatasets.datasets.findIndex((dataset) => {
+				return dataset.jsonKey == datasetKey;
+			});
+			if (index != -1) {
+				console.debug(
+					"index for dataset '" + datasetKey + "': " + index
+				);
+				return index;
+			}
+			console.debug("no index found for '" + datasetKey + "'");
+			return;
+		},
+		addDataset(baseObject, objectKey, elementKey, datasetKey) {
+			console.log(
+				"adding new dataset",
+				baseObject,
+				objectKey,
+				elementKey,
+				datasetKey
+			);
+			// var datasetTemplate = datasetId.replace(/\d/g, "");
+			var datasetTemplate = baseObject + "-" + elementKey;
+			console.debug(
+				"template name: " + datasetTemplate + " key: " + datasetKey
+			);
+			if (this.datasetTemplates[datasetTemplate]) {
+				var newDataset = JSON.parse(
+					JSON.stringify(this.datasetTemplates[datasetTemplate])
+				);
+				newDataset.parsing.yAxisKey = datasetKey;
+				newDataset.jsonKey = datasetKey;
+				newDataset.data = this.chartDataObject;
+				newDataset.label = datasetKey;
+				console.log("adding new dataset", newDataset);
+				return this.chartDatasets.datasets.push(newDataset) - 1;
+			} else {
+				console.warn(
+					"no matching template found for: " +
+						datasetKey +
+						" with template: " +
+						datasetTemplate
+				);
+			}
+			return;
+		},
+		initDataset(baseObject, objectKey, elementKey) {
+			const datasetKey = baseObject + "." + objectKey + "." + elementKey;
+			var index = this.getDatasetIndex(datasetKey);
+			if (index == undefined) {
+				index = this.addDataset(
+					baseObject,
+					objectKey,
+					elementKey,
+					datasetKey
+				);
+			}
+		},
 		requestDailyGraph() {
 			let myForm = document.forms["dailyGraphForm"];
 			if (!myForm.reportValidity()) {
 				console.log("form invalid");
 				return;
 			} else {
+				this.chartDatasets.datasets = [];
 				console.log(this.dailyGraphRequestData);
 				this.$emit("sendCommand", {
 					command: "getDailyLog",
