@@ -573,7 +573,7 @@
 				step="0.001"
 				unit="Wh"
 				:model-value="
-					$store.state.mqtt['openWB/bat/get/daily_yield_import']
+					$store.state.mqtt['openWB/bat/get/daily_yield_imported']
 				"
 			/>
 			<openwb-base-number-input
@@ -583,7 +583,7 @@
 				step="0.001"
 				unit="Wh"
 				:model-value="
-					$store.state.mqtt['openWB/bat/get/daily_yield_export']
+					$store.state.mqtt['openWB/bat/get/daily_yield_exported']
 				"
 			/>
 			<openwb-base-heading>Saldierte Werte</openwb-base-heading>
