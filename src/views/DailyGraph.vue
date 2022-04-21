@@ -27,7 +27,7 @@
 				<openwb-base-alert v-if="!chartDataHasEntries" subtype="info">
 					Es konnten keine Einträge für dieses Datum gefunden werden.
 				</openwb-base-alert>
-				<openwb-base-card v-else title="Demo-Diagramm">
+				<openwb-base-card v-else title="Tages-Diagramm">
 					<LineChart :chartData="chartData" :options="chartOptions" />
 				</openwb-base-card>
 			</div>
@@ -75,6 +75,9 @@ export default {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
 				"openWB/log/daily/#",
+				"openWB/system/device/+/component/+/config",
+				"openWB/chargepoint/+/config",
+				"openWB/vehicle/+/name",
 			],
 			currentDay: "",
 			dailyGraphRequestData: {
@@ -292,6 +295,7 @@ export default {
 							// color: fontColor
 						},
 						grid: {
+							display: false,
 							// color: gridSocColor,
 						},
 						ticks: {
@@ -478,32 +482,87 @@ export default {
 		},
 	},
 	methods: {
+		getDatasetLabel(baseObject, objectKey, elementKey, datasetKey) {
+			// console.log(
+			// 	"getDatasetLabel",
+			// 	baseObject,
+			// 	objectKey,
+			// 	elementKey,
+			// 	datasetKey
+			// );
+			var label = "*" + datasetKey;
+			if (objectKey == "all") {
+				switch (baseObject) {
+					case "pv":
+						label = "PV Summe";
+						break;
+					case "bat":
+						label = "Speicher ";
+						switch (elementKey) {
+							case "power":
+								label += "Summe";
+								break;
+							case "soc":
+								label += "SoC Summe";
+								break;
+						}
+						break;
+					case "cp":
+						label = "Ladepunkte Summe";
+						break;
+				}
+			} else {
+				var objectId = objectKey.match(/\d+$/);
+				var topic = "";
+				switch (baseObject) {
+					case "cp":
+						topic = "openWB/chargepoint/" + objectId + "/config";
+						break;
+					case "ev":
+						topic = "openWB/vehicle/" + objectId + "/name";
+						break;
+					default:
+						topic =
+							"openWB/system/device/+/component/" +
+							objectId +
+							"/config";
+				}
+				var objectTopic = Object.keys(this.getWildcardTopics(topic))[0];
+				switch (baseObject) {
+					case "pv":
+					case "counter":
+					case "bat":
+					case "cp":
+						label = this.$store.state.mqtt[objectTopic].name;
+						if (elementKey == "soc") {
+							label += " SoC";
+						}
+						break;
+					case "ev":
+						label = this.$store.state.mqtt[objectTopic];
+						break;
+				}
+			}
+			return label;
+		},
 		getDatasetIndex(datasetKey) {
 			let index = this.chartDatasets.datasets.findIndex((dataset) => {
 				return dataset.jsonKey == datasetKey;
 			});
 			if (index != -1) {
-				console.debug(
-					"index for dataset '" + datasetKey + "': " + index
-				);
 				return index;
 			}
-			console.debug("no index found for '" + datasetKey + "'");
 			return;
 		},
 		addDataset(baseObject, objectKey, elementKey, datasetKey) {
-			console.log(
+			console.debug(
 				"adding new dataset",
 				baseObject,
 				objectKey,
 				elementKey,
 				datasetKey
 			);
-			// var datasetTemplate = datasetId.replace(/\d/g, "");
 			var datasetTemplate = baseObject + "-" + elementKey;
-			console.debug(
-				"template name: " + datasetTemplate + " key: " + datasetKey
-			);
 			if (this.datasetTemplates[datasetTemplate]) {
 				var newDataset = JSON.parse(
 					JSON.stringify(this.datasetTemplates[datasetTemplate])
@@ -511,8 +570,12 @@ export default {
 				newDataset.parsing.yAxisKey = datasetKey;
 				newDataset.jsonKey = datasetKey;
 				newDataset.data = this.chartDataObject;
-				newDataset.label = datasetKey;
-				console.log("adding new dataset", newDataset);
+				newDataset.label = this.getDatasetLabel(
+					baseObject,
+					objectKey,
+					elementKey,
+					datasetKey
+				);
 				return this.chartDatasets.datasets.push(newDataset) - 1;
 			} else {
 				console.warn(
@@ -543,7 +606,6 @@ export default {
 				return;
 			} else {
 				this.chartDatasets.datasets = [];
-				console.log(this.dailyGraphRequestData);
 				this.$emit("sendCommand", {
 					command: "getDailyLog",
 					data: this.commandData,

@@ -40,7 +40,7 @@ requireComponent.keys().forEach((fileName) => {
 		)
 	);
 
-	console.debug("global registering of component", componentName);
+	// console.debug("global registering of component", componentName);
 	vApp.component(
 		componentName,
 		// Look for the component options on `.default`, which will
