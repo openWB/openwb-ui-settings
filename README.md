@@ -7,6 +7,7 @@ This project is licensed under GPLv3. Any commercial use must be authorized by o
 ## Recommended Dev Environment
 - VS Code
 - VS Code Remote SSH Extension for development on the target system
+- npm 7.5.x
 - nodejs 14.x
 - Vue.js devtools browser extension for debugging
 
