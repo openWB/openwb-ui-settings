@@ -225,8 +225,7 @@ export default {
 						display: (row) => {
 							return this.alignEnd(
 								this.formatNumber(
-									row.data_imported_since_plugged /
-										1000,
+									row.data_imported_since_plugged / 1000,
 									2
 								) +
 									"&nbsp;kWh / " +
