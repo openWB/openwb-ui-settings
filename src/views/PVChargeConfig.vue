@@ -201,6 +201,31 @@
 					>
 						<template #help>Hilfetext</template>
 					</openwb-base-button-group-input>
+					<openwb-base-range-input
+						v-if="
+							$store.state.mqtt[
+								'openWB/general/chargemode_config/pv_charging/phases_to_use'
+							] == 0
+						"
+						title="Verzögerung automat. Phasenumschaltung"
+						:min="1"
+						:max="15"
+						:step="1"
+						unit="Min."
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/chargemode_config/pv_charging/phase_switch_delay'
+							]
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/chargemode_config/pv_charging/phase_switch_delay',
+								$event
+							)
+						"
+					>
+						<template #help>Hilfetext</template>
+					</openwb-base-range-input>
 				</div>
 			</openwb-base-card>
 			<openwb-base-card title="Speicher-Beachtung">
@@ -458,6 +483,7 @@ export default {
 				"openWB/general/chargemode_config/pv_charging/switch_off_threshold",
 				"openWB/general/chargemode_config/pv_charging/switch_off_delay",
 				"openWB/general/chargemode_config/pv_charging/phases_to_use",
+				"openWB/general/chargemode_config/pv_charging/phase_switch_delay",
 				"openWB/general/chargemode_config/pv_charging/bat_prio",
 				"openWB/general/chargemode_config/pv_charging/switch_on_soc",
 				"openWB/general/chargemode_config/pv_charging/switch_off_soc",
