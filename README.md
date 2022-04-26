@@ -12,6 +12,9 @@ This project is licensed under GPLv3. Any commercial use must be authorized by o
 - Vue.js devtools browser extension for debugging
 
 ## Project setup
+**IMPORTANT:**
+Due to a bug in vue-loader please clone this repo into `/opt/openwb-dev/openwb-ui-settings`. The full path is referenced on import and as a result the filename hashes will be different for every other path used. Hope this will be fixed soon.
+
 ```
 npm install
 ```
