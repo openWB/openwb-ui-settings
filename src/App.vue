@@ -147,7 +147,6 @@ export default {
 		 * @param {Object} event - Command object to send
 		 */
 		sendCommand(event) {
-			console.debug("sendCommand event", event);
 			this.doPublish(
 				"openWB/set/command/" + this.client.options.clientId + "/todo",
 				event,
