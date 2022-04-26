@@ -588,15 +588,18 @@ export default {
 			return;
 		},
 		initDataset(baseObject, objectKey, elementKey) {
+			const elementKeysToIgnore = ["imported", "exported", "counter"];
 			const datasetKey = baseObject + "." + objectKey + "." + elementKey;
-			var index = this.getDatasetIndex(datasetKey);
-			if (index == undefined) {
-				index = this.addDataset(
-					baseObject,
-					objectKey,
-					elementKey,
-					datasetKey
-				);
+			if (!elementKeysToIgnore.includes(elementKey)) {
+				var index = this.getDatasetIndex(datasetKey);
+				if (index == undefined) {
+					index = this.addDataset(
+						baseObject,
+						objectKey,
+						elementKey,
+						datasetKey
+					);
+				}
 			}
 		},
 		requestDailyGraph() {
