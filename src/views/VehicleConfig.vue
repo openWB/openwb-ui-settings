@@ -1023,18 +1023,49 @@
 								"
 							>
 							</openwb-base-text-input>
+							<openwb-base-button-group-input
+								title="Ziel"
+								:buttons="[
+									{ buttonValue: 'soc', text: 'SoC' },
+									{
+										buttonValue: 'amount',
+										text: 'Energiemenge',
+									},
+								]"
+								:model-value="plan.limit.selected"
+								@update:model-value="
+									updateState(
+										planKey,
+										$event,
+										'limit.selected'
+									)
+								"
+							>
+								<template #help>Hilfetext</template>
+							</openwb-base-button-group-input>
 							<openwb-base-range-input
 								title="Ziel-SoC"
 								:min="5"
 								:max="100"
 								:step="5"
 								unit="%"
-								:model-value="plan.soc"
+								:model-value="plan.limit.soc"
 								@update:model-value="
-									updateState(planKey, $event, 'soc')
+									updateState(planKey, $event, 'limit.soc')
 								"
 							>
 							</openwb-base-range-input>
+							<openwb-base-number-input
+								title="Ziel-Energiemenge"
+								unit="Wh"
+								:min="1000"
+								:step="1000"
+								:model-value="plan.limit.amount"
+								@update:model-value="
+									updateState(planKey, $event, 'limit.amount')
+								"
+							>
+							</openwb-base-number-input>
 							<openwb-base-button-group-input
 								title="Wiederholungen"
 								:buttons="[
