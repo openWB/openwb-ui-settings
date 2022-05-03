@@ -472,9 +472,29 @@
 									class: 'btn-outline-success',
 								},
 							]"
-							:model-value="template.prevent_switch_stop"
+							:model-value="template.prevent_phase_switch"
 							@update:model-value="
-								updateState(key, $event, 'prevent_switch_stop')
+								updateState(key, $event, 'prevent_phase_switch')
+							"
+						>
+						</openwb-base-button-group-input>
+						<openwb-base-button-group-input
+							title="Ladung aktiv halten"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Aus',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'An',
+									class: 'btn-outline-success',
+								},
+							]"
+							:model-value="template.prevent_charge_stop"
+							@update:model-value="
+								updateState(key, $event, 'prevent_charge_stop')
 							"
 						>
 						</openwb-base-button-group-input>
