@@ -220,13 +220,12 @@ export default {
 					},
 					{
 						label: "Energie",
-						field: "data_charged_since_plugged_counter",
+						field: "data_imported_since_plugged",
 						sortable: true,
 						display: (row) => {
 							return this.alignEnd(
 								this.formatNumber(
-									row.data_charged_since_plugged_counter /
-										1000,
+									row.data_imported_since_plugged / 1000,
 									2
 								) +
 									"&nbsp;kWh / " +
@@ -295,12 +294,12 @@ export default {
 					},
 					{
 						label: "Energie",
-						field: "charged_since_plugged_counter",
+						field: "imported_since_plugged",
 						sortable: false,
 						display: (row) => {
 							return this.alignEnd(
 								this.formatNumber(
-									row.charged_since_plugged_counter / 1000,
+									row.imported_since_plugged / 1000,
 									2
 								) + "&nbsp;kWh"
 							);
@@ -396,10 +395,10 @@ export default {
 							data_power: entry["data"]["power"],
 							data_range_charged: entry["data"]["range_charged"],
 							data_costs: entry["data"]["costs"],
-							data_charged_since_plugged_counter:
-								entry["data"]["charged_since_plugged_counter"],
-							data_charged_since_mode_switch:
-								entry["data"]["charged_since_mode_switch"],
+							data_imported_since_plugged:
+								entry["data"]["imported_since_plugged"],
+							data_imported_since_mode_switch:
+								entry["data"]["imported_since_mode_switch"],
 						};
 					});
 				} catch (error) {
@@ -437,7 +436,7 @@ export default {
 						'"' + row.time_time_charged + '"',
 						this.formatNumber(row.data_power / 1000, 3),
 						this.formatNumber(
-							row.data_charged_since_plugged_counter / 1000,
+							row.data_imported_since_plugged / 1000,
 							2
 						),
 						this.formatNumber(row.data_range_charged / 1000, 0),
@@ -603,9 +602,9 @@ export default {
 					return "Dauer";
 				case "range_charged":
 					return "Reichweite";
-				case "charged_since_mode_switch":
+				case "imported_since_mode_switch":
 					return "Energie im Lademodus";
-				case "charged_since_plugged_counter":
+				case "imported_since_plugged":
 					return "Energie seit Anstecken";
 				case "power":
 					return "Leistung";

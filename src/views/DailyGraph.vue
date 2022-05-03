@@ -435,10 +435,10 @@ export default {
 												row[baseObject][key].power =
 													Math.floor(
 														(row[baseObject][key]
-															.counter -
+															.imported -
 															lastRow[baseObject][
 																key
-															].counter) /
+															].imported) /
 															(timeDiff /
 																1000 /
 																3600)

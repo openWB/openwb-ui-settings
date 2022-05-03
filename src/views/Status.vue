@@ -23,7 +23,7 @@
 				step="0.001"
 				unit="Wh"
 				:model-value="
-					$store.state.mqtt['openWB/chargepoint/get/counter']
+					$store.state.mqtt['openWB/chargepoint/get/imported']
 				"
 			/>
 			<openwb-base-heading>Historie</openwb-base-heading>
@@ -143,7 +143,7 @@
 					$store.state.mqtt[
 						'openWB/chargepoint/' +
 							getChargePointIndex(installedChargePointKey) +
-							'/get/counter'
+							'/get/imported'
 					]
 				"
 			/>
@@ -573,7 +573,7 @@
 				step="0.001"
 				unit="Wh"
 				:model-value="
-					$store.state.mqtt['openWB/bat/get/daily_yield_import']
+					$store.state.mqtt['openWB/bat/get/daily_imported']
 				"
 			/>
 			<openwb-base-number-input
@@ -583,7 +583,7 @@
 				step="0.001"
 				unit="Wh"
 				:model-value="
-					$store.state.mqtt['openWB/bat/get/daily_yield_export']
+					$store.state.mqtt['openWB/bat/get/daily_exported']
 				"
 			/>
 			<openwb-base-heading>Saldierte Werte</openwb-base-heading>
@@ -725,7 +725,7 @@ export default {
 				"openWB/general/extern",
 				// charge points total
 				"openWB/chargepoint/get/power",
-				"openWB/chargepoint/get/counter",
+				"openWB/chargepoint/get/imported",
 				"openWB/chargepoint/get/daily_yield",
 				// individual charge points
 				"openWB/chargepoint/+/config",
