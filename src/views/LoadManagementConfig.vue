@@ -132,6 +132,43 @@
 							</template>
 						</openwb-base-number-input>
 					</openwb-base-card>
+					<openwb-base-heading>
+						Vorhandene Wechselrichtermodule
+					</openwb-base-heading>
+					<openwb-base-card
+						v-for="inverter in inverterConfigs"
+						:key="inverter.id"
+						:title="inverter.name"
+						:collapsible="true"
+						:collapsed="true"
+						subtype="success"
+					>
+						<openwb-base-number-input
+							title="Maximale Ausgangsleistung des Wechselrichters"
+							:min="0"
+							:step="100"
+							unit="W"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/pv/' +
+										inverter.id +
+										'/config/max_ac_out'
+								]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/pv/' +
+										inverter.id +
+										'/config/max_ac_out',
+									$event
+								)
+							"
+						>
+							<template #help>
+								Relevant bei Hybridsystemen mit DC-Speicher.
+							</template>
+						</openwb-base-number-input>
+					</openwb-base-card>
 				</div>
 			</openwb-base-card>
 			<openwb-base-card
@@ -201,6 +238,7 @@ export default {
 				"openWB/system/device/+/component/+/config",
 				"openWB/counter/+/config/max_currents",
 				"openWB/counter/+/config/max_total_power",
+				"openWB/pv/+/config/max_ac_out",
 				"openWB/chargepoint/+/config",
 			],
 		};
@@ -215,6 +253,25 @@ export default {
 					.filter((key) => {
 						return installedComponentsConfigs[key].type.includes(
 							"counter"
+						);
+					})
+					.reduce((obj, key) => {
+						return {
+							...obj,
+							[key]: installedComponentsConfigs[key],
+						};
+					}, {});
+			},
+		},
+		inverterConfigs: {
+			get() {
+				let installedComponentsConfigs = this.getWildcardTopics(
+					"openWB/system/device/+/component/+/config"
+				);
+				return Object.keys(installedComponentsConfigs)
+					.filter((key) => {
+						return installedComponentsConfigs[key].type.includes(
+							"inverter"
 						);
 					})
 					.reduce((obj, key) => {
