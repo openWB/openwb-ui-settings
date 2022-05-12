@@ -220,20 +220,20 @@ export default {
 					},
 					{
 						label: "Energie",
-						field: "data_imported_since_plugged",
+						field: "data_imported_since_mode_switch",
 						sortable: true,
 						display: (row) => {
 							return this.alignEnd(
 								this.formatNumber(
-									row.data_imported_since_plugged / 1000,
+									row.data_imported_since_mode_switch / 1000,
 									2
 								) +
 									"&nbsp;kWh / " +
 									this.formatNumber(
-										row.data_range_charged / 1000,
+										row.data_range_charged,
 										0
 									) +
-									"&nbspkm"
+									"&nbsp;km"
 							);
 						},
 					},
@@ -311,8 +311,8 @@ export default {
 						sortable: false,
 						display: (row) => {
 							return this.alignEnd(
-								this.formatNumber(row.range_charged / 1000, 0) +
-									"&nbspkm"
+								this.formatNumber(row.range_charged, 0) +
+									"&nbsp;km"
 							);
 						},
 					},
@@ -436,10 +436,10 @@ export default {
 						'"' + row.time_time_charged + '"',
 						this.formatNumber(row.data_power / 1000, 3),
 						this.formatNumber(
-							row.data_imported_since_plugged / 1000,
+							row.data_imported_since_mode_switch / 1000,
 							2
 						),
-						this.formatNumber(row.data_range_charged / 1000, 0),
+						this.formatNumber(row.data_range_charged, 0),
 						this.formatNumber(row.data_costs / 1000, 2),
 					]),
 				]
@@ -655,6 +655,11 @@ export default {
 
 :deep(.table-bordered td) {
 	border-color: var(--secondary);
+}
+
+:deep(.vtl-card-body .vtl-row:first-child > div) {
+	padding-left: 0px;
+	padding-right: 0px;
 }
 
 :deep(.vtl-table .vtl-tbody .vtl-tbody-tr:hover) {
