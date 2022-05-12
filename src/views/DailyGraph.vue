@@ -25,10 +25,17 @@
 			</openwb-base-alert>
 			<div v-else>
 				<openwb-base-alert v-if="!chartDataHasEntries" subtype="info">
-					Es konnten keine Einträge für dieses Datum gefunden werden.
+					Es konnten keine Daten für diesen Zeitraum gefunden werden.
 				</openwb-base-alert>
 				<openwb-base-card v-else title="Tages-Diagramm">
 					<LineChart :chartData="chartData" :options="chartOptions" />
+				</openwb-base-card>
+				<openwb-base-card
+					title="Tagessummen (Test)"
+					:collapsible="true"
+					:collapsed="true"
+				>
+					<pre>{{ JSON.stringify(chartTotals, undefined, 2) }}</pre>
 				</openwb-base-card>
 			</div>
 		</form>
@@ -91,9 +98,9 @@ export default {
 					jsonKey: null,
 					borderColor: "rgba(255, 0, 0, 0.7)",
 					backgroundColor: "rgba(255, 10, 13, 0.3)",
-					fill: true,
+					fill: false,
 					lineTension: 0.2,
-					// hidden: boolDisplayPv,
+					hidden: false,
 					borderWidth: 1,
 					data: null,
 					yAxisID: "y1",
@@ -109,7 +116,7 @@ export default {
 					backgroundColor: "rgba(10, 255, 13, 0.3)",
 					fill: true,
 					lineTension: 0.2,
-					// hidden: boolDisplayPv,
+					hidden: true,
 					borderWidth: 1,
 					data: null,
 					yAxisID: "y1",
@@ -123,9 +130,9 @@ export default {
 					jsonKey: null,
 					borderColor: "rgba(255, 153, 13, 0.7)",
 					backgroundColor: "rgba(200, 255, 13, 0.3)",
-					fill: true,
+					fill: false,
 					lineTension: 0.2,
-					// hidden: boolDisplayPv,
+					hidden: true,
 					borderWidth: 1,
 					data: null,
 					yAxisID: "y1",
@@ -140,7 +147,7 @@ export default {
 					borderColor: "rgba(255, 153, 13, 0.7)",
 					backgroundColor: "rgba(200, 255, 13, 0.3)",
 					borderDash: [10, 5],
-					hidden: false,
+					hidden: true,
 					fill: false,
 					lineTension: 0.2,
 					borderWidth: 2,
@@ -158,7 +165,7 @@ export default {
 					backgroundColor: "rgba(0, 0, 255, 0.7)",
 					fill: true,
 					lineTension: 0.2,
-					// hidden: boolDisplayPv,
+					hidden: true,
 					borderWidth: 1,
 					data: null,
 					yAxisID: "y1",
@@ -173,7 +180,7 @@ export default {
 					borderColor: "rgba(0, 0, 255, 0.5)",
 					backgroundColor: "rgba(0, 0, 255, 0.7)",
 					borderDash: [10, 5],
-					hidden: false,
+					hidden: true,
 					fill: false,
 					lineTension: 0.2,
 					borderWidth: 2,
@@ -275,7 +282,7 @@ export default {
 								size: 12,
 							},
 							stepSize: 0.2,
-							maxTicksLimit: 10,
+							maxTicksLimit: 11,
 							// color: tickColor
 						},
 					},
@@ -302,6 +309,8 @@ export default {
 							font: {
 								size: 12,
 							},
+							stepSize: 10,
+							maxTicksLimit: 11,
 							// color: tickColor
 						},
 					},
@@ -350,6 +359,79 @@ export default {
 				return this.chartDataObject.length > 0;
 			},
 		},
+		chartTotals() {
+			var diff = {};
+			const keysToProcess = ["counter", "imported", "exported"];
+
+			const process = (startValue, endValue, path) => {
+				// console.log("process:", path);
+				const keys = path.split(".");
+				if (keysToProcess.includes(keys[keys.length - 1])) {
+					if (keys.length == 3) {
+						var label = this.getDatasetLabel(
+							keys[0],
+							keys[1],
+							keys[2],
+							path
+						);
+					}
+					diff[path] = {
+						value: Math.floor(endValue - startValue) / 1000,
+						label: label,
+					};
+				}
+			};
+
+			const traverse = (
+				startObject,
+				endObject,
+				method,
+				currentPath = ""
+			) => {
+				for (var element in endObject) {
+					if (
+						endObject[element] !== null &&
+						typeof endObject[element] == "object"
+					) {
+						//going one step down in the object tree!!
+						traverse(
+							startObject[element],
+							endObject[element],
+							method,
+							currentPath ? currentPath + "." + element : element
+						);
+					} else {
+						method.apply(this, [
+							startObject[element],
+							endObject[element],
+							currentPath ? currentPath + "." + element : element,
+						]);
+					}
+				}
+			};
+
+			if (
+				this.$store.state.mqtt[
+					"openWB/log/daily/" + this.commandData.day
+				]
+			) {
+				const start =
+					this.$store.state.mqtt[
+						"openWB/log/daily/" + this.commandData.day
+					][0];
+				const end =
+					this.$store.state.mqtt[
+						"openWB/log/daily/" + this.commandData.day
+					][
+						this.$store.state.mqtt[
+							"openWB/log/daily/" + this.commandData.day
+						].length - 1
+					];
+				traverse(start, end, process);
+				return diff;
+			}
+			return undefined;
+		},
 		chartDataObject() {
 			if (
 				this.$store.state.mqtt[
@@ -389,7 +471,7 @@ export default {
 															(timeDiff /
 																1000 /
 																3600)
-													);
+													) / 1000;
 												break;
 											case "counter":
 												row[baseObject][key].power =
@@ -409,7 +491,19 @@ export default {
 															(timeDiff /
 																1000 /
 																3600)
-													);
+													) / 1000;
+												row[baseObject][
+													key
+												].powerImport = Math.max(
+													0,
+													row[baseObject][key].power
+												);
+												row[baseObject][
+													key
+												].powerExport = Math.min(
+													0,
+													row[baseObject][key].power
+												);
 												break;
 											case "bat":
 												row[baseObject][key].power =
@@ -429,7 +523,19 @@ export default {
 															(timeDiff /
 																1000 /
 																3600)
-													);
+													) / 1000;
+												row[baseObject][
+													key
+												].powerImport = Math.max(
+													0,
+													row[baseObject][key].power
+												);
+												row[baseObject][
+													key
+												].powerExport = Math.min(
+													0,
+													row[baseObject][key].power
+												);
 												break;
 											case "cp":
 												row[baseObject][key].power =
@@ -442,7 +548,7 @@ export default {
 															(timeDiff /
 																1000 /
 																3600)
-													);
+													) / 1000;
 												break;
 										}
 									});
@@ -460,7 +566,7 @@ export default {
 				myData.shift();
 				return myData;
 			}
-			return [];
+			return undefined;
 		},
 		chartData() {
 			// add all datasets available in the last entry
@@ -494,21 +600,26 @@ export default {
 			if (objectKey == "all") {
 				switch (baseObject) {
 					case "pv":
-						label = "PV Summe";
+						label = "PV (Summe)";
 						break;
 					case "bat":
-						label = "Speicher ";
+						label = "Speicher";
 						switch (elementKey) {
-							case "power":
-								label += "Summe";
+							case "imported":
+								label += " (Ladung, Summe)";
+								break;
+							case "exported":
+								label += " (Entladung, Summe)";
 								break;
 							case "soc":
-								label += "SoC Summe";
+								label += " SoC (Summe)";
 								break;
+							default:
+								label += " (Summe)";
 						}
 						break;
 					case "cp":
-						label = "Ladepunkte Summe";
+						label = "Ladepunkte (Summe)";
 						break;
 				}
 			} else {
@@ -530,8 +641,33 @@ export default {
 				var objectTopic = Object.keys(this.getWildcardTopics(topic))[0];
 				switch (baseObject) {
 					case "pv":
+						label = this.$store.state.mqtt[objectTopic].name;
+						break;
 					case "counter":
+						label = this.$store.state.mqtt[objectTopic].name;
+						switch (elementKey) {
+							case "imported":
+								label += " (Bezug)";
+								break;
+							case "exported":
+								label += " (Einspeisung)";
+								break;
+						}
+						break;
 					case "bat":
+						label = this.$store.state.mqtt[objectTopic].name;
+						switch (elementKey) {
+							case "imported":
+								label += " (Ladung)";
+								break;
+							case "exported":
+								label += " (Entladung)";
+								break;
+							case "soc":
+								label += " SoC";
+								break;
+						}
+						break;
 					case "cp":
 						label = this.$store.state.mqtt[objectTopic].name;
 						if (elementKey == "soc") {
@@ -576,6 +712,13 @@ export default {
 					elementKey,
 					datasetKey
 				);
+				if (newDataset.labelSuffix != undefined) {
+					newDataset.label =
+						newDataset.label + newDataset.labelSuffix;
+				}
+				if (objectKey == "all") {
+					newDataset.hidden = false;
+				}
 				return this.chartDatasets.datasets.push(newDataset) - 1;
 			} else {
 				console.warn(
@@ -588,9 +731,9 @@ export default {
 			return;
 		},
 		initDataset(baseObject, objectKey, elementKey) {
-			const elementKeysToIgnore = ["imported", "exported", "counter"];
+			const elementKeysToAdd = ["power", "soc"];
 			const datasetKey = baseObject + "." + objectKey + "." + elementKey;
-			if (!elementKeysToIgnore.includes(elementKey)) {
+			if (elementKeysToAdd.includes(elementKey)) {
 				var index = this.getDatasetIndex(datasetKey);
 				if (index == undefined) {
 					index = this.addDataset(
