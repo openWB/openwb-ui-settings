@@ -1,5 +1,5 @@
 <template>
-	<div class="device-fronius-countersm">
+	<div class="device-fronius-counter-sm">
 		<openwb-base-heading>
 			Einstellungen für Fronius SmartMeter
 			<span class="small">(Modul: {{ $options.name }})</span>
@@ -38,7 +38,7 @@
 
 <script>
 export default {
-	name: "DeviceFroniusCountersm",
+	name: "DeviceFroniusCounterSM",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

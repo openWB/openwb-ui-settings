@@ -48,8 +48,7 @@
 						v-model="chargeLogRequestData.filter.vehicle.chargemode"
 					>
 						<template #help>
-							Es können mehrere Elemente mit Strg ausgewählt
-							werden.
+							Es können mehrere Elemente ausgewählt werden.
 						</template>
 					</openwb-base-select-input>
 					<openwb-base-select-input
@@ -59,8 +58,7 @@
 						v-model="chargeLogRequestData.filter.chargepoint.id"
 					>
 						<template #help>
-							Es können mehrere Elemente mit Strg ausgewählt
-							werden.
+							Es können mehrere Elemente ausgewählt werden.
 						</template>
 					</openwb-base-select-input>
 					<openwb-base-select-input
@@ -70,8 +68,7 @@
 						v-model="chargeLogRequestData.filter.vehicle.id"
 					>
 						<template #help>
-							Es können mehrere Elemente mit Strg ausgewählt
-							werden.
+							Es können mehrere Elemente ausgewählt werden.
 						</template>
 					</openwb-base-select-input>
 				</openwb-base-card>

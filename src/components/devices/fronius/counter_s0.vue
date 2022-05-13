@@ -1,5 +1,5 @@
 <template>
-	<div class="device-fronius-counters0">
+	<div class="device-fronius-counter-s0">
 		<openwb-base-heading>
 			Einstellungen für Fronius S0 Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-	name: "DeviceFroniusCounters0",
+	name: "DeviceFroniusCounterS0",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

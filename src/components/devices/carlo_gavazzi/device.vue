@@ -20,7 +20,7 @@
 
 <script>
 export default {
-	name: "DeviceCarlogavazzi",
+	name: "DeviceCarloGavazzi",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
