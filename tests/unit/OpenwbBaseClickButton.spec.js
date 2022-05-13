@@ -1,7 +1,7 @@
 import { shallowMount } from "@vue/test-utils";
 import OpenwbBaseClickButton from "@/components/OpenwbBaseClickButton.vue";
 
-describe("OpenwbBaseClickbutton.vue", () => {
+describe("OpenwbBaseClickButton.vue", () => {
 	// check title prop
 	it("render title", () => {
 		const title = "T";

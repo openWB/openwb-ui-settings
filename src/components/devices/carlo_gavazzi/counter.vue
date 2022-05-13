@@ -15,7 +15,7 @@
 
 <script>
 export default {
-	name: "DeviceCarlogavazziCounter",
+	name: "DeviceCarloGavazziCounter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
