@@ -257,6 +257,18 @@ const routes = [
 				"../views/DailyGraph.vue"
 			),
 	},
+	{
+		path: "/Logging/MonthlyChart",
+		name: "DailyChart",
+		meta: {
+			heading: "Monatsauswertung",
+		},
+		component: () =>
+			import(
+				/* webpackChunkName: "MonthlyChart" */
+				"../views/MonthlyChart.vue"
+			),
+	},
 ];
 /* examples for development only start here */
 if (process.env.NODE_ENV !== "production") {
