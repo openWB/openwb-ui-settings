@@ -1,19 +1,19 @@
 <template>
-	<div class="dailyGraph">
-		<form name="dailyGraphForm">
+	<div class="monthlyChart">
+		<form name="monthlyChartForm">
 			<openwb-base-card title="Filter">
 				<openwb-base-text-input
-					title="Datum"
-					subtype="date"
-					min="2018-01-01"
-					:max="currentDay"
-					v-model="dailyGraphDate"
+					title="Monat"
+					subtype="month"
+					min="2018-01"
+					:max="currentMonth"
+					v-model="monthlyChartDate"
 				/>
 				<template #footer>
 					<div class="row justify-content-center">
 						<openwb-base-click-button
 							class="col-4 btn-success"
-							@click="requestDailyGraph()"
+							@click="requestMonthlyChart()"
 						>
 							Daten anfordern
 						</openwb-base-click-button>
@@ -27,11 +27,11 @@
 				<openwb-base-alert v-if="!chartDataHasEntries" subtype="info">
 					Es konnten keine Daten für diesen Zeitraum gefunden werden.
 				</openwb-base-alert>
-				<openwb-base-card v-else title="Tages-Diagramm">
+				<openwb-base-card v-else title="Monats-Diagramm">
 					<LineChart :chartData="chartData" :options="chartOptions" />
 				</openwb-base-card>
 				<openwb-base-card
-					title="Tagessummen"
+					title="Monatssummen"
 					:collapsible="true"
 					:collapsed="true"
 				>
@@ -81,7 +81,7 @@ Chart.register(
 );
 
 export default {
-	name: "OpenwbDailyGraph",
+	name: "OpenwbMonthlyChart",
 	components: { LineChart },
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
@@ -89,14 +89,13 @@ export default {
 		return {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
-				"openWB/log/daily/#",
+				"openWB/log/monthly/#",
 				"openWB/system/device/+/component/+/config",
 				"openWB/chargepoint/+/config",
 				"openWB/vehicle/+/name",
 			],
-			currentDay: "",
-			dailyGraphRequestData: {
-				day: "",
+			currentMonth: "",
+			monthlyChartRequestData: {
 				month: "",
 				year: "",
 			},
@@ -149,23 +148,6 @@ export default {
 						yAxisKey: null,
 					},
 				},
-				"bat-soc": {
-					label: "Speicher SoC",
-					jsonKey: null,
-					borderColor: "rgba(255, 153, 13, 0.7)",
-					backgroundColor: "rgba(200, 255, 13, 0.3)",
-					borderDash: [10, 5],
-					hidden: true,
-					fill: false,
-					lineTension: 0.2,
-					borderWidth: 2,
-					data: null,
-					yAxisID: "y2",
-					parsing: {
-						xAxisKey: "timestamp",
-						yAxisKey: null,
-					},
-				},
 				"cp-power": {
 					label: "Ladepunkt",
 					jsonKey: null,
@@ -177,23 +159,6 @@ export default {
 					borderWidth: 1,
 					data: null,
 					yAxisID: "y1",
-					parsing: {
-						xAxisKey: "timestamp",
-						yAxisKey: null,
-					},
-				},
-				"ev-soc": {
-					label: "Fahrzeug SoC",
-					jsonKey: null,
-					borderColor: "rgba(0, 0, 255, 0.5)",
-					backgroundColor: "rgba(0, 0, 255, 0.7)",
-					borderDash: [10, 5],
-					hidden: true,
-					fill: false,
-					lineTension: 0.2,
-					borderWidth: 2,
-					data: null,
-					yAxisID: "y2",
 					parsing: {
 						xAxisKey: "timestamp",
 						yAxisKey: null,
@@ -247,13 +212,13 @@ export default {
 					x: {
 						type: "time",
 						time: {
-							unit: "minute",
-							tooltipFormat: "DD T",
+							unit: "day",
+							tooltipFormat: "D",
 						},
 						display: true,
 						title: {
 							display: true,
-							text: "Zeit",
+							text: "Tag",
 						},
 						ticks: {
 							source: "timestamp",
@@ -261,7 +226,7 @@ export default {
 								size: 12,
 							},
 							// color: tickColor,
-							maxTicksLimit: 15,
+							maxTicksLimit: 31,
 						},
 						grid: {
 							// color: xGridColor,
@@ -279,7 +244,7 @@ export default {
 								size: 12,
 							},
 							display: true,
-							text: "Leistung [kW]",
+							text: "Energie [kWh]",
 							// color: fontColor
 						},
 						grid: {
@@ -294,34 +259,6 @@ export default {
 							// color: tickColor
 						},
 					},
-					y2: {
-						// horizontal line for values displayed on the right side (SoC, %)
-						position: "right",
-						type: "linear",
-						display: "auto",
-						suggestedMin: 0,
-						suggestedMax: 100,
-						title: {
-							font: {
-								size: 12,
-							},
-							display: true,
-							text: "SoC [%]",
-							// color: fontColor
-						},
-						grid: {
-							display: false,
-							// color: gridSocColor,
-						},
-						ticks: {
-							font: {
-								size: 12,
-							},
-							stepSize: 10,
-							maxTicksLimit: 11,
-							// color: tickColor
-						},
-					},
 				},
 			},
 			chartDatasets: {
@@ -330,30 +267,26 @@ export default {
 		};
 	},
 	computed: {
-		dailyGraphDate: {
+		monthlyChartDate: {
 			get() {
 				return (
-					this.dailyGraphRequestData.year +
+					this.monthlyChartRequestData.year +
 					"-" +
-					this.dailyGraphRequestData.month +
-					"-" +
-					this.dailyGraphRequestData.day
+					this.monthlyChartRequestData.month
 				);
 			},
 			set(newValue) {
 				let splitDate = newValue.split("-");
-				this.dailyGraphRequestData.year = splitDate[0];
-				this.dailyGraphRequestData.month = splitDate[1];
-				this.dailyGraphRequestData.day = splitDate[2];
+				this.monthlyChartRequestData.year = splitDate[0];
+				this.monthlyChartRequestData.month = splitDate[1];
 			},
 		},
 		commandData: {
 			get() {
 				return {
-					day:
-						this.dailyGraphRequestData.year +
-						this.dailyGraphRequestData.month +
-						this.dailyGraphRequestData.day,
+					month:
+						this.monthlyChartRequestData.year +
+						this.monthlyChartRequestData.month,
 				};
 			},
 		},
@@ -420,19 +353,19 @@ export default {
 
 			if (
 				this.$store.state.mqtt[
-					"openWB/log/daily/" + this.commandData.day
+					"openWB/log/monthly/" + this.commandData.month
 				]
 			) {
 				const start =
 					this.$store.state.mqtt[
-						"openWB/log/daily/" + this.commandData.day
+						"openWB/log/monthly/" + this.commandData.month
 					][0];
 				const end =
 					this.$store.state.mqtt[
-						"openWB/log/daily/" + this.commandData.day
+						"openWB/log/monthly/" + this.commandData.month
 					][
 						this.$store.state.mqtt[
-							"openWB/log/daily/" + this.commandData.day
+							"openWB/log/monthly/" + this.commandData.month
 						].length - 1
 					];
 				traverse(start, end, process);
@@ -443,14 +376,14 @@ export default {
 		chartDataObject() {
 			if (
 				this.$store.state.mqtt[
-					"openWB/log/daily/" + this.commandData.day
+					"openWB/log/monthly/" + this.commandData.month
 				]
 			) {
 				var lastRow = undefined;
 				var myData = JSON.parse(
 					JSON.stringify(
 						this.$store.state.mqtt[
-							"openWB/log/daily/" + this.commandData.day
+							"openWB/log/monthly/" + this.commandData.month
 						]
 					)
 				).map((row) => {
@@ -563,7 +496,6 @@ export default {
 								}
 							);
 						});
-
 						lastRow = row;
 						return row;
 					} else {
@@ -627,20 +559,7 @@ export default {
 						}
 						break;
 					case "cp":
-						label = "Ladepunkte";
-						switch (elementKey) {
-							case "imported":
-								label += " (Ladung, Summe)";
-								break;
-							case "exported":
-								label += " (Entladung, Summe)";
-								break;
-							case "soc":
-								label += " SoC (Summe)";
-								break;
-							default:
-								label += " (Summe)";
-						}
+						label = "Ladepunkte (Summe)";
 						break;
 				}
 			} else {
@@ -691,16 +610,8 @@ export default {
 						break;
 					case "cp":
 						label = this.$store.state.mqtt[objectTopic].name;
-						switch (elementKey) {
-							case "imported":
-								label += " (Ladung)";
-								break;
-							case "exported":
-								label += " (Entladung)";
-								break;
-							case "soc":
-								label += " SoC";
-								break;
+						if (elementKey == "soc") {
+							label += " SoC";
 						}
 						break;
 					case "ev":
@@ -774,15 +685,15 @@ export default {
 				}
 			}
 		},
-		requestDailyGraph() {
-			let myForm = document.forms["dailyGraphForm"];
+		requestMonthlyChart() {
+			let myForm = document.forms["monthlyChartForm"];
 			if (!myForm.reportValidity()) {
 				console.log("form invalid");
 				return;
 			} else {
 				this.chartDatasets.datasets = [];
 				this.$emit("sendCommand", {
-					command: "getDailyLog",
+					command: "getMonthlyLog",
 					data: this.commandData,
 				});
 			}
@@ -790,13 +701,11 @@ export default {
 	},
 	mounted() {
 		const today = new Date();
-		this.currentDay = this.dailyGraphDate =
+		this.currentMonth = this.monthlyChartDate =
 			today.getFullYear() +
 			"-" +
-			String(today.getMonth() + 1).padStart(2, "0") +
-			"-" +
-			String(today.getDate()).padStart(2, "0");
-		this.requestDailyGraph();
+			String(today.getMonth() + 1).padStart(2, "0");
+		this.requestMonthlyChart();
 	},
 };
 </script>

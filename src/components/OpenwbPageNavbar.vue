@@ -230,6 +230,13 @@
 						>
 							Tagesauswertung
 						</router-link>
+						<router-link
+							to="/Logging/MonthlyChart"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							Monatsauswertung
+						</router-link>
 					</div>
 				</li>
 				<li v-if="nodeEnv !== 'production'" class="nav-item dropdown">
