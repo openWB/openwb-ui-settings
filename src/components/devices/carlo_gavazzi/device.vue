@@ -7,14 +7,12 @@
 		<openwb-base-text-input
 			title="IP oder Hostname"
 			subtype="host"
+			required
 			:model-value="configuration.ip_address"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.ip_address')
 			"
 		/>
-		<openwb-base-alert subtype="warning">
-			ToDo: Einstellungen für "Port" ergänzen.
-		</openwb-base-alert>
 	</div>
 </template>
 

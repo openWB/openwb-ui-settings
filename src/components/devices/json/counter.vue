@@ -16,21 +16,29 @@
 		<openwb-base-text-input
 			title="Abfrage für Zählerstand Bezug"
 			subtype="text"
-			required
 			:model-value="configuration.jq_imported"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.jq_imported')
 			"
-		/>
+		>
+			<template #help>
+				Wird dieses Feld leer gelassen, dann werden Zählerstände intern
+				simuliert.
+			</template>
+		</openwb-base-text-input>
 		<openwb-base-text-input
 			title="Abfrage für Zählerstand Einspeisung"
 			subtype="text"
-			required
 			:model-value="configuration.jq_exported"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.jq_exported')
 			"
-		/>
+		>
+			<template #help>
+				Wird dieses Feld leer gelassen, dann werden Zählerstände intern
+				simuliert.
+			</template>
+		</openwb-base-text-input>
 	</div>
 </template>
 

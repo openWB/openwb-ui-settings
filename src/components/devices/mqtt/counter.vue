@@ -11,21 +11,24 @@
 						>openWB/set/counter/{{ componentId }}/get/power</span
 					><br />
 					Bezugsleistung in Watt, mit Nachkommastellen (Float),
-					positiv Bezug, negativ Einspeisung
+					positiv Bezug, negativ Einspeisung<br />
+					Beispiel: <span class="text-info">-123.45</span>
 				</li>
 				<li>
 					<span class="text-info"
 						>openWB/set/counter/{{ componentId }}/get/imported</span
 					><br />
 					Bezogene Energie in Wh, mit Nachkommastellen (Float), nur
-					positiv
+					positiv<br />
+					Beispiel: <span class="text-info">123.45</span>
 				</li>
 				<li>
 					<span class="text-info"
 						>openWB/set/counter/{{ componentId }}/get/exported</span
 					><br />
 					Eingespeiste Energie in Wh, mit Nachkommastellen (Float),
-					nur positiv
+					nur positiv<br />
+					Beispiel: <span class="text-info">123.45</span>
 				</li>
 				<li>
 					<span class="text-info"
@@ -33,29 +36,33 @@
 							componentId
 						}}/get/frequency</span
 					><br />
-					Netzfrequenz in Hz, mit Nachkommastellen (Float)
+					Netzfrequenz in Hz, mit Nachkommastellen (Float)<br />
+					Beispiel: <span class="text-info">50.12</span>
 				</li>
 				<li>
 					<span class="text-info"
 						>openWB/set/counter/{{ componentId }}/get/currents</span
 					><br />
 					Array mit den Strömen je Phase in Ampere, mit
-					Nachkommastellen (Float), positiv Bezug, negativ Einspeisung
-					"[A1,A2,A3]"
+					Nachkommastellen (Float), positiv Bezug, negativ
+					Einspeisung<br />
+					Beispiel: <span class="text-info">[1.2,2.3,-2.1]</span>
 				</li>
 				<li>
 					<span class="text-info"
 						>openWB/set/counter/{{ componentId }}/get/voltages</span
 					><br />
 					Array mit den Spannungen je Phase in Volt, mit
-					Nachkommastellen (Float) "[V1,V2,V3]"
+					Nachkommastellen (Float)<br />
+					Beispiel: <span class="text-info">[222.2,223.3,222.3]</span>
 				</li>
 				<li>
 					<span class="text-info"
 						>openWB/set/counter/{{ componentId }}/get/powers</span
 					><br />
 					Array mit den Leistungen je Phase in Watt, mit
-					Nachkommastellen (Float) "[P1,P2,P3]"
+					Nachkommastellen (Float)<br />
+					Beispiel: <span class="text-info">[12.3,23.4,-12.3]</span>
 				</li>
 				<li>
 					<span class="text-info"
@@ -64,7 +71,8 @@
 						}}/get/power_factors</span
 					><br />
 					Array mit den Leistungsfaktoren je Phase, mit
-					Nachkommastellen (Float), Wertebereich 0 bis 1 "[r1,r2,r3]"
+					Nachkommastellen (Float), Wertebereich -1 bis 1<br />
+					Beispiel: <span class="text-info">[0.95,0.96,-0.95]</span>
 				</li>
 			</ul>
 		</openwb-base-alert>

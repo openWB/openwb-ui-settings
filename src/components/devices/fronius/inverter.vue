@@ -4,17 +4,8 @@
 			Einstellungen für Fronius Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-text-input
-			title="IP oder Hostname 2. WR"
-			subtype="host"
-			:model-value="configuration.ip_address2"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.ip_address2')
-			"
-		/>
-		<openwb-base-alert subtype="warning">
-			ToDo: Einstellung "IP address 2" entfernen. Stattdessen eine zweite
-			Komponente anlegen.
+		<openwb-base-alert subtype="info">
+			Diese Komponente erfordert keine Einstellungen.
 		</openwb-base-alert>
 	</div>
 </template>

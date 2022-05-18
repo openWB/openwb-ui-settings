@@ -1,16 +1,15 @@
 <template>
-	<div class="device-saxpower">
+	<div class="device-discovergy-inverter">
 		<openwb-base-heading>
-			Einstellungen für Saxpower
+			Einstellungen für Discovergy Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
-			title="IP oder Hostname"
-			subtype="host"
+			title="Meter-ID"
 			required
-			:model-value="configuration.ip_address"
+			:model-value="configuration.meter_id"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.ip_address')
+				updateConfiguration($event, 'configuration.meter_id')
 			"
 		/>
 	</div>
@@ -18,10 +17,11 @@
 
 <script>
 export default {
-	name: "DeviceSaxpower",
+	name: "DeviceDiscovergyInverter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
+		deviceId: { default: undefined },
 		componentId: { required: true },
 	},
 	methods: {

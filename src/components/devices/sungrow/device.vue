@@ -1,7 +1,7 @@
 <template>
-	<div class="device-saxpower">
+	<div class="device-sungrow">
 		<openwb-base-heading>
-			Einstellungen für Saxpower
+			Einstellungen für Sungrow
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
@@ -18,7 +18,7 @@
 
 <script>
 export default {
-	name: "DeviceSaxpower",
+	name: "DeviceSungrow",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

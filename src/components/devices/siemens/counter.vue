@@ -4,14 +4,9 @@
 			Einstellungen für Siemens Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-text-input
-			title="IP oder Hostname"
-			subtype="host"
-			:model-value="configuration.ip_address"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.ip_address')
-			"
-		/>
+		<openwb-base-alert subtype="info">
+			Diese Komponente erfordert keine Einstellungen.
+		</openwb-base-alert>
 	</div>
 </template>
 
