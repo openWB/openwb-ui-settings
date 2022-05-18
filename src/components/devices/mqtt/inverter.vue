@@ -11,14 +11,16 @@
 						>openWB/set/pv/{{ componentId }}/get/power</span
 					><br />
 					PV-Leistung in Watt, ohne Nachkommastellen (Integer), nur
-					negativ!
+					negativ!<br />
+					Beispiel: <span class="text-info">-123</span>
 				</li>
 				<li>
 					<span class="text-info"
 						>openWB/set/pv/{{ componentId }}/get/counter</span
 					><br />
 					Erzeugte Energie in Wh, mit Nachkommastellen (Float), nur
-					positiv
+					positiv<br />
+					Beispiel: <span class="text-info">123.45</span>
 				</li>
 			</ul>
 		</openwb-base-alert>

@@ -1,16 +1,18 @@
 <template>
-	<div class="device-saxpower">
+	<div class="device-sungrow-counter">
 		<openwb-base-heading>
-			Einstellungen für Saxpower
+			Einstellungen für Sungrow Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-text-input
-			title="IP oder Hostname"
-			subtype="host"
-			required
-			:model-value="configuration.ip_address"
+		<openwb-base-button-group-input
+			title="Version"
+			:buttons="[
+				{ buttonValue: 0, text: 'SH (Hybrid)' },
+				{ buttonValue: 1, text: 'SG (kein Hybrid)' },
+			]"
+			:model-value="configuration.version"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.ip_address')
+				updateConfiguration($event, 'configuration.version')
 			"
 		/>
 	</div>
@@ -18,10 +20,11 @@
 
 <script>
 export default {
-	name: "DeviceSaxpower",
+	name: "DeviceSungrowCounter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
+		deviceId: { default: undefined },
 		componentId: { required: true },
 	},
 	methods: {

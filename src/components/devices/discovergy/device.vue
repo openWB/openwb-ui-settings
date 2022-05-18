@@ -1,16 +1,25 @@
 <template>
-	<div class="device-saxpower">
+	<div class="device-discovergy">
 		<openwb-base-heading>
-			Einstellungen für Saxpower
+			Einstellungen für Discovergy
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
-			title="IP oder Hostname"
-			subtype="host"
+			title="Benutzername"
+			subtype="user"
 			required
-			:model-value="configuration.ip_address"
+			:model-value="configuration.user"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.ip_address')
+				updateConfiguration($event, 'configuration.user')
+			"
+		/>
+		<openwb-base-text-input
+			title="Passwort"
+			subtype="password"
+			required
+			:model-value="configuration.password"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.password')
 			"
 		/>
 	</div>
@@ -18,11 +27,11 @@
 
 <script>
 export default {
-	name: "DeviceSaxpower",
+	name: "DeviceDiscovergy",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
-		componentId: { required: true },
+		deviceId: { default: undefined },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {

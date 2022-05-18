@@ -16,12 +16,16 @@
 		<openwb-base-text-input
 			title="Abfrage für Zählerstand"
 			subtype="text"
-			required
 			:model-value="configuration.jq_counter"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.jq_counter')
 			"
-		/>
+		>
+			<template #help>
+				Wird dieses Feld leer gelassen, dann werden Zählerstände intern
+				simuliert.
+			</template>
+		</openwb-base-text-input>
 	</div>
 </template>
 

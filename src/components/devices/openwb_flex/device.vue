@@ -7,6 +7,7 @@
 		<openwb-base-text-input
 			title="IP oder Hostname"
 			subtype="host"
+			required
 			:model-value="configuration.ip_address"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.ip_address')
@@ -14,6 +15,7 @@
 		/>
 		<openwb-base-number-input
 			title="Port"
+			required
 			:model-value="configuration.port"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.port')

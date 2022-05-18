@@ -1,16 +1,17 @@
 <template>
-	<div class="device-saxpower">
+	<div class="device-victron-bat">
 		<openwb-base-heading>
-			Einstellungen für Saxpower
+			Einstellungen für Victron Batteriespeicher
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-text-input
-			title="IP oder Hostname"
-			subtype="host"
+		<openwb-base-number-input
+			title="Modbus-ID"
+			:min="1"
+			:max="255"
 			required
-			:model-value="configuration.ip_address"
+			:model-value="configuration.modbus_id"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.ip_address')
+				updateConfiguration($event, 'configuration.modbus_id')
 			"
 		/>
 	</div>
@@ -18,10 +19,11 @@
 
 <script>
 export default {
-	name: "DeviceSaxpower",
+	name: "DeviceVictronBat",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
+		deviceId: { default: undefined },
 		componentId: { required: true },
 	},
 	methods: {

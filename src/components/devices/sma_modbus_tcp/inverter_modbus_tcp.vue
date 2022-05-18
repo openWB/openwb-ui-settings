@@ -1,16 +1,19 @@
 <template>
-	<div class="device-saxpower">
+	<div class="device-sma-modbustcp-inverter">
 		<openwb-base-heading>
-			Einstellungen für Saxpower
+			Einstellungen für SMA Modbus/TCP Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-text-input
-			title="IP oder Hostname"
-			subtype="host"
-			required
-			:model-value="configuration.ip_address"
+		<openwb-base-select-input
+			title="Version"
+			notSelected="Bitte auswählen"
+			:options="[
+				{ value: 0, text: 'Standard' },
+				{ value: 1, text: 'Core-2' },
+			]"
+			:model-value="configuration.version"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.ip_address')
+				updateConfiguration($event, 'configuration.version')
 			"
 		/>
 	</div>
@@ -18,10 +21,11 @@
 
 <script>
 export default {
-	name: "DeviceSaxpower",
+	name: "DeviceSmaModbustcpInverter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
+		deviceId: { default: undefined },
 		componentId: { required: true },
 	},
 	methods: {

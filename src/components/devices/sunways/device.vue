@@ -1,7 +1,7 @@
 <template>
-	<div class="device-saxpower">
+	<div class="device-sunways">
 		<openwb-base-heading>
-			Einstellungen für Saxpower
+			Einstellungen für Sunways
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
@@ -13,12 +13,21 @@
 				updateConfiguration($event, 'configuration.ip_address')
 			"
 		/>
+		<openwb-base-text-input
+			title="Passwort"
+			subtype="password"
+			required
+			:model-value="configuration.password"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.password')
+			"
+		/>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceSaxpower",
+	name: "DeviceSunways",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

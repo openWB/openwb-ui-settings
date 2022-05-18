@@ -14,14 +14,13 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.vc_type')
 			"
-		>
-			<template #help>Hilfetext</template>
-		</openwb-base-button-group-input>
+		/>
 		<openwb-base-number-input
 			title="Anzahl MPPT Solarladeregler"
+			required
+			:min="1"
+			:max="9"
 			:model-value="configuration.vc_count"
-			min="1"
-			max="9"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.vc_count')
 			"

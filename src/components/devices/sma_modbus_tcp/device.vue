@@ -1,7 +1,7 @@
 <template>
-	<div class="device-saxpower">
+	<div class="device-sma-modbustcp">
 		<openwb-base-heading>
-			Einstellungen für Saxpower
+			Einstellungen für SMA Modbus/TCP
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
@@ -18,7 +18,7 @@
 
 <script>
 export default {
-	name: "DeviceSaxpower",
+	name: "DeviceSmaModbustcp",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

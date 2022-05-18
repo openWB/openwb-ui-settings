@@ -4,16 +4,14 @@
 			Einstellungen für Fronius SmartMeter
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-select-input
-			title="Installationsort"
-			notSelected="Bitte auswählen"
-			:options="[
-				{ value: 0, text: 'EVU-Zweig' },
-				{ value: 1, text: 'Hausverbrauchszweig' },
-			]"
-			:model-value="configuration.meter_location"
+		<openwb-base-number-input
+			title="Meter ID"
+			required
+			min="0"
+			max="65535"
+			:model-value="configuration.meter_id"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.meter_location')
+				updateConfiguration($event, 'configuration.meter_id')
 			"
 		/>
 		<openwb-base-select-input
@@ -29,10 +27,6 @@
 				updateConfiguration($event, 'configuration.variant')
 			"
 		/>
-		<openwb-base-alert subtype="warning">
-			ToDo: Einstellung "Installationsort" entfernen und durch die
-			Hierarchie festlegen.
-		</openwb-base-alert>
 	</div>
 </template>
 

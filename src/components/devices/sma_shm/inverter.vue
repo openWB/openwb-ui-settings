@@ -6,6 +6,7 @@
 		</openwb-base-heading>
 		<openwb-base-text-input
 			title="Seriennummer"
+			required
 			:model-value="configuration.serials"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.serials')

@@ -1,7 +1,7 @@
 <template>
-	<div class="device-saxpower">
+	<div class="device-victron">
 		<openwb-base-heading>
-			Einstellungen für Saxpower
+			Einstellungen für Victron
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
@@ -18,7 +18,7 @@
 
 <script>
 export default {
-	name: "DeviceSaxpower",
+	name: "DeviceVictron",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

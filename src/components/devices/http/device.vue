@@ -4,21 +4,6 @@
 			Einstellungen für Http
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-text-input
-			title="IP oder Hostname"
-			subtype="host"
-			required
-			:model-value="configuration.domain"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.domain')
-			"
-		>
-			<template #help>
-				An die IP bzw. den Hostnamen kann optional ein Port angehängt
-				werden. Beispiel: "192.168.1.1:8080". Ist kein Port angegeben,
-				so wird je nach Protokoll 80 (http) bzw. 443 (https) genutzt.
-			</template>
-		</openwb-base-text-input>
 		<openwb-base-select-input
 			title="Protokoll"
 			:options="[
@@ -30,6 +15,29 @@
 				updateConfiguration($event, 'configuration.protocol')
 			"
 		/>
+		<openwb-base-text-input
+			title="IP oder Hostname"
+			subtype="host"
+			required
+			:model-value="configuration.domain"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.domain')
+			"
+		/>
+		<openwb-base-number-input
+			title="Port"
+			:min="1"
+			:max="65535"
+			:model-value="configuration.port"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.port')
+			"
+		>
+			<template #help>
+				Diese Angabe ist optional. Ist kein Port angegeben, so wird je
+				nach Protokoll der Standardport genutzt.
+			</template>
+		</openwb-base-number-input>
 	</div>
 </template>
 

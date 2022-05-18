@@ -1,30 +1,28 @@
 <template>
-	<div class="device-openwb-flex-counter">
+	<div class="device-victron-inverter">
 		<openwb-base-heading>
-			Einstellungen für openWB-Flex Zähler
+			Einstellungen für Victron Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-select-input
-			title="Zählermodell"
-			notSelected="Bitte auswählen"
-			:options="[
-				{ value: 0, text: 'MPM3PM' },
-				{ value: 1, text: 'Lovato' },
-				{ value: 2, text: 'SDM630' },
-			]"
-			:model-value="configuration.version"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.version')
-			"
-		/>
 		<openwb-base-number-input
 			title="Modbus-ID"
-			required
 			:min="1"
 			:max="255"
-			:model-value="configuration.id"
+			required
+			:model-value="configuration.modbus_id"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.id')
+				updateConfiguration($event, 'configuration.modbus_id')
+			"
+		/>
+		<openwb-base-button-group-input
+			title="MPPT"
+			:buttons="[
+				{ buttonValue: false, text: 'Nein' },
+				{ buttonValue: true, text: 'Ja' },
+			]"
+			:model-value="configuration.mppt"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.mppt')
 			"
 		/>
 	</div>
@@ -32,7 +30,7 @@
 
 <script>
 export default {
-	name: "DeviceOpenwbFlexCounter",
+	name: "DeviceVictronInverter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

@@ -4,9 +4,15 @@
 			Einstellungen für Siemens
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-alert subtype="warning">
-			ToDo: Einstellung "IP" von den Komponenten in das Gerät verschieben!
-		</openwb-base-alert>
+		<openwb-base-text-input
+			title="IP oder Hostname"
+			subtype="host"
+			required
+			:model-value="configuration.ip_address"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.ip_address')
+			"
+		/>
 	</div>
 </template>
 
