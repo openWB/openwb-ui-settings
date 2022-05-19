@@ -224,7 +224,7 @@
 							Ladeprotokoll
 						</router-link>
 						<router-link
-							to="/Logging/DailyGraph"
+							to="/Logging/DailyChart"
 							class="dropdown-item"
 							active-class="active disabled"
 						>

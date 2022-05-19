@@ -35,15 +35,43 @@
 					:collapsible="true"
 					:collapsed="true"
 				>
-					<openwb-base-number-input
-						v-for="(element, elementKey) in chartTotals"
-						:key="elementKey"
-						:title="element.label"
-						readonly
-						class="text-right"
-						unit="kWh"
-						:model-value="element.value"
-					/>
+					<openwb-base-card
+						v-for="(group, groupKey) in chartTotals"
+						:key="groupKey"
+						:title="group.label"
+						:collapsible="true"
+						:collapsed="true"
+						:subtype="getCardSubtype(groupKey)"
+					>
+						<openwb-base-heading
+							v-if="Object.keys(group).length > 2"
+						>
+							Summe
+						</openwb-base-heading>
+						<div
+							v-for="(element, elementKey) in group"
+							:key="elementKey"
+						>
+							<openwb-base-number-input
+								v-if="element.label"
+								:title="element.label"
+								readonly
+								class="text-right"
+								unit="kWh"
+								:model-value="element.value"
+							/>
+						</div>
+						<openwb-base-heading>Komponenten</openwb-base-heading>
+						<openwb-base-number-input
+							v-for="(element, elementKey) in group.components"
+							:key="elementKey"
+							:title="element.label"
+							readonly
+							class="text-right"
+							unit="kWh"
+							:model-value="element.value"
+						/>
+					</openwb-base-card>
 				</openwb-base-card>
 			</div>
 		</form>
@@ -64,7 +92,6 @@ import {
 	LineController,
 	LineElement,
 	PointElement,
-	// CategoryScale,
 	LinearScale,
 	TimeScale,
 } from "chart.js";
@@ -74,7 +101,6 @@ Chart.register(
 	LineController,
 	LineElement,
 	PointElement,
-	// CategoryScale,
 	LinearScale,
 	TimeScale,
 	ZoomPlugin
@@ -281,27 +307,38 @@ export default {
 				this.monthlyChartRequestData.month = splitDate[1];
 			},
 		},
-		commandData: {
-			get() {
-				return {
-					month:
-						this.monthlyChartRequestData.year +
-						this.monthlyChartRequestData.month,
-				};
-			},
+		commandData() {
+			return {
+				month:
+					this.monthlyChartRequestData.year +
+					this.monthlyChartRequestData.month,
+			};
 		},
-		chartDataRead: {
-			get() {
-				return this.chartDataObject != undefined;
-			},
+		chartDataRead() {
+			return this.chartDataObject != undefined;
 		},
-		chartDataHasEntries: {
-			get() {
-				return this.chartDataObject.length > 0;
-			},
+		chartDataHasEntries() {
+			return this.chartDataObject.length > 0;
 		},
 		chartTotals() {
-			var diff = {};
+			var diff = {
+				bat: {
+					label: "Speicher",
+					components: {},
+				},
+				counter: {
+					label: "Zähler",
+					components: {},
+				},
+				pv: {
+					label: "Wechselrichter",
+					components: {},
+				},
+				cp: {
+					label: "Ladepunkte",
+					components: {},
+				},
+			};
 			const keysToProcess = ["counter", "imported", "exported"];
 
 			const process = (startValue, endValue, path) => {
@@ -316,10 +353,17 @@ export default {
 							path
 						);
 					}
-					diff[path] = {
-						value: Math.floor(endValue - startValue) / 1000,
-						label: label,
-					};
+					if (keys[1] == "all") {
+						diff[keys[0]][keys[2]] = {
+							value: Math.floor(endValue - startValue) / 1000,
+							label: label,
+						};
+					} else {
+						diff[keys[0]]["components"][path] = {
+							value: Math.floor(endValue - startValue) / 1000,
+							label: label,
+						};
+					}
 				}
 			};
 
@@ -528,6 +572,25 @@ export default {
 		},
 	},
 	methods: {
+		getCardSubtype(elementKey) {
+			switch (elementKey) {
+				case "bat":
+					return "warning";
+				case "counter":
+					return "danger";
+				case "cp":
+					return "primary";
+				case "pv":
+					return "success";
+				default:
+					return "secondary";
+			}
+		},
+		getDatasetHidden(baseObject, objectKey) {
+			// ToDo
+			console.log("getDatasetHidden", baseObject, objectKey);
+			return false;
+		},
 		getDatasetLabel(baseObject, objectKey, elementKey, datasetKey) {
 			// console.log(
 			// 	"getDatasetLabel",
@@ -559,7 +622,20 @@ export default {
 						}
 						break;
 					case "cp":
-						label = "Ladepunkte (Summe)";
+						label = "Ladepunkte";
+						switch (elementKey) {
+							case "imported":
+								label += " (Ladung, Summe)";
+								break;
+							case "exported":
+								label += " (Entladung, Summe)";
+								break;
+							case "soc":
+								label += " SoC (Summe)";
+								break;
+							default:
+								label += " (Summe)";
+						}
 						break;
 				}
 			} else {
@@ -610,8 +686,16 @@ export default {
 						break;
 					case "cp":
 						label = this.$store.state.mqtt[objectTopic].name;
-						if (elementKey == "soc") {
-							label += " SoC";
+						switch (elementKey) {
+							case "imported":
+								label += " (Ladung)";
+								break;
+							case "exported":
+								label += " (Entladung)";
+								break;
+							case "soc":
+								label += " SoC";
+								break;
 						}
 						break;
 					case "ev":
@@ -675,13 +759,24 @@ export default {
 			const datasetKey = baseObject + "." + objectKey + "." + elementKey;
 			if (elementKeysToAdd.includes(elementKey)) {
 				var index = this.getDatasetIndex(datasetKey);
-				if (index == undefined) {
+				const hidden = this.getDatasetHidden(baseObject, objectKey);
+				if (index == undefined && !hidden) {
 					index = this.addDataset(
 						baseObject,
 						objectKey,
 						elementKey,
 						datasetKey
 					);
+				}
+				if (index != undefined && hidden) {
+					console.info(
+						"component hidden:",
+						baseObject,
+						objectKey,
+						elementKey,
+						index
+					);
+					this.chartDatasets.datasets.splice(index, 1);
 				}
 			}
 		},

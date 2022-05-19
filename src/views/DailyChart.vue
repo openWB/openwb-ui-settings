@@ -1,19 +1,19 @@
 <template>
-	<div class="dailyGraph">
-		<form name="dailyGraphForm">
+	<div class="dailyChart">
+		<form name="dailyChartForm">
 			<openwb-base-card title="Filter">
 				<openwb-base-text-input
 					title="Datum"
 					subtype="date"
 					min="2018-01-01"
 					:max="currentDay"
-					v-model="dailyGraphDate"
+					v-model="dailyChartDate"
 				/>
 				<template #footer>
 					<div class="row justify-content-center">
 						<openwb-base-click-button
 							class="col-4 btn-success"
-							@click="requestDailyGraph()"
+							@click="requestDailyChart()"
 						>
 							Daten anfordern
 						</openwb-base-click-button>
@@ -35,15 +35,43 @@
 					:collapsible="true"
 					:collapsed="true"
 				>
-					<openwb-base-number-input
-						v-for="(element, elementKey) in chartTotals"
-						:key="elementKey"
-						:title="element.label"
-						readonly
-						class="text-right"
-						unit="kWh"
-						:model-value="element.value"
-					/>
+					<openwb-base-card
+						v-for="(group, groupKey) in chartTotals"
+						:key="groupKey"
+						:title="group.label"
+						:collapsible="true"
+						:collapsed="true"
+						:subtype="getCardSubtype(groupKey)"
+					>
+						<openwb-base-heading
+							v-if="Object.keys(group).length > 2"
+						>
+							Summe
+						</openwb-base-heading>
+						<div
+							v-for="(element, elementKey) in group"
+							:key="elementKey"
+						>
+							<openwb-base-number-input
+								v-if="element.label"
+								:title="element.label"
+								readonly
+								class="text-right"
+								unit="kWh"
+								:model-value="element.value"
+							/>
+						</div>
+						<openwb-base-heading>Komponenten</openwb-base-heading>
+						<openwb-base-number-input
+							v-for="(element, elementKey) in group.components"
+							:key="elementKey"
+							:title="element.label"
+							readonly
+							class="text-right"
+							unit="kWh"
+							:model-value="element.value"
+						/>
+					</openwb-base-card>
 				</openwb-base-card>
 			</div>
 		</form>
@@ -64,7 +92,6 @@ import {
 	LineController,
 	LineElement,
 	PointElement,
-	// CategoryScale,
 	LinearScale,
 	TimeScale,
 } from "chart.js";
@@ -74,14 +101,13 @@ Chart.register(
 	LineController,
 	LineElement,
 	PointElement,
-	// CategoryScale,
 	LinearScale,
 	TimeScale,
 	ZoomPlugin
 );
 
 export default {
-	name: "OpenwbDailyGraph",
+	name: "OpenwbDailyChart",
 	components: { LineChart },
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
@@ -95,7 +121,7 @@ export default {
 				"openWB/vehicle/+/name",
 			],
 			currentDay: "",
-			dailyGraphRequestData: {
+			dailyChartRequestData: {
 				day: "",
 				month: "",
 				year: "",
@@ -330,30 +356,30 @@ export default {
 		};
 	},
 	computed: {
-		dailyGraphDate: {
+		dailyChartDate: {
 			get() {
 				return (
-					this.dailyGraphRequestData.year +
+					this.dailyChartRequestData.year +
 					"-" +
-					this.dailyGraphRequestData.month +
+					this.dailyChartRequestData.month +
 					"-" +
-					this.dailyGraphRequestData.day
+					this.dailyChartRequestData.day
 				);
 			},
 			set(newValue) {
 				let splitDate = newValue.split("-");
-				this.dailyGraphRequestData.year = splitDate[0];
-				this.dailyGraphRequestData.month = splitDate[1];
-				this.dailyGraphRequestData.day = splitDate[2];
+				this.dailyChartRequestData.year = splitDate[0];
+				this.dailyChartRequestData.month = splitDate[1];
+				this.dailyChartRequestData.day = splitDate[2];
 			},
 		},
 		commandData: {
 			get() {
 				return {
 					day:
-						this.dailyGraphRequestData.year +
-						this.dailyGraphRequestData.month +
-						this.dailyGraphRequestData.day,
+						this.dailyChartRequestData.year +
+						this.dailyChartRequestData.month +
+						this.dailyChartRequestData.day,
 				};
 			},
 		},
@@ -368,7 +394,24 @@ export default {
 			},
 		},
 		chartTotals() {
-			var diff = {};
+			var diff = {
+				bat: {
+					label: "Speicher",
+					components: {},
+				},
+				counter: {
+					label: "Zähler",
+					components: {},
+				},
+				pv: {
+					label: "Wechselrichter",
+					components: {},
+				},
+				cp: {
+					label: "Ladepunkte",
+					components: {},
+				},
+			};
 			const keysToProcess = ["counter", "imported", "exported"];
 
 			const process = (startValue, endValue, path) => {
@@ -383,10 +426,17 @@ export default {
 							path
 						);
 					}
-					diff[path] = {
-						value: Math.floor(endValue - startValue) / 1000,
-						label: label,
-					};
+					if (keys[1] == "all") {
+						diff[keys[0]][keys[2]] = {
+							value: Math.floor(endValue - startValue) / 1000,
+							label: label,
+						};
+					} else {
+						diff[keys[0]]["components"][path] = {
+							value: Math.floor(endValue - startValue) / 1000,
+							label: label,
+						};
+					}
 				}
 			};
 
@@ -563,7 +613,6 @@ export default {
 								}
 							);
 						});
-
 						lastRow = row;
 						return row;
 					} else {
@@ -596,6 +645,25 @@ export default {
 		},
 	},
 	methods: {
+		getCardSubtype(elementKey) {
+			switch (elementKey) {
+				case "bat":
+					return "warning";
+				case "counter":
+					return "danger";
+				case "cp":
+					return "primary";
+				case "pv":
+					return "success";
+				default:
+					return "secondary";
+			}
+		},
+		getDatasetHidden(baseObject, objectKey) {
+			// ToDo
+			console.log("getDatasetHidden", baseObject, objectKey);
+			return false;
+		},
 		getDatasetLabel(baseObject, objectKey, elementKey, datasetKey) {
 			// console.log(
 			// 	"getDatasetLabel",
@@ -764,7 +832,8 @@ export default {
 			const datasetKey = baseObject + "." + objectKey + "." + elementKey;
 			if (elementKeysToAdd.includes(elementKey)) {
 				var index = this.getDatasetIndex(datasetKey);
-				if (index == undefined) {
+				const hidden = this.getDatasetHidden(baseObject, objectKey);
+				if (index == undefined && !hidden) {
 					index = this.addDataset(
 						baseObject,
 						objectKey,
@@ -772,10 +841,20 @@ export default {
 						datasetKey
 					);
 				}
+				if (index != undefined && hidden) {
+					console.info(
+						"component hidden:",
+						baseObject,
+						objectKey,
+						elementKey,
+						index
+					);
+					this.chartDatasets.datasets.splice(index, 1);
+				}
 			}
 		},
-		requestDailyGraph() {
-			let myForm = document.forms["dailyGraphForm"];
+		requestDailyChart() {
+			let myForm = document.forms["dailyChartForm"];
 			if (!myForm.reportValidity()) {
 				console.log("form invalid");
 				return;
@@ -790,13 +869,13 @@ export default {
 	},
 	mounted() {
 		const today = new Date();
-		this.currentDay = this.dailyGraphDate =
+		this.currentDay = this.dailyChartDate =
 			today.getFullYear() +
 			"-" +
 			String(today.getMonth() + 1).padStart(2, "0") +
 			"-" +
 			String(today.getDate()).padStart(2, "0");
-		this.requestDailyGraph();
+		this.requestDailyChart();
 	},
 };
 </script>
