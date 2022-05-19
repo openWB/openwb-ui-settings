@@ -27,7 +27,14 @@
 							)
 						"
 					>
-						<template #help>Hilfetext</template>
+						<template #help>
+							Die Betriebsart "Einheitlich" entspricht dem
+							Verhalten in der Version 1.x. Alle Ladepunkte bzw.
+							Fahrzeuge werden mit dem selben Modus geladen. Bei
+							der Auswahl "Individuell" hingegen können
+							verschiedene Modi an den Ladepunkten/Fahrzeugen
+							genutzt werden.
+						</template>
 					</openwb-base-button-group-input>
 					<hr />
 					<openwb-base-button-group-input
@@ -56,7 +63,19 @@
 							)
 						"
 					>
-						<template #help>Hilfetext</template>
+						<template #help>
+							Wenn diese Option aktiviert ist, werden nicht
+							dreiphasige Ladevorgänge so geregelt, dass am
+							Netzanschlusspunkt (EVU-Zähler) die eingestellte
+							Grenze für die Schieflast nicht überschritten wird.
+							Hierfür muss der EVU-Zähler einzelne Phasenströme
+							bereitstellen! Weiterhin müssen bei den Ladepunkten
+							sowie Fahrzeugen sämtliche Angaben zur Anzahl
+							angeschlossener/unterstützter Phasen und der
+							Phasenrotation hinterlegt werden, damit der Regelung
+							bekannt ist, welcher Ladevorgang welche Phase am
+							Netzanschluss beeinflusst.
+						</template>
 					</openwb-base-button-group-input>
 					<openwb-base-range-input
 						v-if="
@@ -81,7 +100,12 @@
 							)
 						"
 					>
-						<template #help>Hilfetext</template>
+						<template #help
+							>Hiermit wird festgelegt, welche Schieflast am
+							Netzanschlusspunkt erlaubt ist. Bei Überschreitung
+							werden gezielt einzelne Ladevorgänge in der Leistung
+							begrenzt.</template
+						>
 					</openwb-base-range-input>
 				</div>
 			</openwb-base-card>

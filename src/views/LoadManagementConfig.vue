@@ -165,7 +165,7 @@
 							"
 						>
 							<template #help>
-								Relevant bei Hybridsystemen mit DC-Speicher.
+								Relevant bei Hybrid-Systemen mit DC-Speicher.
 							</template>
 						</openwb-base-number-input>
 					</openwb-base-card>
@@ -195,15 +195,18 @@
 						:labels="hierarchyLabels"
 					>
 						<template #help>
-							<pre>{{
-								JSON.stringify(
-									$store.state.mqtt[
-										"openWB/counter/get/hierarchy"
-									],
-									undefined,
-									2
-								)
-							}}</pre>
+							Durch die Anordnung der Komponenten werden
+							Abhängigkeiten abgebildet.<br />
+							An erster Stelle muss eine Zählerkomponente stehen,
+							die den Netzanschlusspunkt erfasst. Dafür kann auch
+							ein virtueller Zähler genutzt werden.<br />
+							Die weiteren Komponenten müssen hierarchisch so
+							angeordnet werden, wie sie auch physisch im
+							Stromnetz angeschlossen werden.<br />
+							Bei DC-gekoppelten Speichern sind diese hinter dem
+							zugehörigen Wechselrichter zu platzieren, damit die
+							Abhängigkeit in der Regelung berücksichtigt werden
+							kann.
 						</template>
 					</sortable-list>
 				</div>

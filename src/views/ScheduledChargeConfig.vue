@@ -28,7 +28,14 @@
 							)
 						"
 					>
-						<template #help>Hilfetext</template>
+						<template #help>
+							Hier kann eingestellt werden, ob Ladevorgänge im
+							Modus "Zielladen" mit nur einer Phase oder dem
+							möglichen Maximum in Abhängigkeit vom Ladepunkt und
+							Fahrzeug durchgeführt werden. Im Modus "Automatik"
+							entscheidet die Regelung, welche Einstellung genutzt
+							wird, um das Ziel zu erreichen.
+						</template>
 					</openwb-base-button-group-input>
 				</div>
 			</openwb-base-card>

@@ -1,7 +1,7 @@
 <template>
 	<div class="generalConfig">
 		<form name="generalConfigForm">
-			<openwb-base-card title="openWB">
+			<!-- <openwb-base-card title="openWB">
 				<openwb-base-button-group-input
 					title="openWB ist nur ein Ladepunkt"
 					:buttons="[
@@ -67,7 +67,7 @@
 						Änderungen sind möglich.
 					</template>
 				</openwb-base-select-input>
-			</openwb-base-card>
+			</openwb-base-card> -->
 			<openwb-base-card title="Hardware">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
@@ -175,7 +175,7 @@
 							</span>
 						</template>
 					</openwb-base-button-group-input>
-					<openwb-base-button-group-input
+					<!-- <openwb-base-button-group-input
 						title="Taster-Eingänge"
 						:model-value="
 							$store.state.mqtt[
@@ -217,10 +217,10 @@
 								<li>Taster 5: Pin 40 / GPIO 21</li>
 							</ul>
 						</template>
-					</openwb-base-button-group-input>
+					</openwb-base-button-group-input> -->
 				</div>
 			</openwb-base-card>
-			<openwb-base-card title="Benachrichtigungen">
+			<!-- <openwb-base-card title="Benachrichtigungen">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
 						Diese Einstellungen sind nicht verfügbar, solange sich
@@ -431,7 +431,7 @@
 						/>
 					</div>
 				</div>
-			</openwb-base-card>
+			</openwb-base-card> -->
 			<openwb-base-card title="Lade-Log">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">

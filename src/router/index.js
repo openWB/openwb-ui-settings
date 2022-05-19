@@ -246,20 +246,20 @@ const routes = [
 			),
 	},
 	{
-		path: "/Logging/DailyGraph",
-		name: "DailyGraph",
+		path: "/Logging/DailyChart",
+		name: "DailyChart",
 		meta: {
 			heading: "Tagesauswertung",
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "DailyGraph" */
-				"../views/DailyGraph.vue"
+				/* webpackChunkName: "DailyChart" */
+				"../views/DailyChart.vue"
 			),
 	},
 	{
 		path: "/Logging/MonthlyChart",
-		name: "DailyChart",
+		name: "MonthlyChart",
 		meta: {
 			heading: "Monatsauswertung",
 		},

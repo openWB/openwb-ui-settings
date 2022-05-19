@@ -193,7 +193,7 @@
 					<hr />
 					<openwb-base-heading>Hardware-Optionen</openwb-base-heading>
 					<openwb-base-button-group-input
-						title="1/3-Phasenumschaltung vorhanden"
+						title="automatische Phasenumschaltung vorhanden"
 						:buttons="[
 							{ buttonValue: false, text: 'Nein' },
 							{ buttonValue: true, text: 'Ja' },
@@ -285,7 +285,19 @@
 							Bei mehreren Ladepunkten macht es Sinn, die Phasen
 							rotierend anzuschließen, damit mehrere nicht
 							dreiphasig ladende Fahrzeuge mit optimaler Leistung
-							laden können, bevor das Lastmanagement eingreift.
+							laden können, bevor das Lastmanagement eingreift.<br />
+							Es wird vorausgesetzt, dass das Drehfeld innerhalb
+							der Installation gleich bleibt. Wenn demnach L1 des
+							Ladepunktes auf EVU L2 liegt, muss L2 des
+							Ladepunktes auf EVU L3 aufgelegt sein.<br />
+							Eine Möglichkeit, den Anschluss von L1 zu ermitteln,
+							ist eine einphasige Ladung zu starten und die
+							Phasenströme am EVU-Zähler zu beobachten. Mit einem
+							zweiphasig ladenden Fahrzeug kann danach auch der
+							Anschluss von L2 ermittelt und so das Drehfeld
+							kontrolliert werden.<br />
+							Im Zweifel bitte das Drehfeld von einer Fachkraft
+							prüfen und korrigieren lassen.
 						</template>
 					</openwb-base-button-group-input>
 				</openwb-base-card>
@@ -361,7 +373,7 @@
 						</template>
 					</openwb-base-text-input>
 					<hr />
-					<openwb-base-heading>RFID</openwb-base-heading>
+					<openwb-base-heading>Zugangskontrolle</openwb-base-heading>
 					<openwb-base-button-group-input
 						title="Freigabe mit RFID"
 						:buttons="[
@@ -390,9 +402,11 @@
 						"
 					/>
 					<hr />
-					<openwb-base-heading>Autolock</openwb-base-heading>
+					<openwb-base-heading
+						>Automatische Sperre</openwb-base-heading
+					>
 					<openwb-base-button-group-input
-						title="Autolock aktiv"
+						title="Automatische Sperre aktiv"
 						:buttons="[
 							{ buttonValue: false, text: 'Nein' },
 							{ buttonValue: true, text: 'Ja' },
@@ -424,7 +438,7 @@
 						"
 					/>
 					<openwb-base-heading>
-						Autolock Zeitpläne
+						Zeitpläne für die automatische Sperre
 						<template #actions>
 							<openwb-base-avatar
 								class="bg-success clickable"
@@ -494,7 +508,7 @@
 													autolockPlan.frequency
 														.once[0]
 											  ) +
-											  "-" +
+											  " - " +
 											  formatDate(
 													autolockPlan.frequency
 														.once[1]
