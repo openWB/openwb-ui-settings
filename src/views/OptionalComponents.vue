@@ -35,7 +35,7 @@
 					</openwb-base-alert>
 				</div>
 			</openwb-base-card>
-			<openwb-base-card title="LED-Ausgänge">
+			<!-- <openwb-base-card title="LED-Ausgänge">
 				<openwb-base-button-group-input
 					title="LED-Ausgänge aktivieren"
 					:model-value="
@@ -952,8 +952,8 @@
 						/>
 					</div>
 				</div>
-			</openwb-base-card>
-			<openwb-base-card title="Display (intern oder extern)">
+			</openwb-base-card> -->
+			<!-- <openwb-base-card title="Display (intern oder extern)">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
 						Diese Einstellungen sind nicht verfügbar, solange sich
@@ -1228,8 +1228,8 @@
 						</openwb-base-alert>
 					</div>
 				</div>
-			</openwb-base-card>
-			<openwb-base-card title="Variable Stromtarife">
+			</openwb-base-card> -->
+			<!-- <openwb-base-card title="Variable Stromtarife">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
 						Diese Einstellungen sind nicht verfügbar, solange sich
@@ -1302,7 +1302,7 @@
 						/>
 					</div>
 				</div>
-			</openwb-base-card>
+			</openwb-base-card> -->
 			<openwb-base-submit-buttons
 				formName="optionalComponentsForm"
 				@save="$emit('save')"
