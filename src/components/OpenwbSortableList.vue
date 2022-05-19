@@ -62,8 +62,7 @@ export default {
 				return this.modelValue;
 			},
 			set(newValue) {
-				// this will never happen, as draggable component does not emit updates!
-				console.log("update in sortableList", newValue);
+				console.debug("update in sortableList", newValue);
 				this.$emit("update:modelValue", newValue);
 			},
 		},
