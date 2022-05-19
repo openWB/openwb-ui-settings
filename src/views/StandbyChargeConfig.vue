@@ -27,7 +27,12 @@
 							)
 						"
 					>
-						<template #help>Hilfetext</template>
+						<template #help>
+							Hier kann eingestellt werden, ob Ladevorgänge im
+							Modus "Standby" mit nur einer Phase oder dem
+							möglichen Maximum in Abhängigkeit vom Ladepunkt und
+							Fahrzeug durchgeführt werden.
+						</template>
 					</openwb-base-button-group-input>
 				</div>
 			</openwb-base-card>

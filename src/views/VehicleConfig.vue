@@ -789,7 +789,11 @@
 							"
 						>
 							<template #help>
-								ToDo: Beschreibung ergänzen!
+								Hier kann ein Mindeststrom eingestellt werden,
+								mit dem unabhängig vom vorhandenen Überschuss
+								immer geladen wird. Diese Einstellung entspricht
+								weitestgehend dem Lademodus "Min+PV" der Version
+								1.x.
 							</template>
 						</openwb-base-range-input>
 						<openwb-base-range-input
@@ -909,6 +913,12 @@
 								)
 							"
 						>
+							<template #help>
+								Wird der eingestellte Mindest-SoC
+								unterschritten, dann wird unabhängig vom
+								Überschuss ein Ladevorgang mit dem hier
+								festgelegten Strom statt.
+							</template>
 						</openwb-base-range-input>
 						<hr />
 						<openwb-base-heading>

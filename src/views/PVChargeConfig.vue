@@ -19,7 +19,14 @@
 						:model-value="calculateControlMode()"
 						@update:model-value="setControlMode($event)"
 					>
-						<template #help>Hilfetext</template>
+						<template #help>
+							Mit dieser Einstellung wird der angestrebte
+							Regelbereich festgelegt. "Einspeisung" und "Bezug"
+							definieren einen Bereich mit minimaler Einspeisung
+							(-230W, 0W) bzw. minimalem Netzbezug (0W, 230W). Mit
+							der Auswahl "individuell" kann ein eigener
+							Regelbereich definiert werden.
+						</template>
 					</openwb-base-button-group-input>
 					<openwb-base-number-input
 						v-if="calculateControlMode() === 'individual'"
@@ -81,13 +88,19 @@
 						"
 					>
 						<template #help>
-							Parameter für den 70%-Regelpunkt im Modus PV-Laden.
-							Dieser Parameter ist nur wirksam bei der Einstellung
-							"70%-Regelung eingeschaltet". Der hier eingetragene
-							Wert sollte zur optimalen Eigenverbrauchssteuerung
-							70% der installierten Generatorleistung betragen.<br />
-							Die Nutzung dieser Option ergibt nur Sinn wenn ein
-							Wechselrichter und Smart-Meter verbaut ist welches
+							Hier ist die vorgeschriebene Einspeisegrenze
+							anzugeben. Wird die Option "Einspeisegrenze
+							beachten" für ein Ladeprofil eingeschaltet, dann
+							wird der Regelpunkt auf diesen Wert verschoben. Die
+							Ladung startet demnach erst, wenn der hier
+							hinterlegte Wert an Einspeisung erreicht wird. Der
+							hier eingetragene Wert sollte zur optimalen
+							Eigenverbrauchssteuerung einige hundert Watt unter
+							der im Wechselrichter hinterlegten Einspeisegrenze
+							liegen, damit openWB die Ladung freigibt, bevor der
+							Wechselrichter begrenzt wird.<br />
+							Die Nutzung dieser Option ergibt nur Sinn, wenn ein
+							Wechselrichter mit Smart-Meter verbaut ist welches
 							eine dynamische Begrenzung der Einspeiseleistung
 							bietet.
 						</template>
@@ -110,7 +123,11 @@
 							)
 						"
 					>
-						<template #help>Hilfetext</template>
+						<template #help>
+							Ist in Abhängigkeit von dem gesetzten Regelbereich
+							mehr als die hier hinterlegte Leistung (pro Phase)
+							verfügbar, dann wird der Ladevorgang gestartet.
+						</template>
 					</openwb-base-number-input>
 					<openwb-base-number-input
 						title="Einschaltverzögerung"
@@ -129,7 +146,11 @@
 							)
 						"
 					>
-						<template #help>Hilfetext</template>
+						<template #help>
+							Die Einschaltschwelle muss für die hier angegebene
+							Zeit dauerhaft überschritten werden, bevor ein
+							Ladevorgang gestartet wird.
+						</template>
 					</openwb-base-number-input>
 					<hr />
 					<openwb-base-number-input
@@ -149,7 +170,12 @@
 							)
 						"
 					>
-						<template #help>Hilfetext</template>
+						<template #help>
+							Wird der Regelbereich um diese Leistung
+							unterschritten, so wird der Ladevorgang beendet oder
+							(falls möglich) auf eine einphasige Ladung
+							umgeschaltet.
+						</template>
 					</openwb-base-number-input>
 					<openwb-base-number-input
 						title="Abschaltverzögerung"
@@ -168,7 +194,11 @@
 							)
 						"
 					>
-						<template #help>Hilfetext</template>
+						<template #help>
+							Die Abschaltschwelle muss für die hier angegebene
+							Zeit dauerhaft unterschritten werden, bevor ein
+							Ladevorgang beendet wird.
+						</template>
 					</openwb-base-number-input>
 				</div>
 			</openwb-base-card>
@@ -199,7 +229,15 @@
 							)
 						"
 					>
-						<template #help>Hilfetext</template>
+						<template #help>
+							Hier kann eingestellt werden, ob Ladevorgänge im
+							Modus "Zielladen" mit nur einer Phase oder dem
+							möglichen Maximum in Abhängigkeit vom Ladepunkt und
+							Fahrzeug durchgeführt werden. Im Modus "Automatik"
+							entscheidet die Regelung, welche Einstellung genutzt
+							wird, um den verfügbaren Überschuss in die Fahrzeuge
+							zu laden.
+						</template>
 					</openwb-base-button-group-input>
 					<openwb-base-range-input
 						v-if="
@@ -224,7 +262,18 @@
 							)
 						"
 					>
-						<template #help>Hilfetext</template>
+						<template #help>
+							Um zu viele Umschaltungen zu vermeiden, wird Anhand
+							dieses Wertes definiert, wann die Umschaltung
+							erfolgen soll. Ist für durchgehend x Minuten die
+							Maximalstromstärke erreicht, wird auf mehrphasige
+							Ladung umgestellt. Ist die Ladung nur für ein
+							Intervall unterhalb der Maximalstromstärke, beginnt
+							das Intervall für die Umschaltung erneut. Ist die
+							Ladung im mehrphasigen Modus für 16 - x Minuten auf
+							der Minimalstromstärke, wird wieder auf einphasige
+							Ladung gewechselt.
+						</template>
 					</openwb-base-range-input>
 				</div>
 			</openwb-base-card>
@@ -254,7 +303,16 @@
 							)
 						"
 					>
-						<template #help>Hilfetext</template>
+						<template #help>
+							Bei der Auswahl "Fahrzeuge" wird auch eventuell
+							vorhandene Ladeleistung eines Speichers für die
+							verfügbare Ladeleistung berücksichtigt. Im Modus
+							"Speicher" hingegen wird dieser nicht in seiner
+							Ladeleistung begrenzt.<br />
+							Beide Modi lassen sich mit den zusätzlichen
+							Einstellungen an die eigenen Bedürfnisse anpassen,
+							sodass auch ein Mischbetrieb möglich ist.
+						</template>
 					</openwb-base-button-group-input>
 					<openwb-base-range-input
 						title="Einschalt-SoC"
@@ -357,7 +415,7 @@
 							)
 						"
 					>
-						<template #help>Zahl mit Einheit</template>
+						<template #help>Hilfetext</template>
 					</openwb-base-number-input>
 					<openwb-base-number-input
 						title="Erlaubte Entladeleistung"
@@ -376,7 +434,7 @@
 							)
 						"
 					>
-						<template #help>Zahl mit Einheit</template>
+						<template #help>Hilfetext</template>
 					</openwb-base-number-input>
 					<openwb-base-range-input
 						title="Minimaler Entlade-SoC"
@@ -419,7 +477,10 @@
 							)
 						"
 					>
-						<template #help>Hilfetext</template>
+						<template #help>
+							Ein vorhandener Speicher wird höchstens bis zu dem
+							hier eingestellten Ladestand entladen.
+						</template>
 					</openwb-base-range-input>
 				</div>
 			</openwb-base-card>
