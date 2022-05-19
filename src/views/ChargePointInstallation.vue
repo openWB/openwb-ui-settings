@@ -494,7 +494,7 @@
 													autolockPlan.frequency
 														.once[0]
 											  ) +
-											  "-" +
+											  " - " +
 											  formatDate(
 													autolockPlan.frequency
 														.once[1]

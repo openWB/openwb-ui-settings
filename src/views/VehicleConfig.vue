@@ -1246,7 +1246,7 @@
 												: formatDate(
 														plan.frequency.once[0]
 												  ) +
-												  "-" +
+												  " - " +
 												  formatDate(
 														plan.frequency.once[1]
 												  )
