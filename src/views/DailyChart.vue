@@ -38,11 +38,22 @@
 					<openwb-base-card
 						v-for="(group, groupKey) in chartTotals"
 						:key="groupKey"
-						:title="group.label"
 						:collapsible="true"
 						:collapsed="true"
 						:subtype="getCardSubtype(groupKey)"
 					>
+						<template #header>
+							<openwb-base-avatar
+								v-if="group.label.icon"
+								class="bg-dark"
+							>
+								<font-awesome-icon
+									fixed-width
+									:icon="group.label.icon"
+								/>
+							</openwb-base-avatar>
+							{{ group.label.text }}
+						</template>
 						<openwb-base-heading
 							v-if="Object.keys(group).length > 2"
 						>
@@ -79,6 +90,17 @@
 </template>
 
 <script>
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+	faCarBattery as fasCarBattery,
+	faTachometerAlt as fasTachometerAlt,
+	faSolarPanel as fasSolarPanel,
+	faChargingStation as fasChargingStation,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(fasCarBattery, fasTachometerAlt, fasSolarPanel, fasChargingStation);
+
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 import { LineChart } from "vue-chart-3";
@@ -108,7 +130,7 @@ Chart.register(
 
 export default {
 	name: "OpenwbDailyChart",
-	components: { LineChart },
+	components: { LineChart, FontAwesomeIcon },
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
 	data() {
@@ -373,42 +395,48 @@ export default {
 				this.dailyChartRequestData.day = splitDate[2];
 			},
 		},
-		commandData: {
-			get() {
-				return {
-					day:
-						this.dailyChartRequestData.year +
-						this.dailyChartRequestData.month +
-						this.dailyChartRequestData.day,
-				};
-			},
+		commandData() {
+			return {
+				day:
+					this.dailyChartRequestData.year +
+					this.dailyChartRequestData.month +
+					this.dailyChartRequestData.day,
+			};
 		},
-		chartDataRead: {
-			get() {
-				return this.chartDataObject != undefined;
-			},
+		chartDataRead() {
+			return this.chartDataObject != undefined;
 		},
-		chartDataHasEntries: {
-			get() {
-				return this.chartDataObject.length > 0;
-			},
+		chartDataHasEntries() {
+			return this.chartDataObject.length > 0;
 		},
 		chartTotals() {
 			var diff = {
 				bat: {
-					label: "Speicher",
+					label: {
+						text: "Speicher",
+						icon: ["fas", "car-battery"],
+					},
 					components: {},
 				},
 				counter: {
-					label: "Zähler",
+					label: {
+						text: "Zähler",
+						icon: ["fas", "tachometer-alt"],
+					},
 					components: {},
 				},
 				pv: {
-					label: "Wechselrichter",
+					label: {
+						text: "Wechselrichter",
+						icon: ["fas", "solar-panel"],
+					},
 					components: {},
 				},
 				cp: {
-					label: "Ladepunkte",
+					label: {
+						text: "Ladepunkte",
+						icon: ["fas", "charging-station"],
+					},
 					components: {},
 				},
 			};
