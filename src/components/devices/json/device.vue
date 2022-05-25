@@ -8,9 +8,9 @@
 			title="URL"
 			subtype="host"
 			required
-			:model-value="configuration.ip_address"
+			:model-value="configuration.url"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.ip_address')
+				updateConfiguration($event, 'configuration.url')
 			"
 		>
 			<template #help>

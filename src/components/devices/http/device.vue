@@ -4,40 +4,21 @@
 			Einstellungen für Http
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-select-input
-			title="Protokoll"
-			:options="[
-				{ value: 'http', text: 'Unverschlüsselt (http://)' },
-				{ value: 'https', text: 'Verschlüsselt (https://)' },
-			]"
-			:model-value="configuration.protocol"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.protocol')
-			"
-		/>
 		<openwb-base-text-input
-			title="IP oder Hostname"
+			title="URL"
 			subtype="host"
 			required
-			:model-value="configuration.domain"
+			:model-value="configuration.url"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.domain')
-			"
-		/>
-		<openwb-base-number-input
-			title="Port"
-			:min="1"
-			:max="65535"
-			:model-value="configuration.port"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.port')
+				updateConfiguration($event, 'configuration.url')
 			"
 		>
 			<template #help>
-				Diese Angabe ist optional. Ist kein Port angegeben, so wird je
-				nach Protokoll der Standardport genutzt.
+				Es wird eine komplette URL erwartet mit Angaben zum Protokoll,
+				IP oder Hostnamen, optional einem Port und einem Pfad.<br />
+				Beispiel: "http://192.168.1.1:8080/json?data=1"
 			</template>
-		</openwb-base-number-input>
+		</openwb-base-text-input>
 	</div>
 </template>
 
