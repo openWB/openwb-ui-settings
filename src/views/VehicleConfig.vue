@@ -184,21 +184,33 @@
 							"
 						/>
 						<hr />
-						<openwb-base-array-input
-							title="Zugeordnete Tags"
-							:model-value="
+						<div
+							v-if="
 								$store.state.mqtt[
-									'openWB/vehicle/' + vehicleId + '/tag_id'
-								]
+									'openWB/optional/rfid/active'
+								] === true
 							"
-							@update:model-value="
-								updateState(
-									'openWB/vehicle/' + vehicleId + '/tag_id',
-									$event
-								)
-							"
-						/>
-						<hr />
+						>
+							<openwb-base-array-input
+								title="Zugeordnete Tags"
+								:model-value="
+									$store.state.mqtt[
+										'openWB/vehicle/' +
+											vehicleId +
+											'/tag_id'
+									]
+								"
+								@update:model-value="
+									updateState(
+										'openWB/vehicle/' +
+											vehicleId +
+											'/tag_id',
+										$event
+									)
+								"
+							/>
+							<hr />
+						</div>
 						<openwb-base-select-input
 							class="mb-2"
 							title="SoC-Modul"
@@ -607,7 +619,7 @@
 							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-button-group-input
-							title="Automatische Sperre"
+							title="Sperre nach Abstecken"
 							:buttons="[
 								{
 									buttonValue: false,
@@ -1532,6 +1544,7 @@ export default {
 		return {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
+				"openWB/optional/rfid/active",
 				"openWB/vehicle/template/ev_template/+",
 				"openWB/vehicle/template/charge_template/+",
 				"openWB/vehicle/template/charge_template/+/chargemode/scheduled_charging/plans/+",

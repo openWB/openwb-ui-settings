@@ -373,35 +373,44 @@
 						</template>
 					</openwb-base-text-input>
 					<hr />
-					<openwb-base-heading>Zugangskontrolle</openwb-base-heading>
-					<openwb-base-button-group-input
-						title="Freigabe mit RFID"
-						:buttons="[
-							{ buttonValue: false, text: 'Nein' },
-							{ buttonValue: true, text: 'Ja' },
-						]"
-						:model-value="chargePointTemplate.rfid_enabling"
-						@update:model-value="
-							updateState(
-								chargePointTemplateKey,
-								$event,
-								'rfid_enabling'
-							)
+					<div
+						v-if="
+							$store.state.mqtt['openWB/optional/rfid/active'] ===
+							true
 						"
-					/>
-					<openwb-base-array-input
-						title="Zugeordnete Tags"
-						noElementsMessage="Keine Tags zugeordnet."
-						:model-value="chargePointTemplate.valid_tags"
-						@update:model-value="
-							updateState(
-								chargePointTemplateKey,
-								$event,
-								'valid_tags'
-							)
-						"
-					/>
-					<hr />
+					>
+						<openwb-base-heading>
+							Zugangskontrolle
+						</openwb-base-heading>
+						<openwb-base-button-group-input
+							title="Freigabe mit RFID"
+							:buttons="[
+								{ buttonValue: false, text: 'Nein' },
+								{ buttonValue: true, text: 'Ja' },
+							]"
+							:model-value="chargePointTemplate.rfid_enabling"
+							@update:model-value="
+								updateState(
+									chargePointTemplateKey,
+									$event,
+									'rfid_enabling'
+								)
+							"
+						/>
+						<openwb-base-array-input
+							title="Zugeordnete Tags"
+							noElementsMessage="Keine Tags zugeordnet."
+							:model-value="chargePointTemplate.valid_tags"
+							@update:model-value="
+								updateState(
+									chargePointTemplateKey,
+									$event,
+									'valid_tags'
+								)
+							"
+						/>
+						<hr />
+					</div>
 					<openwb-base-heading
 						>Automatische Sperre</openwb-base-heading
 					>
@@ -736,6 +745,7 @@ export default {
 		return {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
+				"openWB/optional/rfid/active",
 				"openWB/chargepoint/+/config",
 				"openWB/chargepoint/template/+",
 				"openWB/chargepoint/template/+/autolock/+",
