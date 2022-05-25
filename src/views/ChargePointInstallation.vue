@@ -148,7 +148,7 @@
 						"
 					/>
 					<hr />
-					<openwb-base-text-input
+					<!-- <openwb-base-text-input
 						title="Verbindungsmodul"
 						subtype="text"
 						:model-value="
@@ -190,7 +190,7 @@
 						"
 						disabled
 					/>
-					<hr />
+					<hr /> -->
 					<openwb-base-heading>Hardware-Optionen</openwb-base-heading>
 					<openwb-base-button-group-input
 						title="automatische Phasenumschaltung vorhanden"
@@ -436,7 +436,16 @@
 								'autolock.wait_for_charging_end'
 							)
 						"
-					/>
+					>
+						<template #help>
+							Wenn ein Zeitplan die automatische Sperre aktiviert,
+							werden alle Ladepunkte direkt gesperrt und laufende
+							Ladevorgänge beendet. Wird hier "Ja" ausgewählt,
+							dann werden laufende Ladevorgänge nicht beendet, und
+							diese Ladepunkte erst nach abgeschlossener Ladung
+							gesperrt.
+						</template>
+					</openwb-base-button-group-input>
 					<openwb-base-heading>
 						Zeitpläne für die automatische Sperre
 						<template #actions>
