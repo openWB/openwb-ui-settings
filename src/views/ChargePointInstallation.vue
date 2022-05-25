@@ -162,9 +162,9 @@
 							)
 						"
 						disabled
-					/>
+					/> -->
 					<openwb-base-text-input
-						title="Verbindung"
+						title="Verbindungseinstellungen"
 						subtype="json"
 						:model-value="
 							installedChargePoint.connection_module.configuration
@@ -177,7 +177,7 @@
 							)
 						"
 					/>
-					<openwb-base-text-input
+					<!-- <openwb-base-text-input
 						title="Leistungsmodul"
 						subtype="text"
 						:model-value="installedChargePoint.power_module.type"
@@ -189,8 +189,8 @@
 							)
 						"
 						disabled
-					/>
-					<hr /> -->
+					/> -->
+					<hr />
 					<openwb-base-heading>Hardware-Optionen</openwb-base-heading>
 					<openwb-base-button-group-input
 						title="automatische Phasenumschaltung vorhanden"
