@@ -148,7 +148,7 @@
 						"
 					/>
 					<hr />
-					<openwb-base-text-input
+					<!-- <openwb-base-text-input
 						title="Verbindungsmodul"
 						subtype="text"
 						:model-value="
@@ -162,9 +162,9 @@
 							)
 						"
 						disabled
-					/>
+					/> -->
 					<openwb-base-text-input
-						title="Verbindung"
+						title="Verbindungseinstellungen"
 						subtype="json"
 						:model-value="
 							installedChargePoint.connection_module.configuration
@@ -177,7 +177,7 @@
 							)
 						"
 					/>
-					<openwb-base-text-input
+					<!-- <openwb-base-text-input
 						title="Leistungsmodul"
 						subtype="text"
 						:model-value="installedChargePoint.power_module.type"
@@ -189,7 +189,7 @@
 							)
 						"
 						disabled
-					/>
+					/> -->
 					<hr />
 					<openwb-base-heading>Hardware-Optionen</openwb-base-heading>
 					<openwb-base-button-group-input
@@ -373,35 +373,44 @@
 						</template>
 					</openwb-base-text-input>
 					<hr />
-					<openwb-base-heading>Zugangskontrolle</openwb-base-heading>
-					<openwb-base-button-group-input
-						title="Freigabe mit RFID"
-						:buttons="[
-							{ buttonValue: false, text: 'Nein' },
-							{ buttonValue: true, text: 'Ja' },
-						]"
-						:model-value="chargePointTemplate.rfid_enabling"
-						@update:model-value="
-							updateState(
-								chargePointTemplateKey,
-								$event,
-								'rfid_enabling'
-							)
+					<div
+						v-if="
+							$store.state.mqtt['openWB/optional/rfid/active'] ===
+							true
 						"
-					/>
-					<openwb-base-array-input
-						title="Zugeordnete Tags"
-						noElementsMessage="Keine Tags zugeordnet."
-						:model-value="chargePointTemplate.valid_tags"
-						@update:model-value="
-							updateState(
-								chargePointTemplateKey,
-								$event,
-								'valid_tags'
-							)
-						"
-					/>
-					<hr />
+					>
+						<openwb-base-heading>
+							Zugangskontrolle
+						</openwb-base-heading>
+						<openwb-base-button-group-input
+							title="Freigabe mit RFID"
+							:buttons="[
+								{ buttonValue: false, text: 'Nein' },
+								{ buttonValue: true, text: 'Ja' },
+							]"
+							:model-value="chargePointTemplate.rfid_enabling"
+							@update:model-value="
+								updateState(
+									chargePointTemplateKey,
+									$event,
+									'rfid_enabling'
+								)
+							"
+						/>
+						<openwb-base-array-input
+							title="Zugeordnete Tags"
+							noElementsMessage="Keine Tags zugeordnet."
+							:model-value="chargePointTemplate.valid_tags"
+							@update:model-value="
+								updateState(
+									chargePointTemplateKey,
+									$event,
+									'valid_tags'
+								)
+							"
+						/>
+						<hr />
+					</div>
 					<openwb-base-heading
 						>Automatische Sperre</openwb-base-heading
 					>
@@ -436,7 +445,16 @@
 								'autolock.wait_for_charging_end'
 							)
 						"
-					/>
+					>
+						<template #help>
+							Wenn ein Zeitplan die automatische Sperre aktiviert,
+							werden alle Ladepunkte direkt gesperrt und laufende
+							Ladevorgänge beendet. Wird hier "Ja" ausgewählt,
+							dann werden laufende Ladevorgänge nicht beendet, und
+							diese Ladepunkte erst nach abgeschlossener Ladung
+							gesperrt.
+						</template>
+					</openwb-base-button-group-input>
 					<openwb-base-heading>
 						Zeitpläne für die automatische Sperre
 						<template #actions>
@@ -727,6 +745,7 @@ export default {
 		return {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
+				"openWB/optional/rfid/active",
 				"openWB/chargepoint/+/config",
 				"openWB/chargepoint/template/+",
 				"openWB/chargepoint/template/+/autolock/+",
