@@ -920,6 +920,31 @@
 								festgelegten Strom statt.
 							</template>
 						</openwb-base-range-input>
+						<openwb-base-button-group-input
+							title="Einspeisegrenze beachten"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Nein',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'Ja',
+									class: 'btn-outline-success',
+								},
+							]"
+							:model-value="
+								template.chargemode.pv_charging.feed_in_limit
+							"
+							@update:model-value="
+								updateState(
+									templateKey,
+									$event,
+									'chargemode.pv_charging.feed_in_limit'
+								)
+							"
+						/>
 						<hr />
 						<openwb-base-heading>
 							Zielladen
@@ -1100,7 +1125,7 @@
 								title="Ziel-Energiemenge"
 								unit="Wh"
 								:min="1000"
-								:step="1000"
+								:step="500"
 								:model-value="plan.limit.amount"
 								@update:model-value="
 									updateState(planKey, $event, 'limit.amount')
