@@ -6,7 +6,7 @@
 		</openwb-base-heading>
 		<openwb-base-text-input
 			title="URL"
-			subtype="host"
+			subtype="url"
 			required
 			:model-value="configuration.url"
 			@update:model-value="
@@ -16,7 +16,7 @@
 			<template #help>
 				Es wird eine komplette URL erwartet mit Angaben zum Protokoll,
 				IP oder Hostnamen, optional einem Port und einem Pfad.<br />
-				Beispiel: "http://192.168.1.1:8080/json?data=1"
+				Beispiel: http://192.168.1.1:8080/json?data=1
 			</template>
 		</openwb-base-text-input>
 	</div>
