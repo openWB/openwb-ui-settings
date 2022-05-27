@@ -5,8 +5,8 @@
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
-			title="URL"
-			subtype="host"
+			title="Server-URL"
+			subtype="url"
 			required
 			:model-value="configuration.url"
 			@update:model-value="
@@ -14,9 +14,10 @@
 			"
 		>
 			<template #help>
-				Es wird eine komplette URL erwartet mit Angaben zum Protokoll,
-				IP oder Hostnamen, optional einem Port und einem Pfad.<br />
-				Beispiel: "http://192.168.1.1:8080/json?data=1"
+				Hier sind die Verbindungsangaben für den Http-Server
+				einzutragen. Der Pfad für die einzelnen Daten wird in der
+				Komponente hinterlegt.<br />
+				Beispiel: http://mein.server:8080
 			</template>
 		</openwb-base-text-input>
 	</div>
