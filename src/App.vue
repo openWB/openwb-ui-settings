@@ -256,4 +256,16 @@ export default {
 .container[role="main"] {
 	padding: 60px 15px 30px;
 }
+
+/* Chrome, Safari, Edge, Opera */
+input[readonly]::-webkit-outer-spin-button,
+input[readonly]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Firefox */
+input[readonly][type=number] {
+	-moz-appearance: textfield;
+}
 </style>
