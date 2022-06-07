@@ -45,7 +45,7 @@
 					</ul>
 				</li>
 				<li>
-					von openWB erwartete Topics
+					von openWB zwingend erwartete Topics
 					<ul>
 						<li>
 							<openwb-base-copy-to-clipboard
@@ -118,7 +118,11 @@
 							><br />
 							Geladene Energie in Wh, mit Nachkommastellen
 							(Float), nur positiv<br />
-							Beispiel: <span class="text-info">123.45</span>
+							Wird dieses Topic nicht vom Ladepunkt gesendet, so
+							wird intern ein Zählerstand anhand der Leistung
+							simuliert.<br />
+							Beispiel:
+							<span class="text-info">123.45</span>
 						</li>
 						<li>
 							<openwb-base-copy-to-clipboard
@@ -131,6 +135,9 @@
 							><br />
 							Entladene Energie in Wh, mit Nachkommastellen
 							(Float), nur positiv<br />
+							Wird dieses Topic nicht vom Ladepunkt gesendet, so
+							wird intern ein Zählerstand anhand der Leistung
+							simuliert.<br />
 							Beispiel: <span class="text-info">123.45</span>
 						</li>
 						<li>
@@ -144,6 +151,8 @@
 							><br />
 							Aktuelle Phasenspannungen des Ladepunktes, Array mit
 							drei Zahlen (Float), nur positiv.<br />
+							Die Spannungen werden nicht verarbeitet, sondern
+							lediglich im Status angezeigt.<br />
 							Beispiel:
 							<span class="text-info"
 								>[230.12,231.08,232.54]</span
@@ -161,6 +170,8 @@
 							Aktuelle Leistungsfaktoren des Ladepunktes, Array
 							mit drei Zahlen (Float), Wertebereich von -1 bis
 							1.<br />
+							Die Leistungsfaktoren werden nicht verarbeitet,
+							sondern lediglich im Status angezeigt.<br />
 							Beispiel:
 							<span class="text-info">[-0.87,0.96,1.0]</span>
 						</li>
