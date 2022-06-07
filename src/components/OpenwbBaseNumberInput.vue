@@ -94,4 +94,20 @@ input.invalid,
 input:invalid {
 	background-color: pink;
 }
+
+/* hide spinner buttons if input element is readonly or disabled */
+/* Chrome, Safari, Edge, Opera */
+input[readonly]::-webkit-outer-spin-button,
+input[readonly]::-webkit-inner-spin-button,
+input[disabled]::-webkit-outer-spin-button,
+input[disabled]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Firefox */
+input[readonly][type="number"],
+input[disabled][type="number"] {
+	-moz-appearance: textfield;
+}
 </style>
