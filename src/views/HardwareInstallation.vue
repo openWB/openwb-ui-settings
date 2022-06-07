@@ -254,7 +254,7 @@ library.add(fasPlus, fasNetworkWired, fasMicrochip, fasTrash);
 
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
-import OpenwbConfigProxy from "@/components/OpenwbConfigProxy.vue";
+import OpenwbConfigProxy from "@/components/devices/OpenwbConfigProxy.vue";
 
 export default {
 	name: "OpenwbHardwareInstallation",
@@ -390,7 +390,7 @@ export default {
 			return myDevice.component;
 		},
 		updateConfiguration(key, event) {
-			console.debug("updateConfiguration", event);
+			console.debug("updateConfiguration", key, event);
 			this.updateState(key, event.value, event.object);
 		},
 	},

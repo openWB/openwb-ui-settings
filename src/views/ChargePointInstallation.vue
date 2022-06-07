@@ -140,43 +140,20 @@
 							)
 						"
 					/>
-					<openwb-base-text-input
-						title="Ladepunkt-Typ"
-						readonly
-						:model-value="
+					<hr />
+					<openwb-charge-point-proxy
+						:chargePointId="installedChargePoint.id"
+						:chargePointType="
 							$store.state.mqtt[installedChargePointKey].type
+						"
+						:configuration="
+							installedChargePoint.connection_module.configuration
+						"
+						@update:configuration="
+							updateConfiguration(installedChargePointKey, $event)
 						"
 					/>
 					<hr />
-					<!-- <openwb-base-text-input
-						title="Verbindungsmodul"
-						subtype="text"
-						:model-value="
-							installedChargePoint.connection_module.type
-						"
-						@update:model-value="
-							updateState(
-								installedChargePointKey,
-								$event,
-								'connection_module.type'
-							)
-						"
-						disabled
-					/> -->
-					<openwb-base-text-input
-						title="Verbindungseinstellungen"
-						subtype="json"
-						:model-value="
-							installedChargePoint.connection_module.configuration
-						"
-						@update:model-value="
-							updateState(
-								installedChargePointKey,
-								$event,
-								'connection_module.configuration'
-							)
-						"
-					/>
 					<!-- <openwb-base-text-input
 						title="Leistungsmodul"
 						subtype="text"
@@ -189,8 +166,8 @@
 							)
 						"
 						disabled
-					/> -->
-					<hr />
+					/>
+					<hr /> -->
 					<openwb-base-heading>Hardware-Optionen</openwb-base-heading>
 					<openwb-base-button-group-input
 						title="automatische Phasenumschaltung vorhanden"
@@ -734,12 +711,15 @@ library.add(fasPlus, fasTrash, fasCalendarDay, fasCalendarAlt, fasCalendarWeek);
 
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
+import OpenwbChargePointProxy from "@/components/charge_points/OpenwbChargePointProxy.vue";
+
 export default {
 	name: "OpenwbChargePointInstallation",
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,
+		OpenwbChargePointProxy,
 	},
 	data() {
 		return {
@@ -948,6 +928,10 @@ export default {
 					"/autolock/+"
 			);
 			return result;
+		},
+		updateConfiguration(key, event) {
+			console.debug("updateConfiguration", key, event);
+			this.updateState(key, event.value, event.object);
 		},
 	},
 };
