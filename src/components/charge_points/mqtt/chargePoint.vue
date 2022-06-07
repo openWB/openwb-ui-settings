@@ -1,0 +1,202 @@
+<template>
+	<div class="charge-point-mqtt">
+		<openwb-base-heading>
+			Einstellungen für Ladepunkt MQTT
+			<span class="small">(Modul: {{ $options.name }})</span>
+		</openwb-base-heading>
+		<openwb-base-alert subtype="info">
+			Das MQTT Modul stellt keine aktive Verbindung her, sondern erwartet,
+			dass die Daten von speziellen Topics im Broker gelesen bzw.
+			geschrieben werden.<br />
+			Alle Daten werden als gültiges JSON gesendet und auch so erwartet!
+			Zahlen mit Nachkommastellen (Float) verwenden einen Punkt als
+			Dezimaltrenner (internationales Format).
+			<ol>
+				<li>
+					von openWB gesendete Topics
+					<ul>
+						<li>
+							<openwb-base-copy-to-clipboard
+								class="text-info"
+								tooltip="Topic kopieren"
+							>
+								openWB/chargepoint/{{
+									chargePointId
+								}}/set/current</openwb-base-copy-to-clipboard
+							><br />
+							Sollwert des Ladestroms, mit Nachkommastellen
+							(Float), positiv (laden) oder negativ (entladen,
+							falls vom Ladepunkt unterstützt).<br />
+							Beispiel: <span class="text-info">12.34</span>
+						</li>
+						<li>
+							<openwb-base-copy-to-clipboard
+								class="text-info"
+								tooltip="Topic kopieren"
+							>
+								openWB/chargepoint/{{
+									chargePointId
+								}}/set/phases_to_use</openwb-base-copy-to-clipboard
+							><br />
+							Sollwert für die Anzahl Phasen ans Ganzzahl
+							(Integer). Mögliche Werte: 1 oder 3<br />
+							Beispiel: <span class="text-info">1</span>
+						</li>
+					</ul>
+				</li>
+				<li>
+					von openWB erwartete Topics
+					<ul>
+						<li>
+							<openwb-base-copy-to-clipboard
+								class="text-info"
+								tooltip="Topic kopieren"
+							>
+								openWB/set/chargepoint/{{
+									chargePointId
+								}}/get/currents</openwb-base-copy-to-clipboard
+							><br />
+							Aktuelle Phasenströme des Ladepunktes, Array mit
+							drei Zahlen (Float), positiv (laden) oder negativ
+							(entladen, falls vom Ladepunkt unterstützt).<br />
+							Beispiel:
+							<span class="text-info">[6.78,6.89,6.94]</span>
+						</li>
+						<li>
+							<openwb-base-copy-to-clipboard
+								class="text-info"
+								tooltip="Topic kopieren"
+							>
+								openWB/set/chargepoint/{{
+									chargePointId
+								}}/get/power</openwb-base-copy-to-clipboard
+							><br />
+							Leistung in Watt, mit Nachkommastellen (Float),
+							positiv (laden) oder negativ (entladen, falls vom
+							Ladepunkt unterstützt).<br />
+							Beispiel: <span class="text-info">123.45</span>
+						</li>
+						<li>
+							<openwb-base-copy-to-clipboard
+								class="text-info"
+								tooltip="Topic kopieren"
+							>
+								openWB/set/chargepoint/{{
+									chargePointId
+								}}/get/plug_state</openwb-base-copy-to-clipboard
+							><br />
+							Zeigt an, ob aktuell ein Fahrzeug angesteckt ist,
+							Wahrheitswert (Bool).<br />
+							Beispiel: <span class="text-info">true</span>
+						</li>
+						<li>
+							<openwb-base-copy-to-clipboard
+								class="text-info"
+								tooltip="Topic kopieren"
+							>
+								openWB/set/chargepoint/{{
+									chargePointId
+								}}/get/charge_state</openwb-base-copy-to-clipboard
+							><br />
+							Zeigt an, ob ein Ladevorgang aktiv ist,
+							Wahrheitswert (Bool).<br />
+							Beispiel: <span class="text-info">true</span>
+						</li>
+					</ul>
+				</li>
+				<li>
+					optionale Topics
+					<ul>
+						<li>
+							<openwb-base-copy-to-clipboard
+								class="text-info"
+								tooltip="Topic kopieren"
+							>
+								openWB/set/chargepoint/{{
+									chargePointId
+								}}/get/imported</openwb-base-copy-to-clipboard
+							><br />
+							Geladene Energie in Wh, mit Nachkommastellen
+							(Float), nur positiv<br />
+							Beispiel: <span class="text-info">123.45</span>
+						</li>
+						<li>
+							<openwb-base-copy-to-clipboard
+								class="text-info"
+								tooltip="Topic kopieren"
+							>
+								openWB/set/chargepoint/{{
+									chargePointId
+								}}/get/exported</openwb-base-copy-to-clipboard
+							><br />
+							Entladene Energie in Wh, mit Nachkommastellen
+							(Float), nur positiv<br />
+							Beispiel: <span class="text-info">123.45</span>
+						</li>
+						<li>
+							<openwb-base-copy-to-clipboard
+								class="text-info"
+								tooltip="Topic kopieren"
+							>
+								openWB/set/chargepoint/{{
+									chargePointId
+								}}/get/voltages</openwb-base-copy-to-clipboard
+							><br />
+							Aktuelle Phasenspannungen des Ladepunktes, Array mit
+							drei Zahlen (Float), nur positiv.<br />
+							Beispiel:
+							<span class="text-info"
+								>[230.12,231.08,232.54]</span
+							>
+						</li>
+						<li>
+							<openwb-base-copy-to-clipboard
+								class="text-info"
+								tooltip="Topic kopieren"
+							>
+								openWB/set/chargepoint/{{
+									chargePointId
+								}}/get/power_factors</openwb-base-copy-to-clipboard
+							><br />
+							Aktuelle Leistungsfaktoren des Ladepunktes, Array
+							mit drei Zahlen (Float), Wertebereich von -1 bis
+							1.<br />
+							Beispiel:
+							<span class="text-info">[-0.87,0.96,1.0]</span>
+						</li>
+						<li>
+							<openwb-base-copy-to-clipboard
+								class="text-info"
+								tooltip="Topic kopieren"
+							>
+								openWB/set/chargepoint/{{
+									chargePointId
+								}}/get/rfid_tag</openwb-base-copy-to-clipboard
+							><br />
+							Eine Zeichenfolge, die einen eingelesenen Tag für
+							openWB repräsentiert.<br />
+							Beispiel:
+							<span class="text-info">"123654"</span>
+						</li>
+					</ul>
+				</li>
+			</ol>
+		</openwb-base-alert>
+	</div>
+</template>
+
+<script>
+export default {
+	name: "ChargePointMqtt",
+	emits: ["update:configuration"],
+	props: {
+		configuration: { type: Object, required: true },
+		chargePointId: { default: undefined },
+	},
+	methods: {
+		updateConfiguration(event, path = undefined) {
+			this.$emit("update:configuration", { value: event, object: path });
+		},
+	},
+};
+</script>

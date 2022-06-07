@@ -390,7 +390,7 @@ export default {
 			return myDevice.component;
 		},
 		updateConfiguration(key, event) {
-			console.debug("updateConfiguration", event);
+			console.debug("updateConfiguration", key, event);
 			this.updateState(key, event.value, event.object);
 		},
 	},

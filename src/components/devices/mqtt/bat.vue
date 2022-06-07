@@ -7,32 +7,48 @@
 		<openwb-base-alert subtype="info">
 			<ul>
 				<li>
-					<span class="text-info"
-						>openWB/set/bat/{{ componentId }}/get/power</span
+					<openwb-base-copy-to-clipboard
+						class="text-info"
+						tooltip="Topic kopieren"
+						>openWB/set/bat/{{
+							componentId
+						}}/get/power</openwb-base-copy-to-clipboard
 					><br />
 					Speicherleistung in Watt, ohne Nachkommastellen (Integer),
 					positiv Ladung, negativ Entladung<br />
 					Beispiel: <span class="text-info">-123</span>
 				</li>
 				<li>
-					<span class="text-info"
-						>openWB/set/bat/{{ componentId }}/get/imported</span
+					<openwb-base-copy-to-clipboard
+						class="text-info"
+						tooltip="Topic kopieren"
+						>openWB/set/bat/{{
+							componentId
+						}}/get/imported</openwb-base-copy-to-clipboard
 					><br />
 					Geladene Energie in Wh, mit Nachkommastellen (Float), nur
 					positiv<br />
 					Beispiel: <span class="text-info">123.45</span>
 				</li>
 				<li>
-					<span class="text-info"
-						>openWB/set/bat/{{ componentId }}/get/exported</span
+					<openwb-base-copy-to-clipboard
+						class="text-info"
+						tooltip="Topic kopieren"
+						>openWB/set/bat/{{
+							componentId
+						}}/get/exported</openwb-base-copy-to-clipboard
 					><br />
 					Entladene Energie in Wh, mit Nachkommastellen (Float), nur
 					positiv<br />
 					Beispiel: <span class="text-info">123.45</span>
 				</li>
 				<li>
-					<span class="text-info"
-						>openWB/set/bat/{{ componentId }}/get/soc</span
+					<openwb-base-copy-to-clipboard
+						class="text-info"
+						tooltip="Topic kopieren"
+						>openWB/set/bat/{{
+							componentId
+						}}/get/soc</openwb-base-copy-to-clipboard
 					><br />
 					Ladestand des Speichers, ohne Nachkommastellen (Integer),
 					gültige Werte 0 bis 100<br />
