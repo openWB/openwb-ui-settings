@@ -1530,7 +1530,7 @@ library.add(
 );
 
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
-import OpenwbConfigProxy from "@/components/OpenwbConfigProxy.vue";
+import OpenwbConfigProxy from "@/components/devices/OpenwbConfigProxy.vue";
 
 export default {
 	name: "OpenwbVehicleConfig",
