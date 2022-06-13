@@ -343,111 +343,126 @@ export default {
 			return this.chartDataObject.length > 0;
 		},
 		chartTotals() {
-			var diff = {
-				bat: {
-					label: {
-						text: "Speicher",
-						icon: ["fas", "car-battery"],
-					},
-					components: {},
-				},
-				counter: {
-					label: {
-						text: "Zähler",
-						icon: ["fas", "tachometer-alt"],
-					},
-					components: {},
-				},
-				pv: {
-					label: {
-						text: "Wechselrichter",
-						icon: ["fas", "solar-panel"],
-					},
-					components: {},
-				},
-				cp: {
-					label: {
-						text: "Ladepunkte",
-						icon: ["fas", "charging-station"],
-					},
-					components: {},
-				},
-			};
-			const keysToProcess = ["counter", "imported", "exported"];
-
-			const process = (startValue, endValue, path) => {
-				// console.log("process:", path);
-				const keys = path.split(".");
-				if (keysToProcess.includes(keys[keys.length - 1])) {
-					if (keys.length == 3) {
-						var label = this.getDatasetLabel(
-							keys[0],
-							keys[1],
-							keys[2],
-							path
-						);
-					}
-					if (keys[1] == "all") {
-						diff[keys[0]][keys[2]] = {
-							value: Math.floor(endValue - startValue) / 1000,
-							label: label,
-						};
-					} else {
-						diff[keys[0]]["components"][path] = {
-							value: Math.floor(endValue - startValue) / 1000,
-							label: label,
-						};
-					}
-				}
-			};
-
-			const traverse = (
-				startObject,
-				endObject,
-				method,
-				currentPath = ""
-			) => {
-				for (var element in endObject) {
-					if (
-						endObject[element] !== null &&
-						typeof endObject[element] == "object"
-					) {
-						//going one step down in the object tree!!
-						traverse(
-							startObject[element],
-							endObject[element],
-							method,
-							currentPath ? currentPath + "." + element : element
-						);
-					} else {
-						method.apply(this, [
-							startObject[element],
-							endObject[element],
-							currentPath ? currentPath + "." + element : element,
-						]);
-					}
-				}
-			};
-
 			if (
 				this.$store.state.mqtt[
 					"openWB/log/monthly/" + this.commandData.month
 				]
 			) {
-				const start =
-					this.$store.state.mqtt[
-						"openWB/log/monthly/" + this.commandData.month
-					][0];
-				const end =
-					this.$store.state.mqtt[
-						"openWB/log/monthly/" + this.commandData.month
-					][
+				if (
+					Object.prototype.hasOwnProperty.call(
 						this.$store.state.mqtt[
 							"openWB/log/monthly/" + this.commandData.month
-						].length - 1
-					];
-				traverse(start, end, process);
-				return diff;
+						],
+						"totals"
+					)
+				) {
+					return this.$store.state.mqtt[
+						"openWB/log/monthly/" + this.commandData.month
+					].totals;
+				} else {
+					var diff = {
+						bat: {
+							label: {
+								text: "Speicher",
+								icon: ["fas", "car-battery"],
+							},
+							components: {},
+						},
+						counter: {
+							label: {
+								text: "Zähler",
+								icon: ["fas", "tachometer-alt"],
+							},
+							components: {},
+						},
+						pv: {
+							label: {
+								text: "Wechselrichter",
+								icon: ["fas", "solar-panel"],
+							},
+							components: {},
+						},
+						cp: {
+							label: {
+								text: "Ladepunkte",
+								icon: ["fas", "charging-station"],
+							},
+							components: {},
+						},
+					};
+					const keysToProcess = ["counter", "imported", "exported"];
+
+					const process = (startValue, endValue, path) => {
+						// console.log("process:", path);
+						const keys = path.split(".");
+						if (keysToProcess.includes(keys[keys.length - 1])) {
+							if (keys.length == 3) {
+								var label = this.getDatasetLabel(
+									keys[0],
+									keys[1],
+									keys[2],
+									path
+								);
+							}
+							if (keys[1] == "all") {
+								diff[keys[0]][keys[2]] = {
+									value:
+										Math.floor(endValue - startValue) /
+										1000,
+									label: label,
+								};
+							} else {
+								diff[keys[0]]["components"][path] = {
+									value:
+										Math.floor(endValue - startValue) /
+										1000,
+									label: label,
+								};
+							}
+						}
+					};
+
+					const traverse = (
+						startObject,
+						endObject,
+						method,
+						currentPath = ""
+					) => {
+						for (var element in endObject) {
+							if (
+								endObject[element] !== null &&
+								typeof endObject[element] == "object"
+							) {
+								//going one step down in the object tree!!
+								traverse(
+									startObject[element],
+									endObject[element],
+									method,
+									currentPath
+										? currentPath + "." + element
+										: element
+								);
+							} else {
+								method.apply(this, [
+									startObject[element],
+									endObject[element],
+									currentPath
+										? currentPath + "." + element
+										: element,
+								]);
+							}
+						}
+					};
+
+					var chartEntries =
+						this.$store.state.mqtt[
+							"openWB/log/monthly/" + this.commandData.month
+						];
+					const start = chartEntries[0];
+					const end = chartEntries[chartEntries.length - 1];
+					traverse(start, end, process);
+					return diff;
+				}
 			}
 			return undefined;
 		},
@@ -457,130 +472,259 @@ export default {
 					"openWB/log/monthly/" + this.commandData.month
 				]
 			) {
-				var lastRow = undefined;
-				var myData = JSON.parse(
-					JSON.stringify(
-						this.$store.state.mqtt[
-							"openWB/log/monthly/" + this.commandData.month
-						]
+				var chartEntries =
+					this.$store.state.mqtt[
+						"openWB/log/monthly/" + this.commandData.month
+					];
+				if (
+					Object.prototype.hasOwnProperty.call(
+						chartEntries,
+						"entries"
 					)
-				).map((row) => {
-					row.timestamp = row.timestamp * 1000;
-					if (lastRow) {
-						const timeDiff = row.timestamp - lastRow.timestamp;
-						var baseObjectsToProcess = [
-							"pv",
-							"counter",
-							"bat",
-							"cp",
-						];
-						baseObjectsToProcess.forEach((baseObject) => {
-							Object.entries(row[baseObject]).forEach(
-								([key, value]) => {
-									Object.keys(value).forEach(() => {
-										switch (baseObject) {
-											case "pv":
-												row[baseObject][key].power =
-													Math.floor(
-														(row[baseObject][key]
-															.imported -
-															lastRow[baseObject][
-																key
-															].imported) /
-															(timeDiff /
-																1000 /
-																3600)
-													) / 1000;
-												break;
-											case "counter":
-												row[baseObject][key].power =
-													Math.floor(
-														(row[baseObject][key]
-															.imported -
-															lastRow[baseObject][
-																key
-															].imported -
-															(row[baseObject][
-																key
-															].exported -
+				) {
+					console.debug("upgraded chart data received");
+					chartEntries = chartEntries.entries;
+				}
+				var lastRow = undefined;
+				var myData = JSON.parse(JSON.stringify(chartEntries)).map(
+					(row) => {
+						row.timestamp = row.timestamp * 1000;
+						if (lastRow !== undefined) {
+							const timeDiff = row.timestamp - lastRow.timestamp;
+							var baseObjectsToProcess = [
+								"pv",
+								"counter",
+								"bat",
+								"cp",
+							];
+							baseObjectsToProcess.forEach((baseObject) => {
+								Object.entries(row[baseObject]).forEach(
+									([key, value]) => {
+										if (lastRow[baseObject][key]) {
+											Object.keys(value).forEach(() => {
+												switch (baseObject) {
+													case "pv":
+														if (
+															Object.prototype.hasOwnProperty.call(
+																row[baseObject][
+																	key
+																],
+																"imported"
+															) &&
+															Object.prototype.hasOwnProperty.call(
 																lastRow[
 																	baseObject
-																][key]
-																	.exported)) /
-															(timeDiff /
-																1000 /
-																3600)
-													) / 1000;
-												row[baseObject][
-													key
-												].powerImport = Math.max(
-													0,
-													row[baseObject][key].power
-												);
-												row[baseObject][
-													key
-												].powerExport = Math.min(
-													0,
-													row[baseObject][key].power
-												);
-												break;
-											case "bat":
-												row[baseObject][key].power =
-													Math.floor(
-														(row[baseObject][key]
-															.imported -
-															lastRow[baseObject][
+																][key],
+																"imported"
+															)
+														) {
+															row[baseObject][
 																key
-															].imported -
-															(row[baseObject][
-																key
-															].exported -
+															].power =
+																Math.floor(
+																	(row[
+																		baseObject
+																	][key]
+																		.imported -
+																		lastRow[
+																			baseObject
+																		][key]
+																			.imported) /
+																		(timeDiff /
+																			1000 /
+																			3600)
+																) / 1000;
+														}
+														break;
+													case "counter":
+														if (
+															Object.prototype.hasOwnProperty.call(
+																row[baseObject][
+																	key
+																],
+																"imported"
+															) &&
+															Object.prototype.hasOwnProperty.call(
 																lastRow[
 																	baseObject
-																][key]
-																	.exported)) /
-															(timeDiff /
-																1000 /
-																3600)
-													) / 1000;
-												row[baseObject][
-													key
-												].powerImport = Math.max(
-													0,
-													row[baseObject][key].power
-												);
-												row[baseObject][
-													key
-												].powerExport = Math.min(
-													0,
-													row[baseObject][key].power
-												);
-												break;
-											case "cp":
-												row[baseObject][key].power =
-													Math.floor(
-														(row[baseObject][key]
-															.imported -
-															lastRow[baseObject][
+																][key],
+																"imported"
+															) &&
+															Object.prototype.hasOwnProperty.call(
+																row[baseObject][
+																	key
+																],
+																"exported"
+															) &&
+															Object.prototype.hasOwnProperty.call(
+																lastRow[
+																	baseObject
+																][key],
+																"exported"
+															)
+														) {
+															row[baseObject][
 																key
-															].imported) /
-															(timeDiff /
-																1000 /
-																3600)
-													) / 1000;
-												break;
+															].power =
+																Math.floor(
+																	(row[
+																		baseObject
+																	][key]
+																		.imported -
+																		lastRow[
+																			baseObject
+																		][key]
+																			.imported -
+																		(row[
+																			baseObject
+																		][key]
+																			.exported -
+																			lastRow[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported)) /
+																		(timeDiff /
+																			1000 /
+																			3600)
+																) / 1000;
+															row[baseObject][
+																key
+															].powerImport = Math.max(
+																0,
+																row[baseObject][
+																	key
+																].power
+															);
+															row[baseObject][
+																key
+															].powerExport = Math.min(
+																0,
+																row[baseObject][
+																	key
+																].power
+															);
+														}
+														break;
+													case "bat":
+														if (
+															Object.prototype.hasOwnProperty.call(
+																row[baseObject][
+																	key
+																],
+																"imported"
+															) &&
+															Object.prototype.hasOwnProperty.call(
+																lastRow[
+																	baseObject
+																][key],
+																"imported"
+															) &&
+															Object.prototype.hasOwnProperty.call(
+																row[baseObject][
+																	key
+																],
+																"exported"
+															) &&
+															Object.prototype.hasOwnProperty.call(
+																lastRow[
+																	baseObject
+																][key],
+																"exported"
+															)
+														) {
+															row[baseObject][
+																key
+															].power =
+																Math.floor(
+																	(row[
+																		baseObject
+																	][key]
+																		.imported -
+																		lastRow[
+																			baseObject
+																		][key]
+																			.imported -
+																		(row[
+																			baseObject
+																		][key]
+																			.exported -
+																			lastRow[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported)) /
+																		(timeDiff /
+																			1000 /
+																			3600)
+																) / 1000;
+															row[baseObject][
+																key
+															].powerImport = Math.max(
+																0,
+																row[baseObject][
+																	key
+																].power
+															);
+															row[baseObject][
+																key
+															].powerExport = Math.min(
+																0,
+																row[baseObject][
+																	key
+																].power
+															);
+														}
+														break;
+													case "cp":
+														if (
+															Object.prototype.hasOwnProperty.call(
+																row[baseObject][
+																	key
+																],
+																"imported"
+															) &&
+															Object.prototype.hasOwnProperty.call(
+																lastRow[
+																	baseObject
+																][key],
+																"imported"
+															)
+														) {
+															row[baseObject][
+																key
+															].power =
+																Math.floor(
+																	(row[
+																		baseObject
+																	][key]
+																		.imported -
+																		lastRow[
+																			baseObject
+																		][key]
+																			.imported) /
+																		(timeDiff /
+																			1000 /
+																			3600)
+																) / 1000;
+														}
+														break;
+												}
+											});
 										}
-									});
-								}
-							);
-						});
-						lastRow = row;
-						return row;
-					} else {
-						lastRow = row;
-						return;
+									}
+								);
+							});
+							lastRow = row;
+							return row;
+						} else {
+							lastRow = row;
+							return;
+						}
 					}
-				});
+				);
 				myData.shift();
 				return myData;
 			}
@@ -622,7 +766,7 @@ export default {
 		},
 		getDatasetHidden(baseObject, objectKey) {
 			// ToDo
-			console.log("getDatasetHidden", baseObject, objectKey);
+			console.debug("getDatasetHidden", baseObject, objectKey);
 			return false;
 		},
 		getDatasetLabel(baseObject, objectKey, elementKey, datasetKey) {
