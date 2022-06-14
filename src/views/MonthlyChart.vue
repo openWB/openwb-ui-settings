@@ -38,50 +38,39 @@
 					<openwb-base-card
 						v-for="(group, groupKey) in chartTotals"
 						:key="groupKey"
+						:title="getTotalsLabel(groupKey)"
 						:collapsible="true"
 						:collapsed="true"
 						:subtype="getCardSubtype(groupKey)"
 					>
-						<template #header>
-							<openwb-base-avatar
-								v-if="group.label.icon"
-								class="bg-dark"
-							>
-								<font-awesome-icon
-									fixed-width
-									:icon="group.label.icon"
-								/>
-							</openwb-base-avatar>
-							{{ group.label.text }}
-						</template>
-						<openwb-base-heading
-							v-if="Object.keys(group).length > 2"
-						>
-							Summe
-						</openwb-base-heading>
 						<div
-							v-for="(element, elementKey) in group"
-							:key="elementKey"
+							v-for="(component, componentKey) in group"
+							:key="componentKey"
 						>
-							<openwb-base-number-input
-								v-if="element.label"
-								:title="element.label"
-								readonly
-								class="text-right"
-								unit="kWh"
-								:model-value="element.value"
-							/>
+							<openwb-base-heading>{{
+								getTotalsLabel(groupKey, componentKey)
+							}}</openwb-base-heading>
+							<div
+								v-for="(
+									measurement, measurementKey
+								) in component"
+								:key="measurementKey"
+							>
+								<openwb-base-number-input
+									:title="
+										getTotalsLabel(
+											groupKey,
+											componentKey,
+											measurementKey
+										)
+									"
+									readonly
+									class="text-right"
+									unit="Wh"
+									:model-value="measurement"
+								/>
+							</div>
 						</div>
-						<openwb-base-heading>Komponenten</openwb-base-heading>
-						<openwb-base-number-input
-							v-for="(element, elementKey) in group.components"
-							:key="elementKey"
-							:title="element.label"
-							readonly
-							class="text-right"
-							unit="kWh"
-							:model-value="element.value"
-						/>
 					</openwb-base-card>
 				</openwb-base-card>
 			</div>
@@ -90,17 +79,6 @@
 </template>
 
 <script>
-import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-	faCarBattery as fasCarBattery,
-	faTachometerAlt as fasTachometerAlt,
-	faSolarPanel as fasSolarPanel,
-	faChargingStation as fasChargingStation,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-
-library.add(fasCarBattery, fasTachometerAlt, fasSolarPanel, fasChargingStation);
-
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 import { LineChart } from "vue-chart-3";
@@ -130,7 +108,7 @@ Chart.register(
 
 export default {
 	name: "OpenwbMonthlyChart",
-	components: { LineChart, FontAwesomeIcon },
+	components: { LineChart },
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
 	data() {
@@ -360,35 +338,12 @@ export default {
 						"openWB/log/monthly/" + this.commandData.month
 					].totals;
 				} else {
+					// code for old log data without totals
 					var diff = {
-						bat: {
-							label: {
-								text: "Speicher",
-								icon: ["fas", "car-battery"],
-							},
-							components: {},
-						},
-						counter: {
-							label: {
-								text: "Zähler",
-								icon: ["fas", "tachometer-alt"],
-							},
-							components: {},
-						},
-						pv: {
-							label: {
-								text: "Wechselrichter",
-								icon: ["fas", "solar-panel"],
-							},
-							components: {},
-						},
-						cp: {
-							label: {
-								text: "Ladepunkte",
-								icon: ["fas", "charging-station"],
-							},
-							components: {},
-						},
+						bat: {},
+						counter: {},
+						pv: {},
+						cp: {},
 					};
 					const keysToProcess = ["counter", "imported", "exported"];
 
@@ -396,29 +351,17 @@ export default {
 						// console.log("process:", path);
 						const keys = path.split(".");
 						if (keysToProcess.includes(keys[keys.length - 1])) {
-							if (keys.length == 3) {
-								var label = this.getDatasetLabel(
-									keys[0],
-									keys[1],
-									keys[2],
-									path
-								);
+							if (
+								!Object.prototype.hasOwnProperty.call(
+									diff[keys[0]],
+									[keys[1]]
+								)
+							) {
+								diff[keys[0]][keys[1]] = {};
 							}
-							if (keys[1] == "all") {
-								diff[keys[0]][keys[2]] = {
-									value:
-										Math.floor(endValue - startValue) /
-										1000,
-									label: label,
-								};
-							} else {
-								diff[keys[0]]["components"][path] = {
-									value:
-										Math.floor(endValue - startValue) /
-										1000,
-									label: label,
-								};
-							}
+							diff[keys[0]][keys[1]][keys[2]] = Math.floor(
+								endValue - startValue
+							);
 						}
 					};
 
@@ -769,8 +712,148 @@ export default {
 			console.debug("getDatasetHidden", baseObject, objectKey);
 			return false;
 		},
+		getTotalsLabel(
+			groupKey,
+			componentKey = undefined,
+			measurementKey = undefined
+		) {
+			var label = "*test*";
+			if (!componentKey && !measurementKey) {
+				// console.debug("getTotalsLabel for group:", groupKey);
+				switch (groupKey) {
+					case "bat":
+						return "Speicher";
+					case "counter":
+						return "Zähler";
+					case "pv":
+						return "Wechselrichter";
+					case "cp":
+						return "Ladepunkt";
+					default:
+						console.warn("unknown group key:", groupKey);
+				}
+				return "*" + groupKey + "*";
+			}
+			if (componentKey && !measurementKey) {
+				// console.debug(
+				// 	"getLabel for component:",
+				// 	groupKey,
+				// 	componentKey
+				// );
+				if (componentKey == "all") {
+					return "Summe";
+				} else {
+					var objectId = componentKey.match(/\d+$/);
+					var topic = "";
+					switch (groupKey) {
+						case "cp":
+							topic =
+								"openWB/chargepoint/" + objectId + "/config";
+							break;
+						case "ev":
+							topic = "openWB/vehicle/" + objectId + "/name";
+							break;
+						default:
+							topic =
+								"openWB/system/device/+/component/" +
+								objectId +
+								"/config";
+					}
+					var objectTopic = Object.keys(
+						this.getWildcardTopics(topic)
+					)[0];
+					// console.debug(objectTopic);
+					if (objectTopic) {
+						switch (groupKey) {
+							case "pv":
+								return this.$store.state.mqtt[objectTopic].name;
+							case "counter":
+								return this.$store.state.mqtt[objectTopic].name;
+							case "bat":
+								return this.$store.state.mqtt[objectTopic].name;
+							case "cp":
+								return this.$store.state.mqtt[objectTopic].name;
+							case "ev":
+								return this.$store.state.mqtt[objectTopic];
+							default:
+								console.warn("unknown group key:", groupKey);
+						}
+					} else {
+						console.warn(
+							"topic not found for:",
+							groupKey,
+							componentKey
+						);
+					}
+					return "+" + groupKey + "+" + componentKey + "+";
+				}
+			}
+			if (componentKey && measurementKey) {
+				// console.debug(
+				// 	"getTotalsLabel for measurement",
+				// 	groupKey,
+				// 	componentKey,
+				// 	measurementKey
+				// );
+				switch (groupKey) {
+					case "bat":
+					case "cp":
+						switch (measurementKey) {
+							case "imported":
+								return "Ladung";
+							case "exported":
+								return "Entladung";
+							default:
+								console.warn(
+									"unknown measurement key:",
+									groupKey,
+									measurementKey
+								);
+						}
+						break;
+					case "counter":
+						switch (measurementKey) {
+							case "imported":
+								return "Bezug/Verbrauch";
+							case "exported":
+								return "Einspeisung/Erzeugung";
+							default:
+								console.warn(
+									"unknown measurement key:",
+									groupKey,
+									measurementKey
+								);
+						}
+						break;
+					case "pv":
+						switch (measurementKey) {
+							case "imported":
+								return "Erzeugung";
+							default:
+								console.warn(
+									"unknown measurement key:",
+									groupKey,
+									measurementKey
+								);
+						}
+						break;
+					default:
+						console.warn("unknown group key:", groupKey);
+				}
+				return (
+					"*" +
+					groupKey +
+					"+" +
+					componentKey +
+					"+" +
+					measurementKey +
+					"*"
+				);
+			}
+			return label;
+		},
 		getDatasetLabel(baseObject, objectKey, elementKey, datasetKey) {
-			// console.log(
+			// console.debug(
 			// 	"getDatasetLabel",
 			// 	baseObject,
 			// 	objectKey,
