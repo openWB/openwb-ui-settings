@@ -235,9 +235,9 @@ export default {
 				if (this.subtype == "json") {
 					if (this.inputInvalid) {
 						console.warn("returning invalid String");
-						return this.tempValue;
+						return this.modelValue;
 					} else {
-						return JSON.stringify(this.tempValue);
+						return JSON.stringify(this.modelValue);
 					}
 				}
 				return this.modelValue;
