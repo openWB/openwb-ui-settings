@@ -433,7 +433,7 @@
 				class="text-right text-monospace"
 				step="0.001"
 				unit="Wh"
-				:model-value="$store.state.mqtt['openWB/pv/get/counter']"
+				:model-value="$store.state.mqtt['openWB/pv/get/exported']"
 			/>
 			<openwb-base-number-input
 				title="Leistung"
@@ -458,7 +458,9 @@
 				class="text-right text-monospace"
 				step="0.001"
 				unit="Wh"
-				:model-value="$store.state.mqtt['openWB/pv/get/monthly_exported']"
+				:model-value="
+					$store.state.mqtt['openWB/pv/get/monthly_exported']
+				"
 			/>
 			<openwb-base-number-input
 				title="Dieses Jahr"
@@ -466,7 +468,9 @@
 				class="text-right text-monospace"
 				step="0.001"
 				unit="Wh"
-				:model-value="$store.state.mqtt['openWB/pv/get/yearly_exported']"
+				:model-value="
+					$store.state.mqtt['openWB/pv/get/yearly_exported']
+				"
 			/>
 		</openwb-base-card>
 		<!-- individual inverters -->

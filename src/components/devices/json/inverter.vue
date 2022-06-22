@@ -16,9 +16,9 @@
 		<openwb-base-text-input
 			title="Abfrage für Zählerstand"
 			subtype="text"
-			:model-value="configuration.jq_counter"
+			:model-value="configuration.jq_exported"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.jq_counter')
+				updateConfiguration($event, 'configuration.jq_exported')
 			"
 		>
 			<template #help>

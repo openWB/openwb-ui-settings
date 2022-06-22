@@ -412,7 +412,7 @@ export default {
 						pv: {},
 						cp: {},
 					};
-					const keysToProcess = ["counter", "imported", "exported"];
+					const keysToProcess = ["imported", "exported"];
 
 					const process = (startValue, endValue, path) => {
 						// console.log("process:", path);

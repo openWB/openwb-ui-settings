@@ -27,9 +27,9 @@
 			subtype="text"
 			required
 			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)|none"
-			:model-value="configuration.counter_path"
+			:model-value="configuration.exported_path"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.counter_path')
+				updateConfiguration($event, 'configuration.exported_path')
 			"
 		>
 			<template #help>
