@@ -34,7 +34,7 @@
 				step="0.001"
 				unit="Wh"
 				:model-value="
-					$store.state.mqtt['openWB/chargepoint/get/daily_yield']
+					$store.state.mqtt['openWB/chargepoint/get/daily_imported']
 				"
 			/>
 		</openwb-base-card>
@@ -157,7 +157,7 @@
 					$store.state.mqtt[
 						'openWB/chargepoint/' +
 							getChargePointIndex(installedChargePointKey) +
-							'/get/daily_yield'
+							'/get/daily_imported'
 					]
 				"
 			/>
@@ -433,7 +433,7 @@
 				class="text-right text-monospace"
 				step="0.001"
 				unit="Wh"
-				:model-value="$store.state.mqtt['openWB/pv/get/counter']"
+				:model-value="$store.state.mqtt['openWB/pv/get/exported']"
 			/>
 			<openwb-base-number-input
 				title="Leistung"
@@ -450,7 +450,7 @@
 				class="text-right text-monospace"
 				step="0.001"
 				unit="Wh"
-				:model-value="$store.state.mqtt['openWB/pv/get/daily_yield']"
+				:model-value="$store.state.mqtt['openWB/pv/get/daily_exported']"
 			/>
 			<openwb-base-number-input
 				title="Dieser Monat"
@@ -458,7 +458,9 @@
 				class="text-right text-monospace"
 				step="0.001"
 				unit="Wh"
-				:model-value="$store.state.mqtt['openWB/pv/get/monthly_yield']"
+				:model-value="
+					$store.state.mqtt['openWB/pv/get/monthly_exported']
+				"
 			/>
 			<openwb-base-number-input
 				title="Dieses Jahr"
@@ -466,7 +468,9 @@
 				class="text-right text-monospace"
 				step="0.001"
 				unit="Wh"
-				:model-value="$store.state.mqtt['openWB/pv/get/yearly_yield']"
+				:model-value="
+					$store.state.mqtt['openWB/pv/get/yearly_exported']
+				"
 			/>
 		</openwb-base-card>
 		<!-- individual inverters -->
@@ -726,7 +730,7 @@ export default {
 				// charge points total
 				"openWB/chargepoint/get/power",
 				"openWB/chargepoint/get/imported",
-				"openWB/chargepoint/get/daily_yield",
+				"openWB/chargepoint/get/daily_imported",
 				// individual charge points
 				"openWB/chargepoint/+/config",
 				"openWB/chargepoint/+/get/+",

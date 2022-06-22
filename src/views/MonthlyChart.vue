@@ -345,7 +345,7 @@ export default {
 						pv: {},
 						cp: {},
 					};
-					const keysToProcess = ["counter", "imported", "exported"];
+					const keysToProcess = ["imported", "exported"];
 
 					const process = (startValue, endValue, path) => {
 						// console.log("process:", path);
@@ -452,13 +452,13 @@ export default {
 																row[baseObject][
 																	key
 																],
-																"imported"
+																"exported"
 															) &&
 															Object.prototype.hasOwnProperty.call(
 																lastRow[
 																	baseObject
 																][key],
-																"imported"
+																"exported"
 															)
 														) {
 															row[baseObject][
@@ -468,11 +468,11 @@ export default {
 																	(row[
 																		baseObject
 																	][key]
-																		.imported -
+																		.exported -
 																		lastRow[
 																			baseObject
 																		][key]
-																			.imported) /
+																			.exported) /
 																		(timeDiff /
 																			1000 /
 																			3600)
@@ -827,7 +827,7 @@ export default {
 						break;
 					case "pv":
 						switch (measurementKey) {
-							case "imported":
+							case "exported":
 								return "Erzeugung";
 							default:
 								console.warn(
