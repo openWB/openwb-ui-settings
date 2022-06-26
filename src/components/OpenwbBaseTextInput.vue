@@ -145,11 +145,6 @@
 						v-model="value"
 						v-bind="$attrs"
 					/>
-					<div v-if="unit" class="input-group-append">
-						<div class="input-group-text">
-							{{ unit }}
-						</div>
-					</div>
 				</div>
 			</div>
 			<span v-if="showHelp" class="form-row alert alert-info my-1 small">
@@ -224,7 +219,6 @@ export default {
 			default: "text",
 		},
 		pattern: String,
-		unit: String,
 	},
 	emits: ["update:modelValue"],
 	data() {
