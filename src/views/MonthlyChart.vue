@@ -28,7 +28,7 @@
 					Es konnten keine Daten für diesen Zeitraum gefunden werden.
 				</openwb-base-alert>
 				<openwb-base-card v-else title="Monats-Diagramm">
-					<LineChart :chartData="chartData" :options="chartOptions" />
+					<Line :chartData="chartData" :chartOptions="chartOptions" />
 				</openwb-base-card>
 				<openwb-base-card
 					title="Monatssummen"
@@ -81,7 +81,7 @@
 <script>
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
-import { LineChart } from "vue-chart-3";
+import { Line } from "vue-chartjs";
 import "chartjs-adapter-luxon";
 import "hammerjs";
 import ZoomPlugin from "chartjs-plugin-zoom";
@@ -108,7 +108,7 @@ Chart.register(
 
 export default {
 	name: "OpenwbMonthlyChart",
-	components: { LineChart },
+	components: { Line },
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
 	data() {
