@@ -795,7 +795,7 @@ export default {
 					case "pv":
 						return "Wechselrichter";
 					case "cp":
-						return "Ladepunkt";
+						return "Ladepunkte";
 					default:
 						console.warn("unknown group key:", groupKey);
 				}

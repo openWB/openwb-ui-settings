@@ -17,7 +17,7 @@
 				:model-value="$store.state.mqtt['openWB/chargepoint/get/power']"
 			/>
 			<openwb-base-number-input
-				title="Zählerstand"
+				title="Zählerstand laden"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
@@ -26,15 +26,35 @@
 					$store.state.mqtt['openWB/chargepoint/get/imported']
 				"
 			/>
+			<openwb-base-number-input
+				title="Zählerstand entladen"
+				readonly
+				class="text-right text-monospace"
+				step="0.001"
+				unit="Wh"
+				:model-value="
+					$store.state.mqtt['openWB/chargepoint/get/exported']
+				"
+			/>
 			<openwb-base-heading>Historie</openwb-base-heading>
 			<openwb-base-number-input
-				title="Heute"
+				title="Heute geladen"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
 				unit="Wh"
 				:model-value="
 					$store.state.mqtt['openWB/chargepoint/get/daily_imported']
+				"
+			/>
+			<openwb-base-number-input
+				title="Heute entladen"
+				readonly
+				class="text-right text-monospace"
+				step="0.001"
+				unit="Wh"
+				:model-value="
+					$store.state.mqtt['openWB/chargepoint/get/daily_exported']
 				"
 			/>
 		</openwb-base-card>
@@ -134,7 +154,7 @@
 				"
 			/>
 			<openwb-base-number-input
-				title="Zählerstand"
+				title="Zählerstand laden"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
@@ -144,6 +164,20 @@
 						'openWB/chargepoint/' +
 							getChargePointIndex(installedChargePointKey) +
 							'/get/imported'
+					]
+				"
+			/>
+			<openwb-base-number-input
+				title="Zählerstand entladen"
+				readonly
+				class="text-right text-monospace"
+				step="0.001"
+				unit="Wh"
+				:model-value="
+					$store.state.mqtt[
+						'openWB/chargepoint/' +
+							getChargePointIndex(installedChargePointKey) +
+							'/get/exported'
 					]
 				"
 			/>
@@ -158,6 +192,20 @@
 						'openWB/chargepoint/' +
 							getChargePointIndex(installedChargePointKey) +
 							'/get/daily_imported'
+					]
+				"
+			/>
+			<openwb-base-number-input
+				title="Heute entladen"
+				readonly
+				class="text-right text-monospace"
+				step="0.001"
+				unit="Wh"
+				:model-value="
+					$store.state.mqtt[
+						'openWB/chargepoint/' +
+							getChargePointIndex(installedChargePointKey) +
+							'/get/daily_exported'
 					]
 				"
 			/>
@@ -730,7 +778,9 @@ export default {
 				// charge points total
 				"openWB/chargepoint/get/power",
 				"openWB/chargepoint/get/imported",
+				"openWB/chargepoint/get/exported",
 				"openWB/chargepoint/get/daily_imported",
+				"openWB/chargepoint/get/daily_exported",
 				// individual charge points
 				"openWB/chargepoint/+/config",
 				"openWB/chargepoint/+/get/+",
