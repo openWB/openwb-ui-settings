@@ -529,7 +529,7 @@
 				unit="Wh"
 				:model-value="
 					$store.state.mqtt[
-						'openWB/pv/' + inverter.id + '/get/counter'
+						'openWB/pv/' + inverter.id + '/get/exported'
 					]
 				"
 			/>
