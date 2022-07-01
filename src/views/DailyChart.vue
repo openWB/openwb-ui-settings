@@ -28,7 +28,7 @@
 					Es konnten keine Daten für diesen Zeitraum gefunden werden.
 				</openwb-base-alert>
 				<openwb-base-card v-else title="Tages-Diagramm">
-					<LineChart :chartData="chartData" :options="chartOptions" />
+					<Line :chartData="chartData" :chartOptions="chartOptions" />
 				</openwb-base-card>
 				<openwb-base-card
 					title="Tagessummen"
@@ -81,7 +81,7 @@
 <script>
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
-import { LineChart } from "vue-chart-3";
+import { Line } from "vue-chartjs";
 import "chartjs-adapter-luxon";
 import "hammerjs";
 import ZoomPlugin from "chartjs-plugin-zoom";
@@ -94,6 +94,7 @@ import {
 	PointElement,
 	LinearScale,
 	TimeScale,
+	Filler,
 } from "chart.js";
 Chart.register(
 	Tooltip,
@@ -103,12 +104,13 @@ Chart.register(
 	PointElement,
 	LinearScale,
 	TimeScale,
+	Filler,
 	ZoomPlugin
 );
 
 export default {
 	name: "OpenwbDailyChart",
-	components: { LineChart },
+	components: { Line },
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
 	data() {
@@ -132,7 +134,7 @@ export default {
 					jsonKey: null,
 					borderColor: "rgba(255, 0, 0, 0.7)",
 					backgroundColor: "rgba(255, 10, 13, 0.3)",
-					fill: false,
+					fill: true,
 					lineTension: 0.2,
 					hidden: false,
 					borderWidth: 1,
@@ -196,7 +198,7 @@ export default {
 					label: "Ladepunkt",
 					jsonKey: null,
 					borderColor: "rgba(0, 0, 255, 0.7)",
-					backgroundColor: "rgba(0, 0, 255, 0.7)",
+					backgroundColor: "rgba(0, 0, 255, 0.3)",
 					fill: true,
 					lineTension: 0.2,
 					hidden: true,
@@ -211,8 +213,8 @@ export default {
 				"ev-soc": {
 					label: "Fahrzeug SoC",
 					jsonKey: null,
-					borderColor: "rgba(0, 0, 255, 0.5)",
-					backgroundColor: "rgba(0, 0, 255, 0.7)",
+					borderColor: "rgba(0, 0, 255, 0.7)",
+					backgroundColor: "rgba(0, 0, 255, 0.3)",
 					borderDash: [10, 5],
 					hidden: true,
 					fill: false,
