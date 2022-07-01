@@ -94,6 +94,7 @@ import {
 	PointElement,
 	LinearScale,
 	TimeScale,
+	Filler,
 } from "chart.js";
 Chart.register(
 	Tooltip,
@@ -103,6 +104,7 @@ Chart.register(
 	PointElement,
 	LinearScale,
 	TimeScale,
+	Filler,
 	ZoomPlugin
 );
 
@@ -131,7 +133,7 @@ export default {
 					jsonKey: null,
 					borderColor: "rgba(255, 0, 0, 0.7)",
 					backgroundColor: "rgba(255, 10, 13, 0.3)",
-					fill: false,
+					fill: true,
 					lineTension: 0.2,
 					hidden: false,
 					borderWidth: 1,
@@ -178,7 +180,7 @@ export default {
 					label: "Ladepunkt",
 					jsonKey: null,
 					borderColor: "rgba(0, 0, 255, 0.7)",
-					backgroundColor: "rgba(0, 0, 255, 0.7)",
+					backgroundColor: "rgba(0, 0, 255, 0.3)",
 					fill: true,
 					lineTension: 0.2,
 					hidden: true,
