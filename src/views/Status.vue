@@ -8,53 +8,77 @@
 			:collapsible="true"
 			:collapsed="true"
 		>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Leistung"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="W"
-				:model-value="$store.state.mqtt['openWB/chargepoint/get/power']"
+				unit="kW"
+				:model-value="
+					formatNumber(
+						$store.state.mqtt['openWB/chargepoint/get/power'] /
+							1000,
+						3
+					)
+				"
 			/>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Zählerstand laden"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="Wh"
+				unit="kWh"
 				:model-value="
-					$store.state.mqtt['openWB/chargepoint/get/imported']
+					formatNumber(
+						$store.state.mqtt['openWB/chargepoint/get/imported'] /
+							1000,
+						3
+					)
 				"
 			/>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Zählerstand entladen"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="Wh"
+				unit="kWh"
 				:model-value="
-					$store.state.mqtt['openWB/chargepoint/get/exported']
+					formatNumber(
+						$store.state.mqtt['openWB/chargepoint/get/exported'] /
+							1000,
+						3
+					)
 				"
 			/>
 			<openwb-base-heading>Historie</openwb-base-heading>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Heute geladen"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="Wh"
+				unit="kWh"
 				:model-value="
-					$store.state.mqtt['openWB/chargepoint/get/daily_imported']
+					formatNumber(
+						$store.state.mqtt[
+							'openWB/chargepoint/get/daily_imported'
+						] / 1000,
+						3
+					)
 				"
 			/>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Heute entladen"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="Wh"
+				unit="kWh"
 				:model-value="
-					$store.state.mqtt['openWB/chargepoint/get/daily_exported']
+					formatNumber(
+						$store.state.mqtt[
+							'openWB/chargepoint/get/daily_exported'
+						] / 1000,
+						3
+					)
 				"
 			/>
 		</openwb-base-card>
@@ -153,88 +177,106 @@
 					] == 1
 				"
 			/>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Zählerstand laden"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="Wh"
+				unit="kWh"
 				:model-value="
-					$store.state.mqtt[
-						'openWB/chargepoint/' +
-							getChargePointIndex(installedChargePointKey) +
-							'/get/imported'
-					]
+					formatNumber(
+						$store.state.mqtt[
+							'openWB/chargepoint/' +
+								getChargePointIndex(installedChargePointKey) +
+								'/get/imported'
+						] / 1000,
+						3
+					)
 				"
 			/>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Zählerstand entladen"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="Wh"
+				unit="kWh"
 				:model-value="
-					$store.state.mqtt[
-						'openWB/chargepoint/' +
-							getChargePointIndex(installedChargePointKey) +
-							'/get/exported'
-					]
+					formatNumber(
+						$store.state.mqtt[
+							'openWB/chargepoint/' +
+								getChargePointIndex(installedChargePointKey) +
+								'/get/exported'
+						] / 1000,
+						3
+					)
 				"
 			/>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Heute geladen"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="Wh"
+				unit="kWh"
 				:model-value="
-					$store.state.mqtt[
-						'openWB/chargepoint/' +
-							getChargePointIndex(installedChargePointKey) +
-							'/get/daily_imported'
-					]
+					formatNumber(
+						$store.state.mqtt[
+							'openWB/chargepoint/' +
+								getChargePointIndex(installedChargePointKey) +
+								'/get/daily_imported'
+						] / 1000,
+						3
+					)
 				"
 			/>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Heute entladen"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="Wh"
+				unit="kWh"
 				:model-value="
-					$store.state.mqtt[
-						'openWB/chargepoint/' +
-							getChargePointIndex(installedChargePointKey) +
-							'/get/daily_exported'
-					]
+					formatNumber(
+						$store.state.mqtt[
+							'openWB/chargepoint/' +
+								getChargePointIndex(installedChargePointKey) +
+								'/get/daily_exported'
+						] / 1000,
+						3
+					)
 				"
 			/>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Leistung"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="W"
+				unit="kW"
 				:model-value="
-					$store.state.mqtt[
-						'openWB/chargepoint/' +
-							getChargePointIndex(installedChargePointKey) +
-							'/get/power'
-					]
+					formatNumber(
+						$store.state.mqtt[
+							'openWB/chargepoint/' +
+								getChargePointIndex(installedChargePointKey) +
+								'/get/power'
+						] / 1000,
+						3
+					)
 				"
 			/>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Ladestromvorgabe"
 				readonly
 				class="text-right text-monospace"
 				step="0.01"
 				unit="A"
 				:model-value="
-					$store.state.mqtt[
-						'openWB/chargepoint/' +
-							getChargePointIndex(installedChargePointKey) +
-							'/set/current'
-					]
+					formatNumber(
+						$store.state.mqtt[
+							'openWB/chargepoint/' +
+								getChargePointIndex(installedChargePointKey) +
+								'/set/current'
+						],
+						2
+					)
 				"
 			/>
 			<openwb-base-heading>Werte pro Phase</openwb-base-heading>
@@ -242,7 +284,6 @@
 				title="Spannung"
 				readonly
 				class="text-right text-monospace"
-				subtype="json"
 				unit="V"
 				:model-value="
 					$store.state.mqtt[
@@ -250,13 +291,16 @@
 							getChargePointIndex(installedChargePointKey) +
 							'/get/voltages'
 					]
+						.map((element) => {
+							return formatNumber(element, 1);
+						})
+						.join(' / ')
 				"
 			/>
 			<openwb-base-text-input
 				title="Strom"
 				readonly
 				class="text-right text-monospace"
-				subtype="json"
 				unit="A"
 				:model-value="
 					$store.state.mqtt[
@@ -264,19 +308,33 @@
 							getChargePointIndex(installedChargePointKey) +
 							'/get/currents'
 					]
+						.map((element) => {
+							return formatNumber(element, 2);
+						})
+						.join(' / ')
 				"
 			/>
 			<openwb-base-text-input
+				v-if="
+					$store.state.mqtt[
+						'openWB/chargepoint/' +
+							getChargePointIndex(installedChargePointKey) +
+							'/get/power_factors'
+					]
+				"
 				title="Leistungsfaktor"
 				readonly
 				class="text-right text-monospace"
-				subtype="json"
 				:model-value="
 					$store.state.mqtt[
 						'openWB/chargepoint/' +
 							getChargePointIndex(installedChargePointKey) +
 							'/get/power_factors'
 					]
+						.map((element) => {
+							return formatNumber(element, 2);
+						})
+						.join(' / ')
 				"
 			/>
 			<openwb-base-heading>Phasen</openwb-base-heading>
@@ -369,53 +427,65 @@
 				}}
 			</openwb-base-alert>
 			<openwb-base-heading>Zählerstände</openwb-base-heading>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Export"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="Wh"
+				unit="kWh"
 				:model-value="
-					$store.state.mqtt[
-						'openWB/counter/' + counter.id + '/get/exported'
-					]
+					formatNumber(
+						$store.state.mqtt[
+							'openWB/counter/' + counter.id + '/get/exported'
+						] / 1000,
+						3
+					)
 				"
 			/>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Import"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="Wh"
+				unit="kWh"
 				:model-value="
-					$store.state.mqtt[
-						'openWB/counter/' + counter.id + '/get/imported'
-					]
+					formatNumber(
+						$store.state.mqtt[
+							'openWB/counter/' + counter.id + '/get/imported'
+						] / 1000,
+						3
+					)
 				"
 			/>
 			<openwb-base-heading>Saldierte Werte</openwb-base-heading>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Leistung"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="W"
+				unit="kW"
 				:model-value="
-					$store.state.mqtt[
-						'openWB/counter/' + counter.id + '/get/power'
-					]
+					formatNumber(
+						$store.state.mqtt[
+							'openWB/counter/' + counter.id + '/get/power'
+						] / 1000,
+						3
+					)
 				"
 			/>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Netzfrequenz"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
 				unit="Hz"
 				:model-value="
-					$store.state.mqtt[
-						'openWB/counter/' + counter.id + '/get/frequency'
-					]
+					formatNumber(
+						$store.state.mqtt[
+							'openWB/counter/' + counter.id + '/get/frequency'
+						],
+						3
+					)
 				"
 			/>
 			<openwb-base-heading>Werte pro Phase</openwb-base-heading>
@@ -423,47 +493,59 @@
 				title="Spannung"
 				readonly
 				class="text-right text-monospace"
-				subtype="json"
 				unit="V"
 				:model-value="
 					$store.state.mqtt[
 						'openWB/counter/' + counter.id + '/get/voltages'
 					]
+						.map((element) => {
+							return formatNumber(element, 1);
+						})
+						.join(' / ')
 				"
 			/>
 			<openwb-base-text-input
 				title="Strom"
 				readonly
 				class="text-right text-monospace"
-				subtype="json"
 				unit="A"
 				:model-value="
 					$store.state.mqtt[
 						'openWB/counter/' + counter.id + '/get/currents'
 					]
+						.map((element) => {
+							return formatNumber(element, 2);
+						})
+						.join(' / ')
 				"
 			/>
 			<openwb-base-text-input
 				title="Leistung"
 				readonly
 				class="text-right text-monospace"
-				subtype="json"
-				unit="W"
+				unit="kW"
 				:model-value="
 					$store.state.mqtt[
 						'openWB/counter/' + counter.id + '/get/powers'
 					]
+						.map((element) => {
+							return formatNumber(element / 1000, 3);
+						})
+						.join(' / ')
 				"
 			/>
 			<openwb-base-text-input
 				title="Leistungsfaktor"
 				readonly
 				class="text-right text-monospace"
-				subtype="json"
 				:model-value="
 					$store.state.mqtt[
 						'openWB/counter/' + counter.id + '/get/power_factors'
 					]
+						.map((element) => {
+							return formatNumber(element, 2);
+						})
+						.join(' / ')
 				"
 			/>
 		</openwb-base-card>
@@ -475,49 +557,73 @@
 			:collapsible="true"
 			:collapsed="true"
 		>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Zählerstand"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="Wh"
-				:model-value="$store.state.mqtt['openWB/pv/get/exported']"
+				unit="kWh"
+				:model-value="
+					formatNumber(
+						$store.state.mqtt['openWB/pv/get/exported'] / 1000,
+						3
+					)
+				"
 			/>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Leistung"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="W"
-				:model-value="$store.state.mqtt['openWB/pv/get/power']"
+				unit="kW"
+				:model-value="
+					formatNumber(
+						$store.state.mqtt['openWB/pv/get/power'] / 1000,
+						3
+					)
+				"
 			/>
 			<openwb-base-heading>Erträge</openwb-base-heading>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Heute"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="Wh"
-				:model-value="$store.state.mqtt['openWB/pv/get/daily_exported']"
+				unit="kWh"
+				:model-value="
+					formatNumber(
+						$store.state.mqtt['openWB/pv/get/daily_exported'] /
+							1000,
+						3
+					)
+				"
 			/>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Dieser Monat"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="Wh"
+				unit="kWh"
 				:model-value="
-					$store.state.mqtt['openWB/pv/get/monthly_exported']
+					formatNumber(
+						$store.state.mqtt['openWB/pv/get/monthly_exported'] /
+							1000,
+						3
+					)
 				"
 			/>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Dieses Jahr"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="Wh"
+				unit="kWh"
 				:model-value="
-					$store.state.mqtt['openWB/pv/get/yearly_exported']
+					formatNumber(
+						$store.state.mqtt['openWB/pv/get/yearly_exported'] /
+							1000,
+						3
+					)
 				"
 			/>
 		</openwb-base-card>
@@ -569,26 +675,34 @@
 					]
 				}}
 			</openwb-base-alert>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Zählerstand"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="Wh"
+				unit="kWh"
 				:model-value="
-					$store.state.mqtt[
-						'openWB/pv/' + inverter.id + '/get/exported'
-					]
+					formatNumber(
+						$store.state.mqtt[
+							'openWB/pv/' + inverter.id + '/get/exported'
+						] / 1000,
+						3
+					)
 				"
 			/>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Leistung"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="W"
+				unit="kW"
 				:model-value="
-					$store.state.mqtt['openWB/pv/' + inverter.id + '/get/power']
+					formatNumber(
+						$store.state.mqtt[
+							'openWB/pv/' + inverter.id + '/get/power'
+						] / 1000,
+						3
+					)
 				"
 			/>
 		</openwb-base-card>
@@ -601,51 +715,74 @@
 			:collapsed="true"
 		>
 			<openwb-base-heading>Zählerstände</openwb-base-heading>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Ladung"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="Wh"
-				:model-value="$store.state.mqtt['openWB/bat/get/imported']"
-			/>
-			<openwb-base-number-input
-				title="Entladung"
-				readonly
-				class="text-right text-monospace"
-				step="0.001"
-				unit="Wh"
-				:model-value="$store.state.mqtt['openWB/bat/get/exported']"
-			/>
-			<openwb-base-heading>Tageswerte</openwb-base-heading>
-			<openwb-base-number-input
-				title="Ladung"
-				readonly
-				class="text-right text-monospace"
-				step="0.001"
-				unit="Wh"
+				unit="kWh"
 				:model-value="
-					$store.state.mqtt['openWB/bat/get/daily_imported']
+					formatNumber(
+						$store.state.mqtt['openWB/bat/get/imported'] / 1000,
+						3
+					)
 				"
 			/>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Entladung"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="Wh"
+				unit="kWh"
 				:model-value="
-					$store.state.mqtt['openWB/bat/get/daily_exported']
+					formatNumber(
+						$store.state.mqtt['openWB/bat/get/exported'] / 1000,
+						3
+					)
+				"
+			/>
+			<openwb-base-heading>Tageswerte</openwb-base-heading>
+			<openwb-base-text-input
+				title="Ladung"
+				readonly
+				class="text-right text-monospace"
+				step="0.001"
+				unit="kWh"
+				:model-value="
+					formatNumber(
+						$store.state.mqtt['openWB/bat/get/daily_imported'] /
+							1000,
+						3
+					)
+				"
+			/>
+			<openwb-base-text-input
+				title="Entladung"
+				readonly
+				class="text-right text-monospace"
+				step="0.001"
+				unit="kWh"
+				:model-value="
+					formatNumber(
+						$store.state.mqtt['openWB/bat/get/daily_exported'] /
+							1000,
+						3
+					)
 				"
 			/>
 			<openwb-base-heading>Saldierte Werte</openwb-base-heading>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Leistung"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="W"
-				:model-value="$store.state.mqtt['openWB/bat/get/power']"
+				unit="kW"
+				:model-value="
+					formatNumber(
+						$store.state.mqtt['openWB/bat/get/power'] / 1000,
+						3
+					)
+				"
 			/>
 			<openwb-base-number-input
 				title="Ladestand"
@@ -704,14 +841,19 @@
 				}}
 			</openwb-base-alert>
 			<openwb-base-heading>Aktuelle Werte</openwb-base-heading>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Leistung"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="W"
+				unit="kW"
 				:model-value="
-					$store.state.mqtt['openWB/bat/' + battery.id + '/get/power']
+					formatNumber(
+						$store.state.mqtt[
+							'openWB/bat/' + battery.id + '/get/power'
+						] / 1000,
+						3
+					)
 				"
 			/>
 			<openwb-base-number-input
@@ -724,28 +866,34 @@
 				"
 			/>
 			<openwb-base-heading>Zählerstände</openwb-base-heading>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Ladung"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="Wh"
+				unit="kWh"
 				:model-value="
-					$store.state.mqtt[
-						'openWB/bat/' + battery.id + '/get/imported'
-					]
+					formatNumber(
+						$store.state.mqtt[
+							'openWB/bat/' + battery.id + '/get/imported'
+						] / 1000,
+						3
+					)
 				"
 			/>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Entladung"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
-				unit="Wh"
+				unit="kWh"
 				:model-value="
-					$store.state.mqtt[
-						'openWB/bat/' + battery.id + '/get/exported'
-					]
+					formatNumber(
+						$store.state.mqtt[
+							'openWB/bat/' + battery.id + '/get/exported'
+						] / 1000,
+						3
+					)
 				"
 			/>
 		</openwb-base-card>
