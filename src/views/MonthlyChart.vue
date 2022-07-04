@@ -1,7 +1,11 @@
 <template>
 	<div class="monthlyChart">
 		<form name="monthlyChartForm">
-			<openwb-base-card title="Filter">
+			<openwb-base-card
+				title="Filter"
+				:collapsible="true"
+				:collapsed="false"
+			>
 				<openwb-base-text-input
 					title="Monat"
 					subtype="month"
@@ -27,52 +31,63 @@
 				<openwb-base-alert v-if="!chartDataHasEntries" subtype="info">
 					Es konnten keine Daten für diesen Zeitraum gefunden werden.
 				</openwb-base-alert>
-				<openwb-base-card v-else title="Monats-Diagramm">
-					<Line :chartData="chartData" :chartOptions="chartOptions" />
-				</openwb-base-card>
-				<openwb-base-card
-					title="Monatssummen"
-					:collapsible="true"
-					:collapsed="true"
-				>
+				<div v-else>
 					<openwb-base-card
-						v-for="(group, groupKey) in chartTotals"
-						:key="groupKey"
-						:title="getTotalsLabel(groupKey)"
+						title="Diagramm"
+						:collapsible="true"
+						:collapsed="false"
+					>
+						<Line
+							:chartData="chartData"
+							:chartOptions="chartOptions"
+						/>
+					</openwb-base-card>
+					<openwb-base-card
+						title="Summen"
 						:collapsible="true"
 						:collapsed="true"
-						:subtype="getCardSubtype(groupKey)"
 					>
-						<div
-							v-for="(component, componentKey) in group"
-							:key="componentKey"
+						<openwb-base-card
+							v-for="(group, groupKey) in chartTotals"
+							:key="groupKey"
+							:title="getTotalsLabel(groupKey)"
+							:collapsible="true"
+							:collapsed="true"
+							:subtype="getCardSubtype(groupKey)"
 						>
-							<openwb-base-heading>{{
-								getTotalsLabel(groupKey, componentKey)
-							}}</openwb-base-heading>
 							<div
-								v-for="(
-									measurement, measurementKey
-								) in component"
-								:key="measurementKey"
+								v-for="(component, componentKey) in group"
+								:key="componentKey"
 							>
-								<openwb-base-number-input
-									:title="
-										getTotalsLabel(
-											groupKey,
-											componentKey,
-											measurementKey
-										)
-									"
-									readonly
-									class="text-right"
-									unit="Wh"
-									:model-value="measurement"
-								/>
+								<openwb-base-heading>{{
+									getTotalsLabel(groupKey, componentKey)
+								}}</openwb-base-heading>
+								<div
+									v-for="(
+										measurement, measurementKey
+									) in component"
+									:key="measurementKey"
+								>
+									<openwb-base-text-input
+										:title="
+											getTotalsLabel(
+												groupKey,
+												componentKey,
+												measurementKey
+											)
+										"
+										readonly
+										class="text-right"
+										unit="kWh"
+										:model-value="
+											formatNumber(measurement / 1000, 3)
+										"
+									/>
+								</div>
 							</div>
-						</div>
+						</openwb-base-card>
 					</openwb-base-card>
-				</openwb-base-card>
+				</div>
 			</div>
 		</form>
 	</div>
