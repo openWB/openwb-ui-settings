@@ -49,8 +49,9 @@ export default {
 				connected: false,
 			},
 			connection: {
+				protocol: location.protocol == "https:" ? "wss" : "ws",
 				host: location.hostname,
-				port: 9001,
+				port: location.protocol == "https:" ? 9002 : 9001,
 				endpoint: "/",
 				connectTimeout: 4000,
 				reconnectPeriod: 4000,
@@ -157,7 +158,6 @@ export default {
 		 * Establishes a connection to the configured broker
 		 */
 		createConnection() {
-			console.debug("connecting to broker...");
 			// Connect string, and specify the connection method used through protocol
 			// ws not encrypted WebSocket connection
 			// wss encrypted WebSocket connection
@@ -165,8 +165,10 @@ export default {
 			// mqtts encrypted TCP connection
 			// wxs WeChat mini app connection
 			// alis Alipay mini app connection
-			const { host, port, endpoint, ...options } = this.connection;
-			const connectUrl = `ws://${host}:${port}${endpoint}`;
+			const { protocol, host, port, endpoint, ...options } =
+				this.connection;
+			const connectUrl = `${protocol}://${host}:${port}${endpoint}`;
+			console.debug("connecting to broker:", connectUrl);
 			try {
 				this.client = mqtt.connect(connectUrl, options);
 			} catch (error) {
