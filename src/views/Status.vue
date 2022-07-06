@@ -15,10 +15,11 @@
 				step="0.001"
 				unit="kW"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt['openWB/chargepoint/get/power'] /
-							1000,
-						3
+					formatNumberTopic(
+						'openWB/chargepoint/get/power',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -29,10 +30,11 @@
 				step="0.001"
 				unit="kWh"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt['openWB/chargepoint/get/imported'] /
-							1000,
-						3
+					formatNumberTopic(
+						'openWB/chargepoint/get/imported',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -43,10 +45,11 @@
 				step="0.001"
 				unit="kWh"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt['openWB/chargepoint/get/exported'] /
-							1000,
-						3
+					formatNumberTopic(
+						'openWB/chargepoint/get/exported',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -58,11 +61,11 @@
 				step="0.001"
 				unit="kWh"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt[
-							'openWB/chargepoint/get/daily_imported'
-						] / 1000,
-						3
+					formatNumberTopic(
+						'openWB/chargepoint/get/daily_imported',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -73,11 +76,11 @@
 				step="0.001"
 				unit="kWh"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt[
-							'openWB/chargepoint/get/daily_exported'
-						] / 1000,
-						3
+					formatNumberTopic(
+						'openWB/chargepoint/get/daily_exported',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -184,13 +187,13 @@
 				step="0.001"
 				unit="kWh"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt[
-							'openWB/chargepoint/' +
-								getChargePointIndex(installedChargePointKey) +
-								'/get/imported'
-						] / 1000,
-						3
+					formatNumberTopic(
+						'openWB/chargepoint/' +
+							getChargePointIndex(installedChargePointKey) +
+							'/get/imported',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -201,13 +204,13 @@
 				step="0.001"
 				unit="kWh"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt[
-							'openWB/chargepoint/' +
-								getChargePointIndex(installedChargePointKey) +
-								'/get/exported'
-						] / 1000,
-						3
+					formatNumberTopic(
+						'openWB/chargepoint/' +
+							getChargePointIndex(installedChargePointKey) +
+							'/get/exported',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -218,13 +221,13 @@
 				step="0.001"
 				unit="kWh"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt[
-							'openWB/chargepoint/' +
-								getChargePointIndex(installedChargePointKey) +
-								'/get/daily_imported'
-						] / 1000,
-						3
+					formatNumberTopic(
+						'openWB/chargepoint/' +
+							getChargePointIndex(installedChargePointKey) +
+							'/get/daily_imported',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -235,13 +238,13 @@
 				step="0.001"
 				unit="kWh"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt[
-							'openWB/chargepoint/' +
-								getChargePointIndex(installedChargePointKey) +
-								'/get/daily_exported'
-						] / 1000,
-						3
+					formatNumberTopic(
+						'openWB/chargepoint/' +
+							getChargePointIndex(installedChargePointKey) +
+							'/get/daily_exported',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -252,13 +255,13 @@
 				step="0.001"
 				unit="kW"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt[
-							'openWB/chargepoint/' +
-								getChargePointIndex(installedChargePointKey) +
-								'/get/power'
-						] / 1000,
-						3
+					formatNumberTopic(
+						'openWB/chargepoint/' +
+							getChargePointIndex(installedChargePointKey) +
+							'/get/power',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -269,12 +272,10 @@
 				step="0.01"
 				unit="A"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt[
-							'openWB/chargepoint/' +
-								getChargePointIndex(installedChargePointKey) +
-								'/set/current'
-						],
+					formatNumberTopic(
+						'openWB/chargepoint/' +
+							getChargePointIndex(installedChargePointKey) +
+							'/set/current',
 						2
 					)
 				"
@@ -286,15 +287,12 @@
 				class="text-right text-monospace"
 				unit="V"
 				:model-value="
-					$store.state.mqtt[
+					formatPhaseArrayNumberTopic(
 						'openWB/chargepoint/' +
 							getChargePointIndex(installedChargePointKey) +
-							'/get/voltages'
-					]
-						.map((element) => {
-							return formatNumber(element, 1);
-						})
-						.join(' / ')
+							'/get/voltages',
+						1
+					)
 				"
 			/>
 			<openwb-base-text-input
@@ -303,63 +301,50 @@
 				class="text-right text-monospace"
 				unit="A"
 				:model-value="
-					$store.state.mqtt[
+					formatPhaseArrayNumberTopic(
 						'openWB/chargepoint/' +
 							getChargePointIndex(installedChargePointKey) +
-							'/get/currents'
-					]
-						.map((element) => {
-							return formatNumber(element, 2);
-						})
-						.join(' / ')
+							'/get/currents',
+						2
+					)
 				"
 			/>
 			<openwb-base-text-input
-				v-if="
-					$store.state.mqtt[
-						'openWB/chargepoint/' +
-							getChargePointIndex(installedChargePointKey) +
-							'/get/power_factors'
-					]
-				"
 				title="Leistungsfaktor"
 				readonly
 				class="text-right text-monospace"
 				:model-value="
-					$store.state.mqtt[
+					formatPhaseArrayNumberTopic(
 						'openWB/chargepoint/' +
 							getChargePointIndex(installedChargePointKey) +
-							'/get/power_factors'
-					]
-						.map((element) => {
-							return formatNumber(element, 2);
-						})
-						.join(' / ')
+							'/get/power_factors',
+						2
+					)
 				"
 			/>
 			<openwb-base-heading>Phasen</openwb-base-heading>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Vorgabe"
 				readonly
 				class="text-right text-monospace"
 				:model-value="
-					$store.state.mqtt[
+					formatNumberTopic(
 						'openWB/chargepoint/' +
 							getChargePointIndex(installedChargePointKey) +
 							'/set/phases_to_use'
-					]
+					)
 				"
 			/>
-			<openwb-base-number-input
+			<openwb-base-text-input
 				title="Aktuell"
 				readonly
 				class="text-right text-monospace"
 				:model-value="
-					$store.state.mqtt[
+					formatNumberTopic(
 						'openWB/chargepoint/' +
 							getChargePointIndex(installedChargePointKey) +
 							'/get/phases_in_use'
-					]
+					)
 				"
 			/>
 		</openwb-base-card>
@@ -434,11 +419,11 @@
 				step="0.001"
 				unit="kWh"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt[
-							'openWB/counter/' + counter.id + '/get/exported'
-						] / 1000,
-						3
+					formatNumberTopic(
+						'openWB/counter/' + counter.id + '/get/exported',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -449,11 +434,11 @@
 				step="0.001"
 				unit="kWh"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt[
-							'openWB/counter/' + counter.id + '/get/imported'
-						] / 1000,
-						3
+					formatNumberTopic(
+						'openWB/counter/' + counter.id + '/get/imported',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -465,11 +450,11 @@
 				step="0.001"
 				unit="kW"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt[
-							'openWB/counter/' + counter.id + '/get/power'
-						] / 1000,
-						3
+					formatNumberTopic(
+						'openWB/counter/' + counter.id + '/get/power',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -480,10 +465,8 @@
 				step="0.001"
 				unit="Hz"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt[
-							'openWB/counter/' + counter.id + '/get/frequency'
-						],
+					formatNumberTopic(
+						'openWB/counter/' + counter.id + '/get/frequency',
 						3
 					)
 				"
@@ -495,13 +478,10 @@
 				class="text-right text-monospace"
 				unit="V"
 				:model-value="
-					$store.state.mqtt[
-						'openWB/counter/' + counter.id + '/get/voltages'
-					]
-						.map((element) => {
-							return formatNumber(element, 1);
-						})
-						.join(' / ')
+					formatPhaseArrayNumberTopic(
+						'openWB/counter/' + counter.id + '/get/voltages',
+						1
+					)
 				"
 			/>
 			<openwb-base-text-input
@@ -510,13 +490,10 @@
 				class="text-right text-monospace"
 				unit="A"
 				:model-value="
-					$store.state.mqtt[
-						'openWB/counter/' + counter.id + '/get/currents'
-					]
-						.map((element) => {
-							return formatNumber(element, 2);
-						})
-						.join(' / ')
+					formatPhaseArrayNumberTopic(
+						'openWB/counter/' + counter.id + '/get/currents',
+						2
+					)
 				"
 			/>
 			<openwb-base-text-input
@@ -525,13 +502,12 @@
 				class="text-right text-monospace"
 				unit="kW"
 				:model-value="
-					$store.state.mqtt[
-						'openWB/counter/' + counter.id + '/get/powers'
-					]
-						.map((element) => {
-							return formatNumber(element / 1000, 3);
-						})
-						.join(' / ')
+					formatPhaseArrayNumberTopic(
+						'openWB/counter/' + counter.id + '/get/powers',
+						3,
+						3,
+						0.001
+					)
 				"
 			/>
 			<openwb-base-text-input
@@ -539,13 +515,10 @@
 				readonly
 				class="text-right text-monospace"
 				:model-value="
-					$store.state.mqtt[
-						'openWB/counter/' + counter.id + '/get/power_factors'
-					]
-						.map((element) => {
-							return formatNumber(element, 2);
-						})
-						.join(' / ')
+					formatPhaseArrayNumberTopic(
+						'openWB/counter/' + counter.id + '/get/power_factors',
+						2
+					)
 				"
 			/>
 		</openwb-base-card>
@@ -564,10 +537,7 @@
 				step="0.001"
 				unit="kWh"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt['openWB/pv/get/exported'] / 1000,
-						3
-					)
+					formatNumberTopic('openWB/pv/get/exported', 3, 3, 0.001)
 				"
 			/>
 			<openwb-base-text-input
@@ -577,10 +547,7 @@
 				step="0.001"
 				unit="kW"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt['openWB/pv/get/power'] / 1000,
-						3
-					)
+					formatNumberTopic('openWB/pv/get/power', 3, 3, 0.001)
 				"
 			/>
 			<openwb-base-heading>Erträge</openwb-base-heading>
@@ -591,10 +558,11 @@
 				step="0.001"
 				unit="kWh"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt['openWB/pv/get/daily_exported'] /
-							1000,
-						3
+					formatNumberTopic(
+						'openWB/pv/get/daily_exported',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -605,10 +573,11 @@
 				step="0.001"
 				unit="kWh"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt['openWB/pv/get/monthly_exported'] /
-							1000,
-						3
+					formatNumberTopic(
+						'openWB/pv/get/monthly_exported',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -619,10 +588,11 @@
 				step="0.001"
 				unit="kWh"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt['openWB/pv/get/yearly_exported'] /
-							1000,
-						3
+					formatNumberTopic(
+						'openWB/pv/get/yearly_exported',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -682,11 +652,11 @@
 				step="0.001"
 				unit="kWh"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt[
-							'openWB/pv/' + inverter.id + '/get/exported'
-						] / 1000,
-						3
+					formatNumberTopic(
+						'openWB/pv/' + inverter.id + '/get/exported',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -697,11 +667,11 @@
 				step="0.001"
 				unit="kW"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt[
-							'openWB/pv/' + inverter.id + '/get/power'
-						] / 1000,
-						3
+					formatNumberTopic(
+						'openWB/pv/' + inverter.id + '/get/power',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -722,10 +692,7 @@
 				step="0.001"
 				unit="kWh"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt['openWB/bat/get/imported'] / 1000,
-						3
-					)
+					formatNumberTopic('openWB/bat/get/imported', 3, 3, 0.001)
 				"
 			/>
 			<openwb-base-text-input
@@ -735,10 +702,7 @@
 				step="0.001"
 				unit="kWh"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt['openWB/bat/get/exported'] / 1000,
-						3
-					)
+					formatNumberTopic('openWB/bat/get/exported', 3, 3, 0.001)
 				"
 			/>
 			<openwb-base-heading>Tageswerte</openwb-base-heading>
@@ -749,10 +713,11 @@
 				step="0.001"
 				unit="kWh"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt['openWB/bat/get/daily_imported'] /
-							1000,
-						3
+					formatNumberTopic(
+						'openWB/bat/get/daily_imported',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -763,10 +728,11 @@
 				step="0.001"
 				unit="kWh"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt['openWB/bat/get/daily_exported'] /
-							1000,
-						3
+					formatNumberTopic(
+						'openWB/bat/get/daily_exported',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -778,10 +744,7 @@
 				step="0.001"
 				unit="kW"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt['openWB/bat/get/power'] / 1000,
-						3
-					)
+					formatNumberTopic('openWB/bat/get/power', 3, 3, 0.001)
 				"
 			/>
 			<openwb-base-number-input
@@ -848,11 +811,11 @@
 				step="0.001"
 				unit="kW"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt[
-							'openWB/bat/' + battery.id + '/get/power'
-						] / 1000,
-						3
+					formatNumberTopic(
+						'openWB/bat/' + battery.id + '/get/power',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -873,11 +836,11 @@
 				step="0.001"
 				unit="kWh"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt[
-							'openWB/bat/' + battery.id + '/get/imported'
-						] / 1000,
-						3
+					formatNumberTopic(
+						'openWB/bat/' + battery.id + '/get/imported',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -888,11 +851,11 @@
 				step="0.001"
 				unit="kWh"
 				:model-value="
-					formatNumber(
-						$store.state.mqtt[
-							'openWB/bat/' + battery.id + '/get/exported'
-						] / 1000,
-						3
+					formatNumberTopic(
+						'openWB/bat/' + battery.id + '/get/exported',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
