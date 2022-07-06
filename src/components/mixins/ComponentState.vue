@@ -92,11 +92,54 @@ export default {
 			let date = new Date(dateString);
 			return date.toLocaleDateString(undefined, format);
 		},
-		formatNumber(value, minNumDigits = 0, maxNumDigit = minNumDigits) {
-			return value.toLocaleString(undefined, {
+		formatNumber(
+			value,
+			minNumDigits = 0,
+			maxNumDigit = minNumDigits,
+			scale = 1
+		) {
+			return (value * scale).toLocaleString(undefined, {
 				minimumFractionDigits: minNumDigits,
 				maximumFractionDigits: maxNumDigit,
 			});
+		},
+		formatNumberTopic(
+			topic,
+			minNumDigits = 0,
+			maxNumDigits = minNumDigits,
+			scale = 1
+		) {
+			if (this.$store.state.mqtt[topic]) {
+				return this.formatNumber(
+					this.$store.state.mqtt[topic],
+					minNumDigits,
+					maxNumDigits,
+					scale
+				);
+			} else {
+				return "-";
+			}
+		},
+		formatPhaseArrayNumberTopic(
+			topic,
+			minNumDigits = 0,
+			maxNumDigits = minNumDigits,
+			scale = 1
+		) {
+			if (this.$store.state.mqtt[topic]) {
+				return this.$store.state.mqtt[topic]
+					.map((element) => {
+						return this.formatNumber(
+							element,
+							minNumDigits,
+							maxNumDigits,
+							scale
+						);
+					})
+					.join(" / ");
+			} else {
+				return "- / - / -";
+			}
 		},
 		translateChargeMode(value) {
 			switch (value) {
