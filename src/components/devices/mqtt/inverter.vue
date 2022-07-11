@@ -24,7 +24,7 @@
 						tooltip="Topic kopieren"
 						>openWB/set/pv/{{
 							componentId
-						}}/get/counter</openwb-base-copy-to-clipboard
+						}}/get/exported</openwb-base-copy-to-clipboard
 					><br />
 					Erzeugte Energie in Wh, mit Nachkommastellen (Float), nur
 					positiv<br />
