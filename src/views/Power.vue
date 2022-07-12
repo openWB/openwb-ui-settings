@@ -8,6 +8,56 @@
 				Fahrzeuge von der Ladestation / den Ladestationen abstecken!
 			</p>
 		</openwb-base-alert>
+		<form name="versionInfoForm">
+			<openwb-base-card title="Versions-Informationen">
+				<openwb-base-text-input
+					title="installierte Version"
+					readonly
+					:class="updateAvailable ? 'text-danger' : 'text-success'"
+					v-model="$store.state.mqtt['openWB/system/current_commit']"
+				/>
+				<openwb-base-text-input
+					title="aktuellste Version"
+					readonly
+					v-model="
+						$store.state.mqtt['openWB/system/current_master_commit']
+					"
+				/>
+				<div v-if="updateAvailable">
+					<openwb-base-heading>Änderungen</openwb-base-heading>
+					<ul>
+						<li
+							v-for="(commit, key) in $store.state.mqtt[
+								'openWB/system/current_missing_commits'
+							]"
+							:key="key"
+						>
+							{{ commit }}
+						</li>
+					</ul>
+				</div>
+				<template #footer>
+					<div class="row justify-content-center">
+						<div
+							class="col-md-4 d-flex py-1 justify-content-center"
+						>
+							<openwb-base-click-button
+								class="btn-success"
+								@click="
+									sendSystemCommand('systemFetchVersions')
+								"
+							>
+								Informationen aktualisieren
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'download']"
+								/>
+							</openwb-base-click-button>
+						</div>
+					</div>
+				</template>
+			</openwb-base-card>
+		</form>
 		<form name="updateForm">
 			<openwb-base-card title="Versionsverwaltung">
 				<openwb-base-alert subtype="danger">
@@ -31,7 +81,12 @@
 							class="col-md-4 d-flex py-1 justify-content-center"
 						>
 							<openwb-base-click-button
-								class="btn-success"
+								:class="
+									updateAvailable
+										? 'btn-success clickable'
+										: 'btn-outline-success'
+								"
+								:disabled="!updateAvailable"
 								@click="sendSystemCommand('systemUpdate')"
 							>
 								Update
@@ -95,8 +150,9 @@ import {
 	faArrowAltCircleUp as fasArrowAltCircleUp,
 	faUndo as fasUndo,
 	faPowerOff as fasPowerOff,
+	faDownload as fasDownload,
 } from "@fortawesome/free-solid-svg-icons";
-library.add(fasArrowAltCircleUp, fasUndo, fasPowerOff);
+library.add(fasArrowAltCircleUp, fasUndo, fasPowerOff, fasDownload);
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
@@ -110,14 +166,27 @@ export default {
 	},
 	data() {
 		return {
-			mqttTopicsToSubscribe: [],
+			mqttTopicsToSubscribe: [
+				"openWB/system/current_commit",
+				"openWB/system/current_master_commit",
+				"openWB/system/current_missing_commits",
+			],
 		};
 	},
+	computed: {
+		updateAvailable() {
+			return (
+				this.$store.state.mqtt["openWB/system/current_master_commit"] &&
+				this.$store.state.mqtt["openWB/system/current_master_commit"] !=
+					this.$store.state.mqtt["openWB/system/current_commit"]
+			);
+		},
+	},
 	methods: {
-		sendSystemCommand(command) {
+		sendSystemCommand(command, data = {}) {
 			this.$emit("sendCommand", {
 				command: command,
-				data: {},
+				data: data,
 			});
 		},
 	},
