@@ -188,7 +188,7 @@
 							Datenschutz
 						</router-link>
 						<router-link
-							to="/System/Power"
+							to="/System/SystemConfiguration"
 							class="dropdown-item"
 							active-class="active disabled"
 						>

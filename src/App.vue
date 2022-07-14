@@ -5,16 +5,6 @@
 	<div role="main" class="container">
 		<div id="content">
 			<h1>{{ $route.meta.heading }}</h1>
-			<command-alert
-				:alertData="
-					$store.state.mqtt[
-						'openWB/command/' +
-							this.$root.client.options.clientId +
-							'/error'
-					]
-				"
-				@dismiss="dismissError"
-			/>
 			<router-view
 				@save="saveValues"
 				@reset="resetValues"
@@ -25,23 +15,24 @@
 		<donation-banner />
 	</div>
 	<page-footer />
+	<messages />
 </template>
 
 <script>
 // @ is an alias to /src
 import NavBar from "@/components/OpenwbPageNavbar.vue";
-import CommandAlert from "@/components/OpenwbPageCommandAlert.vue";
 import PageFooter from "@/components/OpenwbPageFooter.vue";
 import DonationBanner from "@/components/OpenwbPageDonationBanner.vue";
+import Messages from "@/components/OpenwbPageMessages.vue";
 import mqtt from "mqtt";
 
 export default {
 	name: "settings-app",
 	components: {
 		NavBar,
-		CommandAlert,
 		PageFooter,
 		DonationBanner,
+		Messages,
 	},
 	data() {
 		return {
@@ -135,15 +126,6 @@ export default {
 			console.debug("setting default values... (ToDo)");
 		},
 		/**
-		 * Removes client specific error topic from broker
-		 */
-		dismissError() {
-			this.doPublish(
-				"openWB/command/" + this.client.options.clientId + "/error",
-				undefined
-			);
-		},
-		/**
 		 * Sends a command via broker to the backend
 		 * @param {Object} event - Command object to send
 		 */
@@ -179,9 +161,6 @@ export default {
 					"Connection succeeded! ClientId: ",
 					this.client.options.clientId
 				);
-				this.doSubscribe([
-					"openWB/command/" + this.client.options.clientId + "/error",
-				]);
 			});
 			this.client.on("error", (error) => {
 				console.error("Connection failed", error);

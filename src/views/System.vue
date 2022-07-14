@@ -158,7 +158,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 export default {
-	name: "OpenwbSupport",
+	name: "OpenwbSystem",
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
 	components: {
