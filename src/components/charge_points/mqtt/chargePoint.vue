@@ -38,7 +38,7 @@
 									chargePointId
 								}}/set/phases_to_use</openwb-base-copy-to-clipboard
 							><br />
-							Sollwert für die Anzahl Phasen ans Ganzzahl
+							Sollwert für die Anzahl Phasen als Ganzzahl
 							(Integer). Mögliche Werte: 1 oder 3<br />
 							Beispiel: <span class="text-info">1</span>
 						</li>
@@ -101,6 +101,19 @@
 							Zeigt an, ob ein Ladevorgang aktiv ist,
 							Wahrheitswert (Bool).<br />
 							Beispiel: <span class="text-info">true</span>
+						</li>
+						<li>
+							<openwb-base-copy-to-clipboard
+								class="text-info"
+								tooltip="Topic kopieren"
+							>
+								openWB/set/chargepoint/{{
+									chargePointId
+								}}/get/phases_in_use</openwb-base-copy-to-clipboard
+							><br />
+							Anzahl der Phasen, mit denen geladen wird, Ganzzahl
+							(Integer). Mögliche Werte: 0 bis 3<br />
+							Beispiel: <span class="text-info">3</span>
 						</li>
 					</ul>
 				</li>
