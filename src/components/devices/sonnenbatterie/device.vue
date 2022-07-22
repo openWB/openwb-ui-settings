@@ -8,9 +8,9 @@
 			title="IP oder Hostname"
 			subtype="host"
 			required
-			:model-value="configuration.ip"
+			:model-value="configuration.ip_address"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.ip')
+				updateConfiguration($event, 'configuration.ip_address')
 			"
 		/>
 		<openwb-base-select-input
@@ -71,18 +71,20 @@ export default {
 	computed: {
 		linkRestApi1() {
 			return (
-				"http://" + this.configuration.ip + ":7979/rest/devices/battery"
+				"http://" +
+				this.configuration.ip_address +
+				":7979/rest/devices/battery"
 			);
 		},
 		linkRestApi2() {
 			return (
 				"http://" +
-				this.configuration.ip +
+				this.configuration.ip_address +
 				":7979/rest/devices/battery/M05"
 			);
 		},
 		linkJsonApi() {
-			return "http://" + this.configuration.ip + "/api/v1/status";
+			return "http://" + this.configuration.ip_address + "/api/v1/status";
 		},
 	},
 	methods: {

@@ -319,8 +319,7 @@ export default {
 						sortable: false,
 						display: (row) => {
 							return this.alignEnd(
-								this.formatNumber(row.costs / 1000, 2) +
-									"&nbsp;€"
+								this.formatNumber(row.costs, 2) + "&nbsp;€"
 							);
 						},
 					},
