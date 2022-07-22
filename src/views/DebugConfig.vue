@@ -31,6 +31,15 @@
 							Schreibvorgänge auf der SD-Karte zu reduzieren.
 						</template>
 					</openwb-base-button-group-input>
+					<openwb-base-alert subtype="warning">
+						Achtung! In den Einstellungen "Info" und "Details"
+						können in den Logdateien sensible Daten wie
+						Benutzernamen und Kennwörter enthalten sein. Diese
+						sollten vor dem Veröffentlichen z.B. im Forum
+						unkenntlich gemacht werden. Private IP-Adressen (z.B.
+						192.168.x.x) müssen nicht maskiert werden, da diese
+						nicht über das Internet erreichbar sind.
+					</openwb-base-alert>
 				</div>
 			</openwb-base-card>
 			<openwb-base-submit-buttons
