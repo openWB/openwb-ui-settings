@@ -42,8 +42,8 @@ export default {
 			connection: {
 				protocol: location.protocol == "https:" ? "wss" : "ws",
 				host: location.hostname,
-				port: location.protocol == "https:" ? 443 : 9001,
-				endpoint: location.protocol == "https:" ? "/ws" : "/",
+				port: location.protocol == "https:" ? 443 : 80,
+				endpoint: location.protocol == "/ws",
 				connectTimeout: 4000,
 				reconnectPeriod: 4000,
 			},
