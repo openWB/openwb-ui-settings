@@ -43,7 +43,7 @@ export default {
 				protocol: location.protocol == "https:" ? "wss" : "ws",
 				host: location.hostname,
 				port: location.protocol == "https:" ? 443 : 80,
-				endpoint: location.protocol == "/ws",
+				endpoint: "/ws",
 				connectTimeout: 4000,
 				reconnectPeriod: 4000,
 			},
