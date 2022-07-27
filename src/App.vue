@@ -151,7 +151,6 @@ export default {
 			// alis Alipay mini app connection
 			const { protocol, host, port, endpoint, ...options } =
 				this.connection;
-			console.log("port:", port);
 			const connectUrl = `${protocol}://${host}:${port}${endpoint}`;
 			console.debug("connecting to broker:", connectUrl);
 			try {
