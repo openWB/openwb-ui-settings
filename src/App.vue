@@ -42,8 +42,10 @@ export default {
 			connection: {
 				protocol: location.protocol == "https:" ? "wss" : "ws",
 				host: location.hostname,
-				port: location.protocol == "https:" ? 443 : 80,
-				endpoint: "/ws",
+				port:
+					parseInt(location.port) ||
+					(location.protocol == "https:" ? 443 : 80),
+				endpoint: "/mqtt",
 				connectTimeout: 4000,
 				reconnectPeriod: 4000,
 			},

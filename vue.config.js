@@ -5,6 +5,14 @@ module.exports = {
 	css: {
 		sourceMap: true,
 	},
+	devServer: {
+		proxy: {
+			'^/mqtt': {
+				target: 'ws://localhost:9001',
+				ws: true,
+			},
+		},
+	},
 	configureWebpack: {
 		resolve: {
 			fallback: {
