@@ -240,8 +240,7 @@ export default {
 						sortable: true,
 						display: (row) => {
 							return this.alignEnd(
-								this.formatNumber(row.data_costs / 1000, 2) +
-									"&nbsp;€"
+								this.formatNumber(row.data_costs, 2) + "&nbsp;€"
 							);
 						},
 					},
