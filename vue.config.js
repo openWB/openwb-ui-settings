@@ -6,8 +6,15 @@ module.exports = {
 		sourceMap: true,
 	},
 	devServer: {
+		webSocketServer: {
+			options: {
+				// change default path "/ws" to avoid collision
+				// with openWB websocket for mqtt
+				path: "/devserver",
+			},
+		},
 		proxy: {
-			'^/mqtt': {
+			'^/ws': {
 				target: 'ws://localhost:9001',
 				ws: true,
 			},
