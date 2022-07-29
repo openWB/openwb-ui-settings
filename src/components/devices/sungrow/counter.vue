@@ -16,7 +16,7 @@
 			"
 		/>
 		<openwb-base-number-input
-			title="Modbus-ID"
+			title="Geräteadresse"
 			required
 			:min="1"
 			:max="255"
