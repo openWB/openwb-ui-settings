@@ -5,7 +5,7 @@
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-number-input
-			title="Modbus-ID"
+			title="Geräteadresse"
 			required
 			:min="1"
 			:max="255"
