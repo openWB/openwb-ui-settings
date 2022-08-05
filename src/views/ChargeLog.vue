@@ -155,6 +155,14 @@ export default {
 	emits: ["sendCommand"],
 	data() {
 		return {
+			dateTimeFormat: new Intl.DateTimeFormat("de-DE", {
+				year: "numeric",
+				month: "2-digit",
+				day: "2-digit",
+				hour: "2-digit",
+				minute: "2-digit",
+				second: "2-digit",
+			}),
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
 				"openWB/chargepoint/+/config",
@@ -196,11 +204,21 @@ export default {
 						label: "Beginn",
 						field: "time_begin",
 						sortable: true,
+						display: (row) => {
+							return this.dateTimeFormat.format(
+								new Date(row.time_begin * 1000)
+							);
+						},
 					},
 					{
 						label: "Ende",
 						field: "time_end",
 						sortable: true,
+						display: (row) => {
+							return this.dateTimeFormat.format(
+								new Date(row.time_end * 1000)
+							);
+						},
 					},
 					{
 						label: "Fahrzeug",
@@ -358,14 +376,6 @@ export default {
 		},
 		chargeLogDataset: {
 			get() {
-				let dateTimeFormat = new Intl.DateTimeFormat("de-DE", {
-					year: "numeric",
-					month: "2-digit",
-					day: "2-digit",
-					hour: "2-digit",
-					minute: "2-digit",
-					second: "2-digit",
-				});
 				try {
 					return this.$store.state.mqtt[
 						"openWB/log/" + this.mqttClientId + "/data"
@@ -380,12 +390,10 @@ export default {
 							),
 							vehicle_rfid: entry["vehicle"]["rfid"],
 							vehicle_prio: entry["vehicle"]["prio"],
-							time_begin: dateTimeFormat.format(
-								new Date(entry["time"]["begin"])
-							),
-							time_end: dateTimeFormat.format(
-								new Date(entry["time"]["end"])
-							),
+							// ToDo: timestamps should already be in unix timestamp format from backend
+							time_begin:
+								Date.parse(entry["time"]["begin"]) / 1000,
+							time_end: Date.parse(entry["time"]["end"]) / 1000,
 							time_time_charged: entry["time"]["time_charged"],
 							data_power: entry["data"]["power"],
 							data_range_charged: entry["data"]["range_charged"],
