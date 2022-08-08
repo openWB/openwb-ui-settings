@@ -592,6 +592,50 @@
 							Allgemeine Optionen
 						</openwb-base-heading>
 						<openwb-base-button-group-input
+							title="Aktiver Lademodus"
+							:buttons="[
+								{
+									buttonValue: 'instant_charging',
+									text: 'Sofortladen',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: 'pv_charging',
+									text: 'PV',
+									class: 'btn-outline-success',
+								},
+								{
+									buttonValue: 'scheduled_charging',
+									text: 'Zielladen',
+									class: 'btn-outline-primary',
+								},
+								{
+									buttonValue: 'standby',
+									text: 'Standby',
+									class: 'btn-outline-secondary',
+								},
+								{
+									buttonValue: 'stop',
+									text: 'Stop',
+									class: 'btn-outline-dark',
+								},
+							]"
+							:model-value="template.chargemode.selected"
+							@update:model-value="
+								updateState(
+									templateKey,
+									$event,
+									'chargemode.selected'
+								)
+							"
+						>
+							<template #help>
+								Dieser Lademodus ist aktiv, wenn ein zugehöriges
+								Fahrzeug angesteckt wird. Diese Einstellung
+								entspricht dem Lademodus auf der Hauptseite.
+							</template>
+						</openwb-base-button-group-input>
+						<openwb-base-button-group-input
 							title="Priorität"
 							:buttons="[
 								{
