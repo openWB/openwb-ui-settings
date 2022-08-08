@@ -1008,7 +1008,7 @@
 									>
 										<font-awesome-icon
 											fixed-width
-											:icon="['fas', 'car-battery']"
+											:icon="['fas', 'bolt']"
 										/>
 										{{ plan.limit.amount / 1000 }}kWh
 									</span>
@@ -1516,6 +1516,7 @@ import {
 	faCalendarWeek as fasCalendarWeek,
 	faClock as fasClock,
 	faCarBattery as fasCarBattery,
+	faBolt as fasBolt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -1526,7 +1527,8 @@ library.add(
 	fasCalendarAlt,
 	fasCalendarWeek,
 	fasClock,
-	fasCarBattery
+	fasCarBattery,
+	fasBolt
 );
 
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
