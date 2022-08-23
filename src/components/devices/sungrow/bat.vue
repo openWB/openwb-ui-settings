@@ -4,16 +4,9 @@
 			Einstellungen für Sungrow Speicher
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-number-input
-			title="Geräteadresse"
-			required
-			:min="1"
-			:max="255"
-			:model-value="configuration.id"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.id')
-			"
-		/>
+		<openwb-base-alert subtype="info">
+			Diese Komponente erfordert keine Einstellungen.
+		</openwb-base-alert>
 	</div>
 </template>
 
