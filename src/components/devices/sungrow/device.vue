@@ -21,6 +21,16 @@
 				updateConfiguration($event, 'configuration.port')
 			"
 		/>
+		<openwb-base-number-input
+			title="Geräteadresse"
+			required
+			:min="1"
+			:max="255"
+			:model-value="configuration.modbus_id"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.modbus_id')
+			"
+		/>
 	</div>
 </template>
 

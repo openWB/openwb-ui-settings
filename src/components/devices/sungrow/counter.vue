@@ -15,16 +15,6 @@
 				updateConfiguration($event, 'configuration.version')
 			"
 		/>
-		<openwb-base-number-input
-			title="Geräteadresse"
-			required
-			:min="1"
-			:max="255"
-			:model-value="configuration.id"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.id')
-			"
-		/>
 	</div>
 </template>
 
