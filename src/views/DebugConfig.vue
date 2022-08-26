@@ -88,6 +88,25 @@
 			<pre>{{ mqttLog }}</pre>
 		</openwb-base-card>
 		<openwb-base-card
+			title="Soc.log"
+			class="mt-3"
+			:collapsible="true"
+			:collapsed="true"
+		>
+			<template #actions>
+				<openwb-base-avatar
+					class="bg-success clickable"
+					@click="loadSocLog($event)"
+				>
+					<font-awesome-icon
+						fixed-width
+						:icon="['fas', 'file-download']"
+					/>
+				</openwb-base-avatar>
+			</template>
+			<pre>{{ socLog }}</pre>
+		</openwb-base-card>
+		<openwb-base-card
 			title="Protokoll des letzten Updates"
 			class="mt-3"
 			:collapsible="true"
@@ -132,6 +151,7 @@ export default {
 			],
 			mainLog: "-- noch nicht geladen --",
 			mqttLog: "-- noch nicht geladen --",
+			socLog: "-- noch nicht geladen --",
 			updateLog: "-- noch nicht geladen --",
 		};
 	},
@@ -173,6 +193,13 @@ export default {
 			this.mqttLog = "wird aktualisiert...";
 			this.getFilePromise("/openWB/ramdisk/mqtt.log").then((result) => {
 				this.mqttLog = result;
+			});
+		},
+		loadSocLog(event) {
+			event.stopPropagation();
+			this.socLog = "wird aktualisiert...";
+			this.getFilePromise("/openWB/ramdisk/soc.log").then((result) => {
+				this.socLog = result;
 			});
 		},
 		loadUpdateLog(event) {
