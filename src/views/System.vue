@@ -27,6 +27,18 @@
 		<div v-if="warningAcknowledged">
 			<form name="versionInfoForm">
 				<openwb-base-card title="Versions-Informationen">
+					<openwb-base-select-input
+						title="Entwicklungszweig"
+						:options="getBranchOptions()"
+						readonly
+						disabled
+						:model-value="
+							$store.state.mqtt['openWB/system/current_branch']
+						"
+						@update:model-value="
+							updateState('openWB/system/current_branch', $event)
+						"
+					/>
 					<openwb-base-text-input
 						title="installierte Version"
 						readonly
@@ -46,9 +58,14 @@
 							]
 						"
 					/>
-					<div v-if="updateAvailable">
-						<openwb-base-heading>Änderungen</openwb-base-heading>
-						<ul>
+					<openwb-base-card
+						v-if="updateAvailable"
+						title="Änderungen"
+						subtype="info"
+						:collapsible="true"
+						:collapsed="true"
+					>
+						<ul class="missing-commits">
 							<li
 								v-for="(commit, key) in $store.state.mqtt[
 									'openWB/system/current_missing_commits'
@@ -58,7 +75,7 @@
 								{{ commit }}
 							</li>
 						</ul>
-					</div>
+					</openwb-base-card>
 					<template #footer>
 						<div class="row justify-content-center">
 							<div
@@ -78,6 +95,12 @@
 								</openwb-base-click-button>
 							</div>
 						</div>
+						<!-- <openwb-base-submit-buttons
+							formName="versionInfoForm"
+							@save="$emit('save')"
+							@reset="$emit('reset')"
+							@defaults="$emit('defaults')"
+						/> -->
 					</template>
 				</openwb-base-card>
 			</form>
@@ -196,6 +219,8 @@ export default {
 				"openWB/system/current_commit",
 				"openWB/system/current_master_commit",
 				"openWB/system/current_missing_commits",
+				"openWB/system/available_branches",
+				"openWB/system/current_branch",
 			],
 			warningAcknowledged: false,
 		};
@@ -216,6 +241,25 @@ export default {
 				data: data,
 			});
 		},
+		getBranchOptions() {
+			var source =
+				this.$store.state.mqtt["openWB/system/available_branches"];
+			var options = [];
+			if (source !== undefined) {
+				for (const [key, value] of Object.entries(source)) {
+					console.log(key, value);
+					options.push({ text: key, value: key });
+				}
+			}
+			return options;
+		},
 	},
 };
 </script>
+
+<style scoped>
+.missing-commits {
+	overflow-y: scroll;
+	max-height: 20rem;
+}
+</style>
