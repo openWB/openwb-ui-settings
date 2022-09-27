@@ -13,7 +13,7 @@
 				<router-link to="/System/DataProtection">
 					Datenschutzerklärung
 				</router-link>
-				zustimmen, um einen Fehlerbericht senden zu können.
+				zustimmen, um einen Systembericht senden zu können.
 			</openwb-base-alert>
 			<div v-else>
 				<openwb-base-alert subtype="success">
@@ -21,9 +21,9 @@
 					<router-link to="/System/DataProtection">
 						Datenschutzerklärung
 					</router-link>
-					zugestimmt und können Fehlerberichte senden.
+					zugestimmt und können Systemberichte senden.
 				</openwb-base-alert>
-				<openwb-base-card title="Fehlerbericht">
+				<openwb-base-card title="Systembericht">
 					<div
 						v-if="
 							$store.state.mqtt['openWB/general/extern'] === true
@@ -31,7 +31,7 @@
 					>
 						<openwb-base-alert subtype="info">
 							Diese openWB befindet sich im Modus "Nur Ladepunkt".
-							Bitte senden Sie den Fehlerbericht von der regelnden
+							Bitte senden Sie den Systembericht von der regelnden
 							openWB.
 						</openwb-base-alert>
 					</div>
@@ -44,12 +44,45 @@
 							"
 						>
 							<openwb-base-alert subtype="info">
-								Das Sammeln der Systemparameter für die
-								Fehlermeldung kann einige Zeit in Anspruch
-								nehmen. Es werden keine Benutzernamen oder
-								Passwörter aus der Konfigurationsdatei
-								übertragen! Der Debug Modus muss nicht verstellt
-								werden.
+								<ul>
+									<li>
+										Vergewissern Sie sich, dass mindestens
+										die aktuelle "Stable" Version
+										installiert ist.
+									</li>
+									<li>
+										Stellen Sie beim Absenden des Berichtes
+										die Fehlerkonditionen her. Lädt ein
+										Fahrzeug nicht, sollte es angeschlossen
+										und nicht voll geladen sein. Ist PV
+										laden betroffen, sollte die Sonne auch
+										scheinen. Der Systembericht muss dann
+										versendet werden, wenn der Fehler
+										aktuell vorliegt.
+									</li>
+									<li>
+										Stellen Sie sicher, dass der Lademodus
+										korrekt gewählt ist und im Falle von
+										nicht ladenden Fahrzeugen, dass der
+										Ladepunkt auch entsperrt wurde.
+									</li>
+									<li>
+										Das Auslesen der Systemkonfiguration
+										erfolgt direkt nach den Klick auf
+										Absenden und kann einige Zeit in
+										Anspruch nehmen. Sie erhalten ca. 15 bis
+										30 Minuten nach Versand des
+										Systemberichtes von uns automatisch eine
+										E-Mail mit der Ticketnummer unter der
+										die Anfrage bei uns registriert wurde.
+										Wir melden uns bei ihnen. Bitte
+										kontrollieren Sie daher immer auch den
+										Spam Ordner auf eingehende Nachrichten.
+										Erhalten Sie trotzdem keine
+										Ticketnummer, ist das Versenden des
+										Systemberichtes fehlgeschlagen.
+									</li>
+								</ul>
 							</openwb-base-alert>
 							<openwb-base-text-input
 								title="E-Mail"
@@ -57,8 +90,47 @@
 								subtype="email"
 								v-model="sendDebugData.email"
 							/>
+							<openwb-base-text-input
+								title="openWB Seriennummer"
+								required
+								subtype="email"
+								v-model="sendDebugData.serialNumber"
+							>
+								<template #help>
+									Die Seriennummer der openWB finden Sie außen
+									am Gehäuse - bei Älteren innen im Gehäuse.
+									Sie können uns aber auch eine Bestellnummer
+									oder Rechnungsnummer übermitteln. Das
+									Gehäuse muss nicht extra geöffnet werden!
+								</template>
+							</openwb-base-text-input>
 							<openwb-base-textarea
-								title="Fehlerbeschreibung"
+								title="Verwendete Komponenten"
+								required
+								minlength="3"
+								maxlength="500"
+								v-model="sendDebugData.installedComponents"
+							>
+								<template #help>
+									Geben Sie hier möglichst detailliert an,
+									welche Anlagenkomponenten (EVU, PV,
+									Speicher) angebunden sind.
+								</template>
+							</openwb-base-textarea>
+							<openwb-base-textarea
+								title="Fahrzeuge"
+								required
+								minlength="3"
+								maxlength="500"
+								v-model="sendDebugData.vehicles"
+							>
+								<template #help>
+									Geben Sie hier an, welche Fahrzeuge geladen
+									werden (Hersteller, Modell, Baujahr).
+								</template>
+							</openwb-base-textarea>
+							<openwb-base-textarea
+								title="Problembeschreibung"
 								required
 								minlength="20"
 								maxlength="500"
@@ -129,6 +201,9 @@ export default {
 			],
 			sendDebugData: {
 				email: "",
+				serialNumber: "",
+				installedComponents: "",
+				vehicles: "",
 				message: "",
 			},
 			enableSendDebugButton: true,
