@@ -632,7 +632,27 @@
 							<template #help>
 								Dieser Lademodus ist aktiv, wenn ein zugehöriges
 								Fahrzeug angesteckt wird. Diese Einstellung
-								entspricht dem Lademodus auf der Hauptseite.
+								entspricht dem Lademodus auf der Hauptseite.<br />
+								Die zur Verfügung stehende Leistung wird intern
+								anhand einer Liste verteilt. Die Fahrzeuge bzw.
+								Ladepunkte werden in dieser Reihenfolge
+								beachtet:<br />
+								<ol>
+									<li>
+										Zielladen (Sofortladen) mit Priorität
+									</li>
+									<li>Zielladen (Sofortladen)</li>
+									<li>Zeitladen mit Priorität</li>
+									<li>Zeitladen</li>
+									<li>Sofortladen mit Priorität</li>
+									<li>Sofortladen</li>
+									<li>PV (Min-Anteil) mit Priorität</li>
+									<li>PV (Min-Anteil)</li>
+									<li>Zielladen (PV) mit Priorität</li>
+									<li>Zielladen (PV)</li>
+									<li>PV (PV-Anteil) mit Priorität</li>
+									<li>PV (PV-Anteil)</li>
+								</ol>
 							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-button-group-input

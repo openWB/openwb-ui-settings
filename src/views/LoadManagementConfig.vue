@@ -26,22 +26,22 @@
 					>
 						<openwb-base-number-input
 							title="Maximale Leistung"
-							:min="1000"
-							:step="1000"
-							unit="W"
+							:min="1"
+							:step="1"
+							unit="kW"
 							:model-value="
 								$store.state.mqtt[
 									'openWB/counter/' +
 										counter.id +
 										'/config/max_total_power'
-								]
+								] / 1000
 							"
 							@update:model-value="
 								updateState(
 									'openWB/counter/' +
 										counter.id +
 										'/config/max_total_power',
-									$event
+									$event * 1000
 								)
 							"
 						>
@@ -146,21 +146,21 @@
 						<openwb-base-number-input
 							title="Maximale Ausgangsleistung des Wechselrichters"
 							:min="0"
-							:step="100"
-							unit="W"
+							:step="0.1"
+							unit="kW"
 							:model-value="
 								$store.state.mqtt[
 									'openWB/pv/' +
 										inverter.id +
 										'/config/max_ac_out'
-								]
+								] / 1000
 							"
 							@update:model-value="
 								updateState(
 									'openWB/pv/' +
 										inverter.id +
 										'/config/max_ac_out',
-									$event
+									$event * 1000
 								)
 							"
 						>

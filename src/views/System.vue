@@ -27,16 +27,11 @@
 		<div v-if="warningAcknowledged">
 			<form name="versionInfoForm">
 				<openwb-base-card title="Versions-Informationen">
-					<openwb-base-select-input
+					<openwb-base-text-input
 						title="Entwicklungszweig"
-						:options="getBranchOptions()"
 						readonly
-						disabled
-						:model-value="
+						v-model="
 							$store.state.mqtt['openWB/system/current_branch']
-						"
-						@update:model-value="
-							updateState('openWB/system/current_branch', $event)
 						"
 					/>
 					<openwb-base-text-input
@@ -54,7 +49,7 @@
 						readonly
 						v-model="
 							$store.state.mqtt[
-								'openWB/system/current_master_commit'
+								'openWB/system/current_branch_commit'
 							]
 						"
 					/>
@@ -105,7 +100,11 @@
 				</openwb-base-card>
 			</form>
 			<form name="updateForm">
-				<openwb-base-card title="Versionsverwaltung">
+				<openwb-base-card
+					title="Aktualisierung"
+					:collapsible="true"
+					:collapsed="true"
+				>
 					<openwb-base-alert subtype="danger">
 						Nach einem Update wird die Ladestation direkt neu
 						gestartet!
@@ -117,11 +116,25 @@
 						</p>
 						ToDo:
 						<ul>
-							<li>fetch tags from git</li>
+							<li>allow branch selection</li>
 							<li>allow tag selection (no downgrade!)</li>
-							<li>release notes?</li>
 						</ul>
 					</openwb-base-alert>
+					<openwb-base-select-input
+						title="Entwicklungszweig"
+						:options="getBranchOptions()"
+						:model-value="
+							$store.state.mqtt['openWB/system/current_branch']
+						"
+						@update:model-value="
+							updateState('openWB/system/current_branch', $event)
+						"
+					/>
+					<openwb-base-select-input
+						title="Tag"
+						:options="getBranchTagOptions()"
+						v-model="selectedTag"
+					/>
 					<template #footer>
 						<div class="row justify-content-center">
 							<div
@@ -134,7 +147,14 @@
 											: 'btn-outline-success'
 									"
 									:disabled="!updateAvailable"
-									@click="sendSystemCommand('systemUpdate')"
+									@click="
+										sendSystemCommand('systemUpdate', {
+											branch: $store.state.mqtt[
+												'openWB/system/current_branch'
+											],
+											tag: selectedTag,
+										})
+									"
 								>
 									Update
 									<font-awesome-icon
@@ -143,12 +163,41 @@
 									/>
 								</openwb-base-click-button>
 							</div>
+							<div
+								class="col-md-4 d-flex py-1 justify-content-center"
+							>
+								<openwb-base-click-button
+									class="btn-danger clickable"
+									@click="
+										sendSystemCommand('systemUpdate', {
+											branch: $store.state.mqtt[
+												'openWB/system/current_branch'
+											],
+											tag: selectedTag,
+										})
+									"
+								>
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'skull-crossbones']"
+									/>
+									Branch und Tag wechseln
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'skull-crossbones']"
+									/>
+								</openwb-base-click-button>
+							</div>
 						</div>
 					</template>
 				</openwb-base-card>
 			</form>
 			<form name="powerForm">
-				<openwb-base-card title="Betrieb">
+				<openwb-base-card
+					title="Betrieb"
+					:collapsible="true"
+					:collapsed="true"
+				>
 					<openwb-base-alert subtype="danger">
 						Wenn die Ladestation ausgeschaltet wird, muss sie
 						komplett spannungsfrei geschaltet werden. Erst beim
@@ -200,8 +249,15 @@ import {
 	faUndo as fasUndo,
 	faPowerOff as fasPowerOff,
 	faDownload as fasDownload,
+	faSkullCrossbones as fasSkullCrossbones,
 } from "@fortawesome/free-solid-svg-icons";
-library.add(fasArrowAltCircleUp, fasUndo, fasPowerOff, fasDownload);
+library.add(
+	fasArrowAltCircleUp,
+	fasUndo,
+	fasPowerOff,
+	fasDownload,
+	fasSkullCrossbones
+);
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
@@ -217,19 +273,20 @@ export default {
 		return {
 			mqttTopicsToSubscribe: [
 				"openWB/system/current_commit",
-				"openWB/system/current_master_commit",
+				"openWB/system/current_branch_commit",
 				"openWB/system/current_missing_commits",
 				"openWB/system/available_branches",
 				"openWB/system/current_branch",
 			],
 			warningAcknowledged: false,
+			selectedTag: "*HEAD*",
 		};
 	},
 	computed: {
 		updateAvailable() {
 			return (
-				this.$store.state.mqtt["openWB/system/current_master_commit"] &&
-				this.$store.state.mqtt["openWB/system/current_master_commit"] !=
+				this.$store.state.mqtt["openWB/system/current_branch_commit"] &&
+				this.$store.state.mqtt["openWB/system/current_branch_commit"] !=
 					this.$store.state.mqtt["openWB/system/current_commit"]
 			);
 		},
@@ -247,10 +304,32 @@ export default {
 			var options = [];
 			if (source !== undefined) {
 				for (const [key, value] of Object.entries(source)) {
-					console.log(key, value);
-					options.push({ text: key, value: key });
+					options.push({
+						value: key,
+						text: key + " (" + value.commit + ")",
+					});
 				}
 			}
+			return options;
+		},
+		getBranchTagOptions() {
+			var source =
+				this.$store.state.mqtt["openWB/system/available_branches"][
+					this.$store.state.mqtt["openWB/system/current_branch"]
+				]["tags"];
+			var options = [];
+			if (source !== undefined) {
+				for (const [key, value] of Object.entries(source)) {
+					options.unshift({
+						value: key,
+						text: value,
+					});
+				}
+			}
+			options.unshift({
+				value: "*HEAD*",
+				text: "Aktuellster Stand",
+			});
 			return options;
 		},
 	},

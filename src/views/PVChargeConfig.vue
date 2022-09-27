@@ -31,16 +31,16 @@
 					<openwb-base-number-input
 						v-if="calculateControlMode() === 'individual'"
 						title="Minimum"
-						unit="W"
+						unit="kW"
 						:model-value="
 							$store.state.mqtt[
 								'openWB/general/chargemode_config/pv_charging/control_range'
-							][0]
+							][0] / 1000
 						"
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/control_range',
-								$event,
+								$event * 1000,
 								'0'
 							)
 						"
@@ -52,16 +52,16 @@
 					<openwb-base-number-input
 						v-if="calculateControlMode() === 'individual'"
 						title="Maximum"
-						unit="W"
+						unit="kW"
 						:model-value="
 							$store.state.mqtt[
 								'openWB/general/chargemode_config/pv_charging/control_range'
-							][1]
+							][1] / 1000
 						"
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/control_range',
-								$event,
+								$event * 1000,
 								'1'
 							)
 						"
@@ -73,17 +73,17 @@
 					<openwb-base-number-input
 						title="Regelpunkt Einspeisegrenze"
 						:min="0"
-						:step="50"
-						unit="W"
+						:step="0.05"
+						unit="kW"
 						:model-value="
 							$store.state.mqtt[
 								'openWB/general/chargemode_config/pv_charging/feed_in_yield'
-							]
+							] / 1000
 						"
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/feed_in_yield',
-								$event
+								$event * 1000
 							)
 						"
 					>
@@ -109,17 +109,17 @@
 					<openwb-base-number-input
 						title="Einschaltschwelle"
 						:min="0"
-						:step="50"
-						unit="W"
+						:step="0.05"
+						unit="kW"
 						:model-value="
 							$store.state.mqtt[
 								'openWB/general/chargemode_config/pv_charging/switch_on_threshold'
-							]
+							] / 1000
 						"
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/switch_on_threshold',
-								$event
+								$event * 1000
 							)
 						"
 					>
@@ -156,17 +156,17 @@
 					<openwb-base-number-input
 						title="Abschaltschwelle"
 						:min="0"
-						:step="5"
-						unit="W"
+						:step="0.05"
+						unit="kW"
 						:model-value="
 							$store.state.mqtt[
 								'openWB/general/chargemode_config/pv_charging/switch_off_threshold'
-							]
+							] / 1000
 						"
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/switch_off_threshold',
-								$event
+								$event * 1000
 							)
 						"
 					>
@@ -401,17 +401,17 @@
 					<openwb-base-number-input
 						title="Reservierte Ladeleistung"
 						:min="0"
-						:step="100"
-						unit="W"
+						:step="0.1"
+						unit="kW"
 						:model-value="
 							$store.state.mqtt[
 								'openWB/general/chargemode_config/pv_charging/charging_power_reserve'
-							]
+							] / 1000
 						"
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/charging_power_reserve',
-								$event
+								$event * 1000
 							)
 						"
 					>
@@ -420,17 +420,17 @@
 					<openwb-base-number-input
 						title="Erlaubte Entladeleistung"
 						:min="0"
-						:step="100"
-						unit="W"
+						:step="0.1"
+						unit="kW"
 						:model-value="
 							$store.state.mqtt[
 								'openWB/general/chargemode_config/pv_charging/rundown_power'
-							]
+							] / 1000
 						"
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/rundown_power',
-								$event
+								$event * 1000
 							)
 						"
 					>
