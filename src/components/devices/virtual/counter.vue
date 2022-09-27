@@ -7,12 +7,12 @@
 		<openwb-base-number-input
 			title="Zusätzlicher Verbrauch"
 			:min="0"
-			unit="W"
+			unit="kW"
 			required
-			:model-value="configuration.external_consumption"
+			:model-value="configuration.external_consumption / 1000"
 			@update:model-value="
 				updateConfiguration(
-					$event,
+					$event * 1000,
 					'configuration.external_consumption'
 				)
 			"
