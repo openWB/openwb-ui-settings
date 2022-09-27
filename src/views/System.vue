@@ -102,22 +102,66 @@
 			<form name="updateForm">
 				<openwb-base-card
 					title="Aktualisierung"
+					subtype="success"
 					:collapsible="true"
 					:collapsed="true"
 				>
 					<openwb-base-alert subtype="danger">
 						Nach einem Update wird die Ladestation direkt neu
-						gestartet!
+						gestartet! Es werden alle lokalen Änderungen mit dem
+						Update verworfen!
+					</openwb-base-alert>
+					<template #footer>
+						<div class="row justify-content-center">
+							<div
+								class="col-md-4 d-flex py-1 justify-content-center"
+							>
+								<openwb-base-click-button
+									:class="
+										updateAvailable
+											? 'btn-success clickable'
+											: 'btn-outline-success'
+									"
+									:disabled="!updateAvailable"
+									@click="
+										sendSystemCommand('systemUpdate', {
+											branch: $store.state.mqtt[
+												'openWB/system/current_branch'
+											],
+											tag: '*HEAD*',
+										})
+									"
+								>
+									Update
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'arrow-alt-circle-up']"
+									/>
+								</openwb-base-click-button>
+							</div>
+						</div>
+					</template>
+				</openwb-base-card>
+			</form>
+			<form name="releaseChangeForm">
+				<openwb-base-card
+					title="Entwicklungszweig"
+					subtype="danger"
+					:collapsible="true"
+					:collapsed="true"
+				>
+					<openwb-base-alert subtype="danger">
+						Nach einem Wechsel wird die Ladestation direkt neu
+						gestartet! Es werden alle lokalen Änderungen mit dem
+						Wechsel verworfen!
 					</openwb-base-alert>
 					<openwb-base-alert subtype="warning">
-						<p>
-							Es werden alle lokalen Änderungen mit dem Update
-							verworfen!
-						</p>
+						Das ist eine experimentelle Option! Verwendung auf
+						eigene Gefahr. Im schlimmsten Fall muss das system neu
+						installiert werden!<br />
 						ToDo:
 						<ul>
-							<li>allow branch selection</li>
-							<li>allow tag selection (no downgrade!)</li>
+							<li>do not allow downgrade</li>
 						</ul>
 					</openwb-base-alert>
 					<openwb-base-select-input
@@ -137,32 +181,6 @@
 					/>
 					<template #footer>
 						<div class="row justify-content-center">
-							<div
-								class="col-md-4 d-flex py-1 justify-content-center"
-							>
-								<openwb-base-click-button
-									:class="
-										updateAvailable
-											? 'btn-success clickable'
-											: 'btn-outline-success'
-									"
-									:disabled="!updateAvailable"
-									@click="
-										sendSystemCommand('systemUpdate', {
-											branch: $store.state.mqtt[
-												'openWB/system/current_branch'
-											],
-											tag: selectedTag,
-										})
-									"
-								>
-									Update
-									<font-awesome-icon
-										fixed-width
-										:icon="['fas', 'arrow-alt-circle-up']"
-									/>
-								</openwb-base-click-button>
-							</div>
 							<div
 								class="col-md-4 d-flex py-1 justify-content-center"
 							>
