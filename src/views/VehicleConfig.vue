@@ -815,17 +815,17 @@
 						</openwb-base-range-input>
 						<openwb-base-number-input
 							title="Energie-Limit"
-							unit="Wh"
-							:min="500"
-							:step="500"
+							unit="kWh"
+							:min="0.5"
+							:step="0.5"
 							:model-value="
 								template.chargemode.instant_charging.limit
-									.amount
+									.amount / 1000
 							"
 							@update:model-value="
 								updateState(
 									templateKey,
-									$event,
+									$event * 1000,
 									'chargemode.instant_charging.limit.amount'
 								)
 							"
@@ -1199,12 +1199,16 @@
 							</openwb-base-range-input>
 							<openwb-base-number-input
 								title="Ziel-Energiemenge"
-								unit="Wh"
-								:min="1000"
-								:step="500"
-								:model-value="plan.limit.amount"
+								unit="kWh"
+								:min="1"
+								:step="0.5"
+								:model-value="plan.limit.amount / 1000"
 								@update:model-value="
-									updateState(planKey, $event, 'limit.amount')
+									updateState(
+										planKey,
+										$event * 1000,
+										'limit.amount'
+									)
 								"
 							>
 							</openwb-base-number-input>
