@@ -25,12 +25,14 @@ module.exports = {
 			fallback: {
 				buffer: require.resolve("buffer/"),
 				process: require.resolve("process/browser"),
+				url: require.resolve("url/"),
 			},
 		},
 		plugins: [
 			new webpack.ProvidePlugin({
 				Buffer: ["buffer", "Buffer"],
 				process: "process/browser",
+				url: "url/",
 			}),
 		],
 		output: {
