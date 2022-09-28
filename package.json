@@ -29,6 +29,7 @@
     "luxon": "^2.5.0",
     "mqtt": "^4.3.7",
     "popper.js": "^1.16.1",
+    "url": "^0.11.0",
     "vue": "^3.2.39",
     "vue-axios": "^3.4.1",
     "vue-chartjs": "^4.1.2",
@@ -36,7 +37,7 @@
     "vue3-table-lite": "^1.2.4",
     "vuedraggable": "^4.1.0",
     "vuex": "^4.0.0-0",
-    "webpack-dev-server": "^3.11.3"
+    "webpack-dev-server": "^4.11.1"
   },
   "devDependencies": {
     "@babel/core": "^7.19.1",
