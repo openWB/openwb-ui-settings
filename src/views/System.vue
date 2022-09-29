@@ -210,6 +210,43 @@
 					</template>
 				</openwb-base-card>
 			</form>
+			<form name="backupForm">
+				<openwb-base-card
+					title="Sicherung"
+					subtype="success"
+					:collapsible="true"
+					:collapsed="true"
+				>
+					<openwb-base-alert subtype="info">
+						Nachdem die Sicherung abgeschlossen ist, kann die
+						erstellte Datei
+						<a href="/openWB/data/backup/">hier</a> heruntergeladen
+						werden.
+					</openwb-base-alert>
+					<template #footer>
+						<div class="row justify-content-center">
+							<div
+								class="col-md-4 d-flex py-1 justify-content-center"
+							>
+								<openwb-base-click-button
+									class="btn-success clickable"
+									@click="
+										sendSystemCommand('createBackup', {
+											use_extended_filename: true,
+										})
+									"
+								>
+									Sicherung erstellen
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'archive']"
+									/>
+								</openwb-base-click-button>
+							</div>
+						</div>
+					</template>
+				</openwb-base-card>
+			</form>
 			<form name="powerForm">
 				<openwb-base-card
 					title="Betrieb"
@@ -268,13 +305,15 @@ import {
 	faPowerOff as fasPowerOff,
 	faDownload as fasDownload,
 	faSkullCrossbones as fasSkullCrossbones,
+	faArchive as fasArchive,
 } from "@fortawesome/free-solid-svg-icons";
 library.add(
 	fasArrowAltCircleUp,
 	fasUndo,
 	fasPowerOff,
 	fasDownload,
-	fasSkullCrossbones
+	fasSkullCrossbones,
+	fasArchive
 );
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
