@@ -219,9 +219,10 @@
 				>
 					<openwb-base-alert subtype="info">
 						Nachdem die Sicherung abgeschlossen ist, kann die
-						erstellte Datei
-						<a href="/openWB/data/backup/">hier</a> heruntergeladen
-						werden.
+						erstellte Datei über den Link in der Benachrichtigung
+						oder
+						<a href="/openWB/data/backup/" target="_blank">hier</a>
+						heruntergeladen werden.
 					</openwb-base-alert>
 					<template #footer>
 						<div class="row justify-content-center">
