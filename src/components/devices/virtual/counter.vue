@@ -7,6 +7,7 @@
 		<openwb-base-number-input
 			title="Zusätzlicher Verbrauch"
 			:min="0"
+			:step="0.05"
 			unit="kW"
 			required
 			:model-value="configuration.external_consumption / 1000"

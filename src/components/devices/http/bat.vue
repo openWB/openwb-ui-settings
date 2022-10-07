@@ -43,7 +43,6 @@
 		<openwb-base-text-input
 			title="Pfad für Zählerstand laden"
 			subtype="text"
-			required
 			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)|none"
 			:model-value="configuration.imported_path"
 			@update:model-value="
@@ -56,14 +55,13 @@
 				Es wird vom Server eine Zahl (Float mit Punkt als
 				Dezimaltrennzeichen oder Integer) erwartet, welche den aktuellen
 				absoluten Zählerstand in kWh darstellt.<br />
-				Wird hier "none" eingetragen, wird der Zählerstand intern
-				simuliert.
+				Wird dieses Feld leer gelassen, werden keine Phasenströme
+				ermittelt und es kann kein Lastmanagement berechnet werden!
 			</template>
 		</openwb-base-text-input>
 		<openwb-base-text-input
 			title="Pfad für Zählerstand entladen"
 			subtype="text"
-			required
 			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)|none"
 			:model-value="configuration.exported_path"
 			@update:model-value="
@@ -76,8 +74,8 @@
 				Es wird vom Server eine Zahl (Float mit Punkt als
 				Dezimaltrennzeichen oder Integer) erwartet, welche den aktuellen
 				absoluten Zählerstand in kWh darstellt.<br />
-				Wird hier "none" eingetragen, wird der Zählerstand intern
-				simuliert.
+				Wird dieses Feld leer gelassen, werden keine Phasenströme
+				ermittelt und es kann kein Lastmanagement berechnet werden!
 			</template>
 		</openwb-base-text-input>
 	</div>
