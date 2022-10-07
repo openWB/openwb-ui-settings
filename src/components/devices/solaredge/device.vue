@@ -25,7 +25,10 @@
 				updateConfiguration($event, 'configuration.port')
 			"
 		>
-			<template #help> Standardmäßig Port 502 oder 1502. </template>
+			<template #help>
+				Je nach Produktionsdatum und Softwareversion ist 502 oder 1502
+				ab Werk eingestellt. Bitte im Wechselrichter überprüfen.
+			</template>
 		</openwb-base-number-input>
 		<openwb-base-button-group-input
 			title="Speicherleistung von PV subtrahieren"

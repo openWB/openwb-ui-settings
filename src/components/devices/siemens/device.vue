@@ -4,6 +4,9 @@
 			Einstellungen für Siemens
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
+		<openwb-base-alert subtype="info">
+			Im Siemens-Speicher muss die Schnittstelle openWB gewählt werden.
+		</openwb-base-alert>
 		<openwb-base-text-input
 			title="IP oder Hostname"
 			subtype="host"

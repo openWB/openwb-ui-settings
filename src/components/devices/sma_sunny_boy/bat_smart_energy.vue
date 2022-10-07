@@ -1,5 +1,5 @@
 <template>
-	<div class="device-sunnyboy-bat">
+	<div class="device-sunnyboy-bat-smart-energy">
 		<openwb-base-heading>
 			Einstellungen für SMA Sunny Boy Batteriespeicher
 			<span class="small">(Modul: {{ $options.name }})</span>
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-	name: "DeviceSunnyBoyBat",
+	name: "DeviceSunnyBoyBatSmartEnergy",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

@@ -22,7 +22,9 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.modbus_id')
 			"
-		/>
+		>
+			<template #help> Für Gen3 ID=0, für Gen4 meistens > 2. </template>
+		</openwb-base-number-input>
 	</div>
 </template>
 

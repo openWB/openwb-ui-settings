@@ -4,6 +4,9 @@
 			Einstellungen für Powerdog
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
+		<openwb-base-alert subtype="info">
+			ModbusTCP muss aktiviert sein.
+		</openwb-base-alert>
 		<openwb-base-text-input
 			title="IP oder Hostname"
 			subtype="host"

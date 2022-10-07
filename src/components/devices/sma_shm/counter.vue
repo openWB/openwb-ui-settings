@@ -6,12 +6,17 @@
 		</openwb-base-heading>
 		<openwb-base-text-input
 			title="Seriennummer"
-			required
 			:model-value="configuration.serials"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.serials')
 			"
-		/>
+		>
+			<template #help>
+				Eine Serienummer ist nur erforderlich, wenn mehrere SMA
+				HomeManager in Betrieb sind.<br />
+				Funktioniert auch mit Energy Meter statt Home Manager.
+			</template>
+		</openwb-base-text-input>
 	</div>
 </template>
 
