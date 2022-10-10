@@ -1,27 +1,22 @@
 <template>
-	<div class="device-sma-modbustcp">
+	<div class="device-goodwe-inverter">
 		<openwb-base-heading>
-			Einstellungen für SMA Modbus/TCP
+			Einstellungen für GoodWe Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-text-input
-			title="IP oder Hostname"
-			subtype="host"
-			required
-			:model-value="configuration.ip_address"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.ip_address')
-			"
-		/>
+		<openwb-base-alert subtype="info">
+			Diese Komponente benötigt keine Einstellungen.
+		</openwb-base-alert>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceSmaModbustcp",
+	name: "DeviceGoodWeInverter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
+		deviceId: { default: undefined },
 		componentId: { required: true },
 	},
 	methods: {

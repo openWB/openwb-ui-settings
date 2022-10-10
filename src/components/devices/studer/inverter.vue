@@ -7,8 +7,8 @@
 		<openwb-base-button-group-input
 			title="Typ der MPPT Solarladeregler"
 			:buttons="[
-				{ buttonValue: 'VT', text: 'VT' },
-				{ buttonValue: 'VS', text: 'VS' },
+				{ buttonValue: 'VT', text: 'Variotrack (VT-40/VT-65/VT-80)' },
+				{ buttonValue: 'VS', text: 'VarioString (VS-70/VS-120)' },
 			]"
 			:model-value="configuration.vc_type"
 			@update:model-value="
@@ -24,7 +24,11 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.vc_count')
 			"
-		/>
+		>
+			<template #help>
+				Anzahl (1-9) der Studer MPPT Solarladeregler im System (VS/VT)
+			</template>
+		</openwb-base-number-input>
 	</div>
 </template>
 

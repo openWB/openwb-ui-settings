@@ -1,19 +1,18 @@
 <template>
-	<div class="device-janitza-counter">
+	<div class="device-tesla-inverter">
 		<openwb-base-heading>
-			Einstellungen für Janitza Zähler
+			Einstellungen für Tesla Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
-			ModbusTCP muss im Janitza auf Port 502 aktiv und die ID auf "1"
-			eingestellt sein.
+			Diese Komponente benötigt keine Einstellungen.
 		</openwb-base-alert>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceJanitzaCounter",
+	name: "DeviceTeslaInverter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

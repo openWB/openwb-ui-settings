@@ -5,7 +5,8 @@
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
-			Diese Komponente erfordert keine Einstellungen.
+			Mit diesem Modul ist kein Lastmanagement möglich, da keine Ströme
+			der einzelnen Phasen gemessen werden.
 		</openwb-base-alert>
 	</div>
 </template>

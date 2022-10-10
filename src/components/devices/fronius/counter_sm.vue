@@ -26,7 +26,16 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.variant')
 			"
-		/>
+		>
+			<template #help>
+				Gegebenenfalls auch für alte Modelle nach einem Softwareupdate
+				erforderlich. Fronius hat derzeit keine Konsistente
+				Schnittstelle. Speziell beim Gen24 kann Variante 1 oder 2
+				erforderlich sein. Nach speichern sollten nach etwa 10-20
+				Sekunden Daten angezeigt werden. Ist dies nicht der Fall die
+				andere Variante ausprobieren.
+			</template>
+		</openwb-base-select-input>
 	</div>
 </template>
 

@@ -1,33 +1,37 @@
 <template>
-	<div class="device-smahm-counter">
+	<div class="device-lg">
 		<openwb-base-heading>
-			Einstellungen für SMA-HM/EM Zähler
+			Einstellungen für LG ESS V1.0
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
-			title="Seriennummer"
-			:model-value="configuration.serials"
+			title="IP oder Hostname"
+			subtype="host"
+			required
+			:model-value="configuration.ip_address"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.serials')
+				updateConfiguration($event, 'configuration.ip_address')
 			"
-		>
-			<template #help>
-				Eine Serienummer ist nur erforderlich, wenn mehrere SMA
-				HomeManager in Betrieb sind.<br />
-				Funktioniert auch mit Energy Meter statt Home Manager.
-			</template>
-		</openwb-base-text-input>
+		/>
+		<openwb-base-text-input
+			title="Passwort"
+			subtype="password"
+			required
+			:model-value="configuration.password"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.password')
+			"
+		/>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceSmahmCounter",
+	name: "DeviceLG",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
 		deviceId: { default: undefined },
-		componentId: { required: true },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {

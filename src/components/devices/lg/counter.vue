@@ -1,19 +1,18 @@
 <template>
-	<div class="device-janitza-counter">
+	<div class="device-lg-counter">
 		<openwb-base-heading>
-			Einstellungen für Janitza Zähler
+			Einstellungen für LG ESS V1.0 Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
-			ModbusTCP muss im Janitza auf Port 502 aktiv und die ID auf "1"
-			eingestellt sein.
+			Diese Komponente benötigt keine Einstellungen.
 		</openwb-base-alert>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceJanitzaCounter",
+	name: "DeviceLGCounter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

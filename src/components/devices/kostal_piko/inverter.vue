@@ -1,28 +1,26 @@
 <template>
-	<div class="device-smahm-counter">
+	<div class="device-kostalpiko-inverter">
 		<openwb-base-heading>
-			Einstellungen für SMA-HM/EM Zähler
+			Einstellungen für Kostal Piko Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-text-input
-			title="Seriennummer"
-			:model-value="configuration.serials"
+		<openwb-base-button-group-input
+			title="Speicher"
+			:buttons="[
+				{ buttonValue: false, text: 'nicht vorhanden' },
+				{ buttonValue: true, text: 'vorhanden' },
+			]"
+			:model-value="configuration.bat_configured"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.serials')
+				updateConfiguration($event, 'configuration.bat_configured')
 			"
-		>
-			<template #help>
-				Eine Serienummer ist nur erforderlich, wenn mehrere SMA
-				HomeManager in Betrieb sind.<br />
-				Funktioniert auch mit Energy Meter statt Home Manager.
-			</template>
-		</openwb-base-text-input>
+		/>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceSmahmCounter",
+	name: "DeviceKostalPikoInverter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

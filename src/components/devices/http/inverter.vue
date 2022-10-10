@@ -25,7 +25,6 @@
 		<openwb-base-text-input
 			title="Pfad für Zählerstand Erzeugung"
 			subtype="text"
-			required
 			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)|none"
 			:model-value="configuration.exported_path"
 			@update:model-value="
@@ -38,7 +37,7 @@
 				Es wird vom Server eine Zahl (Float mit Punkt als
 				Dezimaltrennzeichen oder Integer) erwartet, welche den aktuellen
 				absoluten Zählerstand in kWh darstellt.<br />
-				Wird hier "none" eingetragen, wird der Zählerstand intern
+				Wird dieses Feld leer gelassen, wird der Zählerstand intern
 				simuliert.
 			</template>
 		</openwb-base-text-input>

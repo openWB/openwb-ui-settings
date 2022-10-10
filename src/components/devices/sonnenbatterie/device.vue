@@ -4,6 +4,10 @@
 			Einstellungen für SonnenBatterie
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
+		<openwb-base-alert subtype="info">
+			Die Leistung steht nur in den Varianten "Rest-API 2" und "JSON-API"
+			zur Verfügung.
+		</openwb-base-alert>
 		<openwb-base-text-input
 			title="IP oder Hostname"
 			subtype="host"

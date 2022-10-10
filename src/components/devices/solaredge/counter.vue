@@ -1,28 +1,29 @@
 <template>
-	<div class="device-smahm-counter">
+	<div class="device-solaredge-counter">
 		<openwb-base-heading>
-			Einstellungen für SMA-HM/EM Zähler
+			Einstellungen für SolarEdge Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-text-input
-			title="Seriennummer"
-			:model-value="configuration.serials"
+		<openwb-base-alert subtype="info">
+			Hierfür muss ein EVU-Zähler am SolarEdge Wechselrichter per Modbus
+			angebunden sein. Der Zähler muss an erster Position im
+			Wechselrichter konfiguriert sein.
+		</openwb-base-alert>
+		<openwb-base-number-input
+			title="Modbus ID"
+			:model-value="configuration.modbus_id"
+			min="1"
+			max="255"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.serials')
+				updateConfiguration($event, 'configuration.modbus_id')
 			"
-		>
-			<template #help>
-				Eine Serienummer ist nur erforderlich, wenn mehrere SMA
-				HomeManager in Betrieb sind.<br />
-				Funktioniert auch mit Energy Meter statt Home Manager.
-			</template>
-		</openwb-base-text-input>
+		/>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceSmahmCounter",
+	name: "DeviceSolarEdgeCounter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

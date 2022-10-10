@@ -11,7 +11,14 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.meter_id')
 			"
-		/>
+		>
+			<template #help>
+				Um die ID herauszufinden mit dem Browser die Adresse
+				"https://api.discovergy.com/public/v1/meters" aufrufen und dort
+				Benutzername und Passwort eingeben. Hier wird nun u.a. die ID
+				des Zählers angezeigt.
+			</template>
+		</openwb-base-text-input>
 	</div>
 </template>
 

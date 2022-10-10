@@ -1,12 +1,9 @@
 <template>
-	<div class="device-siemens">
+	<div class="device-byd">
 		<openwb-base-heading>
-			Einstellungen für Siemens
+			Einstellungen für BYD
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-alert subtype="info">
-			Im Siemens-Speicher muss die Schnittstelle openWB gewählt werden.
-		</openwb-base-alert>
 		<openwb-base-text-input
 			title="IP oder Hostname"
 			subtype="host"
@@ -16,16 +13,34 @@
 				updateConfiguration($event, 'configuration.ip_address')
 			"
 		/>
+		<openwb-base-text-input
+			title="Benutzername"
+			subtype="user"
+			required
+			:model-value="configuration.user"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.user')
+			"
+		/>
+		<openwb-base-text-input
+			title="Passwort"
+			subtype="password"
+			required
+			:model-value="configuration.password"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.password')
+			"
+		/>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceSiemens",
+	name: "DeviceBYD",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
-		componentId: { required: true },
+		deviceId: { default: undefined },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {

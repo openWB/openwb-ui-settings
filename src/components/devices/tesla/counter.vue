@@ -1,19 +1,20 @@
 <template>
-	<div class="device-janitza-counter">
+	<div class="device-tesla-counter">
 		<openwb-base-heading>
-			Einstellungen für Janitza Zähler
+			Einstellungen für Tesla Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
-			ModbusTCP muss im Janitza auf Port 502 aktiv und die ID auf "1"
-			eingestellt sein.
+			Je nach Firmware-Version ist nur ein Lastmanagement anhand der
+			Gesamtleistung möglich, da nicht alle Firmware-Versionen
+			Phasenströme liefern.
 		</openwb-base-alert>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceJanitzaCounter",
+	name: "DeviceTeslaCounter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

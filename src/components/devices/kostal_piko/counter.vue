@@ -1,19 +1,18 @@
 <template>
-	<div class="device-janitza-counter">
+	<div class="device-kostalpiko-counter">
 		<openwb-base-heading>
-			Einstellungen für Janitza Zähler
+			Einstellungen für Kostal Piko Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
-			ModbusTCP muss im Janitza auf Port 502 aktiv und die ID auf "1"
-			eingestellt sein.
+			Hausverbrauchszähler
 		</openwb-base-alert>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceJanitzaCounter",
+	name: "DeviceKostalPikoCounter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

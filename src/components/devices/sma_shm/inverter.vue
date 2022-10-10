@@ -4,6 +4,12 @@
 			Einstellungen für SMA-HM/EM Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
+		<openwb-base-alert subtype="info">
+			Dies ist nur die richtige Komponente, wenn ein extra EnergyMeter
+			ausschließlich für die PV-Messung vorhanden ist. Wenn nur ein
+			HomeManager vorhanden ist, muss ein Gerät "SMA Sunny Boy" mit der
+			entsprechenden Wechselrichter-Komponente angelegt werden.
+		</openwb-base-alert>
 		<openwb-base-text-input
 			title="Seriennummer"
 			required

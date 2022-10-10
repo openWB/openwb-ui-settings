@@ -1,18 +1,13 @@
 <template>
-	<div class="device-fronius">
+	<div class="device-sunnyboy">
 		<openwb-base-heading>
-			Einstellungen für Fronius
+			Einstellungen für SMA Sunny Boy
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
-			Die Fronius API muss aktiviert sein.<br />
-			Sind nur Symos in Nutzung, welche über Fronius Solar Net / DATCOM
-			miteinander verbunden sind, muss nur ein Gerät mit einer Komponente
-			Wechselrichter angelegt werden. Sind aber z.B. Symo und Symo Hybrid
-			im Einsatz, muss für jeden Wechselrichter ein Gerät mit einer
-			Komponente Wechselrichter angelegt werden. Die Zähler-Komponente für
-			das Smart-Meter wird in dem Gerät angelegt, dass den Wechselrichter
-			enthält, an den das SmartMeter angeschlossen ist.
+			ModbusTCP muss entweder direkt am Wechselrichter, per Sunny Portal
+			oder über das Tool "Sunny Explorer" aktiviert werden. Dies ist
+			standardmäßig deaktiviert.
 		</openwb-base-alert>
 		<openwb-base-text-input
 			title="IP oder Hostname"
@@ -28,11 +23,11 @@
 
 <script>
 export default {
-	name: "DeviceFronius",
+	name: "DeviceSunnyBoy",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
-		componentId: { required: true },
+		deviceId: { default: undefined },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {

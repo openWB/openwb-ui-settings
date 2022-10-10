@@ -1,27 +1,18 @@
 <template>
-	<div class="device-sma-modbustcp-inverter">
+	<div class="device-lg-inverter">
 		<openwb-base-heading>
-			Einstellungen für SMA Modbus/TCP Wechselrichter
+			Einstellungen für LG ESS V1.0 Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-select-input
-			title="Version"
-			notSelected="Bitte auswählen"
-			:options="[
-				{ value: 0, text: 'Standard' },
-				{ value: 1, text: 'Core-2' },
-			]"
-			:model-value="configuration.version"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.version')
-			"
-		/>
+		<openwb-base-alert subtype="info">
+			Diese Komponente benötigt keine Einstellungen.
+		</openwb-base-alert>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceSmaModbustcpInverter",
+	name: "DeviceLGInverter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
