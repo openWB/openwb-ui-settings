@@ -248,6 +248,86 @@
 					</template>
 				</openwb-base-card>
 			</form>
+			<form name="restoreForm">
+				<openwb-base-card
+					title="Wiederherstellung"
+					subtype="success"
+					:collapsible="true"
+					:collapsed="true"
+				>
+					<openwb-base-alert subtype="warning">
+						Diese Funktion ist noch in Entwicklung!<br />
+						Es kann bereits eine Datei hochgeladen und überprüft
+						werden, jedoch wird die Wiederherstellung nicht
+						gestartet!
+					</openwb-base-alert>
+					<div class="input-group">
+						<div class="custom-file">
+							<input
+								id="input-file"
+								type="file"
+								class="custom-file-input"
+								accept=".tar.gz,application/gzip,application/tar+gzip"
+								@change="updateSelectedFile($event)"
+							/>
+							<label
+								id="input-file-label"
+								class="custom-file-label"
+								for="input-file"
+								data-browse="Suchen"
+							>
+								{{
+									selectedFile
+										? selectedFile.name
+										: "Bitte eine Datei auswählen"
+								}}
+							</label>
+						</div>
+						<div class="input-group-append">
+							<button
+								class="btn"
+								:class="
+									selectedFile
+										? 'btn-success clickable'
+										: 'btn-outline-success'
+								"
+								:disabled="!selectedFile"
+								type="button"
+								@click="uploadFile()"
+							>
+								Hochladen
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'upload']"
+								/>
+							</button>
+						</div>
+					</div>
+					<template #footer>
+						<div class="row justify-content-center">
+							<div
+								class="col-md-4 d-flex py-1 justify-content-center"
+							>
+								<openwb-base-click-button
+									:class="
+										restoreUploadDone
+											? 'btn-success clickable'
+											: 'btn-outline-success'
+									"
+									:disabled="!restoreUploadDone"
+									@click="sendSystemCommand('restoreBackup')"
+								>
+									Wiederherstellung starten
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'box-open']"
+									/>
+								</openwb-base-click-button>
+							</div>
+						</div>
+					</template>
+				</openwb-base-card>
+			</form>
 			<form name="powerForm">
 				<openwb-base-card
 					title="Betrieb"
@@ -307,6 +387,8 @@ import {
 	faDownload as fasDownload,
 	faSkullCrossbones as fasSkullCrossbones,
 	faArchive as fasArchive,
+	faUpload as fasUpload,
+	faBoxOpen as fasBoxOpen,
 } from "@fortawesome/free-solid-svg-icons";
 library.add(
 	fasArrowAltCircleUp,
@@ -314,7 +396,9 @@ library.add(
 	fasPowerOff,
 	fasDownload,
 	fasSkullCrossbones,
-	fasArchive
+	fasArchive,
+	fasUpload,
+	fasBoxOpen
 );
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -338,6 +422,8 @@ export default {
 			],
 			warningAcknowledged: false,
 			selectedTag: "*HEAD*",
+			selectedFile: undefined,
+			restoreUploadDone: false,
 		};
 	},
 	computed: {
@@ -389,6 +475,95 @@ export default {
 				text: "Aktuellster Stand",
 			});
 			return options;
+		},
+		updateSelectedFile(event) {
+			this.selectedFile = event.target.files[0];
+			console.log("selectedFile", this.selectedFile);
+		},
+		uploadFile() {
+			if (this.selectedFile !== undefined) {
+				let formData = new FormData();
+				formData.append("backupFile", this.selectedFile);
+				this.axios
+					.post(
+						location.protocol +
+							"//" +
+							location.host +
+							"/openWB/web/settings/uploadBackup.php",
+						formData,
+						{
+							headers: {
+								"Content-Type": "multipart/form-data",
+							},
+						}
+					)
+					.then((response) => {
+						console.log("POST response", response.data);
+						const successMessage =
+							"Die Sicherungsdatei wurde erfolgreich hochgeladen. " +
+							"Sie können die Wiederherstellung jetzt starten.";
+						const timestamp = Math.floor(Date.now() / 1000);
+						this.$store.commit("addTopic", {
+							topic:
+								"openWB/command/" +
+								this.$root.mqttClientId +
+								"/messages/" +
+								timestamp,
+							payload: {
+								source: "command",
+								type: "success",
+								message: successMessage,
+								timestamp: timestamp,
+							},
+						});
+						this.restoreUploadDone = true;
+					})
+					.catch((error) => {
+						var alertMessage =
+							"Hochladen der Datei fehlgeschlagen!<br />";
+						if (error.response) {
+							// The request was made and the server responded with a status code
+							// that falls out of the range of 2xx
+							console.log(
+								error.response.status,
+								error.response.data
+							);
+							alertMessage +=
+								error.response.status +
+								": " +
+								error.response.data;
+						} else if (error.request) {
+							// The request was made but no response was received
+							// `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+							// http.ClientRequest in node.js
+							console.log(error.request);
+							alertMessage +=
+								"Es wurde keine Antwort vom Server empfangen.";
+						} else {
+							// Something happened in setting up the request that triggered an Error
+							console.log("Error", error.message);
+							alertMessage +=
+								"Es ist ein unbekannter Fehler aufgetreten.";
+						}
+						const timestamp = Math.floor(Date.now() / 1000);
+						this.$store.commit("addTopic", {
+							topic:
+								"openWB/command/" +
+								this.$root.mqttClientId +
+								"/messages/" +
+								timestamp,
+							payload: {
+								source: "command",
+								type: "danger",
+								message: alertMessage,
+								timestamp: timestamp,
+							},
+						});
+						this.restoreUploadDone = false;
+					});
+			} else {
+				console.error("no file selected for upload");
+			}
 		},
 	},
 };
