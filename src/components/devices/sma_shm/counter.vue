@@ -4,7 +4,7 @@
 			Einstellungen für SMA-HM/EM Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-text-input
+		<openwb-base-number-input
 			title="Seriennummer"
 			:model-value="configuration.serials"
 			@update:model-value="
@@ -16,7 +16,7 @@
 				HomeManager in Betrieb sind.<br />
 				Funktioniert auch mit Energy Meter statt Home Manager.
 			</template>
-		</openwb-base-text-input>
+		</openwb-base-number-input>
 	</div>
 </template>
 

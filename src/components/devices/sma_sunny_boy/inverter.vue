@@ -4,9 +4,6 @@
 			Einstellungen für SMA Sunny Boy Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-alert subtype="info">
-			Diese Komponente benötigt keine Einstellungen.
-		</openwb-base-alert>
 		<openwb-base-button-group-input
 			title="Hybrid-System"
 			:buttons="[
