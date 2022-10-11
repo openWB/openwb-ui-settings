@@ -14,9 +14,15 @@
 		>
 			<template #help>
 				Um die ID herauszufinden mit dem Browser die Adresse
-				"https://api.discovergy.com/public/v1/meters" aufrufen und dort
-				Benutzername und Passwort eingeben. Hier wird nun u.a. die ID
-				des Zählers angezeigt.
+				<a
+					href="https://api.discovergy.com/public/v1/meters"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					https://api.discovergy.com/public/v1/meters
+				</a>
+				aufrufen und dort Benutzername und Passwort eingeben. Hier wird
+				nun u.a. die ID des Zählers angezeigt.
 			</template>
 		</openwb-base-text-input>
 	</div>
