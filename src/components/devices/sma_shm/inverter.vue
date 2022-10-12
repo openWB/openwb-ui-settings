@@ -10,7 +10,7 @@
 			HomeManager vorhanden ist, muss ein Gerät "SMA Sunny Boy" mit der
 			entsprechenden Wechselrichter-Komponente angelegt werden.
 		</openwb-base-alert>
-		<openwb-base-text-input
+		<openwb-base-number-input
 			title="Seriennummer"
 			required
 			:model-value="configuration.serials"
