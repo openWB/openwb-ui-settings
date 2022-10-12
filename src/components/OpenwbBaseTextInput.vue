@@ -225,6 +225,7 @@ export default {
 		},
 		pattern: String,
 		unit: String,
+		emptyValue: { required: false, default: null },
 	},
 	emits: ["update:modelValue"],
 	data() {
@@ -265,6 +266,10 @@ export default {
 						this.tempValue = newValue;
 					}
 				} else {
+					if (newValue == "") {
+						console.log(this.emptyValue);
+						newValue = this.emptyValue;
+					}
 					this.$emit("update:modelValue", newValue);
 				}
 			},

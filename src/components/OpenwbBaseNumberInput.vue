@@ -61,6 +61,7 @@ export default {
 		title: String,
 		modelValue: { type: Number },
 		unit: String,
+		emptyValue: { required: false, default: null },
 	},
 	emits: ["update:modelValue"],
 	data() {
@@ -74,6 +75,9 @@ export default {
 				return this.modelValue;
 			},
 			set(newValue) {
+				if (isNaN(newValue) || typeof newValue != "number") {
+					newValue = this.emptyValue;
+				}
 				this.$emit("update:modelValue", newValue);
 			},
 		},
