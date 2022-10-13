@@ -1,5 +1,5 @@
 <template>
-	<div class="device-enphase">
+	<div class="device-siemens-sentron">
 		<openwb-base-heading>
 			Einstellungen für Siemens Sentron
 			<span class="small">(Modul: {{ $options.name }})</span>

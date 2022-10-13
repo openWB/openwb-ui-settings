@@ -1,5 +1,5 @@
 <template>
-	<div class="device-enphase-counter">
+	<div class="device-siemens-sentron-counter">
 		<openwb-base-heading>
 			Einstellungen für Siemens Sentron Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
