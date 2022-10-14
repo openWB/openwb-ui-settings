@@ -255,13 +255,20 @@
 					:collapsible="true"
 					:collapsed="true"
 				>
-					<openwb-base-alert subtype="warning">
-						Diese Funktion ist noch in Entwicklung!<br />
-						Es kann bereits eine Datei hochgeladen und überprüft
-						werden, jedoch wird die Wiederherstellung nicht
-						gestartet!
+					<openwb-base-alert subtype="danger">
+						Diese Funktion ist noch in Entwicklung! Es kann
+						potentiell das System unbrauchbar werden. Nach
+						Möglichkeit vorher ein Image der Installation erstellen!
 					</openwb-base-alert>
 					<div class="input-group">
+						<div class="input-group-prepend">
+							<div class="input-group-text">
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'file-archive']"
+								/>
+							</div>
+						</div>
 						<div class="custom-file">
 							<input
 								id="input-file"
@@ -387,6 +394,7 @@ import {
 	faDownload as fasDownload,
 	faSkullCrossbones as fasSkullCrossbones,
 	faArchive as fasArchive,
+	faFileArchive as fasFileArchive,
 	faUpload as fasUpload,
 	faBoxOpen as fasBoxOpen,
 } from "@fortawesome/free-solid-svg-icons";
@@ -397,6 +405,7 @@ library.add(
 	fasDownload,
 	fasSkullCrossbones,
 	fasArchive,
+	fasFileArchive,
 	fasUpload,
 	fasBoxOpen
 );
