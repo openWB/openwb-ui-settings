@@ -258,7 +258,10 @@
 					<openwb-base-alert subtype="danger">
 						Diese Funktion ist noch in Entwicklung! Es kann
 						potentiell das System unbrauchbar werden. Nach
-						Möglichkeit vorher ein Image der Installation erstellen!
+						Möglichkeit vorher ein Image der Installation
+						erstellen!<br />
+						Für die Wiederherstellung wird eine aktive
+						Internetverbindung benötigt.
 					</openwb-base-alert>
 					<div class="input-group">
 						<div class="input-group-prepend">
