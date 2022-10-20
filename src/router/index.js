@@ -138,7 +138,7 @@ const routes = [
 			),
 	},
 	{
-		path: "/VehicleConfiguration",
+		path: "/VehicleConfiguration/:section?/:section_index?",
 		name: "VehicleConfiguration",
 		meta: {
 			heading: "Fahrzeugkonfiguration",

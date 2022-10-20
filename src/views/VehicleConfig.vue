@@ -528,7 +528,7 @@
 			<openwb-base-card
 				title="Ladeprofil-Vorlagen"
 				:collapsible="true"
-				:collapsed="true"
+				:collapsed="$route.params.section != 'charge_template'"
 			>
 				<template #actions>
 					<openwb-base-avatar
@@ -556,7 +556,13 @@
 						:key="templateKey"
 						:title="template.name ? template.name : templateKey"
 						:collapsible="true"
-						:collapsed="true"
+						:collapsed="
+							!(
+								$route.params.section == 'charge_template' &&
+								parseInt($route.params.section_index) ==
+									getChargeTemplateIndex(templateKey)
+							)
+						"
 						subtype="primary"
 					>
 						<template #actions v-if="!templateKey.endsWith('/0')">
@@ -1824,13 +1830,15 @@ export default {
 				data: {},
 			});
 		},
+		getChargeTemplateIndex(chargeTemplate) {
+			return parseInt(chargeTemplate.match(/([^/]+)$/)[0]);
+		},
 		removeChargeTemplateModal(chargeTemplate, event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
 			// get trailing characters as index
-			this.modalChargeTemplateIndex = parseInt(
-				chargeTemplate.match(/([^/]+)$/)[0]
-			);
+			this.modalChargeTemplateIndex =
+				this.getChargeTemplateIndex(chargeTemplate);
 			this.showChargeTemplateModal = true;
 		},
 		removeChargeTemplate(chargeTemplateIndex, event) {
