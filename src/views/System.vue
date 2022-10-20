@@ -124,12 +124,7 @@
 									"
 									:disabled="!updateAvailable"
 									@click="
-										sendSystemCommand('systemUpdate', {
-											branch: $store.state.mqtt[
-												'openWB/system/current_branch'
-											],
-											tag: '*HEAD*',
-										})
+										sendSystemCommand('systemUpdate', {})
 									"
 								>
 									Update
