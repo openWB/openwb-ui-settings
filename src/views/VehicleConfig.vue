@@ -1046,6 +1046,25 @@
 									/>
 								</openwb-base-avatar>
 							</template>
+							<template #help>
+								Im Lademodus Zielladen wird der Ladestrom so
+								angepasst, dass das Fahrzeug zum angegebenen
+								Zeitpunkt den festgelegten SoC/Energiemenge
+								erreicht. Anhand des angegebenen Ladestroms wird
+								der Zeitpunkt berechnet, an dem die Ladung
+								spätestens starten muss. Ist der berechnete
+								Zeitpunkt des Ladestarts noch nicht erreicht,
+								wird mit PV-Überschuss geladen. Auch nach
+								Erreichen des Ziel-SoCs wird mit PV-Überschuss
+								geladen, solange bis das SoC-Limit erreicht
+								wird. Kann der Ziel-SoC/Energiemenge nicht
+								erreicht werden, z.B. weil das Auto zu spät
+								angesteckt wurde oder das Lastmanagement
+								eingegriffen hat, wird bis 20 Minuten nach dem
+								angegebenen Termin mit der Maximalstromstärke
+								geladen. Danach wird der Termin verworfen und
+								mit PV-Überschuss geladen.
+							</template>
 						</openwb-base-heading>
 						<openwb-base-card
 							v-for="(
@@ -1071,7 +1090,7 @@
 											fixed-width
 											:icon="['fas', 'car-battery']"
 										/>
-										{{ plan.limit.soc }}%
+										{{ plan.limit.soc_scheduled }}%
 									</span>
 									<span
 										v-if="plan.limit.selected == 'amount'"
@@ -1171,6 +1190,33 @@
 								"
 							>
 							</openwb-base-text-input>
+							<openwb-base-range-input
+								title="Ladestrom"
+								:min="6"
+								:max="32"
+								:step="1"
+								unit="A"
+								:model-value="plan.current"
+								@update:model-value="
+									updateState(
+										templateKey,
+										$event,
+										'chargemode.instant_charging.current'
+									)
+								"
+							>
+								<template #help
+									>Mit dieser Stromstärke wird der Zeitpunkt
+									berechnet, wann die Ladung mit Netzbezug
+									gestartet werden muss. Wird der Ziel-SoC
+									nicht zum angegebenen Termin erreicht, weil
+									z.B. das Auto erst später angesteckt wurde,
+									wird auch mit einer höheren Stromstärke
+									geladen. Um etwas Puffer zu haben, empfiehlt
+									es sich, etwas weniger als die
+									Maximalstromstärke des Fahrzeugs zu wählen.
+								</template>
+							</openwb-base-range-input>
 							<openwb-base-button-group-input
 								title="Ziel"
 								:buttons="[
@@ -1189,22 +1235,57 @@
 									)
 								"
 							>
-								<template #help>Hilfetext</template>
+								<template #help
+									>Energiemenge, die bis zum angegebenen
+									Zeitpunkt geladen werden soll.</template
+								>
 							</openwb-base-button-group-input>
 							<openwb-base-range-input
 								title="Ziel-SoC"
+								v-if="plan.limit.selected == 'soc'"
 								:min="5"
 								:max="100"
 								:step="5"
 								unit="%"
-								:model-value="plan.limit.soc"
+								:model-value="plan.limit.soc_scheduled"
 								@update:model-value="
-									updateState(planKey, $event, 'limit.soc')
+									updateState(
+										planKey,
+										$event,
+										'limit.soc_scheduled'
+									)
 								"
 							>
+								<template #help
+									>SoC, der zum angegebenen Zeitpunkt erreicht
+									werden soll.</template
+								>
+							</openwb-base-range-input>
+							<openwb-base-range-input
+								title="SoC-Limit"
+								v-if="plan.limit.selected == 'soc'"
+								:min="5"
+								:max="100"
+								:step="5"
+								unit="%"
+								:model-value="plan.limit.soc_limit"
+								@update:model-value="
+									updateState(
+										planKey,
+										$event,
+										'limit.soc_limit'
+									)
+								"
+							>
+								<template #help
+									>Nach Erreichen des Ziel-SoCs wird mit
+									Überschuss weitergeladen, bis das SoC-Limit
+									erreicht wird.</template
+								>
 							</openwb-base-range-input>
 							<openwb-base-number-input
 								title="Ziel-Energiemenge"
+								v-if="plan.limit.selected == 'amount'"
 								unit="kWh"
 								:min="1"
 								:step="0.5"
