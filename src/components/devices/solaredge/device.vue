@@ -30,20 +30,6 @@
 				ab Werk eingestellt. Bitte im Wechselrichter überprüfen.
 			</template>
 		</openwb-base-number-input>
-		<openwb-base-button-group-input
-			title="Speicherleistung von PV subtrahieren"
-			:buttons="[
-				{ buttonValue: false, text: 'Lade- und Entladeleistung' },
-				{ buttonValue: true, text: 'nur Entladeleistung' },
-			]"
-			:model-value="configuration.fix_only_bat_discharging"
-			@update:model-value="
-				updateConfiguration(
-					$event,
-					'configuration.fix_only_bat_discharging'
-				)
-			"
-		/>
 	</div>
 </template>
 
