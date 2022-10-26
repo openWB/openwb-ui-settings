@@ -4,6 +4,12 @@
 			Einstellungen für Sungrow
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
+		<openwb-base-alert subtype="info">
+			Einige Sungrow-Geräte, wie z.B. der SH10RT, verfügen über zwei
+			LAN-Schnittstellen. Eine davon nutzt den WiNet-S Dongle, die andere
+			nicht. Wenn keine Daten ausgelesen werden können, den LAN-Anschluss
+			ohne WiNet-S Dongle nutzen.
+		</openwb-base-alert>
 		<openwb-base-text-input
 			title="IP oder Hostname"
 			subtype="host"
