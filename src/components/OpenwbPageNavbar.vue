@@ -1,5 +1,5 @@
 <template>
-	<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+	<nav class="navbar navbar-expand-lg bg-dark navbar-dark fixed-top">
 		<a class="navbar-brand" href="/openWB/web/">
 			<span>openWB</span>
 		</a>
@@ -18,6 +18,49 @@
 			ref="collapsibleNavbar"
 		>
 			<ul class="navbar-nav">
+				<li class="nav-item">
+					<router-link
+						to="/Status"
+						class="nav-link"
+						active-class="active disabled"
+					>
+						Status
+					</router-link>
+				</li>
+				<li class="nav-item dropdown nav-separator-after">
+					<a
+						class="nav-link dropdown-toggle"
+						href="#"
+						role="button"
+						data-toggle="dropdown"
+						aria-expanded="false"
+					>
+						Auswertungen
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<router-link
+							to="/Logging/ChargeLog"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							Ladeprotokoll
+						</router-link>
+						<router-link
+							to="/Logging/DailyChart"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							Tagesauswertung
+						</router-link>
+						<router-link
+							to="/Logging/MonthlyChart"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							Monatsauswertung
+						</router-link>
+					</div>
+				</li>
 				<li class="nav-item dropdown">
 					<a
 						class="nav-link dropdown-toggle"
@@ -196,50 +239,10 @@
 						</router-link>
 					</div>
 				</li>
-				<li class="nav-item">
-					<router-link
-						to="/Status"
-						class="nav-link"
-						active-class="active disabled"
-					>
-						Status
-					</router-link>
-				</li>
-				<li class="nav-item dropdown">
-					<a
-						class="nav-link dropdown-toggle"
-						href="#"
-						role="button"
-						data-toggle="dropdown"
-						aria-expanded="false"
-					>
-						Auswertungen
-					</a>
-					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<router-link
-							to="/Logging/ChargeLog"
-							class="dropdown-item"
-							active-class="active disabled"
-						>
-							Ladeprotokoll
-						</router-link>
-						<router-link
-							to="/Logging/DailyChart"
-							class="dropdown-item"
-							active-class="active disabled"
-						>
-							Tagesauswertung
-						</router-link>
-						<router-link
-							to="/Logging/MonthlyChart"
-							class="dropdown-item"
-							active-class="active disabled"
-						>
-							Monatsauswertung
-						</router-link>
-					</div>
-				</li>
-				<li v-if="nodeEnv !== 'production'" class="nav-item dropdown">
+				<li
+					v-if="nodeEnv !== 'production'"
+					class="nav-item dropdown nav-separator-before"
+				>
 					<a
 						class="nav-link dropdown-toggle"
 						href="#"
@@ -259,10 +262,10 @@
 						</router-link>
 					</div>
 				</li>
-				<li class="nav-item">
+				<li class="nav-item nav-separator-before">
 					<a
 						class="nav-link"
-						href="https://github.com/snaptec/openWB/wiki"
+						href="https://github.com/openWB/core/wiki"
 						target="_blank"
 					>
 						Wiki
@@ -304,3 +307,37 @@ export default {
 	},
 };
 </script>
+
+<style scoped>
+.nav-item.nav-separator-before {
+	border-left: 1px solid rgba(255, 255, 255, 0.5);
+	margin-left: 5px;
+	padding-left: 5px;
+}
+
+.nav-item.nav-separator-after {
+	border-right: 1px solid rgba(255, 255, 255, 0.5);
+	margin-right: 5px;
+	padding-right: 5px;
+}
+
+@media (max-width: 992px) {
+	.nav-item.nav-separator-before {
+		border-left: none;
+		margin-left: 0px;
+		padding-left: 0px;
+		border-top: 1px solid rgba(255, 255, 255, 0.5);
+		margin-top: 5px;
+		padding-top: 5px;
+	}
+
+	.nav-item.nav-separator-after {
+		border-right: none;
+		margin-right: 0px;
+		padding-right: 0px;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+		margin-bottom: 5px;
+		padding-bottom: 5px;
+	}
+}
+</style>

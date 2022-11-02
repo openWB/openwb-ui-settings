@@ -996,4 +996,12 @@ export default {
 .status .card {
 	align-self: start;
 }
+
+@media (max-width: 768px) {
+	.status {
+		display: grid;
+		grid-template-columns: repeat(1, 1fr);
+		gap: 10px;
+	}
+}
 </style>
