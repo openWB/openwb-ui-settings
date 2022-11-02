@@ -251,9 +251,12 @@
 						<span style="font-weight: initial">Header</span> Slot
 					</span>
 				</template>
-				<openwb-base-heading
-					>Das ist eine Überschrift</openwb-base-heading
-				>
+				<openwb-base-heading>
+					Das ist eine Überschrift
+					<template #help>
+						Es sind auch Hilfetexte im #help Slot möglich.
+					</template>
+				</openwb-base-heading>
 				<openwb-base-alert>
 					Meldung ohne speziellen Subtype.
 				</openwb-base-alert>
