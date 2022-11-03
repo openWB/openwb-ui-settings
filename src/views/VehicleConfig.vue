@@ -689,6 +689,42 @@
 							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-button-group-input
+							title="Zeitladen"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Nein',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'Ja',
+									class: 'btn-outline-success',
+								},
+							]"
+							:model-value="template.time_charging.active"
+							@update:model-value="
+								updateState(
+									templateKey,
+									$event,
+									'time_charging.active'
+								)
+							"
+						>
+							<template #help>
+								Der Lademodus Zeitladen kann parallel zu einem
+								der anderen Lademodi aktiviert werden. Die
+								Auswahl des Lademodus, der in der Regelung
+								genutzt wird, erfolgt anhand der Übersicht in
+								der Hilfe bei "Aktiver Lademodus". Wenn kein
+								Zeitplan aktiv ist oder das Limit des Zeitplans
+								erreicht wurde, wird der Lademodus verwendet,
+								der bei "Aktiver Lademodus" ausgewählt ist.<br />
+								Über den Modus Zeitladen kann zB Vorheizladen
+								abgebildet werden.
+							</template>
+						</openwb-base-button-group-input>
+						<openwb-base-button-group-input
 							title="Sperre nach Abstecken"
 							:buttons="[
 								{
@@ -1393,30 +1429,6 @@
 								</openwb-base-avatar>
 							</template>
 						</openwb-base-heading>
-						<openwb-base-button-group-input
-							title="Aktiviert"
-							:buttons="[
-								{
-									buttonValue: false,
-									text: 'Nein',
-									class: 'btn-outline-danger',
-								},
-								{
-									buttonValue: true,
-									text: 'Ja',
-									class: 'btn-outline-success',
-								},
-							]"
-							:model-value="template.time_charging.active"
-							@update:model-value="
-								updateState(
-									templateKey,
-									$event,
-									'time_charging.active'
-								)
-							"
-						>
-						</openwb-base-button-group-input>
 						<openwb-base-card
 							v-for="(
 								plan, planKey
