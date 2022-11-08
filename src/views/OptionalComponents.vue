@@ -31,7 +31,10 @@
 					"
 				>
 					<openwb-base-alert subtype="info">
-						ToDo: Hilfetext und Konfiguration
+						Die RFID-Tags, die an dem jeweiligen Ladepunkt gültig
+						sind, müssen in der Ladepunkt-Vorlage hinterlegt werden.
+						Der RFID-Tags wird in den Einstellungen des Fahrzeugs
+						diesem zugeordnet.
 					</openwb-base-alert>
 				</div>
 			</openwb-base-card>
