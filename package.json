@@ -1,6 +1,6 @@
 {
   "name": "openwb-ui-settings",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
