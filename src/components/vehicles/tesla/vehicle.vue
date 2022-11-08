@@ -78,7 +78,7 @@ export default {
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
-		deviceId: { required: true },
+		vehicleId: { required: true },
 	},
 	data() {
 		return {

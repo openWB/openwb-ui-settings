@@ -231,7 +231,7 @@
 								Fahrzeugs ermittelt werden.
 							</template>
 						</openwb-base-select-input>
-						<openwb-config-proxy
+						<openwb-vehicle-proxy
 							v-if="
 								$store.state.mqtt[
 									'openWB/vehicle/' +
@@ -239,15 +239,14 @@
 										'/soc_module/config'
 								].type
 							"
-							:deviceId="vehicleId"
-							:deviceType="
+							:vehicleId="vehicleId"
+							:vehicleType="
 								$store.state.mqtt[
 									'openWB/vehicle/' +
 										vehicleId +
 										'/soc_module/config'
 								].type
 							"
-							componentType="vehicle_soc"
 							:configuration="
 								$store.state.mqtt[
 									'openWB/vehicle/' +
@@ -1606,7 +1605,7 @@ library.add(
 );
 
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
-import OpenwbConfigProxy from "@/components/devices/OpenwbConfigProxy.vue";
+import OpenwbVehicleProxy from "@/components/vehicles/OpenwbVehicleProxy.vue";
 
 export default {
 	name: "OpenwbVehicleConfig",
@@ -1614,7 +1613,7 @@ export default {
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,
-		OpenwbConfigProxy,
+		OpenwbVehicleProxy,
 	},
 	data() {
 		return {
