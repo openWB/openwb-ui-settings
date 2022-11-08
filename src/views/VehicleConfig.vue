@@ -719,9 +719,7 @@
 								der Hilfe bei "Aktiver Lademodus". Wenn kein
 								Zeitplan aktiv ist oder das Limit des Zeitplans
 								erreicht wurde, wird der Lademodus verwendet,
-								der bei "Aktiver Lademodus" ausgewählt ist.<br />
-								Über den Modus Zeitladen kann zB Vorheizladen
-								abgebildet werden.
+								der bei "Aktiver Lademodus" ausgewählt ist.
 							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-button-group-input
