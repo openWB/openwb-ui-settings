@@ -10,34 +10,6 @@
 				</div>
 				<div v-else>
 					<openwb-base-button-group-input
-						title="Lademodus"
-						:buttons="[
-							{ buttonValue: false, text: 'Einheitlich' },
-							{ buttonValue: true, text: 'Individuell' },
-						]"
-						:model-value="
-							$store.state.mqtt[
-								'openWB/general/chargemode_config/individual_mode'
-							]
-						"
-						@update:model-value="
-							updateState(
-								'openWB/general/chargemode_config/individual_mode',
-								$event
-							)
-						"
-					>
-						<template #help>
-							Die Betriebsart "Einheitlich" entspricht dem
-							Verhalten in der Version 1.x. Alle Ladepunkte bzw.
-							Fahrzeuge werden mit dem selben Modus geladen. Bei
-							der Auswahl "Individuell" hingegen können
-							verschiedene Modi an den Ladepunkten/Fahrzeugen
-							genutzt werden.
-						</template>
-					</openwb-base-button-group-input>
-					<hr />
-					<openwb-base-button-group-input
 						title="Begrenzung der Schieflast"
 						:buttons="[
 							{
@@ -129,7 +101,6 @@ export default {
 		return {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
-				"openWB/general/chargemode_config/individual_mode",
 				"openWB/general/chargemode_config/unbalanced_load",
 				"openWB/general/chargemode_config/unbalanced_load_limit",
 			],
