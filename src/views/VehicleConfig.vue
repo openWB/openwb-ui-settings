@@ -838,7 +838,7 @@
 						>
 						</openwb-base-number-input>
 						<hr />
-						<openwb-base-heading>PV-laden</openwb-base-heading>
+						<openwb-base-heading>PV-Laden</openwb-base-heading>
 						<openwb-base-range-input
 							title="Mindeststrom"
 							:min="0"

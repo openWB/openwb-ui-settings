@@ -31,10 +31,10 @@
 				</router-link>
 				zu prüfen!
 			</openwb-base-alert>
-			<openwb-base-card title="Systeme und Komponenten">
+			<openwb-base-card title="Geräte und Komponenten">
 				<openwb-base-select-input
 					class="mb-2"
-					title="Verfügbare Systeme"
+					title="Verfügbare Geräte"
 					notSelected="Bitte auswählen"
 					:options="getDeviceList()"
 					:model-value="deviceToAdd"
@@ -59,7 +59,27 @@
 						</span>
 					</template>
 					<template #help>
-						Bitte ein System auswählen, das hinzugefügt werden soll.
+						Bitte ein Gerät auswählen, das hinzugefügt werden
+						soll.<br />
+						Für jedes physische Gerät, das abgefragt wird, wird ein
+						separates Gerät konfiguiert. Wenn mehrere Daten über ein
+						Gerät ausgelesen werden können, z.B. EVU und
+						Wechselrichter-Daten vom Wechselrichter, werden für
+						dieses Gerät die entsprechenden Komponenten
+						konfiguriert. Wenn die Daten lokal abefragt werden,
+						liefert meist die IP-Adresse den Hinweis auf die
+						richtige Konfiguration: Wenn EVU- und
+						Wechselrichter-Daten über zwei verschiedene IP-Adressen
+						abgefragt werden, müssen zwei Geräte mit jeweils einer
+						Komponente konfiguriert werden. Werden die Daten über
+						die gleiche IP-Adresse abgefragt, wird ein Gerät mit
+						einer Zähler- und einer Wechselrichter-Komponente
+						angelegt.<br />
+						Wenn in 1.9 bei einem/mehreren Modulen der Hinweis "Die
+						Einstellungen bitte im
+						EVU-/Speicher-/Wechselrichter-Modul vornehmen" steht,
+						muss ein Gerät mit den enstprechenden Komponenten
+						konfiguiert werden.
 					</template>
 				</openwb-base-select-input>
 				<openwb-base-card
@@ -156,7 +176,10 @@
 						</template>
 						<template #help>
 							Bitte eine Komponente auswählen, die hinzugefügt
-							werden soll.
+							werden soll. Für jeden Datensatz, z.B.
+							Wechselrichter- und Batteriedaten, muss eine
+							Wechselrichter- und eine Batteriekomponente
+							hinzugefügt werden.
 						</template>
 					</openwb-base-select-input>
 					<openwb-base-alert v-else subtype="info">

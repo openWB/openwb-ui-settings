@@ -57,7 +57,7 @@ const routes = [
 		path: "/PVChargeConfig",
 		name: "PVChargeConfig",
 		meta: {
-			heading: "Einstellungen PV-laden",
+			heading: "Einstellungen PV-Laden",
 		},
 		component: () =>
 			import(

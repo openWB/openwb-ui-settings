@@ -100,7 +100,7 @@
 							liegen, damit openWB die Ladung freigibt, bevor der
 							Wechselrichter begrenzt wird.<br />
 							Die Nutzung dieser Option ergibt nur Sinn, wenn ein
-							Wechselrichter mit Smart-Meter verbaut ist welches
+							Wechselrichter mit Smart-Meter verbaut ist, welches
 							eine dynamische Begrenzung der Einspeiseleistung
 							bietet.
 						</template>
@@ -231,7 +231,7 @@
 					>
 						<template #help>
 							Hier kann eingestellt werden, ob Ladevorgänge im
-							Modus "Zielladen" mit nur einer Phase oder dem
+							Modus "PV-Laden" mit nur einer Phase oder dem
 							möglichen Maximum in Abhängigkeit vom Ladepunkt und
 							Fahrzeug durchgeführt werden. Im Modus "Automatik"
 							entscheidet die Regelung, welche Einstellung genutzt
@@ -354,7 +354,11 @@
 							)
 						"
 					>
-						<template #help>Hilfetext</template>
+						<template #help
+							>Wenn der Einschalt-SoC erreicht wird, wird der
+							Speicher im Modus PV-Laden bis zum Ausschalt-SoC
+							entladen.</template
+						>
 					</openwb-base-range-input>
 					<openwb-base-range-input
 						title="Ausschalt-SoC"
@@ -396,7 +400,11 @@
 							)
 						"
 					>
-						<template #help>Hilfetext</template>
+						<template #help
+							>Wenn der Einschalt-SoC erreicht wird, wird der
+							Speicher im Modus PV-Laden bis zum Ausschalt-SoC
+							entladen.</template
+						>
 					</openwb-base-range-input>
 					<openwb-base-number-input
 						title="Reservierte Ladeleistung"
@@ -415,7 +423,11 @@
 							)
 						"
 					>
-						<template #help>Hilfetext</template>
+						<template #help
+							>Diese Speicher-Leistung wird von der Regelung auch
+							bei EV-Vorrang nicht zum Laden verwendet und bleibt
+							immer dem Speicher vorbehalten.</template
+						>
 					</openwb-base-number-input>
 					<openwb-base-number-input
 						title="Erlaubte Entladeleistung"
@@ -434,7 +446,12 @@
 							)
 						"
 					>
-						<template #help>Hilfetext</template>
+						<template #help
+							>Die erlaubte Entladeleistung wird von der Regelung
+							bei Speicher-Vorrang zum Laden der Fahrzeuge
+							verwendet, solange der Speicher-Soc über dem
+							minimalen Entlade-SoC liegt.</template
+						>
 					</openwb-base-number-input>
 					<openwb-base-range-input
 						title="Minimaler Entlade-SoC"
@@ -478,7 +495,8 @@
 						"
 					>
 						<template #help>
-							Ein vorhandener Speicher wird höchstens bis zu dem
+							Ein vorhandener Speicher wird im Modus PV-Laden mit
+							der erlaubten Entladeleistung höchstens bis zu dem
 							hier eingestellten Ladestand entladen.
 						</template>
 					</openwb-base-range-input>
