@@ -1445,6 +1445,22 @@
 										plan.active ? 'bg-success' : 'bg-danger'
 									"
 								>
+									<span v-if="plan.limit.selected == 'soc'">
+										<font-awesome-icon
+											fixed-width
+											:icon="['fas', 'car-battery']"
+										/>
+										{{ plan.limit.soc }}%
+									</span>
+									<span
+										v-if="plan.limit.selected == 'amount'"
+									>
+										<font-awesome-icon
+											fixed-width
+											:icon="['fas', 'bolt']"
+										/>
+										{{ plan.limit.amount / 1000 }}kWh
+									</span>
 									<font-awesome-icon
 										fixed-width
 										:icon="['fas', 'clock']"
