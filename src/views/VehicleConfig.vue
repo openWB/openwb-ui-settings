@@ -1605,8 +1605,9 @@
 								"
 							>
 								<template #help
-									>SoC, der zum angegebenen Zeitpunkt erreicht
-									werden soll.</template
+									>Ladestand des Akku (State of Charge, SoC),
+									bis zu welchem maximal geladen werden
+									soll.</template
 								>
 							</openwb-base-range-input>
 							<openwb-base-number-input
@@ -1624,6 +1625,11 @@
 									)
 								"
 							>
+								<template #help
+									>Maximal zu ladende Energiemenge innerhalb
+									des Zeitfensters. Eignet sich immer dann
+									wenn kein SoC zur Verfügung steht.
+								</template>
 							</openwb-base-number-input>
 
 							<openwb-base-text-input
