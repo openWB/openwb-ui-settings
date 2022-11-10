@@ -7,8 +7,8 @@
 		<openwb-base-alert subtype="info">
 			Einige Sungrow-Geräte, wie z.B. der SH10RT, verfügen über zwei
 			LAN-Schnittstellen. Eine davon nutzt den WiNet-S Dongle, die andere
-			nicht. Wenn keine Daten ausgelesen werden können, den LAN-Anschluss
-			ohne WiNet-S Dongle nutzen.
+			nicht. Wenn keine oder fehlerhafte Daten ausgelesen werden, den
+			LAN-Anschluss ohne WiNet-S Dongle nutzen.
 		</openwb-base-alert>
 		<openwb-base-text-input
 			title="IP oder Hostname"
