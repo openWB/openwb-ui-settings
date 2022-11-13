@@ -60,7 +60,6 @@
 		</openwb-base-text-input>
 		<openwb-base-text-input
 			title="VIN"
-			required
 			:model-value="configuration.vin"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.vin')
