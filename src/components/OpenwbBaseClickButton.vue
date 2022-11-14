@@ -1,5 +1,5 @@
 <template>
-	<button type="button" class="btn btn-block" @click="click">
+	<button type="button" class="btn btn-block" @click.prevent="click">
 		<slot>{{ title }}</slot>
 	</button>
 </template>

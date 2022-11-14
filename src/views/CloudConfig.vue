@@ -88,7 +88,7 @@
 										: 'btn-outline-success'
 								"
 								:disabled="!enableNewCloudButton"
-								@click="createCloud"
+								@buttonClicked="createCloud"
 							>
 								Zugang erstellen
 							</openwb-base-click-button>
@@ -150,7 +150,7 @@
 										: 'btn-outline-success'
 								"
 								:disabled="!enableCloudConnectButton"
-								@click="connectCloud"
+								@buttonClicked="connectCloud"
 							>
 								Mit Cloud verbinden
 							</openwb-base-click-button>
@@ -198,7 +198,7 @@
 										: 'btn-outline-danger'
 								"
 								:disabled="!enableRemoveCloudButton"
-								@click="removeCloudModal($event)"
+								@buttonClicked="removeCloudModal($event)"
 							>
 								Zugang löschen
 							</openwb-base-click-button>

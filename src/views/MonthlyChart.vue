@@ -17,7 +17,7 @@
 					<div class="row justify-content-center">
 						<openwb-base-click-button
 							class="col-4 btn-success"
-							@click="requestMonthlyChart()"
+							@buttonClicked="requestMonthlyChart()"
 						>
 							Daten anfordern
 						</openwb-base-click-button>

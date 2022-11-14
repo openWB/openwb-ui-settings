@@ -156,7 +156,7 @@
 										: 'btn-outline-success'
 								"
 								:disabled="!enableSendDebugButton"
-								@click="sendDebugMessage"
+								@buttonClicked="sendDebugMessage"
 							>
 								Absenden
 							</openwb-base-click-button>
