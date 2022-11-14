@@ -1,5 +1,5 @@
 <template>
-	<div class="vehicle-soc-vwid">
+	<div class="vehicle-soc-psa">
 		<openwb-base-heading>
 			Einstellungen für PSA SoC
 			<span class="small">(Modul: {{ $options.name }})</span>
