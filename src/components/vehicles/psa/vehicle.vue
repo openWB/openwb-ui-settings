@@ -30,9 +30,27 @@
 				Das Passwort für die Anmeldung an den PSA-Servern.
 			</template>
 		</openwb-base-text-input>
+		<openwb-base-select-input
+			title="Marke"
+			required
+			notSelected="Bitte auswählen"
+			:options="[
+				{ value: 'Peugeot', text: 'Peugeot' },
+				{ value: 'Citroen', text: 'Citroen' },
+				{ value: 'DS', text: 'DS' },
+				{ value: 'Opel', text: 'Opel' },
+				{ value: 'Vauxhall', text: 'Vauxhall' },
+			]"
+			:model-value="configuration.manufacturer"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.manufacturer')
+			"
+		>
+			<template #help> Marke aus des Fahrzeugs.</template>
+		</openwb-base-select-input>
+
 		<openwb-base-text-input
 			title="client-ID"
-			required
 			subtype="user"
 			:model-value="configuration.client_id"
 			@update:model-value="
@@ -41,12 +59,12 @@
 		>
 			<template #help>
 				Die Client-ID für die Anmeldung an den PSA-Servern, muss
-				normalerweise nicht geändert werden.
+				normalerweise nicht angegeben werden.
 			</template>
 		</openwb-base-text-input>
+
 		<openwb-base-text-input
 			title="Client Secret"
-			required
 			subtype="password"
 			:model-value="configuration.client_secret"
 			@update:model-value="
@@ -55,7 +73,7 @@
 		>
 			<template #help>
 				Das Client-Secret für die Anmeldung an den PSA-Servern, muss
-				normalerweise nicht geändert werden.
+				normalerweise nicht angegeben werden.
 			</template>
 		</openwb-base-text-input>
 		<openwb-base-text-input
