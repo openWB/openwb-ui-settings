@@ -93,7 +93,6 @@
 							<openwb-base-text-input
 								title="openWB Seriennummer"
 								required
-								subtype="email"
 								v-model="sendDebugData.serialNumber"
 							>
 								<template #help>
