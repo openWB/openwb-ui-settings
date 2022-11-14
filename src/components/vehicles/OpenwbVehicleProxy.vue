@@ -20,7 +20,7 @@
 			@update:model-value="
 				updateConfiguration({
 					value: $event,
-					object: 'connection_module.configuration',
+					object: 'configuration',
 				})
 			"
 		>
