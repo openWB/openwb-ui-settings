@@ -1445,6 +1445,22 @@
 										plan.active ? 'bg-success' : 'bg-danger'
 									"
 								>
+									<span v-if="plan.limit.selected == 'soc'">
+										<font-awesome-icon
+											fixed-width
+											:icon="['fas', 'car-battery']"
+										/>
+										{{ plan.limit.soc }}%
+									</span>
+									<span
+										v-if="plan.limit.selected == 'amount'"
+									>
+										<font-awesome-icon
+											fixed-width
+											:icon="['fas', 'bolt']"
+										/>
+										{{ plan.limit.amount / 1000 }}kWh
+									</span>
 									<font-awesome-icon
 										fixed-width
 										:icon="['fas', 'clock']"
@@ -1552,6 +1568,70 @@
 								"
 							>
 							</openwb-base-range-input>
+							<openwb-base-button-group-input
+								title="Ziel"
+								:buttons="[
+									{ buttonValue: 'none', text: 'Kein' },
+									{ buttonValue: 'soc', text: 'SoC' },
+									{
+										buttonValue: 'amount',
+										text: 'Energiemenge',
+									},
+								]"
+								:model-value="plan.limit.selected"
+								@update:model-value="
+									updateState(
+										planKey,
+										$event,
+										'limit.selected'
+									)
+								"
+							>
+								<template #help
+									>Bestimmt die Art des Limits für den
+									Ladevorgang.</template
+								>
+							</openwb-base-button-group-input>
+							<openwb-base-range-input
+								title="Ziel-SoC"
+								v-if="plan.limit.selected == 'soc'"
+								:min="5"
+								:max="100"
+								:step="5"
+								unit="%"
+								:model-value="plan.limit.soc"
+								@update:model-value="
+									updateState(planKey, $event, 'limit.soc')
+								"
+							>
+								<template #help
+									>Ladestand des Akku (State of Charge, SoC),
+									bis zu welchem maximal geladen werden
+									soll.</template
+								>
+							</openwb-base-range-input>
+							<openwb-base-number-input
+								title="Ziel-Energiemenge"
+								v-if="plan.limit.selected == 'amount'"
+								unit="kWh"
+								:min="1"
+								:step="0.5"
+								:model-value="plan.limit.amount / 1000"
+								@update:model-value="
+									updateState(
+										planKey,
+										$event * 1000,
+										'limit.amount'
+									)
+								"
+							>
+								<template #help
+									>Maximal zu ladende Energiemenge innerhalb
+									des Zeitfensters. Eignet sich immer dann
+									wenn kein SoC zur Verfügung steht.
+								</template>
+							</openwb-base-number-input>
+
 							<openwb-base-text-input
 								title="Beginn"
 								subtype="time"
