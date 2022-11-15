@@ -76,7 +76,7 @@
 					<div class="row justify-content-center">
 						<openwb-base-click-button
 							class="col-4 btn-success"
-							@click="requestChargeLog()"
+							@buttonClicked="requestChargeLog()"
 						>
 							Filter anwenden
 						</openwb-base-click-button>
@@ -102,7 +102,7 @@
 					<div class="row justify-content-center">
 						<openwb-base-click-button
 							class="col-4 btn-success"
-							@click="downloadChargeLog()"
+							@buttonClicked="downloadChargeLog()"
 						>
 							Als CSV exportieren
 							<font-awesome-icon

@@ -49,7 +49,7 @@
 										: 'btn-success clickable'
 								"
 								:disabled="deviceToAdd === undefined"
-								@click="addDevice"
+								@buttonClicked="addDevice"
 							>
 								<font-awesome-icon
 									fixed-width
@@ -159,7 +159,7 @@
 										componentToAdd[installedDevice.id] ===
 										undefined
 									"
-									@click="
+									@buttonClicked="
 										addComponent(
 											installedDevice.id,
 											installedDevice.type,

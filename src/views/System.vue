@@ -78,7 +78,7 @@
 							>
 								<openwb-base-click-button
 									class="btn-success"
-									@click="
+									@buttonClicked="
 										sendSystemCommand('systemFetchVersions')
 									"
 								>
@@ -123,7 +123,7 @@
 											: 'btn-outline-success'
 									"
 									:disabled="!updateAvailable"
-									@click="
+									@buttonClicked="
 										sendSystemCommand('systemUpdate', {})
 									"
 								>
@@ -181,7 +181,7 @@
 							>
 								<openwb-base-click-button
 									class="btn-danger clickable"
-									@click="
+									@buttonClicked="
 										sendSystemCommand('systemUpdate', {
 											branch: $store.state.mqtt[
 												'openWB/system/current_branch'
@@ -226,7 +226,7 @@
 							>
 								<openwb-base-click-button
 									class="btn-success clickable"
-									@click="
+									@buttonClicked="
 										sendSystemCommand('createBackup', {
 											use_extended_filename: true,
 										})
@@ -320,7 +320,9 @@
 											: 'btn-outline-success'
 									"
 									:disabled="!restoreUploadDone"
-									@click="sendSystemCommand('restoreBackup')"
+									@buttonClicked="
+										sendSystemCommand('restoreBackup')
+									"
 								>
 									Wiederherstellung starten
 									<font-awesome-icon
@@ -352,7 +354,9 @@
 							>
 								<openwb-base-click-button
 									class="btn-warning"
-									@click="sendSystemCommand('systemReboot')"
+									@buttonClicked="
+										sendSystemCommand('systemReboot')
+									"
 								>
 									Neustart
 									<font-awesome-icon
@@ -366,7 +370,9 @@
 							>
 								<openwb-base-click-button
 									class="btn-danger"
-									@click="sendSystemCommand('systemShutdown')"
+									@buttonClicked="
+										sendSystemCommand('systemShutdown')
+									"
 								>
 									Ausschalten
 									<font-awesome-icon

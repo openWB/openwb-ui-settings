@@ -93,7 +93,6 @@
 							<openwb-base-text-input
 								title="openWB Seriennummer"
 								required
-								subtype="email"
 								v-model="sendDebugData.serialNumber"
 							>
 								<template #help>
@@ -157,7 +156,7 @@
 										: 'btn-outline-success'
 								"
 								:disabled="!enableSendDebugButton"
-								@click="sendDebugMessage"
+								@buttonClicked="sendDebugMessage"
 							>
 								Absenden
 							</openwb-base-click-button>

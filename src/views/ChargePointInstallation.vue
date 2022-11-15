@@ -73,7 +73,7 @@
 										: 'btn-success'
 								"
 								:disabled="chargePointToAdd === undefined"
-								@click="addChargePoint"
+								@buttonClicked="addChargePoint"
 							>
 								<font-awesome-icon
 									fixed-width
