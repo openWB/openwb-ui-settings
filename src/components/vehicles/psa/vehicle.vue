@@ -67,33 +67,40 @@
 				Fahrzeuge im selben Account vorhanden sind.
 			</template>
 		</openwb-base-text-input>
-		<openwb-base-text-input
-			title="Client ID"
-			subtype="user"
-			:model-value="configuration.client_id"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.client_id')
-			"
+		<openwb-base-card
+			title="Erweiterte Einstellungen"
+			subtype="info"
+			:collapsible="true"
+			:collapsed="true"
 		>
-			<template #help>
-				Die Client-ID für die Anmeldung an den PSA-Servern, muss
-				normalerweise nicht angegeben werden.
-			</template>
-		</openwb-base-text-input>
+			<openwb-base-text-input
+				title="Client ID"
+				subtype="user"
+				:model-value="configuration.client_id"
+				@update:model-value="
+					updateConfiguration($event, 'configuration.client_id')
+				"
+			>
+				<template #help>
+					Die Client-ID für die Anmeldung an den PSA-Servern, muss
+					normalerweise nicht angegeben werden.
+				</template>
+			</openwb-base-text-input>
 
-		<openwb-base-text-input
-			title="Client Secret"
-			subtype="password"
-			:model-value="configuration.client_secret"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.client_secret')
-			"
-		>
-			<template #help>
-				Das Client-Secret für die Anmeldung an den PSA-Servern, muss
-				normalerweise nicht angegeben werden.
-			</template>
-		</openwb-base-text-input>
+			<openwb-base-text-input
+				title="Client Secret"
+				subtype="password"
+				:model-value="configuration.client_secret"
+				@update:model-value="
+					updateConfiguration($event, 'configuration.client_secret')
+				"
+			>
+				<template #help>
+					Das Client-Secret für die Anmeldung an den PSA-Servern, muss
+					normalerweise nicht angegeben werden.
+				</template>
+			</openwb-base-text-input>
+		</openwb-base-card>
 	</div>
 </template>
 
