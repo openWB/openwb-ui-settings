@@ -4,6 +4,12 @@
 			Einstellungen für PSA SoC
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
+		<openwb-base-alert subtype="info">
+			PSA liefert während eines Ladevorgangs keine Aktualisierung des
+			Ladestands. Die manuelle Berechnung des Ladestands ist derzeit noch
+			nicht implementiert, SoC-gesteuerte Ladung ist daher noch nicht
+			möglich.
+		</openwb-base-alert>
 		<openwb-base-text-input
 			title="Benutzername"
 			required
