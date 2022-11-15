@@ -1,5 +1,10 @@
 <script>
 export default {
+	data() {
+		return {
+			mqttTopicsToSubscribe: [],
+		};
+	},
 	emits: ["reset", "defaults", "save"],
 	computed: {
 		weekdays() {
