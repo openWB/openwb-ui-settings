@@ -222,6 +222,25 @@ export default {
 				}
 			);
 		},
+		postClientMessage(message, type = "secondary") {
+			console.debug("postMessage:", message, type);
+			const timestamp = Date.now();
+			const topic =
+				"openWB/command/" +
+				this.mqttClientId +
+				"/messages/" +
+				timestamp;
+			this.$store.commit({
+				type: "addTopic",
+				topic: topic,
+				payload: {
+					message: message,
+					type: type,
+					source: "client",
+					timestamp: Math.floor(timestamp / 1000),
+				},
+			});
+		},
 	},
 	created() {
 		this.createConnection();
