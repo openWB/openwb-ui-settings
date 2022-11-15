@@ -50,7 +50,19 @@
 		</openwb-base-select-input>
 
 		<openwb-base-text-input
-			title="client-ID"
+			title="VIN"
+			:model-value="configuration.vin"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.vin')
+			"
+		>
+			<template #help>
+				Die Fahrgestellnummer des Fahrzeugs. Nur notwendig falls mehrere
+				Fahrzeuge im selben Account vorhanden sind.
+			</template>
+		</openwb-base-text-input>
+		<openwb-base-text-input
+			title="Client ID"
 			subtype="user"
 			:model-value="configuration.client_id"
 			@update:model-value="
@@ -74,18 +86,6 @@
 			<template #help>
 				Das Client-Secret für die Anmeldung an den PSA-Servern, muss
 				normalerweise nicht angegeben werden.
-			</template>
-		</openwb-base-text-input>
-		<openwb-base-text-input
-			title="VIN"
-			:model-value="configuration.vin"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.vin')
-			"
-		>
-			<template #help>
-				Die Fahrgestellnummer des Fahrzeugs. Nur notwendig falls mehrere
-				Fahrzeuge im selben Account vorhanden sind.
 			</template>
 		</openwb-base-text-input>
 	</div>
