@@ -590,6 +590,8 @@ export default {
 					return "bg-success";
 				case "Zielladen":
 					return "bg-primary";
+				case "Zeitladen":
+					return "bg-warning";
 				case "Standby":
 					return "bg-secondary";
 				case "Stop":
