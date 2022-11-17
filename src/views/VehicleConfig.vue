@@ -82,6 +82,7 @@
 			<!-- vehicle card -->
 			<openwb-base-card
 				title="Fahrzeuge"
+				subtype="info"
 				:collapsible="true"
 				:collapsed="true"
 			>
@@ -266,12 +267,12 @@
 					</openwb-base-card>
 				</div>
 			</openwb-base-card>
+			<hr class="border-secondary" />
 			<!-- vehicle template card -->
-			<openwb-base-card
-				title="Fahrzeug-Vorlagen"
-				:collapsible="true"
-				:collapsed="true"
-			>
+			<openwb-base-card :collapsible="true" :collapsed="true">
+				<template #header>
+					<span style="font-style: italic">Fahrzeug-Vorlagen</span>
+				</template>
 				<template #actions>
 					<openwb-base-avatar
 						class="bg-success clickable"
@@ -525,10 +526,12 @@
 			</openwb-base-card>
 			<!-- charge template card -->
 			<openwb-base-card
-				title="Ladeprofil-Vorlagen"
 				:collapsible="true"
 				:collapsed="$route.params.section != 'charge_template'"
 			>
+				<template #header>
+					<span style="font-style: italic">Ladeprofil-Vorlagen</span>
+				</template>
 				<template #actions>
 					<openwb-base-avatar
 						class="bg-success clickable"
