@@ -23,6 +23,7 @@ export default {
 				"instant_charging",
 				"pv_charging",
 				"scheduled_charging",
+				"time_charging",
 				"standby",
 				"stop",
 			];
@@ -154,6 +155,8 @@ export default {
 					return "PV";
 				case "scheduled_charging":
 					return "Zielladen";
+				case "time_charging":
+					return "Zeitladen";
 				case "standby":
 					return "Standby";
 				case "stop":
