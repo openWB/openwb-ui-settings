@@ -53,6 +53,7 @@
 			<!-- charge point card -->
 			<openwb-base-card
 				title="Ladepunkte"
+				subtype="primary"
 				:collapsible="true"
 				:collapsed="true"
 			>
@@ -279,12 +280,16 @@
 					</openwb-base-button-group-input>
 				</openwb-base-card>
 			</openwb-base-card>
+			<hr class="border-secondary" />
 			<!-- charge point template card -->
 			<openwb-base-card
 				title="Ladepunkt-Vorlagen"
 				:collapsible="true"
 				:collapsed="true"
 			>
+				<template #header>
+					<span style="font-style: italic">Ladepunkt-Vorlagen</span>
+				</template>
 				<template #actions>
 					<openwb-base-avatar
 						class="bg-success clickable"
