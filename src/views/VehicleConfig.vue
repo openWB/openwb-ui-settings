@@ -828,8 +828,8 @@
 						>
 							<template #help>
 								Sofortladen kann entweder durch den Ladestand
-								der Fahrzeugbatterie (SoC) oder eine
-								Energiemenge in kWh begrenzt werden.
+								der Fahrzeugbatterie (SoC) oder eine Energie in
+								kWh begrenzt werden.
 							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-range-input
@@ -1085,21 +1085,21 @@
 							<template #help>
 								Im Lademodus Zielladen wird der Ladestrom so
 								angepasst, dass das Fahrzeug zum angegebenen
-								Zeitpunkt den festgelegten SoC/Energiemenge
-								erreicht. Anhand des angegebenen Ladestroms wird
-								der Zeitpunkt berechnet, an dem die Ladung
+								Zeitpunkt den festgelegten SoC/Energie erreicht.
+								Anhand des angegebenen Ladestroms wird der
+								Zeitpunkt berechnet, an dem die Ladung
 								spätestens starten muss. Ist der berechnete
 								Zeitpunkt des Ladestarts noch nicht erreicht,
 								wird mit PV-Überschuss geladen. Auch nach
 								Erreichen des Ziel-SoCs wird mit PV-Überschuss
 								geladen, solange bis das SoC-Limit erreicht
-								wird. Kann der Ziel-SoC/Energiemenge nicht
-								erreicht werden, z.B. weil das Auto zu spät
-								angesteckt wurde oder das Lastmanagement
-								eingegriffen hat, wird bis 20 Minuten nach dem
-								angegebenen Termin mit der Maximalstromstärke
-								geladen. Danach wird der Termin verworfen und
-								mit PV-Überschuss geladen.
+								wird. Kann der Ziel-SoC/Energie nicht erreicht
+								werden, z.B. weil das Auto zu spät angesteckt
+								wurde oder das Lastmanagement eingegriffen hat,
+								wird bis 20 Minuten nach dem angegebenen Termin
+								mit der Maximalstromstärke geladen. Danach wird
+								der Termin verworfen und mit PV-Überschuss
+								geladen.
 							</template>
 						</openwb-base-heading>
 						<openwb-base-card
@@ -1234,15 +1234,11 @@
 								unit="A"
 								:model-value="plan.current"
 								@update:model-value="
-									updateState(
-										templateKey,
-										$event,
-										'chargemode.instant_charging.current'
-									)
+									updateState(planKey, $event, 'current')
 								"
 							>
-								<template #help
-									>Mit dieser Stromstärke wird der Zeitpunkt
+								<template #help>
+									Mit dieser Stromstärke wird der Zeitpunkt
 									berechnet, wann die Ladung mit Netzbezug
 									gestartet werden muss. Wird der Ziel-SoC
 									nicht zum angegebenen Termin erreicht, weil
@@ -1259,7 +1255,7 @@
 									{ buttonValue: 'soc', text: 'SoC' },
 									{
 										buttonValue: 'amount',
-										text: 'Energiemenge',
+										text: 'Energie',
 									},
 								]"
 								:model-value="plan.limit.selected"
@@ -1271,10 +1267,10 @@
 									)
 								"
 							>
-								<template #help
-									>Energiemenge, die bis zum angegebenen
-									Zeitpunkt geladen werden soll.</template
-								>
+								<template #help>
+									Bestimmt die Art der Grenze für den
+									Ladevorgang.
+								</template>
 							</openwb-base-button-group-input>
 							<openwb-base-range-input
 								title="Ziel-SoC"
@@ -1292,10 +1288,10 @@
 									)
 								"
 							>
-								<template #help
-									>SoC, der zum angegebenen Zeitpunkt erreicht
-									werden soll.</template
-								>
+								<template #help>
+									SoC, der zum angegebenen Zeitpunkt erreicht
+									werden soll.
+								</template>
 							</openwb-base-range-input>
 							<openwb-base-range-input
 								title="SoC-Limit"
@@ -1313,14 +1309,14 @@
 									)
 								"
 							>
-								<template #help
-									>Nach Erreichen des Ziel-SoCs wird mit
-									Überschuss weitergeladen, bis das SoC-Limit
-									erreicht wird.</template
-								>
+								<template #help>
+									Nach Erreichen des Ziel-SoCs wird mit
+									Überschuss weiter geladen, bis das SoC-Limit
+									erreicht wird.
+								</template>
 							</openwb-base-range-input>
 							<openwb-base-number-input
-								title="Ziel-Energiemenge"
+								title="Ziel-Energie"
 								v-if="plan.limit.selected == 'amount'"
 								unit="kWh"
 								:min="1"
@@ -1574,11 +1570,11 @@
 							<openwb-base-button-group-input
 								title="Ziel"
 								:buttons="[
-									{ buttonValue: 'none', text: 'Kein' },
+									{ buttonValue: 'none', text: 'Aus' },
 									{ buttonValue: 'soc', text: 'SoC' },
 									{
 										buttonValue: 'amount',
-										text: 'Energiemenge',
+										text: 'Energie',
 									},
 								]"
 								:model-value="plan.limit.selected"
@@ -1590,10 +1586,10 @@
 									)
 								"
 							>
-								<template #help
-									>Bestimmt die Art des Limits für den
-									Ladevorgang.</template
-								>
+								<template #help>
+									Bestimmt die Art der Grenze für den
+									Ladevorgang.
+								</template>
 							</openwb-base-button-group-input>
 							<openwb-base-range-input
 								title="Ziel-SoC"
@@ -1607,14 +1603,13 @@
 									updateState(planKey, $event, 'limit.soc')
 								"
 							>
-								<template #help
-									>Ladestand des Akku (State of Charge, SoC),
-									bis zu welchem maximal geladen werden
-									soll.</template
-								>
+								<template #help>
+									Ladestand des Akku (State of Charge, SoC),
+									bis zu welchem maximal geladen werden soll.
+								</template>
 							</openwb-base-range-input>
 							<openwb-base-number-input
-								title="Ziel-Energiemenge"
+								title="Ziel-Energi"
 								v-if="plan.limit.selected == 'amount'"
 								unit="kWh"
 								:min="1"
@@ -1628,10 +1623,10 @@
 									)
 								"
 							>
-								<template #help
-									>Maximal zu ladende Energiemenge innerhalb
-									des Zeitfensters. Eignet sich immer dann
-									wenn kein SoC zur Verfügung steht.
+								<template #help>
+									Maximal zu ladende Energie innerhalb des
+									Zeitfensters. Eignet sich immer dann wenn
+									kein SoC zur Verfügung steht.
 								</template>
 							</openwb-base-number-input>
 
