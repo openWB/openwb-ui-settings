@@ -12,7 +12,19 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.jq_power')
 			"
-		/>
+		>
+			<template #help>
+				Zur Analyse der Werte aus dem json-Objekt wird jq benutzt. Ist
+				die Json Antwort z.B. {"PowerInstalledPeak":4655,
+				"PowerProduced":132, "PowerOut":897.08172362555717,
+				"PowerSelfSupplied":234.9182763744428} So muss hier .PowerOut
+				eingetragen werden.
+				<br />
+				Es wird vom Server eine Zahl mit oder ohne Nachkommastellen
+				(Float, Integer) und einem Punkt als Dezimaltrennzeichen
+				erwartet, welche die aktuelle Leistung in Watt darstellt.
+			</template>
+		</openwb-base-text-input>
 		<openwb-base-text-input
 			title="Abfrage für Zählerstand Bezug"
 			subtype="text"
