@@ -57,6 +57,10 @@
 				:collapsible="true"
 				:collapsed="true"
 			>
+				<template #header>
+					<font-awesome-icon fixed-width :icon="['fas', 'plug']" />
+					Ladepunkte
+				</template>
 				<openwb-base-select-input
 					class="mb-2"
 					title="Verfügbare Ladepunkte"
@@ -288,7 +292,18 @@
 				:collapsed="true"
 			>
 				<template #header>
-					<span style="font-style: italic">Ladepunkt-Vorlagen</span>
+					<font-awesome-layers fixed-width class="fa-lg">
+						<font-awesome-icon
+							fixed-width
+							:icon="['far', 'file']"
+						/>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'plug']"
+							transform="shrink-8"
+						/>
+					</font-awesome-layers>
+					Ladepunkt-Vorlagen
 				</template>
 				<template #actions>
 					<openwb-base-avatar
@@ -317,7 +332,6 @@
 					"
 					:collapsible="true"
 					:collapsed="true"
-					subtype="primary"
 				>
 					<template
 						#actions
@@ -709,10 +723,24 @@ import {
 	faCalendarDay as fasCalendarDay,
 	faCalendarAlt as fasCalendarAlt,
 	faCalendarWeek as fasCalendarWeek,
+	faPlug as fasPlug,
+	// faFileAlt as fasFileAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faFile as farFile } from "@fortawesome/free-regular-svg-icons";
+import {
+	FontAwesomeIcon,
+	FontAwesomeLayers,
+} from "@fortawesome/vue-fontawesome";
 
-library.add(fasPlus, fasTrash, fasCalendarDay, fasCalendarAlt, fasCalendarWeek);
+library.add(
+	fasPlus,
+	fasTrash,
+	fasCalendarDay,
+	fasCalendarAlt,
+	fasCalendarWeek,
+	fasPlug,
+	farFile
+);
 
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
@@ -724,6 +752,7 @@ export default {
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,
+		FontAwesomeLayers,
 		OpenwbChargePointProxy,
 	},
 	data() {
