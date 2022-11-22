@@ -204,21 +204,11 @@ export default {
 						label: "Beginn",
 						field: "time_begin",
 						sortable: true,
-						display: (row) => {
-							return this.dateTimeFormat.format(
-								new Date(row.time_begin * 1000)
-							);
-						},
 					},
 					{
 						label: "Ende",
 						field: "time_end",
 						sortable: true,
-						display: (row) => {
-							return this.dateTimeFormat.format(
-								new Date(row.time_end * 1000)
-							);
-						},
 					},
 					{
 						label: "Fahrzeug",
@@ -292,7 +282,7 @@ export default {
 					},
 				],
 				sortable: {
-					order: "time_begin",
+					order: "timestamp_begin",
 					sort: "asc",
 				},
 			},
@@ -380,6 +370,11 @@ export default {
 					return this.$store.state.mqtt[
 						"openWB/log/" + this.mqttClientId + "/data"
 					]["entries"].map((entry) => {
+						// ToDo: timestamps should already be in unix timestamp format from backend
+						var timestamp_begin = Date.parse(
+							entry["time"]["begin"]
+						);
+						var timestamp_end = Date.parse(entry["time"]["end"]);
 						return {
 							chargepoint_id: entry["chargepoint"]["id"],
 							chargepoint_name: entry["chargepoint"]["name"],
@@ -390,10 +385,14 @@ export default {
 							),
 							vehicle_rfid: entry["vehicle"]["rfid"],
 							vehicle_prio: entry["vehicle"]["prio"],
-							// ToDo: timestamps should already be in unix timestamp format from backend
-							time_begin:
-								Date.parse(entry["time"]["begin"]) / 1000,
-							time_end: Date.parse(entry["time"]["end"]) / 1000,
+							timestamp_begin: timestamp_begin / 1000,
+							time_begin: this.dateTimeFormat.format(
+								new Date(timestamp_begin)
+							),
+							timestamp_end: timestamp_end / 1000,
+							time_end: this.dateTimeFormat.format(
+								new Date(timestamp_end)
+							),
 							time_time_charged: entry["time"]["time_charged"],
 							data_power: entry["data"]["power"],
 							data_range_charged: entry["data"]["range_charged"],
@@ -421,6 +420,8 @@ export default {
 						"Priorität",
 						"Beginn",
 						"Ende",
+						"Zeitstempel Beginn",
+						"Zeitstempel Ende",
 						"Dauer",
 						"Leistung",
 						"Energie",
@@ -436,6 +437,8 @@ export default {
 						'"' + this.translateBool(row.vehicle_prio, false) + '"',
 						'"' + row.time_begin + '"',
 						'"' + row.time_end + '"',
+						'"' + row.timestamp_begin + '"',
+						'"' + row.timestamp_end + '"',
 						'"' + row.time_time_charged + '"',
 						this.formatNumber(row.data_power / 1000, 3),
 						this.formatNumber(
@@ -443,7 +446,7 @@ export default {
 							2
 						),
 						this.formatNumber(row.data_range_charged, 0),
-						this.formatNumber(row.data_costs / 1000, 2),
+						this.formatNumber(row.data_costs, 2),
 					]),
 				]
 					.map((element) => element.join(";"))

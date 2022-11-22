@@ -81,11 +81,14 @@
 		<form name="vehicleConfigForm">
 			<!-- vehicle card -->
 			<openwb-base-card
-				title="Fahrzeuge"
-				subtype="info"
+				subtype="primary"
 				:collapsible="true"
 				:collapsed="true"
 			>
+				<template #header>
+					<font-awesome-icon fixed-width :icon="['fas', 'car']" />
+					Fahrzeuge
+				</template>
 				<template #actions>
 					<openwb-base-avatar
 						class="bg-success clickable"
@@ -268,10 +271,22 @@
 				</div>
 			</openwb-base-card>
 			<hr class="border-secondary" />
+			<openwb-base-heading>Vorlagen</openwb-base-heading>
 			<!-- vehicle template card -->
 			<openwb-base-card :collapsible="true" :collapsed="true">
 				<template #header>
-					<span style="font-style: italic">Fahrzeug-Vorlagen</span>
+					<font-awesome-layers fixed-width class="fa-lg">
+						<font-awesome-icon
+							fixed-width
+							:icon="['far', 'file']"
+						/>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'car']"
+							transform="shrink-8"
+						/>
+					</font-awesome-layers>
+					Fahrzeug-Vorlagen
 				</template>
 				<template #actions>
 					<openwb-base-avatar
@@ -300,7 +315,6 @@
 						:title="template.name ? template.name : key"
 						:collapsible="true"
 						:collapsed="true"
-						subtype="primary"
 					>
 						<template #actions v-if="!key.endsWith('/0')">
 							<openwb-base-avatar
@@ -530,7 +544,18 @@
 				:collapsed="$route.params.section != 'charge_template'"
 			>
 				<template #header>
-					<span style="font-style: italic">Ladeprofil-Vorlagen</span>
+					<font-awesome-layers fixed-width class="fa-lg">
+						<font-awesome-icon
+							fixed-width
+							:icon="['far', 'file']"
+						/>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'plug']"
+							transform="shrink-8"
+						/>
+					</font-awesome-layers>
+					Ladeprofil-Vorlagen
 				</template>
 				<template #actions>
 					<openwb-base-avatar
@@ -565,7 +590,6 @@
 									getChargeTemplateIndex(templateKey)
 							)
 						"
-						subtype="primary"
 					>
 						<template #actions v-if="!templateKey.endsWith('/0')">
 							<openwb-base-avatar
@@ -1609,7 +1633,7 @@
 								</template>
 							</openwb-base-range-input>
 							<openwb-base-number-input
-								title="Ziel-Energi"
+								title="Ziel-Energie"
 								v-if="plan.limit.selected == 'amount'"
 								unit="kWh"
 								:min="1"
@@ -1759,8 +1783,14 @@ import {
 	faClock as fasClock,
 	faCarBattery as fasCarBattery,
 	faBolt as fasBolt,
+	faCar as fasCar,
+	faPlug as fasPlug,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faFile as farFile } from "@fortawesome/free-regular-svg-icons";
+import {
+	FontAwesomeIcon,
+	FontAwesomeLayers,
+} from "@fortawesome/vue-fontawesome";
 
 library.add(
 	fasPlus,
@@ -1770,7 +1800,10 @@ library.add(
 	fasCalendarWeek,
 	fasClock,
 	fasCarBattery,
-	fasBolt
+	fasBolt,
+	fasCar,
+	farFile,
+	fasPlug
 );
 
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
@@ -1782,6 +1815,7 @@ export default {
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,
+		FontAwesomeLayers,
 		OpenwbVehicleProxy,
 	},
 	data() {
