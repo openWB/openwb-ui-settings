@@ -143,7 +143,7 @@ export default {
 				year: "",
 			},
 			datasetTemplates: {
-				"counter-power": {
+				"counter-energy": {
 					label: "Zähler",
 					jsonKey: null,
 					borderColor: "rgba(255, 0, 0, 0.7)",
@@ -159,7 +159,7 @@ export default {
 						yAxisKey: null,
 					},
 				},
-				"pv-power": {
+				"pv-energy": {
 					label: "PV",
 					jsonKey: null,
 					borderColor: "rgba(0, 255, 0, 0.7)",
@@ -175,7 +175,7 @@ export default {
 						yAxisKey: null,
 					},
 				},
-				"bat-power": {
+				"bat-energy": {
 					label: "Speicher",
 					jsonKey: null,
 					borderColor: "rgba(255, 153, 13, 0.7)",
@@ -191,7 +191,7 @@ export default {
 						yAxisKey: null,
 					},
 				},
-				"cp-power": {
+				"cp-energy": {
 					label: "Ladepunkt",
 					jsonKey: null,
 					borderColor: "rgba(0, 0, 255, 0.7)",
@@ -246,7 +246,7 @@ export default {
 				},
 				elements: {
 					point: {
-						radius: 0,
+						radius: 3,
 					},
 				},
 				responsive: true,
@@ -276,7 +276,7 @@ export default {
 						},
 					},
 					y1: {
-						// horizontal line for values displayed on the left side (power, kW)
+						// horizontal line for values displayed on the left side (energy, kWh)
 						position: "left",
 						type: "linear",
 						display: "auto",
@@ -450,7 +450,6 @@ export default {
 					(row) => {
 						row.timestamp = row.timestamp * 1000;
 						if (lastRow !== undefined) {
-							const timeDiff = row.timestamp - lastRow.timestamp;
 							var baseObjectsToProcess = [
 								"pv",
 								"counter",
@@ -480,20 +479,16 @@ export default {
 														) {
 															row[baseObject][
 																key
-															].power =
-																Math.floor(
-																	(row[
+															].energy =
+																(row[
+																	baseObject
+																][key]
+																	.exported -
+																	lastRow[
 																		baseObject
 																	][key]
-																		.exported -
-																		lastRow[
-																			baseObject
-																		][key]
-																			.exported) /
-																		(timeDiff /
-																			1000 /
-																			3600)
-																) / 1000;
+																		.exported) /
+																1000;
 														}
 														break;
 													case "counter":
@@ -525,45 +520,39 @@ export default {
 														) {
 															row[baseObject][
 																key
-															].power =
-																Math.floor(
-																	(row[
+															].energy =
+																(row[
+																	baseObject
+																][key]
+																	.imported -
+																	lastRow[
 																		baseObject
 																	][key]
 																		.imported -
+																	(row[
+																		baseObject
+																	][key]
+																		.exported -
 																		lastRow[
 																			baseObject
 																		][key]
-																			.imported -
-																		(row[
-																			baseObject
-																		][key]
-																			.exported -
-																			lastRow[
-																				baseObject
-																			][
-																				key
-																			]
-																				.exported)) /
-																		(timeDiff /
-																			1000 /
-																			3600)
-																) / 1000;
+																			.exported)) /
+																1000;
 															row[baseObject][
 																key
-															].powerImport = Math.max(
+															].energyImport = Math.max(
 																0,
 																row[baseObject][
 																	key
-																].power
+																].energy
 															);
 															row[baseObject][
 																key
-															].powerExport = Math.min(
+															].energyExport = Math.min(
 																0,
 																row[baseObject][
 																	key
-																].power
+																].energy
 															);
 														}
 														break;
@@ -596,45 +585,39 @@ export default {
 														) {
 															row[baseObject][
 																key
-															].power =
-																Math.floor(
-																	(row[
+															].energy =
+																(row[
+																	baseObject
+																][key]
+																	.imported -
+																	lastRow[
 																		baseObject
 																	][key]
 																		.imported -
+																	(row[
+																		baseObject
+																	][key]
+																		.exported -
 																		lastRow[
 																			baseObject
 																		][key]
-																			.imported -
-																		(row[
-																			baseObject
-																		][key]
-																			.exported -
-																			lastRow[
-																				baseObject
-																			][
-																				key
-																			]
-																				.exported)) /
-																		(timeDiff /
-																			1000 /
-																			3600)
-																) / 1000;
+																			.exported)) /
+																1000;
 															row[baseObject][
 																key
-															].powerImport = Math.max(
+															].energyImport = Math.max(
 																0,
 																row[baseObject][
 																	key
-																].power
+																].energy
 															);
 															row[baseObject][
 																key
-															].powerExport = Math.min(
+															].energyExport = Math.min(
 																0,
 																row[baseObject][
 																	key
-																].power
+																].energy
 															);
 														}
 														break;
@@ -655,20 +638,16 @@ export default {
 														) {
 															row[baseObject][
 																key
-															].power =
-																Math.floor(
-																	(row[
+															].energy =
+																(row[
+																	baseObject
+																][key]
+																	.imported -
+																	lastRow[
 																		baseObject
 																	][key]
-																		.imported -
-																		lastRow[
-																			baseObject
-																		][key]
-																			.imported) /
-																		(timeDiff /
-																			1000 /
-																			3600)
-																) / 1000;
+																		.imported) /
+																1000;
 														}
 														break;
 												}
@@ -933,52 +912,56 @@ export default {
 							"/config";
 				}
 				var objectTopic = Object.keys(this.getWildcardTopics(topic))[0];
-				switch (baseObject) {
-					case "pv":
-						label = this.$store.state.mqtt[objectTopic].name;
-						break;
-					case "counter":
-						label = this.$store.state.mqtt[objectTopic].name;
-						switch (elementKey) {
-							case "imported":
-								label += " (Bezug)";
-								break;
-							case "exported":
-								label += " (Einspeisung)";
-								break;
-						}
-						break;
-					case "bat":
-						label = this.$store.state.mqtt[objectTopic].name;
-						switch (elementKey) {
-							case "imported":
-								label += " (Ladung)";
-								break;
-							case "exported":
-								label += " (Entladung)";
-								break;
-							case "soc":
-								label += " SoC";
-								break;
-						}
-						break;
-					case "cp":
-						label = this.$store.state.mqtt[objectTopic].name;
-						switch (elementKey) {
-							case "imported":
-								label += " (Ladung)";
-								break;
-							case "exported":
-								label += " (Entladung)";
-								break;
-							case "soc":
-								label += " SoC";
-								break;
-						}
-						break;
-					case "ev":
-						label = this.$store.state.mqtt[objectTopic];
-						break;
+				if (objectTopic in this.$store.state.mqtt) {
+					switch (baseObject) {
+						case "pv":
+							label = this.$store.state.mqtt[objectTopic].name;
+							break;
+						case "counter":
+							label = this.$store.state.mqtt[objectTopic].name;
+							switch (elementKey) {
+								case "imported":
+									label += " (Bezug)";
+									break;
+								case "exported":
+									label += " (Einspeisung)";
+									break;
+							}
+							break;
+						case "bat":
+							label = this.$store.state.mqtt[objectTopic].name;
+							switch (elementKey) {
+								case "imported":
+									label += " (Ladung)";
+									break;
+								case "exported":
+									label += " (Entladung)";
+									break;
+								case "soc":
+									label += " SoC";
+									break;
+							}
+							break;
+						case "cp":
+							label = this.$store.state.mqtt[objectTopic].name;
+							switch (elementKey) {
+								case "imported":
+									label += " (Ladung)";
+									break;
+								case "exported":
+									label += " (Entladung)";
+									break;
+								case "soc":
+									label += " SoC";
+									break;
+							}
+							break;
+						case "ev":
+							label = this.$store.state.mqtt[objectTopic];
+							break;
+					}
+				} else {
+					console.warn("could not get name for dataset", datasetKey);
 				}
 			}
 			return label;
@@ -1033,7 +1016,7 @@ export default {
 			return;
 		},
 		initDataset(baseObject, objectKey, elementKey) {
-			const elementKeysToAdd = ["power", "soc"];
+			const elementKeysToAdd = ["energy"];
 			const datasetKey = baseObject + "." + objectKey + "." + elementKey;
 			if (elementKeysToAdd.includes(elementKey)) {
 				var index = this.getDatasetIndex(datasetKey);
