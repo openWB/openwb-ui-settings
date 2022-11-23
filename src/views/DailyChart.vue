@@ -304,7 +304,7 @@ export default {
 								size: 12,
 							},
 							// color: tickColor,
-							maxTicksLimit: 15,
+							maxTicksLimit: 24,
 						},
 						grid: {
 							// color: xGridColor,
@@ -1000,52 +1000,56 @@ export default {
 							"/config";
 				}
 				var objectTopic = Object.keys(this.getWildcardTopics(topic))[0];
-				switch (baseObject) {
-					case "pv":
-						label = this.$store.state.mqtt[objectTopic].name;
-						break;
-					case "counter":
-						label = this.$store.state.mqtt[objectTopic].name;
-						switch (elementKey) {
-							case "imported":
-								label += " (Bezug)";
-								break;
-							case "exported":
-								label += " (Einspeisung)";
-								break;
-						}
-						break;
-					case "bat":
-						label = this.$store.state.mqtt[objectTopic].name;
-						switch (elementKey) {
-							case "imported":
-								label += " (Ladung)";
-								break;
-							case "exported":
-								label += " (Entladung)";
-								break;
-							case "soc":
-								label += " SoC";
-								break;
-						}
-						break;
-					case "cp":
-						label = this.$store.state.mqtt[objectTopic].name;
-						switch (elementKey) {
-							case "imported":
-								label += " (Ladung)";
-								break;
-							case "exported":
-								label += " (Entladung)";
-								break;
-							case "soc":
-								label += " SoC";
-								break;
-						}
-						break;
-					case "ev":
-						label = this.$store.state.mqtt[objectTopic];
-						break;
+				if (objectTopic in this.$store.state.mqtt) {
+					switch (baseObject) {
+						case "pv":
+							label = this.$store.state.mqtt[objectTopic].name;
+							break;
+						case "counter":
+							label = this.$store.state.mqtt[objectTopic].name;
+							switch (elementKey) {
+								case "imported":
+									label += " (Bezug)";
+									break;
+								case "exported":
+									label += " (Einspeisung)";
+									break;
+							}
+							break;
+						case "bat":
+							label = this.$store.state.mqtt[objectTopic].name;
+							switch (elementKey) {
+								case "imported":
+									label += " (Ladung)";
+									break;
+								case "exported":
+									label += " (Entladung)";
+									break;
+								case "soc":
+									label += " SoC";
+									break;
+							}
+							break;
+						case "cp":
+							label = this.$store.state.mqtt[objectTopic].name;
+							switch (elementKey) {
+								case "imported":
+									label += " (Ladung)";
+									break;
+								case "exported":
+									label += " (Entladung)";
+									break;
+								case "soc":
+									label += " SoC";
+									break;
+							}
+							break;
+						case "ev":
+							label = this.$store.state.mqtt[objectTopic];
+							break;
+					}
+				} else {
+					console.warn("could not get name for dataset", datasetKey);
 				}
 			}
 			return label;
