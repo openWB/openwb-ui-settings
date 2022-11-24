@@ -17,9 +17,9 @@
 			<template #help>
 				Diese Angabe wird an die Server-URL angehängt und muss mit einem
 				Schrägstrich "/" beginnen.<br />
-				Es wird vom Server eine ganze Zahl (Float mit Punkt als
-				Dezimaltrennzeichen oder Integer) erwartet, welche die aktuelle
-				Leistung in Watt darstellt.
+				Es wird vom Server eine Zahl mit oder ohne Nachkommastellen
+				(Float, Integer) und einem Punkt als Dezimaltrennzeichen
+				erwartet, welche die aktuelle Leistung in Watt darstellt.
 			</template>
 		</openwb-base-text-input>
 		<openwb-base-text-input
@@ -35,9 +35,10 @@
 			<template #help>
 				Diese Angabe wird an die Server-URL angehängt und muss mit einem
 				Schrägstrich "/" beginnen.<br />
-				Es wird vom Server eine Zahl (Float mit Punkt als
-				Dezimaltrennzeichen oder Integer) erwartet, welche den aktuellen
-				Ladestand (SoC) in Prozent darstellt.
+				Es wird vom Server eine Zahl mit oder ohne Nachkommastellen
+				(Float, Integer) und einem Punkt als Dezimaltrennzeichen
+				erwartet, welche den aktuellen Ladestand (SoC) in Prozent
+				darstellt.
 			</template>
 		</openwb-base-text-input>
 		<openwb-base-text-input
@@ -52,9 +53,10 @@
 			<template #help>
 				Diese Angabe wird an die Server-URL angehängt und muss mit einem
 				Schrägstrich "/" beginnen.<br />
-				Es wird vom Server eine Zahl (Float mit Punkt als
-				Dezimaltrennzeichen oder Integer) erwartet, welche den aktuellen
-				absoluten Zählerstand in kWh darstellt.<br />
+				Es wird vom Server eine Zahl mit oder ohne Nachkommastellen
+				(Float, Integer) und einem Punkt als Dezimaltrennzeichen
+				erwartet, welche den aktuellen absoluten Zählerstand in kWh
+				darstellt.<br />
 				Wird dieses Feld leer gelassen, werden keine Phasenströme
 				ermittelt und es kann kein Lastmanagement berechnet werden!
 			</template>
@@ -71,9 +73,10 @@
 			<template #help>
 				Diese Angabe wird an die Server-URL angehängt und muss mit einem
 				Schrägstrich "/" beginnen.<br />
-				Es wird vom Server eine Zahl (Float mit Punkt als
-				Dezimaltrennzeichen oder Integer) erwartet, welche den aktuellen
-				absoluten Zählerstand in kWh darstellt.<br />
+				Es wird vom Server eine Zahl mit oder ohne Nachkommastellen
+				(Float, Integer) und einem Punkt als Dezimaltrennzeichen
+				erwartet, welche den aktuellen absoluten Zählerstand in kWh
+				darstellt.<br />
 				Wird dieses Feld leer gelassen, werden keine Phasenströme
 				ermittelt und es kann kein Lastmanagement berechnet werden!
 			</template>

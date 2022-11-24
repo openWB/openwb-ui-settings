@@ -14,9 +14,13 @@
 							componentId
 						}}/get/power</openwb-base-copy-to-clipboard
 					><br />
-					PV-Leistung in Watt, ohne Nachkommastellen (Integer), nur
-					negativ!<br />
-					Beispiel: <span class="text-info">-123</span>
+					PV-Leistung in Watt als Zahl mit oder ohne Nachkommastellen
+					(Float, Integer) und einem Punkt als Dezimaltrennzeichen.
+					Produzierte Leistung muss ein negatives Vorzeichen haben.
+					(In bestimmten Konstellationen, z.B. wenn ein Hybridsystem
+					über einen zweiten Wechselrichter geladen wird, hat die
+					Leistung ein positives Vorzeichen.) Beispiel:
+					<span class="text-info">-123</span>
 				</li>
 				<li>
 					<openwb-base-copy-to-clipboard
@@ -26,8 +30,9 @@
 							componentId
 						}}/get/exported</openwb-base-copy-to-clipboard
 					><br />
-					Erzeugte Energie in Wh, mit Nachkommastellen (Float), nur
-					positiv<br />
+					Erzeugte Energie in Wh, Zahl mit oder ohne Nachkommastellen
+					(Float, Integer) und einem Punkt als Dezimaltrennzeichen,
+					nur positiv<br />
 					Beispiel: <span class="text-info">123.45</span>
 				</li>
 			</ul>

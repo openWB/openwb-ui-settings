@@ -15,7 +15,8 @@
 		>
 			<template #help>
 				Es wird eine komplette URL erwartet mit Angaben zum Protokoll,
-				IP oder Hostnamen, optional einem Port und einem Pfad.<br />
+				IP oder Hostnamen, optional einem Port und einem Pfad. Die
+				Antwort muss ein json-Objekt sein.<br />
 				Beispiel: http://192.168.1.1:8080/json?data=1
 			</template>
 		</openwb-base-text-input>

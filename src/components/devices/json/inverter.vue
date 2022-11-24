@@ -12,7 +12,23 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.jq_power')
 			"
-		/>
+		>
+			<template #help>
+				Zur Analyse der Werte aus dem json-Objekt wird jq benutzt. Ist
+				die Json Antwort z.B. {"PowerInstalledPeak":4655,
+				"PowerProduced":132, "PowerOut":897.08172362555717,
+				"PowerSelfSupplied":234.9182763744428} So muss hier .PowerOut
+				eingetragen werden.
+				<br />
+				Es wird vom Server eine Zahl mit oder ohne Nachkommastellen
+				(Float, Integer) und einem Punkt als Dezimaltrennzeichen
+				erwartet, welche die aktuelle Leistung in Watt darstellt.
+				Produzierte Leistung muss ein negatives Vorzeichen haben. (In
+				bestimmten Konstellationen, z.B. wenn ein Hybridsystem über
+				einen zweiten Wechselrichter geladen wird, hat die Leistung ein
+				positives Vorzeichen.)
+			</template>
+		</openwb-base-text-input>
 		<openwb-base-text-input
 			title="Abfrage für Zählerstand"
 			subtype="text"

@@ -14,7 +14,8 @@
 							componentId
 						}}/get/power</openwb-base-copy-to-clipboard
 					><br />
-					Bezugsleistung in Watt, mit Nachkommastellen (Float),
+					Bezugsleistung in Watt, Zahl mit oder ohne Nachkommastellen
+					(Float, Integer) und einem Punkt als Dezimaltrennzeichen,
 					positiv Bezug, negativ Einspeisung<br />
 					Beispiel: <span class="text-info">-123.45</span>
 				</li>
@@ -26,8 +27,9 @@
 							componentId
 						}}/get/imported</openwb-base-copy-to-clipboard
 					><br />
-					Bezogene Energie in Wh, mit Nachkommastellen (Float), nur
-					positiv<br />
+					Bezogene Energie in Wh, Zahl mit oder ohne Nachkommastellen
+					(Float, Integer) und einem Punkt als Dezimaltrennzeichen,
+					nur positiv<br />
 					Beispiel: <span class="text-info">123.45</span>
 				</li>
 				<li>
@@ -38,8 +40,9 @@
 							componentId
 						}}/get/exported</openwb-base-copy-to-clipboard
 					><br />
-					Eingespeiste Energie in Wh, mit Nachkommastellen (Float),
-					nur positiv<br />
+					Eingespeiste Energie in Wh, Zahl mit oder ohne
+					Nachkommastellen (Float, Integer) und einem Punkt als
+					Dezimaltrennzeichen, nur positiv<br />
 					Beispiel: <span class="text-info">123.45</span>
 				</li>
 				<li>
@@ -50,7 +53,8 @@
 							componentId
 						}}/get/frequency</openwb-base-copy-to-clipboard
 					><br />
-					Netzfrequenz in Hz, mit Nachkommastellen (Float)<br />
+					Netzfrequenz in Hz, Zahl mit oder ohne Nachkommastellen
+					(Float, Integer) und einem Punkt als Dezimaltrennzeichen<br />
 					Beispiel: <span class="text-info">50.12</span>
 				</li>
 				<li>
