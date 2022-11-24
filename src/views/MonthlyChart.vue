@@ -180,7 +180,7 @@ export default {
 					jsonKey: null,
 					borderColor: "rgba(255, 153, 13, 0.7)",
 					backgroundColor: "rgba(200, 255, 13, 0.3)",
-					fill: false,
+					fill: true,
 					lineTension: 0.2,
 					hidden: true,
 					borderWidth: 1,

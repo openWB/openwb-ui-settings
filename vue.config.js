@@ -14,8 +14,8 @@ module.exports = {
 			},
 		},
 		proxy: {
-			'^/ws': {
-				target: 'ws://localhost:9001',
+			"^/ws": {
+				target: "ws://localhost:9001",
 				ws: true,
 			},
 		},

@@ -2,12 +2,18 @@
 	<div class="status">
 		<!-- all charge points -->
 		<openwb-base-card
-			title="Alle Ladepunkte"
 			v-if="numChargePointsInstalled > 1"
 			subtype="primary"
 			:collapsible="true"
 			:collapsed="true"
 		>
+			<template #header>
+				<font-awesome-icon
+					fixed-width
+					:icon="['fas', 'charging-station']"
+				/>
+				Alle Ladepunkte
+			</template>
 			<openwb-base-text-input
 				title="Leistung"
 				readonly
@@ -91,16 +97,18 @@
 				installedChargePoint, installedChargePointKey
 			) in installedChargePoints"
 			:key="installedChargePointKey"
-			:title="
-				installedChargePoint.name +
-				' (ID: ' +
-				getChargePointIndex(installedChargePointKey) +
-				')'
-			"
 			:collapsible="true"
 			:collapsed="true"
 			subtype="primary"
 		>
+			<template #header>
+				<font-awesome-icon
+					fixed-width
+					:icon="['fas', 'charging-station']"
+				/>
+				{{ installedChargePoint.name }} (ID:
+				{{ getChargePointIndex(installedChargePointKey) }})
+			</template>
 			<openwb-base-alert
 				:subtype="
 					statusLevel[
@@ -357,6 +365,10 @@
 			:collapsed="true"
 			subtype="danger"
 		>
+			<template #header>
+				<font-awesome-icon fixed-width :icon="['fas', 'gauge-high']" />
+				{{ counter.name }} (ID: {{ counter.id }})
+			</template>
 			<openwb-base-alert
 				:subtype="
 					statusLevel[
@@ -524,12 +536,15 @@
 		</openwb-base-card>
 		<!-- all inverters -->
 		<openwb-base-card
-			title="Alle Wechselrichter"
 			v-if="numInvertersInstalled > 1"
 			subtype="success"
 			:collapsible="true"
 			:collapsed="true"
 		>
+			<template #header>
+				<font-awesome-icon fixed-width :icon="['fas', 'solar-panel']" />
+				Alle Wechselrichter
+			</template>
 			<openwb-base-text-input
 				title="Zählerstand"
 				readonly
@@ -601,11 +616,14 @@
 		<openwb-base-card
 			v-for="inverter in inverterConfigs"
 			:key="inverter.id"
-			:title="inverter.name + ' (ID: ' + inverter.id + ')'"
 			:collapsible="true"
 			:collapsed="true"
 			subtype="success"
 		>
+			<template #header>
+				<font-awesome-icon fixed-width :icon="['fas', 'solar-panel']" />
+				{{ inverter.name }} (ID: {{ inverter.id }})
+			</template>
 			<openwb-base-alert
 				:subtype="
 					statusLevel[
@@ -678,12 +696,15 @@
 		</openwb-base-card>
 		<!-- all batteries -->
 		<openwb-base-card
-			title="Alle Speicher"
 			v-if="numBatteriesInstalled > 1"
 			subtype="warning"
 			:collapsible="true"
 			:collapsed="true"
 		>
+			<template #header>
+				<font-awesome-icon fixed-width :icon="['fas', 'car-battery']" />
+				Alle Speicher
+			</template>
 			<openwb-base-heading>Zählerstände</openwb-base-heading>
 			<openwb-base-text-input
 				title="Ladung"
@@ -759,11 +780,14 @@
 		<openwb-base-card
 			v-for="battery in batteryConfigs"
 			:key="battery.id"
-			:title="battery.name + ' (ID: ' + battery.id + ')'"
 			:collapsible="true"
 			:collapsed="true"
 			subtype="warning"
 		>
+			<template #header>
+				<font-awesome-icon fixed-width :icon="['fas', 'car-battery']" />
+				{{ battery.name }} (ID: {{ battery.id }})
+			</template>
 			<openwb-base-alert
 				:subtype="
 					statusLevel[
@@ -860,6 +884,114 @@
 				"
 			/>
 		</openwb-base-card>
+		<!-- vehicles -->
+		<openwb-base-card
+			v-for="(vehicleName, vehicleKey) of vehicleNames"
+			:key="vehicleKey"
+			:collapsible="true"
+			:collapsed="true"
+			subtype="primary"
+		>
+			<template #header>
+				<font-awesome-icon fixed-width :icon="['fas', 'car']" />
+				{{ vehicleName }} (ID: {{ getVehicleIndex(vehicleKey) }})
+			</template>
+			<openwb-base-alert
+				v-if="
+					$store.state.mqtt[
+						'openWB/vehicle/' +
+							getVehicleIndex(vehicleKey) +
+							'/get/fault_state'
+					] !== undefined
+				"
+				:subtype="
+					statusLevel[
+						$store.state.mqtt[
+							'openWB/vehicle/' +
+								getVehicleIndex(vehicleKey) +
+								'/get/fault_state'
+						]
+					]
+				"
+			>
+				<font-awesome-icon
+					v-if="
+						$store.state.mqtt[
+							'openWB/vehicle/' +
+								getVehicleIndex(vehicleKey) +
+								'/get/fault_state'
+						] == 1
+					"
+					fixed-width
+					:icon="['fas', 'exclamation-triangle']"
+				/>
+				<font-awesome-icon
+					v-else-if="
+						$store.state.mqtt[
+							'openWB/vehicle/' +
+								getVehicleIndex(vehicleKey) +
+								'/get/fault_state'
+						] == 2
+					"
+					fixed-width
+					:icon="['fas', 'times-circle']"
+				/>
+				<font-awesome-icon
+					v-else
+					fixed-width
+					:icon="['fas', 'check-circle']"
+				/>
+				Modulmeldung:<br />
+				{{
+					$store.state.mqtt[
+						"openWB/vehicle/" +
+							getVehicleIndex(vehicleKey) +
+							"/get/fault_str"
+					]
+				}}
+			</openwb-base-alert>
+			<openwb-base-heading>Fahrzeugdaten</openwb-base-heading>
+			<openwb-base-number-input
+				title="Ladestand"
+				readonly
+				class="text-right text-monospace"
+				unit="%"
+				:model-value="
+					$store.state.mqtt[
+						'openWB/vehicle/' +
+							getVehicleIndex(vehicleKey) +
+							'/get/soc'
+					]
+				"
+			/>
+			<openwb-base-number-input
+				title="Reichweite"
+				readonly
+				class="text-right text-monospace"
+				unit="km"
+				:model-value="
+					Math.round(
+						$store.state.mqtt[
+							'openWB/vehicle/' +
+								getVehicleIndex(vehicleKey) +
+								'/get/range'
+						]
+					)
+				"
+			/>
+			<openwb-base-text-input
+				title="Letzter Zeitstempel"
+				readonly
+				class="text-right text-monospace"
+				:model-value="
+					$store.state.mqtt[
+						'openWB/vehicle/' +
+							getVehicleIndex(vehicleKey) +
+							'/get/soc_timestamp'
+					]
+				"
+			/>
+		</openwb-base-card>
 	</div>
 </template>
 
@@ -869,10 +1001,24 @@ import {
 	faCheckCircle as fasCheckCircle,
 	faExclamationTriangle as fasExclamationTriangle,
 	faTimesCircle as fasTimesCircle,
+	faCar as fasCar,
+	faChargingStation as fasChargingStation,
+	faCarBattery as fasCarBattery,
+	faSolarPanel as fasSolarPanel,
+	faGaugeHigh as fasGaugeHigh,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasCheckCircle, fasExclamationTriangle, fasTimesCircle);
+library.add(
+	fasCheckCircle,
+	fasExclamationTriangle,
+	fasTimesCircle,
+	fasCar,
+	fasChargingStation,
+	fasCarBattery,
+	fasSolarPanel,
+	fasGaugeHigh
+);
 
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
@@ -907,6 +1053,9 @@ export default {
 				// batteries
 				"openWB/bat/get/+",
 				"openWB/bat/+/get/+",
+				// vehicles
+				"openWB/vehicle/+/name",
+				"openWB/vehicle/+/get/+",
 			],
 			statusLevel: ["success", "warning", "danger"],
 		};
@@ -962,6 +1111,11 @@ export default {
 				);
 			},
 		},
+		vehicleNames: {
+			get() {
+				return this.getWildcardTopics("openWB/vehicle/+/name");
+			},
+		},
 	},
 	methods: {
 		filterComponentsByType(components, type) {
@@ -980,6 +1134,9 @@ export default {
 			return parseInt(key.match(/(?:\/)(\d+)(?=\/)/)[1]);
 		},
 		getComponentIndex(key) {
+			return parseInt(key.match(/(?:\/)(\d+)(?=\/)/)[1]);
+		},
+		getVehicleIndex(key) {
 			return parseInt(key.match(/(?:\/)(\d+)(?=\/)/)[1]);
 		},
 	},
