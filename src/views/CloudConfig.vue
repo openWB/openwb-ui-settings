@@ -11,7 +11,14 @@
 		Vorgang kann nicht rückgängig gemacht werden!
 	</openwb-base-modal-dialog>
 	<!-- main content -->
-	<div class="support">
+	<div class="cloud-config">
+		<openwb-base-alert subtype="danger">
+			Für diese Version gibt es noch keine Weboberfläche in der Cloud!
+			Wenn der Zugang eingerichtet wurde, können z. B. Daten mit einem
+			MQTT-Client von dem MQTT-Broker web.openwb.de abgerufen werden.
+			Ebenfalls kann ein Support-Tunnel aufgebaut werden. Weitere
+			Funktionen sind in der Entwicklung.
+		</openwb-base-alert>
 		<openwb-base-alert
 			v-if="
 				$store.state.mqtt[
@@ -43,6 +50,21 @@
 			</openwb-base-alert>
 			<form v-if="!cloudBridgeKey" name="cloudConfigCreateForm">
 				<openwb-base-card title="Neuen Zugang erstellen">
+					<openwb-base-alert subtype="warning">
+						Derzeit können keine neuen Zugänge für die openWB Cloud
+						angelegt werden. Bitte nutzen Sie die in/an der openWB
+						notierten Zugangsdaten im unteren Bereich dieser Seite.
+						Wenn bei einer gekauften openWB keine Zugangsdaten
+						vorhanden sind, schreiben Sie bitte eine Mail unter
+						Angabe der Bestell- und/oder Seriennummer an
+						<a
+							href="mailto:support@openwb.de"
+							subject="Cloud Zugangsdaten"
+						>
+							support@openwb.de
+						</a>
+						.
+					</openwb-base-alert>
 					<div
 						v-if="
 							$store.state.mqtt['openWB/general/extern'] === true
@@ -61,12 +83,14 @@
 							subtype="user"
 							pattern="[a-zA-Z]+"
 							v-model="newCloudData.username"
+							disabled
 						/>
 						<openwb-base-text-input
 							title="E-Mail"
 							required
 							subtype="email"
 							v-model="newCloudData.email"
+							disabled
 						/>
 					</div>
 					<template
@@ -80,7 +104,7 @@
 						"
 					>
 						<div class="row justify-content-center">
-							<openwb-base-click-button
+							<!-- <openwb-base-click-button
 								class="col-4"
 								:class="
 									enableNewCloudButton
@@ -89,6 +113,12 @@
 								"
 								:disabled="!enableNewCloudButton"
 								@buttonClicked="createCloud"
+							>
+								Zugang erstellen
+							</openwb-base-click-button> -->
+							<openwb-base-click-button
+								class="col-4 btn-outline-success"
+								disabled
 							>
 								Zugang erstellen
 							</openwb-base-click-button>
