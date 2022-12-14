@@ -408,6 +408,54 @@
 						<hr />
 					</div>
 					<openwb-base-heading
+						>Angaben zum konfigurierten Ladestrom der openWB
+					</openwb-base-heading>
+					<openwb-base-alert subtype="info">
+						Diese Einstellung hat KEINE Auswirkung auf das
+						Lastmanagement! Ist die Zuleitung nicht mit der vollen
+						Ladeleistung der openWB abgesichert, muss für den
+						Ladepunkt ein virtueller Zähler konfiguriert werden, der
+						den Strom im Lastmanagement begrenzt. <br />
+						Bei openWBs, deren Leistung z.B. aufgrund der
+						KfW-Förderung auf 11kW begrenzt ist, muss hier bei
+						beiden Maximalströmen 16A eingestellt werden.
+					</openwb-base-alert>
+					<openwb-base-range-input
+						title="Maximalstrom bei einer Phase"
+						:min="6"
+						:max="32"
+						:step="1"
+						unit="A"
+						:model-value="chargePointTemplate.max_current_one_phase"
+						@update:model-value="
+							updateState(
+								chargePointTemplateKey,
+								$event,
+								'max_current_one_phase'
+							)
+						"
+					>
+					</openwb-base-range-input>
+					<openwb-base-range-input
+						title="Maximalstrom mehrere Phasen"
+						:min="6"
+						:max="32"
+						:step="1"
+						unit="A"
+						:model-value="
+							chargePointTemplate.max_current_multi_phases
+						"
+						@update:model-value="
+							updateState(
+								chargePointTemplateKey,
+								$event,
+								'max_current_multi_phases'
+							)
+						"
+					>
+					</openwb-base-range-input>
+					<hr />
+					<openwb-base-heading
 						>Automatische Sperre</openwb-base-heading
 					>
 					<openwb-base-button-group-input
