@@ -33,8 +33,13 @@
 					<openwb-base-alert subtype="info">
 						Die RFID-Tags, die an dem jeweiligen Ladepunkt gültig
 						sind, müssen in der Ladepunkt-Vorlage hinterlegt werden.
-						Der RFID-Tags wird in den Einstellungen des Fahrzeugs
-						diesem zugeordnet.
+						Der RFID-Tag muss in den Einstellungen des Fahrzeugs
+						diesem zugeordnet werden.<br />
+						Es kann zuerst angesteckt und dann der RFID-Tag gescannt
+						werden oder zuerst der RFID-Tag gescannt werden. Dann
+						muss innerhalb von 5 Minuten ein Auto angesteckt werden,
+						sonst wird der RFID-Tag verworfen. Das Auto wird erst
+						nach dem Anstecken zugeordnet.
 					</openwb-base-alert>
 				</div>
 			</openwb-base-card>
