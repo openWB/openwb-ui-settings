@@ -24,7 +24,8 @@
 			:options="[
 				{ value: 0, text: 'Rest-API 1 (z.B. ECO 4)' },
 				{ value: 2, text: 'Rest-API 2 (z.B. ECO 6)' },
-				{ value: 1, text: 'JSON-API (z.B. ECO 8 oder 10)' },
+				{ value: 1, text: 'JSON-API v1(z.B. ECO 8 oder 10)' },
+				{ value: 3, text: 'JSON-API v2(z.B. ECO 8 oder 10)' },
 			]"
 			:model-value="configuration.variant"
 			@update:model-value="
@@ -51,12 +52,19 @@
 						rel="noopener noreferrer"
 						>{{ linkRestApi2 }}</a
 					><br />
-					JSON-API:
+					JSON-API v1:
 					<a
-						:href="linkJsonApi"
+						:href="linkJsonApi1"
 						target="_blank"
 						rel="noopener noreferrer"
-						>{{ linkJsonApi }}
+						>{{ linkJsonApi1 }}</a
+					><br />
+					JSON-API v2:
+					<a
+						:href="linkJsonApi2"
+						target="_blank"
+						rel="noopener noreferrer"
+						>{{ linkJsonApi2 }}
 					</a>
 				</span>
 			</template>
@@ -87,8 +95,11 @@ export default {
 				":7979/rest/devices/battery/M05"
 			);
 		},
-		linkJsonApi() {
+		linkJsonApi1() {
 			return "http://" + this.configuration.ip_address + "/api/v1/status";
+		},
+		linkJsonApi2() {
+			return "http://" + this.configuration.ip_address + "/api/v2/status";
 		},
 	},
 	methods: {
