@@ -426,12 +426,14 @@
 						:max="32"
 						:step="1"
 						unit="A"
-						:model-value="chargePointTemplate.max_current_one_phase"
+						:model-value="
+							chargePointTemplate.max_current_single_phase
+						"
 						@update:model-value="
 							updateState(
 								chargePointTemplateKey,
 								$event,
-								'max_current_one_phase'
+								'max_current_single_phase'
 							)
 						"
 					>
