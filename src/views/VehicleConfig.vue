@@ -228,7 +228,12 @@
 						>
 							<template #help>
 								Mit einem SoC-Modul kann der Ladestand des
-								Fahrzeugs ermittelt werden.
+								Fahrzeugs ermittelt werden.<br />
+								Die Abfrage erfolgt automatisch beim Anstecken,
+								wenn das Auto nicht lädt alle 12 Stunden und
+								wenn es lädt alle 5 Minuten. Die Abfrage kann
+								manuell durch Klick auf den Reload-Pfeil auf der
+								Hauptseite ausgelöst werden.
 							</template>
 						</openwb-base-select-input>
 						<openwb-config-proxy
