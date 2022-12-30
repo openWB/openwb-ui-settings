@@ -618,20 +618,22 @@ export default {
 																) / 1000;
 															row[baseObject][
 																key
-															].powerImport = Math.max(
-																0,
-																row[baseObject][
-																	key
-																].power
-															);
+															].powerImport =
+																Math.max(
+																	0,
+																	row[
+																		baseObject
+																	][key].power
+																);
 															row[baseObject][
 																key
-															].powerExport = Math.min(
-																0,
-																row[baseObject][
-																	key
-																].power
-															);
+															].powerExport =
+																Math.min(
+																	0,
+																	row[
+																		baseObject
+																	][key].power
+																);
 														}
 														break;
 													case "bat":
@@ -689,20 +691,22 @@ export default {
 																) / 1000;
 															row[baseObject][
 																key
-															].powerImport = Math.max(
-																0,
-																row[baseObject][
-																	key
-																].power
-															);
+															].powerImport =
+																Math.max(
+																	0,
+																	row[
+																		baseObject
+																	][key].power
+																);
 															row[baseObject][
 																key
-															].powerExport = Math.min(
-																0,
-																row[baseObject][
-																	key
-																].power
-															);
+															].powerExport =
+																Math.min(
+																	0,
+																	row[
+																		baseObject
+																	][key].power
+																);
 														}
 														break;
 													case "cp":

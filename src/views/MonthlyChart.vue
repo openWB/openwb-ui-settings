@@ -540,20 +540,24 @@ export default {
 																1000;
 															row[baseObject][
 																key
-															].energyImport = Math.max(
-																0,
-																row[baseObject][
-																	key
-																].energy
-															);
+															].energyImport =
+																Math.max(
+																	0,
+																	row[
+																		baseObject
+																	][key]
+																		.energy
+																);
 															row[baseObject][
 																key
-															].energyExport = Math.min(
-																0,
-																row[baseObject][
-																	key
-																].energy
-															);
+															].energyExport =
+																Math.min(
+																	0,
+																	row[
+																		baseObject
+																	][key]
+																		.energy
+																);
 														}
 														break;
 													case "bat":
@@ -605,20 +609,24 @@ export default {
 																1000;
 															row[baseObject][
 																key
-															].energyImport = Math.max(
-																0,
-																row[baseObject][
-																	key
-																].energy
-															);
+															].energyImport =
+																Math.max(
+																	0,
+																	row[
+																		baseObject
+																	][key]
+																		.energy
+																);
 															row[baseObject][
 																key
-															].energyExport = Math.min(
-																0,
-																row[baseObject][
-																	key
-																].energy
-															);
+															].energyExport =
+																Math.min(
+																	0,
+																	row[
+																		baseObject
+																	][key]
+																		.energy
+																);
 														}
 														break;
 													case "cp":
