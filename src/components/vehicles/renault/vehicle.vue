@@ -31,23 +31,11 @@
 			</template>
 		</openwb-base-text-input>
 		<openwb-base-text-input
-			title="Länderkennung"
-			required
-			:model-value="configuration.location"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.location')
-			"
-		>
-			<template #help>
-				Länderkennung des Fahrzeugs, z.b. de_DE für Deutschland.
-			</template>
-		</openwb-base-text-input>
-		<openwb-base-text-input
 			title="Land"
 			required
 			:model-value="configuration.location"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.location')
+				updateConfiguration($event, 'configuration.country')
 			"
 		>
 			<template #help>
