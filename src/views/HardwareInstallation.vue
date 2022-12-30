@@ -62,11 +62,11 @@
 						Bitte ein Gerät auswählen, das hinzugefügt werden
 						soll.<br />
 						Für jedes physische Gerät, das abgefragt wird, wird ein
-						separates Gerät konfiguiert. Wenn mehrere Daten über ein
-						Gerät ausgelesen werden können, z.B. EVU und
+						separates Gerät konfiguriert. Wenn mehrere Daten über
+						ein Gerät ausgelesen werden können, z.B. EVU und
 						Wechselrichter-Daten vom Wechselrichter, werden für
 						dieses Gerät die entsprechenden Komponenten
-						konfiguriert. Wenn die Daten lokal abefragt werden,
+						konfiguriert. Wenn die Daten lokal abgefragt werden,
 						liefert meist die IP-Adresse den Hinweis auf die
 						richtige Konfiguration: Wenn EVU- und
 						Wechselrichter-Daten über zwei verschiedene IP-Adressen
@@ -78,8 +78,8 @@
 						Wenn in 1.9 bei einem/mehreren Modulen der Hinweis "Die
 						Einstellungen bitte im
 						EVU-/Speicher-/Wechselrichter-Modul vornehmen" steht,
-						muss ein Gerät mit den enstprechenden Komponenten
-						konfiguiert werden.
+						muss ein Gerät mit den entsprechenden Komponenten
+						konfiguriert werden.
 					</template>
 				</openwb-base-select-input>
 				<openwb-base-card
@@ -135,56 +135,15 @@
 						"
 					/>
 					<hr />
-					<openwb-base-select-input
-						class="mb-2"
-						v-if="getComponentList(installedDevice.type).length"
-						title="Verfügbare Komponenten"
-						notSelected="Bitte auswählen"
-						:options="getComponentList(installedDevice.type)"
-						:model-value="componentToAdd[installedDevice.id]"
-						@update:model-value="
-							componentToAdd[installedDevice.id] = $event
+					<openwb-base-heading>Komponenten</openwb-base-heading>
+					<openwb-base-alert
+						v-if="
+							!deviceHasConfiguredComponents(installedDevice.id)
 						"
+						subtype="warning"
 					>
-						<template #append>
-							<span class="col-1">
-								<openwb-base-click-button
-									:class="
-										componentToAdd[installedDevice.id] ===
-										undefined
-											? 'btn-outline-success'
-											: 'btn-success clickable'
-									"
-									:disabled="
-										componentToAdd[installedDevice.id] ===
-										undefined
-									"
-									@buttonClicked="
-										addComponent(
-											installedDevice.id,
-											installedDevice.type,
-											componentToAdd[installedDevice.id]
-										)
-									"
-								>
-									<font-awesome-icon
-										fixed-width
-										:icon="['fas', 'plus']"
-									/>
-								</openwb-base-click-button>
-							</span>
-						</template>
-						<template #help>
-							Bitte eine Komponente auswählen, die hinzugefügt
-							werden soll. Für jeden Datensatz, z.B.
-							Wechselrichter- und Batteriedaten, muss eine
-							Wechselrichter- und eine Batteriekomponente
-							hinzugefügt werden.
-						</template>
-					</openwb-base-select-input>
-					<openwb-base-alert v-else subtype="info">
-						Dieses System bietet keine Komponenten zur Installation
-						an.
+						Es wurden noch keine Komponenten zu diesem Gerät
+						angelegt.
 					</openwb-base-alert>
 					<openwb-base-card
 						v-for="(
@@ -250,6 +209,58 @@
 							"
 						/>
 					</openwb-base-card>
+					<hr />
+					<openwb-base-select-input
+						class="mb-2"
+						v-if="getComponentList(installedDevice.type).length"
+						title="Verfügbare Komponenten"
+						notSelected="Bitte auswählen"
+						:options="getComponentList(installedDevice.type)"
+						:model-value="componentToAdd[installedDevice.id]"
+						@update:model-value="
+							componentToAdd[installedDevice.id] = $event
+						"
+					>
+						<template #append>
+							<span class="col-1">
+								<openwb-base-click-button
+									:class="
+										componentToAdd[installedDevice.id] ===
+										undefined
+											? 'btn-outline-success'
+											: 'btn-success clickable'
+									"
+									:disabled="
+										componentToAdd[installedDevice.id] ===
+										undefined
+									"
+									@buttonClicked="
+										addComponent(
+											installedDevice.id,
+											installedDevice.type,
+											componentToAdd[installedDevice.id]
+										)
+									"
+								>
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'plus']"
+									/>
+								</openwb-base-click-button>
+							</span>
+						</template>
+						<template #help>
+							Bitte eine Komponente auswählen, die hinzugefügt
+							werden soll. Für jeden Datensatz, z.B.
+							Wechselrichter- und Batteriedaten, muss eine
+							Wechselrichter- und eine Batteriekomponente
+							hinzugefügt werden.
+						</template>
+					</openwb-base-select-input>
+					<openwb-base-alert v-else subtype="info">
+						Dieses System bietet keine Komponenten zur Installation
+						an.
+					</openwb-base-alert>
 				</openwb-base-card>
 			</openwb-base-card>
 
@@ -323,6 +334,11 @@ export default {
 		getMyInstalledComponents(deviceId) {
 			return this.getWildcardTopics(
 				"openWB/system/device/" + deviceId + "/component/+/config"
+			);
+		},
+		deviceHasConfiguredComponents(deviceId) {
+			return (
+				Object.keys(this.getMyInstalledComponents(deviceId)).length > 0
 			);
 		},
 		addDevice() {
