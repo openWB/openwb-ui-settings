@@ -1,11 +1,7 @@
 <template>
 	<div class="loadManagementConfig">
 		<form name="loadManagementConfigForm">
-			<openwb-base-card
-				title="Einstellungen"
-				:collapsible="true"
-				:collapsed="false"
-			>
+			<openwb-base-card title="Einstellungen" :collapsible="true" :collapsed="false">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
 						Diese Einstellungen sind nicht verfügbar, solange sich
@@ -13,6 +9,35 @@
 					</openwb-base-alert>
 				</div>
 				<div v-else>
+					<openwb-base-button-group-input title="Phasenumschaltung blockieren" :buttons="[
+	{
+		buttonValue: false,
+		text: 'Aus',
+		class: 'btn-outline-danger',
+	},
+	{
+		buttonValue: true,
+		text: 'An',
+		class: 'btn-outline-success',
+	},
+]" :model-value="template.prevent_phase_switch" @update:model-value="
+	updateState(key, $event, 'prevent_phase_switch')
+">
+						<template #help>
+							Wenn Fahrzeuge, die nicht laden, im Lastmanagement berücksichtigt werden, wird für diese der
+							Fahrzeug-Mindeststrom bei vorliegender Ladefreigabe reserviert. Dadurch können bei
+							Eingreifen des Lastmanagements andere Fahrzeuge möglicherweise nur mit reuduzierter
+							Stromstärke laden und der reservierte Strom wird nicht genutzt. Wenn die Fahrzeuge wieder
+							die Ladung starten, zB um vorzuheizen, nutzen sie den für sie reservierten Strom.<br>
+							Wenn Fahrzeuge, die nicht laden, nicht im Lastmanagement berücksichtigt werden, wird für
+							diese kein Strom bei vorliegender Ladefreigabe reserviert. Wenn die Lastmanagment-Grenzen
+							fast erreicht sind und die Fahrzeuge wieder die Ladung starten, zB um vorzuheizen, kann es
+							zu einer kurzzeitigen Überschreitung der Lastmanagement-Grenzen kommen, bis im nächsten
+							Zyklus die Stromstärken aller Ladepunkte an die neue Situation angepasst werden. Das
+							kurzzeitige Überschreiten der Maximal-Werte stellt für die Sicherungen in der Regel kein
+							Problem dar.
+						</template>
+					</openwb-base-button-group-input>
 					<openwb-base-heading>
 						Vorhandene Zählermodule
 					</openwb-base-heading>
@@ -61,82 +86,61 @@
 								(Zwischen-)Zähler.
 							</template>
 						</openwb-base-number-input>
-						<openwb-base-number-input
-							title="Maximaler Strom L1"
-							:min="16"
-							:step="1"
-							unit="A"
-							:model-value="
-								$store.state.mqtt[
-									'openWB/counter/' +
-										counter.id +
-										'/config/max_currents'
-								][0]
-							"
-							@update:model-value="
-								updateState(
-									'openWB/counter/' +
-										counter.id +
-										'/config/max_currents',
-									$event,
-									'0'
-								)
-							"
-						>
+						<openwb-base-number-input title="Maximaler Strom L1" :min="16" :step="1" unit="A" :model-value="
+	$store.state.mqtt[
+	'openWB/counter/' +
+	counter.id +
+	'/config/max_currents'
+	][0]
+" @update:model-value="
+	updateState(
+		'openWB/counter/' +
+		counter.id +
+		'/config/max_currents',
+		$event,
+		'0'
+	)
+">
 							<template #help>
 								Maximal zulässiger Strom für die Phase 1 dieses
 								(Zwischen-)Zählers.
 							</template>
 						</openwb-base-number-input>
-						<openwb-base-number-input
-							title="Maximaler Strom L2"
-							:min="16"
-							:step="1"
-							unit="A"
-							:model-value="
-								$store.state.mqtt[
-									'openWB/counter/' +
-										counter.id +
-										'/config/max_currents'
-								][1]
-							"
-							@update:model-value="
-								updateState(
-									'openWB/counter/' +
-										counter.id +
-										'/config/max_currents',
-									$event,
-									'1'
-								)
-							"
-						>
+						<openwb-base-number-input title="Maximaler Strom L2" :min="16" :step="1" unit="A" :model-value="
+	$store.state.mqtt[
+	'openWB/counter/' +
+	counter.id +
+	'/config/max_currents'
+	][1]
+" @update:model-value="
+	updateState(
+		'openWB/counter/' +
+		counter.id +
+		'/config/max_currents',
+		$event,
+		'1'
+	)
+">
 							<template #help>
 								Maximal zulässiger Strom für die Phase 2 dieses
 								(Zwischen-)Zählers.
 							</template>
 						</openwb-base-number-input>
-						<openwb-base-number-input
-							title="Maximaler Strom L3"
-							:min="16"
-							:step="1"
-							unit="A"
-							:model-value="
-								$store.state.mqtt[
-									'openWB/counter/' +
-										counter.id +
-										'/config/max_currents'
-								][2]
-							"
-							@update:model-value="
-								updateState(
-									'openWB/counter/' +
-										counter.id +
-										'/config/max_currents',
-									$event,
-									'2'
-								)
-							"
-						>
+						<openwb-base-number-input title="Maximaler Strom L3" :min="16" :step="1" unit="A" :model-value="
+	$store.state.mqtt[
+	'openWB/counter/' +
+	counter.id +
+	'/config/max_currents'
+	][2]
+" @update:model-value="
+	updateState(
+		'openWB/counter/' +
+		counter.id +
+		'/config/max_currents',
+		$event,
+		'2'
+	)
+">
 							<template #help>
 								Maximal zulässiger Strom für die Phase 3 dieses
 								(Zwischen-)Zählers.
@@ -188,11 +192,7 @@
 					</openwb-base-card>
 				</div>
 			</openwb-base-card>
-			<openwb-base-card
-				title="Struktur"
-				:collapsible="true"
-				:collapsed="true"
-			>
+			<openwb-base-card title="Struktur" :collapsible="true" :collapsed="true">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
 						Diese Einstellungen sind nicht verfügbar, solange sich
@@ -201,16 +201,11 @@
 				</div>
 				<div v-else>
 					<!-- ToDo: Fix: nested lists bypass store commits! -->
-					<sortable-list
-						title="Anordnung der Komponenten"
-						:model-value="
-							$store.state.mqtt['openWB/counter/get/hierarchy']
-						"
-						@update:model-value="
-							updateState('openWB/counter/get/hierarchy', $event)
-						"
-						:labels="hierarchyLabels"
-					>
+					<sortable-list title="Anordnung der Komponenten" :model-value="
+	$store.state.mqtt['openWB/counter/get/hierarchy']
+" @update:model-value="
+	updateState('openWB/counter/get/hierarchy', $event)
+" :labels="hierarchyLabels">
 						<template #help>
 							Durch die Anordnung der Komponenten werden
 							Abhängigkeiten abgebildet.<br />
@@ -229,12 +224,8 @@
 				</div>
 			</openwb-base-card>
 
-			<openwb-base-submit-buttons
-				formName="loadManagementConfigForm"
-				@save="$emit('save')"
-				@reset="$emit('reset')"
-				@defaults="$emit('defaults')"
-			/>
+			<openwb-base-submit-buttons formName="loadManagementConfigForm" @save="$emit('save')"
+				@reset="$emit('reset')" @defaults="$emit('defaults')" />
 		</form>
 	</div>
 </template>
@@ -351,8 +342,8 @@ export default {
 				if (
 					value.match(
 						"^openWB/system/device/[0-9]+/component/" +
-							componentIndex +
-							"/config$"
+						componentIndex +
+						"/config$"
 					)
 				) {
 					myComponent = this.$store.state.mqtt[value];
