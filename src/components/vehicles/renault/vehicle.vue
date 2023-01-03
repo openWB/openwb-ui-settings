@@ -33,7 +33,7 @@
 		<openwb-base-text-input
 			title="Land"
 			required
-			:model-value="configuration.location"
+			:model-value="configuration.country"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.country')
 			"
