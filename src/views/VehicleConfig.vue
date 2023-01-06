@@ -213,6 +213,12 @@
 									)
 								"
 							/>
+							<openwb-base-alert subtype="info">
+								Der/die RFID-Tag(s) müssen in der
+								Ladepunkt-Vorlage eingetragen werden, um
+								zuzuordnen, an welchem Ladepunkt die Tags
+								verwendet werden dürfen.
+							</openwb-base-alert>
 							<hr />
 						</div>
 						<openwb-base-select-input
