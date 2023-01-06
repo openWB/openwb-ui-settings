@@ -377,12 +377,12 @@
 							:max="32"
 							:step="1"
 							unit="A"
-							:model-value="template.max_current_one_phase"
+							:model-value="template.max_current_single_phase"
 							@update:model-value="
 								updateState(
 									key,
 									$event,
-									'max_current_one_phase'
+									'max_current_single_phase'
 								)
 							"
 						>
