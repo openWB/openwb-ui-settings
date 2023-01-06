@@ -29,7 +29,7 @@
 		<openwb-base-text-input
 			title="Pfad für Zählerstand Erzeugung"
 			subtype="text"
-			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)|none"
+			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)"
 			:model-value="configuration.exported_path"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.exported_path')
