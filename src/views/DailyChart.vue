@@ -50,11 +50,17 @@
 						<openwb-base-card
 							v-for="(group, groupKey) in chartTotals"
 							:key="groupKey"
-							:title="getTotalsLabel(groupKey)"
 							:collapsible="true"
 							:collapsed="true"
 							:subtype="getCardSubtype(groupKey)"
 						>
+							<template #header>
+								<font-awesome-icon
+									fixed-width
+									:icon="getCardIcon(groupKey)"
+								/>
+								{{ getTotalsLabel(groupKey) }}
+							</template>
 							<div
 								v-for="(component, componentKey) in group"
 								:key="componentKey"
@@ -94,6 +100,17 @@
 </template>
 
 <script>
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+	faChargingStation as fasChargingStation,
+	faCarBattery as fasCarBattery,
+	faSolarPanel as fasSolarPanel,
+	faGaugeHigh as fasGaugeHigh,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(fasChargingStation, fasCarBattery, fasSolarPanel, fasGaugeHigh);
+
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 import { Line } from "vue-chartjs";
@@ -125,7 +142,7 @@ Chart.register(
 
 export default {
 	name: "OpenwbDailyChart",
-	components: { Line },
+	components: { Line, FontAwesomeIcon },
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
 	data() {
@@ -793,6 +810,20 @@ export default {
 					return "success";
 				default:
 					return "secondary";
+			}
+		},
+		getCardIcon(elementKey) {
+			switch (elementKey) {
+				case "bat":
+					return ["fas", "car-battery"];
+				case "counter":
+					return ["fas", "gauge-high"];
+				case "cp":
+					return ["fas", "charging-station"];
+				case "pv":
+					return ["fas", "solar-panel"];
+				default:
+					return undefined;
 			}
 		},
 		getDatasetHidden(baseObject, objectKey) {
