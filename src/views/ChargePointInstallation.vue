@@ -404,7 +404,13 @@
 									'valid_tags'
 								)
 							"
-						/>
+						>
+							<template #help>
+								An allen Ladepunkten, denen diese
+								Ladepunkt-Vorlage zugeordnet ist, können die
+								hier eingetragenen Tags verwendet werden.
+							</template>
+						</openwb-base-array-input>
 						<hr />
 					</div>
 					<openwb-base-heading
