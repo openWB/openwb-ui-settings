@@ -19,11 +19,17 @@
 					<openwb-base-card
 						v-for="counter in counterConfigs"
 						:key="counter.id"
-						:title="counter.name"
 						:collapsible="true"
 						:collapsed="true"
 						subtype="danger"
 					>
+						<template #header>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'gauge-high']"
+							/>
+							{{ counter.name }}
+						</template>
 						<openwb-base-number-input
 							title="Maximale Leistung"
 							:min="1"
@@ -138,11 +144,17 @@
 					<openwb-base-card
 						v-for="inverter in inverterConfigs"
 						:key="inverter.id"
-						:title="inverter.name"
 						:collapsible="true"
 						:collapsed="true"
 						subtype="success"
 					>
+						<template #header>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'solar-panel']"
+							/>
+							{{ inverter.name }}
+						</template>
 						<openwb-base-number-input
 							title="Maximale Ausgangsleistung des Wechselrichters"
 							:min="0"
@@ -223,6 +235,15 @@
 </template>
 
 <script>
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+	faSolarPanel as fasSolarPanel,
+	faGaugeHigh as fasGaugeHigh,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(fasSolarPanel, fasGaugeHigh);
+
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
 import SortableList from "@/components/OpenwbSortableList.vue";
@@ -233,6 +254,7 @@ export default {
 	emits: ["sendCommand"],
 	components: {
 		SortableList,
+		FontAwesomeIcon,
 	},
 	data() {
 		return {

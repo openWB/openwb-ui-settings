@@ -16,6 +16,11 @@
 							fixed-width
 							:icon="['fas', 'arrows-alt']"
 						/>
+						<font-awesome-icon
+							v-if="getElementIcon(element)"
+							fixed-width
+							:icon="getElementIcon(element)"
+						/>
 						{{ getElementLabel(element.id) }}
 					</span>
 					<!-- <span class="element-actions">
@@ -44,10 +49,22 @@
 import draggable from "vuedraggable";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faArrowsAlt as fasArrowsAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+	faArrowsAlt as fasArrowsAlt,
+	faChargingStation as fasChargingStation,
+	faCarBattery as fasCarBattery,
+	faSolarPanel as fasSolarPanel,
+	faGaugeHigh as fasGaugeHigh,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasArrowsAlt);
+library.add(
+	fasArrowsAlt,
+	fasChargingStation,
+	fasCarBattery,
+	fasSolarPanel,
+	fasGaugeHigh
+);
 
 export default {
 	name: "OpenwbNestedList",
@@ -80,6 +97,21 @@ export default {
 				return this.labels[elementId];
 			}
 			return elementId;
+		},
+		getElementIcon(element) {
+			console.log(element.type);
+			switch (element.type) {
+				case "bat":
+					return ["fas", "car-battery"];
+				case "counter":
+					return ["fas", "gauge-high"];
+				case "cp":
+					return ["fas", "charging-station"];
+				case "inverter":
+					return ["fas", "solar-panel"];
+				default:
+					return undefined;
+			}
 		},
 		// elementEdit(id) {
 		// 	console.log("edit Element:", id);

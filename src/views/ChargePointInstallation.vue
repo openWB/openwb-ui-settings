@@ -58,7 +58,10 @@
 				:collapsed="true"
 			>
 				<template #header>
-					<font-awesome-icon fixed-width :icon="['fas', 'plug']" />
+					<font-awesome-icon
+						fixed-width
+						:icon="['fas', 'charging-station']"
+					/>
 					Ladepunkte
 				</template>
 				<openwb-base-select-input
@@ -299,7 +302,7 @@
 						/>
 						<font-awesome-icon
 							fixed-width
-							:icon="['fas', 'plug']"
+							:icon="['fas', 'charging-station']"
 							transform="shrink-8"
 						/>
 					</font-awesome-layers>
@@ -779,8 +782,7 @@ import {
 	faCalendarDay as fasCalendarDay,
 	faCalendarAlt as fasCalendarAlt,
 	faCalendarWeek as fasCalendarWeek,
-	faPlug as fasPlug,
-	// faFileAlt as fasFileAlt,
+	faChargingStation as fasChargingStation,
 } from "@fortawesome/free-solid-svg-icons";
 import { faFile as farFile } from "@fortawesome/free-regular-svg-icons";
 import {
@@ -794,7 +796,7 @@ library.add(
 	fasCalendarDay,
 	fasCalendarAlt,
 	fasCalendarWeek,
-	fasPlug,
+	fasChargingStation,
 	farFile
 );
 
