@@ -180,7 +180,12 @@
 								class="col-md-4 d-flex py-1 justify-content-center"
 							>
 								<openwb-base-click-button
-									class="btn-danger clickable"
+									:class="
+										releaseChangeValid
+											? 'btn-danger clickable'
+											: 'btn-outline-danger'
+									"
+									:disabled="!releaseChangeValid"
 									@buttonClicked="
 										sendSystemCommand('systemUpdate', {
 											branch: $store.state.mqtt[
@@ -212,6 +217,11 @@
 					:collapsible="true"
 					:collapsed="true"
 				>
+					<openwb-base-alert subtype="danger">
+						Aktuell können nur Sicherungen wiederhergestellt werden,
+						die in den Entwicklungszweigen "master" oder "Beta"
+						erstellt wurden!
+					</openwb-base-alert>
 					<openwb-base-alert subtype="info">
 						Nachdem die Sicherung abgeschlossen ist, kann die
 						erstellte Datei über den Link in der Benachrichtigung
@@ -256,7 +266,10 @@
 						Möglichkeit vorher ein Image der Installation
 						erstellen!<br />
 						Für die Wiederherstellung wird eine aktive
-						Internetverbindung benötigt.
+						Internetverbindung benötigt.<br />
+						Aktuell können nur Sicherungen wiederhergestellt werden,
+						die in den Entwicklungszweigen "master" oder "Beta"
+						erstellt wurden!
 					</openwb-base-alert>
 					<div class="input-group">
 						<div class="input-group-prepend">
@@ -447,6 +460,23 @@ export default {
 					this.$store.state.mqtt["openWB/system/current_commit"]
 			);
 		},
+		releaseChangeValid() {
+			return (
+				this.$store.state.mqtt["openWB/system/current_branch"] in
+					this.$store.state.mqtt[
+						"openWB/system/available_branches"
+					] &&
+				"tags" in
+					this.$store.state.mqtt["openWB/system/available_branches"][
+						this.$store.state.mqtt["openWB/system/current_branch"]
+					] &&
+				(this.selectedTag in
+					this.$store.state.mqtt["openWB/system/available_branches"][
+						this.$store.state.mqtt["openWB/system/current_branch"]
+					]["tags"] ||
+					this.selectedTag == "*HEAD*")
+			);
+		},
 	},
 	methods: {
 		sendSystemCommand(command, data = {}) {
@@ -470,6 +500,14 @@ export default {
 			return options;
 		},
 		getBranchTagOptions() {
+			if (
+				!(
+					this.$store.state.mqtt["openWB/system/current_branch"] in
+					this.$store.state.mqtt["openWB/system/available_branches"]
+				)
+			) {
+				return [];
+			}
 			var source =
 				this.$store.state.mqtt["openWB/system/available_branches"][
 					this.$store.state.mqtt["openWB/system/current_branch"]
