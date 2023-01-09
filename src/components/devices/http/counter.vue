@@ -25,7 +25,7 @@
 		<openwb-base-text-input
 			title="Pfad für Zählerstand Bezug"
 			subtype="text"
-			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)|none"
+			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)"
 			:model-value="configuration.imported_path"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.imported_path')
@@ -45,7 +45,7 @@
 		<openwb-base-text-input
 			title="Pfad für Zählerstand Einspeisung"
 			subtype="text"
-			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)|none"
+			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)"
 			:model-value="configuration.exported_path"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.exported_path')
@@ -65,7 +65,7 @@
 		<openwb-base-text-input
 			title="Pfad für Strom Phase 1"
 			subtype="text"
-			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)|none"
+			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)"
 			:model-value="configuration.current_l1_path"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.current_l1_path')
@@ -85,7 +85,7 @@
 		<openwb-base-text-input
 			title="Pfad für Strom Phase 2"
 			subtype="text"
-			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)|none"
+			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)"
 			:model-value="configuration.current_l2_path"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.current_l2_path')
@@ -105,7 +105,7 @@
 		<openwb-base-text-input
 			title="Pfad für Strom Phase 3"
 			subtype="text"
-			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)|none"
+			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)"
 			:model-value="configuration.current_l3_path"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.current_l3_path')

@@ -44,7 +44,7 @@
 		<openwb-base-text-input
 			title="Pfad für Zählerstand laden"
 			subtype="text"
-			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)|none"
+			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)"
 			:model-value="configuration.imported_path"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.imported_path')
@@ -64,7 +64,7 @@
 		<openwb-base-text-input
 			title="Pfad für Zählerstand entladen"
 			subtype="text"
-			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)|none"
+			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)"
 			:model-value="configuration.exported_path"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.exported_path')
