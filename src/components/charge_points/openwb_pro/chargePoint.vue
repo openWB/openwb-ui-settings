@@ -1,5 +1,5 @@
 <template>
-	<div class="charge-point-mqtt">
+	<div class="charge-point-openwbpro">
 		<openwb-base-heading>
 			Einstellungen für Ladepunkt OpenWB Pro
 			<span class="small">(Modul: {{ $options.name }})</span>

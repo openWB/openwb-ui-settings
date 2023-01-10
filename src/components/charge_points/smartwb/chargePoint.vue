@@ -1,5 +1,5 @@
 <template>
-	<div class="charge-point-mqtt">
+	<div class="charge-point-smartwb">
 		<openwb-base-heading>
 			Einstellungen für Ladepunkt smartWB/EVSE-Wifi
 			<span class="small">(Modul: {{ $options.name }})</span>
