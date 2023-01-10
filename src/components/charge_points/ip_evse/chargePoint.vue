@@ -1,7 +1,7 @@
 <template>
-	<div class="charge-point-smartwb">
+	<div class="charge-point-ipevse">
 		<openwb-base-heading>
-			Einstellungen für Ladepunkt smartWB/EVSE-Wifi
+			Einstellungen für Ladepunkt IP-Evse
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
@@ -12,26 +12,19 @@
 			@update:model-value="updateConfiguration($event, 'ip_address')"
 		/>
 		<openwb-base-number-input
-			title="Wartezeit"
+			title="Modbus-ID"
 			required
-			:min="2"
-			:max="10"
-			unit="s"
-			:model-value="configuration.timeout"
-			@update:model-value="updateConfiguration($event, 'timeout')"
-		>
-			<template #help>
-				Zeitangabe in Sekunden, für die auf eine Antwort des Ladepunktes
-				gewartet wird. Wird diese Zeit überschritten, so wird von einer
-				Kommunikationsstörung ausgegangen.
-			</template>
-		</openwb-base-number-input>
+			:min="1"
+			:max="255"
+			:model-value="configuration.modbus_id"
+			@update:model-value="updateConfiguration($event, 'modbus_id')"
+		/>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "ChargePointSmartwb",
+	name: "ChargePointIpEvse",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

@@ -1,7 +1,7 @@
 <template>
-	<div class="charge-point-openwbpro">
+	<div class="device-kostalplenticore">
 		<openwb-base-heading>
-			Einstellungen für Ladepunkt OpenWB Pro
+			Einstellungen für Kostal Plenticore
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
@@ -9,24 +9,23 @@
 			subtype="host"
 			required
 			:model-value="configuration.ip_address"
-			@update:model-value="updateConfiguration($event, 'ip_address')"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.ip_address')
+			"
 		/>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "ChargePointOpenwbPro",
+	name: "DeviceKostalPlenticore",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
-		chargePointId: { default: undefined },
+		deviceId: { default: undefined },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {
-			if (path) {
-				path = "connection_module.configuration." + path;
-			}
 			this.$emit("update:configuration", { value: event, object: path });
 		},
 	},
