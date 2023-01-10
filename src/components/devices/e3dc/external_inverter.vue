@@ -1,7 +1,7 @@
 <template>
-	<div class="device-e3dc-inverter">
+	<div class="device-e3dc-external-inverter">
 		<openwb-base-heading>
-			Einstellungen für E3DC Wechselrichter
+			Einstellungen für externe E3DC Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-	name: "DeviceE3dcInverter",
+	name: "DeviceE3dcExternalInverter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
