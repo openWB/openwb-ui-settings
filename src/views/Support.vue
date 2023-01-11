@@ -46,6 +46,11 @@
 							<openwb-base-alert subtype="info">
 								<ul>
 									<li>
+										Lesen Sie den Hilfetext, der durch Klick
+										auf das ? angezeigt wird. Nehmen Sie das
+										Wiki zur Hilfe.
+									</li>
+									<li>
 										Vergewissern Sie sich, dass mindestens
 										die aktuelle "Stable" Version
 										installiert ist.
