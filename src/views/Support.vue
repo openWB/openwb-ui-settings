@@ -47,7 +47,11 @@
 								<ul>
 									<li>
 										Lesen Sie den Hilfetext, der durch Klick
-										auf das ? angezeigt wird. Nehmen Sie das
+										auf das
+										<FontAwesomeIcon
+											:icon="['far', 'question-circle']"
+										/>
+										angezeigt wird. Nehmen Sie das
 										Wiki zur Hilfe.
 									</li>
 									<li>
