@@ -298,12 +298,12 @@ export default {
 					},
 					{
 						label: "Energie",
-						field: "imported_since_plugged",
+						field: "imported_since_mode_switch",
 						sortable: false,
 						display: (row) => {
 							return this.alignEnd(
 								this.formatNumber(
-									row.imported_since_plugged / 1000,
+									row.imported_since_mode_switch / 1000,
 									2
 								) + "&nbsp;kWh"
 							);
