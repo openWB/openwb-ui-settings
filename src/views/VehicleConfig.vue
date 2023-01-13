@@ -907,6 +907,11 @@
 								)
 							"
 						>
+							<template #help>
+								Die geladene Energiemenge wird beim Wechsel des
+								Lademodus oder nach dem Anstecken, wenn
+								Sofortladen schon ausgewählt ist, neu gezählt.
+							</template>
 						</openwb-base-number-input>
 						<hr />
 						<openwb-base-heading>PV-Laden</openwb-base-heading>
@@ -1365,6 +1370,12 @@
 									)
 								"
 							>
+								<template #help>
+									Die geladene Energiemenge wird beim Wechsel
+									des Lademodus, Wechsel des Plans oder nach
+									dem Anstecken, wenn Zielladen schon
+									ausgewählt ist, neu gezählt.
+								</template>
 							</openwb-base-number-input>
 							<openwb-base-button-group-input
 								title="Wiederholungen"
@@ -1661,7 +1672,11 @@
 								<template #help>
 									Maximal zu ladende Energie innerhalb des
 									Zeitfensters. Eignet sich immer dann wenn
-									kein SoC zur Verfügung steht.
+									kein SoC zur Verfügung steht. Die geladene
+									Energiemenge wird beim Wechsel des
+									Lademodus, Wechsel des Plans oder nach dem
+									Anstecken, wenn Zeitladen schon aktiv ist,
+									neu gezählt.
 								</template>
 							</openwb-base-number-input>
 
