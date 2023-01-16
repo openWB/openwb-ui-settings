@@ -55,7 +55,7 @@
 				Schrägstrich "/" beginnen.<br />
 				Es wird vom Server eine Zahl mit oder ohne Nachkommastellen
 				(Float, Integer) und einem Punkt als Dezimaltrennzeichen
-				erwartet, welche den aktuellen absoluten Zählerstand in kWh
+				erwartet, welche den aktuellen absoluten Zählerstand in Wh
 				darstellt.<br />
 				Wird dieses Feld leer gelassen, werden keine Phasenströme
 				ermittelt und es kann kein Lastmanagement berechnet werden!
@@ -75,7 +75,7 @@
 				Schrägstrich "/" beginnen.<br />
 				Es wird vom Server eine Zahl mit oder ohne Nachkommastellen
 				(Float, Integer) und einem Punkt als Dezimaltrennzeichen
-				erwartet, welche den aktuellen absoluten Zählerstand in kWh
+				erwartet, welche den aktuellen absoluten Zählerstand in Wh
 				darstellt.<br />
 				Wird dieses Feld leer gelassen, werden keine Phasenströme
 				ermittelt und es kann kein Lastmanagement berechnet werden!
