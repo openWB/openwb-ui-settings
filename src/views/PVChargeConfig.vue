@@ -149,7 +149,10 @@
 						<template #help>
 							Die Einschaltschwelle muss für die hier angegebene
 							Zeit dauerhaft überschritten werden, bevor ein
-							Ladevorgang gestartet wird.
+							Ladevorgang gestartet wird.<br />
+							Wenn ein Ladevorgang aktiv ist und auf PV-Laden
+							umgeschaltet wird, wird weiter geladen, wenn die
+							Abschaltschwelle nicht unterschritten wird.
 						</template>
 					</openwb-base-number-input>
 					<hr />
@@ -197,7 +200,10 @@
 						<template #help>
 							Die Abschaltschwelle muss für die hier angegebene
 							Zeit dauerhaft unterschritten werden, bevor ein
-							Ladevorgang beendet wird.
+							Ladevorgang beendet wird.<br />
+							Wenn ein Ladevorgang aktiv ist und auf PV-Laden
+							umgeschaltet wird, wird die Ladung sofort beendet,
+							wenn die Abschaltschwelle unterschritten wird.
 						</template>
 					</openwb-base-number-input>
 				</div>
