@@ -247,7 +247,14 @@
 								wenn das Auto nicht lädt alle 12 Stunden und
 								wenn es lädt alle 5 Minuten. Die Abfrage kann
 								manuell durch Klick auf den Reload-Pfeil auf der
-								Hauptseite ausgelöst werden.
+								Hauptseite ausgelöst werden.<br />
+								Wenn eine Abfrage fehlschlägt, wird noch drei
+								weitere Male im Abstand von 5 Minuten, versucht
+								den SoC abzufragen. Wenn dies nicht erfolgreich
+								ist, wird der SoC auf 0% gesetzt, um zu
+								vermeiden, dass ein Auto beim SoC-basierten
+								Laden nicht geladen wird. Die Abfrage erfolgt
+								dann wieder im oben definierten Intervall.
 							</template>
 						</openwb-base-select-input>
 						<openwb-vehicle-proxy
