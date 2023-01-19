@@ -45,7 +45,7 @@
 							Fahrzeug-Mindeststrom bei vorliegender Ladefreigabe
 							reserviert. Dadurch können bei Eingreifen des
 							Lastmanagements andere Fahrzeuge möglicherweise nur
-							mit reuduzierter Stromstärke laden und der
+							mit reduzierter Stromstärke laden und der
 							reservierte Strom wird nicht genutzt. Wenn die
 							Fahrzeuge wieder die Ladung starten, zB um
 							vorzuheizen, nutzen sie den für sie reservierten
