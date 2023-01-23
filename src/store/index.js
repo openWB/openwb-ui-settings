@@ -2,6 +2,11 @@ import { createStore } from "vuex";
 
 let states = {
 	mqtt: {},
+	text: {
+		rfidWiki:
+			"Bitte auch hiervon abhängige Einstellungen beachten. Eine Übersicht gibt es im " +
+			'<a href="https://github.com/openWB/core/wiki/Ladung-nur-nach-Freischaltung" target="_blank">Wiki</a>.',
+	},
 };
 
 /* examples start here */

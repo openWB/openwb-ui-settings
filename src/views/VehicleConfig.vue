@@ -217,7 +217,10 @@
 								Der/die RFID-Tag(s) müssen in der
 								Ladepunkt-Vorlage eingetragen werden, um
 								zuzuordnen, an welchem Ladepunkt die Tags
-								verwendet werden dürfen.
+								verwendet werden dürfen.<br />
+								<span
+									v-html="$store.state.text.rfidWiki"
+								></span>
 							</openwb-base-alert>
 							<hr />
 						</div>
