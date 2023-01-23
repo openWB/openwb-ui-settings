@@ -411,7 +411,10 @@
 							<template #help>
 								An allen Ladepunkten, denen diese
 								Ladepunkt-Vorlage zugeordnet ist, können die
-								hier eingetragenen Tags verwendet werden.
+								hier eingetragenen Tags verwendet werden.<br />
+								<span
+									v-html="$store.state.text.rfidWiki"
+								></span>
 							</template>
 						</openwb-base-array-input>
 						<hr />
