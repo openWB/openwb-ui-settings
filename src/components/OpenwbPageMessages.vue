@@ -9,7 +9,7 @@
 			:timestamp="message.timestamp"
 			@dismiss="dismiss"
 		>
-			<span v-html="message.message" />
+			<span v-html="message.message"></span>
 		</openwb-base-toast>
 	</div>
 </template>

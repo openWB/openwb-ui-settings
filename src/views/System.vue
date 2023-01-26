@@ -1,5 +1,5 @@
 <template>
-	<div class="power">
+	<div class="system">
 		<openwb-base-alert subtype="danger">
 			<h2>Achtung!</h2>
 			<p>
@@ -26,7 +26,12 @@
 		</openwb-base-alert>
 		<div v-if="warningAcknowledged">
 			<form name="versionInfoForm">
-				<openwb-base-card title="Versions-Informationen">
+				<openwb-base-card
+					title="Versions-Informationen / Aktualisierung"
+					subtype="success"
+					:collapsible="true"
+					:collapsed="true"
+				>
 					<openwb-base-text-input
 						title="Entwicklungszweig"
 						readonly
@@ -71,13 +76,18 @@
 							</li>
 						</ul>
 					</openwb-base-card>
+					<openwb-base-alert subtype="danger">
+						Nach einem Update wird die Ladestation direkt neu
+						gestartet! Es werden alle eventuell vorhandenen lokalen
+						Änderungen am Programmcode mit dem Update verworfen!
+					</openwb-base-alert>
 					<template #footer>
 						<div class="row justify-content-center">
 							<div
 								class="col-md-4 d-flex py-1 justify-content-center"
 							>
 								<openwb-base-click-button
-									class="btn-success"
+									class="btn-info"
 									@buttonClicked="
 										sendSystemCommand('systemFetchVersions')
 									"
@@ -89,30 +99,6 @@
 									/>
 								</openwb-base-click-button>
 							</div>
-						</div>
-						<!-- <openwb-base-submit-buttons
-							formName="versionInfoForm"
-							@save="$emit('save')"
-							@reset="$emit('reset')"
-							@defaults="$emit('defaults')"
-						/> -->
-					</template>
-				</openwb-base-card>
-			</form>
-			<form name="updateForm">
-				<openwb-base-card
-					title="Aktualisierung"
-					subtype="success"
-					:collapsible="true"
-					:collapsed="true"
-				>
-					<openwb-base-alert subtype="danger">
-						Nach einem Update wird die Ladestation direkt neu
-						gestartet! Es werden alle lokalen Änderungen mit dem
-						Update verworfen!
-					</openwb-base-alert>
-					<template #footer>
-						<div class="row justify-content-center">
 							<div
 								class="col-md-4 d-flex py-1 justify-content-center"
 							>
@@ -131,6 +117,185 @@
 									<font-awesome-icon
 										fixed-width
 										:icon="['fas', 'arrow-alt-circle-up']"
+									/>
+								</openwb-base-click-button>
+							</div>
+						</div>
+					</template>
+				</openwb-base-card>
+			</form>
+			<form name="backupRestoreForm">
+				<openwb-base-card
+					title="Sicherung / Wiederherstellung"
+					subtype="success"
+					:collapsible="true"
+					:collapsed="true"
+				>
+					<openwb-base-heading>Sicherung</openwb-base-heading>
+					<openwb-base-alert subtype="danger">
+						Aktuell können nur Sicherungen wiederhergestellt werden,
+						die in den Entwicklungszweigen "master" oder "Beta"
+						erstellt wurden!
+					</openwb-base-alert>
+					<openwb-base-alert subtype="info">
+						Nachdem die Sicherung abgeschlossen ist, kann die
+						erstellte Datei über den Link in der Benachrichtigung
+						oder
+						<a href="/openWB/data/backup/" target="_blank">hier</a>
+						heruntergeladen werden.
+					</openwb-base-alert>
+					<div class="row justify-content-center">
+						<div
+							class="col-md-4 d-flex py-1 justify-content-center"
+						>
+							<openwb-base-click-button
+								class="btn-success clickable"
+								@buttonClicked="
+									sendSystemCommand('createBackup', {
+										use_extended_filename: true,
+									})
+								"
+							>
+								Sicherung erstellen
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'archive']"
+								/>
+							</openwb-base-click-button>
+						</div>
+					</div>
+					<hr />
+					<openwb-base-heading>Wiederherstellung</openwb-base-heading>
+					<openwb-base-alert subtype="danger">
+						Diese Funktion ist noch in Entwicklung! Es kann
+						potentiell das System unbrauchbar werden. Nach
+						Möglichkeit vorher ein Image der Installation
+						erstellen!<br />
+						Für die Wiederherstellung wird eine aktive
+						Internetverbindung benötigt.<br />
+						Aktuell können nur Sicherungen wiederhergestellt werden,
+						die in den Entwicklungszweigen "master" oder "Beta"
+						erstellt wurden!
+					</openwb-base-alert>
+					<div class="input-group">
+						<div class="input-group-prepend">
+							<div class="input-group-text">
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'file-archive']"
+								/>
+							</div>
+						</div>
+						<div class="custom-file">
+							<input
+								id="input-file"
+								type="file"
+								class="custom-file-input"
+								accept=".tar.gz,application/gzip,application/tar+gzip"
+								@change="updateSelectedFile($event)"
+							/>
+							<label
+								id="input-file-label"
+								class="custom-file-label"
+								for="input-file"
+								data-browse="Suchen"
+							>
+								{{
+									selectedFile
+										? selectedFile.name
+										: "Bitte eine Datei auswählen"
+								}}
+							</label>
+						</div>
+						<div class="input-group-append">
+							<button
+								class="btn"
+								:class="
+									selectedFile
+										? 'btn-success clickable'
+										: 'btn-outline-success'
+								"
+								:disabled="!selectedFile"
+								type="button"
+								@click="uploadFile()"
+							>
+								Hochladen
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'upload']"
+								/>
+							</button>
+						</div>
+					</div>
+					<div class="row justify-content-center">
+						<div
+							class="col-md-4 d-flex py-1 justify-content-center"
+						>
+							<openwb-base-click-button
+								:class="
+									restoreUploadDone
+										? 'btn-success clickable'
+										: 'btn-outline-success'
+								"
+								:disabled="!restoreUploadDone"
+								@buttonClicked="
+									sendSystemCommand('restoreBackup')
+								"
+							>
+								Wiederherstellung starten
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'box-open']"
+								/>
+							</openwb-base-click-button>
+						</div>
+					</div>
+					<template #footer></template>
+				</openwb-base-card>
+			</form>
+			<form name="powerForm">
+				<openwb-base-card
+					title="Betrieb"
+					:collapsible="true"
+					:collapsed="true"
+				>
+					<openwb-base-alert subtype="danger">
+						Wenn die Ladestation ausgeschaltet wird, muss sie
+						komplett spannungsfrei geschaltet werden. Erst beim
+						erneuten Zuschalten der Spannung fährt das System wieder
+						hoch.
+					</openwb-base-alert>
+					<template #footer>
+						<div class="row justify-content-center">
+							<div
+								class="col-md-4 d-flex py-1 justify-content-center"
+							>
+								<openwb-base-click-button
+									class="btn-warning"
+									@buttonClicked="
+										sendSystemCommand('systemReboot')
+									"
+								>
+									Neustart
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'undo']"
+									/>
+								</openwb-base-click-button>
+							</div>
+							<div
+								class="col-md-4 d-flex py-1 justify-content-center"
+							>
+								<openwb-base-click-button
+									class="btn-danger"
+									@buttonClicked="
+										sendSystemCommand('systemShutdown')
+									"
+								>
+									Ausschalten
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'power-off']"
 									/>
 								</openwb-base-click-button>
 							</div>
@@ -203,194 +368,6 @@
 									<font-awesome-icon
 										fixed-width
 										:icon="['fas', 'skull-crossbones']"
-									/>
-								</openwb-base-click-button>
-							</div>
-						</div>
-					</template>
-				</openwb-base-card>
-			</form>
-			<form name="backupForm">
-				<openwb-base-card
-					title="Sicherung"
-					subtype="success"
-					:collapsible="true"
-					:collapsed="true"
-				>
-					<openwb-base-alert subtype="danger">
-						Aktuell können nur Sicherungen wiederhergestellt werden,
-						die in den Entwicklungszweigen "master" oder "Beta"
-						erstellt wurden!
-					</openwb-base-alert>
-					<openwb-base-alert subtype="info">
-						Nachdem die Sicherung abgeschlossen ist, kann die
-						erstellte Datei über den Link in der Benachrichtigung
-						oder
-						<a href="/openWB/data/backup/" target="_blank">hier</a>
-						heruntergeladen werden.
-					</openwb-base-alert>
-					<template #footer>
-						<div class="row justify-content-center">
-							<div
-								class="col-md-4 d-flex py-1 justify-content-center"
-							>
-								<openwb-base-click-button
-									class="btn-success clickable"
-									@buttonClicked="
-										sendSystemCommand('createBackup', {
-											use_extended_filename: true,
-										})
-									"
-								>
-									Sicherung erstellen
-									<font-awesome-icon
-										fixed-width
-										:icon="['fas', 'archive']"
-									/>
-								</openwb-base-click-button>
-							</div>
-						</div>
-					</template>
-				</openwb-base-card>
-			</form>
-			<form name="restoreForm">
-				<openwb-base-card
-					title="Wiederherstellung"
-					subtype="success"
-					:collapsible="true"
-					:collapsed="true"
-				>
-					<openwb-base-alert subtype="danger">
-						Diese Funktion ist noch in Entwicklung! Es kann
-						potentiell das System unbrauchbar werden. Nach
-						Möglichkeit vorher ein Image der Installation
-						erstellen!<br />
-						Für die Wiederherstellung wird eine aktive
-						Internetverbindung benötigt.<br />
-						Aktuell können nur Sicherungen wiederhergestellt werden,
-						die in den Entwicklungszweigen "master" oder "Beta"
-						erstellt wurden!
-					</openwb-base-alert>
-					<div class="input-group">
-						<div class="input-group-prepend">
-							<div class="input-group-text">
-								<font-awesome-icon
-									fixed-width
-									:icon="['fas', 'file-archive']"
-								/>
-							</div>
-						</div>
-						<div class="custom-file">
-							<input
-								id="input-file"
-								type="file"
-								class="custom-file-input"
-								accept=".tar.gz,application/gzip,application/tar+gzip"
-								@change="updateSelectedFile($event)"
-							/>
-							<label
-								id="input-file-label"
-								class="custom-file-label"
-								for="input-file"
-								data-browse="Suchen"
-							>
-								{{
-									selectedFile
-										? selectedFile.name
-										: "Bitte eine Datei auswählen"
-								}}
-							</label>
-						</div>
-						<div class="input-group-append">
-							<button
-								class="btn"
-								:class="
-									selectedFile
-										? 'btn-success clickable'
-										: 'btn-outline-success'
-								"
-								:disabled="!selectedFile"
-								type="button"
-								@click="uploadFile()"
-							>
-								Hochladen
-								<font-awesome-icon
-									fixed-width
-									:icon="['fas', 'upload']"
-								/>
-							</button>
-						</div>
-					</div>
-					<template #footer>
-						<div class="row justify-content-center">
-							<div
-								class="col-md-4 d-flex py-1 justify-content-center"
-							>
-								<openwb-base-click-button
-									:class="
-										restoreUploadDone
-											? 'btn-success clickable'
-											: 'btn-outline-success'
-									"
-									:disabled="!restoreUploadDone"
-									@buttonClicked="
-										sendSystemCommand('restoreBackup')
-									"
-								>
-									Wiederherstellung starten
-									<font-awesome-icon
-										fixed-width
-										:icon="['fas', 'box-open']"
-									/>
-								</openwb-base-click-button>
-							</div>
-						</div>
-					</template>
-				</openwb-base-card>
-			</form>
-			<form name="powerForm">
-				<openwb-base-card
-					title="Betrieb"
-					:collapsible="true"
-					:collapsed="true"
-				>
-					<openwb-base-alert subtype="danger">
-						Wenn die Ladestation ausgeschaltet wird, muss sie
-						komplett spannungsfrei geschaltet werden. Erst beim
-						erneuten Zuschalten der Spannung fährt das System wieder
-						hoch.
-					</openwb-base-alert>
-					<template #footer>
-						<div class="row justify-content-center">
-							<div
-								class="col-md-4 d-flex py-1 justify-content-center"
-							>
-								<openwb-base-click-button
-									class="btn-warning"
-									@buttonClicked="
-										sendSystemCommand('systemReboot')
-									"
-								>
-									Neustart
-									<font-awesome-icon
-										fixed-width
-										:icon="['fas', 'undo']"
-									/>
-								</openwb-base-click-button>
-							</div>
-							<div
-								class="col-md-4 d-flex py-1 justify-content-center"
-							>
-								<openwb-base-click-button
-									class="btn-danger"
-									@buttonClicked="
-										sendSystemCommand('systemShutdown')
-									"
-								>
-									Ausschalten
-									<font-awesome-icon
-										fixed-width
-										:icon="['fas', 'power-off']"
 									/>
 								</openwb-base-click-button>
 							</div>

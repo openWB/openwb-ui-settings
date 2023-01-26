@@ -64,37 +64,6 @@
 					/>
 					Ladepunkte
 				</template>
-				<openwb-base-select-input
-					class="mb-2"
-					title="Verfügbare Ladepunkte"
-					notSelected="Bitte auswählen"
-					:options="getChargePointList()"
-					:model-value="chargePointToAdd"
-					@update:model-value="chargePointToAdd = $event"
-				>
-					<template #append>
-						<span class="col-1">
-							<openwb-base-click-button
-								:class="
-									chargePointToAdd === undefined
-										? 'btn-outline-success'
-										: 'btn-success'
-								"
-								:disabled="chargePointToAdd === undefined"
-								@buttonClicked="addChargePoint"
-							>
-								<font-awesome-icon
-									fixed-width
-									:icon="['fas', 'plus']"
-								/>
-							</openwb-base-click-button>
-						</span>
-					</template>
-					<template #help>
-						Bitte einen Ladepunkt auswählen, der hinzugefügt werden
-						soll.
-					</template>
-				</openwb-base-select-input>
 				<openwb-base-card
 					v-for="(
 						installedChargePoint, installedChargePointKey
@@ -286,6 +255,38 @@
 						</template>
 					</openwb-base-button-group-input>
 				</openwb-base-card>
+				<hr v-if="Object.keys(installedChargePoints).length > 0" />
+				<openwb-base-select-input
+					class="mb-2"
+					title="Verfügbare Ladepunkte"
+					notSelected="Bitte auswählen"
+					:options="getChargePointList()"
+					:model-value="chargePointToAdd"
+					@update:model-value="chargePointToAdd = $event"
+				>
+					<template #append>
+						<span class="col-1">
+							<openwb-base-click-button
+								:class="
+									chargePointToAdd === undefined
+										? 'btn-outline-success'
+										: 'btn-success'
+								"
+								:disabled="chargePointToAdd === undefined"
+								@buttonClicked="addChargePoint"
+							>
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'plus']"
+								/>
+							</openwb-base-click-button>
+						</span>
+					</template>
+					<template #help>
+						Bitte einen Ladepunkt auswählen, der hinzugefügt werden
+						soll.
+					</template>
+				</openwb-base-select-input>
 			</openwb-base-card>
 			<hr class="border-secondary" />
 			<!-- charge point template card -->
