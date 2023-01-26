@@ -1,6 +1,6 @@
 <template>
 	<teleport to="body" v-if="show">
-		<div class="modal-backdrop fade show" />
+		<div class="modal-backdrop fade show"></div>
 		<div class="modal fade d-block show" role="dialog" @click="handleClick">
 			<div
 				class="modal-dialog modal-dialog-centered modal-dialog-scrollable"

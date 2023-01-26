@@ -16,6 +16,7 @@
 	</div>
 	<page-footer />
 	<messages />
+	<blocker />
 </template>
 
 <script>
@@ -24,6 +25,7 @@ import NavBar from "@/components/OpenwbPageNavbar.vue";
 import PageFooter from "@/components/OpenwbPageFooter.vue";
 import DonationBanner from "@/components/OpenwbPageDonationBanner.vue";
 import Messages from "@/components/OpenwbPageMessages.vue";
+import Blocker from "@/components/OpenwbPageBlocker.vue";
 import mqtt from "mqtt";
 
 export default {
@@ -33,6 +35,7 @@ export default {
 		PageFooter,
 		DonationBanner,
 		Messages,
+		Blocker,
 	},
 	data() {
 		return {
@@ -250,7 +253,7 @@ export default {
 
 <style>
 #app {
-	font-family: Avenir, Helvetica, Arial, sans-serif;
+	font-family: "Avenir", "Helvetica", "Arial", sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
