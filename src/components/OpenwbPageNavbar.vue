@@ -84,7 +84,7 @@
 							class="dropdown-item"
 							active-class="active disabled"
 						>
-							Optionale Komponenten
+							Optionale Hardware
 						</router-link>
 					</div>
 				</li>
@@ -200,7 +200,7 @@
 							class="dropdown-item"
 							active-class="active disabled"
 						>
-							Cloud
+							openWB Cloud
 						</router-link>
 						<router-link
 							to="/System/MqttBridgeConfiguration"
