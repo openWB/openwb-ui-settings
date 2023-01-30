@@ -884,7 +884,7 @@ export default {
 		removeChargePoint(chargePointIndex, event) {
 			this.showChargePointModal = false;
 			if (event == "confirm") {
-				console.info(
+				console.debug(
 					"request removal of charge point '" + chargePointIndex + "'"
 				);
 				this.$emit("sendCommand", {
