@@ -1,7 +1,7 @@
 <template>
 	<component
-		v-if="chargePointTemplateFound"
-		:is="myComponent"
+		v-if="chargePointSettingsTemplateFound"
+		:is="myChargePointSettingsComponent"
 		:configuration="configuration"
 		:chargePointId="chargePointId"
 		@update:configuration="updateConfiguration($event)"
@@ -32,6 +32,13 @@
 			<pre>{{ JSON.stringify(configuration, undefined, 2) }}</pre>
 		</openwb-base-alert>
 	</div>
+	<hr v-if="chargePointCommandsTemplateFound" />
+	<component
+		v-if="chargePointCommandsTemplateFound"
+		:is="myChargePointCommandsComponent"
+		:configuration="configuration"
+		:chargePointId="chargePointId"
+	/>
 </template>
 
 <script>
@@ -47,23 +54,50 @@ export default {
 	},
 	data() {
 		return {
-			chargePointTemplateFound: true,
+			chargePointSettingsTemplateFound: true,
+			chargePointCommandsTemplateFound: true,
 		};
 	},
 	computed: {
-		myComponent() {
-			console.debug(`loading charge point: ${this.chargePointType}`);
+		myChargePointSettingsComponent() {
+			console.debug(
+				`loading charge point settings: ${this.chargePointType}`
+			);
 			return defineAsyncComponent(() =>
 				import(
 					`@/components/charge_points/${this.chargePointType}/chargePoint.vue`
 				)
 					.then((value) => {
-						this.chargePointTemplateFound = true;
+						this.chargePointSettingsTemplateFound = true;
 						return value;
 					})
 					.catch((error) => {
-						console.warn("charge point template not found", error);
-						this.chargePointTemplateFound = false;
+						console.warn(
+							"charge point settings template not found",
+							error
+						);
+						this.chargePointSettingsTemplateFound = false;
+					})
+			);
+		},
+		myChargePointCommandsComponent() {
+			console.debug(
+				`loading charge point commands: ${this.chargePointType}`
+			);
+			return defineAsyncComponent(() =>
+				import(
+					`@/components/charge_points/${this.chargePointType}/commands.vue`
+				)
+					.then((value) => {
+						this.chargePointCommandsTemplateFound = true;
+						return value;
+					})
+					.catch((error) => {
+						console.warn(
+							"charge point commands template not found",
+							error
+						);
+						this.chargePointCommandsTemplateFound = false;
 					})
 			);
 		},
