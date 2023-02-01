@@ -27,22 +27,31 @@ export default {
 	computed: {
 		myComponentTemplate() {
 			if (this.componentType !== undefined) {
-				return `./${this.deviceType}/${this.componentType}.vue`;
+				return `@/components/devices/${this.deviceType}/${this.componentType}.vue`;
 			}
-			return `./${this.deviceType}/device.vue`;
+			return `@/components/devices/${this.deviceType}/device.vue`;
 		},
 		myComponent() {
 			console.debug(
 				`loading component: ${this.deviceType} / ${this.componentType}`
 			);
-			return defineAsyncComponent({
-				loader: () =>
-					import(
-						/* @vite-ignore */
-						this.myComponentTemplate
-					),
-				errorComponent: OpenwbDeviceConfigFallback,
-			});
+			if (this.componentType !== undefined) {
+				return defineAsyncComponent({
+					loader: () =>
+						import(
+							`@/components/devices/${this.deviceType}/${this.componentType}.vue`
+						),
+					errorComponent: OpenwbDeviceConfigFallback,
+				});
+			} else {
+				return defineAsyncComponent({
+					loader: () =>
+						import(
+							`@/components/devices/${this.deviceType}/device.vue`
+						),
+					errorComponent: OpenwbDeviceConfigFallback,
+				});
+			}
 		},
 	},
 	methods: {

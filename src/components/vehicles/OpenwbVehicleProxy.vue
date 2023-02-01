@@ -21,16 +21,12 @@ export default {
 		configuration: { type: Object, required: true },
 	},
 	computed: {
-		myComponentTemplate() {
-			return `./${this.vehicleType}/vehicle.vue`;
-		},
 		myComponent() {
 			console.debug(`loading vehicle: ${this.vehicleType}`);
 			return defineAsyncComponent({
 				loader: () =>
 					import(
-						/* @vite-ignore */
-						this.myComponentTemplate
+						`@/components/vehicles/${this.vehicleType}/vehicle.vue`
 					),
 				errorComponent: OpenwbVehicleFallback,
 			});

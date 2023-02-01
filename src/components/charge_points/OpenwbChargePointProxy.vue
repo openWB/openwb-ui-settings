@@ -36,9 +36,6 @@ export default {
 		moduleName: { type: String, required: false, default: undefined },
 	},
 	computed: {
-		myChargePointSettingsTemplate() {
-			return `./${this.chargePointType}/chargePoint.vue`;
-		},
 		myChargePointSettingsComponent() {
 			console.debug(
 				`loading charge point settings: ${this.chargePointType}`
@@ -46,14 +43,10 @@ export default {
 			return defineAsyncComponent({
 				loader: () =>
 					import(
-						/* @vite-ignore */
-						this.myChargePointSettingsTemplate
+						`@/components/charge_points/${this.chargePointType}/chargePoint.vue`
 					),
 				errorComponent: OpenwbChargePointConfigFallback,
 			});
-		},
-		myChargePointCommandsTemplate() {
-			return `./${this.chargePointType}/commands.vue`;
 		},
 		myChargePointCommandsComponent() {
 			console.debug(
@@ -62,8 +55,7 @@ export default {
 			return defineAsyncComponent({
 				loader: () =>
 					import(
-						/* @vite-ignore */
-						this.myChargePointCommandsTemplate
+						`@/components/charge_points/${this.chargePointType}/commands.vue`
 					),
 				errorComponent: OpenwbChargePointCommandsFallback,
 			});
