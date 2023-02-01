@@ -1,9 +1,5 @@
 <template>
 	<div class="charge-point-mqtt">
-		<openwb-base-heading>
-			Einstellungen für Ladepunkt MQTT
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
 			Das MQTT Modul stellt keine aktive Verbindung her, sondern erwartet,
 			dass die Daten von speziellen Topics im Broker gelesen bzw.

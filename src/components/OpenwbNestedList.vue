@@ -99,7 +99,6 @@ export default {
 			return elementId;
 		},
 		getElementIcon(element) {
-			console.log(element.type);
 			switch (element.type) {
 				case "bat":
 					return ["fas", "car-battery"];

@@ -14,7 +14,6 @@ const routes = [
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "Status" */
 				"../views/Status.vue"
 			),
 	},
@@ -26,7 +25,6 @@ const routes = [
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "ChargeLog" */
 				"../views/ChargeLog.vue"
 			),
 	},
@@ -38,7 +36,6 @@ const routes = [
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "DailyChart" */
 				"../views/DailyChart.vue"
 			),
 	},
@@ -50,7 +47,6 @@ const routes = [
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "MonthlyChart" */
 				"../views/MonthlyChart.vue"
 			),
 	},
@@ -73,7 +69,6 @@ const routes = [
 		// which is lazy-loaded when the route is visited.
 		component: () =>
 			import(
-				/* webpackChunkName: "OptionalComponents" */
 				"../views/OptionalComponents.vue"
 			),
 	},
@@ -85,7 +80,6 @@ const routes = [
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "GeneralChargeConfig" */
 				"../views/GeneralChargeConfig.vue"
 			),
 	},
@@ -97,7 +91,6 @@ const routes = [
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "InstantChargeConfig" */
 				"../views/InstantChargeConfig.vue"
 			),
 	},
@@ -109,7 +102,6 @@ const routes = [
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "PVChargeConfig" */
 				"../views/PVChargeConfig.vue"
 			),
 	},
@@ -121,7 +113,6 @@ const routes = [
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "TimeChargeConfig" */
 				"../views/TimeChargeConfig.vue"
 			),
 	},
@@ -133,7 +124,6 @@ const routes = [
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "ScheduledChargeConfig" */
 				"../views/ScheduledChargeConfig.vue"
 			),
 	},
@@ -145,7 +135,6 @@ const routes = [
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "StandbyChargeConfig" */
 				"../views/StandbyChargeConfig.vue"
 			),
 	},
@@ -157,7 +146,6 @@ const routes = [
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "HardwareInstallation" */
 				"../views/HardwareInstallation.vue"
 			),
 	},
@@ -169,7 +157,6 @@ const routes = [
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "LoadManagementConfiguration" */
 				"../views/LoadManagementConfig.vue"
 			),
 	},
@@ -181,7 +168,6 @@ const routes = [
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "ChargePointInstallation" */
 				"../views/ChargePointInstallation.vue"
 			),
 	},
@@ -193,7 +179,6 @@ const routes = [
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "VehicleConfiguration" */
 				"../views/VehicleConfig.vue"
 			),
 	},
@@ -205,7 +190,6 @@ const routes = [
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "CloudConfig" */
 				"../views/CloudConfig.vue"
 			),
 	},
@@ -217,7 +201,6 @@ const routes = [
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "MqttBridgeConfig" */
 				"../views/MqttBridgeConfig.vue"
 			),
 	},
@@ -229,7 +212,6 @@ const routes = [
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "DebugConfig" */
 				"../views/DebugConfig.vue"
 			),
 	},
@@ -241,7 +223,6 @@ const routes = [
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "Support" */
 				"../views/Support.vue"
 			),
 	},
@@ -253,7 +234,6 @@ const routes = [
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "DataProtection" */
 				"../views/DataProtection.vue"
 			),
 	},
@@ -265,7 +245,6 @@ const routes = [
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "SystemConfig" */
 				"../views/System.vue"
 			),
 	},
@@ -280,7 +259,6 @@ if (process.env.NODE_ENV !== "production") {
 		},
 		component: () =>
 			import(
-				/* webpackChunkName: "testingStore" */
 				"../views/TestingStore.vue"
 			),
 	});

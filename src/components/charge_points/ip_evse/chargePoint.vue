@@ -1,9 +1,5 @@
 <template>
 	<div class="charge-point-ipevse">
-		<openwb-base-heading>
-			Einstellungen für Ladepunkt IP-Evse
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
 		<openwb-base-text-input
 			title="IP oder Hostname"
 			subtype="host"
