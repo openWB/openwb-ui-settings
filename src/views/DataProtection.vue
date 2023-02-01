@@ -11,11 +11,11 @@
 				</div>
 				<div v-else>
 					<iframe
-						:src="publicPath + 'dataprotection.html'"
+						src="dataprotection.html"
 						width="100%"
 						height="400px"
 						class="bg-light"
-					/>
+					></iframe>
 					<hr />
 					<openwb-base-button-group-input
 						title="Akzeptieren"
@@ -76,11 +76,6 @@ export default {
 				"openWB/system/dataprotection_acknowledged",
 			],
 		};
-	},
-	computed: {
-		publicPath() {
-			return this.$root.publicPath;
-		},
 	},
 };
 </script>

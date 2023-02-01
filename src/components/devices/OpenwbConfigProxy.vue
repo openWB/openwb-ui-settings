@@ -1,42 +1,18 @@
 <template>
 	<component
-		v-if="componentTemplateFound"
 		:is="myComponent"
 		:configuration="configuration"
 		:deviceId="deviceId"
+		:deviceType="deviceType"
 		:componentId="componentId"
+		:componentType="componentType"
 		@update:configuration="updateConfiguration($event)"
 	/>
-	<div v-else>
-		<openwb-base-alert subtype="warning">
-			Es wurde keine Konfigurationsseite für den
-			<span v-if="componentType">
-				Komponenten-Typ "{{ componentType }}"
-			</span>
-			<span v-else>Gerätetyp "{{ deviceType }}"</span>
-			gefunden. Die Einstellungen können als JSON direkt bearbeitet
-			werden.
-		</openwb-base-alert>
-		<openwb-base-textarea
-			title="Konfiguration"
-			subtype="json"
-			:model-value="configuration"
-			@update:model-value="
-				updateConfiguration({ value: $event, object: 'configuration' })
-			"
-		>
-			<template #help>
-				Bitte prüfen Sie, ob die Eingaben richtig interpretiert werden.
-			</template>
-		</openwb-base-textarea>
-		<openwb-base-alert subtype="info">
-			<pre>{{ JSON.stringify(configuration, undefined, 2) }}</pre>
-		</openwb-base-alert>
-	</div>
 </template>
 
 <script>
-import { defineAsyncComponent } from "@vue/runtime-core";
+import { defineAsyncComponent } from "vue";
+import OpenwbDeviceConfigFallback from "./OpenwbDeviceConfigFallback.vue";
 
 export default {
 	name: "OpenwbConfigProxy",
@@ -48,33 +24,34 @@ export default {
 		componentType: { type: String, default: undefined },
 		configuration: { type: Object, required: true },
 	},
-	data() {
-		return {
-			componentTemplateFound: true,
-		};
-	},
 	computed: {
+		myComponentTemplate() {
+			if (this.componentType !== undefined) {
+				return `@/components/devices/${this.deviceType}/${this.componentType}.vue`;
+			}
+			return `@/components/devices/${this.deviceType}/device.vue`;
+		},
 		myComponent() {
 			console.debug(
 				`loading component: ${this.deviceType} / ${this.componentType}`
 			);
-			return defineAsyncComponent(() =>
-				import(
-					`@/components/devices/${this.deviceType}${
-						this.componentType
-							? `/${this.componentType}`
-							: "/device"
-					}.vue`
-				)
-					.then((value) => {
-						this.componentTemplateFound = true;
-						return value;
-					})
-					.catch((error) => {
-						console.warn("component template not found", error);
-						this.componentTemplateFound = false;
-					})
-			);
+			if (this.componentType !== undefined) {
+				return defineAsyncComponent({
+					loader: () =>
+						import(
+							`@/components/devices/${this.deviceType}/${this.componentType}.vue`
+						),
+					errorComponent: OpenwbDeviceConfigFallback,
+				});
+			} else {
+				return defineAsyncComponent({
+					loader: () =>
+						import(
+							`@/components/devices/${this.deviceType}/device.vue`
+						),
+					errorComponent: OpenwbDeviceConfigFallback,
+				});
+			}
 		},
 	},
 	methods: {

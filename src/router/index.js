@@ -12,11 +12,7 @@ const routes = [
 		meta: {
 			heading: "Status",
 		},
-		component: () =>
-			import(
-				/* webpackChunkName: "Status" */
-				"../views/Status.vue"
-			),
+		component: () => import("../views/Status.vue"),
 	},
 	{
 		path: "/Logging/ChargeLog",
@@ -24,11 +20,7 @@ const routes = [
 		meta: {
 			heading: "Auswertungen - Ladeprotokoll",
 		},
-		component: () =>
-			import(
-				/* webpackChunkName: "ChargeLog" */
-				"../views/ChargeLog.vue"
-			),
+		component: () => import("../views/ChargeLog.vue"),
 	},
 	{
 		path: "/Logging/DailyChart",
@@ -36,11 +28,7 @@ const routes = [
 		meta: {
 			heading: "Auswertungen - Tagesauswertung",
 		},
-		component: () =>
-			import(
-				/* webpackChunkName: "DailyChart" */
-				"../views/DailyChart.vue"
-			),
+		component: () => import("../views/DailyChart.vue"),
 	},
 	{
 		path: "/Logging/MonthlyChart",
@@ -48,11 +36,7 @@ const routes = [
 		meta: {
 			heading: "Auswertungen - Monatsauswertung",
 		},
-		component: () =>
-			import(
-				/* webpackChunkName: "MonthlyChart" */
-				"../views/MonthlyChart.vue"
-			),
+		component: () => import("../views/MonthlyChart.vue"),
 	},
 	{
 		path: "/GeneralConfig",
@@ -71,11 +55,7 @@ const routes = [
 		// route level code-splitting
 		// this generates a separate chunk (about.[hash].js) for this route
 		// which is lazy-loaded when the route is visited.
-		component: () =>
-			import(
-				/* webpackChunkName: "OptionalComponents" */
-				"../views/OptionalComponents.vue"
-			),
+		component: () => import("../views/OptionalComponents.vue"),
 	},
 	{
 		path: "/GeneralChargeConfig",
@@ -83,11 +63,7 @@ const routes = [
 		meta: {
 			heading: "Ladeeinstellungen - Übergreifendes",
 		},
-		component: () =>
-			import(
-				/* webpackChunkName: "GeneralChargeConfig" */
-				"../views/GeneralChargeConfig.vue"
-			),
+		component: () => import("../views/GeneralChargeConfig.vue"),
 	},
 	{
 		path: "/InstantChargeConfig",
@@ -95,11 +71,7 @@ const routes = [
 		meta: {
 			heading: "Ladeeinstellungen - Sofortladen",
 		},
-		component: () =>
-			import(
-				/* webpackChunkName: "InstantChargeConfig" */
-				"../views/InstantChargeConfig.vue"
-			),
+		component: () => import("../views/InstantChargeConfig.vue"),
 	},
 	{
 		path: "/PVChargeConfig",
@@ -107,11 +79,7 @@ const routes = [
 		meta: {
 			heading: "Ladeeinstellungen - PV-Laden",
 		},
-		component: () =>
-			import(
-				/* webpackChunkName: "PVChargeConfig" */
-				"../views/PVChargeConfig.vue"
-			),
+		component: () => import("../views/PVChargeConfig.vue"),
 	},
 	{
 		path: "/TimeChargeConfig",
@@ -119,11 +87,7 @@ const routes = [
 		meta: {
 			heading: "Ladeeinstellungen - Zeitladen",
 		},
-		component: () =>
-			import(
-				/* webpackChunkName: "TimeChargeConfig" */
-				"../views/TimeChargeConfig.vue"
-			),
+		component: () => import("../views/TimeChargeConfig.vue"),
 	},
 	{
 		path: "/ScheduledChargeConfig",
@@ -131,11 +95,7 @@ const routes = [
 		meta: {
 			heading: "Ladeeinstellungen - Zielladen",
 		},
-		component: () =>
-			import(
-				/* webpackChunkName: "ScheduledChargeConfig" */
-				"../views/ScheduledChargeConfig.vue"
-			),
+		component: () => import("../views/ScheduledChargeConfig.vue"),
 	},
 	{
 		path: "/StandbyChargeConfig",
@@ -143,11 +103,7 @@ const routes = [
 		meta: {
 			heading: "Ladeeinstellungen - Standby",
 		},
-		component: () =>
-			import(
-				/* webpackChunkName: "StandbyChargeConfig" */
-				"../views/StandbyChargeConfig.vue"
-			),
+		component: () => import("../views/StandbyChargeConfig.vue"),
 	},
 	{
 		path: "/HardwareInstallation",
@@ -155,11 +111,7 @@ const routes = [
 		meta: {
 			heading: "Konfiguration - Geräte und Komponenten",
 		},
-		component: () =>
-			import(
-				/* webpackChunkName: "HardwareInstallation" */
-				"../views/HardwareInstallation.vue"
-			),
+		component: () => import("../views/HardwareInstallation.vue"),
 	},
 	{
 		path: "/LoadManagementConfiguration",
@@ -167,11 +119,7 @@ const routes = [
 		meta: {
 			heading: "Konfiguration - Lastmanagement",
 		},
-		component: () =>
-			import(
-				/* webpackChunkName: "LoadManagementConfiguration" */
-				"../views/LoadManagementConfig.vue"
-			),
+		component: () => import("../views/LoadManagementConfig.vue"),
 	},
 	{
 		path: "/ChargePointInstallation",
@@ -179,11 +127,7 @@ const routes = [
 		meta: {
 			heading: "Konfiguration - Ladepunkte",
 		},
-		component: () =>
-			import(
-				/* webpackChunkName: "ChargePointInstallation" */
-				"../views/ChargePointInstallation.vue"
-			),
+		component: () => import("../views/ChargePointInstallation.vue"),
 	},
 	{
 		path: "/VehicleConfiguration/:section?/:section_index?",
@@ -191,11 +135,7 @@ const routes = [
 		meta: {
 			heading: "Konfiguration - Fahrzeuge",
 		},
-		component: () =>
-			import(
-				/* webpackChunkName: "VehicleConfiguration" */
-				"../views/VehicleConfig.vue"
-			),
+		component: () => import("../views/VehicleConfig.vue"),
 	},
 	{
 		path: "/System/CloudConfiguration",
@@ -203,11 +143,7 @@ const routes = [
 		meta: {
 			heading: "System - openWB Cloud",
 		},
-		component: () =>
-			import(
-				/* webpackChunkName: "CloudConfig" */
-				"../views/CloudConfig.vue"
-			),
+		component: () => import("../views/CloudConfig.vue"),
 	},
 	{
 		path: "/System/MqttBridgeConfiguration",
@@ -215,11 +151,7 @@ const routes = [
 		meta: {
 			heading: "System - MQTT-Brücken",
 		},
-		component: () =>
-			import(
-				/* webpackChunkName: "MqttBridgeConfig" */
-				"../views/MqttBridgeConfig.vue"
-			),
+		component: () => import("../views/MqttBridgeConfig.vue"),
 	},
 	{
 		path: "/System/DebugConfiguration",
@@ -227,11 +159,7 @@ const routes = [
 		meta: {
 			heading: "System - Fehlersuche",
 		},
-		component: () =>
-			import(
-				/* webpackChunkName: "DebugConfig" */
-				"../views/DebugConfig.vue"
-			),
+		component: () => import("../views/DebugConfig.vue"),
 	},
 	{
 		path: "/System/Support",
@@ -239,11 +167,7 @@ const routes = [
 		meta: {
 			heading: "System - Support",
 		},
-		component: () =>
-			import(
-				/* webpackChunkName: "Support" */
-				"../views/Support.vue"
-			),
+		component: () => import("../views/Support.vue"),
 	},
 	{
 		path: "/System/DataProtection",
@@ -251,11 +175,7 @@ const routes = [
 		meta: {
 			heading: "System - Datenschutz",
 		},
-		component: () =>
-			import(
-				/* webpackChunkName: "DataProtection" */
-				"../views/DataProtection.vue"
-			),
+		component: () => import("../views/DataProtection.vue"),
 	},
 	{
 		path: "/System/SystemConfiguration",
@@ -263,26 +183,18 @@ const routes = [
 		meta: {
 			heading: "System - System",
 		},
-		component: () =>
-			import(
-				/* webpackChunkName: "SystemConfig" */
-				"../views/System.vue"
-			),
+		component: () => import("../views/System.vue"),
 	},
 ];
 /* examples for development only start here */
-if (process.env.NODE_ENV !== "production") {
+if (import.meta.env.MODE !== "production") {
 	routes.push({
 		path: "/TestingStore",
 		name: "VUEX Store",
 		meta: {
 			heading: "Beispiele - VUEX Store",
 		},
-		component: () =>
-			import(
-				/* webpackChunkName: "testingStore" */
-				"../views/TestingStore.vue"
-			),
+		component: () => import("../views/TestingStore.vue"),
 	});
 }
 

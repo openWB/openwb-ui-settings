@@ -37,7 +37,7 @@
 						:collapsible="true"
 						:collapsed="false"
 					>
-						<Line
+						<chartjs-line
 							:chartData="chartData"
 							:chartOptions="chartOptions"
 						/>
@@ -113,7 +113,7 @@ library.add(fasChargingStation, fasCarBattery, fasSolarPanel, fasGaugeHigh);
 
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 
-import { Line } from "vue-chartjs";
+import { Line as ChartjsLine } from "vue-chartjs";
 import "chartjs-adapter-luxon";
 import "hammerjs";
 import ZoomPlugin from "chartjs-plugin-zoom";
@@ -142,7 +142,7 @@ Chart.register(
 
 export default {
 	name: "OpenwbMonthlyChart",
-	components: { Line, FontAwesomeIcon },
+	components: { ChartjsLine, FontAwesomeIcon },
 	mixins: [ComponentStateMixin],
 	emits: ["sendCommand"],
 	data() {

@@ -1,9 +1,5 @@
 <template>
 	<div class="charge-point-commands-openwbpro">
-		<openwb-base-heading>
-			Befehle für Ladepunkt OpenWB Pro
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
 		<openwb-base-button-input
 			title="Ladepunkt aktualisieren"
 			buttonText="Update anfordern"

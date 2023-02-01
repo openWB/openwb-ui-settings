@@ -10,7 +10,7 @@ let states = {
 };
 
 /* examples start here */
-if (process.env.NODE_ENV !== "production") {
+if (import.meta.env.MODE !== "production") {
 	states["examples"] = {
 		text1: "Text...",
 		text2: "mail@domain.com",

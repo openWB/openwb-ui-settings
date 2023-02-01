@@ -1,9 +1,5 @@
 <template>
 	<div class="charge-point-openwbpro">
-		<openwb-base-heading>
-			Einstellungen für Ladepunkt OpenWB Pro
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
 		<openwb-base-text-input
 			title="IP oder Hostname"
 			subtype="host"
