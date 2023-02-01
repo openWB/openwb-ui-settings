@@ -124,7 +124,8 @@
 							$store.state.mqtt[installedChargePointKey].type
 						"
 						:moduleName="
-							$store.state.mqtt[installedChargePointKey].connection_module.name
+							$store.state.mqtt[installedChargePointKey]
+								.connection_module.name
 						"
 						:configuration="
 							installedChargePoint.connection_module.configuration

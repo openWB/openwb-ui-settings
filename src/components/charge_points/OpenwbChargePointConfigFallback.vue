@@ -11,10 +11,7 @@
 			subtype="json"
 			:model-value="configuration"
 			@update:model-value="
-				updateConfiguration(
-					$event,
-					'connection_module.configuration'
-				)
+				updateConfiguration($event, 'connection_module.configuration')
 			"
 		>
 			<template #help>

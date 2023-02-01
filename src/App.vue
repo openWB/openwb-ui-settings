@@ -71,18 +71,6 @@ export default {
 		topicList() {
 			return Object.keys(this.$store.state.mqtt);
 		},
-		/**
-		 * @return {String} - NODE_ENV
-		 */
-		nodeEnv() {
-			return process.env.NODE_ENV;
-		},
-		/**
-		 * @return {String} - BASE_URL
-		 */
-		publicPath() {
-			return process.env.BASE_URL;
-		},
 	},
 	methods: {
 		/**

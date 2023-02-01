@@ -294,7 +294,7 @@ export default {
 	},
 	computed: {
 		nodeEnv() {
-			return this.$root.nodeEnv;
+			return import.meta.env.MODE;
 		},
 	},
 	watch: {

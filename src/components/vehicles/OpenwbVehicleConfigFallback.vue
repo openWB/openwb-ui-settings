@@ -10,12 +10,7 @@
 			title="Konfiguration"
 			subtype="json"
 			:model-value="configuration"
-			@update:model-value="
-				updateConfiguration(
-					$event,
-					'configuration',
-				)
-			"
+			@update:model-value="updateConfiguration($event, 'configuration')"
 		>
 			<template #help>
 				Bitte prüfen Sie, ob die Eingaben richtig interpretiert werden.

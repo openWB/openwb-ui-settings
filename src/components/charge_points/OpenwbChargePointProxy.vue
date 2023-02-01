@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from "@vue/runtime-core";
+import { defineAsyncComponent } from "vue";
 import OpenwbChargePointConfigFallback from "./OpenwbChargePointConfigFallback.vue";
 import OpenwbChargePointCommandsFallback from "./OpenwbChargePointCommandsFallback.vue";
 

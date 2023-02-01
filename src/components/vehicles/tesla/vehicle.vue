@@ -123,6 +123,7 @@ import { encode } from "urlsafe-base64";
 import crypto from "crypto";
 import url from "url";
 import axios from "axios";
+import { Buffer } from "buffer";
 
 import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
 

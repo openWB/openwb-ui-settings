@@ -16,7 +16,9 @@ const vApp = createApp(App);
 vApp.use(store).use(router).use(VueAxios, axios);
 
 // automatic global registering of our base components
-const componentFiles = import.meta.glob("@/components/OpenwbBase*.vue", { eager: true });
+const componentFiles = import.meta.glob("@/components/OpenwbBase*.vue", {
+	eager: true,
+});
 Object.entries(componentFiles).forEach(([path, module]) => {
 	// Get PascalCase name of component
 	const componentName = upperFirst(
@@ -28,9 +30,7 @@ Object.entries(componentFiles).forEach(([path, module]) => {
 				.replace(/\.\w+$/, "")
 		)
 	);
-	vApp.component(
-		componentName, module.default
-	);
+	vApp.component(componentName, module.default);
 });
 
 vApp.mount("#app");

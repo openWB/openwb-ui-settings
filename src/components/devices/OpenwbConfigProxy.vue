@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from "@vue/runtime-core";
+import { defineAsyncComponent } from "vue";
 import OpenwbDeviceConfigFallback from "./OpenwbDeviceConfigFallback.vue";
 
 export default {

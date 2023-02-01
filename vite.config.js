@@ -23,10 +23,12 @@ export default defineConfig(({ command, mode }) => {
 				environment: "jsdom",
 			};
 		} else {
-			myConfiguration.plugins.push(nodePolyfills({
-				// Whether to polyfill `node:` protocol imports.
-				protocolImports: true,
-			}));
+			myConfiguration.plugins.push(
+				nodePolyfills({
+					// Whether to polyfill `node:` protocol imports.
+					protocolImports: true,
+				})
+			);
 			myConfiguration.server = {
 				proxy: {
 					"/ws": {
@@ -37,10 +39,12 @@ export default defineConfig(({ command, mode }) => {
 			};
 		}
 	} else {
-		myConfiguration.plugins.push(nodePolyfills({
-			// Whether to polyfill `node:` protocol imports.
-			protocolImports: true,
-		}));
+		myConfiguration.plugins.push(
+			nodePolyfills({
+				// Whether to polyfill `node:` protocol imports.
+				protocolImports: true,
+			})
+		);
 		myConfiguration.build = {
 			rollupOptions: {
 				plugins: [rollupNodePolyFill()],
@@ -53,7 +57,10 @@ export default defineConfig(({ command, mode }) => {
 							if (id.includes("bootstrap")) {
 								return "vendor-bootstrap";
 							}
-							if (id.includes("chart.js") || id.includes("chartjs")) {
+							if (
+								id.includes("chart.js") ||
+								id.includes("chartjs")
+							) {
 								return "vendor-chartjs";
 							}
 							// if (id.includes("mqtt")) {
@@ -86,7 +93,7 @@ export default defineConfig(({ command, mode }) => {
 							// if (id.includes("@vue")) {
 							// 	return "vendor-vue";
 							// }
-							console.log("vendor chunk: "+id);
+							console.log("vendor chunk: " + id);
 							return "vendor";
 						}
 					},
