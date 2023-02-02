@@ -16,6 +16,11 @@
 					<openwb-base-heading>
 						Vorhandene Zählermodule
 					</openwb-base-heading>
+					<openwb-base-alert subtype="info">
+						Die maximale Leistung wird nur für den EVU-Zähler
+						berücksichtigt. Bei Zwischenzählern begrenzt das
+						Lastmanagement rein anhand der maximalen Phasenströme.
+					</openwb-base-alert>
 					<openwb-base-card
 						v-for="counter in counterConfigs"
 						:key="counter.id"
