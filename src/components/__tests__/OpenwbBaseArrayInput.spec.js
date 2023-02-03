@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { shallowMount } from "@vue/test-utils";
-import OpenwbBaseArrayInput from "@/components/OpenwbBaseArrayInput.vue";
+import OpenwbBaseArrayInput from "../OpenwbBaseArrayInput.vue";
 
 describe("OpenwbBaseNumberInput.vue", () => {
 	// check title prop

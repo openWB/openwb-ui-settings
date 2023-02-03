@@ -42,12 +42,10 @@
 					subtype="primary"
 				>
 					<template #header>
-						<openwb-base-avatar class="bg-success">
-							<font-awesome-icon
-								fixed-width
-								:icon="['fas', 'network-wired']"
-							/>
-						</openwb-base-avatar>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'network-wired']"
+						/>
 						{{ installedDevice.name }}
 					</template>
 					<template #actions>
@@ -105,12 +103,10 @@
 						subtype="dark"
 					>
 						<template #header>
-							<openwb-base-avatar class="bg-success">
-								<font-awesome-icon
-									fixed-width
-									:icon="['fas', 'microchip']"
-								/>
-							</openwb-base-avatar>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'microchip']"
+							/>
 							{{ installedComponent.name }}
 						</template>
 						<template #actions>
@@ -287,13 +283,12 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasPlus, fasNetworkWired, fasMicrochip, fasTrash);
 
-import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
-
-import OpenwbConfigProxy from "@/components/devices/OpenwbConfigProxy.vue";
+import ComponentState from "../components/mixins/ComponentState.vue";
+import OpenwbConfigProxy from "../components/devices/OpenwbConfigProxy.vue";
 
 export default {
 	name: "OpenwbHardwareInstallation",
-	mixins: [ComponentStateMixin],
+	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,

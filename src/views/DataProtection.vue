@@ -64,11 +64,11 @@
 </template>
 
 <script>
-import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
+import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
 	name: "OpenwbDataProtection",
-	mixins: [ComponentStateMixin],
+	mixins: [ComponentState],
 	data() {
 		return {
 			mqttTopicsToSubscribe: [

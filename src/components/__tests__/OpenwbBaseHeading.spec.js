@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { shallowMount } from "@vue/test-utils";
-import OpenwbBaseHeading from "@/components/OpenwbBaseHeading.vue";
+import OpenwbBaseHeading from "../OpenwbBaseHeading.vue";
 
 describe("OpenwbBaseHeading.vue", () => {
 	it("render default slot when passed", () => {

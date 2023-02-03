@@ -50,11 +50,11 @@
 </template>
 
 <script>
-import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
+import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
 	name: "OpenwbScheduledChargeConfig",
-	mixins: [ComponentStateMixin],
+	mixins: [ComponentState],
 	data() {
 		return {
 			mqttTopicsToSubscribe: [

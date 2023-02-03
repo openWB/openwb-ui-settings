@@ -20,12 +20,11 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import NavBar from "@/components/OpenwbPageNavbar.vue";
-import PageFooter from "@/components/OpenwbPageFooter.vue";
-import DonationBanner from "@/components/OpenwbPageDonationBanner.vue";
-import Messages from "@/components/OpenwbPageMessages.vue";
-import Blocker from "@/components/OpenwbPageBlocker.vue";
+import NavBar from "./components/OpenwbPageNavbar.vue";
+import PageFooter from "./components/OpenwbPageFooter.vue";
+import DonationBanner from "./components/OpenwbPageDonationBanner.vue";
+import Messages from "./components/OpenwbPageMessages.vue";
+import Blocker from "./components/OpenwbPageBlocker.vue";
 import mqtt from "mqtt";
 
 export default {

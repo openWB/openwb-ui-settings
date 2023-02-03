@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { shallowMount } from "@vue/test-utils";
-import OpenwbBaseAlert from "@/components/OpenwbBaseAlert.vue";
+import OpenwbBaseAlert from "../OpenwbBaseAlert.vue";
 
 describe("OpenwbBaseAlert.vue", () => {
 	it("adds class props.subtype when passed", () => {

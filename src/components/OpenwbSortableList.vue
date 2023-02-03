@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import OpenwbNestedList from "@/components/OpenwbNestedList.vue";
+import OpenwbNestedList from "./OpenwbNestedList.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faQuestionCircle as fasQuestionCircle } from "@fortawesome/free-solid-svg-icons";

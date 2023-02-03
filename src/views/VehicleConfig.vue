@@ -81,7 +81,7 @@
 		<form name="vehicleConfigForm">
 			<!-- vehicle card -->
 			<openwb-base-card
-				subtype="primary"
+				subtype="info"
 				:collapsible="true"
 				:collapsed="true"
 			>
@@ -116,7 +116,7 @@
 						:title="getVehicleName(vehicleId)"
 						:collapsible="true"
 						:collapsed="true"
-						subtype="primary"
+						subtype="info"
 					>
 						<template #actions v-if="vehicleId !== 0">
 							<openwb-base-avatar
@@ -1835,12 +1835,12 @@ library.add(
 	fasPlug
 );
 
-import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
-import OpenwbVehicleProxy from "@/components/vehicles/OpenwbVehicleProxy.vue";
+import ComponentState from "../components/mixins/ComponentState.vue";
+import OpenwbVehicleProxy from "../components/vehicles/OpenwbVehicleProxy.vue";
 
 export default {
 	name: "OpenwbVehicleConfig",
-	mixins: [ComponentStateMixin],
+	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,

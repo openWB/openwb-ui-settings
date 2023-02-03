@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { shallowMount } from "@vue/test-utils";
-import OpenwbBaseClickButton from "@/components/OpenwbBaseClickButton.vue";
+import OpenwbBaseClickButton from "../OpenwbBaseClickButton.vue";
 
 describe("OpenwbBaseClickButton.vue", () => {
 	// check title prop

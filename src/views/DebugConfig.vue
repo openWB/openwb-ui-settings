@@ -135,11 +135,11 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasFileDownload);
 
-import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
+import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
 	name: "OpenwbDebugging",
-	mixins: [ComponentStateMixin],
+	mixins: [ComponentState],
 	components: {
 		FontAwesomeIcon,
 	},

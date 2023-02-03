@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { shallowMount } from "@vue/test-utils";
-import OpenwbBaseCheckboxInput from "@/components/OpenwbBaseCheckboxInput.vue";
+import OpenwbBaseCheckboxInput from "../OpenwbBaseCheckboxInput.vue";
 
 describe("OpenwbBaseCheckboxInput.vue", () => {
 	// check title prop

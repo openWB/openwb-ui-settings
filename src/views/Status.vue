@@ -890,7 +890,7 @@
 			:key="vehicleKey"
 			:collapsible="true"
 			:collapsed="true"
-			subtype="primary"
+			subtype="info"
 		>
 			<template #header>
 				<font-awesome-icon fixed-width :icon="['fas', 'car']" />
@@ -1020,11 +1020,11 @@ library.add(
 	fasGaugeHigh
 );
 
-import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
+import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
 	name: "OpenwbStatus",
-	mixins: [ComponentStateMixin],
+	mixins: [ComponentState],
 	components: {
 		FontAwesomeIcon,
 	},

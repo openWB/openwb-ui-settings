@@ -143,7 +143,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasFilter, fasDownload);
 
 import Vue3TableLite from "vue3-table-lite";
-import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
+import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
 	name: "OpenwbChargeLog",
@@ -151,7 +151,7 @@ export default {
 		Vue3TableLite,
 		FontAwesomeIcon,
 	},
-	mixins: [ComponentStateMixin],
+	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	data() {
 		return {

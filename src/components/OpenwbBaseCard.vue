@@ -115,10 +115,13 @@ export default {
 .card-actions .pill {
 	border-radius: 10px;
 	padding: 5px;
+	border-width: 2px;
+	border-style: solid;
 }
 
 .bg-primary,
 .bg-secondary,
+.bg-info,
 .bg-danger,
 .bg-success,
 .bg-dark {
@@ -126,7 +129,6 @@ export default {
 }
 
 .bg-warning,
-.bg-info,
 .bg-light {
 	color: #212529;
 }

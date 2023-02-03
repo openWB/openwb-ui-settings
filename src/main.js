@@ -16,7 +16,7 @@ const vApp = createApp(App);
 vApp.use(store).use(router).use(VueAxios, axios);
 
 // automatic global registering of our base components
-const componentFiles = import.meta.glob("@/components/OpenwbBase*.vue", {
+const componentFiles = import.meta.glob("./components/OpenwbBase*.vue", {
 	eager: true,
 });
 Object.entries(componentFiles).forEach(([path, module]) => {

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { shallowMount } from "@vue/test-utils";
-import OpenwbBaseAvatar from "@/components/OpenwbBaseAvatar.vue";
+import OpenwbBaseAvatar from "../OpenwbBaseAvatar.vue";
 
 describe("OpenwbBaseAvatar.vue", () => {
 	it("render slot when passed", () => {

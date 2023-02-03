@@ -111,7 +111,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasChargingStation, fasCarBattery, fasSolarPanel, fasGaugeHigh);
 
-import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
+import ComponentState from "../components/mixins/ComponentState.vue";
 
 import { Line as ChartjsLine } from "vue-chartjs";
 import "chartjs-adapter-luxon";
@@ -143,7 +143,7 @@ Chart.register(
 export default {
 	name: "OpenwbDailyChart",
 	components: { ChartjsLine, FontAwesomeIcon },
-	mixins: [ComponentStateMixin],
+	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	data() {
 		return {

@@ -125,7 +125,7 @@ import url from "url";
 import axios from "axios";
 import { Buffer } from "buffer";
 
-import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
+import ComponentStateVue from "../../mixins/ComponentState.vue";
 
 export default {
 	name: "VehicleSocTesla",
@@ -147,7 +147,7 @@ export default {
 			page_not_found_url: "",
 		};
 	},
-	mixins: [ComponentStateMixin],
+	mixins: [ComponentStateVue],
 	methods: {
 		updateConfiguration(event, path = undefined) {
 			this.$emit("update:configuration", { value: event, object: path });
