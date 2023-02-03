@@ -39,10 +39,7 @@ export default {
 				});
 			} else {
 				return defineAsyncComponent({
-					loader: () =>
-						import(
-							`./${this.deviceType}/device.vue`
-						),
+					loader: () => import(`./${this.deviceType}/device.vue`),
 					errorComponent: OpenwbDeviceConfigFallback,
 				});
 			}
