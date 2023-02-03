@@ -890,7 +890,7 @@
 			:key="vehicleKey"
 			:collapsible="true"
 			:collapsed="true"
-			subtype="primary"
+			subtype="info"
 		>
 			<template #header>
 				<font-awesome-icon fixed-width :icon="['fas', 'car']" />

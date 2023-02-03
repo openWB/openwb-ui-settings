@@ -81,7 +81,7 @@
 		<form name="vehicleConfigForm">
 			<!-- vehicle card -->
 			<openwb-base-card
-				subtype="primary"
+				subtype="info"
 				:collapsible="true"
 				:collapsed="true"
 			>
@@ -116,7 +116,7 @@
 						:title="getVehicleName(vehicleId)"
 						:collapsible="true"
 						:collapsed="true"
-						subtype="primary"
+						subtype="info"
 					>
 						<template #actions v-if="vehicleId !== 0">
 							<openwb-base-avatar
