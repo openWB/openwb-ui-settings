@@ -24,10 +24,7 @@ export default {
 		myComponent() {
 			console.debug(`loading vehicle: ${this.vehicleType}`);
 			return defineAsyncComponent({
-				loader: () =>
-					import(
-						`./${this.vehicleType}/vehicle.vue`
-					),
+				loader: () => import(`./${this.vehicleType}/vehicle.vue`),
 				errorComponent: OpenwbVehicleFallback,
 			});
 		},
