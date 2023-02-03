@@ -42,12 +42,10 @@
 					subtype="primary"
 				>
 					<template #header>
-						<openwb-base-avatar class="bg-success">
-							<font-awesome-icon
-								fixed-width
-								:icon="['fas', 'network-wired']"
-							/>
-						</openwb-base-avatar>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'network-wired']"
+						/>
 						{{ installedDevice.name }}
 					</template>
 					<template #actions>
@@ -105,12 +103,10 @@
 						subtype="dark"
 					>
 						<template #header>
-							<openwb-base-avatar class="bg-success">
-								<font-awesome-icon
-									fixed-width
-									:icon="['fas', 'microchip']"
-								/>
-							</openwb-base-avatar>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'microchip']"
+							/>
 							{{ installedComponent.name }}
 						</template>
 						<template #actions>
