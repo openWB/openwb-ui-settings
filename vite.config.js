@@ -1,5 +1,3 @@
-import { fileURLToPath, URL } from "node:url";
-
 import { defineConfig } from "vite";
 import Vue from "@vitejs/plugin-vue";
 
@@ -10,11 +8,6 @@ export default defineConfig(({ command, mode }) => {
 	var myConfiguration = {
 		plugins: [Vue()],
 		base: "/openWB/web/settings/",
-		resolve: {
-			alias: {
-				"@": fileURLToPath(new URL("./src", import.meta.url)),
-			},
-		},
 	};
 	if (command === "serve") {
 		if (mode === "test") {

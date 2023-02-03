@@ -1835,12 +1835,12 @@ library.add(
 	fasPlug
 );
 
-import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
-import OpenwbVehicleProxy from "@/components/vehicles/OpenwbVehicleProxy.vue";
+import ComponentState from "../components/mixins/ComponentState.vue";
+import OpenwbVehicleProxy from "../components/vehicles/OpenwbVehicleProxy.vue";
 
 export default {
 	name: "OpenwbVehicleConfig",
-	mixins: [ComponentStateMixin],
+	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,

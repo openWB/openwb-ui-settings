@@ -412,11 +412,11 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasPlus, fasTrash);
 
-import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
+import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
 	name: "OpenwbMqttBridgeConfiguration",
-	mixins: [ComponentStateMixin],
+	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,

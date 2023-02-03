@@ -1,5 +1,6 @@
 <script>
 export default {
+	name: "ComponentState",
 	data() {
 		return {
 			mqttTopicsToSubscribe: [],

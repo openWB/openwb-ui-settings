@@ -241,11 +241,11 @@
 </template>
 
 <script>
-import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
+import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
 	name: "OpenwbCloudConfig",
-	mixins: [ComponentStateMixin],
+	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	data() {
 		return {

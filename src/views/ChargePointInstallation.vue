@@ -808,13 +808,12 @@ library.add(
 	farFile
 );
 
-import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
-
-import OpenwbChargePointProxy from "@/components/charge_points/OpenwbChargePointProxy.vue";
+import ComponentState from "../components/mixins/ComponentState.vue"
+import OpenwbChargePointProxy from "../components/charge_points/OpenwbChargePointProxy.vue"
 
 export default {
 	name: "OpenwbChargePointInstallation",
-	mixins: [ComponentStateMixin],
+	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,

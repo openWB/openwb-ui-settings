@@ -43,7 +43,7 @@ export default {
 			return defineAsyncComponent({
 				loader: () =>
 					import(
-						`@/components/charge_points/${this.chargePointType}/chargePoint.vue`
+						`./${this.chargePointType}/chargePoint.vue`
 					),
 				errorComponent: OpenwbChargePointConfigFallback,
 			});
@@ -55,7 +55,7 @@ export default {
 			return defineAsyncComponent({
 				loader: () =>
 					import(
-						`@/components/charge_points/${this.chargePointType}/commands.vue`
+						`./${this.chargePointType}/commands.vue`
 					),
 				errorComponent: OpenwbChargePointCommandsFallback,
 			});

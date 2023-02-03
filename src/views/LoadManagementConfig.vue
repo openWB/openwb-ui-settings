@@ -249,13 +249,12 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasSolarPanel, fasGaugeHigh);
 
-import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
-
-import SortableList from "@/components/OpenwbSortableList.vue";
+import ComponentState from "../components/mixins/ComponentState.vue";
+import SortableList from "../components/OpenwbSortableList.vue";
 
 export default {
 	name: "OpenwbLoadManagementConfig",
-	mixins: [ComponentStateMixin],
+	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
 		SortableList,

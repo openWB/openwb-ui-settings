@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { shallowMount } from "@vue/test-utils";
-import OpenwbBaseCard from "@/components/OpenwbBaseCard.vue";
+import OpenwbBaseCard from "../OpenwbBaseCard.vue";
 
 describe("Card.vue", () => {
 	it("adds class props.subtype when passed", () => {

@@ -25,12 +25,6 @@ export default {
 		configuration: { type: Object, required: true },
 	},
 	computed: {
-		myComponentTemplate() {
-			if (this.componentType !== undefined) {
-				return `@/components/devices/${this.deviceType}/${this.componentType}.vue`;
-			}
-			return `@/components/devices/${this.deviceType}/device.vue`;
-		},
 		myComponent() {
 			console.debug(
 				`loading component: ${this.deviceType} / ${this.componentType}`
@@ -39,7 +33,7 @@ export default {
 				return defineAsyncComponent({
 					loader: () =>
 						import(
-							`@/components/devices/${this.deviceType}/${this.componentType}.vue`
+							`./${this.deviceType}/${this.componentType}.vue`
 						),
 					errorComponent: OpenwbDeviceConfigFallback,
 				});
@@ -47,7 +41,7 @@ export default {
 				return defineAsyncComponent({
 					loader: () =>
 						import(
-							`@/components/devices/${this.deviceType}/device.vue`
+							`./${this.deviceType}/device.vue`
 						),
 					errorComponent: OpenwbDeviceConfigFallback,
 				});

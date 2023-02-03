@@ -519,11 +519,11 @@
 </template>
 
 <script>
-import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
+import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
 	name: "OpenwbPVChargeConfig",
-	mixins: [ComponentStateMixin],
+	mixins: [ComponentState],
 	methods: {
 		calculateControlMode() {
 			const topic =

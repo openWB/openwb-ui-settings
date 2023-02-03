@@ -287,13 +287,12 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasPlus, fasNetworkWired, fasMicrochip, fasTrash);
 
-import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
-
-import OpenwbConfigProxy from "@/components/devices/OpenwbConfigProxy.vue";
+import ComponentState from "../components/mixins/ComponentState.vue";
+import OpenwbConfigProxy from "../components/devices/OpenwbConfigProxy.vue";
 
 export default {
 	name: "OpenwbHardwareInstallation",
-	mixins: [ComponentStateMixin],
+	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,

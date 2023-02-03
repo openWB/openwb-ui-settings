@@ -15,11 +15,11 @@
 </template>
 
 <script>
-import ComponentStateMixin from "@/components/mixins/ComponentState.vue";
+import ComponentState from "./mixins/ComponentState.vue";
 
 export default {
 	name: "OpenwbPageMessages",
-	mixins: [ComponentStateMixin],
+	mixins: [ComponentState],
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
