@@ -72,7 +72,7 @@
 								)"
 								:key="installedComponent.id"
 								:class="
-									'bg-' +
+									'ml-1 bg-' +
 									getComponentTypeClass(
 										installedComponent.type
 									)
@@ -370,7 +370,8 @@ export default {
 	},
 	methods: {
 		getComponentTypeClass(type) {
-			switch (type) {
+			// type may be extended: "counter_sm" so we split by "_" and take the first part
+			switch (type.split("_")[0]) {
 				case "counter":
 					return "danger";
 				case "inverter":
@@ -382,7 +383,7 @@ export default {
 			}
 		},
 		getComponentTypeIcon(type) {
-			switch (type) {
+			switch (type.split("_")[0]) {
 				case "counter":
 					return ["fas", "fa-gauge-high"];
 				case "inverter":
