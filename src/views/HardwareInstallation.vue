@@ -39,7 +39,7 @@
 					:key="installedDevice.id"
 					:collapsible="true"
 					:collapsed="true"
-					subtype="primary"
+					subtype="dark"
 				>
 					<template #header>
 						<font-awesome-icon
@@ -48,8 +48,9 @@
 						/>
 						{{ installedDevice.name }}
 					</template>
-					<template #actions>
+					<template #actions="slotProps">
 						<openwb-base-avatar
+							v-if="!slotProps.collapsed"
 							class="bg-danger clickable"
 							@click="
 								removeDeviceModal(
@@ -64,6 +65,29 @@
 								:icon="['fas', 'trash']"
 							/>
 						</openwb-base-avatar>
+						<div v-else>
+							<openwb-base-avatar
+								v-for="installedComponent in getMyInstalledComponents(
+									installedDevice.id
+								)"
+								:key="installedComponent.id"
+								:class="
+									'bg-' +
+									getComponentTypeClass(
+										installedComponent.type
+									)
+								"
+							>
+								<font-awesome-icon
+									fixed-width
+									:icon="
+										getComponentTypeIcon(
+											installedComponent.type
+										)
+									"
+								/>
+							</openwb-base-avatar>
+						</div>
 					</template>
 					<openwb-base-text-input
 						title="Bezeichnung"
@@ -100,17 +124,24 @@
 						:key="installedComponent.id"
 						:collapsible="true"
 						:collapsed="true"
-						subtype="dark"
+						:subtype="
+							getComponentTypeClass(installedComponent.type)
+						"
 					>
 						<template #header>
 							<font-awesome-icon
 								fixed-width
-								:icon="['fas', 'microchip']"
+								:icon="
+									getComponentTypeIcon(
+										installedComponent.type
+									)
+								"
 							/>
 							{{ installedComponent.name }}
 						</template>
-						<template #actions>
+						<template #actions="slotProps">
 							<openwb-base-avatar
+								v-if="!slotProps.collapsed"
 								class="bg-danger clickable"
 								@click="
 									removeComponentModal(
@@ -278,10 +309,21 @@ import {
 	faTrash as fasTrash,
 	faNetworkWired as fasNetworkWired,
 	faMicrochip as fasMicrochip,
+	faCarBattery as fasCarBattery,
+	faSolarPanel as fasSolarPanel,
+	faGaugeHigh as fasGaugeHigh,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasPlus, fasNetworkWired, fasMicrochip, fasTrash);
+library.add(
+	fasPlus,
+	fasNetworkWired,
+	fasMicrochip,
+	fasTrash,
+	fasCarBattery,
+	fasSolarPanel,
+	fasGaugeHigh
+);
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbConfigProxy from "../components/devices/OpenwbConfigProxy.vue";
@@ -327,6 +369,30 @@ export default {
 		},
 	},
 	methods: {
+		getComponentTypeClass(type) {
+			switch (type) {
+				case "counter":
+					return "danger";
+				case "inverter":
+					return "success";
+				case "bat":
+					return "warning";
+				default:
+					return "dark";
+			}
+		},
+		getComponentTypeIcon(type) {
+			switch (type) {
+				case "counter":
+					return ["fas", "fa-gauge-high"];
+				case "inverter":
+					return ["fas", "fa-solar-panel"];
+				case "bat":
+					return ["fas", "fa-car-battery"];
+				default:
+					return ["fas", "fa-microchip"];
+			}
+		},
 		getMyInstalledComponents(deviceId) {
 			return this.getWildcardTopics(
 				"openWB/system/device/" + deviceId + "/component/+/config"

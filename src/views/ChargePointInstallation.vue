@@ -79,8 +79,9 @@
 					:collapsed="true"
 					subtype="primary"
 				>
-					<template #actions>
+					<template #actions="slotProps">
 						<openwb-base-avatar
+							v-if="!slotProps.collapsed"
 							class="bg-danger clickable"
 							@click="
 								removeChargePointModal(
@@ -342,10 +343,11 @@
 					:collapsed="true"
 				>
 					<template
-						#actions
+						#actions="slotProps"
 						v-if="!chargePointTemplateKey.endsWith('/0')"
 					>
 						<openwb-base-avatar
+							v-if="!slotProps.collapsed"
 							class="bg-danger clickable"
 							@click="
 								removeChargePointTemplateModal(

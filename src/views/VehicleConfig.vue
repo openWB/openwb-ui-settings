@@ -118,8 +118,9 @@
 						:collapsed="true"
 						subtype="info"
 					>
-						<template #actions v-if="vehicleId !== 0">
+						<template #actions="slotProps" v-if="vehicleId !== 0">
 							<openwb-base-avatar
+								v-if="!slotProps.collapsed"
 								class="bg-danger clickable"
 								@click="removeVehicleModal(vehicleId, $event)"
 							>
@@ -330,13 +331,16 @@
 						:collapsible="true"
 						:collapsed="true"
 					>
-						<template #actions v-if="!key.endsWith('/0')">
+						<template
+							#actions="slotProps"
+							v-if="!key.endsWith('/0')"
+						>
 							<openwb-base-avatar
 								class="bg-danger clickable"
 								v-if="
 									$store.state.mqtt[
 										'openWB/general/extern'
-									] === false
+									] === false && !slotProps.collapsed
 								"
 								@click="removeEvTemplateModal(key, $event)"
 							>
@@ -605,8 +609,12 @@
 							)
 						"
 					>
-						<template #actions v-if="!templateKey.endsWith('/0')">
+						<template
+							#actions="slotProps"
+							v-if="!templateKey.endsWith('/0')"
+						>
 							<openwb-base-avatar
+								v-if="!slotProps.collapsed"
 								class="bg-danger clickable"
 								@click="
 									removeChargeTemplateModal(
