@@ -35,7 +35,7 @@ export default {
 	methods: {
 		updateConfiguration(event, path = undefined) {
 			if (path) {
-				path = "connection_module.configuration." + path;
+				path = "configuration." + path;
 			}
 			this.$emit("update:configuration", { value: event, object: path });
 		},
