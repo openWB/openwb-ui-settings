@@ -64,6 +64,16 @@
 					/>
 					Ladepunkte
 				</template>
+				<openwb-base-alert
+					v-if="Object.keys(installedChargePoints).length > 1"
+					subtype="danger"
+				>
+					Wenn das Standard-Fahrzeug auch aktiv zum Laden genutzt
+					wird, ist es aktuell bei mehreren Ladepunkten erforderlich,
+					dass für jeden Ladepunkt ein eigenes Standard-Fahrzeug
+					angelegt und zugeordnet wird. Diese Abhängigkeit wird
+					mittelfristig noch bereinigt.
+				</openwb-base-alert>
 				<openwb-base-card
 					v-for="(
 						installedChargePoint, installedChargePointKey
