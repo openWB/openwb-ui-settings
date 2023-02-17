@@ -28,7 +28,7 @@ export default {
 			formData.append("command", "update");
 			formData.append(
 				"data",
-				'{"ip_address":' + this.configuration.ip_address + "}"
+				'{"ip_address":"' + this.configuration.ip_address + '"}'
 			);
 			const startedMessage =
 				"Die Aktualisierung der openWB Pro wird gestartet...";
