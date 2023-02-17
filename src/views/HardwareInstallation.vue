@@ -370,29 +370,28 @@ export default {
 	},
 	methods: {
 		getComponentTypeClass(type) {
-			// type may be extended: "counter_sm" so we split by "_" and take the first part
-			switch (type.split("_")[0]) {
-				case "counter":
-					return "danger";
-				case "inverter":
-					return "success";
-				case "bat":
-					return "warning";
-				default:
-					return "dark";
+			if (type.match(/^(.+_)?counter(_.+)?$/)) {
+				return "danger";
 			}
+			if (type.match(/^(.+_)?inverter(_.+)?$/)) {
+				return "success";
+			}
+			if (type.match(/^(.+_)?bat(_.+)?$/)) {
+				return "warning";
+			}
+			return "dark";
 		},
 		getComponentTypeIcon(type) {
-			switch (type.split("_")[0]) {
-				case "counter":
-					return ["fas", "fa-gauge-high"];
-				case "inverter":
-					return ["fas", "fa-solar-panel"];
-				case "bat":
-					return ["fas", "fa-car-battery"];
-				default:
-					return ["fas", "fa-microchip"];
+			if (type.match(/^(.+_)?counter(_.+)?$/)) {
+				return ["fas", "fa-gauge-high"];
 			}
+			if (type.match(/^(.+_)?inverter(_.+)?$/)) {
+				return ["fas", "fa-solar-panel"];
+			}
+			if (type.match(/^(.+_)?bat(_.+)?$/)) {
+				return ["fas", "fa-car-battery"];
+			}
+			return ["fas", "fa-microchip"];
 		},
 		getMyInstalledComponents(deviceId) {
 			return this.getWildcardTopics(

@@ -156,14 +156,6 @@ export default {
 				}
 			},
 		},
-		value: {
-			get() {
-				return this.modelValue;
-			},
-			set(newValue) {
-				this.$emit("update:modelValue", newValue);
-			},
-		},
 	},
 	methods: {
 		toggleHelp() {

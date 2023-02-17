@@ -25,7 +25,11 @@ export default {
 	methods: {
 		async triggerUpdate() {
 			let formData = new FormData();
-			formData.append("update", 1);
+			formData.append("command", "update");
+			formData.append(
+				"data",
+				'{"ip_address":' + this.configuration.ip_address + "}"
+			);
 			const startedMessage =
 				"Die Aktualisierung der openWB Pro wird gestartet...";
 			const timestamp = Math.floor(Date.now() / 1000);
@@ -42,9 +46,13 @@ export default {
 					timestamp: timestamp,
 				},
 			});
+			console.log(location);
 			this.axios
 				.post(
-					"http://" + this.configuration.ip_address + "/connect.php",
+					location.protocol +
+						"//" +
+						location.host +
+						"/openWB/web/settings/modules/charge_points/openwb_pro/commands.php",
 					formData,
 					{ timeout: 5000 }
 				)

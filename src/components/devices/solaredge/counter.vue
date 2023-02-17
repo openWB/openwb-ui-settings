@@ -18,6 +18,15 @@
 				updateConfiguration($event, 'configuration.modbus_id')
 			"
 		/>
+		<openwb-base-number-input
+			title="Meter ID"
+			:model-value="configuration.meter_id"
+			min="1"
+			max="255"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.meter_id')
+			"
+		/>
 	</div>
 </template>
 

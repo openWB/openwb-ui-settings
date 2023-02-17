@@ -4,11 +4,12 @@
 			Einstellungen für Sungrow Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-button-group-input
+		<openwb-base-select-input
 			title="Version"
-			:buttons="[
-				{ buttonValue: 0, text: 'SH (Hybrid)' },
-				{ buttonValue: 1, text: 'SG (kein Hybrid)' },
+			:options="[
+				{ value: 0, text: 'SH (Hybrid)' },
+				{ value: 1, text: 'SG (kein Hybrid)' },
+				{ value: 2, text: 'SG (kein Hybrid) mit WiNet Dongle' },
 			]"
 			:model-value="configuration.version"
 			@update:model-value="
