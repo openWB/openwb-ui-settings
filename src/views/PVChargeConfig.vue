@@ -323,12 +323,11 @@
 					<openwb-base-range-input
 						title="Einschalt-SoC"
 						:min="0"
-						:max="19"
+						:max="18"
 						:step="1"
 						unit="%"
 						:labels="[
 							{ label: 'Aus', value: 0 },
-							{ label: 5, value: 5 },
 							{ label: 10, value: 10 },
 							{ label: 15, value: 15 },
 							{ label: 20, value: 20 },
@@ -353,23 +352,19 @@
 								'openWB/general/chargemode_config/pv_charging/switch_on_soc'
 							]
 						"
-						@update:model-value="
-							updateState(
-								'openWB/general/chargemode_config/pv_charging/switch_on_soc',
-								$event
-							)
-						"
+						@update:model-value="updateBatterySwitchOnSoc($event)"
 					>
 						<template #help
-							>Wenn der Einschalt-SoC erreicht wird, wird der
-							Speicher im Modus PV-Laden bis zum Ausschalt-SoC
-							entladen.</template
+							>Wenn der Speicher den Einschalt-SoC erreicht, wird
+							dieser im Modus PV-Laden bis zum Ausschalt-SoC
+							entladen. Der Einschalt-SoC muss größer oder gleich
+							dem Ausschalt-SoC sein.</template
 						>
 					</openwb-base-range-input>
 					<openwb-base-range-input
 						title="Ausschalt-SoC"
 						:min="0"
-						:max="19"
+						:max="18"
 						:step="1"
 						unit="%"
 						:labels="[
@@ -392,24 +387,19 @@
 							{ label: 80, value: 80 },
 							{ label: 85, value: 85 },
 							{ label: 90, value: 90 },
-							{ label: 95, value: 95 },
 						]"
 						:model-value="
 							$store.state.mqtt[
 								'openWB/general/chargemode_config/pv_charging/switch_off_soc'
 							]
 						"
-						@update:model-value="
-							updateState(
-								'openWB/general/chargemode_config/pv_charging/switch_off_soc',
-								$event
-							)
-						"
+						@update:model-value="updateBatterySwitchOffSoc($event)"
 					>
 						<template #help
-							>Wenn der Einschalt-SoC erreicht wird, wird der
-							Speicher im Modus PV-Laden bis zum Ausschalt-SoC
-							entladen.</template
+							>Wenn der Speicher den Einschalt-SoC erreicht, wird
+							dieser im Modus PV-Laden bis zum Ausschalt-SoC
+							entladen. Der Einschalt-SoC muss größer oder gleich
+							dem Ausschalt-SoC sein.</template
 						>
 					</openwb-base-range-input>
 					<openwb-base-number-input
@@ -524,6 +514,27 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 export default {
 	name: "OpenwbPVChargeConfig",
 	mixins: [ComponentState],
+	data() {
+		return {
+			mqttTopicsToSubscribe: [
+				"openWB/general/extern",
+				"openWB/general/chargemode_config/pv_charging/control_range",
+				"openWB/general/chargemode_config/pv_charging/feed_in_yield",
+				"openWB/general/chargemode_config/pv_charging/switch_on_threshold",
+				"openWB/general/chargemode_config/pv_charging/switch_on_delay",
+				"openWB/general/chargemode_config/pv_charging/switch_off_threshold",
+				"openWB/general/chargemode_config/pv_charging/switch_off_delay",
+				"openWB/general/chargemode_config/pv_charging/phases_to_use",
+				"openWB/general/chargemode_config/pv_charging/phase_switch_delay",
+				"openWB/general/chargemode_config/pv_charging/bat_prio",
+				"openWB/general/chargemode_config/pv_charging/switch_on_soc",
+				"openWB/general/chargemode_config/pv_charging/switch_off_soc",
+				"openWB/general/chargemode_config/pv_charging/charging_power_reserve",
+				"openWB/general/chargemode_config/pv_charging/rundown_power",
+				"openWB/general/chargemode_config/pv_charging/rundown_soc",
+			],
+		};
+	},
 	methods: {
 		calculateControlMode() {
 			const topic =
@@ -556,27 +567,40 @@ export default {
 					break;
 			}
 		},
-	},
-	data() {
-		return {
-			mqttTopicsToSubscribe: [
-				"openWB/general/extern",
-				"openWB/general/chargemode_config/pv_charging/control_range",
-				"openWB/general/chargemode_config/pv_charging/feed_in_yield",
-				"openWB/general/chargemode_config/pv_charging/switch_on_threshold",
-				"openWB/general/chargemode_config/pv_charging/switch_on_delay",
-				"openWB/general/chargemode_config/pv_charging/switch_off_threshold",
-				"openWB/general/chargemode_config/pv_charging/switch_off_delay",
-				"openWB/general/chargemode_config/pv_charging/phases_to_use",
-				"openWB/general/chargemode_config/pv_charging/phase_switch_delay",
-				"openWB/general/chargemode_config/pv_charging/bat_prio",
+		updateBatterySwitchOnSoc(event) {
+			this.updateState(
 				"openWB/general/chargemode_config/pv_charging/switch_on_soc",
+				event
+			);
+			if (
+				event <=
+				this.$store.state.mqtt[
+					"openWB/general/chargemode_config/pv_charging/switch_off_soc"
+				]
+			) {
+				this.updateState(
+					"openWB/general/chargemode_config/pv_charging/switch_off_soc",
+					Math.max(0, event - 5)
+				);
+			}
+		},
+		updateBatterySwitchOffSoc(event) {
+			this.updateState(
 				"openWB/general/chargemode_config/pv_charging/switch_off_soc",
-				"openWB/general/chargemode_config/pv_charging/charging_power_reserve",
-				"openWB/general/chargemode_config/pv_charging/rundown_power",
-				"openWB/general/chargemode_config/pv_charging/rundown_soc",
-			],
-		};
+				event
+			);
+			if (
+				event >=
+				this.$store.state.mqtt[
+					"openWB/general/chargemode_config/pv_charging/switch_on_soc"
+				]
+			) {
+				this.updateState(
+					"openWB/general/chargemode_config/pv_charging/switch_on_soc",
+					event + 5
+				);
+			}
+		},
 	},
 };
 </script>
