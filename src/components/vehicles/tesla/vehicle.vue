@@ -123,7 +123,7 @@ import { encode } from "urlsafe-base64";
 import crypto from "crypto";
 import url from "url";
 import axios from "axios";
-import { Buffer } from "buffer";
+// import { Buffer } from "buffer";
 
 import ComponentStateVue from "../../mixins/ComponentState.vue";
 
@@ -163,13 +163,20 @@ export default {
 			teslaLogin.focus();
 		},
 		tesla_gen_challenge() {
-			this.code_verifier = encode(crypto.randomBytes(86)).trim();
+			this.code_verifier = encode(crypto.randomBytes(86))
+				.replace(/[^a-zA-Z0-9]/gi, "")
+				.substring(0, 86);
 			const hash = crypto
 				.createHash("sha256")
 				.update(this.code_verifier)
-				.digest("hex");
-			const buffer = Buffer.from(hash, "utf8");
-			this.code_challenge = encode(buffer).trim();
+				.digest();
+			this.code_challenge = encode(hash);
+			console.log(
+				this.code_verifier,
+				this.code_verifier.length,
+				this.code_challenge,
+				this.code_challenge.length
+			);
 		},
 		tesla_gen_url() {
 			const teslaAuthUrl = new URL(this.tesla_api_oauth2 + "/authorize/");
