@@ -412,12 +412,21 @@
 						</openwb-base-range-input>
 						<openwb-base-number-input
 							title="Erlaubte Stromabweichung"
+							:step="0.1"
 							unit="A"
 							:model-value="template.nominal_difference"
 							@update:model-value="
 								updateState(key, $event, 'nominal_difference')
 							"
 						>
+							<template #help>
+								In manchen Lademodi, z.B. bei der automatischen
+								Phasenumschaltung, wird geprüft, ob das Fahrzeug
+								mit der vorgegebenen Stromstärke lädt. Manche
+								Fahrzeuge laden nicht exakt mit der vorgegebenen
+								Stromstärke. Die erlaubte Abweichung kann hier
+								eingestellt werden.
+							</template>
 						</openwb-base-number-input>
 						<openwb-base-heading>
 							Angaben zur Batterie
