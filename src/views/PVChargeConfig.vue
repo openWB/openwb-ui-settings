@@ -321,7 +321,7 @@
 						</template>
 					</openwb-base-button-group-input>
 					<openwb-base-range-input
-						title="Einschalt-SoC"
+						title="Einschalt-SoC für Ladung mit Mindeststrom"
 						:min="0"
 						:max="18"
 						:step="1"
@@ -356,13 +356,15 @@
 					>
 						<template #help
 							>Wenn der Speicher den Einschalt-SoC erreicht, wird
-							dieser im Modus PV-Laden bis zum Ausschalt-SoC
-							entladen. Der Einschalt-SoC muss größer oder gleich
-							dem Ausschalt-SoC sein.</template
+							dieser im Modus PV-Laden bei aktiviertem
+							Mindeststrom bis zum Ausschalt-SoC entladen, auch
+							wenn kein Überschuss vorhanden ist. Der
+							Einschalt-SoC muss größer oder gleich dem
+							Ausschalt-SoC sein.</template
 						>
 					</openwb-base-range-input>
 					<openwb-base-range-input
-						title="Ausschalt-SoC"
+						title="Ausschalt-SoC für Ladung mit Mindeststrom"
 						:min="0"
 						:max="18"
 						:step="1"
@@ -397,9 +399,11 @@
 					>
 						<template #help
 							>Wenn der Speicher den Einschalt-SoC erreicht, wird
-							dieser im Modus PV-Laden bis zum Ausschalt-SoC
-							entladen. Der Einschalt-SoC muss größer oder gleich
-							dem Ausschalt-SoC sein.</template
+							dieser im Modus PV-Laden bei aktiviertem
+							Mindeststrom bis zum Ausschalt-SoC entladen, auch
+							wenn kein Überschuss vorhanden ist. Der
+							Einschalt-SoC muss größer oder gleich dem
+							Ausschalt-SoC sein.</template
 						>
 					</openwb-base-range-input>
 					<openwb-base-number-input
