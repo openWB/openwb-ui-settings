@@ -14,7 +14,7 @@
 				</div>
 				<div v-else>
 					<openwb-base-button-group-input
-						title="Nicht-ladende Fahrzeuge im Lastmanagement"
+						title="Nicht-ladende Fahrzeuge"
 						:buttons="[
 							{
 								buttonValue: false,
@@ -40,25 +40,26 @@
 						"
 					>
 						<template #help>
-							Wenn Fahrzeuge, die nicht laden, im Lastmanagement
-							berücksichtigt werden, wird für diese der
-							Fahrzeug-Mindeststrom bei vorliegender Ladefreigabe
-							reserviert. Dadurch können bei Eingreifen des
-							Lastmanagements andere Fahrzeuge möglicherweise nur
-							mit reduzierter Stromstärke laden und der
-							reservierte Strom wird nicht genutzt. Wenn die
-							Fahrzeuge wieder die Ladung starten, zB um
-							vorzuheizen, nutzen sie den für sie reservierten
-							Strom.<br />
-							Wenn Fahrzeuge, die nicht laden, nicht im
+							Wenn angesteckte Fahrzeuge, die nicht laden, im
 							Lastmanagement berücksichtigt werden, wird für diese
-							kein Strom bei vorliegender Ladefreigabe reserviert.
-							Wenn die Lastmanagment-Grenzen fast erreicht sind
-							und die Fahrzeuge wieder die Ladung starten, zB um
-							vorzuheizen, kann es zu einer kurzzeitigen
-							Überschreitung der Lastmanagement-Grenzen kommen,
-							bis im nächsten Zyklus die Stromstärken aller
-							Ladepunkte an die neue Situation angepasst werden.
+							der Fahrzeug-Mindeststrom bei vorliegender
+							Ladefreigabe reserviert. Dadurch können bei
+							Eingreifen des Lastmanagements andere Fahrzeuge
+							möglicherweise nur mit reduzierter Stromstärke laden
+							und der reservierte Strom wird nicht genutzt. Wenn
+							die Fahrzeuge wieder Leistung beziehen, z. B. um zu
+							klimatisieren, nutzen sie den für sie reservierten
+							Strom.<br />
+							Wenn angesteckte Fahrzeuge, die nicht laden, nicht
+							im Lastmanagement berücksichtigt werden, wird für
+							diese kein Strom bei vorliegender Ladefreigabe
+							reserviert. Wenn die Lastmanagement-Grenzen fast
+							erreicht sind und die Fahrzeuge wieder Leistung
+							beziehen, z. B. um zu klimatisieren, kann es zu
+							einer kurzzeitigen Überschreitung der
+							Lastmanagement-Grenzen kommen, bis im nächsten
+							Zyklus die Stromstärken aller Ladepunkte an die neue
+							Situation angepasst werden.<br />
 							Das kurzzeitige Überschreiten der Maximal-Werte
 							stellt für die Sicherungen in der Regel kein Problem
 							dar.
