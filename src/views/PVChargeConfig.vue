@@ -320,88 +320,6 @@
 							sodass auch ein Mischbetrieb möglich ist.
 						</template>
 					</openwb-base-button-group-input>
-					<openwb-base-range-input
-						title="Einschalt-SoC"
-						:min="0"
-						:max="18"
-						:step="1"
-						unit="%"
-						:labels="[
-							{ label: 'Aus', value: 0 },
-							{ label: 10, value: 10 },
-							{ label: 15, value: 15 },
-							{ label: 20, value: 20 },
-							{ label: 25, value: 25 },
-							{ label: 30, value: 30 },
-							{ label: 35, value: 35 },
-							{ label: 40, value: 40 },
-							{ label: 45, value: 45 },
-							{ label: 50, value: 50 },
-							{ label: 55, value: 55 },
-							{ label: 60, value: 60 },
-							{ label: 65, value: 65 },
-							{ label: 70, value: 70 },
-							{ label: 75, value: 75 },
-							{ label: 80, value: 80 },
-							{ label: 85, value: 85 },
-							{ label: 90, value: 90 },
-							{ label: 95, value: 95 },
-						]"
-						:model-value="
-							$store.state.mqtt[
-								'openWB/general/chargemode_config/pv_charging/switch_on_soc'
-							]
-						"
-						@update:model-value="updateBatterySwitchOnSoc($event)"
-					>
-						<template #help
-							>Wenn der Speicher den Einschalt-SoC erreicht, wird
-							dieser im Modus PV-Laden bis zum Ausschalt-SoC
-							entladen. Der Einschalt-SoC muss größer oder gleich
-							dem Ausschalt-SoC sein.</template
-						>
-					</openwb-base-range-input>
-					<openwb-base-range-input
-						title="Ausschalt-SoC"
-						:min="0"
-						:max="18"
-						:step="1"
-						unit="%"
-						:labels="[
-							{ label: 'Aus', value: 0 },
-							{ label: 5, value: 5 },
-							{ label: 10, value: 10 },
-							{ label: 15, value: 15 },
-							{ label: 20, value: 20 },
-							{ label: 25, value: 25 },
-							{ label: 30, value: 30 },
-							{ label: 35, value: 35 },
-							{ label: 40, value: 40 },
-							{ label: 45, value: 45 },
-							{ label: 50, value: 50 },
-							{ label: 55, value: 55 },
-							{ label: 60, value: 60 },
-							{ label: 65, value: 65 },
-							{ label: 70, value: 70 },
-							{ label: 75, value: 75 },
-							{ label: 80, value: 80 },
-							{ label: 85, value: 85 },
-							{ label: 90, value: 90 },
-						]"
-						:model-value="
-							$store.state.mqtt[
-								'openWB/general/chargemode_config/pv_charging/switch_off_soc'
-							]
-						"
-						@update:model-value="updateBatterySwitchOffSoc($event)"
-					>
-						<template #help
-							>Wenn der Speicher den Einschalt-SoC erreicht, wird
-							dieser im Modus PV-Laden bis zum Ausschalt-SoC
-							entladen. Der Einschalt-SoC muss größer oder gleich
-							dem Ausschalt-SoC sein.</template
-						>
-					</openwb-base-range-input>
 					<openwb-base-number-input
 						title="Reservierte Ladeleistung"
 						:min="0"
@@ -495,6 +413,92 @@
 							der erlaubten Entladeleistung höchstens bis zu dem
 							hier eingestellten Ladestand entladen.
 						</template>
+					</openwb-base-range-input>
+					<hr />
+					<openwb-base-heading>Laden mit Mindeststrom</openwb-base-heading>
+					<openwb-base-range-input
+						title="Einschalt-SoC"
+						:min="0"
+						:max="18"
+						:step="1"
+						unit="%"
+						:labels="[
+							{ label: 'Aus', value: 0 },
+							{ label: 10, value: 10 },
+							{ label: 15, value: 15 },
+							{ label: 20, value: 20 },
+							{ label: 25, value: 25 },
+							{ label: 30, value: 30 },
+							{ label: 35, value: 35 },
+							{ label: 40, value: 40 },
+							{ label: 45, value: 45 },
+							{ label: 50, value: 50 },
+							{ label: 55, value: 55 },
+							{ label: 60, value: 60 },
+							{ label: 65, value: 65 },
+							{ label: 70, value: 70 },
+							{ label: 75, value: 75 },
+							{ label: 80, value: 80 },
+							{ label: 85, value: 85 },
+							{ label: 90, value: 90 },
+							{ label: 95, value: 95 },
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/chargemode_config/pv_charging/switch_on_soc'
+							]
+						"
+						@update:model-value="updateBatterySwitchOnSoc($event)"
+					>
+						<template #help
+							>Wenn der Speicher den Einschalt-SoC erreicht, wird
+							dieser im Modus PV-Laden bei aktiviertem
+							Mindeststrom bis zum Ausschalt-SoC entladen, auch
+							wenn kein Überschuss vorhanden ist. Der
+							Einschalt-SoC muss größer oder gleich dem
+							Ausschalt-SoC sein.</template
+						>
+					</openwb-base-range-input>
+					<openwb-base-range-input
+						title="Ausschalt-SoC"
+						:min="0"
+						:max="18"
+						:step="1"
+						unit="%"
+						:labels="[
+							{ label: 'Aus', value: 0 },
+							{ label: 5, value: 5 },
+							{ label: 10, value: 10 },
+							{ label: 15, value: 15 },
+							{ label: 20, value: 20 },
+							{ label: 25, value: 25 },
+							{ label: 30, value: 30 },
+							{ label: 35, value: 35 },
+							{ label: 40, value: 40 },
+							{ label: 45, value: 45 },
+							{ label: 50, value: 50 },
+							{ label: 55, value: 55 },
+							{ label: 60, value: 60 },
+							{ label: 65, value: 65 },
+							{ label: 70, value: 70 },
+							{ label: 75, value: 75 },
+							{ label: 80, value: 80 },
+							{ label: 85, value: 85 },
+							{ label: 90, value: 90 },
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/chargemode_config/pv_charging/switch_off_soc'
+							]
+						"
+						@update:model-value="updateBatterySwitchOffSoc($event)"
+					>
+						<template #help
+							>Wenn der Speicher den Einschalt-SoC erreicht, wird
+							dieser im Modus PV-Laden bis zum Ausschalt-SoC
+							entladen. Der Einschalt-SoC muss größer oder gleich
+							dem Ausschalt-SoC sein.</template
+						>
 					</openwb-base-range-input>
 				</div>
 			</openwb-base-card>
