@@ -1,5 +1,5 @@
 <template>
-	<div class="vehicle-soc-skodaconnect">
+	<div class="vehicle-soc-mercedeseq">
 		<openwb-base-heading>
 			Einstellungen für Mercedes EQ SoC
 			<span class="small">(Modul: {{ $options.name }})</span>
@@ -79,7 +79,8 @@ export default {
 	computed: {
 		callback_url() {
 			// ToDo: move callback_ev.php!!
-			return `${location.origin}/openWB/web/settings/modules/vehicles/mercedeseq/callback_ev.php`;
+			this.configuration.callback_url = `${location.origin}/openWB/web/settings/modules/vehicles/mercedeseq/callback_vehicle.php`;
+			return this.configuration.callback_url;
 
 		},
 		login_url() {
