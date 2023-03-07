@@ -440,7 +440,8 @@
 						>Angaben zum konfigurierten Ladestrom der openWB
 					</openwb-base-heading>
 					<openwb-base-alert subtype="info">
-						Diese Einstellung hat KEINE Auswirkung auf das
+						Diese Einstellung hat
+						<span class="highlight">keine</span> Auswirkung auf das
 						Lastmanagement! Ist die Zuleitung nicht mit der vollen
 						Ladeleistung der openWB abgesichert, muss für den
 						Ladepunkt ein virtueller Zähler konfiguriert werden, der
@@ -1051,5 +1052,10 @@ export default {
 <style scoped>
 .clickable {
 	cursor: pointer;
+}
+
+.highlight {
+	text-transform: uppercase;
+	font-weight: bold;
 }
 </style>
