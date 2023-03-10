@@ -150,6 +150,12 @@
 								werden.
 							</template>
 						</openwb-base-text-input>
+						<openwb-base-alert subtype="info">
+							Ein anderes Fahrzeug-Profil wid erst nach dem
+							Abstecken übernommen, da es sonst durch die Änderung
+							bestimmter Einstellungen im laufenden Ladevorgang zu
+							Widersprüchen kommen kann.
+						</openwb-base-alert>
 						<openwb-base-select-input
 							title="Fahrzeug-Vorlage"
 							:options="evTemplateList"
@@ -247,7 +253,14 @@
 								wenn das Auto nicht lädt alle 12 Stunden und
 								wenn es lädt alle 5 Minuten. Die Abfrage kann
 								manuell durch Klick auf den Reload-Pfeil auf der
-								Hauptseite ausgelöst werden.
+								Hauptseite ausgelöst werden.<br />
+								Wenn eine Abfrage fehlschlägt, wird noch drei
+								weitere Male im Abstand von 5 Minuten, versucht
+								den SoC abzufragen. Wenn dies nicht erfolgreich
+								ist, wird der SoC auf 0% gesetzt, um zu
+								vermeiden, dass ein Auto beim SoC-basierten
+								Laden nicht geladen wird. Die Abfrage erfolgt
+								dann wieder im oben definierten Intervall.
 							</template>
 						</openwb-base-select-input>
 						<openwb-vehicle-proxy
@@ -324,6 +337,12 @@
 					</openwb-base-alert>
 				</div>
 				<div v-else>
+					<openwb-base-alert subtype="info">
+						Änderungen im Fahrzeug-Profil werden erst nach dem
+						Abstecken übernommen, da es sonst durch die Änderung
+						bestimmter Einstellungen im laufenden Ladevorgang zu
+						Widersprüchen kommen kann.
+					</openwb-base-alert>
 					<openwb-base-card
 						v-for="(template, key) in evTemplates"
 						:key="key"
