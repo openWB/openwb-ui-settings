@@ -1,10 +1,5 @@
 <template>
-	<span
-		ref="slot-wrapper"
-		:title="tooltip"
-		class="copy-me"
-		@click="click"
-	>
+	<span ref="slot-wrapper" :title="tooltip" class="copy-me" @click="click">
 		<slot />
 		<font-awesome-icon
 			fixed-width
@@ -42,16 +37,20 @@ export default {
 			// event.target may be our icon, so we use a ref here
 			console.debug(this.$refs["slot-wrapper"].innerText);
 			if (this.clipboardApiAvailable) {
-				navigator.clipboard.writeText(this.$refs["slot-wrapper"].innerText).then(
-					() => {
-						this.isCopied = true;
-					},
-					() => {
-						console.error("copy to clipboard failed");
-					}
-				);
+				navigator.clipboard
+					.writeText(this.$refs["slot-wrapper"].innerText)
+					.then(
+						() => {
+							this.isCopied = true;
+						},
+						() => {
+							console.error("copy to clipboard failed");
+						}
+					);
 			} else {
-				console.debug("clipboard api not supported/enabled, fallback to select");
+				console.debug(
+					"clipboard api not supported/enabled, fallback to select"
+				);
 				if (window.getSelection) {
 					console.debug("using 'window.getSelection'");
 					const selection = window.getSelection();

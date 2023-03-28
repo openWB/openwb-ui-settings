@@ -415,7 +415,9 @@
 						</template>
 					</openwb-base-range-input>
 					<hr />
-					<openwb-base-heading>Laden mit Mindeststrom</openwb-base-heading>
+					<openwb-base-heading>
+						Laden mit Mindeststrom
+					</openwb-base-heading>
 					<openwb-base-range-input
 						title="Einschalt-SoC"
 						:min="0"

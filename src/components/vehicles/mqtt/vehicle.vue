@@ -5,9 +5,10 @@
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
-			Die Daten werden immer dann aktualisiert, wenn das Topic veröffentlicht
-			wird. Die Abfrageintervalle werden nicht berücksichtigt, da das
-			Intervall vom sendenden Client festgelegt wird.
+			Die Daten werden immer dann aktualisiert, wenn das Topic
+			veröffentlicht wird. Die Abfrageintervalle werden nicht
+			berücksichtigt, da das Intervall vom sendenden Client festgelegt
+			wird.
 			<ul>
 				<li>
 					<openwb-base-copy-to-clipboard
