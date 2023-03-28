@@ -21,7 +21,14 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.modbus_id')
 			"
-		/>
+		>
+			<template #help>
+				Sind mehrere Huawei Wechselrichter als "Schwarm" verbunden, dann
+				besitzt der Master vermutlich die ID "16". Über diese ID werden
+				dann alle Daten in Summe zur Verfügung gestellt.<br />
+				Die IDs 1 bis 15 sind für einzelne Wechselrichter reserviert.
+			</template>
+		</openwb-base-number-input>
 	</div>
 </template>
 
