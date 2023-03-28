@@ -37,10 +37,12 @@
 						:collapsible="true"
 						:collapsed="false"
 					>
-						<chartjs-line
-							:chartData="chartData"
-							:chartOptions="chartOptions"
-						/>
+						<div class="openwb-chart">
+							<chartjs-line
+								:data="chartData"
+								:options="chartOptions"
+							/>
+						</div>
 					</openwb-base-card>
 					<openwb-base-card
 						title="Summen"
@@ -170,7 +172,7 @@ export default {
 					hidden: false,
 					borderWidth: 1,
 					data: null,
-					yAxisID: "y1",
+					yAxisID: "y",
 					parsing: {
 						xAxisKey: "timestamp",
 						yAxisKey: null,
@@ -186,7 +188,7 @@ export default {
 					hidden: true,
 					borderWidth: 1,
 					data: null,
-					yAxisID: "y1",
+					yAxisID: "y",
 					parsing: {
 						xAxisKey: "timestamp",
 						yAxisKey: null,
@@ -202,7 +204,7 @@ export default {
 					hidden: true,
 					borderWidth: 1,
 					data: null,
-					yAxisID: "y1",
+					yAxisID: "y",
 					parsing: {
 						xAxisKey: "timestamp",
 						yAxisKey: null,
@@ -218,7 +220,7 @@ export default {
 					hidden: true,
 					borderWidth: 1,
 					data: null,
-					yAxisID: "y1",
+					yAxisID: "y",
 					parsing: {
 						xAxisKey: "timestamp",
 						yAxisKey: null,
@@ -292,7 +294,7 @@ export default {
 							// color: xGridColor,
 						},
 					},
-					y1: {
+					y: {
 						// horizontal line for values displayed on the left side (energy, kWh)
 						position: "left",
 						type: "linear",
@@ -1104,3 +1106,9 @@ export default {
 	},
 };
 </script>
+
+<style scoped>
+.openwb-chart {
+	min-height: 400px;
+}
+</style>
