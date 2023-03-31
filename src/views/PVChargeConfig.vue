@@ -31,6 +31,7 @@
 					<openwb-base-number-input
 						v-if="calculateControlMode() === 'individual'"
 						title="Minimum"
+						:step="0.01"
 						unit="kW"
 						:model-value="
 							$store.state.mqtt[
@@ -52,6 +53,7 @@
 					<openwb-base-number-input
 						v-if="calculateControlMode() === 'individual'"
 						title="Maximum"
+						:step="0.01"
 						unit="kW"
 						:model-value="
 							$store.state.mqtt[
