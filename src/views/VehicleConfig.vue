@@ -582,7 +582,7 @@
 						>
 						</openwb-base-number-input>
 						<openwb-base-number-input
-							title="Pause nach Phasenumschaltung"
+							title="Mindestzeit zwischen Umschaltungen"
 							unit="s"
 							:min="2"
 							:step="1"
