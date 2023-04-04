@@ -581,6 +581,27 @@
 							"
 						>
 						</openwb-base-number-input>
+						<openwb-base-number-input
+							title="Mindestzeit zwischen Umschaltungen"
+							unit="s"
+							:min="2"
+							:step="1"
+							:model-value="template.keep_charge_active_duration"
+							@update:model-value="
+								updateState(
+									key,
+									$event,
+									'keep_charge_active_duration'
+								)
+							"
+						>
+							<template #help>
+								Manche Fahrzeuge benötigen nach der Umschaltung
+								einige Zeit, bis sie mit der vorgegebenen
+								Phasenzahl laden. In dieser Zeit wird keine neue
+								Phasenumschaltung angestoßen.
+							</template>
+						</openwb-base-number-input>
 					</openwb-base-card>
 				</div>
 			</openwb-base-card>
