@@ -12,17 +12,8 @@
 					min="2018-01-01"
 					:max="currentDay"
 					v-model="dailyChartDate"
+					@update:model-value="updateChart()"
 				/>
-				<template #footer>
-					<div class="row justify-content-center">
-						<openwb-base-click-button
-							class="col-4 btn-success"
-							@buttonClicked="requestDailyChart()"
-						>
-							Daten anfordern
-						</openwb-base-click-button>
-					</div>
-				</template>
 			</openwb-base-card>
 			<openwb-base-alert v-if="!chartDataRead" subtype="info">
 				Es wurden noch keine Daten abgerufen.
@@ -37,8 +28,7 @@
 						:collapsible="true"
 						:collapsed="false"
 					>
-
-					<div class="openwb-chart">
+						<div class="openwb-chart">
 							<chartjs-line
 								:data="chartData"
 								:options="chartOptions"
@@ -422,7 +412,10 @@ export default {
 			return this.chartDataObject != undefined;
 		},
 		chartDataHasEntries() {
-			return this.chartDataObject.length > 0;
+			if (this.chartDataObject) {
+				return this.chartDataObject.length > 0;
+			}
+			return false;
 		},
 		chartTotals() {
 			if (
@@ -782,22 +775,25 @@ export default {
 			return undefined;
 		},
 		chartData() {
-			// add all datasets available in the last entry
-			var baseObjectsToProcess = ["pv", "counter", "bat", "cp", "ev"];
-			const lastElement =
-				this.chartDataObject[this.chartDataObject.length - 1];
-			if (lastElement) {
-				baseObjectsToProcess.forEach((baseObject) => {
-					Object.entries(lastElement[baseObject]).forEach(
-						([key, value]) => {
-							Object.keys(value).forEach((entryKey) => {
-								this.initDataset(baseObject, key, entryKey);
-							});
-						}
-					);
-				});
+			if (this.chartDataObject) {
+				// add all datasets available in the last entry
+				var baseObjectsToProcess = ["pv", "counter", "bat", "cp", "ev"];
+				const lastElement =
+					this.chartDataObject[this.chartDataObject.length - 1];
+				if (lastElement) {
+					baseObjectsToProcess.forEach((baseObject) => {
+						Object.entries(lastElement[baseObject]).forEach(
+							([key, value]) => {
+								Object.keys(value).forEach((entryKey) => {
+									this.initDataset(baseObject, key, entryKey);
+								});
+							}
+						);
+					});
+				}
+				return this.chartDatasets;
 			}
-			return this.chartDatasets;
+			return undefined;
 		},
 	},
 	methods: {
@@ -1179,6 +1175,15 @@ export default {
 					data: this.commandData,
 				});
 			}
+		},
+		clearChartData() {
+			this.getWildcardIndexList("openWB/log/daily/+").forEach((topic) => {
+				this.$store.commit("removeTopic", `openWB/log/daily/${topic}`);
+			});
+		},
+		updateChart() {
+			this.clearChartData();
+			this.requestDailyChart();
 		},
 	},
 	mounted() {

@@ -12,17 +12,8 @@
 					min="2018-01"
 					:max="currentMonth"
 					v-model="monthlyChartDate"
+					@update:model-value="updateChart()"
 				/>
-				<template #footer>
-					<div class="row justify-content-center">
-						<openwb-base-click-button
-							class="col-4 btn-success"
-							@buttonClicked="requestMonthlyChart()"
-						>
-							Daten anfordern
-						</openwb-base-click-button>
-					</div>
-				</template>
 			</openwb-base-card>
 			<openwb-base-alert v-if="!chartDataRead" subtype="info">
 				Es wurden noch keine Daten abgerufen.
@@ -354,7 +345,10 @@ export default {
 			return this.chartDataObject != undefined;
 		},
 		chartDataHasEntries() {
-			return this.chartDataObject.length > 0;
+			if (this.chartDataObject) {
+				return this.chartDataObject.length > 0;
+			}
+			return false;
 		},
 		chartTotals() {
 			if (
@@ -697,22 +691,25 @@ export default {
 			return undefined;
 		},
 		chartData() {
-			// add all datasets available in the last entry
-			var baseObjectsToProcess = ["pv", "counter", "bat", "cp", "ev"];
-			const lastElement =
-				this.chartDataObject[this.chartDataObject.length - 1];
-			if (lastElement) {
-				baseObjectsToProcess.forEach((baseObject) => {
-					Object.entries(lastElement[baseObject]).forEach(
-						([key, value]) => {
-							Object.keys(value).forEach((entryKey) => {
-								this.initDataset(baseObject, key, entryKey);
-							});
-						}
-					);
-				});
+			if (this.chartDataObject) {
+				// add all datasets available in the last entry
+				var baseObjectsToProcess = ["pv", "counter", "bat", "cp", "ev"];
+				const lastElement =
+					this.chartDataObject[this.chartDataObject.length - 1];
+				if (lastElement) {
+					baseObjectsToProcess.forEach((baseObject) => {
+						Object.entries(lastElement[baseObject]).forEach(
+							([key, value]) => {
+								Object.keys(value).forEach((entryKey) => {
+									this.initDataset(baseObject, key, entryKey);
+								});
+							}
+						);
+					});
+				}
+				return this.chartDatasets;
 			}
-			return this.chartDatasets;
+			return undefined;
 		},
 	},
 	methods: {
@@ -1094,6 +1091,20 @@ export default {
 					data: this.commandData,
 				});
 			}
+		},
+		clearChartData() {
+			this.getWildcardIndexList("openWB/log/monthly/+").forEach(
+				(topic) => {
+					this.$store.commit(
+						"removeTopic",
+						`openWB/log/monthly/${topic}`
+					);
+				}
+			);
+		},
+		updateChart() {
+			this.clearChartData();
+			this.requestMonthlyChart();
 		},
 	},
 	mounted() {
