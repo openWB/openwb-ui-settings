@@ -569,6 +569,12 @@
 								updateState(key, $event, 'prevent_charge_stop')
 							"
 						>
+							<template #help>
+								Im Lademodus PV-Laden und Zielladen wird die
+								Ladung nicht unterbrochen. Manche Fahrzeuge
+								starten nach einer Unterbrechung die Ladung
+								nicht mehr.
+							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-number-input
 							title="Pause bei Phasenumschaltung"
