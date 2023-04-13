@@ -530,20 +530,7 @@ export default {
 						const successMessage =
 							"Die Sicherungsdatei wurde erfolgreich hochgeladen. " +
 							"Sie können die Wiederherstellung jetzt starten.";
-						const timestamp = Math.floor(Date.now() / 1000);
-						this.$store.commit("addTopic", {
-							topic:
-								"openWB/command/" +
-								this.$root.mqttClientId +
-								"/messages/" +
-								timestamp,
-							payload: {
-								source: "command",
-								type: "success",
-								message: successMessage,
-								timestamp: timestamp,
-							},
-						});
+						this.$root.postClientMessage(successMessage, "success");
 						this.restoreUploadDone = true;
 					})
 					.catch((error) => {
@@ -573,20 +560,7 @@ export default {
 							alertMessage +=
 								"Es ist ein unbekannter Fehler aufgetreten.";
 						}
-						const timestamp = Math.floor(Date.now() / 1000);
-						this.$store.commit("addTopic", {
-							topic:
-								"openWB/command/" +
-								this.$root.mqttClientId +
-								"/messages/" +
-								timestamp,
-							payload: {
-								source: "command",
-								type: "danger",
-								message: alertMessage,
-								timestamp: timestamp,
-							},
-						});
+						this.$root.postClientMessage(alertMessage, "danger");
 						this.restoreUploadDone = false;
 					});
 			} else {
