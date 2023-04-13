@@ -575,6 +575,12 @@
 								updateState(key, $event, 'prevent_charge_stop')
 							"
 						>
+							<template #help>
+								In den Lademodi PV- und Zielladen wird nach
+								Ladebeginn die Ladefreigabenicht unterbrochen,
+								damit auch Fahrzeuge, die sehr lange für den
+								Ladebeginn brauchen, genügend Zeit haben.
+							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-number-input
 							title="Pause bei Phasenumschaltung"
