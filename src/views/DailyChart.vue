@@ -156,11 +156,12 @@ export default {
 			datasetTemplates: {
 				"counter-power": {
 					label: "Zähler",
+					unit: "kW",
 					jsonKey: null,
 					borderColor: "rgba(255, 0, 0, 0.7)",
 					backgroundColor: "rgba(255, 10, 13, 0.3)",
 					fill: true,
-					lineTension: 0.2,
+					cubicInterpolationMode: "monotone",
 					hidden: false,
 					borderWidth: 1,
 					data: null,
@@ -172,15 +173,17 @@ export default {
 				},
 				"pv-power": {
 					label: "PV",
+					unit: "kW",
 					jsonKey: null,
 					borderColor: "rgba(0, 255, 0, 0.7)",
 					backgroundColor: "rgba(10, 255, 13, 0.3)",
 					fill: true,
-					lineTension: 0.2,
+					cubicInterpolationMode: "monotone",
 					hidden: true,
 					borderWidth: 1,
 					data: null,
 					yAxisID: "y",
+					// stack: "inverter",
 					parsing: {
 						xAxisKey: "timestamp",
 						yAxisKey: null,
@@ -188,15 +191,17 @@ export default {
 				},
 				"bat-power": {
 					label: "Speicher",
+					unit: "kW",
 					jsonKey: null,
 					borderColor: "rgba(255, 153, 13, 0.7)",
 					backgroundColor: "rgba(200, 255, 13, 0.3)",
 					fill: true,
-					lineTension: 0.2,
+					cubicInterpolationMode: "monotone",
 					hidden: true,
 					borderWidth: 1,
 					data: null,
 					yAxisID: "y",
+					// stack: "battery",
 					parsing: {
 						xAxisKey: "timestamp",
 						yAxisKey: null,
@@ -204,13 +209,14 @@ export default {
 				},
 				"bat-soc": {
 					label: "Speicher SoC",
+					unit: "%",
 					jsonKey: null,
 					borderColor: "rgba(255, 153, 13, 0.7)",
 					backgroundColor: "rgba(200, 255, 13, 0.3)",
 					borderDash: [10, 5],
 					hidden: true,
 					fill: false,
-					lineTension: 0.2,
+					cubicInterpolationMode: "monotone",
 					borderWidth: 2,
 					data: null,
 					yAxisID: "y2",
@@ -221,15 +227,17 @@ export default {
 				},
 				"cp-power": {
 					label: "Ladepunkt",
+					unit: "kW",
 					jsonKey: null,
 					borderColor: "rgba(0, 0, 255, 0.7)",
 					backgroundColor: "rgba(0, 0, 255, 0.3)",
 					fill: true,
-					lineTension: 0.2,
+					cubicInterpolationMode: "monotone",
 					hidden: true,
 					borderWidth: 1,
 					data: null,
 					yAxisID: "y",
+					// stack: "charge-point",
 					parsing: {
 						xAxisKey: "timestamp",
 						yAxisKey: null,
@@ -237,13 +245,14 @@ export default {
 				},
 				"ev-soc": {
 					label: "Fahrzeug SoC",
+					unit: "%",
 					jsonKey: null,
 					borderColor: "rgba(0, 0, 255, 0.7)",
 					backgroundColor: "rgba(0, 0, 255, 0.3)",
 					borderDash: [10, 5],
 					hidden: true,
 					fill: false,
-					lineTension: 0.2,
+					cubicInterpolationMode: "monotone",
 					borderWidth: 2,
 					data: null,
 					yAxisID: "y2",
@@ -260,6 +269,10 @@ export default {
 					},
 					tooltip: {
 						enabled: true,
+						callbacks: {
+							label: (item) =>
+								`${item.dataset.label}: ${item.formattedValue} ${item.dataset.unit}`,
+						},
 					},
 					legend: {
 						display: true,
@@ -291,11 +304,15 @@ export default {
 				},
 				elements: {
 					point: {
-						radius: 0,
+						radius: 2,
 					},
 				},
 				responsive: true,
 				maintainAspectRatio: false,
+				interaction: {
+					mode: "index",
+					intersect: false,
+				},
 				scales: {
 					x: {
 						type: "time",
@@ -1105,6 +1122,10 @@ export default {
 				elementKey,
 				datasetKey
 			);
+			// if (objectKey == "all") {
+			// 	console.log("skipping sum data");
+			// 	return;
+			// }
 			var datasetTemplate = baseObject + "-" + elementKey;
 			if (this.datasetTemplates[datasetTemplate]) {
 				var newDataset = JSON.parse(
