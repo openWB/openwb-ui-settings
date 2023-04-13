@@ -953,8 +953,9 @@
 						<openwb-base-number-input
 							title="Energie-Limit"
 							unit="kWh"
-							:min="0.5"
-							:step="0.5"
+							:min="1"
+							:max="100"
+							:step="1"
 							:model-value="
 								template.chargemode.instant_charging.limit
 									.amount / 1000
