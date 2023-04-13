@@ -28,7 +28,7 @@ export default {
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
-		displayThemeType: String,
+		displayThemeType: { type: String },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {
