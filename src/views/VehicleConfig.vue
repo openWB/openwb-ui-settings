@@ -570,10 +570,10 @@
 							"
 						>
 							<template #help>
-								Im Lademodus PV-Laden und Zielladen wird die
-								Ladung nicht unterbrochen. Manche Fahrzeuge
-								starten nach einer Unterbrechung die Ladung
-								nicht mehr.
+								In den Lademodi PV- und Zielladen wird nach
+								Ladebeginn die Ladefreigabenicht unterbrochen,
+								damit auch Fahrzeuge, die sehr lange für den
+								Ladebeginn brauchen, genügend Zeit haben.
 							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-number-input
