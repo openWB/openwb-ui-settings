@@ -83,7 +83,7 @@
 			<openwb-base-card
 				subtype="info"
 				:collapsible="true"
-				:collapsed="true"
+				:collapsed="$route.params.section != 'vehicle'"
 			>
 				<template #header>
 					<font-awesome-icon fixed-width :icon="['fas', 'car']" />
@@ -115,7 +115,13 @@
 						:key="vehicleId"
 						:title="getVehicleName(vehicleId)"
 						:collapsible="true"
-						:collapsed="true"
+						:collapsed="
+							!(
+								$route.params.section == 'vehicle' &&
+								parseInt($route.params.section_index) ==
+									vehicleId
+							)
+						"
 						subtype="info"
 					>
 						<template #actions="slotProps" v-if="vehicleId !== 0">
