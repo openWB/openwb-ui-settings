@@ -130,7 +130,7 @@ const routes = [
 		component: () => import("../views/ChargePointInstallation.vue"),
 	},
 	{
-		path: "/VehicleConfiguration/:section?/:section_index?",
+		path: "/VehicleConfiguration/:section?/:section_index?/:section_part?/:action?",
 		name: "VehicleConfiguration",
 		meta: {
 			heading: "Konfiguration - Fahrzeuge",

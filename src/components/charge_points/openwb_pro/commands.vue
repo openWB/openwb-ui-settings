@@ -32,20 +32,7 @@ export default {
 			);
 			const startedMessage =
 				"Die Aktualisierung der openWB Pro wird gestartet...";
-			const timestamp = Math.floor(Date.now() / 1000);
-			this.$store.commit("addTopic", {
-				topic:
-					"openWB/command/" +
-					this.$root.mqttClientId +
-					"/messages/" +
-					timestamp,
-				payload: {
-					source: "command",
-					type: "info",
-					message: startedMessage,
-					timestamp: timestamp,
-				},
-			});
+			this.$root.postClientMessage(startedMessage, "info");
 			console.log(location);
 			this.axios
 				.post(
@@ -60,20 +47,7 @@ export default {
 					console.log("POST response", response.data);
 					const successMessage =
 						"Die Aktualisierung der openWB Pro wurde erfolgreich gestartet.";
-					const timestamp = Math.floor(Date.now() / 1000);
-					this.$store.commit("addTopic", {
-						topic:
-							"openWB/command/" +
-							this.$root.mqttClientId +
-							"/messages/" +
-							timestamp,
-						payload: {
-							source: "command",
-							type: "success",
-							message: successMessage,
-							timestamp: timestamp,
-						},
-					});
+					this.$root.postClientMessage(successMessage, "success");
 				})
 				.catch((error) => {
 					var alertMessage = "Aktualisierung fehlgeschlagen!<br />";
@@ -96,20 +70,7 @@ export default {
 						alertMessage +=
 							"Es ist ein unbekannter Fehler aufgetreten.";
 					}
-					const timestamp = Math.floor(Date.now() / 1000);
-					this.$store.commit("addTopic", {
-						topic:
-							"openWB/command/" +
-							this.$root.mqttClientId +
-							"/messages/" +
-							timestamp,
-						payload: {
-							source: "command",
-							type: "danger",
-							message: alertMessage,
-							timestamp: timestamp,
-						},
-					});
+					this.$root.postClientMessage(alertMessage, "danger");
 				});
 		},
 	},

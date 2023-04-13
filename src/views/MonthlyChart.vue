@@ -155,11 +155,12 @@ export default {
 			datasetTemplates: {
 				"counter-energy": {
 					label: "Zähler",
+					unit: "kWh",
 					jsonKey: null,
 					borderColor: "rgba(255, 0, 0, 0.7)",
 					backgroundColor: "rgba(255, 10, 13, 0.3)",
 					fill: true,
-					lineTension: 0.2,
+					cubicInterpolationMode: "monotone",
 					hidden: false,
 					borderWidth: 1,
 					data: null,
@@ -171,15 +172,17 @@ export default {
 				},
 				"pv-energy": {
 					label: "PV",
+					unit: "kWh",
 					jsonKey: null,
 					borderColor: "rgba(0, 255, 0, 0.7)",
 					backgroundColor: "rgba(10, 255, 13, 0.3)",
 					fill: true,
-					lineTension: 0.2,
+					cubicInterpolationMode: "monotone",
 					hidden: true,
 					borderWidth: 1,
 					data: null,
 					yAxisID: "y",
+					// stack: "inverter",
 					parsing: {
 						xAxisKey: "timestamp",
 						yAxisKey: null,
@@ -187,15 +190,17 @@ export default {
 				},
 				"bat-energy": {
 					label: "Speicher",
+					unit: "kWh",
 					jsonKey: null,
 					borderColor: "rgba(255, 153, 13, 0.7)",
 					backgroundColor: "rgba(200, 255, 13, 0.3)",
 					fill: true,
-					lineTension: 0.2,
+					cubicInterpolationMode: "monotone",
 					hidden: true,
 					borderWidth: 1,
 					data: null,
 					yAxisID: "y",
+					// stack: "battery",
 					parsing: {
 						xAxisKey: "timestamp",
 						yAxisKey: null,
@@ -203,15 +208,17 @@ export default {
 				},
 				"cp-energy": {
 					label: "Ladepunkt",
+					unit: "kWh",
 					jsonKey: null,
 					borderColor: "rgba(0, 0, 255, 0.7)",
 					backgroundColor: "rgba(0, 0, 255, 0.3)",
 					fill: true,
-					lineTension: 0.2,
+					cubicInterpolationMode: "monotone",
 					hidden: true,
 					borderWidth: 1,
 					data: null,
 					yAxisID: "y",
+					// stack: "charge-point",
 					parsing: {
 						xAxisKey: "timestamp",
 						yAxisKey: null,
@@ -225,6 +232,10 @@ export default {
 					},
 					tooltip: {
 						enabled: true,
+						callbacks: {
+							label: (item) =>
+								`${item.dataset.label}: ${item.formattedValue} ${item.dataset.unit}`,
+						},
 					},
 					legend: {
 						display: true,
@@ -256,11 +267,15 @@ export default {
 				},
 				elements: {
 					point: {
-						radius: 3,
+						radius: 2,
 					},
 				},
 				responsive: true,
 				maintainAspectRatio: false,
+				interaction: {
+					mode: "index",
+					intersect: false,
+				},
 				scales: {
 					x: {
 						type: "time",
@@ -693,7 +708,7 @@ export default {
 		chartData() {
 			if (this.chartDataObject) {
 				// add all datasets available in the last entry
-				var baseObjectsToProcess = ["pv", "counter", "bat", "cp", "ev"];
+				var baseObjectsToProcess = ["pv", "counter", "bat", "cp"];
 				const lastElement =
 					this.chartDataObject[this.chartDataObject.length - 1];
 				if (lastElement) {
@@ -1021,6 +1036,10 @@ export default {
 				elementKey,
 				datasetKey
 			);
+			// if (objectKey == "all") {
+			// 	console.log("skipping sum data");
+			// 	return;
+			// }
 			var datasetTemplate = baseObject + "-" + elementKey;
 			if (this.datasetTemplates[datasetTemplate]) {
 				var newDataset = JSON.parse(
