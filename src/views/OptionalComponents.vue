@@ -15,7 +15,6 @@
 							buttonValue: false,
 							text: 'Aus',
 							class: 'btn-outline-danger',
-							icon: 'fas fa-times',
 						},
 						{
 							buttonValue: true,
@@ -58,7 +57,6 @@
 							buttonValue: false,
 							text: 'Aus',
 							class: 'btn-outline-danger',
-							icon: 'fas fa-times',
 						},
 						{
 							buttonValue: true,
@@ -962,7 +960,7 @@
 					</div>
 				</div>
 			</openwb-base-card> -->
-			<!-- <openwb-base-card title="Display (intern oder extern)">
+			<openwb-base-card title="Display (intern oder extern)">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
 						Diese Einstellungen sind nicht verfügbar, solange sich
@@ -1079,7 +1077,7 @@
 								},
 							]"
 						/>
-						<openwb-base-button-group-input
+						<!-- <openwb-base-button-group-input
 							v-if="
 								$store.state.mqtt[
 									'openWB/optional/int_display/standby'
@@ -1115,9 +1113,9 @@
 								sich das Display automatisch ein, wenn ein
 								Fahrzeug angesteckt wird.
 							</template>
-						</openwb-base-button-group-input>
+						</openwb-base-button-group-input> -->
 					</div>
-					<hr />
+					<!-- <hr />
 					<openwb-base-heading>PIN-Sperre</openwb-base-heading>
 					<openwb-base-button-group-input
 						title="Display mit PIN schützen"
@@ -1173,71 +1171,54 @@
 								Zahlen enthalten.
 							</template>
 						</openwb-base-text-input>
-					</div>
+					</div> -->
 					<hr />
-					<openwb-base-select-input
-						title="Theme des Displays"
-						:model-value="
-							$store.state.mqtt[
-								'openWB/optional/int_display/theme'
-							]
-						"
-						@update:model-value="
-							updateState(
-								'openWB/optional/int_display/theme',
-								$event
-							)
-						"
-						:options="[
-							{
-								value: 'cards',
-								text: 'Cards',
-							},
-							{
-								value: 'gauges',
-								text: 'Gauges',
-							},
-							{
-								value: 'slave',
-								text: 'Nur Ladeleistung (keine Bedienung möglich)',
-							},
-						]"
-					/>
 					<div
 						v-if="
 							$store.state.mqtt[
 								'openWB/optional/int_display/theme'
-							] == 'cards'
+							] !== undefined
 						"
 					>
-						<openwb-base-alert subtype="info">
-							ToDo: Optionen für das Cards-Theme...
-						</openwb-base-alert>
-					</div>
-					<div
-						v-if="
-							$store.state.mqtt[
-								'openWB/optional/int_display/theme'
-							] == 'gauges'
-						"
-					>
-						<openwb-base-alert subtype="info">
-							ToDo: Optionen für das Gauges-Theme...
-						</openwb-base-alert>
-					</div>
-					<div
-						v-if="
-							$store.state.mqtt[
-								'openWB/optional/int_display/theme'
-							] == 'slave'
-						"
-					>
-						<openwb-base-alert subtype="info">
-							Das Theme "Nur Ladeleistung" bietet keine Optionen.
-						</openwb-base-alert>
+						<openwb-base-select-input
+							class="mb-2"
+							title="Theme des Displays"
+							:options="displayThemeList"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/optional/int_display/theme'
+								].type
+							"
+							@update:model-value="
+								updateSelectedDisplayTheme($event)
+							"
+						/>
+						<openwb-display-theme-proxy
+							v-if="
+								$store.state.mqtt[
+									'openWB/optional/int_display/theme'
+								].type
+							"
+							:displayThemeType="
+								$store.state.mqtt[
+									'openWB/optional/int_display/theme'
+								].type
+							"
+							:configuration="
+								$store.state.mqtt[
+									'openWB/optional/int_display/theme'
+								].configuration
+							"
+							@update:configuration="
+								updateConfiguration(
+									'openWB/optional/int_display/theme',
+									$event
+								)
+							"
+						/>
 					</div>
 				</div>
-			</openwb-base-card> -->
+			</openwb-base-card>
 			<!-- <openwb-base-card title="Variable Stromtarife">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
@@ -1324,10 +1305,12 @@
 
 <script>
 import ComponentState from "../components/mixins/ComponentState.vue";
+import OpenwbDisplayThemeProxy from "../components/display_themes/OpenwbDisplayThemeProxy.vue";
 
 export default {
 	name: "OpenwbOptionalComponents",
 	mixins: [ComponentState],
+	components: { OpenwbDisplayThemeProxy },
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
@@ -1350,11 +1333,57 @@ export default {
 				"openWB/optional/int_display/pin_active",
 				"openWB/optional/int_display/pin_code",
 				"openWB/optional/int_display/theme",
+				"openWB/system/configurable/display_themes",
 				"openWB/optional/et/active",
 				"openWB/optional/et/config/provider",
 				"openWB/optional/et/config/max_price",
 			],
 		};
+	},
+	computed: {
+		displayThemeList: {
+			get() {
+				return this.$store.state.mqtt[
+					"openWB/system/configurable/display_themes"
+				];
+			},
+		},
+	},
+	methods: {
+		getDisplayThemeDefaultConfiguration(displayThemeType) {
+			const displayThemeDefaults = this.displayThemeList.find(
+				(element) => element.value == displayThemeType
+			);
+			if (
+				Object.prototype.hasOwnProperty.call(
+					displayThemeDefaults,
+					"defaults"
+				)
+			) {
+				return { ...displayThemeDefaults.defaults.configuration };
+			}
+			console.warn(
+				"no default configuration found for display theme type!",
+				displayThemeType
+			);
+			return {};
+		},
+		updateSelectedDisplayTheme($event) {
+			this.updateState(
+				"openWB/optional/int_display/theme",
+				$event,
+				"type"
+			);
+			this.updateState(
+				"openWB/optional/int_display/theme",
+				this.getDisplayThemeDefaultConfiguration($event),
+				"configuration"
+			);
+		},
+		updateConfiguration(key, event) {
+			console.debug("updateConfiguration", key, event);
+			this.updateState(key, event.value, event.object);
+		},
 	},
 };
 </script>
