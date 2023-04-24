@@ -252,9 +252,9 @@ function getChangedValues() {
 		}
 		var topic = topicPrefix + topicSubGroup + topicIdentifier;
 		if ( ( value != undefined ) && ( originalValues[topic] != value ) ) {
-			// topic = topic.replace(/^openWB\//, 'openWB/set/');
+			topic = topic.replace(/^openWB\//, 'openWB/set/');
 			changedValues[topic] = value;
-			// console.log("ChangedValue found: "+topic+": "+value);
+			console.log("ChangedValue found: "+topic+": "+value);
 		}
 	});
 }

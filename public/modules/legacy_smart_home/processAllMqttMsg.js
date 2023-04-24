@@ -11,7 +11,7 @@ function checkAllSaved(topic, value) {
      * @param {string} value - the value for the topic
      * @requires global var:changedValues - is declared with proxy in helperFunctions.js
      */
-    // topic = topic.replace('/get/', '/set/');
+    topic = topic.replace(/^openWB\//, 'openWB/set/');
     if ( changedValues.hasOwnProperty(topic) && changedValues[topic] == value ) {
         // received topic-value-pair equals one that was send before
         delete changedValues[topic];  // delete it
