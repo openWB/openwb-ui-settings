@@ -685,7 +685,7 @@ Messaging = (function (global) {
      * Internal implementation of the Websockets MQTT V3.1 client.
      *
      * @name Messaging.ClientImpl @constructor
-     * @param {String} host the DNS nameof the webSocket host.
+     * @param {String} host the DNS name of the webSocket host.
      * @param {Number} port the port number for that host.
      * @param {String} clientId the MQ client identifier.
      */
@@ -717,7 +717,7 @@ Messaging = (function (global) {
         // Messages we have sent and are expecting a response for, indexed by their respective message ids. 
         this._sentMessages = {};
 
-        // Messages we have received and acknowleged and are expecting a confirm message for
+        // Messages we have received and acknowledged and are expecting a confirm message for
         // indexed by their respective message ids. 
         this._receivedMessages = {};
 
@@ -909,9 +909,9 @@ Messaging = (function (global) {
     ClientImpl.prototype._doConnect = function (host, port) {
         // When the socket is open, this client will send the CONNECT WireMessage using the saved parameters. 
         if (this.connectOptions.useSSL)
-            wsurl = ["wss://", host, ":", port, "/mqtt"].join("");
+            wsurl = ["wss://", host, ":", port, "/ws"].join("");
         else
-            wsurl = ["ws://", host, ":", port, "/mqtt"].join("");
+            wsurl = ["ws://", host, ":", port, "/ws"].join("");
         this.connected = false;
         this.socket = new WebSocket(wsurl, 'mqttv3.1');
         this.socket.binaryType = 'arraybuffer';

@@ -11,7 +11,7 @@ function checkAllSaved(topic, value) {
      * @param {string} value - the value for the topic
      * @requires global var:changedValues - is declared with proxy in helperFunctions.js
      */
-    topic = topic.replace('/get/', '/set/');
+    // topic = topic.replace('/get/', '/set/');
     if ( changedValues.hasOwnProperty(topic) && changedValues[topic] == value ) {
         // received topic-value-pair equals one that was send before
         delete changedValues[topic];  // delete it
@@ -27,7 +27,7 @@ function processMessages(mqttmsg, mqttpayload) {
      * @requires function:setInputValue - is declared in pvconfig.html
      * @requires function:setToggleBtnGroup  - is declared in pvconfig.html
      */
-    // console.log("new message: "+mqttmsg+": "+mqttpayload);
+    console.log("new message: "+mqttmsg+": "+mqttpayload);
     checkAllSaved(mqttmsg, mqttpayload);
     // last part of topic after /
     var topicIdentifier = mqttmsg.substring(mqttmsg.lastIndexOf('/')+1);

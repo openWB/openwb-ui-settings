@@ -8,6 +8,7 @@
 
 //Connect Options
 var isSSL = location.protocol == 'https:'
+var port = parseInt(location.port) || (isSSL ? 443 : 80);
 var options = {
 	timeout: 5,
 	useSSL: isSSL,
@@ -23,8 +24,8 @@ var options = {
 	}
 };
 
-var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, "").substr(0, 5);
-var client = new Messaging.Client(location.hostname, 9001, clientuid);
+var client_uid = Math.random().toString(36).replace(/[^a-z]+/g, "").substring(0, 5);
+var client = new Messaging.Client(location.hostname, port, client_uid);
 
 $(document).ready(function(){
 	client.connect(options);
@@ -37,12 +38,12 @@ client.onConnectionLost = function (responseObject) {
 
 //Gets called whenever you receive a message
 client.onMessageArrived = function (message) {
-    // func processMessages defined in respective processAllMqttMsg_
+	// func processMessages defined in respective processAllMqttMsg_
 	processMessages(message.destinationName, message.payloadString);
 };
 
 client.onDeliveryComplete = function (token) {
-    // func processMessages defined in respective processAllMqttMsg_
+	// func processMessages defined in respective processAllMqttMsg_
 	console.log("token");
 };
 

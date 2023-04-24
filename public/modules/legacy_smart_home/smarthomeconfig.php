@@ -1,46 +1,44 @@
 <!DOCTYPE html>
 <html lang="de">
 <?php
-// set number of supported smarthome devices
+// set number of supported smart home devices
 $numDevices = 9;
 ?>
 	<head>
-		<base href="/openWB/web/">
+		<base href="/openWB/web/settings/">
 
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-		<title>openWB Einstellungen</title>
+		<title>openWB Einstellungen - SmartHome</title>
 		<meta name="description" content="Control your charge" />
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
-		<!-- Favicons (created with http://realfavicongenerator.net/)-->
-		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
-		<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
-		<link rel="icon" type="image/png" href="img/favicons/favicon-32x32.png" sizes="32x32">
-		<link rel="icon" type="image/png" href="img/favicons/favicon-16x16.png" sizes="16x16">
-		<link rel="manifest" href="manifest.json">
-		<link rel="shortcut icon" href="img/favicons/favicon.ico">
-		<meta name="msapplication-TileColor" content="#00a8ff">
-		<meta name="msapplication-config" content="img/favicons/browserconfig.xml">
-		<meta name="theme-color" content="#ffffff">
+		<link rel="shortcut icon" href="favicon.ico">
 
 		<!-- Bootstrap -->
-		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="modules/legacy_smart_home/css/bootstrap-4.4.1/bootstrap.min.css">
 		<!-- Normalize -->
-		<link rel="stylesheet" type="text/css" href="css/normalize-8.0.1.css">
+		<link rel="stylesheet" type="text/css" href="modules/legacy_smart_home/css/normalize-8.0.1.css">
 		<!-- include settings-style -->
-		<link rel="stylesheet" type="text/css" href="css/settings_style.css?ver=20200416-a">
+		<link rel="stylesheet" type="text/css" href="modules/legacy_smart_home/css/settings_style.css?ver=20200416-a">
 
 		<!-- important scripts to be loaded -->
-		<script src="js/jquery-3.6.0.min.js"></script>
-		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<script src="modules/legacy_smart_home/js/jquery-3.6.0.min.js"></script>
+		<script src="modules/legacy_smart_home/js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20210329" ></script>
+		<script src = "modules/legacy_smart_home/helperFunctions.js?ver=20210329" ></script>
 	</head>
 
 	<body>
 
-		<div id="nav"></div> <!-- placeholder for navbar -->
+		<header>
+			<!-- Fixed navbar -->
+			<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+				<a class="navbar-brand" href="./">
+					<span>openWB</span>
+				</a>
+			</nav>
+		</header>
 
 		<div role="main" class="container" style="margin-top:20px">
 
@@ -143,7 +141,7 @@ $numDevices = 9;
 											</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-viessmann hide">
 											Vitalcal 200-s Wärmepumpe mit LON Kommunikationsmodul und Vitogate 300. Wenn die Einschaltbedingung erreicht ist wird Komfortfunktion "Einmalige Warmwasserbereitung" außerhalb des Zeitprogramms gestartet. Für die "Einmalige Warmwasserbereitung" wird der Warmwassertemperatur-Sollwert 2 genutzt. In der Wp kann eingestellt werden, ob für diese Funktion  die Elektroheizung (Heizstab) benutzt werden soll.
-											siehe auch https://openwb.de/forum/viewtopic.php?t=6593 für alternative Ansteuerungen 
+											siehe auch https://openwb.de/forum/viewtopic.php?t=6593 für alternative Ansteuerungen
 										</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-elwa hide">
 											Heizstab ELWA-E  der Firma my-PV<br>
@@ -203,7 +201,7 @@ $numDevices = 9;
 											</div>
 										</div>
 										<span class="form-text small">Wenn diese Option aktiviert wird, wird für den Shelly eine Userid und ein Password verlangt. Läuft momentan nur für shell ohne plus.</span>
-									</div>	
+									</div>
 									<div class="device<?php echo $devicenum; ?>shauth hide">
 										<div class="form-row mb-1">
 											<label for="device_shusernameDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Benutzername</label>
@@ -217,8 +215,8 @@ $numDevices = 9;
 													<input id="device_shpasswordDevices<?php echo $devicenum; ?>" name="device_shpassword" class="form-control" type="password" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 												</div>
 										</div>
-									</div>									
-								</div>									
+									</div>
+								</div>
 									<!-- Shellyend -->
 								<hr class="border-secondary">
 								<div class="form-row mb-1">
@@ -840,7 +838,7 @@ $numDevices = 9;
 											<option value="mqtt" data-option="mqtt">Mqtt</option>
 											<option value="smaem" data-option="smaem">SMA Energy Meter</option>
 											<option value="sdm120" data-option="sdm630">SDM120</option>
-											<option value="lovato" data-option="lovato">Lovato</option>											
+											<option value="lovato" data-option="lovato">Lovato</option>
 										</select>
 									</div>
 								</div>
@@ -867,7 +865,7 @@ $numDevices = 9;
 												</div>
 											</div>
 											<span class="form-text small">Wenn diese Option aktiviert wird, wird für den Shelly eine Userid und ein Password verlangt.Läuft momentan nur für shell ohne plus.</span>
-										</div>	
+										</div>
 										<div class="device<?php echo $devicenum; ?>measureshauth hide">
 											<div class="form-row mb-1">
 												<label for="device_measureshusernameDevices<?php echo $devicenum; ?>" class="col-md-4 col-form-label">Benutzername</label>
@@ -881,8 +879,8 @@ $numDevices = 9;
 														<input id="device_measureshpasswordDevices<?php echo $devicenum; ?>" name="device_measureshpassword" class="form-control" type="password" required="required" data-default="" value="" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 													</div>
 											</div>
-										</div>									
-									</div>		
+										</div>
+									</div>
 										<!-- Shellyend -->
 									<hr class="border-secondary">
 									<div class="form-row mb-1">
@@ -1110,6 +1108,28 @@ $numDevices = 9;
 				</div>
 			</div>
 
+			<!-- modal saved-values window -->
+			<div class="modal fade" id="savedValuesInfoModal" role="dialog">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<!-- modal header -->
+						<div class="modal-header bg-success">
+							<h4 class="modal-title text-light">Erfolgreich</h4>
+						</div>
+						<!-- modal body -->
+						<div class="modal-body text-center">
+							<p>
+								Einstellungen wurden gespeichert.
+							</p>
+						</div>
+						<!-- modal footer -->
+						<div class="modal-footer d-flex justify-content-center">
+							<button type="button" class="btn btn-success" data-dismiss="modal">Ok</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
 		</div>  <!-- container -->
 
 		<footer class="footer bg-dark text-light font-small">
@@ -1119,15 +1139,15 @@ $numDevices = 9;
 		</footer>
 
 		<!-- load mqtt library -->
-		<script src = "js/mqttws31.js" ></script>
+		<script src = "modules/legacy_smart_home/js/mqttws31.js" ></script>
 		<!-- load topics -->
-		<script src = "settings/topicsToSubscribe_smarthomeconfig.js?ver=20210215" ></script>
+		<script src = "modules/legacy_smart_home/topicsToSubscribe_smarthomeconfig.js?ver=20210215" ></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20210215" ></script>
+		<script src = "modules/legacy_smart_home/helperFunctions.js?ver=20210215" ></script>
 		<!-- load service -->
-		<script src = "settings/setupMqttServices.js?ver=20201207" ></script>
+		<script src = "modules/legacy_smart_home/setupMqttServices.js?ver=20201207" ></script>
 		<!-- load mqtt handler-->
-		<script src = "settings/processAllMqttMsg.js?ver=20210104" ></script>
+		<script src = "modules/legacy_smart_home/processAllMqttMsg.js?ver=20210104" ></script>
 
 		<script>
 			<?php for( $devicenum = 1; $devicenum <= $numDevices; $devicenum++ ) { ?>
@@ -1336,23 +1356,17 @@ $numDevices = 9;
 				<?php } ?>
 			});
 
-			$.get(
-				{ url: 'settings/navbar.html', cache: false },
-				function(data){
-					$('#nav').replaceWith(data);
-					// disable navbar entry for current page
-					$('#navSmartHome2').addClass('disabled');
-				}
-			);
-
 			function saveSettings() {
 				// sends all changed values by mqtt if valid
+				console.log("form check...");
 				var formValid = $("#myForm")[0].checkValidity();
 				if ( !formValid ) {
 					$('#formNotValidModal').modal();
 					return;
 				};
+				console.log("get changed values...");
 				getChangedValues();
+				console.log("send changed values...");
 				sendValues();
 			}
 
@@ -1362,8 +1376,8 @@ $numDevices = 9;
 					visibility_device_typeDevices<?php echo $devicenum; ?>();
 					visibility_device_pbtypeDevices<?php echo $devicenum; ?>();
 					visibility_device_differentMeasurementDevices<?php echo $devicenum; ?>();
-					visibility_device_measureshauthDevices<?php echo $devicenum; ?>();										
-					visibility_device_shauthDevices<?php echo $devicenum; ?>();															
+					visibility_device_measureshauthDevices<?php echo $devicenum; ?>();
+					visibility_device_shauthDevices<?php echo $devicenum; ?>();
 					visibility_device_measureTypeDevices<?php echo $devicenum; ?>();
 					visibility_device_canSwitchDevices<?php echo $devicenum; ?>();
 					visibility_device_nameDevices<?php echo $devicenum; ?>();
