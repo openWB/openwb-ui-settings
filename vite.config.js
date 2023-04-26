@@ -86,7 +86,7 @@ export default defineConfig(({ command, mode }) => {
 							// if (id.includes("@vue")) {
 							// 	return "vendor-vue";
 							// }
-							console.log("vendor chunk: " + id);
+							// console.log("vendor chunk: " + id);
 							return "vendor";
 						}
 					},
