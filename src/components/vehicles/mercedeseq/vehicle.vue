@@ -78,10 +78,7 @@ export default {
 	},
 	computed: {
 		callback_url() {
-			// ToDo: move callback_ev.php!!
-			this.configuration.callback_url = `${location.origin}/openWB/web/settings/modules/vehicles/mercedeseq/callback_vehicle.php`;
-			return this.configuration.callback_url;
-
+			return `${location.origin}/openWB/web/settings/modules/vehicles/mercedeseq/callback_vehicle.php`;
 		},
 		login_url() {
 			return (
@@ -91,7 +88,11 @@ export default {
 			);
 		},
 		input_complete() {
-			return this.configuration.client_id && this.configuration.client_secret && this.configuration.vin;
+			return (
+				this.configuration.client_id &&
+				this.configuration.client_secret &&
+				this.configuration.vin
+			);
 		},
 	},
 	methods: {
