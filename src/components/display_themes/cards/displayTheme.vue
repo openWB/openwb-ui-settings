@@ -39,9 +39,9 @@
 				Der PIN muss aus 4 bis 10 Zahlen bestehen.
 			</template>
 		</openwb-base-text-input>
-		<openwb-base-heading>Ansicht "Dashboard"</openwb-base-heading>
+		<openwb-base-heading>Ansicht "Übersicht"</openwb-base-heading>
 		<openwb-base-button-group-input
-			title="Dashboard anzeigen"
+			title="Übersicht anzeigen"
 			:model-value="configuration.enable_dashboard_view"
 			@update:model-value="
 				updateConfiguration(
