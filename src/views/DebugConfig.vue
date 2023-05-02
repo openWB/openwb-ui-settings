@@ -2,45 +2,37 @@
 	<div class="debugging">
 		<form name="debugConfigForm">
 			<openwb-base-card title="Protokollierung">
-				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-					<openwb-base-alert subtype="info">
-						Diese Einstellungen sind nicht verfügbar, solange sich
-						diese openWB im Modus "Nur Ladepunkt" befindet.
-					</openwb-base-alert>
-				</div>
-				<div v-else>
-					<openwb-base-button-group-input
-						title="Debug Level"
-						:buttons="[
-							{ buttonValue: 30, text: 'Warnungen und Fehler' },
-							{ buttonValue: 20, text: 'Info' },
-							{ buttonValue: 10, text: 'Details' },
-						]"
-						:model-value="
-							$store.state.mqtt['openWB/system/debug_level']
-						"
-						@update:model-value="
-							updateState('openWB/system/debug_level', $event)
-						"
-					>
-						<template #help>
-							Wenn der Debug Level auf "Info" oder "Details"
-							gesetzt wird, werden mehr Informationen in die
-							Logdateien geschrieben. Im normalen Betrieb sollte
-							immer "Warnungen und Fehler" gewählt werden, um die
-							Schreibvorgänge auf der SD-Karte zu reduzieren.
-						</template>
-					</openwb-base-button-group-input>
-					<openwb-base-alert subtype="warning">
-						Achtung! In den Einstellungen "Info" und "Details"
-						können in den Logdateien sensible Daten wie
-						Benutzernamen und Kennwörter enthalten sein. Diese
-						sollten vor dem Veröffentlichen z.B. im Forum
-						unkenntlich gemacht werden. Private IP-Adressen (z.B.
-						192.168.x.x) müssen nicht maskiert werden, da diese
-						nicht über das Internet erreichbar sind.
-					</openwb-base-alert>
-				</div>
+				<openwb-base-button-group-input
+					title="Debug Level"
+					:buttons="[
+						{ buttonValue: 30, text: 'Warnungen und Fehler' },
+						{ buttonValue: 20, text: 'Info' },
+						{ buttonValue: 10, text: 'Details' },
+					]"
+					:model-value="
+						$store.state.mqtt['openWB/system/debug_level']
+					"
+					@update:model-value="
+						updateState('openWB/system/debug_level', $event)
+					"
+				>
+					<template #help>
+						Wenn der Debug Level auf "Info" oder "Details"
+						gesetzt wird, werden mehr Informationen in die
+						Logdateien geschrieben. Im normalen Betrieb sollte
+						immer "Warnungen und Fehler" gewählt werden, um die
+						Schreibvorgänge auf der SD-Karte zu reduzieren.
+					</template>
+				</openwb-base-button-group-input>
+				<openwb-base-alert subtype="warning">
+					Achtung! In den Einstellungen "Info" und "Details"
+					können in den Logdateien sensible Daten wie
+					Benutzernamen und Kennwörter enthalten sein. Diese
+					sollten vor dem Veröffentlichen z.B. im Forum
+					unkenntlich gemacht werden. Private IP-Adressen (z.B.
+					192.168.x.x) müssen nicht maskiert werden, da diese
+					nicht über das Internet erreichbar sind.
+				</openwb-base-alert>
 			</openwb-base-card>
 			<openwb-base-submit-buttons
 				formName="debugConfigForm"
@@ -50,7 +42,7 @@
 			/>
 		</form>
 		<openwb-base-card
-			title="Main.log"
+			title="Main-Log"
 			class="mt-3"
 			:collapsible="true"
 			:collapsed="true"
@@ -69,7 +61,26 @@
 			<pre>{{ mainLog }}</pre>
 		</openwb-base-card>
 		<openwb-base-card
-			title="Mqtt.log"
+			title="Log des internen Ladepunktes"
+			class="mt-3"
+			:collapsible="true"
+			:collapsed="true"
+		>
+			<template #actions>
+				<openwb-base-avatar
+					class="bg-success clickable"
+					@click="loadInternalChargepointLog($event)"
+				>
+					<font-awesome-icon
+						fixed-width
+						:icon="['fas', 'file-download']"
+					/>
+				</openwb-base-avatar>
+			</template>
+			<pre>{{ internalChargepointLog }}</pre>
+		</openwb-base-card>
+		<openwb-base-card
+			title="MQTT-Log"
 			class="mt-3"
 			:collapsible="true"
 			:collapsed="true"
@@ -88,7 +99,7 @@
 			<pre>{{ mqttLog }}</pre>
 		</openwb-base-card>
 		<openwb-base-card
-			title="Soc.log"
+			title="SoC-Log"
 			class="mt-3"
 			:collapsible="true"
 			:collapsed="true"
@@ -150,6 +161,7 @@ export default {
 				"openWB/system/debug_level",
 			],
 			mainLog: "-- noch nicht geladen --",
+			internalChargepointLog: "-- noch nicht geladen --",
 			mqttLog: "-- noch nicht geladen --",
 			socLog: "-- noch nicht geladen --",
 			updateLog: "-- noch nicht geladen --",
@@ -186,6 +198,13 @@ export default {
 			this.mainLog = "wird aktualisiert...";
 			this.getFilePromise("/openWB/ramdisk/main.log").then((result) => {
 				this.mainLog = result;
+			});
+		},
+		loadInternalChargepointLog(event) {
+			event.stopPropagation();
+			this.internalChargepointLog = "wird aktualisiert...";
+			this.getFilePromise("/openWB/ramdisk/internal_chargepoint.log").then((result) => {
+				this.internalChargepointLog = result;
 			});
 		},
 		loadMqttLog(event) {
