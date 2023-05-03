@@ -22,21 +22,24 @@ function checkAllSaved(topic, value) {
 	}
 }
 
-function processMessages(mqttmsg, mqttpayload) {
+function processMessages(mqtttopic, mqttpayload) {
 	/** @function processMessages
 	 * sets input fields, range sliders and button-groups to values by mqtt
-	 * @param {string} mqttmsg - the complete mqtt topic
+	 * @param {string} mqtttopic - the complete mqtt topic
 	 * @param {string} mqttpayload - the value for the topic
 	 * @requires function:setInputValue - is declared in pvconfig.html
 	 * @requires function:setToggleBtnGroup  - is declared in pvconfig.html
 	 */
-	console.log("new message: " + mqttmsg + ": " + mqttpayload);
-	checkAllSaved(mqttmsg, mqttpayload);
+	console.log("new message: " + mqtttopic + ": " + mqttpayload);
+	checkAllSaved(mqtttopic, mqttpayload);
+	// first part of topic after openWB/
+	var section = mqtttopic.match(/^openWB\/([^/]+)\//)[1];
+	console.log("section", section);
 	// last part of topic after /
-	var topicIdentifier = mqttmsg.substring(mqttmsg.lastIndexOf("/") + 1);
+	var topicIdentifier = mqtttopic.substring(mqtttopic.lastIndexOf("/") + 1);
 	var elementId = topicIdentifier;
 	// check if topic contains subgroup like /lp/1/
-	var topicSubGroup = mqttmsg.match(/(\w+)\/(\d\d?)\//);
+	var topicSubGroup = mqtttopic.match(/(\w+)\/(\d\d?)\//);
 	if (topicSubGroup != null) {
 		// topic might be for one of several subgroups
 		// topicSubGroup[0]=complete subgroup, [1]=suffix=first part between //, [1]=index=second part between //
@@ -47,7 +50,7 @@ function processMessages(mqttmsg, mqttpayload) {
 		elementId += suffix + index;
 	}
 	// Could be a main on / off switch, check visibility func on main settings page
-	visibiltycheck(elementId, mqttpayload);
+	visibiltycheck(section, elementId, mqttpayload);
 	var element = $("#" + elementId);
 	if (
 		element.attr("type") == "number" ||
@@ -56,13 +59,13 @@ function processMessages(mqttmsg, mqttpayload) {
 		element.attr("type") == "password" ||
 		element.attr("type") == "range"
 	) {
-		originalValues[mqttmsg] = mqttpayload;
+		originalValues[mqtttopic] = mqttpayload;
 		setInputValue(elementId, mqttpayload);
 	} else if (element.hasClass("btn-group-toggle")) {
-		originalValues[mqttmsg] = mqttpayload;
+		originalValues[mqtttopic] = mqttpayload;
 		setToggleBtnGroup(elementId, mqttpayload);
 	} else if (element.is("select")) {
-		originalValues[mqttmsg] = mqttpayload;
+		originalValues[mqtttopic] = mqttpayload;
 		setInputValue(elementId, mqttpayload);
 	} else {
 		console.debug(elementId + " not found");
