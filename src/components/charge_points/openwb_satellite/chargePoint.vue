@@ -1,5 +1,5 @@
 <template>
-	<div class="charge-point-ipevse">
+	<div class="charge-point-satellite">
 		<openwb-base-text-input
 			title="IP oder Hostname"
 			subtype="host"
@@ -7,20 +7,22 @@
 			:model-value="configuration.ip_address"
 			@update:model-value="updateConfiguration($event, 'ip_address')"
 		/>
-		<openwb-base-number-input
-			title="Modbus-ID"
-			required
-			:min="1"
-			:max="255"
-			:model-value="configuration.modbus_id"
-			@update:model-value="updateConfiguration($event, 'modbus_id')"
+		<openwb-base-select-input
+			title="Zählertyp"
+			:options="[
+				{ value: 'sdm630', text: 'SDM 630 / 72DMv2 und kompatible' },
+			]"
+			:model-value="configuration.counter_type"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.counter_type')
+			"
 		/>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "ChargePointIpEvse",
+	name: "ChargePointSatellite",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
