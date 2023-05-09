@@ -1,7 +1,7 @@
 <template>
 	<div class="dataProtection">
 		<form name="dataProtectionForm">
-			<openwb-base-card title="Fehlerbericht">
+			<openwb-base-card title="Datenschutzerklärung">
 				<iframe
 					src="dataprotection.html"
 					width="100%"

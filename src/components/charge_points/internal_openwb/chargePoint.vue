@@ -14,6 +14,7 @@
 			"
 		/>
 		<openwb-base-number-input
+			v-if="configuration.mode == 'duo'"
 			title="Ladepunkt-Nummer"
 			required
 			:min="1"
@@ -41,6 +42,12 @@ export default {
 	methods: {
 		updateConfiguration(event, path = undefined) {
 			if (path) {
+				if (path === "mode") {
+					// set "duo_num" to "1" for mode which only support one charge point
+					if (event == "series" || event == "socket") {
+						this.updateConfiguration(1, "duo_num");
+					}
+				}
 				path = "configuration." + path;
 			}
 			this.$emit("update:configuration", { value: event, object: path });
