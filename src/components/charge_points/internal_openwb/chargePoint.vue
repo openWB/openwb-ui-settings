@@ -4,9 +4,9 @@
 			title="Bauart"
 			notSelected="Bitte auswählen"
 			:options="[
-				{ value: 'series', text: 'openWB Series 1/2 in den Varianten Custom, Standard & Standard+' },
-				{ value: 'duo', text: 'openWB Series 1/2 Duo' },
-				{ value: 'socket', text: 'openWB Series 1/2 Buchse' },
+				{ value: 'series', text: 'openWB series1/2 in den Varianten custom, standard & standard+' },
+				{ value: 'duo', text: 'openWB series1/2 Duo' },
+				{ value: 'socket', text: 'openWB series1/2 Buchse' },
 			]"
 			:model-value="configuration.mode"
 			@update:model-value="
