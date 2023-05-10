@@ -1,18 +1,31 @@
 <template>
 	<div class="generalConfig">
 		<form name="generalConfigForm">
-			<!-- <openwb-base-card title="openWB">
+			<openwb-base-card title="Betriebsmodus">
+				<openwb-base-alert subtype="info">
+					Wird hier Ja gewählt ist diese openWB nur ein Ladepunkt
+					und übernimmt keine eigene Regelung. Hier ist Ja zu
+					wählen, wenn bereits eine openWB vorhanden ist und diese
+					nur ein weiterer Ladepunkt der vorhandenen openWB sein
+					soll.
+					<span class="text-danger">
+						Alle in dieser openWB getätigten Einstellungen
+						werden nicht beachtet.
+					</span>
+					An der Haupt openWB wird als Ladepunkt "externe openWB"
+					gewählt und die IP Adresse eingetragen.
+				</openwb-base-alert>
 				<openwb-base-button-group-input
-					title="openWB ist nur ein Ladepunkt"
+					title="NurLadepunkt-Modus"
 					:buttons="[
 						{
 							buttonValue: false,
-							text: 'Nein',
+							text: 'Aus',
 							class: 'btn-outline-danger',
 						},
 						{
 							buttonValue: true,
-							text: 'Ja',
+							text: 'An',
 							class: 'btn-outline-success',
 						},
 					]"
@@ -21,22 +34,8 @@
 						updateState('openWB/general/extern', $event)
 					"
 				>
-					<template #help>
-						Wird hier Ja gewählt ist diese openWB nur ein Ladepunkt
-						und übernimmt keine eigene Regelung. Hier ist Ja zu
-						wählen, wenn bereits eine openWB vorhanden ist und diese
-						nur ein weiterer Ladepunkt der vorhandenen openWB sein
-						soll.
-						<span class="text-danger">
-							Alle in dieser openWB getätigten Einstellungen
-							werden nicht beachtet.
-						</span>
-						An der Haupt openWB wird als Ladepunkt "externe openWB"
-						gewählt und die IP Adresse eingetragen.
-					</template>
 				</openwb-base-button-group-input>
 				<openwb-base-select-input
-					v-if="$store.state.mqtt['openWB/general/extern'] === true"
 					title="Display-Theme"
 					:options="[
 						{
@@ -67,7 +66,7 @@
 						Änderungen sind möglich.
 					</template>
 				</openwb-base-select-input>
-			</openwb-base-card> -->
+			</openwb-base-card>
 			<openwb-base-card title="Hardware">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
@@ -96,11 +95,11 @@
 							},
 						]"
 						:model-value="
-							$store.state.mqtt['openWB/general/control_interval']
+							$store.state.mqtt['openWB/general/extern_interval']
 						"
 						@update:model-value="
 							updateState(
-								'openWB/general/control_interval',
+								'openWB/general/extern_interval',
 								$event
 							)
 						"
@@ -493,7 +492,7 @@ export default {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
 				"openWB/general/extern_display_mode",
-				"openWB/general/control_interval",
+				"openWB/general/extern_interval",
 				"openWB/general/grid_protection_configured",
 				"openWB/general/external_buttons_hw",
 				"openWB/general/notifications/selected",

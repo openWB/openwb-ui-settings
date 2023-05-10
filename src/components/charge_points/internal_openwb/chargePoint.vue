@@ -1,13 +1,20 @@
 <template>
-	<div class="charge-point-externalopenwb">
-		<openwb-base-text-input
-			title="IP oder Hostname"
-			subtype="host"
-			required
-			:model-value="configuration.ip_address"
-			@update:model-value="updateConfiguration($event, 'ip_address')"
+	<div class="charge-point-internalopenwb">
+		<openwb-base-select-input
+			title="Bauart"
+			notSelected="Bitte auswählen"
+			:options="[
+				{ value: 'series', text: 'openWB series1/2 in den Varianten custom, standard & standard+' },
+				{ value: 'duo', text: 'openWB series1/2 Duo' },
+				{ value: 'socket', text: 'openWB series1/2 Buchse' },
+			]"
+			:model-value="configuration.mode"
+			@update:model-value="
+				updateConfiguration($event, 'mode')
+			"
 		/>
 		<openwb-base-number-input
+			v-if="configuration.mode == 'duo'"
 			title="Ladepunkt-Nummer"
 			required
 			:min="1"
@@ -26,7 +33,7 @@
 
 <script>
 export default {
-	name: "ChargePointExternalOpenwb",
+	name: "ChargePointInternalOpenwb",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
@@ -35,6 +42,12 @@ export default {
 	methods: {
 		updateConfiguration(event, path = undefined) {
 			if (path) {
+				if (path === "mode") {
+					// set "duo_num" to "1" for mode which only support one charge point
+					if (event == "series" || event == "socket") {
+						this.updateConfiguration(1, "duo_num");
+					}
+				}
 				path = "configuration." + path;
 			}
 			this.$emit("update:configuration", { value: event, object: path });

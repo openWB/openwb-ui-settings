@@ -315,6 +315,7 @@ export default {
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
+				"openWB/general/extern",
 				"openWB/counter/config/reserve_for_not_charging",
 				"openWB/counter/get/hierarchy",
 				"openWB/system/device/+/component/+/config",
