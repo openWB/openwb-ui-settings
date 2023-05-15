@@ -95,11 +95,11 @@
 							},
 						]"
 						:model-value="
-							$store.state.mqtt['openWB/general/extern_interval']
+							$store.state.mqtt['openWB/general/control_interval']
 						"
 						@update:model-value="
 							updateState(
-								'openWB/general/extern_interval',
+								'openWB/general/control_interval',
 								$event
 							)
 						"
@@ -492,7 +492,7 @@ export default {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
 				"openWB/general/extern_display_mode",
-				"openWB/general/extern_interval",
+				"openWB/general/control_interval",
 				"openWB/general/grid_protection_configured",
 				"openWB/general/external_buttons_hw",
 				"openWB/general/notifications/selected",
