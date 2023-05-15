@@ -4,14 +4,15 @@
 			title="Bauart"
 			notSelected="Bitte auswählen"
 			:options="[
-				{ value: 'series', text: 'openWB series1/2 in den Varianten custom, standard & standard+' },
+				{
+					value: 'series',
+					text: 'openWB series1/2 in den Varianten custom, standard & standard+',
+				},
 				{ value: 'duo', text: 'openWB series1/2 Duo' },
 				{ value: 'socket', text: 'openWB series1/2 Buchse' },
 			]"
 			:model-value="configuration.mode"
-			@update:model-value="
-				updateConfiguration($event, 'mode')
-			"
+			@update:model-value="updateConfiguration($event, 'mode')"
 		/>
 		<openwb-base-number-input
 			v-if="configuration.mode == 'duo'"
