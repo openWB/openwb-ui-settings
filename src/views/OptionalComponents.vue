@@ -994,6 +994,48 @@
 							},
 						]"
 					/>
+					<openwb-base-button-group-input
+						title="Orientierung"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/optional/int_display/rotation'
+							]
+						"
+						@update:model-value="
+							updateState(
+								'openWB/optional/int_display/rotation',
+								$event
+							)
+						"
+						:buttons="[
+							{
+								buttonValue: 0,
+								text: '0°',
+							},
+							{
+								buttonValue: 90,
+								text: '90°',
+							},
+							{
+								buttonValue: 180,
+								text: '180°',
+							},
+							{
+								buttonValue: 270,
+								text: '270°',
+							},
+						]"
+					>
+						<template #help>
+							Mit dieser Einstellung kann das Display im
+							Uhrzeigersinn gedreht werden, falls erforderlich.
+							Nach einer Änderung ist ein Neustart
+							erforderlich!<br />
+							Diese Einstellung erfordert ein Raspberry Pi
+							Display. Anzeigen, welche über HDMI angeschlossen
+							sind, werden nicht unterstützt.
+						</template>
+					</openwb-base-button-group-input>
 					<div
 						v-if="
 							$store.state.mqtt[
@@ -1002,9 +1044,9 @@
 						"
 					>
 						<hr />
-						<openwb-base-heading
-							>Display Standby</openwb-base-heading
-						>
+						<openwb-base-heading>
+							Display Standby
+						</openwb-base-heading>
 						<openwb-base-range-input
 							title="Ausschaltzeit"
 							:min="0"
@@ -1076,7 +1118,12 @@
 									value: 600,
 								},
 							]"
-						/>
+						>
+							<template #help>
+								Hier kann eine Zeitspanne angegeben werden, nach
+								der das Display ausgeschaltet wird.
+							</template>
+						</openwb-base-range-input>
 						<!-- <openwb-base-button-group-input
 							v-if="
 								$store.state.mqtt[
@@ -1329,6 +1376,7 @@ export default {
 				"ToDo/optional/led/stop",
 				"openWB/optional/int_display/active",
 				"openWB/optional/int_display/standby",
+				"openWB/optional/int_display/rotation",
 				"openWB/optional/int_display/on_if_plugged_in",
 				"openWB/optional/int_display/pin_active",
 				"openWB/optional/int_display/pin_code",
