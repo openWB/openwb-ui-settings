@@ -17,21 +17,20 @@
 					"
 				>
 					<template #help>
-						Wenn der Debug Level auf "Info" oder "Details"
-						gesetzt wird, werden mehr Informationen in die
-						Logdateien geschrieben. Im normalen Betrieb sollte
-						immer "Warnungen und Fehler" gewählt werden, um die
-						Schreibvorgänge auf der SD-Karte zu reduzieren.
+						Wenn der Debug Level auf "Info" oder "Details" gesetzt
+						wird, werden mehr Informationen in die Logdateien
+						geschrieben. Im normalen Betrieb sollte immer "Warnungen
+						und Fehler" gewählt werden, um die Schreibvorgänge auf
+						der SD-Karte zu reduzieren.
 					</template>
 				</openwb-base-button-group-input>
 				<openwb-base-alert subtype="warning">
-					Achtung! In den Einstellungen "Info" und "Details"
-					können in den Logdateien sensible Daten wie
-					Benutzernamen und Kennwörter enthalten sein. Diese
-					sollten vor dem Veröffentlichen z.B. im Forum
-					unkenntlich gemacht werden. Private IP-Adressen (z.B.
-					192.168.x.x) müssen nicht maskiert werden, da diese
-					nicht über das Internet erreichbar sind.
+					Achtung! In den Einstellungen "Info" und "Details" können in
+					den Logdateien sensible Daten wie Benutzernamen und
+					Kennwörter enthalten sein. Diese sollten vor dem
+					Veröffentlichen z.B. im Forum unkenntlich gemacht werden.
+					Private IP-Adressen (z.B. 192.168.x.x) müssen nicht maskiert
+					werden, da diese nicht über das Internet erreichbar sind.
 				</openwb-base-alert>
 			</openwb-base-card>
 			<openwb-base-submit-buttons
@@ -203,7 +202,9 @@ export default {
 		loadInternalChargepointLog(event) {
 			event.stopPropagation();
 			this.internalChargepointLog = "wird aktualisiert...";
-			this.getFilePromise("/openWB/ramdisk/internal_chargepoint.log").then((result) => {
+			this.getFilePromise(
+				"/openWB/ramdisk/internal_chargepoint.log"
+			).then((result) => {
 				this.internalChargepointLog = result;
 			});
 		},

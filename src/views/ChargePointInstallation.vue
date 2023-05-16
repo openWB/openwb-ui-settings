@@ -114,12 +114,18 @@
 							updateState(installedChargePointKey, $event, 'name')
 						"
 					/>
-					<span v-if="installedChargePoint.type !== 'internal_openwb' || $store.state.mqtt['openWB/general/extern'] === false">
+					<span
+						v-if="
+							installedChargePoint.type !== 'internal_openwb' ||
+							$store.state.mqtt['openWB/general/extern'] === false
+						"
+					>
 						<openwb-base-select-input
 							title="Ladepunkt-Vorlage"
 							:options="chargePointTemplateList"
 							:model-value="
-								$store.state.mqtt[installedChargePointKey].template
+								$store.state.mqtt[installedChargePointKey]
+									.template
 							"
 							@update:model-value="
 								updateState(
@@ -138,17 +144,19 @@
 							$store.state.mqtt[installedChargePointKey].type
 						"
 						:moduleName="
-							$store.state.mqtt[installedChargePointKey]
-								.name
+							$store.state.mqtt[installedChargePointKey].name
 						"
-						:configuration="
-							installedChargePoint.configuration
-						"
+						:configuration="installedChargePoint.configuration"
 						@update:configuration="
 							updateConfiguration(installedChargePointKey, $event)
 						"
 					/>
-					<div v-if="installedChargePoint.type !== 'internal_openwb' || $store.state.mqtt['openWB/general/extern'] === false">
+					<div
+						v-if="
+							installedChargePoint.type !== 'internal_openwb' ||
+							$store.state.mqtt['openWB/general/extern'] === false
+						"
+					>
 						<hr />
 						<!-- <openwb-base-text-input
 							title="Leistungsmodul"
@@ -164,14 +172,18 @@
 							disabled
 						/>
 						<hr /> -->
-						<openwb-base-heading>Hardware-Optionen</openwb-base-heading>
+						<openwb-base-heading
+							>Hardware-Optionen</openwb-base-heading
+						>
 						<openwb-base-button-group-input
 							title="automatische Phasenumschaltung vorhanden"
 							:buttons="[
 								{ buttonValue: false, text: 'Nein' },
 								{ buttonValue: true, text: 'Ja' },
 							]"
-							:model-value="installedChargePoint.auto_phase_switch_hw"
+							:model-value="
+								installedChargePoint.auto_phase_switch_hw
+							"
 							@update:model-value="
 								updateState(
 									installedChargePointKey,
@@ -252,25 +264,29 @@
 							<template #help>
 								Hier ist anzugeben, an welcher Phase am
 								Hausanschluss die Phase 1 dieses Ladepunktes
-								angeschlossen ist. Diese Information wird für das
-								Lastmanagement benötigt, um bei einer Schieflast
-								gezielt einzelne Ladepunkte zu drosseln.<br />
-								Bei mehreren Ladepunkten macht es Sinn, die Phasen
-								rotierend anzuschließen, damit mehrere nicht
-								dreiphasig ladende Fahrzeuge mit optimaler Leistung
-								laden können, bevor das Lastmanagement eingreift.<br />
-								Es wird vorausgesetzt, dass das Drehfeld innerhalb
-								der Installation gleich bleibt. Wenn demnach L1 des
-								Ladepunktes auf EVU L2 liegt, muss L2 des
-								Ladepunktes auf EVU L3 aufgelegt sein.<br />
-								Eine Möglichkeit, den Anschluss von L1 zu ermitteln,
-								ist eine einphasige Ladung zu starten und die
-								Phasenströme am EVU-Zähler zu beobachten. Mit einem
-								zweiphasig ladenden Fahrzeug kann danach auch der
-								Anschluss von L2 ermittelt und so das Drehfeld
-								kontrolliert werden.<br />
-								Im Zweifel bitte das Drehfeld von einer Fachkraft
-								prüfen und korrigieren lassen.
+								angeschlossen ist. Diese Information wird für
+								das Lastmanagement benötigt, um bei einer
+								Schieflast gezielt einzelne Ladepunkte zu
+								drosseln.<br />
+								Bei mehreren Ladepunkten macht es Sinn, die
+								Phasen rotierend anzuschließen, damit mehrere
+								nicht dreiphasig ladende Fahrzeuge mit optimaler
+								Leistung laden können, bevor das Lastmanagement
+								eingreift.<br />
+								Es wird vorausgesetzt, dass das Drehfeld
+								innerhalb der Installation gleich bleibt. Wenn
+								demnach L1 des Ladepunktes auf EVU L2 liegt,
+								muss L2 des Ladepunktes auf EVU L3 aufgelegt
+								sein.<br />
+								Eine Möglichkeit, den Anschluss von L1 zu
+								ermitteln, ist eine einphasige Ladung zu starten
+								und die Phasenströme am EVU-Zähler zu
+								beobachten. Mit einem zweiphasig ladenden
+								Fahrzeug kann danach auch der Anschluss von L2
+								ermittelt und so das Drehfeld kontrolliert
+								werden.<br />
+								Im Zweifel bitte das Drehfeld von einer
+								Fachkraft prüfen und korrigieren lassen.
 							</template>
 						</openwb-base-button-group-input>
 					</div>
@@ -358,7 +374,9 @@
 						:title="
 							chargePointTemplate.name +
 							' (ID: ' +
-							getChargePointTemplateIndex(chargePointTemplateKey) +
+							getChargePointTemplateIndex(
+								chargePointTemplateKey
+							) +
 							')'
 						"
 						:collapsible="true"
@@ -389,7 +407,11 @@
 							subtype="text"
 							:model-value="chargePointTemplate.name"
 							@update:model-value="
-								updateState(chargePointTemplateKey, $event, 'name')
+								updateState(
+									chargePointTemplateKey,
+									$event,
+									'name'
+								)
 							"
 							:disabled="chargePointTemplateKey.endsWith('/0')"
 						>
@@ -397,14 +419,16 @@
 								#help
 								v-if="chargePointTemplateKey.endsWith('/0')"
 							>
-								Die Standard-Vorlage kann nicht umbenannt werden.
+								Die Standard-Vorlage kann nicht umbenannt
+								werden.
 							</template>
 						</openwb-base-text-input>
 						<hr />
 						<div
 							v-if="
-								$store.state.mqtt['openWB/optional/rfid/active'] ===
-								true
+								$store.state.mqtt[
+									'openWB/optional/rfid/active'
+								] === true
 							"
 						>
 							<openwb-base-heading>
@@ -453,11 +477,12 @@
 						</openwb-base-heading>
 						<openwb-base-alert subtype="info">
 							Diese Einstellung hat
-							<span class="highlight">keine</span> Auswirkung auf das
-							Lastmanagement! Ist die Zuleitung nicht mit der vollen
-							Ladeleistung der openWB abgesichert, muss für den
-							Ladepunkt ein virtueller Zähler konfiguriert werden, der
-							den Strom im Lastmanagement begrenzt. <br />
+							<span class="highlight">keine</span> Auswirkung auf
+							das Lastmanagement! Ist die Zuleitung nicht mit der
+							vollen Ladeleistung der openWB abgesichert, muss für
+							den Ladepunkt ein virtueller Zähler konfiguriert
+							werden, der den Strom im Lastmanagement begrenzt.
+							<br />
 							Bei openWBs, deren Leistung z.B. aufgrund der
 							KfW-Förderung auf 11kW begrenzt ist, muss hier bei
 							beiden Maximalströmen 16A eingestellt werden.
@@ -524,7 +549,8 @@
 								{ buttonValue: true, text: 'Ja' },
 							]"
 							:model-value="
-								chargePointTemplate.autolock.wait_for_charging_end
+								chargePointTemplate.autolock
+									.wait_for_charging_end
 							"
 							@update:model-value="
 								updateState(
@@ -535,12 +561,12 @@
 							"
 						>
 							<template #help>
-								Wenn ein Zeitplan die automatische Sperre aktiviert,
-								werden alle Ladepunkte direkt gesperrt und laufende
-								Ladevorgänge beendet. Wird hier "Ja" ausgewählt,
-								dann werden laufende Ladevorgänge nicht beendet, und
-								diese Ladepunkte erst nach abgeschlossener Ladung
-								gesperrt.
+								Wenn ein Zeitplan die automatische Sperre
+								aktiviert, werden alle Ladepunkte direkt
+								gesperrt und laufende Ladevorgänge beendet. Wird
+								hier "Ja" ausgewählt, dann werden laufende
+								Ladevorgänge nicht beendet, und diese Ladepunkte
+								erst nach abgeschlossener Ladung gesperrt.
 							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-heading>
@@ -609,16 +635,16 @@
 												? formatDate(
 														autolockPlan.frequency
 															.once[0]
-												)
+												  )
 												: formatDate(
 														autolockPlan.frequency
 															.once[0]
-												) +
-												" - " +
-												formatDate(
+												  ) +
+												  " - " +
+												  formatDate(
 														autolockPlan.frequency
 															.once[1]
-												)
+												  )
 										}}
 									</span>
 									<span
@@ -685,7 +711,11 @@
 								]"
 								:model-value="autolockPlan.active"
 								@update:model-value="
-									updateState(autolockPlanKey, $event, 'active')
+									updateState(
+										autolockPlanKey,
+										$event,
+										'active'
+									)
 								"
 							>
 							</openwb-base-button-group-input>
@@ -694,7 +724,11 @@
 								subtype="time"
 								:model-value="autolockPlan.time[0]"
 								@update:model-value="
-									updateState(autolockPlanKey, $event, 'time.0')
+									updateState(
+										autolockPlanKey,
+										$event,
+										'time.0'
+									)
 								"
 							>
 							</openwb-base-text-input>
@@ -703,7 +737,11 @@
 								subtype="time"
 								:model-value="autolockPlan.time[1]"
 								@update:model-value="
-									updateState(autolockPlanKey, $event, 'time.1')
+									updateState(
+										autolockPlanKey,
+										$event,
+										'time.1'
+									)
 								"
 							>
 							</openwb-base-text-input>
@@ -763,7 +801,11 @@
 									)
 								"
 							/>
-							<div v-if="autolockPlan.frequency.selected == 'weekly'">
+							<div
+								v-if="
+									autolockPlan.frequency.selected == 'weekly'
+								"
+							>
 								<openwb-base-button-group-input
 									v-for="(day, dayIndex) in weekdays"
 									:key="dayIndex"
@@ -870,15 +912,21 @@ export default {
 		installedChargePoints: {
 			get() {
 				// only show internal chargepoint(s) when configured as external chargepoint
-				let chargePoints = this.getWildcardTopics("openWB/chargepoint/+/config")
-				console.log(chargePoints)
+				let chargePoints = this.getWildcardTopics(
+					"openWB/chargepoint/+/config"
+				);
+				console.log(chargePoints);
 				let myObj = {};
 				for (const [key, element] of Object.entries(chargePoints)) {
-					if (element.type === 'internal_openwb' || this.$store.state.mqtt['openWB/general/extern'] === false) {
-						myObj[key]= element ;
-					};
+					if (
+						element.type === "internal_openwb" ||
+						this.$store.state.mqtt["openWB/general/extern"] ===
+							false
+					) {
+						myObj[key] = element;
+					}
 				}
-				console.log(myObj)
+				console.log(myObj);
 				return myObj;
 			},
 		},
@@ -934,15 +982,14 @@ export default {
 			}
 		},
 		getChargePointList() {
-			if (this.$store.state.mqtt['openWB/general/extern'] === false) {
-			return this.$store.state.mqtt[
-				"openWB/system/configurable/chargepoints"
-			];
-			}
-			else {
+			if (this.$store.state.mqtt["openWB/general/extern"] === false) {
 				return this.$store.state.mqtt[
-				"openWB/system/configurable/chargepoints_internal"
-			];
+					"openWB/system/configurable/chargepoints"
+				];
+			} else {
+				return this.$store.state.mqtt[
+					"openWB/system/configurable/chargepoints_internal"
+				];
 			}
 		},
 		getChargePointName(chargePointIndex) {

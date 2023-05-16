@@ -961,23 +961,173 @@
 				</div>
 			</openwb-base-card> -->
 			<openwb-base-card title="Display (intern oder extern)">
-				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-					<openwb-base-alert subtype="info">
-						Diese Einstellungen sind nicht verfügbar, solange sich
-						diese openWB im Modus "Nur Ladepunkt" befindet.
-					</openwb-base-alert>
-				</div>
-				<div v-else>
+				<openwb-base-button-group-input
+					title="Integriertes Display"
+					:model-value="
+						$store.state.mqtt['openWB/optional/int_display/active']
+					"
+					@update:model-value="
+						updateState(
+							'openWB/optional/int_display/active',
+							$event
+						)
+					"
+					:buttons="[
+						{
+							buttonValue: false,
+							text: 'Nein',
+							class: 'btn-outline-danger',
+						},
+						{
+							buttonValue: true,
+							text: 'Ja',
+							class: 'btn-outline-success',
+						},
+					]"
+				/>
+				<div
+					v-if="
+						$store.state.mqtt[
+							'openWB/optional/int_display/active'
+						] == true
+					"
+				>
 					<openwb-base-button-group-input
-						title="Integriertes Display"
+						title="Orientierung"
 						:model-value="
 							$store.state.mqtt[
-								'openWB/optional/int_display/active'
+								'openWB/optional/int_display/rotation'
 							]
 						"
 						@update:model-value="
 							updateState(
-								'openWB/optional/int_display/active',
+								'openWB/optional/int_display/rotation',
+								$event
+							)
+						"
+						:buttons="[
+							{
+								buttonValue: 0,
+								text: '0°',
+							},
+							{
+								buttonValue: 90,
+								text: '90°',
+							},
+							{
+								buttonValue: 180,
+								text: '180°',
+							},
+							{
+								buttonValue: 270,
+								text: '270°',
+							},
+						]"
+					>
+						<template #help>
+							Mit dieser Einstellung kann das Display im
+							Uhrzeigersinn gedreht werden, falls erforderlich.
+							Nach einer Änderung ist ein Neustart
+							erforderlich!<br />
+							Diese Einstellung erfordert ein Raspberry Pi
+							Display. Anzeigen, welche über HDMI angeschlossen
+							sind, werden nicht unterstützt.
+						</template>
+					</openwb-base-button-group-input>
+					<hr />
+					<openwb-base-heading> Display Standby </openwb-base-heading>
+					<openwb-base-range-input
+						title="Ausschaltzeit"
+						:min="0"
+						:max="12"
+						:step="1"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/optional/int_display/standby'
+							]
+						"
+						@update:model-value="
+							updateState(
+								'openWB/optional/int_display/standby',
+								$event
+							)
+						"
+						unit="Sek"
+						:labels="[
+							{
+								label: 'Immer an',
+								value: 0,
+							},
+							{
+								label: 5,
+								value: 5,
+							},
+							{
+								label: 10,
+								value: 10,
+							},
+							{
+								label: 15,
+								value: 15,
+							},
+							{
+								label: 30,
+								value: 30,
+							},
+							{
+								label: 45,
+								value: 45,
+							},
+							{
+								label: '1 Min',
+								value: 60,
+							},
+							{
+								label: '1,5 Min',
+								value: 90,
+							},
+							{
+								label: '2 Min',
+								value: 120,
+							},
+							{
+								label: '3 Min',
+								value: 180,
+							},
+							{
+								label: '4 Min',
+								value: 240,
+							},
+							{
+								label: '5 Min',
+								value: 300,
+							},
+							{
+								label: '10 Min',
+								value: 600,
+							},
+						]"
+					>
+						<template #help>
+							Hier kann eine Zeitspanne angegeben werden, nach der
+							das Display ausgeschaltet wird.
+						</template>
+					</openwb-base-range-input>
+					<!-- <openwb-base-button-group-input
+						v-if="
+							$store.state.mqtt[
+								'openWB/optional/int_display/standby'
+							] != 0
+						"
+						title="Automatisch einschalten"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/optional/int_display/on_if_plugged_in'
+							]
+						"
+						@update:model-value="
+							updateState(
+								'openWB/optional/int_display/on_if_plugged_in',
 								$event
 							)
 						"
@@ -993,128 +1143,21 @@
 								class: 'btn-outline-success',
 							},
 						]"
-					/>
-					<div
-						v-if="
-							$store.state.mqtt[
-								'openWB/optional/int_display/active'
-							] == true
-						"
 					>
-						<hr />
-						<openwb-base-heading
-							>Display Standby</openwb-base-heading
-						>
-						<openwb-base-range-input
-							title="Ausschaltzeit"
-							:min="0"
-							:max="12"
-							:step="1"
-							:model-value="
-								$store.state.mqtt[
-									'openWB/optional/int_display/standby'
-								]
-							"
-							@update:model-value="
-								updateState(
-									'openWB/optional/int_display/standby',
-									$event
-								)
-							"
-							unit="Sek"
-							:labels="[
-								{
-									label: 'Immer an',
-									value: 0,
-								},
-								{
-									label: 5,
-									value: 5,
-								},
-								{
-									label: 10,
-									value: 10,
-								},
-								{
-									label: 15,
-									value: 15,
-								},
-								{
-									label: 30,
-									value: 30,
-								},
-								{
-									label: 45,
-									value: 45,
-								},
-								{
-									label: '1 Min',
-									value: 60,
-								},
-								{
-									label: '1,5 Min',
-									value: 90,
-								},
-								{
-									label: '2 Min',
-									value: 120,
-								},
-								{
-									label: '3 Min',
-									value: 180,
-								},
-								{
-									label: '4 Min',
-									value: 240,
-								},
-								{
-									label: '5 Min',
-									value: 300,
-								},
-								{
-									label: '10 Min',
-									value: 600,
-								},
-							]"
-						/>
-						<!-- <openwb-base-button-group-input
-							v-if="
-								$store.state.mqtt[
-									'openWB/optional/int_display/standby'
-								] != 0
-							"
-							title="Automatisch einschalten"
-							:model-value="
-								$store.state.mqtt[
-									'openWB/optional/int_display/on_if_plugged_in'
-								]
-							"
-							@update:model-value="
-								updateState(
-									'openWB/optional/int_display/on_if_plugged_in',
-									$event
-								)
-							"
-							:buttons="[
-								{
-									buttonValue: false,
-									text: 'Nein',
-									class: 'btn-outline-danger',
-								},
-								{
-									buttonValue: true,
-									text: 'Ja',
-									class: 'btn-outline-success',
-								},
-							]"
-						>
-							<template #help>
-								Wird diese Funktion aktiviert, dann schaltet
-								sich das Display automatisch ein, wenn ein
-								Fahrzeug angesteckt wird.
-							</template>
-						</openwb-base-button-group-input> -->
-					</div>
+						<template #help>
+							Wird diese Funktion aktiviert, dann schaltet
+							sich das Display automatisch ein, wenn ein
+							Fahrzeug angesteckt wird.
+						</template>
+					</openwb-base-button-group-input> -->
+				</div>
+				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+					<openwb-base-alert subtype="info">
+						Weitere Einstellungen sind nicht verfügbar, solange sich
+						diese openWB im Modus "Nur Ladepunkt" befindet.
+					</openwb-base-alert>
+				</div>
+				<div v-else>
 					<!-- <hr />
 					<openwb-base-heading>PIN-Sperre</openwb-base-heading>
 					<openwb-base-button-group-input
@@ -1329,6 +1372,7 @@ export default {
 				"ToDo/optional/led/stop",
 				"openWB/optional/int_display/active",
 				"openWB/optional/int_display/standby",
+				"openWB/optional/int_display/rotation",
 				"openWB/optional/int_display/on_if_plugged_in",
 				"openWB/optional/int_display/pin_active",
 				"openWB/optional/int_display/pin_code",

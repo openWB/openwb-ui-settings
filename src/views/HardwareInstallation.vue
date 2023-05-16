@@ -117,7 +117,9 @@
 						<openwb-base-heading>Komponenten</openwb-base-heading>
 						<openwb-base-alert
 							v-if="
-								!deviceHasConfiguredComponents(installedDevice.id)
+								!deviceHasConfiguredComponents(
+									installedDevice.id
+								)
 							"
 							subtype="warning"
 						>
@@ -184,7 +186,9 @@
 								:deviceType="installedDevice.type"
 								:componentId="installedComponent.id"
 								:componentType="installedComponent.type"
-								:configuration="installedComponent.configuration"
+								:configuration="
+									installedComponent.configuration
+								"
 								@update:configuration="
 									updateConfiguration(
 										installedComponentKey,
@@ -209,20 +213,24 @@
 								<span class="col-1">
 									<openwb-base-click-button
 										:class="
-											componentToAdd[installedDevice.id] ===
-											undefined
+											componentToAdd[
+												installedDevice.id
+											] === undefined
 												? 'btn-outline-success'
 												: 'btn-success clickable'
 										"
 										:disabled="
-											componentToAdd[installedDevice.id] ===
-											undefined
+											componentToAdd[
+												installedDevice.id
+											] === undefined
 										"
 										@buttonClicked="
 											addComponent(
 												installedDevice.id,
 												installedDevice.type,
-												componentToAdd[installedDevice.id]
+												componentToAdd[
+													installedDevice.id
+												]
 											)
 										"
 									>
@@ -242,8 +250,8 @@
 							</template>
 						</openwb-base-select-input>
 						<openwb-base-alert v-else subtype="info">
-							Dieses System bietet keine Komponenten zur Installation
-							an.
+							Dieses System bietet keine Komponenten zur
+							Installation an.
 						</openwb-base-alert>
 					</openwb-base-card>
 					<hr v-if="Object.keys(installedDevices).length > 0" />
@@ -276,25 +284,25 @@
 						<template #help>
 							Bitte ein Gerät auswählen, das hinzugefügt werden
 							soll.<br />
-							Für jedes physische Gerät, das abgefragt wird, wird ein
-							separates Gerät konfiguriert. Wenn mehrere Daten über
-							ein Gerät ausgelesen werden können, z.B. EVU und
-							Wechselrichter-Daten vom Wechselrichter, werden für
-							dieses Gerät die entsprechenden Komponenten
+							Für jedes physische Gerät, das abgefragt wird, wird
+							ein separates Gerät konfiguriert. Wenn mehrere Daten
+							über ein Gerät ausgelesen werden können, z.B. EVU
+							und Wechselrichter-Daten vom Wechselrichter, werden
+							für dieses Gerät die entsprechenden Komponenten
 							konfiguriert. Wenn die Daten lokal abgefragt werden,
 							liefert meist die IP-Adresse den Hinweis auf die
 							richtige Konfiguration: Wenn EVU- und
-							Wechselrichter-Daten über zwei verschiedene IP-Adressen
-							abgefragt werden, müssen zwei Geräte mit jeweils einer
-							Komponente konfiguriert werden. Werden die Daten über
-							die gleiche IP-Adresse abgefragt, wird ein Gerät mit
-							einer Zähler- und einer Wechselrichter-Komponente
-							angelegt.<br />
-							Wenn in 1.9 bei einem/mehreren Modulen der Hinweis "Die
-							Einstellungen bitte im
-							EVU-/Speicher-/Wechselrichter-Modul vornehmen" steht,
-							muss ein Gerät mit den entsprechenden Komponenten
-							konfiguriert werden.
+							Wechselrichter-Daten über zwei verschiedene
+							IP-Adressen abgefragt werden, müssen zwei Geräte mit
+							jeweils einer Komponente konfiguriert werden. Werden
+							die Daten über die gleiche IP-Adresse abgefragt,
+							wird ein Gerät mit einer Zähler- und einer
+							Wechselrichter-Komponente angelegt.<br />
+							Wenn in 1.9 bei einem/mehreren Modulen der Hinweis
+							"Die Einstellungen bitte im
+							EVU-/Speicher-/Wechselrichter-Modul vornehmen"
+							steht, muss ein Gerät mit den entsprechenden
+							Komponenten konfiguriert werden.
 						</template>
 					</openwb-base-select-input>
 				</div>
