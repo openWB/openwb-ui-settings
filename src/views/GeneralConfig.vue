@@ -34,7 +34,8 @@
 					"
 				>
 				</openwb-base-button-group-input>
-				<openwb-base-select-input
+				<!-- <openwb-base-select-input
+					v-if="$store.state.mqtt['openWB/general/extern'] === true"
 					title="Display-Theme"
 					:options="[
 						{
@@ -64,7 +65,7 @@
 						Display der regelnden openWB. Alle Anzeigen und
 						Änderungen sind möglich.
 					</template>
-				</openwb-base-select-input>
+				</openwb-base-select-input> -->
 			</openwb-base-card>
 			<openwb-base-card title="Hardware">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
