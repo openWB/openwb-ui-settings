@@ -13,7 +13,8 @@
 			"
 		>
 			<template #help>
-				Kommandos gemäß SolarView-Dokumentation, z.B.: 00* (gesamte Anlage), 01* (Wechselrichter 1), 02* (Wechselrichter 2)
+				Kommandos gemäß SolarView-Dokumentation, z.B.: 00* (gesamte
+				Anlage), 01* (Wechselrichter 1), 02* (Wechselrichter 2)
 			</template>
 		</openwb-base-text-input>
 	</div>

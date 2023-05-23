@@ -26,7 +26,8 @@
 			"
 		>
 			<template #help>
-				Wenn beide Abrufmethoden verwendet werden sollen, muss für jede Methode ein Gerät erstellt werden.
+				Wenn beide Abrufmethoden verwendet werden sollen, muss für jede
+				Methode ein Gerät erstellt werden.
 			</template>
 		</openwb-base-select-input>
 	</div>
