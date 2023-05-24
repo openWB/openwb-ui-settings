@@ -424,9 +424,8 @@
 					</openwb-base-heading>
 					<div
 						v-if="
-							$store.state.mqtt[
-								'openWB/general/web_theme'
-							] !== undefined
+							$store.state.mqtt['openWB/general/web_theme'] !==
+							undefined
 						"
 					>
 						<openwb-base-select-input
@@ -434,29 +433,23 @@
 							title="Theme"
 							:options="webThemeList"
 							:model-value="
-								$store.state.mqtt[
-									'openWB/general/web_theme'
-								].type
+								$store.state.mqtt['openWB/general/web_theme']
+									.type
 							"
-							@update:model-value="
-								updateSelectedWebTheme($event)
-							"
+							@update:model-value="updateSelectedWebTheme($event)"
 						/>
 						<openwb-web-theme-proxy
 							v-if="
-								$store.state.mqtt[
-									'openWB/general/web_theme'
-								].type
+								$store.state.mqtt['openWB/general/web_theme']
+									.type
 							"
 							:webThemeType="
-								$store.state.mqtt[
-									'openWB/general/web_theme'
-								].type
+								$store.state.mqtt['openWB/general/web_theme']
+									.type
 							"
 							:configuration="
-								$store.state.mqtt[
-									'openWB/general/web_theme'
-								].configuration
+								$store.state.mqtt['openWB/general/web_theme']
+									.configuration
 							"
 							@update:configuration="
 								updateConfiguration(
@@ -467,9 +460,7 @@
 						/>
 					</div>
 					<hr />
-					<openwb-base-heading>
-						Lade-Log
-					</openwb-base-heading>
+					<openwb-base-heading> Lade-Log </openwb-base-heading>
 					<openwb-base-number-input
 						title="Preis je kWh"
 						:min="0"
@@ -569,11 +560,7 @@ export default {
 			return {};
 		},
 		updateSelectedWebTheme($event) {
-			this.updateState(
-				"openWB/general/web_theme",
-				$event,
-				"type"
-			);
+			this.updateState("openWB/general/web_theme", $event, "type");
 			this.updateState(
 				"openWB/general/web_theme",
 				this.getWebThemeDefaultConfiguration($event),

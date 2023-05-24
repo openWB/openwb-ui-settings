@@ -1,5 +1,8 @@
 <template>
-	<div class="display-theme-fallback">
+	<div
+		class="display-theme-fallback"
+		v-if="Object.keys(configuration).length > 0"
+	>
 		<openwb-base-alert subtype="warning">
 			Es wurde keine Konfigurationsseite für das Display Theme "{{
 				displayThemeType
@@ -20,6 +23,9 @@
 			<pre>{{ JSON.stringify(configuration, undefined, 2) }}</pre>
 		</openwb-base-alert>
 	</div>
+	<openwb-base-alert v-else subtype="info">
+		Das Display Theme "{{ displayThemeType }}" kann nicht angepasst werden.
+	</openwb-base-alert>
 </template>
 
 <script>

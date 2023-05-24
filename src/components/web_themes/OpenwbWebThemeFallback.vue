@@ -1,5 +1,8 @@
 <template>
-	<div class="web-theme-fallback">
+	<div
+		class="web-theme-fallback"
+		v-if="Object.keys(configuration).length > 0"
+	>
 		<openwb-base-alert subtype="warning">
 			Es wurde keine Konfigurationsseite für das Web Theme "{{
 				webThemeType
@@ -20,6 +23,9 @@
 			<pre>{{ JSON.stringify(configuration, undefined, 2) }}</pre>
 		</openwb-base-alert>
 	</div>
+	<openwb-base-alert v-else subtype="info">
+		Das Web Theme "{{ webThemeType }}" kann nicht angepasst werden.
+	</openwb-base-alert>
 </template>
 
 <script>

@@ -22,8 +22,7 @@ export default {
 		myComponent() {
 			console.debug(`loading web theme: ${this.webThemeType}`);
 			return defineAsyncComponent({
-				loader: () =>
-					import(`./${this.webThemeType}/webTheme.vue`),
+				loader: () => import(`./${this.webThemeType}/webTheme.vue`),
 				errorComponent: OpenwbWebThemeFallback,
 			});
 		},
