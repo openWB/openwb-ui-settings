@@ -1,5 +1,5 @@
 <template>
-	<div class="card-text card-text-heading">
+	<div class="card-text card-text-heading" v-bind="$attrs">
 		<div class="heading-text" v-on:click="toggleHelp">
 			<slot />
 			<font-awesome-icon
@@ -36,6 +36,7 @@ library.add(fasQuestionCircle, farQuestionCircle, fasCheck);
 
 export default {
 	name: "OpenwbHeading",
+	inheritAttrs: false,
 	components: {
 		FontAwesomeIcon,
 	},
