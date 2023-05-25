@@ -384,6 +384,36 @@
 						>
 							<template #help>ToDo...</template>
 						</openwb-base-button-group-input>
+						<openwb-base-button-group-input
+							disabled
+							title="Zugang für Partner"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Aus',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'An',
+									class: 'btn-outline-success',
+								},
+							]"
+							:model-value="mqttBridge.remote.partner"
+							@update:model-value="
+								updateState(
+									mqttBridgeKey,
+									$event,
+									'remote.partner'
+								)
+							"
+						>
+							<template #help>
+								Wenn diese OpenWB über einen Partner erworben
+								wurde, kann hier ein Support-Zugang für diesen
+								freigegeben werden.
+							</template>
+						</openwb-base-button-group-input>
 						<template #footer>
 							<openwb-base-submit-buttons
 								:formName="

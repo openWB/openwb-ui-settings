@@ -92,6 +92,29 @@
 							v-model="newCloudData.email"
 							disabled
 						/>
+						<openwb-base-button-group-input
+							disabled
+							title="Zugang für Partner"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Aus',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'An',
+									class: 'btn-outline-success',
+								},
+							]"
+							v-model="newCloudData.partner"
+						>
+							<template #help>
+								Wenn diese OpenWB über einen Partner erworben
+								wurde, kann hier ein Support-Zugang für diesen
+								freigegeben werden.
+							</template>
+						</openwb-base-button-group-input>
 					</div>
 					<template
 						#footer
@@ -160,6 +183,28 @@
 							subtype="password"
 							v-model="connectCloudData.password"
 						/>
+						<openwb-base-button-group-input
+							title="Zugang für Partner"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Aus',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'An',
+									class: 'btn-outline-success',
+								},
+							]"
+							v-model="connectCloudData.partner"
+						>
+							<template #help>
+								Wenn diese OpenWB über einen Partner erworben
+								wurde, kann hier ein Support-Zugang für diesen
+								freigegeben werden.
+							</template>
+						</openwb-base-button-group-input>
 					</div>
 					<template
 						#footer
@@ -258,11 +303,13 @@ export default {
 			newCloudData: {
 				email: "",
 				username: "",
+				partner: false,
 			},
 			enableCloudConnectButton: true,
 			connectCloudData: {
 				username: "",
 				password: "",
+				partner: false,
 			},
 			enableRemoveCloudButton: true,
 			showCloudRemoveModal: false,
