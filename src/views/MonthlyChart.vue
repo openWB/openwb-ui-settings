@@ -169,6 +169,9 @@ export default {
 						xAxisKey: "timestamp",
 						yAxisKey: null,
 					},
+					pointStyle: "circle",
+					pointRadius: 0,
+					pointHoverRadius: 4,
 				},
 				"pv-energy": {
 					label: "PV",
@@ -187,6 +190,9 @@ export default {
 						xAxisKey: "timestamp",
 						yAxisKey: null,
 					},
+					pointStyle: "circle",
+					pointRadius: 0,
+					pointHoverRadius: 4,
 				},
 				"bat-energy": {
 					label: "Speicher",
@@ -205,6 +211,9 @@ export default {
 						xAxisKey: "timestamp",
 						yAxisKey: null,
 					},
+					pointStyle: "circle",
+					pointRadius: 0,
+					pointHoverRadius: 4,
 				},
 				"cp-energy": {
 					label: "Ladepunkt",
@@ -223,6 +232,9 @@ export default {
 						xAxisKey: "timestamp",
 						yAxisKey: null,
 					},
+					pointStyle: "circle",
+					pointRadius: 0,
+					pointHoverRadius: 4,
 				},
 			},
 			chartOptions: {
