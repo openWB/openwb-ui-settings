@@ -1,5 +1,5 @@
 <template>
-	<div class="device-smart_me-inverter">
+	<div class="device-smart-me-inverter">
 		<openwb-base-heading>
 			Einstellungen für smart-me Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
