@@ -1,5 +1,5 @@
 <template>
-	<div class="device-solar_view-inverter">
+	<div class="device-solar-view-inverter">
 		<openwb-base-heading>
 			Einstellungen für SolarView Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
