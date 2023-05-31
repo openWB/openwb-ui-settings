@@ -1,5 +1,5 @@
 <template>
-	<div class="device-smart_me">
+	<div class="device-smart-me">
 		<openwb-base-heading>
 			Einstellungen für smart-me
 			<span class="small">(Modul: {{ $options.name }})</span>
