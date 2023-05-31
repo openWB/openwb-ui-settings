@@ -1,5 +1,5 @@
 <template>
-	<div class="device-kostal_sem-counter">
+	<div class="device-kostal-sem-counter">
 		<openwb-base-heading>
 			Einstellungen für Kostal Smart Energy Meter oder TQ EM 410 Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
