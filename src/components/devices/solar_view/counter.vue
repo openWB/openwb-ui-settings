@@ -1,5 +1,5 @@
 <template>
-	<div class="device-solar_view-counter">
+	<div class="device-solar-view-counter">
 		<openwb-base-heading>
 			Einstellungen für SolarView Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
