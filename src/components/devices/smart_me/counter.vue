@@ -1,5 +1,5 @@
 <template>
-	<div class="device-smart_me-counter">
+	<div class="device-smart-me-counter">
 		<openwb-base-heading>
 			Einstellungen für smart-me Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
