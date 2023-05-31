@@ -1,5 +1,5 @@
 <template>
-	<div class="device-solar_view">
+	<div class="device-solar-view">
 		<openwb-base-heading>
 			Einstellungen für SolarView
 			<span class="small">(Modul: {{ $options.name }})</span>
