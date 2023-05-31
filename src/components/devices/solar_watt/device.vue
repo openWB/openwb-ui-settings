@@ -1,5 +1,5 @@
 <template>
-	<div class="device-batterx">
+	<div class="device-solarwatt">
 		<openwb-base-heading>
 			Einstellungen für Solarwatt/My Reserve
 			<span class="small">(Modul: {{ $options.name }})</span>
