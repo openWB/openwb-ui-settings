@@ -92,6 +92,29 @@
 							v-model="newCloudData.email"
 							disabled
 						/>
+						<openwb-base-button-group-input
+							disabled
+							title="Zugang für Partner"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Aus',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'An',
+									class: 'btn-outline-success',
+								},
+							]"
+							v-model="newCloudData.partner"
+						>
+							<template #help>
+								Wenn diese OpenWB über einen Partner erworben
+								wurde, kann hier ein Support-Zugang für diesen
+								freigegeben werden.
+							</template>
+						</openwb-base-button-group-input>
 					</div>
 					<template
 						#footer
@@ -160,6 +183,28 @@
 							subtype="password"
 							v-model="connectCloudData.password"
 						/>
+						<openwb-base-button-group-input
+							title="Zugang für Partner"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Aus',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'An',
+									class: 'btn-outline-success',
+								},
+							]"
+							v-model="connectCloudData.partner"
+						>
+							<template #help>
+								Wenn diese OpenWB über einen Partner erworben
+								wurde, kann hier ein Support-Zugang für diesen
+								freigegeben werden.
+							</template>
+						</openwb-base-button-group-input>
 					</div>
 					<template
 						#footer
@@ -208,16 +253,40 @@
 						title="Benutzername"
 						required
 						subtype="user"
-						v-model="getCloudCredentials().username"
+						v-model="cloudSettings.username"
 						disabled
 					/>
 					<openwb-base-text-input
 						title="Passwort"
 						required
 						subtype="password"
-						v-model="getCloudCredentials().password"
+						v-model="cloudSettings.password"
 						disabled
 					/>
+					<hr />
+					<openwb-base-button-group-input
+						title="Zugang für Partner"
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Aus',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'An',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="cloudSettings.partner"
+						@update:model-value="updateState(cloudBridgeKey, $event, 'access.partner')"
+					>
+						<template #help>
+							Wenn diese OpenWB über einen Partner erworben
+							wurde, kann hier ein Support-Zugang für diesen
+							freigegeben werden.
+						</template>
+					</openwb-base-button-group-input>
 					<template #footer>
 						<div class="row justify-content-center">
 							<openwb-base-click-button
@@ -236,6 +305,13 @@
 					</template>
 				</openwb-base-card>
 			</form>
+			<openwb-base-submit-buttons
+				v-if="cloudBridgeKey"
+				formName="cloudConfigured"
+				@save="$emit('save')"
+				@reset="$emit('reset')"
+				@defaults="$emit('defaults')"
+			/>
 		</div>
 	</div>
 </template>
@@ -258,11 +334,13 @@ export default {
 			newCloudData: {
 				email: "",
 				username: "",
+				partner: false,
 			},
 			enableCloudConnectButton: true,
 			connectCloudData: {
 				username: "",
 				password: "",
+				partner: false,
 			},
 			enableRemoveCloudButton: true,
 			showCloudRemoveModal: false,
@@ -292,14 +370,17 @@ export default {
 				return undefined;
 			},
 		},
+		cloudSettings: {
+			get() {
+				return {
+					username: this.cloudBridge[this.cloudBridgeKey].remote.username,
+					password: this.cloudBridge[this.cloudBridgeKey].remote.password,
+					partner: this.cloudBridge[this.cloudBridgeKey].access ? this.cloudBridge[this.cloudBridgeKey].access.partner : false,
+				};
+			},
+		},
 	},
 	methods: {
-		getCloudCredentials() {
-			return {
-				username: this.cloudBridge[this.cloudBridgeKey].remote.username,
-				password: this.cloudBridge[this.cloudBridgeKey].remote.password,
-			};
-		},
 		getMqttBridgeIndex(bridgeKey) {
 			return parseInt(bridgeKey.match(/(?:\/)(\d+)$/)[1]);
 		},
@@ -336,6 +417,8 @@ export default {
 						bridge: this.getMqttBridgeIndex(this.cloudBridgeKey),
 					},
 				});
+				this.enableCloudConnectButton = true;
+				// this.enableNewCloudButton = true;
 			}
 		},
 	},
