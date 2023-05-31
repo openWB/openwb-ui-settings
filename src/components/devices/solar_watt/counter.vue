@@ -1,5 +1,5 @@
 <template>
-	<div class="device-batterx-counter">
+	<div class="device-solarwatt-counter">
 		<openwb-base-heading>
 			Einstellungen für Solarwatt/My Reserve Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
