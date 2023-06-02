@@ -182,6 +182,14 @@
 						>
 							Fahrzeuge
 						</router-link>
+						<div class="dropdown-divider"></div>
+						<a
+							href="modules/legacy_smart_home/smarthomeconfig.php"
+							class="dropdown-item"
+							target="_blank"
+						>
+							SmartHome
+						</a>
 					</div>
 				</li>
 				<li class="nav-item dropdown">
