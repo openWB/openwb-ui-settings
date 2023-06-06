@@ -2,7 +2,7 @@
 	<div class="openwb-blocker">
 		<openwb-base-modal-dialog
 			:show="showModalBlocker"
-			title="OpenWB ist noch nicht bereit"
+			title="openWB ist noch nicht bereit"
 			subtype="dark"
 			:preventClose="true"
 		>

@@ -102,7 +102,7 @@ $numDevices = 9;
 											Wenn die Einschaltbedingung erreicht ist wird alle 30 Sekunden der gerechnete Überschuss übertragen.
 											Mit dem Parameter Updategerät kann eine abweichende Sekundenzahl angegeben werden.<br>
 											Wenn die Ausschaltbedingung erreicht ist wird einmalig 0 als Überschuss übertragen.
-											Die Ausschaltschwelle/ Ausschaltverzögerung in OpenWB ist sinnvoll zu wählen (z.B. 500 / 3) um die Regelung von Acthor nicht zu stören.
+											Die Ausschaltschwelle/ Ausschaltverzögerung in openWB ist sinnvoll zu wählen (z.B. 500 / 3) um die Regelung von Acthor nicht zu stören.
 											Wenn Acthor als Gerät 1 oder 2 definiert ist, wird die Warmwassertemperatur als Temp1 angezeigt (Modbusadresse 1001). Ebenso wird Temp2 (Modbusadresse 1030) und Temp3 (Modbusadresse 1031) angezeigt (falls angeschlossen).
 										</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-lambda hide">
@@ -111,7 +111,7 @@ $numDevices = 9;
 											Wenn die Einschaltbedingung erreicht ist wird alle 30 Sekunden der gerechnete Überschuss übertragen.
 											Mit dem Parameter Updategerät kann eine abweichende Sekundenzahl angegeben werden.<br>
 											Wenn die Ausschaltbedingung erreicht ist wird einmalig 0 als Überschuss übertragen.<br>
-											Die Ausschaltschwelle/ Ausschaltverzögerung in OpenWB ist sinnvoll zu wählen (z.B. 500 / 3) um die Regelung von Lambda nicht zu stören.
+											Die Ausschaltschwelle/ Ausschaltverzögerung in openWB ist sinnvoll zu wählen (z.B. 500 / 3) um die Regelung von Lambda nicht zu stören.
 										</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-mqtt hide">
 											Generisches MQTT modul<br>
@@ -149,8 +149,8 @@ $numDevices = 9;
 											Wenn die Einschaltbedingung erreicht ist wird alle 30 Sekunden der gerechnete Überschuss übertragen.
 											Mit dem Parameter Updategerät kann eine abweichende Sekundenzahl angegeben werden.
 											Wenn die Ausschaltbedingung erreicht ist wird einmalig 0 als Überschuss übertragen.
-											Die Ausschaltschwelle/ Ausschaltverzögerung in OpenWB ist sinnvoll zu wählen (z.B. 500 / 3) um die Regelung von Elwa nicht zu stören.
-											Die Warmwassersicherstellung in Elwa kann genutzt werden. OpenWB erkennt dieses am Status und überträgt dann keinen Überschuss.
+											Die Ausschaltschwelle/ Ausschaltverzögerung in openWB ist sinnvoll zu wählen (z.B. 500 / 3) um die Regelung von Elwa nicht zu stören.
+											Die Warmwassersicherstellung in Elwa kann genutzt werden. openWB erkennt dieses am Status und überträgt dann keinen Überschuss.
 											Wenn Elwa als Gerät 1 oder 2 definiert ist, wird die Warmwassertemperatur als Temp1 angezeigt (Modbusadresse 1001).
 										</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-idm hide">
@@ -158,7 +158,7 @@ $numDevices = 9;
 											Im Web Frontend muss unter "Heizungsbauerebene / Konfiguration / PV-Signal": Auswahl "Gebäudeleittechnik / Smartfox" und unter "Heizungsbauerebene / Gebäudeleittechnik" der Parameter "Modbus TCP = Ein" und unter "Einstellungen / Photovoltaik" der Parameter "PV Überschuss = 0" gesetzt werden
 											Wenn die Einschaltbedingung erreicht ist wird alle 30 Sekunden der gerechnete Überschuss übertragen
 											Wenn die Ausschaltbedingung erreicht ist wird einmalig 0 als Überschuss übertragen.
-											Die Ausschaltschwelle/ Ausschaltverzögerung in OpenWB ist sinnvoll zu wählen (z.B. 500 / 3) um die Regelung von IDM nicht zu stören.
+											Die Ausschaltschwelle/ Ausschaltverzögerung in openWB ist sinnvoll zu wählen (z.B. 500 / 3) um die Regelung von IDM nicht zu stören.
 										</span>
 										<span class="form-text small device<?php echo $devicenum; ?>-option device<?php echo $devicenum; ?>-option-stiebel hide">
 											Wärmepumpe der Firma Stiebel mit ISG (Servicewelt über Modbus) und SG Ready Eingang.<br>
