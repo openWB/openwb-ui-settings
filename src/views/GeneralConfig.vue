@@ -3,17 +3,27 @@
 		<form name="generalConfigForm">
 			<openwb-base-card title="Betriebsmodus">
 				<openwb-base-alert subtype="info">
-					Wird hier An gewählt, wird diese openWB als "nur Ladepunkt"
-					eingestellt und übernimmt keine eigene Regelung.
-					<span class="text-danger">
-						Alle in dieser "nur Ladepunkt-openWB" getätigten
-						Einstellungen werden nicht beachtet!
-					</span>
-					Diese Einstellung erfordert eine Steuerung der "nur
-					Ladepunkt-openWB" von extern, was durch die "Haupt-openWB"
-					realisiert wird. An der "Haupt-openWB" wird die "nur
-					Ladepunkt-openWB" als "externe openWB" konfigurierrt und
-					deren IP-Adresse eingetragen.
+					Wird hier der Nur Ladepunkt-Modus deaktiviert, übernimmt
+					diese openWB die Regelung und steuert alle weiteren openWBs.
+					Alle weiteren openWBs im Verbund werden als "externe openWB"
+					in den Ladepunkt-Einstellungen hinzugefügt.<br />
+					Wird hier der Nur Ladepunkt-Modus aktiviert, übernimmt diese
+					openWB keine eigene Regelung und muss von einer weiteren
+					openWB, die sich nicht im Nur Ladepunkt-Modus befindet,
+					gesteuert werden. Im Nur Ladepunkt-Modus werden alle
+					ausgeblendeten Einstellungen nicht beachtet. Wichtig ist,
+					dass im Nur Ladepunkt-Modus ein interner Ladepunkt mit der
+					korrekten Bauart konfiguriert ist (bei einer Duo zwei
+					interne Ladepunkte) .<br />
+					Eine bebilderte Anleitung zur Konfiguration der Ladepunkte
+					findest Du auf der Homepage:
+					<a
+						href="https://openwb.de/main/?page_id=1025"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						https://openwb.de/main/?page_id=1025
+					</a>
 				</openwb-base-alert>
 				<openwb-base-button-group-input
 					title="Nur Ladepunkt-Modus"
