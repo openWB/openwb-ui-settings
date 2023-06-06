@@ -110,7 +110,7 @@
 							v-model="newCloudData.partner"
 						>
 							<template #help>
-								Wenn diese OpenWB über einen Partner erworben
+								Wenn diese openWB über einen Partner erworben
 								wurde, kann hier ein Support-Zugang für diesen
 								freigegeben werden.
 							</template>
@@ -200,7 +200,7 @@
 							v-model="connectCloudData.partner"
 						>
 							<template #help>
-								Wenn diese OpenWB über einen Partner erworben
+								Wenn diese openWB über einen Partner erworben
 								wurde, kann hier ein Support-Zugang für diesen
 								freigegeben werden.
 							</template>
@@ -279,12 +279,18 @@
 							},
 						]"
 						:model-value="cloudSettings.partner"
-						@update:model-value="updateState(cloudBridgeKey, $event, 'access.partner')"
+						@update:model-value="
+							updateState(
+								cloudBridgeKey,
+								$event,
+								'access.partner'
+							)
+						"
 					>
 						<template #help>
-							Wenn diese OpenWB über einen Partner erworben
-							wurde, kann hier ein Support-Zugang für diesen
-							freigegeben werden.
+							Wenn diese openWB über einen Partner erworben wurde,
+							kann hier ein Support-Zugang für diesen freigegeben
+							werden.
 						</template>
 					</openwb-base-button-group-input>
 					<template #footer>
@@ -373,9 +379,13 @@ export default {
 		cloudSettings: {
 			get() {
 				return {
-					username: this.cloudBridge[this.cloudBridgeKey].remote.username,
-					password: this.cloudBridge[this.cloudBridgeKey].remote.password,
-					partner: this.cloudBridge[this.cloudBridgeKey].access ? this.cloudBridge[this.cloudBridgeKey].access.partner : false,
+					username:
+						this.cloudBridge[this.cloudBridgeKey].remote.username,
+					password:
+						this.cloudBridge[this.cloudBridgeKey].remote.password,
+					partner: this.cloudBridge[this.cloudBridgeKey].access
+						? this.cloudBridge[this.cloudBridgeKey].access.partner
+						: false,
 				};
 			},
 		},
