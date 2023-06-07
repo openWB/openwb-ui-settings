@@ -14,11 +14,11 @@
 			werden. Eine Beispiel-Konfiguration mit Solar-Log Zähler findest Du
 			hier:
 			<a
-				href="https://openwb.de/main/?page_id=1025"
+				href="https://github.com/openWB/core/pull/934/files"
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				https://openwb.de/main/?page_id=1025
+				https://github.com/openWB/core/pull/934/files
 			</a>
 		</openwb-base-alert>
 	</div>
