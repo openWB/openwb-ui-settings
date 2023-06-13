@@ -23,7 +23,8 @@
 			"
 		>
 			<template #help>
-				Bei Nutzung von Fenecon FEMS ist das Passwort im Normalfall user, bei Kaco mit Hy-Control ist das Passwort meist admin.
+				Bei Nutzung von Fenecon FEMS ist das Passwort im Normalfall
+				user, bei Kaco mit Hy-Control ist das Passwort meist admin.
 			</template>
 		</openwb-base-text-input>
 	</div>
