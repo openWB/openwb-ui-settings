@@ -1,14 +1,18 @@
 <template>
 	<div class="device-kostal-steca-inverter">
 		<openwb-base-heading>
-			Einstellungen für Kostal Piko MP oder Steca Grid Coolcept Wechselrichter
+			Einstellungen für Kostal Piko MP oder Steca Grid Coolcept
+			Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-				<openwb-base-button-group-input
+		<openwb-base-button-group-input
 			title="Variante"
 			:buttons="[
 				{ buttonValue: false, text: 'Kostal Piko MP (non-plus)' },
-				{ buttonValue: true, text: 'Kostal Piko MP oder Steca Grid Coolcept' },
+				{
+					buttonValue: true,
+					text: 'Kostal Piko MP oder Steca Grid Coolcept',
+				},
 			]"
 			:model-value="configuration.variant_steca"
 			@update:model-value="

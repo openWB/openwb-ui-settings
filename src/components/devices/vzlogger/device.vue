@@ -1,31 +1,32 @@
 <template>
-	<div class="device-fems-bat">
+	<div class="device-vzlogger">
 		<openwb-base-heading>
-			Einstellungen für openEMS, Fenecon FEMS, Kaco Hy-Control
-			Batteriespeicher
+			Einstellungen für VZLogger
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-number-input
-			title="Anzahl der verbauten Speicher"
+		<openwb-base-text-input
+			title="IP oder Hostname"
+			subtype="host"
 			required
-			:min="1"
-			:max="2"
-			:model-value="configuration.num"
+			:model-value="configuration.ip_address"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.num')
+				updateConfiguration($event, 'configuration.ip_address')
 			"
-		/>
+		>
+			<template #help>
+			Bei Angabe des Ports muss auch das Schema mit angegeben werden: http://ip:port
+			</template>
+		</openwb-base-text-input>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceFemsBat",
+	name: "DeviceVZLogger",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
 		deviceId: { default: undefined },
-		componentId: { required: true },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {
