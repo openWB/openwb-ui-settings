@@ -463,9 +463,26 @@
 							:step="1"
 							:model-value="template.battery_capacity / 1000"
 							@update:model-value="
-								updateState(key, $event * 1000, 'battery_capacity')
+								updateState(
+									key,
+									$event * 1000,
+									'battery_capacity'
+								)
 							"
 						>
+							<template #help>
+								Angabe der Netto-Kapazität der Fahrzeugbatterie.
+								Dient zur Berechnung des manuellen SoC und der
+								geladenen Reichweite. Die Netto-Kapazität
+								unterscheidet sich meist von den Angaben der
+								Fahrzeughersteller. So besitzt ein Tesla Model S
+								90 z. B. nur ca. 83kWh und nicht die durch die
+								Typenbezeichnung suggerierten 90kWh. Andere
+								Hersteller begrenzen die nutzbare Kapazität
+								absichtlich, um eine höhere Lebensdauer der
+								Akkus zu erreichen. Gängig sind eine Drosselung
+								auf 90% der angegebenen Brutto-Kapazität.
+							</template>
 						</openwb-base-number-input>
 						<openwb-base-number-input
 							title="Durchschnittsverbrauch"
@@ -474,7 +491,11 @@
 							:step="0.1"
 							:model-value="template.average_consump / 1000"
 							@update:model-value="
-								updateState(key, $event * 1000, 'average_consump')
+								updateState(
+									key,
+									$event * 1000,
+									'average_consump'
+								)
 							"
 						>
 						</openwb-base-number-input>
