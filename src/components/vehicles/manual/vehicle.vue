@@ -5,11 +5,11 @@
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
-			Beim Anstecken des Fahrzeugs muss der aktuelle SoC (am Display oder
-			über einen Browser) angegeben werden. Anhand des Zählers im
-			Ladepunkt wird dann der aktuelle SoC errechnet. Ausschlaggebend für
-			die Qualität dieses Moduls sind die beiden Einstellungen "Kapazität
-			der Batterie" in der Fahrzeug-Vorlage und "Wirkungsgrad".
+			Beim Anstecken des Fahrzeugs muss der aktuelle SoC über die
+			Hauptseite angegeben werden. Anhand des Zählers im Ladepunkt wird
+			dann der aktuelle SoC errechnet. Ausschlaggebend für die Qualität
+			dieses Moduls sind die beiden Einstellungen "Kapazität der Batterie"
+			in der Fahrzeug-Vorlage und "Wirkungsgrad der Ladeelektronik".
 		</openwb-base-alert>
 		<openwb-base-number-input
 			title="Wirkungsgrad der Ladeelektronik"
