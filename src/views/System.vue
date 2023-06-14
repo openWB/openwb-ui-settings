@@ -165,6 +165,77 @@
 						</div>
 					</div>
 					<hr />
+					<form name="systemCloudBackupForm">
+						<openwb-base-heading
+							>Automatische Sicherung in einen
+							Cloud-Dienst</openwb-base-heading
+						>
+						<openwb-base-alert subtype="info">
+							Um Mitternacht wird automatisch eine Sicherung
+							erstellt und in den angegebenen Cloud-Dienst (nicht
+							openWB Cloud!) hochgeladen. Ist kein Cloud-Dienst
+							konfiguriert, wird keine automatische Sicherung
+							erstellt. Die automatische Sicherung kann unabhängig
+							von der openWB Cloud genutzt werden.
+						</openwb-base-alert>
+						<openwb-base-text-input
+							title="Cloud-URL"
+							subtype="host"
+							required
+							:model-value="
+								$store.state.mqtt['openWB/system/cloud_backup'][
+									'ip_address'
+								]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/system/cloud_backup',
+									$event,
+									'ip_address'
+								)
+							"
+						/>
+						<openwb-base-text-input
+							title="Benutzername"
+							subtype="user"
+							required
+							:model-value="
+								$store.state.mqtt['openWB/system/cloud_backup'][
+									'user'
+								]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/system/cloud_backup',
+									$event,
+									'user'
+								)
+							"
+						/>
+						<openwb-base-text-input
+							title="Passwort"
+							subtype="password"
+							:model-value="
+								$store.state.mqtt['openWB/system/cloud_backup'][
+									'password'
+								]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/system/cloud_backup',
+									$event,
+									'password'
+								)
+							"
+						/>
+						<openwb-base-submit-buttons
+							formName="systemCloudBackupForm"
+							@save="$emit('save')"
+							@reset="$emit('reset')"
+							@defaults="$emit('defaults')"
+						/>
+					</form>
+					<hr />
 					<openwb-base-heading>Wiederherstellung</openwb-base-heading>
 					<openwb-base-alert subtype="danger">
 						Diese Funktion ist noch in Entwicklung! Es kann
@@ -422,6 +493,7 @@ export default {
 				"openWB/system/current_missing_commits",
 				"openWB/system/available_branches",
 				"openWB/system/current_branch",
+				"openWB/system/cloud_backup",
 			],
 			warningAcknowledged: false,
 			selectedTag: "*HEAD*",
