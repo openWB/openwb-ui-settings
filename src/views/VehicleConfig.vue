@@ -461,9 +461,9 @@
 							unit="kWh"
 							:min="10"
 							:step="1"
-							:model-value="template.battery_capacity"
+							:model-value="template.battery_capacity / 1000"
 							@update:model-value="
-								updateState(key, $event, 'battery_capacity')
+								updateState(key, $event * 1000, 'battery_capacity')
 							"
 						>
 						</openwb-base-number-input>
@@ -472,9 +472,9 @@
 							unit="kWh&nbsp;/&nbsp;100km"
 							:min="0"
 							:step="0.1"
-							:model-value="template.average_consump"
+							:model-value="template.average_consump / 1000"
 							@update:model-value="
-								updateState(key, $event, 'average_consump')
+								updateState(key, $event * 1000, 'average_consump')
 							"
 						>
 						</openwb-base-number-input>
