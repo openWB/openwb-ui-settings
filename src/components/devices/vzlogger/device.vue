@@ -14,7 +14,8 @@
 			"
 		>
 			<template #help>
-			Bei Angabe des Ports muss auch das Schema mit angegeben werden: http://ip:port
+				Bei Angabe des Ports muss auch das Schema mit angegeben werden:
+				http://ip:port
 			</template>
 		</openwb-base-text-input>
 	</div>
