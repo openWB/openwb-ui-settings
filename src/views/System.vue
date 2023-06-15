@@ -178,53 +178,40 @@
 							erstellt. Die automatische Sicherung kann unabhängig
 							von der openWB Cloud genutzt werden.
 						</openwb-base-alert>
-						<openwb-base-text-input
-							title="Cloud-URL"
-							subtype="host"
-							required
+						<openwb-base-select-input
+							class="mb-2"
+							title="Backup-Cloud"
+							:options="backupCloudList"
 							:model-value="
-								$store.state.mqtt['openWB/system/cloud_backup'][
-									'ip_address'
-								]
+								$store.state.mqtt[
+									'openWB/system/backup_cloud/config'
+								].type
 							"
 							@update:model-value="
-								updateState(
-									'openWB/system/cloud_backup',
-									$event,
-									'ip_address'
-								)
+								updateSelectedBackupCloud($event)
 							"
-						/>
-						<openwb-base-text-input
-							title="Benutzername"
-							subtype="user"
-							required
-							:model-value="
-								$store.state.mqtt['openWB/system/cloud_backup'][
-									'user'
-								]
+						>
+						</openwb-base-select-input>
+						<openwb-backup-cloud-proxy
+							v-if="
+								$store.state.mqtt[
+									'openWB/system/backup_cloud/config'
+								].type
 							"
-							@update:model-value="
-								updateState(
-									'openWB/system/cloud_backup',
-									$event,
-									'user'
-								)
+							:backupCloudType="
+								$store.state.mqtt[
+									'openWB/system/backup_cloud/config'
+								].type
 							"
-						/>
-						<openwb-base-text-input
-							title="Passwort"
-							subtype="password"
-							:model-value="
-								$store.state.mqtt['openWB/system/cloud_backup'][
-									'password'
-								]
+							:configuration="
+								$store.state.mqtt[
+									'openWB/system/backup_cloud/config'
+								].configuration
 							"
-							@update:model-value="
-								updateState(
-									'openWB/system/cloud_backup',
-									$event,
-									'password'
+							@update:configuration="
+								updateConfiguration(
+									'openWB/system/backup_cloud/config',
+									$event
 								)
 							"
 						/>
@@ -235,6 +222,15 @@
 							@defaults="$emit('defaults')"
 						/>
 					</form>
+					<openwb-base-button-input
+						title="Manuelle Cloud-Sicherung"
+						buttonText="Sicherung erzeugen und hochladen"
+						subtype="success"
+						@buttonClicked="
+							sendSystemCommand('createCloudBackup', {})
+						"
+					>
+					</openwb-base-button-input>
 					<hr />
 					<openwb-base-heading>Wiederherstellung</openwb-base-heading>
 					<openwb-base-alert subtype="danger">
@@ -477,6 +473,7 @@ library.add(
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import ComponentState from "../components/mixins/ComponentState.vue";
+import OpenwbBackupCloudProxy from "../components/backup_clouds/OpenwbBackupCloudProxy.vue";
 
 export default {
 	name: "OpenwbSystem",
@@ -484,16 +481,18 @@ export default {
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,
+		OpenwbBackupCloudProxy,
 	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
+				"openWB/system/configurable/backup_clouds",
 				"openWB/system/current_commit",
 				"openWB/system/current_branch_commit",
 				"openWB/system/current_missing_commits",
 				"openWB/system/available_branches",
 				"openWB/system/current_branch",
-				"openWB/system/cloud_backup",
+				"openWB/system/backup_cloud/config",
 			],
 			warningAcknowledged: false,
 			selectedTag: "*HEAD*",
@@ -502,6 +501,13 @@ export default {
 		};
 	},
 	computed: {
+		backupCloudList: {
+			get() {
+				return this.$store.state.mqtt[
+					"openWB/system/configurable/backup_clouds"
+				];
+			},
+		},
 		updateAvailable() {
 			return (
 				this.$store.state.mqtt["openWB/system/current_branch_commit"] &&
@@ -528,6 +534,24 @@ export default {
 		},
 	},
 	methods: {
+		getBackupCloudDefaultConfiguration(backupCloudType) {
+			const backupCloudDefaults = this.backupCloudList.find(
+				(element) => element.value == backupCloudType
+			);
+			if (
+				Object.prototype.hasOwnProperty.call(
+					backupCloudDefaults,
+					"defaults"
+				)
+			) {
+				return { ...backupCloudDefaults.defaults };
+			}
+			console.warn(
+				"no default configuration found for backup cloud type!",
+				backupCloudType
+			);
+			return {};
+		},
 		sendSystemCommand(command, data = {}) {
 			this.$emit("sendCommand", {
 				command: command,
@@ -575,6 +599,21 @@ export default {
 				text: "Aktuellster Stand",
 			});
 			return options;
+		},
+		updateConfiguration(key, event) {
+			console.debug("updateConfiguration", key, event);
+			this.updateState(key, event.value, event.object);
+		},
+		updateSelectedBackupCloud($event) {
+			this.updateState(
+				"openWB/system/backup_cloud/config",
+				$event,
+				"type"
+			);
+			this.updateState(
+				"openWB/system/backup_cloud/config",
+				this.getBackupCloudDefaultConfiguration($event)
+			);
 		},
 		updateSelectedFile(event) {
 			this.selectedFile = event.target.files[0];
