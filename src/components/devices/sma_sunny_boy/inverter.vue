@@ -26,6 +26,7 @@
 			:options="[
 				{ value: 0, text: 'Standard' },
 				{ value: 1, text: 'Core-2' },
+				{ value: 2, text: 'Data Manager/Cluster Controller' },
 			]"
 			:model-value="configuration.version"
 			@update:model-value="
