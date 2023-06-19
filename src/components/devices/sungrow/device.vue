@@ -5,10 +5,8 @@
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
-			Einige Sungrow-Geräte, wie z.B. der SH10RT, verfügen über zwei
-			LAN-Schnittstellen. Eine davon nutzt den WiNet-S Dongle, die andere
-			nicht. Wenn keine oder fehlerhafte Daten ausgelesen werden, den
-			LAN-Anschluss ohne WiNet-S Dongle nutzen.
+			Bitte zur Fehlervermeidung die Firmware des Sungrow Wechselrichters
+			und WiNet-S Dongls aktuell halten.
 		</openwb-base-alert>
 		<openwb-base-text-input
 			title="IP oder Hostname"
@@ -17,14 +15,6 @@
 			:model-value="configuration.ip_address"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.ip_address')
-			"
-		/>
-		<openwb-base-number-input
-			title="Port"
-			required
-			:model-value="configuration.port"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.port')
 			"
 		/>
 		<openwb-base-number-input

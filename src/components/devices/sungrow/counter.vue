@@ -15,7 +15,14 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.version')
 			"
-		/>
+		>
+			<template #help>
+				Die Variante SH ist nur über die LAN-IP mit openWB nutzbar.
+				Hierzu hinter dem WiNet-S Dongle den Lan Anschluss nutzen. Den
+				WiNet-S Dongle zusätzlich ins Heimnetz (per Lan oder Wlan)
+				einbinden, um ISolarCloud nutzen zu können.
+			</template>
+		</openwb-base-select-input>
 	</div>
 </template>
 
