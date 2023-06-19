@@ -171,12 +171,13 @@
 							Cloud-Dienst</openwb-base-heading
 						>
 						<openwb-base-alert subtype="info">
-							Um Mitternacht wird automatisch eine Sicherung
-							erstellt und in den angegebenen Cloud-Dienst (nicht
-							openWB Cloud!) hochgeladen. Ist kein Cloud-Dienst
-							konfiguriert, wird keine automatische Sicherung
-							erstellt. Die automatische Sicherung kann unabhängig
-							von der openWB Cloud genutzt werden.
+							Zwischen Mitternacht und 5:00 Uhr wird automatisch
+							eine Sicherung erstellt und in den angegebenen
+							Cloud-Dienst (nicht openWB Cloud!) hochgeladen. Ist
+							kein Cloud-Dienst konfiguriert, wird keine
+							automatische Sicherung erstellt. Die automatische
+							Sicherung kann unabhängig von der openWB Cloud
+							genutzt werden.
 						</openwb-base-alert>
 						<openwb-base-select-input
 							class="mb-2"
