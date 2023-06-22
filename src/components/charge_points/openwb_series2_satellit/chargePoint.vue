@@ -13,7 +13,7 @@
 			:min="1"
 			:max="2"
 			:model-value="configuration.duo_num"
-			@update:model-value="updateConfiguration($event, 'configuration.duo_num')"
+			@update:model-value="updateConfiguration($event, 'duo_num')"
 		>
 			<template #help>
 				Bei einfachen Ladepunkten ist hier immer eine "1" einzutragen.
@@ -28,7 +28,7 @@
 			]"
 			:model-value="configuration.counter_type"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.counter_type')
+				updateConfiguration($event, 'counter_type')
 			"
 		/>
 	</div>
