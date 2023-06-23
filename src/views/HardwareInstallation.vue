@@ -282,27 +282,21 @@
 							</span>
 						</template>
 						<template #help>
-							Bitte ein Gerät auswählen, das hinzugefügt werden
-							soll.<br />
-							Für jedes physische Gerät, das abgefragt wird, wird
-							ein separates Gerät konfiguriert. Wenn mehrere Daten
-							über ein Gerät ausgelesen werden können, z.B. EVU
-							und Wechselrichter-Daten vom Wechselrichter, werden
-							für dieses Gerät die entsprechenden Komponenten
-							konfiguriert. Wenn die Daten lokal abgefragt werden,
-							liefert meist die IP-Adresse den Hinweis auf die
-							richtige Konfiguration: Wenn EVU- und
-							Wechselrichter-Daten über zwei verschiedene
-							IP-Adressen abgefragt werden, müssen zwei Geräte mit
-							jeweils einer Komponente konfiguriert werden. Werden
-							die Daten über die gleiche IP-Adresse abgefragt,
-							wird ein Gerät mit einer Zähler- und einer
-							Wechselrichter-Komponente angelegt.<br />
-							Wenn in 1.9 bei einem/mehreren Modulen der Hinweis
-							"Die Einstellungen bitte im
-							EVU-/Speicher-/Wechselrichter-Modul vornehmen"
-							steht, muss ein Gerät mit den entsprechenden
-							Komponenten konfiguriert werden.
+							Die openWB ist auf Werte von Messpunkten (Zähler,
+							Energy Meter usw.) angewiesen. Hierfür werden
+							"Geräte" und "Komponenten" verwendet.<br />
+							Ein Gerät kann mehrere Komponenten haben, z.B. ein
+							Messpunkt für PV-Ertrag und ein Messpunkt für Werte
+							wie Netzeinspeisung/-bezug am EVU-Punkt. Die
+							Verbindung mit dem Gerät erfolgt über die Eingabe
+							der zugehörigen IP-Adresse.<br /><br />
+							Werden die Daten von verschiedenen Messpunkten (z.B.
+							PV, EVU usw.) über die gleiche IP-Adresse abgefragt,
+							wird dafür ein Gerät mit z.B. zwei Komponenten für
+							PV- und EVU- Messpunkt angelegt.<br />
+							Verfügt jeder Messpunkt über eine eigene IP-Adresse,
+							wird jeder Messpunkt als eigenes Gerät mit nur einer
+							Komponente angelegt.
 						</template>
 					</openwb-base-select-input>
 				</div>
