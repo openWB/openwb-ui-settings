@@ -27,9 +27,7 @@
 				{ value: 'sdm630', text: 'SDM 630 / 72DMv2 und kompatible' },
 			]"
 			:model-value="configuration.counter_type"
-			@update:model-value="
-				updateConfiguration($event, 'counter_type')
-			"
+			@update:model-value="updateConfiguration($event, 'counter_type')"
 		/>
 	</div>
 </template>
