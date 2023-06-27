@@ -312,11 +312,23 @@
 						"
 					>
 						<template #help>
-							Bei der Auswahl "Fahrzeuge" wird auch eventuell
-							vorhandene Ladeleistung eines Speichers für die
-							verfügbare Ladeleistung berücksichtigt. Im Modus
-							"Speicher" hingegen wird dieser nicht in seiner
-							Ladeleistung begrenzt.<br />
+							Sofern ein Hausstromspeicher (im Folgenden
+							"Speicher" genannt) im Energiesystem verbaut ist,
+							kann dieser beim Fahrzeugladen mit berücksichtigt
+							werden. Dies erfolgt passiv über die
+							Berücksichtigung der Speicherleistungswerte und des
+							Speicher-SoC. Eine aktive Speichersteuerung durch
+							openWB ist aktuell mangels Speicherschnittstelle
+							nicht möglich.<br />
+							Bei Priorisierung "Fahrzeuge" wird die gesamte
+							PV-Leistung ABZÜGLICH der "reservierten
+							Ladeleistung" des Speichers zum Fahrzeugladen
+							verwendet.<br />
+							Bei Priorisierung "Speicher" wird die gesamte
+							PV-Leistung und ZUSÄTZLICH die "erlaubte
+							Entladeleistung" des Speichers (bis zum Erreichen
+							des "minimalen Entlade-SoC" des Speichers) zum
+							Fahrzeugladen verwendet.<br />
 							Beide Modi lassen sich mit den zusätzlichen
 							Einstellungen an die eigenen Bedürfnisse anpassen,
 							sodass auch ein Mischbetrieb möglich ist.
