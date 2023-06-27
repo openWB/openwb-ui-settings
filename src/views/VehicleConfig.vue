@@ -269,7 +269,7 @@
 								dann wieder im oben definierten Intervall.
 							</template>
 						</openwb-base-select-input>
-						<openwb-vehicle-proxy
+						<div
 							v-if="
 								$store.state.mqtt[
 									'openWB/vehicle/' +
@@ -277,30 +277,145 @@
 										'/soc_module/config'
 								].type
 							"
-							:vehicleId="vehicleId"
-							:vehicleType="
-								$store.state.mqtt[
-									'openWB/vehicle/' +
-										vehicleId +
-										'/soc_module/config'
-								].type
-							"
-							:configuration="
-								$store.state.mqtt[
-									'openWB/vehicle/' +
-										vehicleId +
-										'/soc_module/config'
-								].configuration
-							"
-							@update:configuration="
-								updateConfiguration(
-									'openWB/vehicle/' +
-										vehicleId +
-										'/soc_module/config',
-									$event
-								)
-							"
-						/>
+						>
+							<openwb-vehicle-proxy
+								:vehicleId="vehicleId"
+								:vehicleType="
+									$store.state.mqtt[
+										'openWB/vehicle/' +
+											vehicleId +
+											'/soc_module/config'
+									].type
+								"
+								:configuration="
+									$store.state.mqtt[
+										'openWB/vehicle/' +
+											vehicleId +
+											'/soc_module/config'
+									].configuration
+								"
+								@update:configuration="
+									updateConfiguration(
+										'openWB/vehicle/' +
+											vehicleId +
+											'/soc_module/config',
+										$event
+									)
+								"
+							/>
+							<div
+								v-if="
+									$store.state.mqtt[
+										'openWB/vehicle/' +
+											vehicleId +
+											'/soc_module/interval_config'
+									]
+								"
+							>
+								<openwb-base-heading>
+									Aktualisierung der Fahrzeugdaten
+									<template #help>
+										Einige Hersteller begrenzen die
+										möglichen Abfragen. Sobald ein gewisses
+										Limit in einem Zeitraum überschritten
+										wird, werden weitere Anfragen blockiert.
+										Die Zeitintervalle sollten daher nicht
+										zu klein gewählt werden.
+									</template>
+								</openwb-base-heading>
+								<openwb-base-number-input
+									title="Während der Ladung"
+									unit="Min."
+									:model-value="
+										$store.state.mqtt[
+											'openWB/vehicle/' +
+												vehicleId +
+												'/soc_module/interval_config'
+										].request_interval_charging
+									"
+									@update:model-value="
+										updateState(
+											'openWB/vehicle/' +
+												vehicleId +
+												'/soc_module/interval_config',
+											$event,
+											'request_interval_charging'
+										)
+									"
+								>
+									<template #help>
+										Der Ladestand des Fahrzeugs (SoC) wird
+										bei einem laufenden Ladevorgang in dem
+										hier eingestellten Intervall in Minuten
+										abgefragt.
+									</template>
+								</openwb-base-number-input>
+								<openwb-base-number-input
+									title="Ohne laufende Ladung"
+									unit="Min."
+									:model-value="
+										$store.state.mqtt[
+											'openWB/vehicle/' +
+												vehicleId +
+												'/soc_module/interval_config'
+										].request_interval_not_charging
+									"
+									@update:model-value="
+										updateState(
+											'openWB/vehicle/' +
+												vehicleId +
+												'/soc_module/interval_config',
+											$event,
+											'request_interval_not_charging'
+										)
+									"
+								>
+									<template #help>
+										Der Ladestand des Fahrzeugs (SoC) wird
+										in dem hier eingestellten Intervall in
+										Minuten abgefragt, falls kein
+										Ladevorgang aktiv ist.
+									</template>
+								</openwb-base-number-input>
+								<openwb-base-button-group-input
+									title="Nur aktualisieren wenn angesteckt"
+									:buttons="[
+										{
+											buttonValue: false,
+											text: 'Nein',
+											class: 'btn-outline-danger',
+										},
+										{
+											buttonValue: true,
+											text: 'Ja',
+											class: 'btn-outline-success',
+										},
+									]"
+									:model-value="
+										$store.state.mqtt[
+											'openWB/vehicle/' +
+												vehicleId +
+												'/soc_module/interval_config'
+										].request_only_plugged
+									"
+									@update:model-value="
+										updateState(
+											'openWB/vehicle/' +
+												vehicleId +
+												'/soc_module/interval_config',
+											$event,
+											'request_only_plugged'
+										)
+									"
+								>
+									<template #help>
+										Wird hier "Ja" ausgewählt, dann wird der
+										Ladestand des Fahrzeugs nur abgefragt,
+										wenn das Ladekabel angesteckt ist.
+									</template>
+								</openwb-base-button-group-input>
+							</div>
+						</div>
 					</openwb-base-card>
 				</div>
 			</openwb-base-card>
@@ -1953,6 +2068,7 @@ export default {
 				"openWB/vehicle/+/tag_id",
 				"openWB/system/configurable/soc_modules",
 				"openWB/vehicle/+/soc_module/config",
+				"openWB/vehicle/+/soc_module/interval_config",
 			],
 			showVehicleModal: false,
 			modalVehicleIndex: undefined,
