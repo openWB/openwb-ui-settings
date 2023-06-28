@@ -215,6 +215,9 @@
 									$event
 								)
 							"
+							@sendCommand="
+								sendSystemCommand($event.command, $event.args)
+							"
 						/>
 						<openwb-base-submit-buttons
 							formName="systemCloudBackupForm"
