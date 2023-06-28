@@ -176,10 +176,15 @@ export default {
 			if (topic.includes("#") || topic.includes("+")) {
 				console.debug("skipping init of wildcard topic:", topic);
 			} else {
-				this.$store.commit("addTopic", {
-					topic: topic,
-					payload: undefined,
-				});
+				// prevent overwriting data with multiple subscriptions
+				if (!Object.keys(this.$store.state.mqtt).includes(topic)) {
+					this.$store.commit("addTopic", {
+						topic: topic,
+						payload: undefined,
+					});
+				} else {
+					console.error("multiple subscriptions of topic!", topic);
+				}
 			}
 		});
 		this.$root.doSubscribe(this.mqttTopicsToSubscribe);
