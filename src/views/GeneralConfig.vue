@@ -16,14 +16,14 @@
 					korrekten Bauart konfiguriert ist (bei einer Duo zwei
 					interne Ladepunkte) .<br />
 					Eine bebilderte Anleitung zur Konfiguration der Ladepunkte
-					findest Du auf der Homepage:
+					findest Du auf der
 					<a
 						href="https://openwb.de/main/?page_id=1025"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
-						https://openwb.de/main/?page_id=1025
-					</a>
+						Homepage </a
+					>.
 				</openwb-base-alert>
 				<openwb-base-button-group-input
 					title="Nur Ladepunkt-Modus"
