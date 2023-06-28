@@ -177,7 +177,17 @@
 							kein Cloud-Dienst konfiguriert, wird keine
 							automatische Sicherung erstellt. Die automatische
 							Sicherung kann unabhängig von der openWB Cloud
-							genutzt werden.
+							genutzt werden.<br />
+							Die Anleitung zur Konfiguration des Cloud-Dienstes
+							findest Du
+							<a
+								href="https://github.com/openWB/core/wiki/Cloud-Backup"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								hier
+							</a>
+							.
 						</openwb-base-alert>
 						<openwb-base-select-input
 							class="mb-2"
