@@ -319,20 +319,20 @@
 						</div>
 					</div>
 					<hr />
-					<openwb-base-heading
-						>Werkseinstellungen</openwb-base-heading
-					>
+					<openwb-base-heading>Zurücksetzen</openwb-base-heading>
 					<openwb-base-alert subtype="danger">
-						Alle Einstellungen, die auf den Einstellseiten
-						vorgenommen wurden, werden unwiederbringlich gelöscht.
-						Bitte erstelle vor dem Zurücksetzen eine Sicherung!
+						Alle Einstellungen und Daten für die Auswertungen werden
+						unwiederbringlich gelöscht. Bitte erstelle vor dem
+						Zurücksetzen eine Sicherung!
 					</openwb-base-alert>
 					<openwb-base-alert subtype="info">
 						Alle Einstellungen, angelegte Geräte/Komponenten,
-						Ladepunkte und Fahrzeuge, etc werden gelöscht. Tages-,
-						Monats- und Jahresauswertungen sowie das Ladelog werden
-						nicht gelöscht. Nach dem Zurücksetzen wird die openWB
-						neu gestartet.
+						Ladepunkte und Fahrzeuge, etc, Tages-, Monats- und
+						Jahresauswertungen sowie das Ladelog werden gelöscht.
+						Auch die Vorkonfiguration im Auslieferungszustand wird
+						gelöscht. Die openWB muss danach komplett neu
+						eingerichtet werden. Nach dem Zurücksetzen wird die
+						openWB neu gestartet.
 					</openwb-base-alert>
 					<div class="row justify-content-center">
 						<div
@@ -341,15 +341,18 @@
 							<openwb-base-click-button
 								class="btn-danger clickable"
 								@buttonClicked="
-									sendSystemCommand('factoryReset', {
-									})
+									sendSystemCommand('factoryReset', {})
 								"
 							>
 								<font-awesome-icon
 									fixed-width
 									:icon="['fas', 'skull-crossbones']"
 								/>
-								Zurücksetzen auf Werkseinstellungen
+								Zurücksetzen
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'skull-crossbones']"
+								/>
 							</openwb-base-click-button>
 						</div>
 					</div>
