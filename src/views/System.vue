@@ -318,6 +318,44 @@
 							</openwb-base-click-button>
 						</div>
 					</div>
+					<hr />
+					<openwb-base-heading>Zurücksetzen</openwb-base-heading>
+					<openwb-base-alert subtype="danger">
+						Alle Einstellungen und Daten für die Auswertungen werden
+						unwiederbringlich gelöscht. Bitte erstelle vor dem
+						Zurücksetzen eine Sicherung!
+					</openwb-base-alert>
+					<openwb-base-alert subtype="info">
+						Alle Einstellungen, angelegte Geräte/Komponenten,
+						Ladepunkte und Fahrzeuge, etc, Tages-, Monats- und
+						Jahresauswertungen sowie das Ladelog werden gelöscht.
+						Auch die Vorkonfiguration im Auslieferungszustand wird
+						gelöscht. Die openWB muss danach komplett neu
+						eingerichtet werden. Nach dem Zurücksetzen wird die
+						openWB neu gestartet.
+					</openwb-base-alert>
+					<div class="row justify-content-center">
+						<div
+							class="col-md-4 d-flex py-1 justify-content-center"
+						>
+							<openwb-base-click-button
+								class="btn-danger clickable"
+								@buttonClicked="
+									sendSystemCommand('factoryReset', {})
+								"
+							>
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'skull-crossbones']"
+								/>
+								Zurücksetzen
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'skull-crossbones']"
+								/>
+							</openwb-base-click-button>
+						</div>
+					</div>
 					<template #footer></template>
 				</openwb-base-card>
 			</form>
