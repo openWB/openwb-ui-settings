@@ -134,13 +134,6 @@
 						>
 							Zielladen
 						</router-link>
-						<router-link
-							to="/StandbyChargeConfig"
-							class="dropdown-item"
-							active-class="active disabled"
-						>
-							Standby
-						</router-link>
 					</div>
 				</li>
 				<li class="nav-item dropdown">
