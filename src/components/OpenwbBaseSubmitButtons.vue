@@ -26,7 +26,7 @@
 		Wollen Sie wirklich alle Werte dieser Seite auf die Werkseinstellungen
 		zurücksetzen?
 	</openwb-base-modal-dialog>
-	<div class="row justify-content-center">
+	<div class="row justify-content-center mb-1">
 		<div class="col-md-4 d-flex py-1 justify-content-center">
 			<button
 				id="saveSettingsBtn"
