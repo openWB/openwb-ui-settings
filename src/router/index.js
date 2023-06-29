@@ -98,14 +98,6 @@ const routes = [
 		component: () => import("../views/ScheduledChargeConfig.vue"),
 	},
 	{
-		path: "/StandbyChargeConfig",
-		name: "StandbyChargeConfig",
-		meta: {
-			heading: "Ladeeinstellungen - Standby",
-		},
-		component: () => import("../views/StandbyChargeConfig.vue"),
-	},
-	{
 		path: "/HardwareInstallation",
 		name: "HardwareInstallation",
 		meta: {
