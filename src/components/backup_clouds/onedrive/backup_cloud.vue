@@ -6,7 +6,8 @@
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
 			Zum Abruf der Zugangsberechtigung bitte die Konfiguration speichern,
-			dann die Schritte 1-4 durchführen und danach die Konfiguration erneut speichern.
+			dann die Schritte 1-4 durchführen und danach die Konfiguration erneut speichern. <br>
+			Auth Code und URL werden nur einmal benötigt werden nach erfolgreicher Authorisierung wieder gelöscht.			
 		</openwb-base-alert>
 		<openwb-base-text-input
 			title="Backupverzeichnis in Onedrive"
@@ -22,6 +23,12 @@
 				In diesem Verzeichnis werden die Backudateien erstellt. Bitte
 				den Pfad mit / beenden. <br/>Beispiel: /openWB/Backup/
 			</template>
+		</openwb-base-text-input>
+		<openwb-base-text-input
+						title="Anmeldedaten auf openWB gespeichert"
+						readonly
+						:model-value="configuration.persistent_tokencache.length > 0 ? 'Ja' : 'Nein'"
+					>
 		</openwb-base-text-input>
 		<openwb-base-heading>Zugang zu Onedrive für diese openWB authorisieren</openwb-base-heading>
 		<openwb-base-button-input
@@ -44,11 +51,6 @@
 			subtype="text"
 			readonly
 			:model-value="configuration.authcode"
-			@update:model-value="
-				updateConfiguration($event,
-					'configuration.authcode'
-				)
-			"
 		>
 		</openwb-base-text-input>
 		<openwb-base-text-input
@@ -56,20 +58,14 @@
 			subtype="url"
 			readonly
 			:model-value="configuration.authurl"
-			@update:model-value="
-				updateConfiguration($event,
-					'configuration.authurl'
-				)
-			"
 		>
 			<template #help>
 				Diese URL im Browser öffnen und den Code eingeben. Dies erzeugt die notwendigen Zugangsberechtigung für diese openWB.
 			</template>
 		</openwb-base-text-input>
-
 		<openwb-base-button-input
 						title="4. Token abrufen und speichern"
-						buttonText="Authorisierungstokens abrufen und speichern"
+						buttonText="Authorisierungstokens abrufen"
 						subtype="success"
 						@buttonClicked="
 										sendSystemCommand('retrieveMSALTokens', {})
@@ -79,7 +75,8 @@
 							Zugangstoken wird abgerufen und gespeichert, damit das Backup durchgeführt werden kann.
 							Zugangstoken werden nur lokal auf dieser openWB gespeichert.
 						</template>
-					</openwb-base-button-input>
+		</openwb-base-button-input>
+
 	</div>
 </template>
 
