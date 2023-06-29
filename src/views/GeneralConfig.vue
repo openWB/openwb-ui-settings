@@ -179,9 +179,8 @@
 							Die Erhöhung der Frequenz wird durchgeführt, um die
 							PV Anlagen abzuschalten.<br />
 							<span class="text-danger">
-								Die Option ist nur aktiv, wenn der Ladepunkt die
-								Frequenz übermittelt. Jede openWB Series1/2
-								unterstützt dies.
+								Die Option ist nur aktiv, wenn der EVU-Zähler
+								die Frequenz übermittelt.
 							</span>
 						</template>
 					</openwb-base-button-group-input>
