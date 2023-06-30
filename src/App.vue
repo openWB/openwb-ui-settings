@@ -153,6 +153,7 @@ export default {
 					"Connection succeeded! ClientId: ",
 					this.client.options.clientId
 				);
+				this.doSubscribe(["openWB/system/usage_terms_acknowledged"]); // required for route guard
 			});
 			this.client.on("error", (error) => {
 				console.error("Connection failed", error);
