@@ -225,18 +225,18 @@
 							Support
 						</router-link>
 						<router-link
-							to="/System/DataProtection"
-							class="dropdown-item"
-							active-class="active disabled"
-						>
-							Datenschutz
-						</router-link>
-						<router-link
 							to="/System/SystemConfiguration"
 							class="dropdown-item"
 							active-class="active disabled"
 						>
 							System
+						</router-link>
+						<router-link
+							to="/System/LegalSettings"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							Rechtliches
 						</router-link>
 					</div>
 				</li>

@@ -1,25 +1,64 @@
 <template>
 	<div class="dataProtection">
 		<form name="dataProtectionForm">
-			<openwb-base-card title="Datenschutzerklärung">
+			<openwb-base-card
+				title="Nutzungsbedingungen &amp; Datenschutzerklärung"
+			>
 				<iframe
-					src="dataprotection.html"
+					src="dataProtection-usageTerms.html"
 					width="100%"
 					height="400px"
 					class="bg-light"
 				></iframe>
 				<hr />
 				<openwb-base-button-group-input
-					title="Akzeptieren"
+					title="Nutzungsbedingungen"
 					:buttons="[
 						{
 							buttonValue: false,
-							text: 'Nein',
+							text: 'Ablehnen',
 							class: 'btn-outline-danger',
 						},
 						{
 							buttonValue: true,
-							text: 'Ja',
+							text: 'Akzeptieren',
+							class: 'btn-outline-success',
+						},
+					]"
+					:model-value="
+						$store.state.mqtt[
+							'openWB/system/usage_terms_acknowledged'
+						]
+					"
+					@update:model-value="
+						updateState(
+							'openWB/system/usage_terms_acknowledged',
+							$event
+						)
+					"
+				/>
+				<openwb-base-alert
+					v-if="
+						!$store.state.mqtt[
+							'openWB/system/usage_terms_acknowledged'
+						]
+					"
+					subtype="danger"
+				>
+					Sie müssen die Nutzungsbedingungen akzeptieren, bevor openWB
+					eingesetzt werden kann.
+				</openwb-base-alert>
+				<openwb-base-button-group-input
+					title="Datenschutzerklärung"
+					:buttons="[
+						{
+							buttonValue: false,
+							text: 'Ablehnen',
+							class: 'btn-outline-danger',
+						},
+						{
+							buttonValue: true,
+							text: 'Akzeptieren',
 							class: 'btn-outline-success',
 						},
 					]"
@@ -35,8 +74,15 @@
 						)
 					"
 				/>
-				<openwb-base-alert subtype="warning">
-					Wenn sie nicht einwilligen wird eine ggf. konfigurierte
+				<openwb-base-alert
+					v-if="
+						!$store.state.mqtt[
+							'openWB/system/dataprotection_acknowledged'
+						]
+					"
+					subtype="warning"
+				>
+					Wenn sie nicht einwilligen, wird eine ggf. konfigurierte
 					Cloud Anbindung gelöscht. Die openWB arbeitet autark wie
 					gewohnt weiter. Fernzugriff und Remote Support sind dann
 					nicht mehr möglich!
@@ -64,6 +110,7 @@ export default {
 		return {
 			mqttTopicsToSubscribe: [
 				"openWB/system/dataprotection_acknowledged",
+				// "openWB/system/usage_terms_acknowledged", // already done in app.vue
 			],
 		};
 	},
