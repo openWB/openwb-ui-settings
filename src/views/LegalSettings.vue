@@ -1,7 +1,9 @@
 <template>
 	<div class="dataProtection">
 		<form name="dataProtectionForm">
-			<openwb-base-card title="Nutzungsbedingungen &amp; Datenschutzerklärung">
+			<openwb-base-card
+				title="Nutzungsbedingungen &amp; Datenschutzerklärung"
+			>
 				<iframe
 					src="dataProtection-usageTerms.html"
 					width="100%"
@@ -36,9 +38,11 @@
 					"
 				/>
 				<openwb-base-alert
-					v-if="!$store.state.mqtt[
+					v-if="
+						!$store.state.mqtt[
 							'openWB/system/usage_terms_acknowledged'
-						]"
+						]
+					"
 					subtype="danger"
 				>
 					Sie müssen die Nutzungsbedingungen akzeptieren, bevor openWB
@@ -71,9 +75,11 @@
 					"
 				/>
 				<openwb-base-alert
-					v-if="!$store.state.mqtt[
+					v-if="
+						!$store.state.mqtt[
 							'openWB/system/dataprotection_acknowledged'
-						]"
+						]
+					"
 					subtype="warning"
 				>
 					Wenn sie nicht einwilligen, wird eine ggf. konfigurierte

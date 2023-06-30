@@ -195,7 +195,8 @@ const router = createRouter({
 router.beforeEach(async (to) => {
 	if (to.name !== "LegalSettings") {
 		// redirect to data protection page to force acceptance of usage terms
-		const usageTermsAcknowledged = await store.getters.usageTermsAcknowledged;
+		const usageTermsAcknowledged = await store.getters
+			.usageTermsAcknowledged;
 		if (!usageTermsAcknowledged) {
 			return { name: "LegalSettings" };
 		}
