@@ -208,7 +208,22 @@
 									'control_pilot_interruption_hw'
 								)
 							"
-						/>
+						>
+							<template #help>
+								Die Control-Pilot-Leitung ist im Ladekabel
+								integriert und dient der Steuerung der
+								Fahrzeugladung (An/Aus/Stromvorgaben). Bei
+								einigen Fahrzeugen können durch die Regelung
+								erzwungene, längere Ladestops (z.B. beim
+								PV-Laden) zu unerwünschten "Einschlaf"-Effekten
+								des Fahrzeuges führen. Mit diesem feature,
+								welches hardwarseitig verbaut sein muss, kann
+								ein Abstecken des Ladesteckers simuliert werden,
+								um ein Aufwecken des Fahrzeuges zu ermöglichen.
+								Die Funktion hängt immer auch vom Fahrzeugtyp
+								ab.
+							</template>
+						</openwb-base-button-group-input>
 						<openwb-base-heading>
 							Elektrischer Anschluss
 						</openwb-base-heading>
@@ -262,29 +277,29 @@
 							"
 						>
 							<template #help>
-								Hier ist anzugeben, an welcher Phase am
-								Hausanschluss die Phase 1 dieses Ladepunktes
-								angeschlossen ist. Diese Information wird für
-								das Lastmanagement benötigt, um bei einer
-								Schieflast gezielt einzelne Ladepunkte zu
+								Hier ist anzugeben, an welcher Phase des
+								Hausanschlusses (EVU-Punkt) die Phase 1 dieses
+								Ladepunktes angeschlossen ist. Diese Information
+								wird für das Lastmanagement benötigt, um bei
+								einer Schieflast gezielt einzelne Ladepunkte zu
 								drosseln.<br />
 								Bei mehreren Ladepunkten macht es Sinn, die
-								Phasen rotierend anzuschließen, damit mehrere
-								nicht dreiphasig ladende Fahrzeuge mit optimaler
-								Leistung laden können, bevor das Lastmanagement
-								eingreift.<br />
+								Phasen der LP rotierend anzuschließen, damit
+								mehrere "nicht-dreiphasig" ladende Fahrzeuge mit
+								optimaler Leistung laden können, bevor das
+								Lastmanagement eingreift.<br />
 								Es wird vorausgesetzt, dass das Drehfeld
 								innerhalb der Installation gleich bleibt. Wenn
-								demnach L1 des Ladepunktes auf EVU L2 liegt,
-								muss L2 des Ladepunktes auf EVU L3 aufgelegt
-								sein.<br />
-								Eine Möglichkeit, den Anschluss von L1 zu
-								ermitteln, ist eine einphasige Ladung zu starten
-								und die Phasenströme am EVU-Zähler zu
-								beobachten. Mit einem zweiphasig ladenden
-								Fahrzeug kann danach auch der Anschluss von L2
-								ermittelt und so das Drehfeld kontrolliert
-								werden.<br />
+								z.B. L1 des Ladepunktes auf EVU-L2 liegt, muss
+								L2 des Ladepunktes auf EVU-L3 aufgelegt sein
+								(und L3 des Ladepunktes auf EVU-L1).<br />
+								Eine Möglichkeit, die zur Ladepunktphase L1
+								zugehörige EVU-Phase zu ermitteln, ist eine
+								einphasige Ladung zu starten und die
+								Phasenströme am EVU-Zähler zu beobachten. Mit
+								einem zweiphasig ladenden Fahrzeug kann danach
+								auch der Anschluss von L2 ermittelt und so das
+								Drehfeld kontrolliert werden.<br />
 								Im Zweifel bitte das Drehfeld von einer
 								Fachkraft prüfen und korrigieren lassen.
 							</template>
@@ -319,8 +334,43 @@
 						</span>
 					</template>
 					<template #help>
-						Bitte einen Ladepunkt auswählen, der hinzugefügt werden
-						soll.
+						Bitte einen Ladepunkt auswählen, der der openWB-Regelung
+						hinzugefügt werden soll.<br />
+						<ul>
+							<li>
+								Interne openWB - wenn diese openWB über einen
+								verbauten Ladepunkt mit Regelcontroller verfügt
+								(z.B. Standard(+), Custom, Duo, Buchse, NICHT
+								Standalone); ansonsten immer anlegen, egal ob
+								diese openWB steuert = primary oder
+								ferngesteuert wird = secondary
+							</li>
+							<li>
+								Externe openWB - wenn diese openWB (primary) die
+								Fernsteuerung von externen openWB (secondary)
+								übernimmt
+							</li>
+							<li>
+								MQTT-Ladepunkt - nur zur Nutzung des
+								openWB-Simulators zugelassen
+							</li>
+							<li>
+								openWB Pro - wenn diese openWB (primary) die
+								Fernsteuerung einer openWB Pro (secondary)
+								übernimmt
+							</li>
+							<li>
+								openWB series2 satellit/Satellit Duo - wenn
+								diese openWB (primary) die Fernsteuerung einer
+								openWB series2 satellit/Satellit Duo (secondary)
+								übernimmt
+							</li>
+							<li>
+								smartWB/EVSE-Wifi - wenn diese openWB (primary)
+								die Fernsteuerung einer smartWB/EVSE-Wifi
+								übernimmt
+							</li>
+						</ul>
 					</template>
 				</openwb-base-select-input>
 			</openwb-base-card>
@@ -478,10 +528,11 @@
 						<openwb-base-alert subtype="info">
 							Diese Einstellung hat
 							<span class="highlight">keine</span> Auswirkung auf
-							das Lastmanagement! Ist die Zuleitung nicht mit der
-							vollen Ladeleistung der openWB abgesichert, muss für
-							den Ladepunkt ein virtueller Zähler konfiguriert
-							werden, der den Strom im Lastmanagement begrenzt.
+							das Lastmanagement!<br />
+							Ist die Zuleitung nicht mit der vollen Ladeleistung
+							der openWB abgesichert, muss für den Ladepunkt ein
+							virtueller Zähler konfiguriert werden, der den Strom
+							im Lastmanagement begrenzt.
 							<br />
 							Bei openWBs, deren Leistung z.B. aufgrund der
 							KfW-Förderung auf 11kW begrenzt ist, muss hier bei
@@ -541,7 +592,16 @@
 									'autolock.active'
 								)
 							"
-						/>
+						>
+							<template #help>
+								Wird die automatische Sperre aktiviert, können
+								Fahrzeugladungen mittels Zeitplan auf gewünschte
+								Zeitbereiche eingeschränkt werden. Dies kann
+								z.B. bei Zugänglichkeiten zu Ladepunkten in
+								öffentlichen oder halb-öffentlichen Bereichen
+								sinnvoll sein.
+							</template>
+						</openwb-base-button-group-input>
 						<openwb-base-button-group-input
 							title="Erst nach Ladeende sperren"
 							:buttons="[
@@ -565,7 +625,7 @@
 								aktiviert, werden alle Ladepunkte direkt
 								gesperrt und laufende Ladevorgänge beendet. Wird
 								hier "Ja" ausgewählt, dann werden laufende
-								Ladevorgänge nicht beendet, und diese Ladepunkte
+								Ladevorgänge NICHT beendet und diese Ladepunkte
 								erst nach abgeschlossener Ladung gesperrt.
 							</template>
 						</openwb-base-button-group-input>

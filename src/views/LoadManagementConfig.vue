@@ -46,20 +46,22 @@
 							Ladefreigabe reserviert. Dadurch können bei
 							Eingreifen des Lastmanagements andere Fahrzeuge
 							möglicherweise nur mit reduzierter Stromstärke laden
-							und der reservierte Strom wird nicht genutzt. Wenn
-							die Fahrzeuge wieder Leistung beziehen, z. B. um zu
-							klimatisieren, nutzen sie den für sie reservierten
-							Strom.<br />
+							und der reservierte Strom wird nicht genutzt.<br />
+							Wenn die Fahrzeuge wieder Leistung beziehen, z.B. um
+							zu vorzuklimatisieren, nutzen sie den für sie
+							reservierten Strom.<br /><br />
 							Wenn angesteckte Fahrzeuge, die nicht laden, nicht
 							im Lastmanagement berücksichtigt werden, wird für
-							diese kein Strom bei vorliegender Ladefreigabe
-							reserviert. Wenn die Lastmanagement-Grenzen fast
+							diese auch kein Strom bei vorliegender Ladefreigabe
+							reserviert. Andere Fahrzeuge können dadurch mit
+							höherer Stromstärke laden.<br />
+							Wenn die maximalen Lastmanagement-Grenzen fast
 							erreicht sind und die Fahrzeuge wieder Leistung
-							beziehen, z. B. um zu klimatisieren, kann es zu
+							beziehen, z.B. um vorzuklimatisieren, kann es zu
 							einer kurzzeitigen Überschreitung der
 							Lastmanagement-Grenzen kommen, bis im nächsten
-							Zyklus die Stromstärken aller Ladepunkte an die neue
-							Situation angepasst werden.<br />
+							Zyklus die Stromstärken ALLER Ladepunkte an die neue
+							Situation angepasst wurden.<br />
 							Das kurzzeitige Überschreiten der Maximal-Werte
 							stellt für die Sicherungen in der Regel kein Problem
 							dar.

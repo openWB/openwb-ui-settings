@@ -3,18 +3,22 @@
 		<form name="generalConfigForm">
 			<openwb-base-card title="Betriebsmodus">
 				<openwb-base-alert subtype="info">
-					Wird hier der Nur Ladepunkt-Modus deaktiviert, übernimmt
-					diese openWB die Regelung und steuert alle weiteren openWBs.
-					Alle weiteren openWBs im Verbund werden als "externe openWB"
-					in den Ladepunkt-Einstellungen hinzugefügt.<br />
-					Wird hier der Nur Ladepunkt-Modus aktiviert, übernimmt diese
-					openWB keine eigene Regelung und muss von einer weiteren
-					openWB, die sich nicht im Nur Ladepunkt-Modus befindet,
-					gesteuert werden. Im Nur Ladepunkt-Modus werden alle
-					ausgeblendeten Einstellungen nicht beachtet. Wichtig ist,
-					dass im Nur Ladepunkt-Modus ein interner Ladepunkt mit der
-					korrekten Bauart konfiguriert ist (bei einer Duo zwei
-					interne Ladepunkte) .<br />
+					Wird für den Steuerungsmodus "primary" gewählt, übernimmt
+					diese openWB die alleinige Regelung und steuert ggf.
+					vorhandene weitere openWB (z.B. externe openWB im
+					Steuermodus secondary, openWB Pro, Satellit u.a.) fern. Sie
+					werden in den Ladepunkt-Einstellungen der primary-openWB
+					hinzugefügt.
+					<br /><br />
+					Wird für den Steuerungsmodus "secondary" gewählt, übernimmt
+					diese openWB keine Regelung und muss von einer anderen
+					primary openWB ferngesteuert werden. Wichtig ist, dass in
+					der secondary-openWB eine "interne openWB" mit der korrekten
+					Bauart (= openWB-Hardwarevariante z.B. "Custom, Standard,
+					Standard+, Duo, Buchse") konfiguriert ist. Bei einer Duo
+					sind zwei "interne openWB" zu konfigurieren. Im
+					"secondary"-Modus bleiben alle ausgeblendeten Einstellungen
+					unbeachtet.<br />
 					Eine bebilderte Anleitung zur Konfiguration der Ladepunkte
 					findest Du auf der Homepage:
 					<a
@@ -26,16 +30,16 @@
 					</a>
 				</openwb-base-alert>
 				<openwb-base-button-group-input
-					title="Nur Ladepunkt-Modus"
+					title="Steuerungsmodus"
 					:buttons="[
 						{
 							buttonValue: false,
-							text: 'Aus',
+							text: 'primary',
 							class: 'btn-outline-danger',
 						},
 						{
 							buttonValue: true,
-							text: 'An',
+							text: 'secondary',
 							class: 'btn-outline-success',
 						},
 					]"
@@ -116,24 +120,22 @@
 						"
 					>
 						<template #help>
-							Sollten Probleme, oder Fehlermeldungen, auftauchen,
-							zunächst das Regelintervall auf "Normal" stellen.
-							Werden Module genutzt, welche z.B. eine Online API
-							zur Abfrage nutzen, oder möchte man weniger regeln,
-							kann man das Regelintervall auf "Langsam" (20
-							Sekunden) herabsetzen. Die Einstellungen „Sehr
-							Langsam“ führt zu einer Regelzeit von 60
-							Sekunden.<br />
+							Sollten Probleme oder Fehlermeldungen auftauchen,
+							stelle bitte zunächst das Regelintervall auf
+							"Normal". Werden Module genutzt, welche z.B. eine
+							Online-API zur Abfrage nutzen (höhere Latenzzeiten)
+							oder möchte man weniger Regeleingriffe, so kann man
+							das Regelintervall auf "Langsam" (20 Sekunden)
+							herabsetzen. Die Einstellung „Sehr Langsam“ führt zu
+							einer Regelzeit von 60 Sekunden.<br />
 							<span class="text-danger">
 								Nicht nur die Regelung der PV geführten Ladung,
-								sondern auch Ladestromänderung, beispielsweise
-								“Stop“ etc., werden dann nur noch in diesem
-								Intervall ausgeführt. Die Regelung wird
-								insgesamt träger. Ebenso können eingestellte
-								Verzögerungen um den Faktor der Änderung
-								langsamer ausgeführt werden. Solange es keinen
-								triftigen Grund gibt, sollte immer Normal
-								gewählt werden.
+								sondern auch die Ladestromänderung,
+								beispielsweise “Stop“ etc., werden dann nur noch
+								in diesem Intervall ausgeführt. Die Regelung
+								wird insgesamt träger. Solange es keinen
+								triftigen Grund gibt, sollte "Normal" gewählt
+								werden.
 							</span>
 						</template>
 					</openwb-base-button-group-input>
