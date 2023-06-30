@@ -114,6 +114,15 @@
 							updateState(installedChargePointKey, $event, 'name')
 						"
 					/>
+					<openwb-base-text-input
+						title="Modul"
+						subtype="text"
+						disabled
+						readonly
+						:model-value="
+							$store.state.mqtt[installedChargePointKey].type
+						"
+					/>
 					<span
 						v-if="
 							installedChargePoint.type !== 'internal_openwb' ||
@@ -158,20 +167,6 @@
 						"
 					>
 						<hr />
-						<!-- <openwb-base-text-input
-							title="Leistungsmodul"
-							subtype="text"
-							:model-value="installedChargePoint.power_module.type"
-							@update:model-value="
-								updateState(
-									installedChargePointKey,
-									$event,
-									'power_module.type'
-								)
-							"
-							disabled
-						/>
-						<hr /> -->
 						<openwb-base-heading
 							>Hardware-Optionen</openwb-base-heading
 						>

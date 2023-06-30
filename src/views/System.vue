@@ -124,13 +124,13 @@
 					</template>
 				</openwb-base-card>
 			</form>
-			<form name="backupRestoreForm">
-				<openwb-base-card
-					title="Sicherung / Wiederherstellung"
-					subtype="success"
-					:collapsible="true"
-					:collapsed="true"
-				>
+			<openwb-base-card
+				title="Sicherung / Wiederherstellung"
+				subtype="success"
+				:collapsible="true"
+				:collapsed="true"
+			>
+				<form name="backupForm">
 					<openwb-base-heading>Sicherung</openwb-base-heading>
 					<openwb-base-alert subtype="danger">
 						Aktuell können nur Sicherungen wiederhergestellt werden,
@@ -164,91 +164,11 @@
 							</openwb-base-click-button>
 						</div>
 					</div>
-					<hr />
-					<form name="systemCloudBackupForm">
-						<openwb-base-heading
-							>Automatische Sicherung in einen
-							Cloud-Dienst</openwb-base-heading
-						>
-						<openwb-base-alert subtype="info">
-							Zwischen Mitternacht und 5:00 Uhr wird automatisch
-							eine Sicherung erstellt und in den angegebenen
-							Cloud-Dienst (nicht openWB Cloud!) hochgeladen. Ist
-							kein Cloud-Dienst konfiguriert, wird keine
-							automatische Sicherung erstellt. Die automatische
-							Sicherung kann unabhängig von der openWB Cloud
-							genutzt werden.<br />
-							Die Anleitung zur Konfiguration des Cloud-Dienstes
-							findest Du
-							<a
-								href="https://github.com/openWB/core/wiki/Cloud-Backup"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								hier
-							</a>
-							.
-						</openwb-base-alert>
-						<openwb-base-select-input
-							class="mb-2"
-							title="Backup-Cloud"
-							:options="backupCloudList"
-							:model-value="
-								$store.state.mqtt[
-									'openWB/system/backup_cloud/config'
-								].type
-							"
-							@update:model-value="
-								updateSelectedBackupCloud($event)
-							"
-						>
-						</openwb-base-select-input>
-						<openwb-backup-cloud-proxy
-							v-if="
-								$store.state.mqtt[
-									'openWB/system/backup_cloud/config'
-								].type
-							"
-							:backupCloudType="
-								$store.state.mqtt[
-									'openWB/system/backup_cloud/config'
-								].type
-							"
-							:configuration="
-								$store.state.mqtt[
-									'openWB/system/backup_cloud/config'
-								].configuration
-							"
-							@update:configuration="
-								updateConfiguration(
-									'openWB/system/backup_cloud/config',
-									$event
-								)
-							"
-						/>
-						<openwb-base-submit-buttons
-							formName="systemCloudBackupForm"
-							@save="$emit('save')"
-							@reset="$emit('reset')"
-							@defaults="$emit('defaults')"
-						/>
-					</form>
-					<openwb-base-button-input
-						title="Manuelle Cloud-Sicherung"
-						buttonText="Sicherung erzeugen und hochladen"
-						subtype="success"
-						@buttonClicked="
-							sendSystemCommand('createCloudBackup', {})
-						"
-					>
-					</openwb-base-button-input>
-					<hr />
+				</form>
+				<hr />
+				<form name="restoreForm">
 					<openwb-base-heading>Wiederherstellung</openwb-base-heading>
 					<openwb-base-alert subtype="danger">
-						Diese Funktion ist noch in Entwicklung! Es kann
-						potentiell das System unbrauchbar werden. Nach
-						Möglichkeit vorher ein Image der Installation
-						erstellen!<br />
 						Für die Wiederherstellung wird eine aktive
 						Internetverbindung benötigt.<br />
 						Aktuell können nur Sicherungen wiederhergestellt werden,
@@ -328,47 +248,84 @@
 							</openwb-base-click-button>
 						</div>
 					</div>
-					<hr />
-					<openwb-base-heading>Zurücksetzen</openwb-base-heading>
-					<openwb-base-alert subtype="danger">
-						Alle Einstellungen und Daten für die Auswertungen werden
-						unwiederbringlich gelöscht. Bitte erstelle vor dem
-						Zurücksetzen eine Sicherung!
-					</openwb-base-alert>
+				</form>
+				<hr />
+				<form name="cloudBackupForm">
+					<openwb-base-heading>
+						Automatische Sicherung in einen Cloud-Dienst
+					</openwb-base-heading>
 					<openwb-base-alert subtype="info">
-						Alle Einstellungen, angelegte Geräte/Komponenten,
-						Ladepunkte und Fahrzeuge, etc, Tages-, Monats- und
-						Jahresauswertungen sowie das Ladelog werden gelöscht.
-						Auch die Vorkonfiguration im Auslieferungszustand wird
-						gelöscht. Die openWB muss danach komplett neu
-						eingerichtet werden. Nach dem Zurücksetzen wird die
-						openWB neu gestartet.
-					</openwb-base-alert>
-					<div class="row justify-content-center">
-						<div
-							class="col-md-4 d-flex py-1 justify-content-center"
+						Zwischen Mitternacht und 5:00 Uhr wird automatisch eine
+						Sicherung erstellt und in den angegebenen Cloud-Dienst
+						(nicht openWB Cloud!) hochgeladen. Ist kein Cloud-Dienst
+						konfiguriert, wird keine automatische Sicherung
+						erstellt. Die automatische Sicherung kann unabhängig von
+						der openWB Cloud genutzt werden.Die Anleitung zur Konfiguration des Cloud-Dienstes
+						findest Du
+						<a
+							href="https://github.com/openWB/core/wiki/Cloud-Backup"
+							target="_blank"
+							rel="noopener noreferrer"
 						>
-							<openwb-base-click-button
-								class="btn-danger clickable"
-								@buttonClicked="
-									sendSystemCommand('factoryReset', {})
-								"
-							>
-								<font-awesome-icon
-									fixed-width
-									:icon="['fas', 'skull-crossbones']"
-								/>
-								Zurücksetzen
-								<font-awesome-icon
-									fixed-width
-									:icon="['fas', 'skull-crossbones']"
-								/>
-							</openwb-base-click-button>
-						</div>
+							hier
+						</a>
+						.
+					</openwb-base-alert>
+					<openwb-base-select-input
+						class="mb-2"
+						title="Backup-Cloud"
+						:options="backupCloudList"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/system/backup_cloud/config'
+							].type
+						"
+						@update:model-value="updateSelectedBackupCloud($event)"
+					/>
+					<div
+						v-if="
+							$store.state.mqtt[
+								'openWB/system/backup_cloud/config'
+							].type
+						"
+					>
+						<openwb-base-button-input
+							title="Manuelle Cloud-Sicherung"
+							buttonText="Sicherung erstellen und hochladen"
+							subtype="success"
+							@buttonClicked="
+								sendSystemCommand('createCloudBackup', {})
+							"
+						/>
+						<openwb-backup-cloud-proxy
+							:backupCloudType="
+								$store.state.mqtt[
+									'openWB/system/backup_cloud/config'
+								].type
+							"
+							:configuration="
+								$store.state.mqtt[
+									'openWB/system/backup_cloud/config'
+								].configuration
+							"
+							@update:configuration="
+								updateConfiguration(
+									'openWB/system/backup_cloud/config',
+									$event
+								)
+							"
+						/>
+						<openwb-base-submit-buttons
+							formName="cloudBackupForm"
+							:hideReset="true"
+							:hideDefaults="true"
+							@save="$emit('save')"
+							@reset="$emit('reset')"
+							@defaults="$emit('defaults')"
+						/>
 					</div>
-					<template #footer></template>
-				</openwb-base-card>
-			</form>
+				</form>
+			</openwb-base-card>
 			<form name="powerForm">
 				<openwb-base-card
 					title="Betrieb"
@@ -481,6 +438,49 @@
 										:icon="['fas', 'skull-crossbones']"
 									/>
 									Branch und Tag wechseln
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'skull-crossbones']"
+									/>
+								</openwb-base-click-button>
+							</div>
+						</div>
+					</template>
+				</openwb-base-card>
+			</form>
+			<form name="resetForm">
+				<openwb-base-card
+					title="Zurücksetzen"
+					subtype="danger"
+					:collapsible="true"
+					:collapsed="true"
+				>
+					<openwb-base-alert subtype="danger">
+						Alle Einstellungen, angelegte Geräte/Komponenten,
+						Ladepunkte und Fahrzeuge, etc, Tages-, Monats- und
+						Jahresauswertungen sowie das Ladeprotokoll werden
+						unwiederbringlich gelöscht. Auch die Vorkonfiguration im
+						Auslieferungszustand wird gelöscht. Die openWB muss
+						danach komplett neu eingerichtet werden. Die openWB wird
+						hierfür automatisch neu gestartet. Bitte erstelle vor
+						dem Zurücksetzen eine Sicherung!
+					</openwb-base-alert>
+					<template #footer>
+						<div class="row justify-content-center">
+							<div
+								class="col-md-4 d-flex py-1 justify-content-center"
+							>
+								<openwb-base-click-button
+									class="btn-danger clickable"
+									@buttonClicked="
+										sendSystemCommand('factoryReset', {})
+									"
+								>
+									<font-awesome-icon
+										fixed-width
+										:icon="['fas', 'skull-crossbones']"
+									/>
+									Zurücksetzen
 									<font-awesome-icon
 										fixed-width
 										:icon="['fas', 'skull-crossbones']"

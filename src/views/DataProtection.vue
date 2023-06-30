@@ -63,7 +63,6 @@ export default {
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
-				"openWB/general/extern",
 				"openWB/system/dataprotection_acknowledged",
 			],
 		};
