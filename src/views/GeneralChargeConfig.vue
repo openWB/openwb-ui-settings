@@ -36,17 +36,20 @@
 						"
 					>
 						<template #help>
-							Wenn diese Option aktiviert ist, werden nicht
-							dreiphasige Ladevorgänge so geregelt, dass am
+							Wenn diese Option aktiviert ist, werden
+							nicht-dreiphasige Ladevorgänge so geregelt, dass am
 							Netzanschlusspunkt (EVU-Zähler) die eingestellte
 							Grenze für die Schieflast nicht überschritten wird.
 							Hierfür muss der EVU-Zähler einzelne Phasenströme
-							bereitstellen! Weiterhin müssen bei den Ladepunkten
-							sowie Fahrzeugen sämtliche Angaben zur Anzahl
+							bereitstellen!<br />
+							Weiterhin müssen bei den Ladepunkten sowie
+							Fahrzeugen sämtliche Angaben zur Anzahl
 							angeschlossener/unterstützter Phasen und der
 							Phasenrotation hinterlegt werden, damit der Regelung
 							bekannt ist, welcher Ladevorgang welche Phase am
-							Netzanschluss beeinflusst.
+							Netzanschluss beeinflusst. siehe "Konfiguration -
+							Ladepunkte -> elektrischer Anschluss - Phase 1" und
+							"Konfiguration - Fahrzeuge -> Fahrzeugvorlagen"
 						</template>
 					</openwb-base-button-group-input>
 					<openwb-base-range-input

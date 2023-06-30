@@ -22,7 +22,13 @@
 							class: 'btn-outline-success',
 						},
 					]"
-				/>
+				>
+					<template #help>
+						Dies bedingt das Vorhandensein eines RFID-Readers in
+						deiner openWB. Bitte prüfe zuerst die
+						Hardwareausstattung deiner openWB (z.B. Lieferschein).
+					</template>
+				</openwb-base-button-group-input>
 				<div
 					v-if="
 						$store.state.mqtt['openWB/optional/rfid/active'] ===
@@ -984,7 +990,14 @@
 							class: 'btn-outline-success',
 						},
 					]"
-				/>
+				>
+					<template #help>
+						Je nach Bestellung kann die openWB mit oder ohne Display
+						geliefert worden sein. Auch die Variante "Standalone"
+						bietet beide Optionen. Bitte prüfe zuerst die
+						Hardwareausstattung deiner openWB (z.B. Lieferschein).
+					</template>
+				</openwb-base-button-group-input>
 				<div
 					v-if="
 						$store.state.mqtt[
@@ -1235,7 +1248,14 @@
 							@update:model-value="
 								updateSelectedDisplayTheme($event)
 							"
-						/>
+						>
+							<template #help>
+								Hier können unterschiedliche Display-Anzeigen,
+								s.g. Themes, ausgewählt werden. Die Anzahl der
+								Themes wird sich mit zukünftigen Releases
+								erhöhen.
+							</template>
+						</openwb-base-select-input>
 						<openwb-display-theme-proxy
 							v-if="
 								$store.state.mqtt[

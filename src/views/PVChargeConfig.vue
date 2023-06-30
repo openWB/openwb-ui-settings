@@ -72,41 +72,6 @@
 							>Obere Grenze des Regelbereichs.</template
 						>
 					</openwb-base-number-input>
-					<openwb-base-number-input
-						title="Regelpunkt Einspeisegrenze"
-						:min="0"
-						:step="0.05"
-						unit="kW"
-						:model-value="
-							$store.state.mqtt[
-								'openWB/general/chargemode_config/pv_charging/feed_in_yield'
-							] / 1000
-						"
-						@update:model-value="
-							updateState(
-								'openWB/general/chargemode_config/pv_charging/feed_in_yield',
-								$event * 1000
-							)
-						"
-					>
-						<template #help>
-							Hier ist die vorgeschriebene Einspeisegrenze
-							anzugeben. Wird die Option "Einspeisegrenze
-							beachten" für ein Ladeprofil eingeschaltet, dann
-							wird der Regelpunkt auf diesen Wert verschoben. Die
-							Ladung startet demnach erst, wenn der hier
-							hinterlegte Wert an Einspeisung erreicht wird. Der
-							hier eingetragene Wert sollte zur optimalen
-							Eigenverbrauchssteuerung einige hundert Watt unter
-							der im Wechselrichter hinterlegten Einspeisegrenze
-							liegen, damit openWB die Ladung freigibt, bevor der
-							Wechselrichter begrenzt wird.<br />
-							Die Nutzung dieser Option ergibt nur Sinn, wenn ein
-							Wechselrichter mit Smart-Meter verbaut ist, welches
-							eine dynamische Begrenzung der Einspeiseleistung
-							bietet.
-						</template>
-					</openwb-base-number-input>
 					<hr />
 					<openwb-base-number-input
 						title="Einschaltschwelle"
@@ -208,6 +173,51 @@
 							wenn die Abschaltschwelle unterschritten wird.
 						</template>
 					</openwb-base-number-input>
+					<hr />
+					<openwb-base-number-input
+						title="Regelpunkt Einspeisegrenze"
+						:min="0"
+						:step="0.05"
+						unit="kW"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/chargemode_config/pv_charging/feed_in_yield'
+							] / 1000
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/chargemode_config/pv_charging/feed_in_yield',
+								$event * 1000
+							)
+						"
+					>
+						<template #help>
+							Die Nutzung dieser Option ergibt nur Sinn, wenn ein
+							Wechselrichter mit separatem Smart-Meter am
+							EVU-Punkt verbaut ist (nicht der originale Zähler
+							des Versorgers!), welches eine dynamische Begrenzung
+							der Einspeiseleistung am EVU-Punkt durch den
+							PV-Wechselrichter bietet (bitte bei ev. Problemen
+							immer vorab prüfen lassen).<br />
+							Ist eine Einspeiseleistungsreduzierung verbaut (in
+							vielen älteren, privaten Einspeiseverträgen z.B. als
+							70% Regelung bekannt), wird mit Eingabe des Wertes
+							"Regelpunkt Einspeisegrenze" ein
+							eigenverbrauchsoptimiertes Fahrzeugladen mit
+							PV-Überschussenergie möglich, die sonst abgeregelt
+							werden würde (Nutzung der PV-Peaks).<br />
+							Wird in einem "Ladeprofil" die Option
+							"Einspeisegrenze beachten" eingeschaltet, so wird
+							der Regelpunkt auf diesen Wert verschoben und die
+							Ladung startet erst, wenn der hinterlegte Wert
+							"Regelpunkt Einspeisegrenze" überschritten wird.<br />
+							Zur optimalen Eigenverbrauchssteuerung sollte der
+							Wert einige hundert Watt UNTER der im Wechselrichter
+							hinterlegten EVU-Einspeiseleistungsgrenze liegen,
+							damit openWB die Ladung freigibt, BEVOR der
+							Wechselrichter begrenzt wird.
+						</template>
+					</openwb-base-number-input>
 				</div>
 			</openwb-base-card>
 			<openwb-base-card title="Phasenumschaltung">
@@ -240,11 +250,13 @@
 						<template #help>
 							Hier kann eingestellt werden, ob Ladevorgänge im
 							Modus "PV-Laden" mit nur einer Phase oder dem
-							möglichen Maximum in Abhängigkeit vom Ladepunkt und
-							Fahrzeug durchgeführt werden. Im Modus "Automatik"
-							entscheidet die Regelung, welche Einstellung genutzt
-							wird, um den verfügbaren Überschuss in die Fahrzeuge
-							zu laden.
+							möglichen Maximum in Abhängigkeit der "Ladepunkt"-
+							und "Fahrzeug"-Einstellungen durchgeführt werden. Im
+							Modus "Automatik" entscheidet die Regelung, welche
+							Einstellung genutzt wird, um den verfügbaren
+							Überschuss in die Fahrzeuge zu laden. Voraussetzung
+							ist die verbaute Umschaltmöglichkeit zwischen 1- und
+							3-phasig (s.g. 1p3p).
 						</template>
 					</openwb-base-button-group-input>
 					<openwb-base-range-input
@@ -319,19 +331,19 @@
 							Berücksichtigung der Speicherleistungswerte und des
 							Speicher-SoC. Eine aktive Speichersteuerung durch
 							openWB ist aktuell mangels Speicherschnittstelle
-							nicht möglich.<br />
+							nicht möglich.<br /><br />
 							Bei Priorisierung "Fahrzeuge" wird die gesamte
 							PV-Leistung ABZÜGLICH der "reservierten
 							Ladeleistung" des Speichers zum Fahrzeugladen
-							verwendet.<br />
+							verwendet.<br /><br />
 							Bei Priorisierung "Speicher" wird die gesamte
 							PV-Leistung und ZUSÄTZLICH die "erlaubte
 							Entladeleistung" des Speichers (bis zum Erreichen
 							des "minimalen Entlade-SoC" des Speichers) zum
-							Fahrzeugladen verwendet.<br />
+							Fahrzeugladen verwendet.<br /><br />
 							Beide Modi lassen sich mit den zusätzlichen
 							Einstellungen an die eigenen Bedürfnisse anpassen,
-							sodass auch ein Mischbetrieb möglich ist.
+							so dass auch ein Mischbetrieb möglich ist.
 						</template>
 					</openwb-base-button-group-input>
 					<openwb-base-number-input
@@ -351,11 +363,12 @@
 							)
 						"
 					>
-						<template #help
-							>Diese Speicher-Leistung wird von der Regelung auch
-							bei EV-Vorrang nicht zum Laden verwendet und bleibt
-							immer dem Speicher vorbehalten.</template
-						>
+						<template #help>
+							Die "reservierte Ladeeistung" des Speichers wird von
+							der Regelung auch bei "Fahrzeuge"-Vorrang NICHT für
+							das Fahrzeugladen verwendet und bleibt immer dem
+							Speicher vorbehalten.
+						</template>
 					</openwb-base-number-input>
 					<openwb-base-number-input
 						title="Erlaubte Entladeleistung"
@@ -374,12 +387,13 @@
 							)
 						"
 					>
-						<template #help
-							>Die erlaubte Entladeleistung wird von der Regelung
-							bei Speicher-Vorrang zum Laden der Fahrzeuge
-							verwendet, solange der Speicher-Soc über dem
-							minimalen Entlade-SoC liegt.</template
-						>
+						<template #help>
+							Die "erlaubte Entladeleistung" des Speichers wird
+							von der Regelung bei "Speicher"-Vorrang ZUSÄTZLICH
+							zur PV-Leistung für das Fahrzeugladen verwendet,
+							solange der Speicher-SoC über dem "minimalen
+							Entlade-SoC" liegt.
+						</template>
 					</openwb-base-number-input>
 					<openwb-base-range-input
 						title="Minimaler Entlade-SoC"
@@ -467,12 +481,12 @@
 						@update:model-value="updateBatterySwitchOnSoc($event)"
 					>
 						<template #help
-							>Wenn der Speicher den Einschalt-SoC erreicht, wird
-							dieser im Modus PV-Laden bei aktiviertem
-							Mindeststrom bis zum Ausschalt-SoC entladen, auch
-							wenn kein Überschuss vorhanden ist. Der
-							Einschalt-SoC muss größer oder gleich dem
-							Ausschalt-SoC sein.</template
+							>Ist der Speicher-SoC größer oder gleich dem
+							"Einschalt-SoC", wird der Speicher im Modus
+							"PV-Laden" bei aktiviertem Mindeststrom bis zum
+							"Ausschalt-SoC" entladen, auch wenn KEIN Überschuss
+							vorhanden ist. Der "Einschalt-SoC" muss größer oder
+							gleich dem "Ausschalt-SoC" sein.</template
 						>
 					</openwb-base-range-input>
 					<openwb-base-range-input
@@ -510,10 +524,12 @@
 						@update:model-value="updateBatterySwitchOffSoc($event)"
 					>
 						<template #help
-							>Wenn der Speicher den Einschalt-SoC erreicht, wird
-							dieser im Modus PV-Laden bis zum Ausschalt-SoC
-							entladen. Der Einschalt-SoC muss größer oder gleich
-							dem Ausschalt-SoC sein.</template
+							>Ist der Speicher-SoC größer oder gleich dem
+							"Einschalt-SoC", wird der Speicher im Modus
+							"PV-Laden" bei aktiviertem Mindeststrom bis zum
+							"Ausschalt-SoC" entladen, auch wenn KEIN Überschuss
+							vorhanden ist. Der "Einschalt-SoC" muss größer oder
+							gleich dem "Ausschalt-SoC" sein.</template
 						>
 					</openwb-base-range-input>
 				</div>

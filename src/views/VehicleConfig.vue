@@ -157,7 +157,7 @@
 							</template>
 						</openwb-base-text-input>
 						<openwb-base-alert subtype="info">
-							Ein anderes Fahrzeug-Profil wid erst nach dem
+							Ein anderes Fahrzeug-Profil wird erst NACH dem
 							Abstecken übernommen, da es sonst durch die Änderung
 							bestimmter Einstellungen im laufenden Ladevorgang zu
 							Widersprüchen kommen kann.
@@ -254,19 +254,35 @@
 						>
 							<template #help>
 								Mit einem SoC-Modul kann der Ladestand des
-								Fahrzeugs ermittelt werden.<br />
-								Die Abfrage erfolgt automatisch beim Anstecken,
-								wenn das Auto nicht lädt alle 12 Stunden und
-								wenn es lädt alle 5 Minuten. Die Abfrage kann
+								Fahrzeugs ermittelt und geregelt werden. Z.B.
+								lassen sich unabhängig vom Fahrzeug bestimmte
+								SoC-Werte einstellen, um den Fahrzeugakku zu
+								schonen. Aktuell werden die SoC-Werte mittels
+								der App-Zugangsdaten aus dem Herstellerserver
+								des Fahrzeuges ausgelesen. Zukünftig soll auch
+								eine direkte SoC-Auslesung aus dem Fahrzeug
+								möglich werden (openWB Pro).<br />
+								Die SoC-Abfrage erfolgt automatisch beim
+								Anstecken des Fahrzeuges und zusätzlich über
+								einstellbare Abfrageintervalle während des
+								Ladens und Nichtladens. Die Abfrage kann auch
 								manuell durch Klick auf den Reload-Pfeil auf der
 								Hauptseite ausgelöst werden.<br />
 								Wenn eine Abfrage fehlschlägt, wird noch drei
-								weitere Male im Abstand von 5 Minuten, versucht
+								weitere Male im Abstand von 5 Minuten versucht,
 								den SoC abzufragen. Wenn dies nicht erfolgreich
-								ist, wird der SoC auf 0% gesetzt, um zu
+								ist, wird der SoC auf 0% gesetzt um zu
 								vermeiden, dass ein Auto beim SoC-basierten
 								Laden nicht geladen wird. Die Abfrage erfolgt
-								dann wieder im oben definierten Intervall.
+								dann wieder in den oben genannten
+								Intervallen.<br />
+								Da aktuell die SoC-Abfragen über Onlineserver
+								der Fahrzeughersteller laufen, ist infolge
+								möglicher Umstellungen/Wartungen keine 100%-ig
+								sichere SoC-Abfrage garantiert. Auch kann es zu
+								SoC-Abweichungen infolge von zeitlicher
+								Verzögerungen kommen. Hilfestellung erfolgt
+								primär im openWB-Forum.
 							</template>
 						</openwb-base-select-input>
 						<div
@@ -459,10 +475,10 @@
 				</div>
 				<div v-else>
 					<openwb-base-alert subtype="info">
-						Änderungen im Fahrzeug-Profil werden erst nach dem
-						Abstecken übernommen, da es sonst durch die Änderung
-						bestimmter Einstellungen im laufenden Ladevorgang zu
-						Widersprüchen kommen kann.
+						Ein anderes Fahrzeug-Profil wird erst NACH dem Abstecken
+						übernommen, da es sonst durch die Änderung bestimmter
+						Einstellungen im laufenden Ladevorgang zu Widersprüchen
+						kommen kann.
 					</openwb-base-alert>
 					<openwb-base-card
 						v-for="(template, key) in evTemplates"
@@ -629,6 +645,12 @@
 								updateState(key, $event, 'max_phases')
 							"
 						>
+							<template #help>
+								Anzahl der Phasen, die der Fahrzeuglader (s.g.
+								OBC - OnboardCharger) bereitstellt.
+								Plugin-Hybride haben meist nur eine Phase, reine
+								E-Autos meist 2 bis 3 Phasen.
+							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-button-group-input
 							title="CP-Unterbrechung"
@@ -653,6 +675,10 @@
 								)
 							"
 						>
+							<template #help>
+								Erläuterung siehe "Konfiguraton - Ladepunkte" ->
+								Hardware-Optionen
+							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-number-input
 							title="Dauer der CP-Unterbrechung"
@@ -691,6 +717,9 @@
 								updateState(key, $event, 'prevent_phase_switch')
 							"
 						>
+							<template #help>
+								Erläuterung zu 1p3p siehe "Ladeeinstellungen"
+							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-button-group-input
 							title="Ladung aktiv halten"
@@ -881,13 +910,12 @@
 							"
 						>
 							<template #help>
-								Dieser Lademodus ist aktiv, wenn ein zugehöriges
-								Fahrzeug angesteckt wird. Diese Einstellung
-								entspricht dem Lademodus auf der Hauptseite.<br />
+								Diese Einstellung entspricht dem gewählten
+								Lademodus auf der Hauptseite und ist aktiv, wenn
+								ein zugehöriges Fahrzeug angesteckt ist.<br />
 								Die zur Verfügung stehende Leistung wird intern
-								anhand einer Liste verteilt. Die Fahrzeuge bzw.
-								Ladepunkte werden in dieser Reihenfolge
-								beachtet:<br />
+								anhand folgender Prioritätsliste auf die
+								Fahrzeuge bzw. Ladepunkte verteilt:<br />
 								<ol>
 									<li>
 										Zielladen (Sofortladen) mit Priorität
@@ -1024,7 +1052,7 @@
 						<hr />
 						<openwb-base-heading>Sofortladen</openwb-base-heading>
 						<openwb-base-range-input
-							title="Ladestrom"
+							title="Soll-Ladestrom"
 							:min="6"
 							:max="32"
 							:step="1"
@@ -1070,9 +1098,11 @@
 							"
 						>
 							<template #help>
-								Sofortladen kann entweder durch den Ladestand
-								der Fahrzeugbatterie (SoC) oder eine Energie in
-								kWh begrenzt werden.
+								Sofortladen kann ohne Fahrzeug-SoC-Begrenzung
+								(Aus), mit Begrenzung des Fahrzeug-SoC (SoC) bei
+								konfiguriertem SoC-Auslesemodul oder mittels
+								Vorgabe eine gewünschten Energiemenge in kWh
+								(Energie) genutzt werden.
 							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-range-input
@@ -1093,9 +1123,10 @@
 							"
 						>
 							<template #help>
-								Um diese Begrenzung nutzen zu können, muss ein
-								SoC-Modul für das jeweilige Fahrzeug
-								eingerichtet werden!
+								Um die Fahrzeug-SoC-Begrenzung nutzen zu können,
+								muss ein SoC-Modul für das jeweilige Fahrzeug
+								eingerichtet sein (siehe "Konfiguration" ->
+								"Fahrzeuge" -> "SoC-Modul").
 							</template>
 						</openwb-base-range-input>
 						<openwb-base-number-input
@@ -1158,9 +1189,14 @@
 							<template #help>
 								Hier kann ein Mindeststrom eingestellt werden,
 								mit dem unabhängig vom vorhandenen Überschuss
-								immer geladen wird. Diese Einstellung entspricht
-								weitestgehend dem Lademodus "Min+PV" der Version
-								1.x.
+								durchgeladen wird. Hierdurch wird z.B. an Tagen
+								mit häufigem Sonne/Wolken-Wechsel oder mit nur
+								wenig PV-Ertrag ein Laden ohne Unterbrechung
+								ermöglicht. Folglich kann auch Netzbezug für das
+								Fahrzeugladen entstehen, weshalb der niedrigste
+								Stromwert empfohlen wird. Diese Einstellung
+								entspricht weitestgehend dem Lademodus "Min+PV"
+								der Version 1.x.
 							</template>
 						</openwb-base-range-input>
 						<openwb-base-range-input
@@ -1204,14 +1240,18 @@
 							"
 						>
 							<template #help>
-								Bei der Einstellung "100%" wird die Ladung mit
-								Erreichen der 100% ebenfalls beendet. Dadurch
-								erfolgt kein Balancing der Batteriezellen. Ist
-								dies gewünscht, muss hier "Aus" gewählt werden,
-								um die Ladung nicht zu beenden.<br />
-								Um diese Begrenzung nutzen zu können, muss ein
-								SoC-Modul für das jeweilige Fahrzeug
-								eingerichtet werden!
+								Bei der Einstellung "100%" wird die Ladung
+								sofort mit Erreichen der 100% beendet. Dadurch
+								erfolgt KEIN Balancing der Batteriezellen. Ist
+								dies gewünscht (sollte ab und an durchgeführt
+								werden), muss hier "Aus" gewählt werden
+								(Schieberegler ganz nach rechts stellen), um die
+								Ladung MIT Balancing bis zur Beendigung durch
+								das Fahrzeug weiterlaufen zu lassen.<br />
+								Um die Fahrzeug-SoC-Begrenzung nutzen zu können,
+								muss ein SoC-Modul für das jeweilige Fahrzeug
+								eingerichtet sein (siehe "Konfiguration" ->
+								"Fahrzeuge" -> "SoC-Modul").
 							</template>
 						</openwb-base-range-input>
 						<openwb-base-range-input
@@ -1254,13 +1294,20 @@
 							"
 						>
 							<template #help>
-								Liegt der Ladestand (SoC) der Fahrzeugbatterie
-								unter dem hier eingestellten Wert, dann wird bis
-								zum Erreichen dieses Wertes mit dem
-								eingestellten "Mindest-SoC-Strom" geladen.<br />
-								Um diese Begrenzung nutzen zu können, muss ein
-								SoC-Modul für das jeweilige Fahrzeug
-								eingerichtet werden!
+								Liegt der Fahrzeug-Ladestand (SoC) unter dem
+								hier eingestellten Wert, dann wird bis zum
+								Erreichen dieses Wertes mit dem eingestellten
+								"Mindest-SoC-Strom" geladen. Dies dient der
+								Sicherstellung eines "Mindest-SoC" - z.B. für
+								eine immer abzudeckende Fahrzeugreichweite -
+								auch wenn kein oder zu wenig Überschuss
+								verfügbar ist (=> Laden mit anteilig Netzstrom).
+								Nach dem Erreichen des "Mindest-SoC" wird bei
+								verfügbarem Überschuss geladen.<br />
+								Um die Fahrzeug-SoC-Begrenzung nutzen zu können,
+								muss ein SoC-Modul für das jeweilige Fahrzeug
+								eingerichtet sein (siehe "Konfiguration" ->
+								"Fahrzeuge" -> "SoC-Modul").
 							</template>
 						</openwb-base-range-input>
 						<openwb-base-range-input
@@ -1281,10 +1328,11 @@
 							"
 						>
 							<template #help>
-								Wird der eingestellte Mindest-SoC
-								unterschritten, dann wird unabhängig vom
-								Überschuss ein Ladevorgang mit dem hier
-								festgelegten Strom statt.
+								Wird der oben eingestellte "Mindest-SoC" des
+								Fahrzeuges unterschritten, dann wird unabhängig
+								vom Überschuss ein Ladevorgang mit dem hier
+								festgelegten "Mindest-SoC-Strom" initiiert (ggf.
+								mit anteilig Netzbezug).
 							</template>
 						</openwb-base-range-input>
 						<openwb-base-button-group-input
@@ -1311,7 +1359,13 @@
 									'chargemode.pv_charging.feed_in_limit'
 								)
 							"
-						/>
+						>
+							<template #help>
+								Erläuterung siehe "Ladeeinstellungen" ->
+								"PV-Laden" -> "Regelparameter" -> "Regelpunkt
+								Einspeisegrenze"
+							</template>
+						</openwb-base-button-group-input>
 						<hr />
 						<openwb-base-heading>
 							Zielladen
@@ -1332,23 +1386,25 @@
 								</openwb-base-avatar>
 							</template>
 							<template #help>
-								Im Lademodus Zielladen wird der Ladestrom so
+								Im Lademodus "Zielladen" wird der Ladestrom so
 								angepasst, dass das Fahrzeug zum angegebenen
-								Zeitpunkt den festgelegten SoC/Energie erreicht.
-								Anhand des angegebenen Ladestroms wird der
-								Zeitpunkt berechnet, an dem die Ladung
-								spätestens starten muss. Ist der berechnete
-								Zeitpunkt des Ladestarts noch nicht erreicht,
-								wird mit PV-Überschuss geladen. Auch nach
-								Erreichen des Ziel-SoCs wird mit PV-Überschuss
-								geladen, solange bis das SoC-Limit erreicht
-								wird. Kann der Ziel-SoC/Energie nicht erreicht
-								werden, z.B. weil das Auto zu spät angesteckt
-								wurde oder das Lastmanagement eingegriffen hat,
-								wird bis 20 Minuten nach dem angegebenen Termin
-								mit der Maximalstromstärke geladen. Danach wird
-								der Termin verworfen und mit PV-Überschuss
-								geladen.
+								Zeitpunkt den eingestellten SoC bzw. die
+								einzuladende Energiemenge erreicht. Anhand des
+								vorgegebenen Ladestroms wird der Zeitpunkt
+								berechnet, an dem die Ladung spätestens starten
+								muss.<br />
+								Ist der berechnete Zeitpunkt des Ladestarts noch
+								nicht erreicht, wird mit Überschuss geladen.
+								Auch nach Erreichen des Ziel-SoCs wird mit
+								Überschuss geladen, solange bis das "SoC-Limit"
+								erreicht wird.<br />
+								Kann der Ziel-SoC bzw. die Energiemenge NICHT
+								erreicht werden, z.B. weil das Auto zu spät
+								angesteckt wurde oder das Lastmanagement
+								eingegriffen hat, wird bis 20 Minuten nach dem
+								angegebenen Termin mit der Maximalstromstärke
+								geladen. Danach wird der Termin verworfen und
+								mit Überschuss geladen.
 							</template>
 						</openwb-base-heading>
 						<openwb-base-card
@@ -1467,13 +1523,19 @@
 							>
 							</openwb-base-button-group-input>
 							<openwb-base-text-input
-								title="Uhrzeit"
+								title="Ziel-Uhrzeit"
 								subtype="time"
 								:model-value="plan.time"
 								@update:model-value="
 									updateState(planKey, $event, 'time')
 								"
 							>
+								<template #help>
+									Hier ist die gewünschte Uhrzeit
+									einzustellen, zu welcher das Fahrzeug den
+									gewünschten SoC bzw. die zu ladende
+									Energiemenge BEREITS ERREICHT haben soll.
+								</template>
 							</openwb-base-text-input>
 							<openwb-base-range-input
 								title="Ladestrom"
@@ -1678,6 +1740,22 @@
 										:icon="['fas', 'plus']"
 									/>
 								</openwb-base-avatar>
+							</template>
+							<template #help>
+								Mit einem Zeitplan kann ein klar abgegrenzter
+								Zeitbereich zum Fahrzeugladen definiert werden.
+								Dies wird häufig genutzt, um einem Fahrzeug kurz
+								vor der Abfahrt Strom anzubieten, damit dessen
+								Vorklimatisierung nicht aus dem Fahrzeugakku,
+								sondern aus der openWB bezogen wird (Enteisung,
+								Vorwärmung, Abkühlung). Nicht von der
+								Vorklimatisierung benötigter Strom erhöht dabei
+								den Fahrzeug-SoC. Um das Stromnetz am Morgen
+								nicht unnötig zu strapazieren, sollte eine
+								moderate Stromvorgabe und ein beschränkter
+								Zeitbereich vorgegeben werden (z.B. max. 10A;
+								30min - in Übereinstimmung mit den
+								Fahrzeug-App-Vorklimatisierungsvorgaben).
 							</template>
 						</openwb-base-heading>
 						<openwb-base-card
@@ -1890,7 +1968,7 @@
 							</openwb-base-number-input>
 
 							<openwb-base-text-input
-								title="Beginn"
+								title="Zeitpunkt des Ladebeginns"
 								subtype="time"
 								:model-value="plan.time[0]"
 								@update:model-value="
@@ -1899,7 +1977,7 @@
 							>
 							</openwb-base-text-input>
 							<openwb-base-text-input
-								title="Ende"
+								title="Zeitpunkt des Ladeendes"
 								subtype="time"
 								:model-value="plan.time[1]"
 								@update:model-value="
