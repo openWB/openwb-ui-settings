@@ -27,7 +27,7 @@
 		<openwb-base-text-input
 						title="Anmeldedaten auf openWB gespeichert"
 						readonly
-						:model-value="configuration.persistent_tokencache.length > 0 ? 'Ja' : 'Nein'"
+						:model-value="configuration.persistent_tokencache ? 'Ja' : 'Nein'"
 					>
 		</openwb-base-text-input>
 		<openwb-base-heading>Zugang zu Onedrive für diese openWB authorisieren</openwb-base-heading>
