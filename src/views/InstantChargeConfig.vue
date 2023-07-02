@@ -30,8 +30,10 @@
 						<template #help>
 							Hier kann eingestellt werden, ob Ladevorgänge im
 							Modus "Sofortladen" mit nur einer Phase oder dem
-							möglichen Maximum in Abhängigkeit vom Ladepunkt und
-							Fahrzeug durchgeführt werden.
+							möglichen Maximum in Abhängigkeit der "Ladepunkt"-
+							und "Fahrzeug"-Einstellungen durchgeführt werden.
+							Voraussetzung ist die verbaute Umschaltmöglichkeit
+							zwischen 1- und 3-phasig (s.g. 1p3p).
 						</template>
 					</openwb-base-button-group-input>
 				</div>

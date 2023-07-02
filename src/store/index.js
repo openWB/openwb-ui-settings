@@ -127,4 +127,41 @@ export default createStore({
 	},
 	actions: {},
 	modules: {},
+	getters: {
+		usageTermsAcknowledged(state) {
+			return new Promise((resolve) => {
+				if (
+					state.mqtt["openWB/system/usage_terms_acknowledged"] !==
+					undefined
+				) {
+					resolve(
+						state.mqtt["openWB/system/usage_terms_acknowledged"]
+					);
+				} else {
+					var timer, interval;
+					// add general timeout if topic not set
+					timer = setTimeout(() => {
+						clearInterval(interval);
+						resolve(false);
+					}, 5000);
+					// check until we received valid data
+					interval = setInterval(() => {
+						if (
+							state.mqtt[
+								"openWB/system/usage_terms_acknowledged"
+							] !== undefined
+						) {
+							clearTimeout(timer);
+							clearInterval(interval);
+							resolve(
+								state.mqtt[
+									"openWB/system/usage_terms_acknowledged"
+								]
+							);
+						}
+					}, 100);
+				}
+			});
+		},
+	},
 });

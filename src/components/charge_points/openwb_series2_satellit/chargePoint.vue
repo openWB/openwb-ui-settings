@@ -7,16 +7,20 @@
 			:model-value="configuration.ip_address"
 			@update:model-value="updateConfiguration($event, 'ip_address')"
 		/>
-		<openwb-base-select-input
-			title="Zählertyp"
-			:options="[
-				{ value: 'sdm630', text: 'SDM 630 / 72DMv2 und kompatible' },
-			]"
-			:model-value="configuration.counter_type"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.counter_type')
-			"
-		/>
+		<openwb-base-number-input
+			title="Ladepunkt-Nummer"
+			required
+			:min="1"
+			:max="2"
+			:model-value="configuration.duo_num + 1"
+			@update:model-value="updateConfiguration($event - 1, 'duo_num')"
+		>
+			<template #help>
+				Bei einfachen Ladepunkten ist hier immer eine "1" einzutragen.
+				Lediglich bei einer openWB Duo kann mit "2" der zweite
+				enthaltene Ladepunkt angesprochen werden.
+			</template>
+		</openwb-base-number-input>
 	</div>
 </template>
 

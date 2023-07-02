@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import GeneralConfig from "../views/GeneralConfig.vue";
+import store from "../store";
 
 const routes = [
 	{
@@ -44,7 +44,7 @@ const routes = [
 		meta: {
 			heading: "Einstellungen - Allgemein",
 		},
-		component: GeneralConfig,
+		component: () => import("../views/GeneralConfig.vue"),
 	},
 	{
 		path: "/OptionalComponents",
@@ -52,9 +52,6 @@ const routes = [
 		meta: {
 			heading: "Einstellungen - Optionale Hardware",
 		},
-		// route level code-splitting
-		// this generates a separate chunk (about.[hash].js) for this route
-		// which is lazy-loaded when the route is visited.
 		component: () => import("../views/OptionalComponents.vue"),
 	},
 	{
@@ -96,14 +93,6 @@ const routes = [
 			heading: "Ladeeinstellungen - Zielladen",
 		},
 		component: () => import("../views/ScheduledChargeConfig.vue"),
-	},
-	{
-		path: "/StandbyChargeConfig",
-		name: "StandbyChargeConfig",
-		meta: {
-			heading: "Ladeeinstellungen - Standby",
-		},
-		component: () => import("../views/StandbyChargeConfig.vue"),
 	},
 	{
 		path: "/HardwareInstallation",
@@ -170,12 +159,12 @@ const routes = [
 		component: () => import("../views/Support.vue"),
 	},
 	{
-		path: "/System/DataProtection",
-		name: "DataProtection",
+		path: "/System/LegalSettings",
+		name: "LegalSettings",
 		meta: {
-			heading: "System - Datenschutz",
+			heading: "System - Rechtliches",
 		},
-		component: () => import("../views/DataProtection.vue"),
+		component: () => import("../views/LegalSettings.vue"),
 	},
 	{
 		path: "/System/SystemConfiguration",
@@ -201,6 +190,17 @@ if (import.meta.env.MODE !== "production") {
 const router = createRouter({
 	history: createWebHashHistory(),
 	routes,
+});
+
+router.beforeEach(async (to) => {
+	if (to.name !== "LegalSettings") {
+		// redirect to data protection page to force acceptance of usage terms
+		const usageTermsAcknowledged = await store.getters
+			.usageTermsAcknowledged;
+		if (!usageTermsAcknowledged) {
+			return { name: "LegalSettings" };
+		}
+	}
 });
 
 router.afterEach((to) => {

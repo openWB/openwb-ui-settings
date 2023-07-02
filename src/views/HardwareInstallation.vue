@@ -282,27 +282,29 @@
 							</span>
 						</template>
 						<template #help>
-							Bitte ein Gerät auswählen, das hinzugefügt werden
-							soll.<br />
-							Für jedes physische Gerät, das abgefragt wird, wird
-							ein separates Gerät konfiguriert. Wenn mehrere Daten
-							über ein Gerät ausgelesen werden können, z.B. EVU
-							und Wechselrichter-Daten vom Wechselrichter, werden
-							für dieses Gerät die entsprechenden Komponenten
-							konfiguriert. Wenn die Daten lokal abgefragt werden,
-							liefert meist die IP-Adresse den Hinweis auf die
-							richtige Konfiguration: Wenn EVU- und
-							Wechselrichter-Daten über zwei verschiedene
-							IP-Adressen abgefragt werden, müssen zwei Geräte mit
-							jeweils einer Komponente konfiguriert werden. Werden
-							die Daten über die gleiche IP-Adresse abgefragt,
-							wird ein Gerät mit einer Zähler- und einer
-							Wechselrichter-Komponente angelegt.<br />
-							Wenn in 1.9 bei einem/mehreren Modulen der Hinweis
-							"Die Einstellungen bitte im
-							EVU-/Speicher-/Wechselrichter-Modul vornehmen"
-							steht, muss ein Gerät mit den entsprechenden
-							Komponenten konfiguriert werden.
+							Die openWB-Regelung ist auf Werte von MESSPUNKTEN
+							(Zähler, Energy Meter usw.) angewiesen. Hierfür
+							werden "Geräte" und "Komponenten" verwendet.<br />
+							Ein "Gerät" wird hierbei durch seine IP-Adresse
+							spezifiziert (häufig durch manuelle Eingabe oder
+							manchmal automatisch ermittelt) und kann über
+							mehrere untergeordnete "Komponenten" verfügen, z.B.
+							einen Messpunkt für PV-Erzeugung, einen Messpunkt
+							für Netzeinspeisung/-bezug am EVU-Punkt usw.. Ein
+							"Gerät" bedingt somit immer mindestens eine
+							zugehörige "Komponente".<br /><br />
+							Bsp: Werden die Werte von verschiedenen Messpunkten
+							(z.B. PV und EVU) über die gleiche IP-Adresse
+							abgefragt, wird dafür ein "Gerät" mit zwei
+							"Komponenten" für PV- und EVU- Messpunkt
+							angelegt.<br />
+							Verfügt dagegen jeder Messpunkt über eine eigene
+							IP-Adresse, wird jeder Messpunkt als eigenes "Gerät"
+							mit nur einer "Komponente" angelegt.<br /><br />
+							Das "Gerät" wird in der dropdown-Liste ausgewählt
+							und mit "+" der Regelung hinzugefügt. Im Anschluss
+							erfolgt die Konfiguration des "Gerätes" innerhalb
+							des schwarzen "Geräte"-Reiters.
 						</template>
 					</openwb-base-select-input>
 				</div>
