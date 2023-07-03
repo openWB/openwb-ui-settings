@@ -676,7 +676,7 @@
 							"
 						>
 							<template #help>
-								Erläuterung siehe "Konfiguraton - Ladepunkte" ->
+								Erläuterung siehe "Konfiguration - Ladepunkte" ->
 								Hardware-Optionen
 							</template>
 						</openwb-base-button-group-input>
@@ -914,7 +914,7 @@
 								Lademodus auf der Hauptseite und ist aktiv, wenn
 								ein zugehöriges Fahrzeug angesteckt ist.<br />
 								Die zur Verfügung stehende Leistung wird intern
-								anhand folgender Prioritätsliste auf die
+								anhand folgender Prioritätenliste auf die
 								Fahrzeuge bzw. Ladepunkte verteilt:<br />
 								<ol>
 									<li>

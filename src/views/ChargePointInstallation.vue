@@ -209,10 +209,10 @@
 								integriert und dient der Steuerung der
 								Fahrzeugladung (An/Aus/Stromvorgaben). Bei
 								einigen Fahrzeugen können durch die Regelung
-								erzwungene, längere Ladestops (z.B. beim
+								erzwungene, längere Ladestopps (z.B. beim
 								PV-Laden) zu unerwünschten "Einschlaf"-Effekten
 								des Fahrzeuges führen. Mit diesem feature,
-								welches hardwarseitig verbaut sein muss, kann
+								welches hardwareseitig verbaut sein muss, kann
 								ein Abstecken des Ladesteckers simuliert werden,
 								um ein Aufwecken des Fahrzeuges zu ermöglichen.
 								Die Funktion hängt immer auch vom Fahrzeugtyp
@@ -355,9 +355,9 @@
 								übernimmt
 							</li>
 							<li>
-								openWB series2 satellit/Satellit Duo - wenn
+								openWB series2 Satellit/Satellit Duo - wenn
 								diese openWB (primary) die Fernsteuerung einer
-								openWB series2 satellit/Satellit Duo (secondary)
+								openWB series2 Satellit/Satellit Duo (secondary)
 								übernimmt
 							</li>
 							<li>
