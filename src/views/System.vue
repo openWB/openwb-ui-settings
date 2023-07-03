@@ -264,7 +264,7 @@
 						Die Anleitung zur Konfiguration des Cloud-Dienstes
 						findest Du
 						<a
-							href="https://github.com/openWB/core/wiki/Cloud-Backup"
+							href="https://github.com/openWB/core/wiki/Cloud-Sicherung"
 							target="_blank"
 							rel="noopener noreferrer"
 						>
