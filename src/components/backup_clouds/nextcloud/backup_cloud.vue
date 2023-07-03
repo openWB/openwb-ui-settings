@@ -1,7 +1,7 @@
 <template>
 	<div class="backup-cloud-nextcloud">
 		<openwb-base-heading>
-			Einstellungen für Nextcloud-Backup Cloud
+			Einstellungen für NextCloud-Backup Cloud
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
@@ -14,9 +14,11 @@
 			"
 		>
 			<template #help>
-				Die Cloud-URL wird in der Form https://nextcloud-url und
-				Benutzername im Eingabefeld oder
-				https://nextcloud-url/index.php/s/user_token erwartet.
+				Die Cloud-URL wird in der Form 'https://nextcloud-url' und
+				Benutzername im Eingabefeld oder mit Zugangstoken erwartet. Die
+				URL kann je nach NextCloud Installation so
+				'https://nextcloud-url/s/user_token' oder so
+				'https://nextcloud-url/index.php/s/user_token' aussehen.
 			</template>
 		</openwb-base-text-input>
 		<openwb-base-text-input
@@ -40,7 +42,7 @@
 
 <script>
 export default {
-	name: "BackupCloudNextcloud",
+	name: "BackupCloudNextCloud",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

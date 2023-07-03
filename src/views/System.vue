@@ -264,7 +264,7 @@
 						Die Anleitung zur Konfiguration des Cloud-Dienstes
 						findest Du
 						<a
-							href="https://github.com/openWB/core/wiki/Cloud-Backup"
+							href="https://github.com/openWB/core/wiki/Cloud-Sicherung"
 							target="_blank"
 							rel="noopener noreferrer"
 						>
@@ -316,15 +316,15 @@
 								)
 							"
 						/>
-						<openwb-base-submit-buttons
-							formName="cloudBackupForm"
-							:hideReset="true"
-							:hideDefaults="true"
-							@save="$emit('save')"
-							@reset="$emit('reset')"
-							@defaults="$emit('defaults')"
-						/>
 					</div>
+					<openwb-base-submit-buttons
+						formName="cloudBackupForm"
+						:hideReset="true"
+						:hideDefaults="true"
+						@save="$emit('save')"
+						@reset="$emit('reset')"
+						@defaults="$emit('defaults')"
+					/>
 				</form>
 			</openwb-base-card>
 			<form name="powerForm">
