@@ -316,15 +316,15 @@
 								)
 							"
 						/>
-						<openwb-base-submit-buttons
-							formName="cloudBackupForm"
-							:hideReset="true"
-							:hideDefaults="true"
-							@save="$emit('save')"
-							@reset="$emit('reset')"
-							@defaults="$emit('defaults')"
-						/>
 					</div>
+					<openwb-base-submit-buttons
+						formName="cloudBackupForm"
+						:hideReset="true"
+						:hideDefaults="true"
+						@save="$emit('save')"
+						@reset="$emit('reset')"
+						@defaults="$emit('defaults')"
+					/>
 				</form>
 			</openwb-base-card>
 			<form name="powerForm">
