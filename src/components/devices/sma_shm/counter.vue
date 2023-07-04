@@ -12,7 +12,7 @@
 			"
 		>
 			<template #help>
-				Eine Serienummer ist nur erforderlich, wenn mehrere SMA
+				Eine Seriennummer ist nur erforderlich, wenn mehrere SMA
 				HomeManager in Betrieb sind.<br />
 				Funktioniert auch mit Energy Meter statt Home Manager.
 			</template>

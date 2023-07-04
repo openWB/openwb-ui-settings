@@ -48,7 +48,7 @@
 							möglicherweise nur mit reduzierter Stromstärke laden
 							und der reservierte Strom wird nicht genutzt.<br />
 							Wenn die Fahrzeuge wieder Leistung beziehen, z.B. um
-							zu vorzuklimatisieren, nutzen sie den für sie
+							vorzuklimatisieren, nutzen sie den für sie
 							reservierten Strom.<br /><br />
 							Wenn angesteckte Fahrzeuge, die nicht laden, nicht
 							im Lastmanagement berücksichtigt werden, wird für

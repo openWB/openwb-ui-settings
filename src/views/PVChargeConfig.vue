@@ -364,7 +364,7 @@
 						"
 					>
 						<template #help>
-							Die "reservierte Ladeeistung" des Speichers wird von
+							Die "reservierte Ladeleistung" des Speichers wird von
 							der Regelung auch bei "Fahrzeuge"-Vorrang NICHT für
 							das Fahrzeugladen verwendet und bleibt immer dem
 							Speicher vorbehalten.
