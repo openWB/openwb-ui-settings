@@ -1,9 +1,9 @@
 <template>
 	<div class="charge-point-mqtt">
 		<openwb-base-alert subtype="danger">
-			Dieser Ladepunkt-Typ darf nur in Kombination mit dem Simulator
-			zur Fehleranalyse genutzt werden. Eine andere Verwendung ist
-			laut den Nutzungsbedingungen untersagt.
+			Dieser Ladepunkt-Typ darf nur in Kombination mit dem Simulator zur
+			Fehleranalyse genutzt werden. Eine andere Verwendung ist laut den
+			Nutzungsbedingungen untersagt.
 		</openwb-base-alert>
 		<openwb-base-alert subtype="info">
 			Das MQTT Modul stellt keine aktive Verbindung her, sondern erwartet,
