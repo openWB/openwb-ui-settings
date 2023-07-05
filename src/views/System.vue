@@ -134,8 +134,8 @@
 					<openwb-base-heading>Sicherung</openwb-base-heading>
 					<openwb-base-alert subtype="danger">
 						Aktuell können nur Sicherungen wiederhergestellt werden,
-						die in den Entwicklungszweigen "master" oder "Beta"
-						erstellt wurden!
+						die in den Entwicklungszweigen "master", "Beta" oder
+						"Release" erstellt wurden!
 					</openwb-base-alert>
 					<openwb-base-alert subtype="info">
 						Nachdem die Sicherung abgeschlossen ist, kann die
@@ -172,8 +172,8 @@
 						Für die Wiederherstellung wird eine aktive
 						Internetverbindung benötigt.<br />
 						Aktuell können nur Sicherungen wiederhergestellt werden,
-						die in den Entwicklungszweigen "master" oder "Beta"
-						erstellt wurden!
+						die in den Entwicklungszweigen "master", "Beta" oder
+						"Release" erstellt wurden!
 					</openwb-base-alert>
 					<div class="input-group">
 						<div class="input-group-prepend">
@@ -390,13 +390,28 @@
 						Wechsel verworfen!
 					</openwb-base-alert>
 					<openwb-base-alert subtype="warning">
-						Das ist eine experimentelle Option! Verwendung auf
-						eigene Gefahr. Im schlimmsten Fall muss das system neu
-						installiert werden!<br />
-						ToDo:
-						<ul>
-							<li>do not allow downgrade</li>
-						</ul>
+						Bevor auf einen neuen Entwicklungszweig gewechselt
+						wieder sollte immer eine Sicherung erstellt werden! Es
+						kann zwar wieder auf eine ältere Version gewechselt
+						werden, jedoch ist nicht sichergestellt, dass es dabei
+						keine Probleme gibt. Gerade wenn sich das Datenformat in
+						der neuen Version angepasst wurde, wird eine ältere
+						damit Fehler produzieren.<br />
+						Für den normalen Betrieb wird der Zweig "Release"
+						empfohlen. Der Softwarestand wurde ausgiebig getestet,
+						sodass ein Fehlverhalten relativ unwahrscheinlich
+						ist.<br />
+						Der "Beta" Zweig beinhaltet Vorabversionen, bei denen
+						die Entwicklung soweit abgeschlossen ist. Die
+						enthaltenen Anpassungen wurden rudimentär getestet,
+						können aber durchaus noch Fehler enthalten.<br />
+						Die aktuelle Softwareentwicklung findet im Zweig
+						"master" statt. Die enthaltenen Anpassungen sind
+						teilweise noch nicht getestet und enthalten potentiell
+						Fehler.<br />
+						Einträge, die mit "feature" beginnen, sind
+						experimentelle Entwicklungszweige, die nicht für den
+						allgemeinen Gebrauch gedacht sind.
 					</openwb-base-alert>
 					<openwb-base-select-input
 						title="Entwicklungszweig"
