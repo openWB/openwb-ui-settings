@@ -2,9 +2,11 @@
 	<div class="openwb-blocker">
 		<openwb-base-modal-dialog
 			:show="showModalBlocker"
-			title="openWB ist noch nicht bereit"
+			:title="title"
 			subtype="dark"
 			:preventClose="true"
+			:buttons="myButtons"
+			@modal-result="handleModalResult($event)"
 		>
 			<p v-if="bootInProgress">
 				Der Systemstart ist noch nicht abgeschlossen.
@@ -12,7 +14,10 @@
 			<p v-if="updateInProgress">
 				Es wird eine Systemaktualisierung ausgeführt.
 			</p>
-			<p>Bitte warten...</p>
+			<p v-if="!(bootInProgress || updateInProgress) && reloadRequired">
+				Bitte die Seite neu laden.
+			</p>
+			<p v-else>Bitte warten...</p>
 		</openwb-base-modal-dialog>
 	</div>
 </template>
@@ -32,6 +37,23 @@ export default {
 		};
 	},
 	computed: {
+		title() {
+			if (this.bootInProgress || this.updateInProgress) {
+				return "openWB ist noch nicht bereit";
+			} else if (this.reloadRequired) {
+				return "Neues Laden der Seite erforderlich";
+			}
+			return "???";
+		},
+		myButtons() {
+			if (
+				!(this.bootInProgress || this.updateInProgress) &&
+				this.reloadRequired
+			) {
+				return [{ text: "Jetzt neu laden", subtype: "success", event: "reload" }];
+			}
+			return [];
+		},
 		bootInProgress() {
 			if (
 				this.$store.state.mqtt["openWB/system/boot_done"] == undefined
@@ -49,8 +71,24 @@ export default {
 			}
 			return this.$store.state.mqtt["openWB/system/update_in_progress"];
 		},
+		reloadRequired() {
+			return this.$store.state.local.reloadRequired;
+		},
 		showModalBlocker() {
-			return this.bootInProgress || this.updateInProgress;
+			return (
+				this.bootInProgress ||
+				this.updateInProgress ||
+				this.reloadRequired
+			);
+		},
+	},
+	methods: {
+		handleModalResult(event) {
+			if (event == "reload") {
+				location.reload();
+			} else {
+				console.warn("unknown event", event);
+			}
 		},
 	},
 };

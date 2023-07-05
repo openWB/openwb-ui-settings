@@ -2,6 +2,9 @@ import { createStore } from "vuex";
 
 let states = {
 	mqtt: {},
+	local: {
+		reloadRequired: false,
+	},
 	text: {
 		rfidWiki:
 			"Bitte auch hiervon abhängige Einstellungen beachten. Eine Übersicht gibt es im " +
@@ -73,6 +76,10 @@ export default createStore({
 	// strict: process.env.NODE_ENV !== "production",
 	state: states,
 	mutations: {
+		storeLocal(state, message) {
+			console.log(message);
+			state.local[message.name] = message.value;
+		},
 		addTopic(state, message) {
 			state.mqtt[message.topic] = message.payload;
 		},
