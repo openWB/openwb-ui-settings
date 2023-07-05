@@ -109,9 +109,7 @@
 											: 'btn-outline-success'
 									"
 									:disabled="!updateAvailable"
-									@buttonClicked="
-										sendSystemCommand('systemUpdate', {})
-									"
+									@buttonClicked="systemUpdate()"
 								>
 									Update
 									<font-awesome-icon
@@ -236,9 +234,7 @@
 										: 'btn-outline-success'
 								"
 								:disabled="!restoreUploadDone"
-								@buttonClicked="
-									sendSystemCommand('restoreBackup')
-								"
+								@buttonClicked="restoreBackup()"
 							>
 								Wiederherstellung starten
 								<font-awesome-icon
@@ -390,13 +386,13 @@
 						Wechsel verworfen!
 					</openwb-base-alert>
 					<openwb-base-alert subtype="warning">
-						Bevor auf einen neuen Entwicklungszweig gewechselt
-						wird sollte immer eine Sicherung erstellt werden! Es
-						kann zwar wieder auf eine ältere Version gewechselt
-						werden, jedoch ist nicht sichergestellt, dass es dabei
-						keine Probleme gibt. Gerade wenn das Datenformat in
-						der neuen Version angepasst wurde, wird eine ältere
-						damit Fehler produzieren.<br />
+						Bevor auf einen neuen Entwicklungszweig gewechselt wird
+						sollte immer eine Sicherung erstellt werden! Es kann
+						zwar wieder auf eine ältere Version gewechselt werden,
+						jedoch ist nicht sichergestellt, dass es dabei keine
+						Probleme gibt. Gerade wenn das Datenformat in der neuen
+						Version angepasst wurde, wird eine ältere damit Fehler
+						produzieren.<br />
 						Für den normalen Betrieb wird der Zweig "Release"
 						empfohlen. Der Softwarestand wurde ausgiebig getestet,
 						sodass ein Fehlverhalten relativ unwahrscheinlich
@@ -440,14 +436,7 @@
 											: 'btn-outline-danger'
 									"
 									:disabled="!releaseChangeValid"
-									@buttonClicked="
-										sendSystemCommand('systemUpdate', {
-											branch: $store.state.mqtt[
-												'openWB/system/current_branch'
-											],
-											tag: selectedTag,
-										})
-									"
+									@buttonClicked="switchBranch()"
 								>
 									<font-awesome-icon
 										fixed-width
@@ -742,6 +731,30 @@ export default {
 			} else {
 				console.error("no file selected for upload");
 			}
+		},
+		systemUpdate() {
+			this.sendSystemCommand("systemUpdate", {});
+			this.$store.commit("storeLocal", {
+				name: "reloadRequired",
+				value: true,
+			});
+		},
+		switchBranch() {
+			this.sendSystemCommand("systemUpdate", {
+				branch: this.$store.state.mqtt["openWB/system/current_branch"],
+				tag: this.selectedTag,
+			});
+			this.$store.commit("storeLocal", {
+				name: "reloadRequired",
+				value: true,
+			});
+		},
+		restoreBackup() {
+			this.sendSystemCommand("restoreBackup");
+			this.$store.commit("storeLocal", {
+				name: "reloadRequired",
+				value: true,
+			});
 		},
 	},
 };
