@@ -391,10 +391,10 @@
 					</openwb-base-alert>
 					<openwb-base-alert subtype="warning">
 						Bevor auf einen neuen Entwicklungszweig gewechselt
-						wieder sollte immer eine Sicherung erstellt werden! Es
+						wird sollte immer eine Sicherung erstellt werden! Es
 						kann zwar wieder auf eine ältere Version gewechselt
 						werden, jedoch ist nicht sichergestellt, dass es dabei
-						keine Probleme gibt. Gerade wenn sich das Datenformat in
+						keine Probleme gibt. Gerade wenn das Datenformat in
 						der neuen Version angepasst wurde, wird eine ältere
 						damit Fehler produzieren.<br />
 						Für den normalen Betrieb wird der Zweig "Release"
