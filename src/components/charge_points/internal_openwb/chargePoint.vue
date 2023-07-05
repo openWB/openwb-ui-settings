@@ -46,7 +46,7 @@ export default {
 				if (path === "mode") {
 					// set "duo_num" to "1" for mode which only support one charge point
 					if (event == "series" || event == "socket") {
-						this.updateConfiguration(1, "duo_num");
+						this.updateConfiguration(0, "duo_num");
 					}
 				}
 				path = "configuration." + path;
