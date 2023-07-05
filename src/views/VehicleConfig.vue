@@ -676,8 +676,8 @@
 							"
 						>
 							<template #help>
-								Erläuterung siehe "Konfiguration - Ladepunkte" ->
-								Hardware-Optionen
+								Erläuterung siehe "Konfiguration - Ladepunkte"
+								-> Hardware-Optionen
 							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-number-input

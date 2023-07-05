@@ -364,9 +364,9 @@
 						"
 					>
 						<template #help>
-							Die "reservierte Ladeleistung" des Speichers wird von
-							der Regelung auch bei "Fahrzeuge"-Vorrang NICHT für
-							das Fahrzeugladen verwendet und bleibt immer dem
+							Die "reservierte Ladeleistung" des Speichers wird
+							von der Regelung auch bei "Fahrzeuge"-Vorrang NICHT
+							für das Fahrzeugladen verwendet und bleibt immer dem
 							Speicher vorbehalten.
 						</template>
 					</openwb-base-number-input>
