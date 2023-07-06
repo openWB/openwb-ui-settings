@@ -91,9 +91,9 @@
 						"
 					>
 						<template #help>
-							Ist in Abhängigkeit von dem gesetzten Regelbereich
-							mehr als die hier hinterlegte Leistung (pro Phase)
-							verfügbar, dann wird der Ladevorgang gestartet.
+							Wird der Regelbereich in Richtung Einspeisung um
+							diese Leistung überschritten, so wird der
+							Ladevorgang gestartet.
 						</template>
 					</openwb-base-number-input>
 					<openwb-base-number-input
@@ -141,10 +141,9 @@
 						"
 					>
 						<template #help>
-							Wird der Regelbereich um diese Leistung
-							unterschritten, so wird der Ladevorgang beendet oder
-							(falls möglich) auf eine einphasige Ladung
-							umgeschaltet.
+							Wird der Regelbereich in Richtung Netzbezug um diese
+							Leistung überschritten, so wird der Ladevorgang
+							beendet.
 						</template>
 					</openwb-base-number-input>
 					<openwb-base-number-input
