@@ -68,11 +68,11 @@
 					v-if="Object.keys(installedChargePoints).length > 1"
 					subtype="danger"
 				>
-					Wenn das Standard-Fahrzeug auch aktiv zum Laden genutzt
-					wird, ist es aktuell bei mehreren Ladepunkten erforderlich,
-					dass für jeden Ladepunkt ein eigenes Standard-Fahrzeug
-					angelegt und zugeordnet wird. Diese Abhängigkeit wird
-					mittelfristig noch bereinigt.
+					Wenn mehrere Ladepunkte mit unterschiedlichen Lademodi
+					genutzt werden, so ist für jeden Ladepunkt ein eigenes
+					"Fahrzeug" (mit eigenem "Ladeprofil") anzulegen und dem
+					jeweiligen LP auf der Hauptseite zuzuordnen. Diese
+					Abhängigkeit wird mittelfristig noch bereinigt.
 				</openwb-base-alert>
 				<openwb-base-card
 					v-for="(
@@ -209,10 +209,10 @@
 								integriert und dient der Steuerung der
 								Fahrzeugladung (An/Aus/Stromvorgaben). Bei
 								einigen Fahrzeugen können durch die Regelung
-								erzwungene, längere Ladestops (z.B. beim
+								erzwungene, längere Ladestopps (z.B. beim
 								PV-Laden) zu unerwünschten "Einschlaf"-Effekten
 								des Fahrzeuges führen. Mit diesem feature,
-								welches hardwarseitig verbaut sein muss, kann
+								welches hardwareseitig verbaut sein muss, kann
 								ein Abstecken des Ladesteckers simuliert werden,
 								um ein Aufwecken des Fahrzeuges zu ermöglichen.
 								Die Funktion hängt immer auch vom Fahrzeugtyp
@@ -239,7 +239,7 @@
 							"
 						/>
 						<openwb-base-button-group-input
-							title="Phase 1"
+							title="Phase 1 der Wallbox-Zuleitung"
 							:buttons="[
 								{
 									buttonValue: 0,
@@ -355,9 +355,9 @@
 								übernimmt
 							</li>
 							<li>
-								openWB series2 satellit/Satellit Duo - wenn
+								openWB series2 Satellit/Satellit Duo - wenn
 								diese openWB (primary) die Fernsteuerung einer
-								openWB series2 satellit/Satellit Duo (secondary)
+								openWB series2 Satellit/Satellit Duo (secondary)
 								übernimmt
 							</li>
 							<li>

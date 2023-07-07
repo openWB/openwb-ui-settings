@@ -20,8 +20,8 @@
 			required
 			:min="1"
 			:max="2"
-			:model-value="configuration.duo_num"
-			@update:model-value="updateConfiguration($event, 'duo_num')"
+			:model-value="configuration.duo_num + 1"
+			@update:model-value="updateConfiguration($event - 1, 'duo_num')"
 		>
 			<template #help>
 				Bei einfachen Ladepunkten ist hier immer eine "1" einzutragen.
@@ -46,7 +46,7 @@ export default {
 				if (path === "mode") {
 					// set "duo_num" to "1" for mode which only support one charge point
 					if (event == "series" || event == "socket") {
-						this.updateConfiguration(1, "duo_num");
+						this.updateConfiguration(0, "duo_num");
 					}
 				}
 				path = "configuration." + path;

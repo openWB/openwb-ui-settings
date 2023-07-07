@@ -30,7 +30,7 @@
 					>
 						<template #help>
 							Hier kann eingestellt werden, ob Ladevorgänge im
-							Modus "Zieladen" mit nur einer Phase oder dem
+							Modus "Zielladen" mit nur einer Phase oder dem
 							möglichen Maximum in Abhängigkeit der "Ladepunkt"-
 							und "Fahrzeug"-Einstellungen durchgeführt werden. Im
 							Modus "Automatik" entscheidet die Regelung, welche

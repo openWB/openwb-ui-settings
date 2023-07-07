@@ -1,7 +1,7 @@
 <template>
 	<div class="generalConfig">
 		<form name="generalConfigForm">
-			<openwb-base-card title="Betriebsmodus">
+			<openwb-base-card title="Steuerungsmodus">
 				<openwb-base-alert subtype="info">
 					Wird für den Steuerungsmodus "primary" gewählt, übernimmt
 					diese openWB die alleinige Regelung und steuert ggf.
