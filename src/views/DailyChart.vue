@@ -1,19 +1,9 @@
 <template>
 	<div class="dailyChart">
 		<form name="dailyChartForm">
-			<openwb-base-card
-				title="Filter"
-				:collapsible="true"
-				:collapsed="false"
-			>
-				<openwb-base-text-input
-					title="Datum"
-					subtype="date"
-					min="2018-01-01"
-					:max="currentDay"
-					v-model="dailyChartDate"
-					@update:model-value="updateChart()"
-				/>
+			<openwb-base-card title="Filter" :collapsible="true" :collapsed="false">
+				<openwb-base-text-input title="Datum" subtype="date" min="2018-01-01" :max="currentDay"
+					:showQuickButtons="true" v-model="dailyChartDate" @update:model-value="updateChart()" />
 			</openwb-base-card>
 			<openwb-base-alert v-if="!chartDataRead" subtype="info">
 				Es wurden noch keine Daten abgerufen.
@@ -23,65 +13,32 @@
 					Es konnten keine Daten für diesen Zeitraum gefunden werden.
 				</openwb-base-alert>
 				<div v-else>
-					<openwb-base-card
-						title="Diagramm"
-						:collapsible="true"
-						:collapsed="false"
-					>
+					<openwb-base-card title="Diagramm" :collapsible="true" :collapsed="false">
 						<div class="openwb-chart">
-							<chartjs-line
-								:data="chartData"
-								:options="chartOptions"
-							/>
+							<chartjs-line :data="chartData" :options="chartOptions" />
 						</div>
 					</openwb-base-card>
-					<openwb-base-card
-						title="Summen"
-						:collapsible="true"
-						:collapsed="true"
-					>
-						<openwb-base-card
-							v-for="(group, groupKey) in chartTotals"
-							:key="groupKey"
-							:collapsible="true"
-							:collapsed="true"
-							:subtype="getCardSubtype(groupKey)"
-						>
+					<openwb-base-card title="Summen" :collapsible="true" :collapsed="true">
+						<openwb-base-card v-for="(group, groupKey) in chartTotals" :key="groupKey" :collapsible="true"
+							:collapsed="true" :subtype="getCardSubtype(groupKey)">
 							<template #header>
-								<font-awesome-icon
-									fixed-width
-									:icon="getCardIcon(groupKey)"
-								/>
+								<font-awesome-icon fixed-width :icon="getCardIcon(groupKey)" />
 								{{ getTotalsLabel(groupKey) }}
 							</template>
-							<div
-								v-for="(component, componentKey) in group"
-								:key="componentKey"
-							>
+							<div v-for="(component, componentKey) in group" :key="componentKey">
 								<openwb-base-heading>{{
 									getTotalsLabel(groupKey, componentKey)
 								}}</openwb-base-heading>
-								<div
-									v-for="(
+								<div v-for="(
 										measurement, measurementKey
-									) in component"
-									:key="measurementKey"
-								>
-									<openwb-base-text-input
-										:title="
-											getTotalsLabel(
-												groupKey,
-												componentKey,
-												measurementKey
-											)
-										"
-										readonly
-										class="text-right"
-										unit="kWh"
-										:model-value="
-											formatNumber(measurement / 1000, 3)
-										"
-									/>
+									) in component" :key="measurementKey">
+									<openwb-base-text-input :title="getTotalsLabel(
+										groupKey,
+										componentKey,
+										measurementKey
+									)
+										" readonly class="text-right" unit="kWh" :model-value="formatNumber(measurement / 1000, 3)
+		" />
 								</div>
 							</div>
 						</openwb-base-card>
@@ -99,10 +56,11 @@ import {
 	faCarBattery as fasCarBattery,
 	faSolarPanel as fasSolarPanel,
 	faGaugeHigh as fasGaugeHigh,
+	faHouseSignal as fasHouseSignal,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasChargingStation, fasCarBattery, fasSolarPanel, fasGaugeHigh);
+library.add(fasChargingStation, fasCarBattery, fasSolarPanel, fasGaugeHigh, fasHouseSignal);
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 
@@ -274,6 +232,26 @@ export default {
 					borderWidth: 2,
 					data: null,
 					yAxisID: "y2",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
+				"sh-power": {
+					label: "SmartHome",
+					unit: "kW",
+					jsonKey: null,
+					borderColor: "rgba(232, 62, 140, 0.7)",
+					backgroundColor: "rgba(232, 72, 150, 0.3)",
+					fill: true,
+					pointStyle: "circle",
+					pointRadius: 0,
+					pointHoverRadius: 4,
+					cubicInterpolationMode: "monotone",
+					hidden: false,
+					borderWidth: 1,
+					data: null,
+					yAxisID: "y",
 					parsing: {
 						xAxisKey: "timestamp",
 						yAxisKey: null,
@@ -455,13 +433,13 @@ export default {
 		chartTotals() {
 			if (
 				this.$store.state.mqtt[
-					"openWB/log/daily/" + this.commandData.day
+				"openWB/log/daily/" + this.commandData.day
 				]
 			) {
 				if (
 					Object.prototype.hasOwnProperty.call(
 						this.$store.state.mqtt[
-							"openWB/log/daily/" + this.commandData.day
+						"openWB/log/daily/" + this.commandData.day
 						],
 						"totals"
 					)
@@ -531,7 +509,7 @@ export default {
 
 					var chartEntries =
 						this.$store.state.mqtt[
-							"openWB/log/daily/" + this.commandData.day
+						"openWB/log/daily/" + this.commandData.day
 						];
 					const start = chartEntries[0];
 					const end = chartEntries[chartEntries.length - 1];
@@ -544,12 +522,12 @@ export default {
 		chartDataObject() {
 			if (
 				this.$store.state.mqtt[
-					"openWB/log/daily/" + this.commandData.day
+				"openWB/log/daily/" + this.commandData.day
 				]
 			) {
 				var chartEntries =
 					this.$store.state.mqtt[
-						"openWB/log/daily/" + this.commandData.day
+					"openWB/log/daily/" + this.commandData.day
 					];
 				if (
 					Object.prototype.hasOwnProperty.call(
@@ -560,35 +538,36 @@ export default {
 					console.debug("upgraded chart data received");
 					chartEntries = chartEntries.entries;
 				}
-				var lastRow = undefined;
 				var myData = JSON.parse(JSON.stringify(chartEntries)).map(
-					(row) => {
-						row.timestamp = row.timestamp * 1000;
-						if (lastRow !== undefined) {
-							const timeDiff = row.timestamp - lastRow.timestamp;
+					(row, currentIndex, entries) => {
+						if (entries.length > currentIndex + 1) {
+							const nextRow = entries[currentIndex + 1];
+							row.timestamp = row.timestamp * 1000;
+							const timeDiff = nextRow.timestamp * 1000 - row.timestamp;
 							var baseObjectsToProcess = [
 								"pv",
 								"counter",
 								"bat",
 								"cp",
+								"sh",
 							];
 							baseObjectsToProcess.forEach((baseObject) => {
 								Object.entries(row[baseObject]).forEach(
 									([key, value]) => {
-										if (lastRow[baseObject][key]) {
+										if (row[baseObject][key]) {
 											Object.keys(value).forEach(() => {
 												switch (baseObject) {
 													case "pv":
 														if (
 															Object.prototype.hasOwnProperty.call(
-																row[baseObject][
-																	key
+																nextRow[baseObject][
+																key
 																],
 																"exported"
 															) &&
 															Object.prototype.hasOwnProperty.call(
-																lastRow[
-																	baseObject
+																row[
+																baseObject
 																][key],
 																"exported"
 															)
@@ -597,43 +576,43 @@ export default {
 																key
 															].power =
 																Math.floor(
-																	(row[
+																	(nextRow[
 																		baseObject
 																	][key]
 																		.exported -
-																		lastRow[
+																		row[
 																			baseObject
 																		][key]
 																			.exported) /
-																		(timeDiff /
-																			1000 /
-																			3600)
+																	(timeDiff /
+																		1000 /
+																		3600)
 																) / 1000;
 														}
 														break;
 													case "counter":
 														if (
 															Object.prototype.hasOwnProperty.call(
-																row[baseObject][
-																	key
+																nextRow[baseObject][
+																key
 																],
 																"imported"
 															) &&
 															Object.prototype.hasOwnProperty.call(
-																lastRow[
-																	baseObject
+																row[
+																baseObject
 																][key],
 																"imported"
 															) &&
 															Object.prototype.hasOwnProperty.call(
-																row[baseObject][
-																	key
+																nextRow[baseObject][
+																key
 																],
 																"exported"
 															) &&
 															Object.prototype.hasOwnProperty.call(
-																lastRow[
-																	baseObject
+																row[
+																baseObject
 																][key],
 																"exported"
 															)
@@ -642,27 +621,27 @@ export default {
 																key
 															].power =
 																Math.floor(
-																	(row[
+																	(nextRow[
 																		baseObject
 																	][key]
 																		.imported -
-																		lastRow[
+																		row[
 																			baseObject
 																		][key]
 																			.imported -
-																		(row[
+																		(nextRow[
 																			baseObject
 																		][key]
 																			.exported -
-																			lastRow[
+																			row[
 																				baseObject
 																			][
 																				key
 																			]
 																				.exported)) /
-																		(timeDiff /
-																			1000 /
-																			3600)
+																	(timeDiff /
+																		1000 /
+																		3600)
 																) / 1000;
 															row[baseObject][
 																key
@@ -687,26 +666,26 @@ export default {
 													case "bat":
 														if (
 															Object.prototype.hasOwnProperty.call(
-																row[baseObject][
-																	key
+																nextRow[baseObject][
+																key
 																],
 																"imported"
 															) &&
 															Object.prototype.hasOwnProperty.call(
-																lastRow[
-																	baseObject
+																row[
+																baseObject
 																][key],
 																"imported"
 															) &&
 															Object.prototype.hasOwnProperty.call(
-																row[baseObject][
-																	key
+																nextRow[baseObject][
+																key
 																],
 																"exported"
 															) &&
 															Object.prototype.hasOwnProperty.call(
-																lastRow[
-																	baseObject
+																row[
+																baseObject
 																][key],
 																"exported"
 															)
@@ -715,27 +694,27 @@ export default {
 																key
 															].power =
 																Math.floor(
-																	(row[
+																	(nextRow[
 																		baseObject
 																	][key]
 																		.imported -
-																		lastRow[
+																		row[
 																			baseObject
 																		][key]
 																			.imported -
-																		(row[
+																		(nextRow[
 																			baseObject
 																		][key]
 																			.exported -
-																			lastRow[
+																			row[
 																				baseObject
 																			][
 																				key
 																			]
 																				.exported)) /
-																		(timeDiff /
-																			1000 /
-																			3600)
+																	(timeDiff /
+																		1000 /
+																		3600)
 																) / 1000;
 															row[baseObject][
 																key
@@ -760,14 +739,14 @@ export default {
 													case "cp":
 														if (
 															Object.prototype.hasOwnProperty.call(
-																row[baseObject][
-																	key
+																nextRow[baseObject][
+																key
 																],
 																"imported"
 															) &&
 															Object.prototype.hasOwnProperty.call(
-																lastRow[
-																	baseObject
+																row[
+																baseObject
 																][key],
 																"imported"
 															)
@@ -776,18 +755,91 @@ export default {
 																key
 															].power =
 																Math.floor(
-																	(row[
+																	(nextRow[
 																		baseObject
 																	][key]
 																		.imported -
-																		lastRow[
+																		row[
 																			baseObject
 																		][key]
 																			.imported) /
-																		(timeDiff /
-																			1000 /
-																			3600)
+																	(timeDiff /
+																		1000 /
+																		3600)
 																) / 1000;
+														}
+														break;
+													case "sh":
+														if (
+															Object.prototype.hasOwnProperty.call(
+																nextRow[baseObject][
+																key
+																],
+																"imported"
+															) &&
+															Object.prototype.hasOwnProperty.call(
+																row[
+																baseObject
+																][key],
+																"imported"
+															) &&
+															Object.prototype.hasOwnProperty.call(
+																nextRow[baseObject][
+																key
+																],
+																"exported"
+															) &&
+															Object.prototype.hasOwnProperty.call(
+																row[
+																baseObject
+																][key],
+																"exported"
+															)
+														) {
+															row[baseObject][
+																key
+															].power =
+																Math.floor(
+																	(nextRow[
+																		baseObject
+																	][key]
+																		.imported -
+																		row[
+																			baseObject
+																		][key]
+																			.imported -
+																		(nextRow[
+																			baseObject
+																		][key]
+																			.exported -
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported)) /
+																	(timeDiff /
+																		1000 /
+																		3600)
+																) / 1000;
+															row[baseObject][
+																key
+															].powerImport =
+																Math.max(
+																	0,
+																	row[
+																		baseObject
+																	][key].power
+																);
+															row[baseObject][
+																key
+															].powerExport =
+																Math.min(
+																	0,
+																	row[
+																		baseObject
+																	][key].power
+																);
 														}
 														break;
 												}
@@ -796,15 +848,13 @@ export default {
 									}
 								);
 							});
-							lastRow = row;
 							return row;
 						} else {
-							lastRow = row;
 							return;
 						}
 					}
 				);
-				myData.shift();
+				myData.pop();
 				return myData;
 			}
 			return undefined;
@@ -812,7 +862,7 @@ export default {
 		chartData() {
 			if (this.chartDataObject) {
 				// add all datasets available in the last entry
-				var baseObjectsToProcess = ["pv", "counter", "bat", "cp", "ev"];
+				var baseObjectsToProcess = ["pv", "counter", "bat", "cp", "sh", "ev"];
 				const lastElement =
 					this.chartDataObject[this.chartDataObject.length - 1];
 				if (lastElement) {
@@ -842,6 +892,8 @@ export default {
 					return "primary";
 				case "pv":
 					return "success";
+				case "sh":
+					return "pink";
 				default:
 					return "secondary";
 			}
@@ -856,6 +908,8 @@ export default {
 					return ["fas", "charging-station"];
 				case "pv":
 					return ["fas", "solar-panel"];
+				case "sh":
+					return ["fas", "house-signal"];
 				default:
 					return undefined;
 			}
@@ -872,7 +926,6 @@ export default {
 		) {
 			var label = "*test*";
 			if (!componentKey && !measurementKey) {
-				// console.debug("getTotalsLabel for group:", groupKey);
 				switch (groupKey) {
 					case "bat":
 						return "Speicher";
@@ -882,6 +935,8 @@ export default {
 						return "Wechselrichter";
 					case "cp":
 						return "Ladepunkte";
+					case "sh":
+						return "SmartHome-Geräte"
 					default:
 						console.warn("unknown group key:", groupKey);
 				}
@@ -896,49 +951,64 @@ export default {
 				if (componentKey == "all") {
 					return "Summe";
 				} else {
-					var objectId = componentKey.match(/\d+$/);
-					var topic = "";
-					switch (groupKey) {
-						case "cp":
-							topic =
-								"openWB/chargepoint/" + objectId + "/config";
-							break;
-						case "ev":
-							topic = "openWB/vehicle/" + objectId + "/name";
-							break;
-						default:
-							topic =
-								"openWB/system/device/+/component/" +
-								objectId +
-								"/config";
-					}
-					var objectTopic = Object.keys(
-						this.getWildcardTopics(topic)
-					)[0];
-					// console.debug(objectTopic);
-					if (objectTopic) {
-						switch (groupKey) {
-							case "pv":
-								return this.$store.state.mqtt[objectTopic].name;
-							case "counter":
-								return this.$store.state.mqtt[objectTopic].name;
-							case "bat":
-								return this.$store.state.mqtt[objectTopic].name;
-							case "cp":
-								return this.$store.state.mqtt[objectTopic].name;
-							case "ev":
-								return this.$store.state.mqtt[objectTopic];
-							default:
-								console.warn("unknown group key:", groupKey);
-						}
+					if (
+						Object.prototype.hasOwnProperty.call(
+							this.$store.state.mqtt[
+							"openWB/log/daily/" + this.commandData.day
+							],
+							"names"
+						)
+					) {
+						return this.$store.state.mqtt[
+							"openWB/log/daily/" + this.commandData.day
+						].names[componentKey];
 					} else {
-						console.warn(
-							"topic not found for:",
-							groupKey,
-							componentKey
-						);
+						var objectId = componentKey.match(/\d+$/);
+						var topic = "";
+						switch (groupKey) {
+							case "cp":
+								topic =
+									"openWB/chargepoint/" + objectId + "/config";
+								break;
+							case "ev":
+								topic = "openWB/vehicle/" + objectId + "/name";
+								break;
+							default:
+								topic =
+									"openWB/system/device/+/component/" +
+									objectId +
+									"/config";
+						}
+						var objectTopic = Object.keys(
+							this.getWildcardTopics(topic)
+						)[0];
+						// console.debug(objectTopic);
+						if (objectTopic) {
+							switch (groupKey) {
+								case "pv":
+									return this.$store.state.mqtt[objectTopic].name;
+								case "counter":
+									return this.$store.state.mqtt[objectTopic].name;
+								case "bat":
+									return this.$store.state.mqtt[objectTopic].name;
+								case "cp":
+									return this.$store.state.mqtt[objectTopic].name;
+								case "ev":
+									return this.$store.state.mqtt[objectTopic];
+								case "sh":
+									return "SmartHome*";
+								default:
+									console.warn("unknown group key:", groupKey);
+							}
+						} else {
+							console.warn(
+								"topic not found for:",
+								groupKey,
+								componentKey
+							);
+						}
+						return "+" + groupKey + "+" + componentKey + "+";
 					}
-					return "+" + groupKey + "+" + componentKey + "+";
 				}
 			}
 			if (componentKey && measurementKey) {
@@ -990,6 +1060,20 @@ export default {
 								);
 						}
 						break;
+					case "sh":
+						switch (measurementKey) {
+							case "imported":
+								return "Verbrauch";
+							case "exported":
+								return "Erzeugung";
+							default:
+								console.warn(
+									"unknown measurement key:",
+									groupKey,
+									measurementKey
+								);
+						}
+						break;
 					default:
 						console.warn("unknown group key:", groupKey);
 				}
@@ -1005,123 +1089,162 @@ export default {
 			}
 			return label;
 		},
+		/**
+		 * Builds a label string
+		 * @param {String} baseObject
+		 * @param {String} objectKey
+		 * @param {String} elementKey
+		 * @param {String} datasetKey
+		 * @returns {String}
+		 */
 		getDatasetLabel(baseObject, objectKey, elementKey, datasetKey) {
-			// console.debug(
-			// 	"getDatasetLabel",
-			// 	baseObject,
-			// 	objectKey,
-			// 	elementKey,
-			// 	datasetKey
-			// );
-			var label = "*" + datasetKey;
+			var label = ["*" + datasetKey];
+			var details = [];
 			if (objectKey == "all") {
+				details.push("Summe");
 				switch (baseObject) {
 					case "pv":
-						label = "PV (Summe)";
+						label = ["PV"];
 						break;
 					case "bat":
-						label = "Speicher";
+						label = ["Speicher"];
 						switch (elementKey) {
-							case "imported":
-								label += " (Ladung, Summe)";
-								break;
-							case "exported":
-								label += " (Entladung, Summe)";
-								break;
 							case "soc":
-								label += " SoC (Summe)";
+								label.push("SoC");
 								break;
-							default:
-								label += " (Summe)";
 						}
 						break;
 					case "cp":
-						label = "Ladepunkte";
+						label = ["Ladepunkte"];
 						switch (elementKey) {
-							case "imported":
-								label += " (Ladung, Summe)";
-								break;
-							case "exported":
-								label += " (Entladung, Summe)";
-								break;
 							case "soc":
-								label += " SoC (Summe)";
+								label.push("SoC");
 								break;
-							default:
-								label += " (Summe)";
 						}
 						break;
 				}
 			} else {
-				var objectId = objectKey.match(/\d+$/);
-				var topic = "";
-				switch (baseObject) {
-					case "cp":
-						topic = "openWB/chargepoint/" + objectId + "/config";
-						break;
-					case "ev":
-						topic = "openWB/vehicle/" + objectId + "/name";
-						break;
-					default:
-						topic =
-							"openWB/system/device/+/component/" +
-							objectId +
-							"/config";
-				}
-				var objectTopic = Object.keys(this.getWildcardTopics(topic))[0];
-				if (objectTopic in this.$store.state.mqtt) {
+				if (
+					Object.prototype.hasOwnProperty.call(
+						this.$store.state.mqtt[
+						"openWB/log/daily/" + this.commandData.day
+						],
+						"names"
+					) &&
+					Object.prototype.hasOwnProperty.call(
+						this.$store.state.mqtt[
+							"openWB/log/daily/" + this.commandData.day
+						].names,
+						objectKey
+					)
+				) {
+					label = [this.$store.state.mqtt[
+						"openWB/log/daily/" + this.commandData.day
+					].names[objectKey]];
+				} else {
+					// DEPRECATED!
+					var objectId = objectKey.match(/\d+$/);
+					var topic = "";
 					switch (baseObject) {
-						case "pv":
-							label = this.$store.state.mqtt[objectTopic].name;
-							break;
-						case "counter":
-							label = this.$store.state.mqtt[objectTopic].name;
-							switch (elementKey) {
-								case "imported":
-									label += " (Bezug)";
-									break;
-								case "exported":
-									label += " (Einspeisung)";
-									break;
-							}
-							break;
-						case "bat":
-							label = this.$store.state.mqtt[objectTopic].name;
-							switch (elementKey) {
-								case "imported":
-									label += " (Ladung)";
-									break;
-								case "exported":
-									label += " (Entladung)";
-									break;
-								case "soc":
-									label += " SoC";
-									break;
-							}
-							break;
 						case "cp":
-							label = this.$store.state.mqtt[objectTopic].name;
-							switch (elementKey) {
-								case "imported":
-									label += " (Ladung)";
-									break;
-								case "exported":
-									label += " (Entladung)";
-									break;
-								case "soc":
-									label += " SoC";
-									break;
-							}
+							topic = "openWB/chargepoint/" + objectId + "/config";
 							break;
 						case "ev":
-							label = this.$store.state.mqtt[objectTopic];
+							topic = "openWB/vehicle/" + objectId + "/name";
 							break;
+						default:
+							topic =
+								"openWB/system/device/+/component/" +
+								objectId +
+								"/config";
 					}
-				} else {
-					console.warn("could not get name for dataset", datasetKey);
+					var objectTopic = Object.keys(this.getWildcardTopics(topic))[0];
+					if (objectTopic in this.$store.state.mqtt) {
+						switch (baseObject) {
+							case "pv":
+								label = [this.$store.state.mqtt[objectTopic].name];
+								break;
+							case "counter":
+								label = [this.$store.state.mqtt[objectTopic].name];
+								break;
+							case "bat":
+								label = [this.$store.state.mqtt[objectTopic].name];
+								switch (elementKey) {
+									case "soc":
+										label.push("SoC");
+										break;
+								}
+								break;
+							case "cp":
+								label = [this.$store.state.mqtt[objectTopic].name];
+								switch (elementKey) {
+									case "soc":
+										label.push("SoC");
+										break;
+								}
+								break;
+							case "sh":
+								label = [this.$store.state.mqtt[objectTopic].name];
+								switch (elementKey) {
+									case "temp1":
+									case "temp2":
+									case "temp3":
+										label.push(elementKey.charAt(0).toUpperCase() + elementKey.substring(1));
+										break;
+								}
+								break;
+							case "ev":
+								label = [this.$store.state.mqtt[objectTopic]];
+								switch (elementKey) {
+									case "soc":
+										label.push("SoC");
+										break;
+								}
+								break;
+						}
+					} else {
+						console.warn("could not get name for dataset", datasetKey);
+					}
 				}
 			}
-			return label;
+			switch (baseObject) {
+				case "bat":
+				case "cp":
+					switch (elementKey) {
+						case "imported":
+						case "energyImport":
+							details.push("Ladung");
+							break;
+						case "exported":
+						case "energyExport":
+							details.push("Entladung");
+							break;
+					}
+					break;
+				case "counter":
+					switch (elementKey) {
+						case "imported":
+						case "energyImport":
+							details.push("Bezug/Verbrauch");
+							break;
+						case "exported":
+						case "energyExport":
+							details.push("Einspeisung/Erzeugung");
+							break;
+					}
+					break;
+			}
+			console.debug(
+				"getDatasetLabel",
+				baseObject,
+				objectKey,
+				elementKey,
+				datasetKey,
+				"Label:",
+				label,
+				details
+			);
+			return `${label.join(" ")}${details.length ? " (" + details.join(", ") + ")" : ""}`;
 		},
 		getDatasetIndex(datasetKey) {
 			let index = this.chartDatasets.datasets.findIndex((dataset) => {
@@ -1169,9 +1292,9 @@ export default {
 			} else {
 				console.warn(
 					"no matching template found for: " +
-						datasetKey +
-						" with template: " +
-						datasetTemplate
+					datasetKey +
+					" with template: " +
+					datasetTemplate
 				);
 			}
 			return;
