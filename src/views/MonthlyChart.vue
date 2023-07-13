@@ -1,9 +1,20 @@
 <template>
 	<div class="monthlyChart">
 		<form name="monthlyChartForm">
-			<openwb-base-card title="Filter" :collapsible="true" :collapsed="false">
-				<openwb-base-text-input title="Monat" subtype="month" min="2018-01" :max="currentMonth"
-					:showQuickButtons="true" v-model="monthlyChartDate" @update:model-value="updateChart()" />
+			<openwb-base-card
+				title="Filter"
+				:collapsible="true"
+				:collapsed="false"
+			>
+				<openwb-base-text-input
+					title="Monat"
+					subtype="month"
+					min="2018-01"
+					:max="currentMonth"
+					:showQuickButtons="true"
+					v-model="monthlyChartDate"
+					@update:model-value="updateChart()"
+				/>
 			</openwb-base-card>
 			<openwb-base-alert v-if="!chartDataRead" subtype="info">
 				Es wurden noch keine Daten abgerufen.
@@ -13,32 +24,65 @@
 					Es konnten keine Daten für diesen Zeitraum gefunden werden.
 				</openwb-base-alert>
 				<div v-else>
-					<openwb-base-card title="Diagramm" :collapsible="true" :collapsed="false">
+					<openwb-base-card
+						title="Diagramm"
+						:collapsible="true"
+						:collapsed="false"
+					>
 						<div class="openwb-chart">
-							<chartjs-line :data="chartData" :options="chartOptions" />
+							<chartjs-line
+								:data="chartData"
+								:options="chartOptions"
+							/>
 						</div>
 					</openwb-base-card>
-					<openwb-base-card title="Summen" :collapsible="true" :collapsed="true">
-						<openwb-base-card v-for="(group, groupKey) in chartTotals" :key="groupKey" :collapsible="true"
-							:collapsed="true" :subtype="getCardSubtype(groupKey)">
+					<openwb-base-card
+						title="Summen"
+						:collapsible="true"
+						:collapsed="true"
+					>
+						<openwb-base-card
+							v-for="(group, groupKey) in chartTotals"
+							:key="groupKey"
+							:collapsible="true"
+							:collapsed="true"
+							:subtype="getCardSubtype(groupKey)"
+						>
 							<template #header>
-								<font-awesome-icon fixed-width :icon="getCardIcon(groupKey)" />
+								<font-awesome-icon
+									fixed-width
+									:icon="getCardIcon(groupKey)"
+								/>
 								{{ getTotalsLabel(groupKey) }}
 							</template>
-							<div v-for="(component, componentKey) in group" :key="componentKey">
+							<div
+								v-for="(component, componentKey) in group"
+								:key="componentKey"
+							>
 								<openwb-base-heading>{{
 									getTotalsLabel(groupKey, componentKey)
 								}}</openwb-base-heading>
-								<div v-for="(
+								<div
+									v-for="(
 										measurement, measurementKey
-									) in component" :key="measurementKey">
-									<openwb-base-text-input :title="getTotalsLabel(
-										groupKey,
-										componentKey,
-										measurementKey
-									)
-										" readonly class="text-right" unit="kWh" :model-value="formatNumber(measurement / 1000, 3)
-		" />
+									) in component"
+									:key="measurementKey"
+								>
+									<openwb-base-text-input
+										:title="
+											getTotalsLabel(
+												groupKey,
+												componentKey,
+												measurementKey
+											)
+										"
+										readonly
+										class="text-right"
+										unit="kWh"
+										:model-value="
+											formatNumber(measurement / 1000, 3)
+										"
+									/>
 								</div>
 							</div>
 						</openwb-base-card>
@@ -60,7 +104,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasChargingStation, fasCarBattery, fasSolarPanel, fasGaugeHigh, fasHouseSignal);
+library.add(
+	fasChargingStation,
+	fasCarBattery,
+	fasSolarPanel,
+	fasGaugeHigh,
+	fasHouseSignal
+);
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 
@@ -419,13 +469,13 @@ export default {
 		chartTotals() {
 			if (
 				this.$store.state.mqtt[
-				"openWB/log/monthly/" + this.commandData.month
+					"openWB/log/monthly/" + this.commandData.month
 				]
 			) {
 				if (
 					Object.prototype.hasOwnProperty.call(
 						this.$store.state.mqtt[
-						"openWB/log/monthly/" + this.commandData.month
+							"openWB/log/monthly/" + this.commandData.month
 						],
 						"totals"
 					)
@@ -496,7 +546,7 @@ export default {
 
 					var chartEntries =
 						this.$store.state.mqtt[
-						"openWB/log/monthly/" + this.commandData.month
+							"openWB/log/monthly/" + this.commandData.month
 						];
 					const start = chartEntries[0];
 					const end = chartEntries[chartEntries.length - 1];
@@ -509,12 +559,12 @@ export default {
 		chartDataObject() {
 			if (
 				this.$store.state.mqtt[
-				"openWB/log/monthly/" + this.commandData.month
+					"openWB/log/monthly/" + this.commandData.month
 				]
 			) {
 				var chartEntries =
 					this.$store.state.mqtt[
-					"openWB/log/monthly/" + this.commandData.month
+						"openWB/log/monthly/" + this.commandData.month
 					];
 				if (
 					Object.prototype.hasOwnProperty.call(
@@ -867,7 +917,7 @@ export default {
 					case "cp":
 						return "Ladepunkte";
 					case "sh":
-						return "SmartHome-Geräte"
+						return "SmartHome-Geräte";
 					default:
 						console.warn("unknown group key:", groupKey);
 				}
@@ -885,7 +935,7 @@ export default {
 					if (
 						Object.prototype.hasOwnProperty.call(
 							this.$store.state.mqtt[
-							"openWB/log/monthly/" + this.commandData.month
+								"openWB/log/monthly/" + this.commandData.month
 							],
 							"names"
 						)
@@ -899,7 +949,9 @@ export default {
 						switch (groupKey) {
 							case "cp":
 								topic =
-									"openWB/chargepoint/" + objectId + "/config";
+									"openWB/chargepoint/" +
+									objectId +
+									"/config";
 								break;
 							case "ev":
 								topic = "openWB/vehicle/" + objectId + "/name";
@@ -917,19 +969,26 @@ export default {
 						if (objectTopic) {
 							switch (groupKey) {
 								case "pv":
-									return this.$store.state.mqtt[objectTopic].name;
+									return this.$store.state.mqtt[objectTopic]
+										.name;
 								case "counter":
-									return this.$store.state.mqtt[objectTopic].name;
+									return this.$store.state.mqtt[objectTopic]
+										.name;
 								case "bat":
-									return this.$store.state.mqtt[objectTopic].name;
+									return this.$store.state.mqtt[objectTopic]
+										.name;
 								case "cp":
-									return this.$store.state.mqtt[objectTopic].name;
+									return this.$store.state.mqtt[objectTopic]
+										.name;
 								case "ev":
 									return this.$store.state.mqtt[objectTopic];
 								case "sh":
 									return "SmartHome*";
 								default:
-									console.warn("unknown group key:", groupKey);
+									console.warn(
+										"unknown group key:",
+										groupKey
+									);
 							}
 						} else {
 							console.warn(
@@ -1058,7 +1117,7 @@ export default {
 				if (
 					Object.prototype.hasOwnProperty.call(
 						this.$store.state.mqtt[
-						"openWB/log/monthly/" + this.commandData.month
+							"openWB/log/monthly/" + this.commandData.month
 						],
 						"names"
 					) &&
@@ -1069,16 +1128,19 @@ export default {
 						objectKey
 					)
 				) {
-					label = [this.$store.state.mqtt[
-						"openWB/log/monthly/" + this.commandData.month
-					].names[objectKey]];
+					label = [
+						this.$store.state.mqtt[
+							"openWB/log/monthly/" + this.commandData.month
+						].names[objectKey],
+					];
 				} else {
 					// DEPRECATED!
 					var objectId = objectKey.match(/\d+$/);
 					var topic = "";
 					switch (baseObject) {
 						case "cp":
-							topic = "openWB/chargepoint/" + objectId + "/config";
+							topic =
+								"openWB/chargepoint/" + objectId + "/config";
 							break;
 						case "ev":
 							topic = "openWB/vehicle/" + objectId + "/name";
@@ -1089,17 +1151,25 @@ export default {
 								objectId +
 								"/config";
 					}
-					var objectTopic = Object.keys(this.getWildcardTopics(topic))[0];
+					var objectTopic = Object.keys(
+						this.getWildcardTopics(topic)
+					)[0];
 					if (objectTopic in this.$store.state.mqtt) {
 						switch (baseObject) {
 							case "pv":
-								label = [this.$store.state.mqtt[objectTopic].name];
+								label = [
+									this.$store.state.mqtt[objectTopic].name,
+								];
 								break;
 							case "counter":
-								label = [this.$store.state.mqtt[objectTopic].name];
+								label = [
+									this.$store.state.mqtt[objectTopic].name,
+								];
 								break;
 							case "bat":
-								label = [this.$store.state.mqtt[objectTopic].name];
+								label = [
+									this.$store.state.mqtt[objectTopic].name,
+								];
 								switch (elementKey) {
 									case "soc":
 										label.push("SoC");
@@ -1107,7 +1177,9 @@ export default {
 								}
 								break;
 							case "cp":
-								label = [this.$store.state.mqtt[objectTopic].name];
+								label = [
+									this.$store.state.mqtt[objectTopic].name,
+								];
 								switch (elementKey) {
 									case "soc":
 										label.push("SoC");
@@ -1115,12 +1187,17 @@ export default {
 								}
 								break;
 							case "sh":
-								label = [this.$store.state.mqtt[objectTopic].name];
+								label = [
+									this.$store.state.mqtt[objectTopic].name,
+								];
 								switch (elementKey) {
 									case "temp1":
 									case "temp2":
 									case "temp3":
-										label.push(elementKey.charAt(0).toUpperCase() + elementKey.substring(1));
+										label.push(
+											elementKey.charAt(0).toUpperCase() +
+												elementKey.substring(1)
+										);
 										break;
 								}
 								break;
@@ -1134,7 +1211,10 @@ export default {
 								break;
 						}
 					} else {
-						console.warn("could not get name for dataset", datasetKey);
+						console.warn(
+							"could not get name for dataset",
+							datasetKey
+						);
 					}
 				}
 			}
@@ -1175,7 +1255,9 @@ export default {
 				label,
 				details
 			);
-			return `${label.join(" ")}${details.length ? " (" + details.join(", ") + ")" : ""}`;
+			return `${label.join(" ")}${
+				details.length ? " (" + details.join(", ") + ")" : ""
+			}`;
 		},
 		getDatasetIndex(datasetKey) {
 			let index = this.chartDatasets.datasets.findIndex((dataset) => {
@@ -1223,9 +1305,9 @@ export default {
 			} else {
 				console.warn(
 					"no matching template found for: " +
-					datasetKey +
-					" with template: " +
-					datasetTemplate
+						datasetKey +
+						" with template: " +
+						datasetTemplate
 				);
 			}
 			return;
