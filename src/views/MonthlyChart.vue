@@ -944,6 +944,7 @@ export default {
 							"openWB/log/monthly/" + this.commandData.month
 						].names[componentKey];
 					} else {
+						// DEPRECATED
 						var objectId = componentKey.match(/\d+$/);
 						var topic = "";
 						switch (groupKey) {
@@ -1053,8 +1054,10 @@ export default {
 					case "sh":
 						switch (measurementKey) {
 							case "imported":
+							case "energyImport":
 								return "Verbrauch";
 							case "exported":
+							case "energyExport":
 								return "Erzeugung";
 							default:
 								console.warn(
@@ -1241,6 +1244,18 @@ export default {
 						case "exported":
 						case "energyExport":
 							details.push("Einspeisung/Erzeugung");
+							break;
+					}
+					break;
+				case "sh":
+					switch (elementKey) {
+						case "imported":
+						case "energyImport":
+							details.push("Verbrauch");
+							break;
+						case "exported":
+						case "energyExport":
+							details.push("Erzeugung");
 							break;
 					}
 					break;
