@@ -50,7 +50,13 @@ export default {
 				!(this.bootInProgress || this.updateInProgress) &&
 				this.reloadRequired
 			) {
-				return [{ text: "Jetzt neu laden", subtype: "success", event: "reload" }];
+				return [
+					{
+						text: "Jetzt neu laden",
+						subtype: "success",
+						event: "reload",
+					},
+				];
 			}
 			return [];
 		},
