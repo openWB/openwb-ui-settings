@@ -39,6 +39,14 @@ const routes = [
 		component: () => import("../views/MonthlyChart.vue"),
 	},
 	{
+		path: "/Logging/YearlyChart",
+		name: "YearlyChart",
+		meta: {
+			heading: "Auswertungen - Jahresauswertung",
+		},
+		component: () => import("../views/YearlyChart.vue"),
+	},
+	{
 		path: "/GeneralConfig",
 		name: "GeneralConfig",
 		meta: {

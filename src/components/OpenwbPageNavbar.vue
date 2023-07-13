@@ -59,6 +59,13 @@
 						>
 							Monatsauswertung
 						</router-link>
+						<router-link
+							to="/Logging/YearlyChart"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							Jahresauswertung
+						</router-link>
 					</div>
 				</li>
 				<li class="nav-item dropdown">
