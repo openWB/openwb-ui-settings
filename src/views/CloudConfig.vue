@@ -71,7 +71,7 @@
 						"
 					>
 						<openwb-base-alert subtype="info">
-							Diese openWB befindet sich im Modus "Nur Ladepunkt".
+							Diese openWB befindet sich im Steuerungsmodus "secondary".
 							Bitte richten Sie die openWB Cloud auf der regelnden
 							openWB ein.
 						</openwb-base-alert>
@@ -165,7 +165,7 @@
 						"
 					>
 						<openwb-base-alert subtype="info">
-							Diese openWB befindet sich im Modus "Nur Ladepunkt".
+							Diese openWB befindet sich im Steuerungsmodus "secondary".
 							Bitte richten Sie die openWB Cloud auf der regelnden
 							openWB ein.
 						</openwb-base-alert>

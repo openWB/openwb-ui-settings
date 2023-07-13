@@ -5,7 +5,7 @@
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
 						Diese Einstellungen sind nicht verfügbar, solange sich
-						diese openWB im Modus "Nur Ladepunkt" befindet.
+						diese openWB im Steuerungsmodus "secondary" befindet.
 					</openwb-base-alert>
 				</div>
 				<div v-else>
