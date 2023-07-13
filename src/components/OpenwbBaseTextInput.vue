@@ -63,7 +63,11 @@
 							/>
 							<font-awesome-icon
 								fixed-width
-								v-if="subtype == 'date' || subtype == 'month'"
+								v-if="
+									subtype == 'date' ||
+									subtype == 'month' ||
+									subtype == 'year'
+								"
 								:icon="['fas', 'calendar-day']"
 							/>
 						</div>
@@ -147,28 +151,42 @@
 						v-model="value"
 						v-bind="$attrs"
 					/>
+					<input
+						v-if="subtype == 'year'"
+						type="number"
+						ref="yearInput"
+						class="form-control"
+						v-model="value"
+						v-bind="$attrs"
+					/>
 					<div v-if="unit" class="input-group-append">
 						<div class="input-group-text">
 							{{ unit }}
 						</div>
 					</div>
 					<div
-						v-if="showQuickButtons && (subtype == 'date' || subtype == 'month')"
+						v-if="
+							showQuickButtons &&
+							(subtype == 'date' ||
+								subtype == 'month' ||
+								subtype == 'year')
+						"
 						class="input-group-append clickable"
 						@click="modify(-1)"
 					>
-						<div class="input-group-text">
-							-
-						</div>
+						<div class="input-group-text">-</div>
 					</div>
 					<div
-						v-if="showQuickButtons && (subtype == 'date' || subtype == 'month')"
+						v-if="
+							showQuickButtons &&
+							(subtype == 'date' ||
+								subtype == 'month' ||
+								subtype == 'year')
+						"
 						class="input-group-append clickable"
 						@click="modify(1)"
 					>
-						<div class="input-group-text">
-							+
-						</div>
+						<div class="input-group-text">+</div>
 					</div>
 				</div>
 			</div>
@@ -238,6 +256,7 @@ export default {
 						"time",
 						"date",
 						"month",
+						"year",
 					].indexOf(value) !== -1
 				);
 			},
@@ -309,22 +328,31 @@ export default {
 			switch (this.subtype) {
 				case "date":
 					newDate.setDate(newDate.getDate() + offset);
-					newValue = String(newDate.getFullYear()) +
-							"-" +
-							String(newDate.getMonth() + 1).padStart(2, "0") +
-							"-" +
-							String(newDate.getDate()).padStart(2, "0");
+					newValue =
+						String(newDate.getFullYear()) +
+						"-" +
+						String(newDate.getMonth() + 1).padStart(2, "0") +
+						"-" +
+						String(newDate.getDate()).padStart(2, "0");
 					inputRef = this.$refs.dateInput;
 					break;
 				case "month":
 					newDate.setMonth(newDate.getMonth() + offset);
-					newValue = String(newDate.getFullYear()) +
-							"-" +
-							String(newDate.getMonth() + 1).padStart(2, "0");
+					newValue =
+						String(newDate.getFullYear()) +
+						"-" +
+						String(newDate.getMonth() + 1).padStart(2, "0");
 					inputRef = this.$refs.monthInput;
 					break;
+				case "year":
+					newDate.setYear(newDate.getFullYear() + offset);
+					newValue = String(newDate.getFullYear());
+					inputRef = this.$refs.yearInput;
+					break;
 				default:
-					console.warn(`cannot modify input of subtype '${this.subtype}'`);
+					console.warn(
+						`cannot modify input of subtype '${this.subtype}'`
+					);
 					return;
 			}
 			if (newValue > inputRef.max || newValue < inputRef.min) {
