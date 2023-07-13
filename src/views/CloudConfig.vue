@@ -71,9 +71,9 @@
 						"
 					>
 						<openwb-base-alert subtype="info">
-							Diese openWB befindet sich im Steuerungsmodus "secondary".
-							Bitte richten Sie die openWB Cloud auf der regelnden
-							openWB ein.
+							Diese openWB befindet sich im Steuerungsmodus
+							"secondary". Bitte richten Sie die openWB Cloud auf
+							der regelnden openWB ein.
 						</openwb-base-alert>
 					</div>
 					<div v-else>
@@ -165,9 +165,9 @@
 						"
 					>
 						<openwb-base-alert subtype="info">
-							Diese openWB befindet sich im Steuerungsmodus "secondary".
-							Bitte richten Sie die openWB Cloud auf der regelnden
-							openWB ein.
+							Diese openWB befindet sich im Steuerungsmodus
+							"secondary". Bitte richten Sie die openWB Cloud auf
+							der regelnden openWB ein.
 						</openwb-base-alert>
 					</div>
 					<div v-else>
