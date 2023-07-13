@@ -67,6 +67,7 @@ export default {
 						"secondary",
 						"light",
 						"dark",
+						"pink",
 					].indexOf(value) !== -1
 				);
 			},
@@ -119,6 +120,14 @@ export default {
 	border-style: solid;
 }
 
+.border-pink {
+	border-color: var(--pink) !important;
+}
+
+.bg-pink {
+	background-color: var(--pink) !important;
+}
+
 .bg-primary,
 .bg-secondary,
 .bg-info,
@@ -129,6 +138,7 @@ export default {
 }
 
 .bg-warning,
+.bg-pink,
 .bg-light {
 	color: #212529;
 }
