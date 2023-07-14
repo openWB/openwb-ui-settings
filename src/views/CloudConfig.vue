@@ -245,7 +245,12 @@
 					<openwb-base-heading>
 						<span>
 							Mit diesen Zugangsdaten können Sie sich in der
-							<a href="https://web.openwb.de/">openWB Cloud </a>
+							<a
+								href="https://web.openwb.de/"
+								target="_blank"
+								rel="noopener noreferrer"
+								>openWB Cloud
+							</a>
 							anmelden.
 						</span>
 					</openwb-base-heading>
