@@ -607,296 +607,369 @@ export default {
 								Object.entries(row[baseObject]).forEach(
 									([key, value]) => {
 										if (row[baseObject][key]) {
-											if (nextRow[baseObject][key]){
-												Object.keys(value).forEach(() => {
-													switch (baseObject) {
-														case "pv":
-															if (
-																Object.prototype.hasOwnProperty.call(
-																	nextRow[
-																		baseObject
-																	][key],
-																	"exported"
-																) &&
-																Object.prototype.hasOwnProperty.call(
-																	row[baseObject][
-																		key
-																	],
-																	"exported"
-																)
-															) {
-																row[baseObject][
-																	key
-																].power =
-																	Math.floor(
-																		(nextRow[
+											if (nextRow[baseObject][key]) {
+												Object.keys(value).forEach(
+													() => {
+														switch (baseObject) {
+															case "pv":
+																if (
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
 																			baseObject
-																		][key]
-																			.exported -
-																			row[
-																				baseObject
-																			][key]
-																				.exported) /
-																			(timeDiff /
-																				1000 /
-																				3600)
-																	) / 1000;
-															}
-															break;
-														case "counter":
-															if (
-																Object.prototype.hasOwnProperty.call(
-																	nextRow[
-																		baseObject
-																	][key],
-																	"imported"
-																) &&
-																Object.prototype.hasOwnProperty.call(
-																	row[baseObject][
-																		key
-																	],
-																	"imported"
-																) &&
-																Object.prototype.hasOwnProperty.call(
-																	nextRow[
-																		baseObject
-																	][key],
-																	"exported"
-																) &&
-																Object.prototype.hasOwnProperty.call(
-																	row[baseObject][
-																		key
-																	],
-																	"exported"
-																)
-															) {
-																row[baseObject][
-																	key
-																].power =
-																	Math.floor(
-																		(nextRow[
+																		][key],
+																		"exported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
+																		row[
 																			baseObject
-																		][key]
-																			.imported -
-																			row[
-																				baseObject
-																			][key]
-																				.imported -
+																		][key],
+																		"exported"
+																	)
+																) {
+																	row[
+																		baseObject
+																	][
+																		key
+																	].power =
+																		Math.floor(
 																			(nextRow[
 																				baseObject
-																			][key]
+																			][
+																				key
+																			]
 																				.exported -
 																				row[
 																					baseObject
 																				][
 																					key
 																				]
-																					.exported)) /
-																			(timeDiff /
-																				1000 /
-																				3600)
-																	) / 1000;
-																row[baseObject][
-																	key
-																].powerImport =
-																	Math.max(
-																		0,
+																					.exported) /
+																				(timeDiff /
+																					1000 /
+																					3600)
+																		) /
+																		1000;
+																}
+																break;
+															case "counter":
+																if (
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"imported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
 																		row[
 																			baseObject
-																		][key].power
-																	);
-																row[baseObject][
-																	key
-																].powerExport =
-																	Math.min(
-																		0,
+																		][key],
+																		"imported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"exported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
 																		row[
 																			baseObject
-																		][key].power
-																	);
-															}
-															break;
-														case "bat":
-															if (
-																Object.prototype.hasOwnProperty.call(
-																	nextRow[
+																		][key],
+																		"exported"
+																	)
+																) {
+																	row[
 																		baseObject
-																	][key],
-																	"imported"
-																) &&
-																Object.prototype.hasOwnProperty.call(
-																	row[baseObject][
+																	][
 																		key
-																	],
-																	"imported"
-																) &&
-																Object.prototype.hasOwnProperty.call(
-																	nextRow[
-																		baseObject
-																	][key],
-																	"exported"
-																) &&
-																Object.prototype.hasOwnProperty.call(
-																	row[baseObject][
-																		key
-																	],
-																	"exported"
-																)
-															) {
-																row[baseObject][
-																	key
-																].power =
-																	Math.floor(
-																		(nextRow[
-																			baseObject
-																		][key]
-																			.imported -
-																			row[
-																				baseObject
-																			][key]
-																				.imported -
+																	].power =
+																		Math.floor(
 																			(nextRow[
 																				baseObject
-																			][key]
-																				.exported -
+																			][
+																				key
+																			]
+																				.imported -
 																				row[
 																					baseObject
 																				][
 																					key
 																				]
-																					.exported)) /
-																			(timeDiff /
-																				1000 /
-																				3600)
-																	) / 1000;
-																row[baseObject][
-																	key
-																].powerImport =
-																	Math.max(
-																		0,
-																		row[
-																			baseObject
-																		][key].power
-																	);
-																row[baseObject][
-																	key
-																].powerExport =
-																	Math.min(
-																		0,
-																		row[
-																			baseObject
-																		][key].power
-																	);
-															}
-															break;
-														case "cp":
-															if (
-																Object.prototype.hasOwnProperty.call(
-																	nextRow[
+																					.imported -
+																				(nextRow[
+																					baseObject
+																				][
+																					key
+																				]
+																					.exported -
+																					row[
+																						baseObject
+																					][
+																						key
+																					]
+																						.exported)) /
+																				(timeDiff /
+																					1000 /
+																					3600)
+																		) /
+																		1000;
+																	row[
 																		baseObject
-																	][key],
-																	"imported"
-																) &&
-																Object.prototype.hasOwnProperty.call(
-																	row[baseObject][
+																	][
 																		key
-																	],
-																	"imported"
-																)
-															) {
-																row[baseObject][
-																	key
-																].power =
-																	Math.floor(
-																		(nextRow[
-																			baseObject
-																		][key]
-																			.imported -
+																	].powerImport =
+																		Math.max(
+																			0,
 																			row[
 																				baseObject
-																			][key]
-																				.imported) /
-																			(timeDiff /
-																				1000 /
-																				3600)
-																	) / 1000;
-															}
-															break;
-														case "sh":
-															if (
-																Object.prototype.hasOwnProperty.call(
-																	nextRow[
+																			][
+																				key
+																			]
+																				.power
+																		);
+																	row[
 																		baseObject
-																	][key],
-																	"imported"
-																) &&
-																Object.prototype.hasOwnProperty.call(
-																	row[baseObject][
+																	][
 																		key
-																	],
-																	"imported"
-																) &&
-																Object.prototype.hasOwnProperty.call(
-																	nextRow[
-																		baseObject
-																	][key],
-																	"exported"
-																) &&
-																Object.prototype.hasOwnProperty.call(
-																	row[baseObject][
-																		key
-																	],
-																	"exported"
-																)
-															) {
-																row[baseObject][
-																	key
-																].power =
-																	Math.floor(
-																		(nextRow[
-																			baseObject
-																		][key]
-																			.imported -
+																	].powerExport =
+																		Math.min(
+																			0,
 																			row[
 																				baseObject
-																			][key]
-																				.imported -
+																			][
+																				key
+																			]
+																				.power
+																		);
+																}
+																break;
+															case "bat":
+																if (
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"imported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
+																		row[
+																			baseObject
+																		][key],
+																		"imported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"exported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
+																		row[
+																			baseObject
+																		][key],
+																		"exported"
+																	)
+																) {
+																	row[
+																		baseObject
+																	][
+																		key
+																	].power =
+																		Math.floor(
 																			(nextRow[
 																				baseObject
-																			][key]
-																				.exported -
+																			][
+																				key
+																			]
+																				.imported -
 																				row[
 																					baseObject
 																				][
 																					key
 																				]
-																					.exported)) /
-																			(timeDiff /
-																				1000 /
-																				3600)
-																	) / 1000;
-																row[baseObject][
-																	key
-																].powerImport =
-																	Math.max(
-																		0,
+																					.imported -
+																				(nextRow[
+																					baseObject
+																				][
+																					key
+																				]
+																					.exported -
+																					row[
+																						baseObject
+																					][
+																						key
+																					]
+																						.exported)) /
+																				(timeDiff /
+																					1000 /
+																					3600)
+																		) /
+																		1000;
+																	row[
+																		baseObject
+																	][
+																		key
+																	].powerImport =
+																		Math.max(
+																			0,
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.power
+																		);
+																	row[
+																		baseObject
+																	][
+																		key
+																	].powerExport =
+																		Math.min(
+																			0,
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.power
+																		);
+																}
+																break;
+															case "cp":
+																if (
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"imported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
 																		row[
 																			baseObject
-																		][key].power
-																	);
-																row[baseObject][
-																	key
-																].powerExport =
-																	Math.min(
-																		0,
+																		][key],
+																		"imported"
+																	)
+																) {
+																	row[
+																		baseObject
+																	][
+																		key
+																	].power =
+																		Math.floor(
+																			(nextRow[
+																				baseObject
+																			][
+																				key
+																			]
+																				.imported -
+																				row[
+																					baseObject
+																				][
+																					key
+																				]
+																					.imported) /
+																				(timeDiff /
+																					1000 /
+																					3600)
+																		) /
+																		1000;
+																}
+																break;
+															case "sh":
+																if (
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"imported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
 																		row[
 																			baseObject
-																		][key].power
-																	);
-															}
-															break;
+																		][key],
+																		"imported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"exported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
+																		row[
+																			baseObject
+																		][key],
+																		"exported"
+																	)
+																) {
+																	row[
+																		baseObject
+																	][
+																		key
+																	].power =
+																		Math.floor(
+																			(nextRow[
+																				baseObject
+																			][
+																				key
+																			]
+																				.imported -
+																				row[
+																					baseObject
+																				][
+																					key
+																				]
+																					.imported -
+																				(nextRow[
+																					baseObject
+																				][
+																					key
+																				]
+																					.exported -
+																					row[
+																						baseObject
+																					][
+																						key
+																					]
+																						.exported)) /
+																				(timeDiff /
+																					1000 /
+																					3600)
+																		) /
+																		1000;
+																	row[
+																		baseObject
+																	][
+																		key
+																	].powerImport =
+																		Math.max(
+																			0,
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.power
+																		);
+																	row[
+																		baseObject
+																	][
+																		key
+																	].powerExport =
+																		Math.min(
+																			0,
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.power
+																		);
+																}
+																break;
+														}
 													}
-												});
+												);
 											} else {
 												return;
 											}

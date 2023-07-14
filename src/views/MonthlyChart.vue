@@ -591,237 +591,271 @@ export default {
 								Object.entries(row[baseObject]).forEach(
 									([key, value]) => {
 										if (row[baseObject][key]) {
-											if (nextRow[baseObject][key]){
-												Object.keys(value).forEach(() => {
-													switch (baseObject) {
-														case "pv":
-															if (
-																Object.prototype.hasOwnProperty.call(
-																	nextRow[
-																		baseObject
-																	][key],
-																	"exported"
-																) &&
-																Object.prototype.hasOwnProperty.call(
-																	row[baseObject][
-																		key
-																	],
-																	"exported"
-																)
-															) {
-																row[baseObject][
-																	key
-																].energyExport =
-																	(nextRow[
-																		baseObject
-																	][key]
-																		.exported -
+											if (nextRow[baseObject][key]) {
+												Object.keys(value).forEach(
+													() => {
+														switch (baseObject) {
+															case "pv":
+																if (
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"exported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
 																		row[
 																			baseObject
-																		][key]
-																			.exported) /
-																	1000;
-															}
-															break;
-														case "counter":
-															if (
-																Object.prototype.hasOwnProperty.call(
-																	nextRow[
+																		][key],
+																		"exported"
+																	)
+																) {
+																	row[
 																		baseObject
-																	][key],
-																	"imported"
-																) &&
-																Object.prototype.hasOwnProperty.call(
-																	row[baseObject][
+																	][
 																		key
-																	],
-																	"imported"
-																)
-															) {
-																row[baseObject][
-																	key
-																].energyImport =
-																	(nextRow[
-																		baseObject
-																	][key]
-																		.imported -
-																		row[
+																	].energyExport =
+																		(nextRow[
 																			baseObject
 																		][key]
-																			.imported) /
-																	1000;
-															}
-															if (
-																Object.prototype.hasOwnProperty.call(
-																	nextRow[
-																		baseObject
-																	][key],
-																	"exported"
-																) &&
-																Object.prototype.hasOwnProperty.call(
-																	row[baseObject][
-																		key
-																	],
-																	"exported"
-																)
-															) {
-																row[baseObject][
-																	key
-																].energyExport =
-																	(nextRow[
-																		baseObject
-																	][key]
-																		.exported -
+																			.exported -
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported) /
+																		1000;
+																}
+																break;
+															case "counter":
+																if (
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"imported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
 																		row[
 																			baseObject
-																		][key]
-																			.exported) /
-																	1000;
-															}
-															break;
-														case "bat":
-															if (
-																Object.prototype.hasOwnProperty.call(
-																	nextRow[
+																		][key],
+																		"imported"
+																	)
+																) {
+																	row[
 																		baseObject
-																	][key],
-																	"imported"
-																) &&
-																Object.prototype.hasOwnProperty.call(
-																	row[baseObject][
+																	][
 																		key
-																	],
-																	"imported"
-																)
-															) {
-																row[baseObject][
-																	key
-																].energyImport =
-																	(nextRow[
-																		baseObject
-																	][key]
-																		.imported -
-																		row[
+																	].energyImport =
+																		(nextRow[
 																			baseObject
 																		][key]
-																			.imported) /
-																	1000;
-															}
-															if (
-																Object.prototype.hasOwnProperty.call(
-																	nextRow[
-																		baseObject
-																	][key],
-																	"exported"
-																) &&
-																Object.prototype.hasOwnProperty.call(
-																	row[baseObject][
-																		key
-																	],
-																	"exported"
-																)
-															) {
-																row[baseObject][
-																	key
-																].energyExport =
-																	(nextRow[
-																		baseObject
-																	][key]
-																		.exported -
+																			.imported -
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.imported) /
+																		1000;
+																}
+																if (
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"exported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
 																		row[
 																			baseObject
-																		][key]
-																			.exported) /
-																	1000;
-															}
-															break;
-														case "cp":
-															if (
-																Object.prototype.hasOwnProperty.call(
-																	nextRow[
+																		][key],
+																		"exported"
+																	)
+																) {
+																	row[
 																		baseObject
-																	][key],
-																	"imported"
-																) &&
-																Object.prototype.hasOwnProperty.call(
-																	row[baseObject][
+																	][
 																		key
-																	],
-																	"imported"
-																)
-															) {
-																row[baseObject][
-																	key
-																].energyImport =
-																	(nextRow[
-																		baseObject
-																	][key]
-																		.imported -
-																		row[
+																	].energyExport =
+																		(nextRow[
 																			baseObject
 																		][key]
-																			.imported) /
-																	1000;
-															}
-															break;
-														case "sh":
-															if (
-																Object.prototype.hasOwnProperty.call(
-																	nextRow[
-																		baseObject
-																	][key],
-																	"imported"
-																) &&
-																Object.prototype.hasOwnProperty.call(
-																	row[baseObject][
-																		key
-																	],
-																	"imported"
-																)
-															) {
-																row[baseObject][
-																	key
-																].energyImport =
-																	(nextRow[
-																		baseObject
-																	][key]
-																		.imported -
+																			.exported -
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported) /
+																		1000;
+																}
+																break;
+															case "bat":
+																if (
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"imported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
 																		row[
 																			baseObject
-																		][key]
-																			.imported) /
-																	1000;
-															}
-															if (
-																Object.prototype.hasOwnProperty.call(
-																	nextRow[
+																		][key],
+																		"imported"
+																	)
+																) {
+																	row[
 																		baseObject
-																	][key],
-																	"exported"
-																) &&
-																Object.prototype.hasOwnProperty.call(
-																	row[baseObject][
+																	][
 																		key
-																	],
-																	"exported"
-																)
-															) {
-																row[baseObject][
-																	key
-																].energyExport =
-																	(nextRow[
-																		baseObject
-																	][key]
-																		.exported -
-																		row[
+																	].energyImport =
+																		(nextRow[
 																			baseObject
 																		][key]
-																			.exported) /
-																	1000;
-															}
-															break;
+																			.imported -
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.imported) /
+																		1000;
+																}
+																if (
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"exported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
+																		row[
+																			baseObject
+																		][key],
+																		"exported"
+																	)
+																) {
+																	row[
+																		baseObject
+																	][
+																		key
+																	].energyExport =
+																		(nextRow[
+																			baseObject
+																		][key]
+																			.exported -
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported) /
+																		1000;
+																}
+																break;
+															case "cp":
+																if (
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"imported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
+																		row[
+																			baseObject
+																		][key],
+																		"imported"
+																	)
+																) {
+																	row[
+																		baseObject
+																	][
+																		key
+																	].energyImport =
+																		(nextRow[
+																			baseObject
+																		][key]
+																			.imported -
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.imported) /
+																		1000;
+																}
+																break;
+															case "sh":
+																if (
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"imported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
+																		row[
+																			baseObject
+																		][key],
+																		"imported"
+																	)
+																) {
+																	row[
+																		baseObject
+																	][
+																		key
+																	].energyImport =
+																		(nextRow[
+																			baseObject
+																		][key]
+																			.imported -
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.imported) /
+																		1000;
+																}
+																if (
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"exported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
+																		row[
+																			baseObject
+																		][key],
+																		"exported"
+																	)
+																) {
+																	row[
+																		baseObject
+																	][
+																		key
+																	].energyExport =
+																		(nextRow[
+																			baseObject
+																		][key]
+																			.exported -
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported) /
+																		1000;
+																}
+																break;
+														}
 													}
-												});
+												);
 											} else {
 												return;
 											}
