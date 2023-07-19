@@ -4,9 +4,17 @@
 			Einstellungen für Powerdog Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-alert subtype="info">
-			Diese Komponente erfordert keine Einstellungen.
-		</openwb-base-alert>
+		<openwb-base-button-group-input
+			title="Einbau-Position"
+			:buttons="[
+				{ buttonValue: false, text: 'Hausverbrauch' },
+				{ buttonValue: true, text: 'EVU-Punkt' },
+			]"
+			:model-value="configuration.position_evu"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.position_evu')
+			"
+		/>
 	</div>
 </template>
 
