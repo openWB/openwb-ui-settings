@@ -1,18 +1,23 @@
 <template>
-	<div class="dailyChart">
-		<form name="dailyChartForm">
+	<div class="chart">
+		<form name="chartForm">
 			<openwb-base-card
 				title="Filter"
 				:collapsible="true"
 				:collapsed="false"
 			>
+				<openwb-base-select-input
+					title="Zeitraum"
+					v-model="chartRange"
+					:options="[{value:'day', text:'Tag'},{value:'month', text:'Monat'},{value:'year', text:'Jahr'}]"
+				/>
 				<openwb-base-text-input
-					title="Datum"
-					subtype="date"
-					min="2018-01-01"
-					:max="currentDay"
+					:title="dateInput.title"
+					:subtype="dateInput.type"
+					:min="dateInput.min"
+					:max="currentDate"
 					:showQuickButtons="true"
-					v-model="dailyChartDate"
+					v-model="chartDate"
 					@update:model-value="updateChart()"
 				/>
 			</openwb-base-card>
@@ -142,21 +147,48 @@ Chart.register(
 );
 
 export default {
-	name: "OpenwbDailyChart",
+	name: "OpenwbChart",
 	components: { ChartjsLine, FontAwesomeIcon },
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
+	props: {
+		initialChartRange: {
+			type: String,
+			required: false,
+			validator: function (value) {
+				return (
+					[
+						"day",
+						"month",
+						"year",
+					].indexOf(value) !== -1
+				);
+			},
+			default: "day",
+		},
+		initialDate: {
+			type: String,
+			required: false,
+			validator: function (value) {
+				return value.match(/^(([0-9]{4})(-[0-9]{2}(-[0-9]{2})?)?)?$/g);
+			},
+			default: "",
+		},
+	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
 				"openWB/log/daily/#",
+				"openWB/log/monthly/#",
+				"openWB/log/yearly/#",
 				"openWB/system/device/+/component/+/config",
 				"openWB/chargepoint/+/config",
 				"openWB/vehicle/+/name",
 			],
-			currentDay: "",
-			dailyChartRequestData: {
+			currentDate: "",
+			chartRange: "day",
+			chartRequestDate: {
 				day: "",
 				month: "",
 				year: "",
@@ -182,6 +214,46 @@ export default {
 						yAxisKey: null,
 					},
 				},
+				"counter-energyImport": {
+					label: "Zähler",
+					unit: "kWh",
+					jsonKey: null,
+					borderColor: "rgba(255, 0, 0, 0.7)",
+					backgroundColor: "rgba(255, 10, 13, 0.3)",
+					fill: true,
+					pointStyle: "circle",
+					pointRadius: 0,
+					pointHoverRadius: 4,
+					cubicInterpolationMode: "monotone",
+					hidden: false,
+					borderWidth: 1,
+					data: null,
+					yAxisID: "y2",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
+				"counter-energyExport": {
+					label: "Zähler",
+					unit: "kWh",
+					jsonKey: null,
+					borderColor: "rgba(255, 0, 0, 0.7)",
+					backgroundColor: "rgba(255, 10, 13, 0.3)",
+					fill: true,
+					pointStyle: "circle",
+					pointRadius: 0,
+					pointHoverRadius: 4,
+					cubicInterpolationMode: "monotone",
+					hidden: false,
+					borderWidth: 1,
+					data: null,
+					yAxisID: "y2",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
 				"pv-power": {
 					label: "PV",
 					unit: "kW",
@@ -197,6 +269,27 @@ export default {
 					borderWidth: 1,
 					data: null,
 					yAxisID: "y",
+					// stack: "inverter",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
+				"pv-energyExport": {
+					label: "PV",
+					unit: "kWh",
+					jsonKey: null,
+					borderColor: "rgba(0, 255, 0, 0.7)",
+					backgroundColor: "rgba(10, 255, 13, 0.3)",
+					fill: true,
+					pointStyle: "circle",
+					pointRadius: 0,
+					pointHoverRadius: 4,
+					cubicInterpolationMode: "monotone",
+					hidden: false,
+					borderWidth: 1,
+					data: null,
+					yAxisID: "y2",
 					// stack: "inverter",
 					parsing: {
 						xAxisKey: "timestamp",
@@ -224,6 +317,48 @@ export default {
 						yAxisKey: null,
 					},
 				},
+				"bat-energyImport": {
+					label: "Speicher",
+					unit: "kWh",
+					jsonKey: null,
+					borderColor: "rgba(255, 153, 13, 0.7)",
+					backgroundColor: "rgba(200, 255, 13, 0.3)",
+					fill: true,
+					pointStyle: "circle",
+					pointRadius: 0,
+					pointHoverRadius: 4,
+					cubicInterpolationMode: "monotone",
+					hidden: false,
+					borderWidth: 1,
+					data: null,
+					yAxisID: "y2",
+					// stack: "battery",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
+				"bat-energyExport": {
+					label: "Speicher",
+					unit: "kWh",
+					jsonKey: null,
+					borderColor: "rgba(255, 153, 13, 0.7)",
+					backgroundColor: "rgba(200, 255, 13, 0.3)",
+					fill: true,
+					pointStyle: "circle",
+					pointRadius: 0,
+					pointHoverRadius: 4,
+					cubicInterpolationMode: "monotone",
+					hidden: false,
+					borderWidth: 1,
+					data: null,
+					yAxisID: "y2",
+					// stack: "battery",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
 				"bat-soc": {
 					label: "Speicher SoC",
 					unit: "%",
@@ -239,7 +374,7 @@ export default {
 					cubicInterpolationMode: "monotone",
 					borderWidth: 2,
 					data: null,
-					yAxisID: "y2",
+					yAxisID: "y3",
 					parsing: {
 						xAxisKey: "timestamp",
 						yAxisKey: null,
@@ -266,6 +401,27 @@ export default {
 						yAxisKey: null,
 					},
 				},
+				"cp-energyImport": {
+					label: "Ladepunkt",
+					unit: "kWh",
+					jsonKey: null,
+					borderColor: "rgba(0, 0, 255, 0.7)",
+					backgroundColor: "rgba(0, 0, 255, 0.3)",
+					fill: true,
+					pointStyle: "circle",
+					pointRadius: 0,
+					pointHoverRadius: 4,
+					cubicInterpolationMode: "monotone",
+					hidden: false,
+					borderWidth: 1,
+					data: null,
+					yAxisID: "y2",
+					// stack: "charge-point",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
 				"ev-soc": {
 					label: "Fahrzeug SoC",
 					unit: "%",
@@ -281,7 +437,7 @@ export default {
 					cubicInterpolationMode: "monotone",
 					borderWidth: 2,
 					data: null,
-					yAxisID: "y2",
+					yAxisID: "y3",
 					parsing: {
 						xAxisKey: "timestamp",
 						yAxisKey: null,
@@ -302,6 +458,46 @@ export default {
 					borderWidth: 1,
 					data: null,
 					yAxisID: "y",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
+				"sh-energyImport": {
+					label: "SmartHome",
+					unit: "kWh",
+					jsonKey: null,
+					borderColor: "rgba(232, 62, 140, 0.7)",
+					backgroundColor: "rgba(232, 72, 150, 0.3)",
+					fill: true,
+					pointStyle: "circle",
+					pointRadius: 0,
+					pointHoverRadius: 4,
+					cubicInterpolationMode: "monotone",
+					hidden: false,
+					borderWidth: 1,
+					data: null,
+					yAxisID: "y2",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
+				"sh-energyExport": {
+					label: "SmartHome",
+					unit: "kWh",
+					jsonKey: null,
+					borderColor: "rgba(232, 62, 140, 0.7)",
+					backgroundColor: "rgba(232, 72, 150, 0.3)",
+					fill: true,
+					pointStyle: "circle",
+					pointRadius: 0,
+					pointHoverRadius: 4,
+					cubicInterpolationMode: "monotone",
+					hidden: false,
+					borderWidth: 1,
+					data: null,
+					yAxisID: "y2",
 					parsing: {
 						xAxisKey: "timestamp",
 						yAxisKey: null,
@@ -363,13 +559,13 @@ export default {
 					x: {
 						type: "time",
 						time: {
-							unit: "minute",
-							tooltipFormat: "DD T",
+							unit: "",
+							tooltipFormat: "",
 						},
 						display: true,
 						title: {
 							display: true,
-							text: "Zeit",
+							text: "",
 						},
 						ticks: {
 							source: "timestamp",
@@ -377,7 +573,7 @@ export default {
 								size: 12,
 							},
 							// color: tickColor,
-							maxTicksLimit: 24,
+							maxTicksLimit: 0,
 						},
 						grid: {
 							// color: xGridColor,
@@ -411,6 +607,33 @@ export default {
 						},
 					},
 					y2: {
+						// horizontal line for values displayed on the left side (energy, kWh)
+						position: "left",
+						type: "linear",
+						display: "auto",
+						suggestedMin: 0,
+						suggestedMax: 0,
+						title: {
+							font: {
+								size: 12,
+							},
+							display: true,
+							text: "Energie [kWh]",
+							// color: fontColor
+						},
+						grid: {
+							// color: gridColor
+						},
+						ticks: {
+							font: {
+								size: 12,
+							},
+							stepSize: 0.2,
+							maxTicksLimit: 11,
+							// color: tickColor
+						},
+					},
+					y3: {
 						// horizontal line for values displayed on the right side (SoC, %)
 						position: "right",
 						type: "linear",
@@ -446,30 +669,128 @@ export default {
 		};
 	},
 	computed: {
-		dailyChartDate: {
+		dateInput() {
+			var dateObject = {
+				title: "Datum",
+				type: "date",
+				min: "2018-01-01",
+			};
+			switch (this.chartRange) {
+				case "month":
+					dateObject = {
+						title: "Monat",
+						type: "month",
+						min: "2018-01",
+					};
+					break;
+				case "year":
+					dateObject = {
+						title: "Jahr",
+						type: "year",
+						min: "2018",
+					};
+					break;
+			}
+			return dateObject;
+		},
+		chartDate: {
 			get() {
-				return (
-					this.dailyChartRequestData.year +
-					"-" +
-					this.dailyChartRequestData.month +
-					"-" +
-					this.dailyChartRequestData.day
-				);
+				var dateString = this.chartRequestDate.year;
+				if (this.chartRange != "year") {
+					dateString = dateString + "-" + this.chartRequestDate.month;
+				}
+				if (this.chartRange == "day") {
+					dateString = dateString + "-" + this.chartRequestDate.day;
+				}
+				return dateString;
 			},
 			set(newValue) {
 				let splitDate = newValue.split("-");
-				this.dailyChartRequestData.year = splitDate[0];
-				this.dailyChartRequestData.month = splitDate[1];
-				this.dailyChartRequestData.day = splitDate[2];
+				this.chartRequestDate.year = splitDate[0];
+				if (splitDate.length > 1) {
+					this.chartRequestDate.month = splitDate[1];
+				} else {
+					this.chartRequestDate.month = "";
+				}
+				if (splitDate.length > 2) {
+					this.chartRequestDate.day = splitDate[2];
+				} else {
+					this.chartRequestDate.day = "";
+				}
 			},
 		},
-		commandData() {
-			return {
-				day:
-					this.dailyChartRequestData.year +
-					this.dailyChartRequestData.month +
-					this.dailyChartRequestData.day,
+		chartScaleX() {
+			var scaleObject = {
+				unit: "minute",
+				tooltipFormat: "DD T",
+				text: "Zeit",
+				maxTicksLimit: 24,
 			};
+			switch (this.chartRange) {
+				case "month":
+					scaleObject = {
+						unit: "day",
+						tooltipFormat: "D",
+						text: "Tag",
+						maxTicksLimit: 31,
+					};
+					break;
+				case "year":
+					scaleObject = {
+						unit: "month",
+						tooltipFormat: "M",
+						text: "Monat",
+						maxTicksLimit: 12,
+					};
+					break;
+			}
+			return scaleObject;
+		},
+		commandData() {
+			var dataObject = {
+				date:
+					this.chartRequestDate.year +
+					this.chartRequestDate.month +
+					this.chartRequestDate.day,
+				day:
+					this.chartRequestDate.year +
+					this.chartRequestDate.month +
+					this.chartRequestDate.day,
+			};
+			switch (this.chartRange) {
+				case "month":
+					dataObject = {
+						date:
+							this.chartRequestDate.year +
+							this.chartRequestDate.month,
+						month:
+							this.chartRequestDate.year +
+							this.chartRequestDate.month,
+					};
+					break;
+				case "year":
+					dataObject = {
+						date: this.chartRequestDate.year,
+						year: this.chartRequestDate.year,
+					};
+					break;
+			}
+			return dataObject;
+		},
+		baseTopic() {
+			var topic = "openWB/log/";
+			switch (this.chartRange) {
+				case "day":
+					topic = topic + "daily/";
+					break;
+				case "month":
+					topic = topic + "monthly/";
+					break;
+				case "year":
+					topic = topic + "yearly/";
+					break;
+			}
+			return topic;
 		},
 		chartDataRead() {
 			return this.chartDataObject != undefined;
@@ -482,20 +803,18 @@ export default {
 		},
 		chartTotals() {
 			if (
-				this.$store.state.mqtt[
-					"openWB/log/daily/" + this.commandData.day
-				]
+				this.$store.state.mqtt[this.baseTopic + this.commandData.date]
 			) {
 				if (
 					Object.prototype.hasOwnProperty.call(
 						this.$store.state.mqtt[
-							"openWB/log/daily/" + this.commandData.day
+							this.baseTopic + this.commandData.date
 						],
 						"totals"
 					)
 				) {
 					return this.$store.state.mqtt[
-						"openWB/log/daily/" + this.commandData.day
+						this.baseTopic + this.commandData.date
 					].totals;
 				} else {
 					// DEPRECATED!
@@ -560,7 +879,7 @@ export default {
 
 					var chartEntries =
 						this.$store.state.mqtt[
-							"openWB/log/daily/" + this.commandData.day
+							this.baseTopic + this.commandData.date
 						];
 					const start = chartEntries[0];
 					const end = chartEntries[chartEntries.length - 1];
@@ -571,14 +890,31 @@ export default {
 			return undefined;
 		},
 		chartDataObject() {
+			const calculatePower = (
+				timeDiff,
+				currentValueExported,
+				nextValueExported,
+				currentValueImported,
+				nextValueImported
+			) => {
+				return (
+					Math.floor(
+						(nextValueImported -
+							currentValueImported -
+							(nextValueExported - currentValueExported)) /
+							(timeDiff / 1000 / 3600)
+					) / 1000
+				);
+			};
+			const calculateEnergyDiff = (currentValue, nextValue) => {
+				return (nextValue - currentValue) / 1000;
+			};
 			if (
-				this.$store.state.mqtt[
-					"openWB/log/daily/" + this.commandData.day
-				]
+				this.$store.state.mqtt[this.baseTopic + this.commandData.date]
 			) {
 				var chartEntries =
 					this.$store.state.mqtt[
-						"openWB/log/daily/" + this.commandData.day
+						this.baseTopic + this.commandData.date
 					];
 				if (
 					Object.prototype.hasOwnProperty.call(
@@ -593,9 +929,9 @@ export default {
 					(row, currentIndex, entries) => {
 						if (entries.length > currentIndex + 1) {
 							const nextRow = entries[currentIndex + 1];
-							row.timestamp = row.timestamp * 1000;
 							const timeDiff =
-								nextRow.timestamp * 1000 - row.timestamp;
+								(nextRow.timestamp - row.timestamp) * 1000;
+							row.timestamp = row.timestamp * 1000;
 							var baseObjectsToProcess = [
 								"pv",
 								"counter",
@@ -631,24 +967,42 @@ export default {
 																	][
 																		key
 																	].power =
-																		Math.floor(
-																			(nextRow[
+																		calculatePower(
+																			timeDiff,
+																			0,
+																			0,
+																			row[
 																				baseObject
 																			][
 																				key
 																			]
-																				.exported -
-																				row[
-																					baseObject
-																				][
-																					key
-																				]
-																					.exported) /
-																				(timeDiff /
-																					1000 /
-																					3600)
-																		) /
-																		1000;
+																				.exported,
+																			nextRow[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported
+																		);
+																	row[
+																		baseObject
+																	][
+																		key
+																	].energyExport =
+																		calculateEnergyDiff(
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported,
+																			nextRow[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported
+																		);
 																}
 																break;
 															case "counter":
@@ -742,6 +1096,74 @@ export default {
 																				.power
 																		);
 																}
+																if (
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"imported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
+																		row[
+																			baseObject
+																		][key],
+																		"imported"
+																	)
+																) {
+																	row[
+																		baseObject
+																	][
+																		key
+																	].energyImport =
+																		calculateEnergyDiff(
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.imported,
+																			nextRow[
+																				baseObject
+																			][
+																				key
+																			]
+																				.imported
+																		);
+																}
+																if (
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"exported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
+																		row[
+																			baseObject
+																		][key],
+																		"exported"
+																	)
+																) {
+																	row[
+																		baseObject
+																	][
+																		key
+																	].energyExport =
+																		calculateEnergyDiff(
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported,
+																			nextRow[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported
+																		);
+																}
 																break;
 															case "bat":
 																if (
@@ -775,36 +1197,33 @@ export default {
 																	][
 																		key
 																	].power =
-																		Math.floor(
-																			(nextRow[
+																		calculatePower(
+																			timeDiff,
+																			row[
 																				baseObject
 																			][
 																				key
 																			]
-																				.imported -
-																				row[
-																					baseObject
-																				][
-																					key
-																				]
-																					.imported -
-																				(nextRow[
-																					baseObject
-																				][
-																					key
-																				]
-																					.exported -
-																					row[
-																						baseObject
-																					][
-																						key
-																					]
-																						.exported)) /
-																				(timeDiff /
-																					1000 /
-																					3600)
-																		) /
-																		1000;
+																				.exported,
+																			nextRow[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported,
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.imported,
+																			nextRow[
+																				baseObject
+																			][
+																				key
+																			]
+																				.imported
+																		);
 																	row[
 																		baseObject
 																	][
@@ -834,8 +1253,6 @@ export default {
 																				.power
 																		);
 																}
-																break;
-															case "cp":
 																if (
 																	Object.prototype.hasOwnProperty.call(
 																		nextRow[
@@ -854,25 +1271,184 @@ export default {
 																		baseObject
 																	][
 																		key
-																	].power =
-																		Math.floor(
-																			(nextRow[
+																	].energyImport =
+																		calculateEnergyDiff(
+																			row[
 																				baseObject
 																			][
 																				key
 																			]
-																				.imported -
-																				row[
-																					baseObject
-																				][
-																					key
-																				]
-																					.imported) /
-																				(timeDiff /
-																					1000 /
-																					3600)
-																		) /
-																		1000;
+																				.imported,
+																			nextRow[
+																				baseObject
+																			][
+																				key
+																			]
+																				.imported
+																		);
+																}
+																if (
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"exported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
+																		row[
+																			baseObject
+																		][key],
+																		"exported"
+																	)
+																) {
+																	row[
+																		baseObject
+																	][
+																		key
+																	].energyExport =
+																		calculateEnergyDiff(
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported,
+																			nextRow[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported
+																		);
+																}
+																break;
+															case "cp":
+																if (
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"exported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
+																		row[
+																			baseObject
+																		][key],
+																		"exported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"imported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
+																		row[
+																			baseObject
+																		][key],
+																		"imported"
+																	)
+																) {
+																	row[
+																		baseObject
+																	][
+																		key
+																	].power =
+																		calculatePower(
+																			timeDiff,
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported,
+																			nextRow[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported,
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.imported,
+																			nextRow[
+																				baseObject
+																			][
+																				key
+																			]
+																				.imported
+																		);
+																}
+																if (
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"imported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
+																		row[
+																			baseObject
+																		][key],
+																		"imported"
+																	)
+																) {
+																	row[
+																		baseObject
+																	][
+																		key
+																	].energyImport =
+																		calculateEnergyDiff(
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.imported,
+																			nextRow[
+																				baseObject
+																			][
+																				key
+																			]
+																				.imported
+																		);
+																}
+																if (
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"exported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
+																		row[
+																			baseObject
+																		][key],
+																		"exported"
+																	)
+																) {
+																	row[
+																		baseObject
+																	][
+																		key
+																	].energyExport =
+																		calculateEnergyDiff(
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported,
+																			nextRow[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported
+																		);
 																}
 																break;
 															case "sh":
@@ -907,36 +1483,33 @@ export default {
 																	][
 																		key
 																	].power =
-																		Math.floor(
-																			(nextRow[
+																		calculatePower(
+																			timeDiff,
+																			row[
 																				baseObject
 																			][
 																				key
 																			]
-																				.imported -
-																				row[
-																					baseObject
-																				][
-																					key
-																				]
-																					.imported -
-																				(nextRow[
-																					baseObject
-																				][
-																					key
-																				]
-																					.exported -
-																					row[
-																						baseObject
-																					][
-																						key
-																					]
-																						.exported)) /
-																				(timeDiff /
-																					1000 /
-																					3600)
-																		) /
-																		1000;
+																				.exported,
+																			nextRow[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported,
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.imported,
+																			nextRow[
+																				baseObject
+																			][
+																				key
+																			]
+																				.imported
+																		);
 																	row[
 																		baseObject
 																	][
@@ -964,6 +1537,74 @@ export default {
 																				key
 																			]
 																				.power
+																		);
+																}
+																if (
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"imported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
+																		row[
+																			baseObject
+																		][key],
+																		"imported"
+																	)
+																) {
+																	row[
+																		baseObject
+																	][
+																		key
+																	].energyImport =
+																		calculateEnergyDiff(
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.imported,
+																			nextRow[
+																				baseObject
+																			][
+																				key
+																			]
+																				.imported
+																		);
+																}
+																if (
+																	Object.prototype.hasOwnProperty.call(
+																		nextRow[
+																			baseObject
+																		][key],
+																		"exported"
+																	) &&
+																	Object.prototype.hasOwnProperty.call(
+																		row[
+																			baseObject
+																		][key],
+																		"exported"
+																	)
+																) {
+																	row[
+																		baseObject
+																	][
+																		key
+																	].energyExport =
+																		calculateEnergyDiff(
+																			row[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported,
+																			nextRow[
+																				baseObject
+																			][
+																				key
+																			]
+																				.exported
 																		);
 																}
 																break;
@@ -1003,13 +1644,24 @@ export default {
 					this.chartDataObject[this.chartDataObject.length - 1];
 				if (lastElement) {
 					baseObjectsToProcess.forEach((baseObject) => {
-						Object.entries(lastElement[baseObject]).forEach(
-							([key, value]) => {
-								Object.keys(value).forEach((entryKey) => {
-									this.initDataset(baseObject, key, entryKey);
-								});
-							}
-						);
+						if (
+							Object.prototype.hasOwnProperty.call(
+								lastElement,
+								baseObject
+							)
+						) {
+							Object.entries(lastElement[baseObject]).forEach(
+								([key, value]) => {
+									Object.keys(value).forEach((entryKey) => {
+										this.initDataset(
+											baseObject,
+											key,
+											entryKey
+										);
+									});
+								}
+							);
+						}
 					});
 				}
 				return this.chartDatasets;
@@ -1090,13 +1742,13 @@ export default {
 					if (
 						Object.prototype.hasOwnProperty.call(
 							this.$store.state.mqtt[
-								"openWB/log/daily/" + this.commandData.day
+								this.baseTopic + this.commandData.date
 							],
 							"names"
 						)
 					) {
 						return this.$store.state.mqtt[
-							"openWB/log/daily/" + this.commandData.day
+							this.baseTopic + this.commandData.date
 						].names[componentKey];
 					} else {
 						// DEPRECATED
@@ -1275,20 +1927,20 @@ export default {
 				if (
 					Object.prototype.hasOwnProperty.call(
 						this.$store.state.mqtt[
-							"openWB/log/daily/" + this.commandData.day
+							this.baseTopic + this.commandData.date
 						],
 						"names"
 					) &&
 					Object.prototype.hasOwnProperty.call(
 						this.$store.state.mqtt[
-							"openWB/log/daily/" + this.commandData.day
+							this.baseTopic + this.commandData.date
 						].names,
 						objectKey
 					)
 				) {
 					label = [
 						this.$store.state.mqtt[
-							"openWB/log/daily/" + this.commandData.day
+							this.baseTopic + this.commandData.date
 						].names[objectKey],
 					];
 				} else {
@@ -1483,7 +2135,12 @@ export default {
 			return;
 		},
 		initDataset(baseObject, objectKey, elementKey) {
-			const elementKeysToAdd = ["power", "soc"];
+			var elementKeysToAdd = [];
+			if (this.chartRange == "day") {
+				elementKeysToAdd = ["power", "soc"];
+			} else {
+				elementKeysToAdd = ["energyImport", "energyExport"];
+			}
 			const datasetKey = baseObject + "." + objectKey + "." + elementKey;
 			if (elementKeysToAdd.includes(elementKey)) {
 				var index = this.getDatasetIndex(datasetKey);
@@ -1508,38 +2165,82 @@ export default {
 				}
 			}
 		},
-		requestDailyChart() {
-			let myForm = document.forms["dailyChartForm"];
+		setupScaleX() {
+			this.chartOptions.scales.x.time.unit = this.chartScaleX.unit;
+			this.chartOptions.scales.x.time.tooltipFormat =
+				this.chartScaleX.tooltipFormat;
+			this.chartOptions.scales.x.title.text = this.chartScaleX.text;
+			this.chartOptions.scales.x.ticks.maxTicksLimit =
+				this.chartScaleX.maxTicksLimit;
+		},
+		requestChart() {
+			let myForm = document.forms["chartForm"];
 			if (!myForm.reportValidity()) {
 				console.log("form invalid");
 				return;
 			} else {
+				this.setupScaleX();
 				this.chartDatasets.datasets = [];
+				var command = "";
+				switch (this.chartRange) {
+					case "day":
+						command = "getDailyLog";
+						break;
+					case "month":
+						command = "getMonthlyLog";
+						break;
+					case "year":
+						command = "getYearlyLog";
+						break;
+				}
 				this.$emit("sendCommand", {
-					command: "getDailyLog",
+					command: command,
 					data: this.commandData,
 				});
 			}
 		},
 		clearChartData() {
-			this.getWildcardIndexList("openWB/log/daily/+").forEach((topic) => {
-				this.$store.commit("removeTopic", `openWB/log/daily/${topic}`);
+			this.getWildcardIndexList(this.baseTopic + "+").forEach((topic) => {
+				this.$store.commit("removeTopic", `${this.baseTopic}${topic}`);
 			});
 		},
 		updateChart() {
 			this.clearChartData();
-			this.requestDailyChart();
+			this.requestChart();
+		},
+		init() {
+			const today = new Date();
+			this.currentDate = String(today.getFullYear());
+			if (this.chartRange != "year") {
+				this.currentDate =
+					this.currentDate +
+					"-" +
+					String(today.getMonth() + 1).padStart(2, "0");
+			}
+			if (this.chartRange == "day") {
+				this.currentDate =
+					this.currentDate +
+					"-" +
+					String(today.getDate()).padStart(2, "0");
+			}
+			if (this.initialDate == undefined || this.initialDate == "") {
+				console.log(
+					"no initial date for chart found, fallback to today"
+				);
+				this.chartDate = this.currentDate;
+			} else {
+				this.chartDate = this.initialDate;
+			}
+			this.updateChart();
+		},
+	},
+	watch: {
+		chartRange() {
+			this.init();
 		},
 	},
 	mounted() {
-		const today = new Date();
-		this.currentDay = this.dailyChartDate =
-			today.getFullYear() +
-			"-" +
-			String(today.getMonth() + 1).padStart(2, "0") +
-			"-" +
-			String(today.getDate()).padStart(2, "0");
-		this.requestDailyChart();
+		this.init();
 	},
 };
 </script>
