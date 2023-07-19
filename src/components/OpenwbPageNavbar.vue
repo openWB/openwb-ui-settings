@@ -225,6 +225,13 @@
 							Support
 						</router-link>
 						<router-link
+							to="/System/DataManagement"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							Datenverwaltung
+						</router-link>
+						<router-link
 							to="/System/SystemConfiguration"
 							class="dropdown-item"
 							active-class="active disabled"
