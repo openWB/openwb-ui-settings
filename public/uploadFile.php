@@ -28,7 +28,7 @@ function check_restore_file_contents() {
 }
 
 if (isset($_POST["target"])) {
-	switch ($$_POST["target"]) {
+	switch ($_POST["target"]) {
 		case 'restore':
 			$target_file = $target_dir . "restore/" . "restore.tar.gz";
 			check_gzip();

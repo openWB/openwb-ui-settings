@@ -774,72 +774,75 @@ export default {
 			);
 		},
 		uploadFile(target, selectedFile, successMessage) {
-			if (selectedFile !== undefined) {
-				let formData = new FormData();
-				formData.append("file", selectedFile);
-				formData.append("target", target);
-				this.axios
-					.post(
-						location.protocol +
-							"//" +
-							location.host +
-							"/openWB/web/settings/uploadFile.php",
-						formData,
-						{
-							headers: {
-								"Content-Type": "multipart/form-data",
-							},
-						}
-					)
-					.then((response) => {
-						this.$root.postClientMessage(successMessage, "success");
-						this.restoreUploadDone = true;
-					})
-					.catch((error) => {
-						if (error.response) {
-							// The request was made and the server responded with a status code
-							// that falls out of the range of 2xx
-							console.error(
-								error.response.status,
-								error.response.data
-							);
-							var alertMessage =
-								"Hochladen der Datei fehlgeschlagen!" +
-								"<br />" +
-								error.response.status +
-								": " +
-								error.response.data;
-						} else if (error.request) {
-							// The request was made but no response was received
-							// `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-							// http.ClientRequest in node.js
-							console.error(error.request);
-							alertMessage +=
-								"Es wurde keine Antwort vom Server empfangen.";
-						} else {
-							// Something happened in setting up the request that triggered an Error
-							console.error("Error", error.message);
-							alertMessage +=
-								"Es ist ein unbekannter Fehler aufgetreten.";
-						}
-						this.$root.postClientMessage(alertMessage, "danger");
-						this.restoreUploadDone = false;
-					});
-			} else {
-				console.error("no file selected for upload");
-			}
+			return new Promise(resolve => {
+				if (selectedFile !== undefined) {
+					let formData = new FormData();
+					formData.append("file", selectedFile);
+					formData.append("target", target);
+					this.axios
+						.post(
+							location.protocol +
+								"//" +
+								location.host +
+								"/openWB/web/settings/uploadFile.php",
+							formData,
+							{
+								headers: {
+									"Content-Type": "multipart/form-data",
+								},
+							}
+						)
+						.then((response) => {
+							this.$root.postClientMessage(successMessage, "success");
+							resolve(true);
+						})
+						.catch((error) => {
+							if (error.response) {
+								// The request was made and the server responded with a status code
+								// that falls out of the range of 2xx
+								console.error(
+									error.response.status,
+									error.response.data
+								);
+								var alertMessage =
+									"Hochladen der Datei fehlgeschlagen!" +
+									"<br />" +
+									error.response.status +
+									": " +
+									error.response.data;
+							} else if (error.request) {
+								// The request was made but no response was received
+								// `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+								// http.ClientRequest in node.js
+								console.error(error.request);
+								alertMessage +=
+									"Es wurde keine Antwort vom Server empfangen.";
+							} else {
+								// Something happened in setting up the request that triggered an Error
+								console.error("Error", error.message);
+								alertMessage +=
+									"Es ist ein unbekannter Fehler aufgetreten.";
+							}
+							this.$root.postClientMessage(alertMessage, "danger");
+							resolve(false);
+						});
+				} else {
+					console.error("no file selected for upload");
+					resolve(false);
+				}
+			});
 		},
-		uploadRestoreFile() {
+		async uploadRestoreFile() {
 			const successMessage =
 				"Die Sicherungsdatei wurde erfolgreich hochgeladen. " +
 				"Sie können die Wiederherstellung jetzt starten.";
-			this.uploadFile("restore", this.selectedRestoreFile, successMessage);
+			this.restoreUploadDone = await this.uploadFile("restore", this.selectedRestoreFile, successMessage);
 			},
-		uploadDataMigrationFile() {
+		async uploadDataMigrationFile() {
 			const successMessage =
 				"Die Sicherungsdatei wurde erfolgreich hochgeladen. " +
 				"Sie können den Import jetzt starten.";
-			this.uploadFile("migrate", this.selectedDataMigrationFile, successMessage);
+			this.dataMigrationUploadDone = await this.uploadFile("migrate", this.selectedDataMigrationFile, successMessage);
 		},
 		restoreBackup() {
 			this.sendSystemCommand("restoreBackup");
