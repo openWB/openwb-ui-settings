@@ -188,7 +188,7 @@
 								type="file"
 								class="custom-file-input"
 								accept=".tar.gz,application/gzip,application/tar+gzip"
-								@change="updateSelectedFile($event)"
+								@change="updateSelectedRestoreFile($event)"
 							/>
 							<label
 								id="input-file-label"
@@ -197,8 +197,8 @@
 								data-browse="Suchen"
 							>
 								{{
-									selectedFile
-										? selectedFile.name
+									selectedRestoreFile
+										? selectedRestoreFile.name
 										: "Bitte eine Datei auswählen"
 								}}
 							</label>
@@ -207,13 +207,13 @@
 							<button
 								class="btn"
 								:class="
-									selectedFile
+									selectedRestoreFile
 										? 'btn-success clickable'
 										: 'btn-outline-success'
 								"
-								:disabled="!selectedFile"
+								:disabled="!selectedRestoreFile"
 								type="button"
-								@click="uploadFile()"
+								@click="uploadRestoreFile()"
 							>
 								Hochladen
 								<font-awesome-icon
@@ -550,17 +550,15 @@ export default {
 			],
 			warningAcknowledged: false,
 			selectedTag: "*HEAD*",
-			selectedFile: undefined,
+			selectedRestoreFile: undefined,
 			restoreUploadDone: false,
 		};
 	},
 	computed: {
-		backupCloudList: {
-			get() {
-				return this.$store.state.mqtt[
-					"openWB/system/configurable/backup_clouds"
-				];
-			},
+		backupCloudList() {
+			return this.$store.state.mqtt[
+				"openWB/system/configurable/backup_clouds"
+			];
 		},
 		updateAvailable() {
 			return (
@@ -669,20 +667,20 @@ export default {
 				this.getBackupCloudDefaultConfiguration($event)
 			);
 		},
-		updateSelectedFile(event) {
-			this.selectedFile = event.target.files[0];
-			console.log("selectedFile", this.selectedFile);
+		updateSelectedRestoreFile(event) {
+			this.selectedRestoreFile = event.target.files[0];
 		},
-		uploadFile() {
-			if (this.selectedFile !== undefined) {
+		uploadFile(target, selectedFile, successMessage) {
+			if (selectedFile !== undefined) {
 				let formData = new FormData();
-				formData.append("backupFile", this.selectedFile);
+				formData.append("file", selectedFile);
+				formData.append("target", target);
 				this.axios
 					.post(
 						location.protocol +
 							"//" +
 							location.host +
-							"/openWB/web/settings/uploadBackup.php",
+							"/openWB/web/settings/uploadFile.php",
 						formData,
 						{
 							headers: {
@@ -691,24 +689,20 @@ export default {
 						}
 					)
 					.then((response) => {
-						console.log("POST response", response.data);
-						const successMessage =
-							"Die Sicherungsdatei wurde erfolgreich hochgeladen. " +
-							"Sie können die Wiederherstellung jetzt starten.";
 						this.$root.postClientMessage(successMessage, "success");
 						this.restoreUploadDone = true;
 					})
 					.catch((error) => {
-						var alertMessage =
-							"Hochladen der Datei fehlgeschlagen!<br />";
 						if (error.response) {
 							// The request was made and the server responded with a status code
 							// that falls out of the range of 2xx
-							console.log(
+							console.error(
 								error.response.status,
 								error.response.data
 							);
-							alertMessage +=
+							var alertMessage =
+								"Hochladen der Datei fehlgeschlagen!" +
+								"<br />" +
 								error.response.status +
 								": " +
 								error.response.data;
@@ -716,12 +710,12 @@ export default {
 							// The request was made but no response was received
 							// `error.request` is an instance of XMLHttpRequest in the browser and an instance of
 							// http.ClientRequest in node.js
-							console.log(error.request);
+							console.error(error.request);
 							alertMessage +=
 								"Es wurde keine Antwort vom Server empfangen.";
 						} else {
 							// Something happened in setting up the request that triggered an Error
-							console.log("Error", error.message);
+							console.error("Error", error.message);
 							alertMessage +=
 								"Es ist ein unbekannter Fehler aufgetreten.";
 						}
@@ -732,6 +726,12 @@ export default {
 				console.error("no file selected for upload");
 			}
 		},
+		uploadRestoreFile() {
+			const successMessage =
+				"Die Sicherungsdatei wurde erfolgreich hochgeladen. " +
+				"Sie können die Wiederherstellung jetzt starten.";
+			this.uploadFile("restore", this.selectedRestoreFile, successMessage);
+			},
 		systemUpdate() {
 			this.sendSystemCommand("systemUpdate", {});
 			this.$store.commit("storeLocal", {
