@@ -236,13 +236,18 @@
 					<openwb-base-alert subtype="info">
 						Hier kann die Sicherung einer älteren 1.9er Version
 						hochgeladen werden, um vorhandene historische Daten
-						(Diagramme und Ladeprotokolle) in diese Installation zu
-						importieren. Die Zuordnung zwischen den alten und neuen
-						Komponenten muss manuell durchgeführt werden.
+						(Diagramme und Ladeprotokolle) sowie Cloud-Daten und
+						Seriennummer in diese Installation zu importieren. Die
+						Zuordnung zwischen den alten und neuen Komponenten muss
+						manuell durchgeführt werden.<br />
+						Die Portierung kann einige Minuten dauern. Du erhältst
+						eine Meldung, wenn die Datenübernahme abgeschlossen ist.
 					</openwb-base-alert>
 					<openwb-base-alert subtype="danger">
-						Vor der Datenübernahme unbedingt eine Sicherung erstellen.<br />
-						Die Datenübernahme kann nur durch Einspielen einer Sicherung rückgängig gemacht werden!
+						Vor der Datenübernahme unbedingt eine Sicherung
+						erstellen.<br />
+						Die Datenübernahme kann nur durch Einspielen einer
+						Sicherung rückgängig gemacht werden!
 					</openwb-base-alert>
 					<div class="input-group">
 						<div class="input-group-prepend">
