@@ -240,6 +240,10 @@
 						importieren. Die Zuordnung zwischen den alten und neuen
 						Komponenten muss manuell durchgeführt werden.
 					</openwb-base-alert>
+					<openwb-base-alert subtype="danger">
+						Vor der Datenübernahme unbedingt eine Sicherung erstellen.<br />
+						Die Datenübernahme kann nur durch Einspielen einer Sicherung rückgängig gemacht werden!
+					</openwb-base-alert>
 					<div class="input-group">
 						<div class="input-group-prepend">
 							<div class="input-group-text">
