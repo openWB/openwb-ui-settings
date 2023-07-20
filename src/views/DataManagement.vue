@@ -672,7 +672,7 @@ export default {
 			let vehicleNames = this.getWildcardTopics("openWB/vehicle/+/name");
 			var myOptions = [];
 			for (const [key, name] of Object.entries(vehicleNames)) {
-				let id = key.match(/\/(\d\d?)\//)[1];
+				let id = parseInt(key.match(/\/(\d\d?)\//)[1]);
 				myOptions.push({ value: id, text: name });
 			}
 			return myOptions;
@@ -684,7 +684,7 @@ export default {
 			var myOptions = [];
 			for (const [key, value] of Object.entries(smartHomeDevices)) {
 				if (value == 1) {
-					let id = key.match(/\/(\d\d?)\//)[1];
+					let id = parseInt(key.match(/\/(\d\d?)\//)[1]);
 					myOptions.push({
 						value: id,
 						text: this.$store.state.mqtt[
