@@ -1,28 +1,23 @@
 <template>
-	<div class="device-solarmax">
+	<div class="device-solarmax-bat">
 		<openwb-base-heading>
-			Einstellungen für Solarmax
+			Einstellungen für Solarmax MAX.STORAGE / MAX.STORAGE Ultimate Batteriespeicher
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-text-input
-			title="IP oder Hostname"
-			subtype="host"
-			required
-			:model-value="configuration.ip_address"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.ip_address')
-			"
-		/>
+		<openwb-base-alert subtype="info">
+			Diese Komponente benötigt keine Einstellungen. 
+		</openwb-base-alert>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceSolarmax",
+	name: "DeviceSolarmaxBat",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
 		deviceId: { default: undefined },
+		componentId: { required: true },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {
