@@ -214,6 +214,9 @@
 									$event
 								)
 							"
+							@sendCommand="
+								sendSystemCommand($event.command, $event.args)
+							"
 						/>
 					</div>
 					<openwb-base-submit-buttons
