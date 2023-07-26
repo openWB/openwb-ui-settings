@@ -174,6 +174,14 @@ const routes = [
 		},
 		component: () => import("../views/System.vue"),
 	},
+	{
+		path: "/System/DataManagement",
+		name: "DataManagement",
+		meta: {
+			heading: "System - Datenverwaltung",
+		},
+		component: () => import("../views/DataManagement.vue"),
+	},
 ];
 /* examples for development only start here */
 if (import.meta.env.MODE !== "production") {
