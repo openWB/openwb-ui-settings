@@ -238,8 +238,8 @@ export default {
 					label: "Zähler",
 					unit: "kWh",
 					jsonKey: null,
-					borderColor: "rgba(255, 0, 0, 0.7)",
-					backgroundColor: "rgba(255, 10, 13, 0.3)",
+					borderColor: "rgba(0, 255, 105, 0.7)",
+					backgroundColor: "rgba(0, 255, 255, 0.3)",
 					fill: true,
 					pointStyle: "circle",
 					pointRadius: 0,
@@ -258,7 +258,7 @@ export default {
 					label: "PV",
 					unit: "kW",
 					jsonKey: null,
-					borderColor: "rgba(0, 255, 0, 0.7)",
+					borderColor: "rgba(40, 167, 69, 0.7)",
 					backgroundColor: "rgba(10, 255, 13, 0.3)",
 					fill: true,
 					pointStyle: "circle",
@@ -279,7 +279,7 @@ export default {
 					label: "PV",
 					unit: "kWh",
 					jsonKey: null,
-					borderColor: "rgba(0, 255, 0, 0.7)",
+					borderColor: "rgba(40, 167, 69, 0.7)",
 					backgroundColor: "rgba(10, 255, 13, 0.3)",
 					fill: true,
 					pointStyle: "circle",
@@ -300,7 +300,7 @@ export default {
 					label: "Speicher",
 					unit: "kW",
 					jsonKey: null,
-					borderColor: "rgba(255, 153, 13, 0.7)",
+					borderColor: "rgba(253, 126, 20, 0.7)",
 					backgroundColor: "rgba(200, 255, 13, 0.3)",
 					fill: true,
 					pointStyle: "circle",
@@ -321,7 +321,7 @@ export default {
 					label: "Speicher",
 					unit: "kWh",
 					jsonKey: null,
-					borderColor: "rgba(255, 153, 13, 0.7)",
+					borderColor: "rgba(253, 126, 20, 0.7)",
 					backgroundColor: "rgba(200, 255, 13, 0.3)",
 					fill: true,
 					pointStyle: "circle",
@@ -342,7 +342,7 @@ export default {
 					label: "Speicher",
 					unit: "kWh",
 					jsonKey: null,
-					borderColor: "rgba(255, 153, 13, 0.7)",
+					borderColor: "rgba(253, 126, 20, 0.7)",
 					backgroundColor: "rgba(200, 255, 13, 0.3)",
 					fill: true,
 					pointStyle: "circle",
@@ -363,7 +363,7 @@ export default {
 					label: "Speicher SoC",
 					unit: "%",
 					jsonKey: null,
-					borderColor: "rgba(255, 153, 13, 0.7)",
+					borderColor: "rgba(253, 126, 20, 0.7)",
 					backgroundColor: "rgba(200, 255, 13, 0.3)",
 					borderDash: [10, 5],
 					hidden: false,
@@ -1731,11 +1731,6 @@ export default {
 				return "*" + groupKey + "*";
 			}
 			if (componentKey && !measurementKey) {
-				// console.debug(
-				// 	"getLabel for component:",
-				// 	groupKey,
-				// 	componentKey
-				// );
 				if (componentKey == "all") {
 					return "Summe";
 				} else {
@@ -1810,12 +1805,6 @@ export default {
 				}
 			}
 			if (componentKey && measurementKey) {
-				// console.debug(
-				// 	"getTotalsLabel for measurement",
-				// 	groupKey,
-				// 	componentKey,
-				// 	measurementKey
-				// );
 				switch (groupKey) {
 					case "bat":
 					case "cp":
@@ -1916,11 +1905,6 @@ export default {
 						break;
 					case "cp":
 						label = ["Ladepunkte"];
-						switch (elementKey) {
-							case "soc":
-								label.push("SoC");
-								break;
-						}
 						break;
 				}
 			} else {
@@ -2030,6 +2014,10 @@ export default {
 			}
 			switch (baseObject) {
 				case "bat":
+				case "ev":
+					if (elementKey == "soc") {
+						details.push("SoC");
+					}
 				case "cp":
 					switch (elementKey) {
 						case "imported":
