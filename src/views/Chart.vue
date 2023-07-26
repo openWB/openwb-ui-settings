@@ -9,8 +9,9 @@
 				<openwb-base-select-input
 					title="Zeitraum"
 					v-model="chartRange"
-					:options="[{value:'day', text:'Tag'},{value:'month', text:'Monat'},{value:'year', text:'Jahr'}]"
+					:options="[{value:'day', text:'Tag'},{value:'month', text:'Monat'}]"
 				/>
+				<!--  // ToDo: {value:'year', text:'Jahr'} -->
 				<openwb-base-text-input
 					:title="dateInput.title"
 					:subtype="dateInput.type"
@@ -160,7 +161,7 @@ export default {
 					[
 						"day",
 						"month",
-						"year",
+						// ToDo: "year",
 					].indexOf(value) !== -1
 				);
 			},
@@ -181,7 +182,7 @@ export default {
 				"openWB/general/extern",
 				"openWB/log/daily/#",
 				"openWB/log/monthly/#",
-				"openWB/log/yearly/#",
+				// ToDo: "openWB/log/yearly/#",
 				"openWB/system/device/+/component/+/config",
 				"openWB/chargepoint/+/config",
 				"openWB/vehicle/+/name",
