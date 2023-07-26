@@ -8,7 +8,8 @@ let states = {
 	text: {
 		rfidWiki:
 			"Bitte auch hiervon abhängige Einstellungen beachten. Eine Übersicht gibt es im " +
-			'<a href="https://github.com/openWB/core/wiki/Ladung-nur-nach-Freischaltung" target="_blank">Wiki</a>.',
+			'<a href="https://github.com/openWB/core/wiki/Ladung-nur-nach-Freischaltung" ' +
+			'target="_blank" rel="noopener noreferrer">Wiki</a>.',
 	},
 };
 

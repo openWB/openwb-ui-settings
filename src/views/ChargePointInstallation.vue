@@ -521,17 +521,26 @@
 							>Angaben zum konfigurierten Ladestrom der openWB
 						</openwb-base-heading>
 						<openwb-base-alert subtype="info">
-							Diese Einstellung hat
-							<span class="highlight">keine</span> Auswirkung auf
-							das Lastmanagement!<br />
-							Ist die Zuleitung nicht mit der vollen Ladeleistung
-							der openWB abgesichert, muss für den Ladepunkt ein
-							virtueller Zähler konfiguriert werden, der den Strom
-							im Lastmanagement begrenzt.
-							<br />
-							Bei openWBs, deren Leistung z.B. aufgrund der
-							KfW-Förderung auf 11kW begrenzt ist, muss hier bei
-							beiden Maximalströmen 16A eingestellt werden.
+							Hier werden die maximalen Ladeströme entsprechend
+							den in der zugeordneten Wallbox genutzten Phasen
+							eingestellt.<br />
+							Generell gilt, dass diese Werte entsprechend der
+							Ausführung der Wallbox und des elektrischen
+							Anschlusses bzw. der Absicherung zu wählen sind. Bei
+							einer openWB mit 22kW Maximalleistung sind hier
+							jeweils 32A einzustellen. Ist die openWB
+							beispielsweise auf 11kW begrenzt (KfW-Förderung oder
+							die Zuleitung ist mit 16A abgesichert), dann sind
+							hier jeweils 16A einzustellen.<br />
+							Komplexere Installationen mit mehreren Wallboxen
+							werden im
+							<a
+								href="https://github.com/openWB/core/wiki/Lastmanagement-und-kaskadierte-Z%C3%A4hler"
+								target="_blank"
+								rel="noopener noreferrer"
+								>Wiki zum Lastmanagement</a
+							>
+							beschrieben.
 						</openwb-base-alert>
 						<openwb-base-range-input
 							title="Maximalstrom bei einer Phase"
