@@ -71,9 +71,9 @@
 						"
 					>
 						<openwb-base-alert subtype="info">
-							Diese openWB befindet sich im Modus "Nur Ladepunkt".
-							Bitte richten Sie die openWB Cloud auf der regelnden
-							openWB ein.
+							Diese openWB befindet sich im Steuerungsmodus
+							"secondary". Bitte richten Sie die openWB Cloud auf
+							der regelnden openWB ein.
 						</openwb-base-alert>
 					</div>
 					<div v-else>
@@ -165,9 +165,9 @@
 						"
 					>
 						<openwb-base-alert subtype="info">
-							Diese openWB befindet sich im Modus "Nur Ladepunkt".
-							Bitte richten Sie die openWB Cloud auf der regelnden
-							openWB ein.
+							Diese openWB befindet sich im Steuerungsmodus
+							"secondary". Bitte richten Sie die openWB Cloud auf
+							der regelnden openWB ein.
 						</openwb-base-alert>
 					</div>
 					<div v-else>
@@ -245,7 +245,12 @@
 					<openwb-base-heading>
 						<span>
 							Mit diesen Zugangsdaten können Sie sich in der
-							<a href="https://web.openwb.de/">openWB Cloud </a>
+							<a
+								href="https://web.openwb.de/"
+								target="_blank"
+								rel="noopener noreferrer"
+								>openWB Cloud
+							</a>
 							anmelden.
 						</span>
 					</openwb-base-heading>

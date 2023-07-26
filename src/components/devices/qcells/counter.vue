@@ -1,26 +1,18 @@
 <template>
-	<div class="device-powerdog-counter">
+	<div class="device-qcells-counter">
 		<openwb-base-heading>
-			Einstellungen für Powerdog Zähler
+			Einstellungen für QCells ESS Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-button-group-input
-			title="Einbau-Position"
-			:buttons="[
-				{ buttonValue: false, text: 'Hausverbrauch' },
-				{ buttonValue: true, text: 'EVU-Punkt' },
-			]"
-			:model-value="configuration.position_evu"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.position_evu')
-			"
-		/>
+		<openwb-base-alert subtype="info">
+			Diese Komponente benötigt keine Einstellungen.
+		</openwb-base-alert>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DevicePowerdogCounter",
+	name: "DeviceQCelllsCounter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

@@ -23,20 +23,12 @@ const routes = [
 		component: () => import("../views/ChargeLog.vue"),
 	},
 	{
-		path: "/Logging/DailyChart",
+		path: "/Logging/Chart/:chartRange?/:initialDate?",
 		name: "DailyChart",
 		meta: {
-			heading: "Auswertungen - Tagesauswertung",
+			heading: "Auswertungen - Diagramme",
 		},
-		component: () => import("../views/DailyChart.vue"),
-	},
-	{
-		path: "/Logging/MonthlyChart",
-		name: "MonthlyChart",
-		meta: {
-			heading: "Auswertungen - Monatsauswertung",
-		},
-		component: () => import("../views/MonthlyChart.vue"),
+		component: () => import("../views/Chart.vue"),
 	},
 	{
 		path: "/GeneralConfig",
@@ -173,6 +165,14 @@ const routes = [
 			heading: "System - System",
 		},
 		component: () => import("../views/System.vue"),
+	},
+	{
+		path: "/System/DataManagement",
+		name: "DataManagement",
+		meta: {
+			heading: "System - Datenverwaltung",
+		},
+		component: () => import("../views/DataManagement.vue"),
 	},
 ];
 /* examples for development only start here */

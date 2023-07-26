@@ -46,18 +46,11 @@
 							Ladeprotokoll
 						</router-link>
 						<router-link
-							to="/Logging/DailyChart"
+							to="/Logging/Chart"
 							class="dropdown-item"
 							active-class="active disabled"
 						>
-							Tagesauswertung
-						</router-link>
-						<router-link
-							to="/Logging/MonthlyChart"
-							class="dropdown-item"
-							active-class="active disabled"
-						>
-							Monatsauswertung
+							Diagramme
 						</router-link>
 					</div>
 				</li>
@@ -223,6 +216,13 @@
 							active-class="active disabled"
 						>
 							Support
+						</router-link>
+						<router-link
+							to="/System/DataManagement"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							Datenverwaltung
 						</router-link>
 						<router-link
 							to="/System/SystemConfiguration"

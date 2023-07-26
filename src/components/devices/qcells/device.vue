@@ -1,18 +1,25 @@
 <template>
-	<div class="device-powerdog-counter">
+	<div class="device-qcells">
 		<openwb-base-heading>
-			Einstellungen für Powerdog Zähler
+			Einstellungen für QCells ESS
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-button-group-input
-			title="Einbau-Position"
-			:buttons="[
-				{ buttonValue: false, text: 'Hausverbrauch' },
-				{ buttonValue: true, text: 'EVU-Punkt' },
-			]"
-			:model-value="configuration.position_evu"
+		<openwb-base-text-input
+			title="IP oder Hostname"
+			subtype="host"
+			required
+			:model-value="configuration.ip_address"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.position_evu')
+				updateConfiguration($event, 'configuration.ip_address')
+			"
+		/>
+		<openwb-base-number-input
+			title="Modbus ID"
+			:model-value="configuration.modbus_id"
+			min="1"
+			max="255"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.modbus_id')
 			"
 		/>
 	</div>
@@ -20,12 +27,11 @@
 
 <script>
 export default {
-	name: "DevicePowerdogCounter",
+	name: "DeviceQCellls",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
 		deviceId: { default: undefined },
-		componentId: { required: true },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {
