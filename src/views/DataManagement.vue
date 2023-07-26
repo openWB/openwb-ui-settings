@@ -777,10 +777,6 @@ export default {
 		},
 		updateSelectedDataMigrationFile(event) {
 			this.selectedDataMigrationFile = event.target.files[0];
-			console.log(
-				"selectedDataMigrationFile",
-				this.selectedDataMigrationFile
-			);
 		},
 		uploadFile(target, selectedFile, successMessage) {
 			return new Promise(resolve => {
@@ -861,7 +857,6 @@ export default {
 			});
 		},
 		dataMigration() {
-			console.log("dataMigration", this.dataMigrationMapping);
 			this.sendSystemCommand("dataMigration", this.dataMigrationMapping);
 		},
 	},
