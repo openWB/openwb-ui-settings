@@ -6,8 +6,10 @@
 					title="Zeitraum"
 					subtype="month"
 					min="2018-01"
+					:showQuickButtons="true"
 					:max="currentMonth"
 					v-model="chargeLogDate"
+					@update:model-value="requestChargeLog()"
 				/>
 				<openwb-base-card
 					title="Erweiterte Optionen"
