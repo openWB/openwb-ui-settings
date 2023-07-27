@@ -32,22 +32,24 @@
 							},
 							{
 								buttonValue: false,
-								text: 'Aus',
+								text: 'Nein',
 								class: 'btn-outline-danger',
 							},
 							{
 								buttonValue: true,
-								text: 'An',
+								text: 'Ja',
 								class: 'btn-outline-success',
 							},
 						]"
 						v-model="chargeLogRequestData.filter.vehicle.prio"
+						@update:model-value="requestChargeLog()"
 					/>
 					<openwb-base-select-input
 						title="Lademodus"
 						multiple
 						:options="chargeModeList"
 						v-model="chargeLogRequestData.filter.vehicle.chargemode"
+						@update:model-value="requestChargeLog()"
 					>
 						<template #help>
 							Es können mehrere Elemente ausgewählt werden.
@@ -58,6 +60,7 @@
 						multiple
 						:options="chargePointList"
 						v-model="chargeLogRequestData.filter.chargepoint.id"
+						@update:model-value="requestChargeLog()"
 					>
 						<template #help>
 							Es können mehrere Elemente ausgewählt werden.
@@ -68,22 +71,13 @@
 						multiple
 						:options="vehicleList"
 						v-model="chargeLogRequestData.filter.vehicle.id"
+						@update:model-value="requestChargeLog()"
 					>
 						<template #help>
 							Es können mehrere Elemente ausgewählt werden.
 						</template>
 					</openwb-base-select-input>
 				</openwb-base-card>
-				<template #footer>
-					<div class="row justify-content-center">
-						<openwb-base-click-button
-							class="col-4 btn-success"
-							@buttonClicked="requestChargeLog()"
-						>
-							Filter anwenden
-						</openwb-base-click-button>
-					</div>
-				</template>
 			</openwb-base-card>
 			<openwb-base-alert v-if="!chargeLogRead" subtype="info">
 				Es wurden noch keine Daten abgerufen.
