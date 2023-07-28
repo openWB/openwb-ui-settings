@@ -779,7 +779,7 @@ export default {
 			this.selectedDataMigrationFile = event.target.files[0];
 		},
 		uploadFile(target, selectedFile, successMessage) {
-			return new Promise(resolve => {
+			return new Promise((resolve) => {
 				if (selectedFile !== undefined) {
 					let formData = new FormData();
 					formData.append("file", selectedFile);
@@ -797,8 +797,11 @@ export default {
 								},
 							}
 						)
-						.then((response) => {
-							this.$root.postClientMessage(successMessage, "success");
+						.then(() => {
+							this.$root.postClientMessage(
+								successMessage,
+								"success"
+							);
 							resolve(true);
 						})
 						.catch((error) => {
@@ -828,7 +831,10 @@ export default {
 								alertMessage +=
 									"Es ist ein unbekannter Fehler aufgetreten.";
 							}
-							this.$root.postClientMessage(alertMessage, "danger");
+							this.$root.postClientMessage(
+								alertMessage,
+								"danger"
+							);
 							resolve(false);
 						});
 				} else {
@@ -841,13 +847,21 @@ export default {
 			const successMessage =
 				"Die Sicherungsdatei wurde erfolgreich hochgeladen. " +
 				"Sie können die Wiederherstellung jetzt starten.";
-			this.restoreUploadDone = await this.uploadFile("restore", this.selectedRestoreFile, successMessage);
-			},
+			this.restoreUploadDone = await this.uploadFile(
+				"restore",
+				this.selectedRestoreFile,
+				successMessage
+			);
+		},
 		async uploadDataMigrationFile() {
 			const successMessage =
 				"Die Sicherungsdatei wurde erfolgreich hochgeladen. " +
 				"Sie können den Import jetzt starten.";
-			this.dataMigrationUploadDone = await this.uploadFile("migrate", this.selectedDataMigrationFile, successMessage);
+			this.dataMigrationUploadDone = await this.uploadFile(
+				"migrate",
+				this.selectedDataMigrationFile,
+				successMessage
+			);
 		},
 		restoreBackup() {
 			this.sendSystemCommand("restoreBackup");

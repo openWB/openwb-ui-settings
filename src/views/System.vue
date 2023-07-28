@@ -270,12 +270,11 @@ library.add(
 	fasUndo,
 	fasPowerOff,
 	fasDownload,
-	fasSkullCrossbones,
+	fasSkullCrossbones
 );
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import ComponentState from "../components/mixins/ComponentState.vue";
-import OpenwbBackupCloudProxy from "../components/backup_clouds/OpenwbBackupCloudProxy.vue";
 
 export default {
 	name: "OpenwbSystem",
@@ -283,7 +282,6 @@ export default {
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,
-		OpenwbBackupCloudProxy,
 	},
 	data() {
 		return {
