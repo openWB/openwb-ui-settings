@@ -9,7 +9,10 @@
 				<openwb-base-select-input
 					title="Zeitraum"
 					v-model="chartRange"
-					:options="[{value:'day', text:'Tag'},{value:'month', text:'Monat'}]"
+					:options="[
+						{ value: 'day', text: 'Tag' },
+						{ value: 'month', text: 'Monat' },
+					]"
 				/>
 				<!--  // ToDo: {value:'year', text:'Jahr'} -->
 				<openwb-base-text-input
@@ -2016,11 +2019,11 @@ export default {
 			switch (baseObject) {
 				case "bat":
 				case "ev":
-					if (elementKey == "soc") {
-						details.push("SoC");
-					}
 				case "cp":
 					switch (elementKey) {
+						case "soc":
+							details.push("SoC");
+							break;
 						case "imported":
 						case "energyImport":
 							details.push("Ladung");
