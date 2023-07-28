@@ -80,8 +80,8 @@
 				</openwb-base-card>
 			</openwb-base-card>
 			<openwb-base-alert subtype="info">
-				Das komplette Ladeprotokoll kann auch automatisiert über
-				folgende URL abgerufen werden:
+				Das komplette Ladeprotokoll kann automatisiert über folgende URL
+				abgerufen werden:
 				<a :href="downloadUrl">{{ downloadUrl }}</a>
 			</openwb-base-alert>
 			<openwb-base-alert v-if="!chargeLogRead" subtype="info">
