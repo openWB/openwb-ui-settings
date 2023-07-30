@@ -51,6 +51,42 @@
 				simuliert.
 			</template>
 		</openwb-base-text-input>
+		<openwb-base-text-input
+			title="Abfrage für Leistung auf Phase 1"
+			subtype="text"
+			:model-value="configuration.jq_power_l1"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.jq_power_l1')
+			"
+		>
+			<template #help>
+				Wird dieses Feld leer gelassen, kann kein Lastmanagement erfolgen.
+			</template>
+		</openwb-base-text-input>
+		<openwb-base-text-input
+			title="Abfrage für Leistung auf Phase 2"
+			subtype="text"
+			:model-value="configuration.jq_power_l2"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.jq_power_l2')
+			"
+		>
+			<template #help>
+				Wird dieses Feld leer gelassen, kann kein Lastmanagement erfolgen.
+			</template>
+		</openwb-base-text-input>
+		<openwb-base-text-input
+			title="Abfrage für Leistung auf Phase 3"
+			subtype="text"
+			:model-value="configuration.jq_power_l3"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.jq_power_l3')
+			"
+		>
+			<template #help>
+				Wird dieses Feld leer gelassen, kann kein Lastmanagement erfolgen.
+			</template>
+		</openwb-base-text-input>
 	</div>
 </template>
 
