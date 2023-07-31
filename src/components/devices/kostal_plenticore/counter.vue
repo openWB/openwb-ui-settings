@@ -7,7 +7,7 @@
 		<openwb-base-alert subtype="info">
 		Wenn der Zähler im Hausverbrauchs-Zweig installiert ist, muss die Hierarchie wie im
 			<a
-				href="https://github.com/openWB/core/wiki/r"
+				href="https://github.com/openWB/core/wiki/Hausverbrauchs-Zähler"
 				target="_blank"
 				rel="noopener noreferrer"
 				>Wiki für Hausverbrauchs-Zähler</a
