@@ -14,14 +14,14 @@
 	</openwb-base-modal-dialog>
 	<openwb-base-modal-dialog
 		:show="showChargePointTemplateModal"
-		title="Ladepunkt-Vorlage löschen"
+		title="Ladepunkt-Profil löschen"
 		subtype="danger"
 		:buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
 		@modal-result="
 			removeChargePointTemplate(modalChargePointTemplateIndex, $event)
 		"
 	>
-		Wollen Sie die Ladepunkt-Vorlage "{{
+		Wollen Sie das Ladepunkt-Profil "{{
 			getChargePointTemplateName(modalChargePointTemplateIndex)
 		}}" (ID: {{ modalChargePointTemplateIndex }}) wirklich entfernen? Dieser
 		Vorgang kann nicht rückgängig gemacht werden!
@@ -130,7 +130,7 @@
 						"
 					>
 						<openwb-base-select-input
-							title="Ladepunkt-Vorlage"
+							title="Ladepunkt-Profil"
 							:options="chargePointTemplateList"
 							:model-value="
 								$store.state.mqtt[installedChargePointKey]
@@ -372,7 +372,7 @@
 			<hr class="border-secondary" />
 			<!-- charge point template card -->
 			<openwb-base-card
-				title="Ladepunkt-Vorlagen"
+				title="Ladepunkt-Profile"
 				:collapsible="true"
 				:collapsed="true"
 			>
@@ -388,7 +388,7 @@
 							transform="shrink-8"
 						/>
 					</font-awesome-layers>
-					Ladepunkt-Vorlagen
+					Ladepunkt-Profile
 				</template>
 				<template #actions>
 					<openwb-base-avatar
@@ -464,7 +464,7 @@
 								#help
 								v-if="chargePointTemplateKey.endsWith('/0')"
 							>
-								Die Standard-Vorlage kann nicht umbenannt
+								Das Standard-Profil kann nicht umbenannt
 								werden.
 							</template>
 						</openwb-base-text-input>
@@ -507,8 +507,8 @@
 								"
 							>
 								<template #help>
-									An allen Ladepunkten, denen diese
-									Ladepunkt-Vorlage zugeordnet ist, können die
+									An allen Ladepunkten, denen dieses
+									Ladepunkt-Profil zugeordnet ist, können die
 									hier eingetragenen Tags verwendet werden.<br />
 									<span
 										v-html="$store.state.text.rfidWiki"
@@ -1073,7 +1073,7 @@ export default {
 						"openWB/chargepoint/template/" +
 							chargePointTemplateIndex
 				  ].name
-				: "Vorlage " + chargePointTemplateIndex;
+				: "Profil " + chargePointTemplateIndex;
 		},
 		addChargePointTemplate(event) {
 			// prevent further processing of the click event
