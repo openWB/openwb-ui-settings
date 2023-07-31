@@ -5,7 +5,7 @@
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
-			Diese Komponente benötigt keine Einstellungen.
+			Diese Komponente ist nur richtig, wenn der Zähler NICHT direkt am Wechselrichter (Kostal Plenticore) angeschlossen ist und daher separat abgefragt werden muss.
 		</openwb-base-alert>
 	</div>
 </template>

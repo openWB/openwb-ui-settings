@@ -4,6 +4,9 @@
 			Einstellungen für Kostal Plenticore
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
+		<openwb-base-alert subtype="info">
+			Wenn am Kostal Plenticore-Wechselrichter ein EM300 oder Kostal Energy Smart Meter (KSEM) angeschlossen ist, muss eine Zähler-und eine Wechselrichter-Komponente angelegt werden.
+		</openwb-base-alert>
 		<openwb-base-text-input
 			title="IP oder Hostname"
 			subtype="host"
