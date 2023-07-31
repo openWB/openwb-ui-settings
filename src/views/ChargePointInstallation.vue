@@ -239,7 +239,7 @@
 							"
 						/>
 						<openwb-base-button-group-input
-							title="Phase 1 der Wallbox-Zuleitung"
+							title="Phase 1 des Ladekabels"
 							:buttons="[
 								{
 									buttonValue: 0,
