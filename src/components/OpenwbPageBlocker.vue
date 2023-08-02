@@ -64,7 +64,7 @@ export default {
 			if (
 				this.$store.state.mqtt["openWB/system/boot_done"] == undefined
 			) {
-				return false;
+				return true;
 			}
 			return !this.$store.state.mqtt["openWB/system/boot_done"];
 		},
