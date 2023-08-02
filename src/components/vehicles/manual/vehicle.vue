@@ -9,7 +9,7 @@
 			Hauptseite angegeben werden. Anhand des Zählers im Ladepunkt wird
 			dann der aktuelle SoC errechnet. Ausschlaggebend für die Qualität
 			dieses Moduls sind die beiden Einstellungen "Kapazität der Batterie"
-			in der Fahrzeug-Vorlage und "Wirkungsgrad der Ladeelektronik".
+			in dem Fahrzeug-Profil und "Wirkungsgrad der Ladeelektronik".
 		</openwb-base-alert>
 		<openwb-base-number-input
 			title="Wirkungsgrad der Ladeelektronik"

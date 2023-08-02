@@ -49,7 +49,7 @@
 							bekannt ist, welcher Ladevorgang welche Phase am
 							Netzanschluss beeinflusst. siehe "Konfiguration -
 							Ladepunkte -> elektrischer Anschluss - Phase 1" und
-							"Konfiguration - Fahrzeuge -> Fahrzeugvorlagen"
+							"Konfiguration - Fahrzeuge -> Fahrzeug-Profile"
 						</template>
 					</openwb-base-button-group-input>
 					<openwb-base-range-input

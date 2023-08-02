@@ -37,7 +37,7 @@
 				>
 					<openwb-base-alert subtype="info">
 						Die RFID-Tags, die an dem jeweiligen Ladepunkt gültig
-						sind, müssen in der Ladepunkt-Vorlage hinterlegt werden.
+						sind, müssen in dem Ladepunkt-Profil hinterlegt werden.
 						Der RFID-Tag muss in den Einstellungen des Fahrzeugs
 						diesem zugeordnet werden.<br />
 						Es kann zuerst angesteckt und dann der RFID-Tag gescannt

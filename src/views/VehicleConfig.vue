@@ -12,24 +12,24 @@
 	</openwb-base-modal-dialog>
 	<openwb-base-modal-dialog
 		:show="showEvTemplateModal"
-		title="Fahrzeug-Vorlage löschen"
+		title="Fahrzeug-Profil löschen"
 		subtype="danger"
 		:buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
 		@modal-result="removeEvTemplate(modalEvTemplateIndex, $event)"
 	>
-		Wollen Sie die Fahrzeug-Vorlage "{{
+		Wollen Sie das Fahrzeug-Profil "{{
 			getEvTemplateName(modalEvTemplateIndex)
 		}}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht
 		werden!
 	</openwb-base-modal-dialog>
 	<openwb-base-modal-dialog
 		:show="showChargeTemplateModal"
-		title="Ladeprofil-Vorlage löschen"
+		title="Lade-Profil löschen"
 		subtype="danger"
 		:buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
 		@modal-result="removeChargeTemplate(modalChargeTemplateIndex, $event)"
 	>
-		Wollen Sie die Ladeprofil-Vorlage "{{
+		Wollen Sie das Lade-Profil "{{
 			getChargeTemplateName(modalChargeTemplateIndex)
 		}}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht
 		werden!
@@ -163,7 +163,7 @@
 							Widersprüchen kommen kann.
 						</openwb-base-alert>
 						<openwb-base-select-input
-							title="Fahrzeug-Vorlage"
+							title="Fahrzeug-Profil"
 							:options="evTemplateList"
 							:model-value="
 								$store.state.mqtt[
@@ -182,7 +182,7 @@
 							"
 						/>
 						<openwb-base-select-input
-							title="Ladeprofil-Vorlage"
+							title="Lade-Profil"
 							:options="chargeTemplateList"
 							:model-value="
 								$store.state.mqtt[
@@ -227,8 +227,8 @@
 								"
 							/>
 							<openwb-base-alert subtype="info">
-								Der/die RFID-Tag(s) müssen in der
-								Ladepunkt-Vorlage eingetragen werden, um
+								Der/die RFID-Tag(s) müssen in dem
+								Ladepunkt-Profil eingetragen werden, um
 								zuzuordnen, an welchem Ladepunkt die Tags
 								verwendet werden dürfen.<br />
 								<span
@@ -436,7 +436,7 @@
 				</div>
 			</openwb-base-card>
 			<hr class="border-secondary" />
-			<openwb-base-heading>Vorlagen</openwb-base-heading>
+			<openwb-base-heading>Profile</openwb-base-heading>
 			<!-- vehicle template card -->
 			<openwb-base-card :collapsible="true" :collapsed="true">
 				<template #header>
@@ -451,7 +451,7 @@
 							transform="shrink-8"
 						/>
 					</font-awesome-layers>
-					Fahrzeug-Vorlagen
+					Fahrzeug-Profile
 				</template>
 				<template #actions>
 					<openwb-base-avatar
@@ -515,7 +515,7 @@
 							:disabled="key.endsWith('/0')"
 						>
 							<template #help v-if="key.endsWith('/0')">
-								Die Standard-Vorlage kann nicht umbenannt
+								Das Standard-Profil kann nicht umbenannt
 								werden.
 							</template>
 						</openwb-base-text-input>
@@ -799,7 +799,7 @@
 							transform="shrink-8"
 						/>
 					</font-awesome-layers>
-					Ladeprofil-Vorlagen
+					Lade-Profile
 				</template>
 				<template #actions>
 					<openwb-base-avatar
@@ -864,7 +864,7 @@
 							:disabled="templateKey.endsWith('/0')"
 						>
 							<template #help v-if="templateKey.endsWith('/0')">
-								Die Standard-Vorlage kann nicht umbenannt
+								Das Standard-Profil kann nicht umbenannt
 								werden.
 							</template>
 						</openwb-base-text-input>
@@ -2334,7 +2334,7 @@ export default {
 				? this.$store.state.mqtt[
 						"openWB/vehicle/template/ev_template/" + id
 				  ].name
-				: "Fahrzeug-Vorlage " + id;
+				: "Fahrzeug-Profil " + id;
 		},
 		addChargeTemplate(event) {
 			// prevent further processing of the click event
@@ -2377,7 +2377,7 @@ export default {
 				? this.$store.state.mqtt[
 						"openWB/vehicle/template/charge_template/" + id
 				  ].name
-				: "Ladeprofil-Vorlage " + id;
+				: "Lade-Profil " + id;
 		},
 		getChargeTemplateSchedulePlanName(templateIndex, planIndex) {
 			return this.$store.state.mqtt[
