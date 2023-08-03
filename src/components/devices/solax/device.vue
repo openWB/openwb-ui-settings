@@ -16,7 +16,7 @@
 		<openwb-base-number-input
 			title="Modbus-ID"
 			required
-			:min="1"
+			:min="0"
 			:max="255"
 			:model-value="configuration.modbus_id"
 			@update:model-value="
