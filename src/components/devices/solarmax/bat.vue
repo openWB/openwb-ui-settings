@@ -1,21 +1,22 @@
 <template>
-	<div class="device-kostalplenticore">
+	<div class="device-solarmax-bat">
 		<openwb-base-heading>
-			Einstellungen für Kostal Plenticore
+			Einstellungen für Solarmax MAX.STORAGE / MAX.STORAGE Ultimate
+			Batteriespeicher
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
-			Wenn am Kostal Plenticore-Wechselrichter ein EM300 oder Kostal
-			Energy Smart Meter (KSEM) angeschlossen ist, muss eine Zähler-und
-			eine Wechselrichter-Komponente angelegt werden.
+			Solarmax MAX.STORAGE / MAX.STORAGE Ultimate Batteriespeicher sind
+			Teil eines Hybridsystems. Daher muss auch eine Komponente
+			Wechselrichter angelegt werden.
 		</openwb-base-alert>
-		<openwb-base-text-input
-			title="IP oder Hostname"
-			subtype="host"
-			required
-			:model-value="configuration.ip_address"
+		<openwb-base-number-input
+			title="Modbus ID"
+			:model-value="configuration.modbus_id"
+			min="1"
+			max="255"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.ip_address')
+				updateConfiguration($event, 'configuration.modbus_id')
 			"
 		/>
 	</div>
@@ -23,11 +24,12 @@
 
 <script>
 export default {
-	name: "DeviceKostalPlenticore",
+	name: "DeviceSolarmaxBat",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
 		deviceId: { default: undefined },
+		componentId: { required: true },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {

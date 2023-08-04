@@ -13,15 +13,6 @@
 				updateConfiguration($event, 'configuration.ip_address')
 			"
 		/>
-		<openwb-base-number-input
-			title="Modbus ID"
-			:model-value="configuration.modbus_id"
-			min="1"
-			max="255"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.modbus_id')
-			"
-		/>
 	</div>
 </template>
 

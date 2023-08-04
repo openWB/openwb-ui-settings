@@ -515,8 +515,7 @@
 							:disabled="key.endsWith('/0')"
 						>
 							<template #help v-if="key.endsWith('/0')">
-								Das Standard-Profil kann nicht umbenannt
-								werden.
+								Das Standard-Profil kann nicht umbenannt werden.
 							</template>
 						</openwb-base-text-input>
 						<openwb-base-heading>
@@ -744,9 +743,9 @@
 								In den Lademodi PV- und Zielladen wird die
 								Abschaltverzögerung ausgesetzt und nach
 								Ladebeginn der Ladevorgang nicht unterbrochen.
-								Diese Einstellung sollte bei Fahrzeugen aktiviert
-								werden, die nach Unterbrechen der Ladung keine
-								Ladung mehr starten.
+								Diese Einstellung sollte bei Fahrzeugen
+								aktiviert werden, die nach Unterbrechen der
+								Ladung keine Ladung mehr starten.
 							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-number-input
@@ -866,8 +865,7 @@
 							:disabled="templateKey.endsWith('/0')"
 						>
 							<template #help v-if="templateKey.endsWith('/0')">
-								Das Standard-Profil kann nicht umbenannt
-								werden.
+								Das Standard-Profil kann nicht umbenannt werden.
 							</template>
 						</openwb-base-text-input>
 						<openwb-base-heading>
