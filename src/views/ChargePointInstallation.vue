@@ -464,8 +464,7 @@
 								#help
 								v-if="chargePointTemplateKey.endsWith('/0')"
 							>
-								Das Standard-Profil kann nicht umbenannt
-								werden.
+								Das Standard-Profil kann nicht umbenannt werden.
 							</template>
 						</openwb-base-text-input>
 						<hr />
