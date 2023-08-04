@@ -98,6 +98,7 @@
 				updateConfiguration($event, 'configuration.jq_current_l2')
 			"
 		>
+	    </openwb-base-text-input>
 		<openwb-base-text-input
 			title="Abfrage für Strom auf Phase 3"
 			subtype="text"
