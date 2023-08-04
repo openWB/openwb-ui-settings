@@ -741,10 +741,12 @@
 							"
 						>
 							<template #help>
-								In den Lademodi PV- und Zielladen wird nach
-								Ladebeginn die Ladefreigabenicht unterbrochen,
-								damit auch Fahrzeuge, die sehr lange für den
-								Ladebeginn brauchen, genügend Zeit haben.
+								In den Lademodi PV- und Zielladen wird die
+								Abschaltverzögerung ausgesetzt und nach
+								Ladebeginn der Ladevorgang nicht unterbrochen.
+								Diese Einstellung sollte bei Fahrzeugen aktiviert
+								werden, die nach Unterbrechen der Ladung keine
+								Ladung mehr starten.
 							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-number-input
