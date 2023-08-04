@@ -104,9 +104,6 @@
 				updateConfiguration($event, 'configuration.jq_current_l3')
 			"
 		>
-			<template #help>
-				Werden sowohl Leistung als auch Strom auf den Einzelphasen leer gelassen, kann kein Lastmanagement erfolgen.
-			</template>
 		</openwb-base-text-input>
 	</div>
 </template>
