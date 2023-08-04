@@ -51,8 +51,8 @@
 				simuliert.
 			</template>
 		</openwb-base-text-input>
-                <openwb-base-alert subtype="info"> Werden sowohl Leistung als auch Strom auf den Einzelphasen leer gelassen, erfolgt das Lastmanagement am EVU-Punkt nur anhand der Gesamtleistung am EVU-Punkt. Wird der Zähler als Zwischenzähler verwendet, wird in diesem Fall kein Lastmanagement durchgeführt. 
-                </openwb-base-alert>
+            <openwb-base-alert subtype="info"> Werden sowohl Leistung als auch Strom auf den Einzelphasen leer gelassen, erfolgt das Lastmanagement am EVU-Punkt nur anhand der Gesamtleistung am EVU-Punkt. Wird der Zähler als Zwischenzähler verwendet, wird in diesem Fall kein Lastmanagement durchgeführt. 
+            </openwb-base-alert>
 		<openwb-base-text-input
 			title="Abfrage für Leistung auf Phase 1"
 			subtype="text"
