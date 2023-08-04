@@ -68,9 +68,6 @@
 				updateConfiguration($event, 'configuration.jq_power_l2')
 			"
 		>
-			<template #help>
-				Werden sowohl Leistung als auch Strom auf den Einzelphasen leer gelassen, kann kein Lastmanagement erfolgen.
-			</template>
 		</openwb-base-text-input>
 		<openwb-base-text-input
 			title="Abfrage für Leistung auf Phase 3"
