@@ -1,7 +1,7 @@
 <template>
 	<div class="device-sunnyboy-bat-smart-energy">
 		<openwb-base-heading>
-			Einstellungen für SMA Sunny Boy Batteriespeicher
+			Einstellungen für SMA Sunny Boy Smart Energy Batteriespeicher
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
