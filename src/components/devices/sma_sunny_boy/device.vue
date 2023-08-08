@@ -1,7 +1,7 @@
 <template>
 	<div class="device-sunnyboy">
 		<openwb-base-heading>
-			Einstellungen für SMA Sunny Boy
+			Einstellungen für SMA Sunny Boy/Tripower
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">

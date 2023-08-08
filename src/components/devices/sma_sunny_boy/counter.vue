@@ -1,7 +1,7 @@
 <template>
 	<div class="device-sunnyboy-counter">
 		<openwb-base-heading>
-			Einstellungen für SMA Sunny Boy Zähler
+			Einstellungen für SMA Sunny Boy/Tripower Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">

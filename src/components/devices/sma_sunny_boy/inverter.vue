@@ -1,7 +1,7 @@
 <template>
 	<div class="device-sunnyboy-inverter">
 		<openwb-base-heading>
-			Einstellungen für SMA Sunny Boy Wechselrichter
+			Einstellungen für SMA Sunny Boy/Tripower Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-button-group-input
