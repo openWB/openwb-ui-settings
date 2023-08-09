@@ -1,13 +1,9 @@
 <template>
-	<div class="device-sungrow">
+	<div class="device-kostal-piko-old">
 		<openwb-base-heading>
-			Einstellungen für Sungrow
+			Einstellungen für Kostal Piko (alte Generation)
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-alert subtype="info">
-			Bitte zur Fehlervermeidung die Firmware des Sungrow Wechselrichters
-			und WiNet-S Dongels aktuell halten.
-		</openwb-base-alert>
 		<openwb-base-text-input
 			title="IP oder Hostname"
 			subtype="host"
@@ -17,24 +13,22 @@
 				updateConfiguration($event, 'configuration.ip_address')
 			"
 		/>
-		<openwb-base-number-input
-			title="Port"
+		<openwb-base-text-input
+			title="Benutzername"
+			subtype="user"
 			required
-			:min="1"
-			:max="65535"
-			:model-value="configuration.port"
+			:model-value="configuration.user"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.port')
+				updateConfiguration($event, 'configuration.user')
 			"
 		/>
-		<openwb-base-number-input
-			title="Geräteadresse"
+		<openwb-base-text-input
+			title="Passwort"
+			subtype="password"
 			required
-			:min="1"
-			:max="255"
-			:model-value="configuration.modbus_id"
+			:model-value="configuration.password"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.modbus_id')
+				updateConfiguration($event, 'configuration.password')
 			"
 		/>
 	</div>
@@ -42,11 +36,11 @@
 
 <script>
 export default {
-	name: "DeviceSungrow",
+	name: "DeviceKostalPikoOld",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
-		componentId: { required: true },
+		deviceId: { default: undefined },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {
