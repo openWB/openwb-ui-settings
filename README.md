@@ -39,7 +39,7 @@ sudo sysctl --system -p
 ### Compiles and hot-reloads for development
 
 ```bash
-npm run serve
+npm run dev
 ```
 
 If working with remote ssh extension, port 8080 will be redirected automatically.
