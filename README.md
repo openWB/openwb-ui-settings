@@ -42,9 +42,8 @@ sudo sysctl --system -p
 npm run dev
 ```
 
-If working with remote ssh extension, port 8080 will be redirected automatically.
-Manually add port 9001 for accessing mosquitto on remote system.
-Then point your browser to <http://localhost:8080/openWB/web/settings/> to get started.
+If working with remote ssh extension, the port of the server will be redirected automatically.
+Look at the output on how to access the server with a browser.
 
 ### Compiles and minifies for production
 
