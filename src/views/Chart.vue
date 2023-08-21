@@ -12,7 +12,7 @@
 					:options="[
 						{ value: 'day', text: 'Tag' },
 						{ value: 'month', text: 'Monat' },
-						{value:'year', text:'Jahr'},
+						{ value: 'year', text: 'Jahr' },
 					]"
 				/>
 				<openwb-base-text-input
@@ -125,10 +125,7 @@ library.add(
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 
-import {
-	Line as ChartjsLine,
-	getElementAtEvent,
-} from "vue-chartjs";
+import { Line as ChartjsLine, getElementAtEvent } from "vue-chartjs";
 import "chartjs-adapter-luxon";
 import "hammerjs";
 import ZoomPlugin from "chartjs-plugin-zoom";
@@ -165,13 +162,7 @@ export default {
 			type: String,
 			required: false,
 			validator: function (value) {
-				return (
-					[
-						"day",
-						"month",
-						"year",
-					].indexOf(value) !== -1
-				);
+				return ["day", "month", "year"].indexOf(value) !== -1;
 			},
 			default: "day",
 		},
@@ -852,8 +843,7 @@ export default {
 						row.timestamp = row.timestamp * 1000;
 						return row;
 					}
-				)
-				myData.pop();
+				);
 				return myData;
 			}
 			return undefined;
@@ -906,23 +896,32 @@ export default {
 			}
 			const chart = this.$refs.myChart.chart;
 			if (!chart) {
-				return
+				return;
 			}
-			const element = (getElementAtEvent(chart, event));
+			const element = getElementAtEvent(chart, event);
 			if (!element.length) {
 				return;
 			}
 			const { datasetIndex, index } = element[0];
-			const clickedDate = this.chartData.datasets[datasetIndex].data[index].date;
+			const clickedDate =
+				this.chartData.datasets[datasetIndex].data[index].date;
 			var newDate = "";
 			var newRange = "";
 			switch (this.chartRange) {
 				case "month":
-					newDate = clickedDate.substring(0,4) + "-" + clickedDate.substring(4, 6) + "-" + clickedDate.substring(6);
+					newDate =
+						clickedDate.substring(0, 4) +
+						"-" +
+						clickedDate.substring(4, 6) +
+						"-" +
+						clickedDate.substring(6);
 					newRange = "day";
 					break;
 				case "year":
-					newDate = clickedDate.substring(0,4) + "-" + clickedDate.substring(4, 6);
+					newDate =
+						clickedDate.substring(0, 4) +
+						"-" +
+						clickedDate.substring(4, 6);
 					newRange = "month";
 					break;
 			}
@@ -965,7 +964,7 @@ export default {
 		},
 		getDatasetHidden(baseObject, objectKey) {
 			// ToDo
-			// console.debug("getDatasetHidden", baseObject, objectKey);
+			console.debug("getDatasetHidden", baseObject, objectKey);
 			return false;
 		},
 		getTotalsLabel(
@@ -1252,7 +1251,7 @@ export default {
 					bat: ["power_average", "soc"],
 					cp: ["power_average"],
 					sh: ["power_average"],
-					ev: ["soc"]
+					ev: ["soc"],
 				};
 			} else {
 				elementKeysToAdd = {
