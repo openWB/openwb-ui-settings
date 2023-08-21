@@ -12,14 +12,14 @@
 			Solar-Log Zähler sind Hausverbrauchs-Zähler. Um die Werte am
 			EVU-Punkt zu ermitteln, muss ein virtueller Zähler konfiguriert
 			werden. Eine Beispiel-Konfiguration mit Solar-Log Zähler findest Du
-			hier:
+			im
 			<a
-				href="https://github.com/openWB/core/pull/934/files"
+				href="https://github.com/openWB/core/wiki/Hausverbrauchs-Z%C3%A4hler"
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				https://github.com/openWB/core/pull/934/files
-			</a>
+				Wiki für Hausverbrauchs-Zähler </a
+			>.
 		</openwb-base-alert>
 	</div>
 </template>
