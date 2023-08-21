@@ -1,28 +1,18 @@
 <template>
-	<div class="device-openwb-pvkit-inverter">
+	<div class="device-shelly-inverter">
 		<openwb-base-heading>
-			Einstellungen für openWB PV-Kit Wechselrichter
+			Einstellungen für Shelly Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-select-input
-			title="Zählermodell"
-			notSelected="Bitte auswählen"
-			:options="[
-				{ value: 0, text: 'MPM3PM' },
-				{ value: 1, text: 'Lovato' },
-				{ value: 2, text: 'SDM630/SDM72D-M' },
-			]"
-			:model-value="configuration.version"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.version')
-			"
-		/>
+		<openwb-base-alert subtype="info">
+			Diese Komponente benötigt keine Einstellungen.
+		</openwb-base-alert>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceOpenwbPvkitInverter",
+	name: "DeviceShellyInverter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

@@ -1,20 +1,28 @@
 <template>
-	<div class="device-openwb-pvkit-inverter">
+	<div class="device-shelly">
 		<openwb-base-heading>
-			Einstellungen für openWB PV-Kit Wechselrichter
+			Einstellungen für Shelly
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
+		<openwb-base-text-input
+			title="IP oder Hostname"
+			subtype="host"
+			required
+			:model-value="configuration.ip_address"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.ip_address')
+			"
+		/>
 		<openwb-base-select-input
-			title="Zählermodell"
+			title="Generation"
 			notSelected="Bitte auswählen"
 			:options="[
-				{ value: 0, text: 'MPM3PM' },
-				{ value: 1, text: 'Lovato' },
-				{ value: 2, text: 'SDM630/SDM72D-M' },
+				{ value: 1, text: 'Shelly 1pm' },
+				{ value: 2, text: 'Shelly 1pm plus' },
 			]"
-			:model-value="configuration.version"
+			:model-value="configuration.generation"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.version')
+				updateConfiguration($event, 'configuration.generation')
 			"
 		/>
 	</div>
@@ -22,12 +30,11 @@
 
 <script>
 export default {
-	name: "DeviceOpenwbPvkitInverter",
+	name: "DeviceShelly",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
 		deviceId: { default: undefined },
-		componentId: { required: true },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {

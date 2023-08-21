@@ -10,7 +10,7 @@
 			:options="[
 				{ value: 0, text: 'MPM3PM' },
 				{ value: 1, text: 'SDM120' },
-				{ value: 2, text: 'SDM630' },
+				{ value: 2, text: 'SDM630/SDM72D-M' },
 			]"
 			:model-value="configuration.version"
 			@update:model-value="
