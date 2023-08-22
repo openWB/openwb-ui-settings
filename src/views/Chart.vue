@@ -835,7 +835,6 @@ export default {
 						"entries"
 					)
 				) {
-					console.debug("upgraded chart data received");
 					chartEntries = chartEntries.entries;
 				}
 				var myData = JSON.parse(JSON.stringify(chartEntries)).map(
@@ -1175,16 +1174,6 @@ export default {
 					}
 					break;
 			}
-			// console.debug(
-			// 	"getDatasetLabel",
-			// 	baseObject,
-			// 	objectKey,
-			// 	elementKey,
-			// 	datasetKey,
-			// 	"Label:",
-			// 	label,
-			// 	details
-			// );
 			return `${label.join(" ")}${
 				details.length ? " (" + details.join(", ") + ")" : ""
 			}`;
@@ -1199,13 +1188,6 @@ export default {
 			return;
 		},
 		addDataset(baseObject, objectKey, elementKey, datasetKey) {
-			// console.debug(
-			// 	"adding new dataset",
-			// 	baseObject,
-			// 	objectKey,
-			// 	elementKey,
-			// 	datasetKey
-			// );
 			var datasetTemplate = baseObject + "-" + elementKey;
 			if (this.datasetTemplates[datasetTemplate]) {
 				var newDataset = JSON.parse(
@@ -1276,13 +1258,7 @@ export default {
 					);
 				}
 				if (index != undefined && hidden) {
-					console.info(
-						"component hidden:",
-						baseObject,
-						objectKey,
-						elementKey,
-						index
-					);
+					// dataset is hidden
 					this.chartDatasets.datasets.splice(index, 1);
 				}
 			} else {
@@ -1300,7 +1276,7 @@ export default {
 		requestChart() {
 			let myForm = document.forms["chartForm"];
 			if (!myForm.reportValidity()) {
-				console.log("form invalid");
+				console.warn("form invalid");
 				return;
 			} else {
 				this.setupScaleX();
@@ -1333,25 +1309,22 @@ export default {
 			this.requestChart();
 		},
 		init() {
+			const today = new Date();
+			this.currentDate = String(today.getFullYear());
+			if (this.chartRange != "year") {
+				this.currentDate =
+					this.currentDate +
+					"-" +
+					String(today.getMonth() + 1).padStart(2, "0");
+			}
+			if (this.chartRange == "day") {
+				this.currentDate =
+					this.currentDate +
+					"-" +
+					String(today.getDate()).padStart(2, "0");
+			}
 			if (!this.blockChartInit) {
-				const today = new Date();
-				this.currentDate = String(today.getFullYear());
-				if (this.chartRange != "year") {
-					this.currentDate =
-						this.currentDate +
-						"-" +
-						String(today.getMonth() + 1).padStart(2, "0");
-				}
-				if (this.chartRange == "day") {
-					this.currentDate =
-						this.currentDate +
-						"-" +
-						String(today.getDate()).padStart(2, "0");
-				}
 				if (this.initialDate == undefined || this.initialDate == "") {
-					console.log(
-						"no initial date for chart found, fallback to today"
-					);
 					this.chartDate = this.currentDate;
 				} else {
 					this.chartDate = this.initialDate;
