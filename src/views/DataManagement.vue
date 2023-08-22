@@ -656,7 +656,7 @@ export default {
 		counterOptions() {
 			var myOptions = [];
 			for (const element of Object.values(this.componentConfigurations)) {
-				if (element.type == "counter") {
+				if (this.isComponentType(element.type, "counter")) {
 					myOptions.push({ value: element.id, text: element.name });
 				}
 			}
@@ -665,7 +665,7 @@ export default {
 		inverterOptions() {
 			var myOptions = [];
 			for (const element of Object.values(this.componentConfigurations)) {
-				if (element.type == "inverter") {
+				if (this.isComponentType(element.type, "inverter")) {
 					myOptions.push({ value: element.id, text: element.name });
 				}
 			}
@@ -674,7 +674,7 @@ export default {
 		batteryOptions() {
 			var myOptions = [];
 			for (const element of Object.values(this.componentConfigurations)) {
-				if (element.type == "bat") {
+				if (this.isComponentType(element.type, "bat")) {
 					myOptions.push({ value: element.id, text: element.name });
 				}
 			}
@@ -709,6 +709,14 @@ export default {
 		},
 	},
 	methods: {
+		/**
+		 * checks, if "componentType" is some kind of "verifier"
+		 * @param {String} componentType
+		 * @param {String} verifier
+		 */
+		isComponentType(componentType, verifier) {
+			return componentType.split("_").includes(verifier);
+		},
 		getBackupCloudDefaultConfiguration(backupCloudType) {
 			const backupCloudDefaults = this.backupCloudList.find(
 				(element) => element.value == backupCloudType
