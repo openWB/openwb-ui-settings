@@ -49,38 +49,6 @@
 					"
 				>
 				</openwb-base-button-group-input>
-				<!-- <openwb-base-select-input
-					v-if="$store.state.mqtt['openWB/general/extern'] === true"
-					title="Display-Theme"
-					:options="[
-						{
-							value: 'local',
-							text: 'Normal',
-						},
-						{
-							value: 'main',
-							text: 'Anzeige der übergeordneten openWB',
-						},
-					]"
-					:model-value="
-						$store.state.mqtt['openWB/general/extern_display_mode']
-					"
-					@update:model-value="
-						updateState(
-							'openWB/general/extern_display_mode',
-							$event
-						)
-					"
-				>
-					<template #help>
-						Das Theme "Normal" zeigt lediglich die Ladeleistung des
-						Ladepunktes an. Änderungen sind nicht möglich.<br />
-						Wird hier "Anzeige der übergeordneten openWB"
-						ausgewählt, dann ist die Darstellung identisch zum
-						Display der regelnden openWB. Alle Anzeigen und
-						Änderungen sind möglich.
-					</template>
-				</openwb-base-select-input> -->
 			</openwb-base-card>
 			<openwb-base-card title="Hardware">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
@@ -503,7 +471,6 @@ export default {
 		return {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
-				"openWB/general/extern_display_mode",
 				"openWB/general/control_interval",
 				"openWB/general/grid_protection_configured",
 				"openWB/general/external_buttons_hw",
