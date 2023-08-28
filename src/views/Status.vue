@@ -257,7 +257,7 @@
 				"
 			/>
 			<openwb-base-text-input
-				title="Leistung"
+				title="Wirkleistung"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
@@ -288,6 +288,21 @@
 					)
 				"
 			/>
+			<openwb-base-text-input
+				title="Netzfrequenz"
+				readonly
+				class="text-right text-monospace"
+				step="0.01"
+				unit="Hz"
+				:model-value="
+					formatNumberTopic(
+						'openWB/chargepoint/' +
+							getChargePointIndex(installedChargePointKey) +
+							'/get/frequency',
+						2
+					)
+				"
+			/>
 			<openwb-base-heading>Werte pro Phase</openwb-base-heading>
 			<openwb-base-text-input
 				title="Spannung"
@@ -314,6 +329,22 @@
 							getChargePointIndex(installedChargePointKey) +
 							'/get/currents',
 						2
+					)
+				"
+			/>
+			<openwb-base-text-input
+				title="Wirkleistung"
+				readonly
+				class="text-right text-monospace"
+				unit="kW"
+				:model-value="
+					formatPhaseArrayNumberTopic(
+						'openWB/chargepoint/' +
+							getChargePointIndex(installedChargePointKey) +
+							'/get/powers',
+						3,
+						3,
+						0.001
 					)
 				"
 			/>
@@ -456,7 +487,7 @@
 			/>
 			<openwb-base-heading>Saldierte Werte</openwb-base-heading>
 			<openwb-base-text-input
-				title="Leistung"
+				title="Wirkleistung"
 				readonly
 				class="text-right text-monospace"
 				step="0.001"
@@ -509,7 +540,7 @@
 				"
 			/>
 			<openwb-base-text-input
-				title="Leistung"
+				title="Wirkleistung"
 				readonly
 				class="text-right text-monospace"
 				unit="kW"
