@@ -954,11 +954,16 @@
 							"
 						>
 							<template #help>
-								Fahrzeuge mit Priorität werden bevorzugt
-								geladen. Erst wenn alle priorisierten Fahrzeuge
-								die maximale Ladeleistung bekommen und noch
-								zusätzlicher Überschuss vorhanden ist, werden
-								auch Fahrzeuge ohne Priorität geladen.
+								Die Ladefreigabe mit dem jeweils eingestellten
+								Mindeststrom erfolgt für alle Fahrzeuge, soweit
+								die verfügbare Leistung ausreicht. Fahrzeuge mit
+								Priorität werden bevorzugt mit mehr Leistung
+								geladen, falls verfügbar. Erst wenn alle
+								priorisierten Fahrzeuge die maximale
+								Ladeleistung bekommen und noch zusätzlicher
+								Überschuss vorhanden ist, wird auch für
+								Fahrzeuge ohne Priorität mehr Leistung
+								freigegeben.
 							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-button-group-input
