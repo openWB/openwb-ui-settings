@@ -52,51 +52,64 @@
 						:collapsible="true"
 						:collapsed="true"
 					>
-						<openwb-base-card
+						<div
 							v-for="(group, groupKey) in chartTotals"
 							:key="groupKey"
-							:collapsible="true"
-							:collapsed="true"
-							:subtype="getCardSubtype(groupKey)"
 						>
-							<template #header>
-								<font-awesome-icon
-									fixed-width
-									:icon="getCardIcon(groupKey)"
-								/>
-								{{ getTotalsLabel(groupKey) }}
-							</template>
-							<div
-								v-for="(component, componentKey) in group"
-								:key="componentKey"
+							<openwb-base-card
+								v-if="Object.keys(group).length > 0"
+								:collapsible="true"
+								:collapsed="true"
+								:subtype="getCardSubtype(groupKey)"
 							>
-								<openwb-base-heading>{{
-									getTotalsLabel(groupKey, componentKey)
-								}}</openwb-base-heading>
+								<template #header>
+									<font-awesome-icon
+										fixed-width
+										:icon="getCardIcon(groupKey)"
+									/>
+									{{ getTotalsLabel(groupKey) }}
+								</template>
 								<div
-									v-for="(
-										measurement, measurementKey
-									) in component"
-									:key="measurementKey"
+									v-for="(component, componentKey) in group"
+									:key="componentKey"
 								>
-									<openwb-base-text-input
-										:title="
+									<openwb-base-heading
+										v-if="groupKey !== 'hc'"
+										>{{
 											getTotalsLabel(
 												groupKey,
-												componentKey,
-												measurementKey
+												componentKey
 											)
-										"
-										readonly
-										class="text-right"
-										unit="kWh"
-										:model-value="
-											formatNumber(measurement / 1000, 3)
-										"
-									/>
+										}}</openwb-base-heading
+									>
+									<div
+										v-for="(
+											measurement, measurementKey
+										) in component"
+										:key="measurementKey"
+									>
+										<openwb-base-text-input
+											:title="
+												getTotalsLabel(
+													groupKey,
+													componentKey,
+													measurementKey
+												)
+											"
+											readonly
+											class="text-right"
+											unit="kWh"
+											:model-value="
+												formatNumber(
+													measurement / 1000,
+													3
+												)
+											"
+										/>
+									</div>
 								</div>
-							</div>
-						</openwb-base-card>
+							</openwb-base-card>
+						</div>
 					</openwb-base-card>
 				</div>
 			</div>
@@ -112,6 +125,7 @@ import {
 	faSolarPanel as fasSolarPanel,
 	faGaugeHigh as fasGaugeHigh,
 	faHouseSignal as fasHouseSignal,
+	faHouse as fasHouse,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -120,7 +134,8 @@ library.add(
 	fasCarBattery,
 	fasSolarPanel,
 	fasGaugeHigh,
-	fasHouseSignal
+	fasHouseSignal,
+	fasHouse
 );
 
 import ComponentState from "../components/mixins/ComponentState.vue";
@@ -504,6 +519,46 @@ export default {
 						yAxisKey: null,
 					},
 				},
+				"hc-power_imported": {
+					label: "Hausverbrauch",
+					unit: "kW",
+					jsonKey: null,
+					borderColor: "rgba(120, 122, 124, 0.7)",
+					backgroundColor: "rgba(120, 122, 124, 0.3)",
+					fill: true,
+					pointStyle: "circle",
+					pointRadius: 0,
+					pointHoverRadius: 4,
+					cubicInterpolationMode: "monotone",
+					hidden: true,
+					borderWidth: 1,
+					data: null,
+					yAxisID: "y",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
+				"hc-energy_imported": {
+					label: "Hausverbrauch",
+					unit: "kWh",
+					jsonKey: null,
+					borderColor: "rgba(120, 122, 124, 0.7)",
+					backgroundColor: "rgba(120, 122, 124, 0.3)",
+					fill: true,
+					pointStyle: "circle",
+					pointRadius: 0,
+					pointHoverRadius: 4,
+					cubicInterpolationMode: "monotone",
+					hidden: true,
+					borderWidth: 1,
+					data: null,
+					yAxisID: "y2",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
 			},
 			chartOptions: {
 				plugins: {
@@ -857,6 +912,7 @@ export default {
 					"cp",
 					"sh",
 					"ev",
+					"hc",
 				];
 				const lastElement =
 					this.chartDataObject[this.chartDataObject.length - 1];
@@ -957,6 +1013,8 @@ export default {
 					return ["fas", "solar-panel"];
 				case "sh":
 					return ["fas", "house-signal"];
+				case "hc":
+					return ["fas", "house"];
 				default:
 					return undefined;
 			}
@@ -984,6 +1042,8 @@ export default {
 						return "Ladepunkte";
 					case "sh":
 						return "SmartHome-Geräte";
+					case "hc":
+						return "Hausverbrauch";
 					default:
 						console.warn("unknown group key:", groupKey);
 				}
@@ -1071,6 +1131,19 @@ export default {
 								);
 						}
 						break;
+					case "hc":
+						switch (measurementKey) {
+							case "imported":
+							case "energy_imported":
+								return "Verbrauch";
+							default:
+								console.warn(
+									"unknown measurement key:",
+									groupKey,
+									measurementKey
+								);
+						}
+						break;
 					default:
 						console.warn("unknown group key:", groupKey);
 				}
@@ -1098,7 +1171,9 @@ export default {
 			var label = ["*" + datasetKey];
 			var details = [];
 			if (objectKey == "all") {
-				details.push("Summe");
+				if (baseObject !== "hc") {
+					details.push("Summe");
+				}
 				switch (baseObject) {
 					case "pv":
 						label = ["PV"];
@@ -1114,6 +1189,8 @@ export default {
 					case "cp":
 						label = ["Ladepunkte"];
 						break;
+					case "hc":
+						label = ["Hausverbrauch"];
 				}
 			} else {
 				if (
@@ -1234,6 +1311,7 @@ export default {
 					cp: ["power_average"],
 					sh: ["power_average"],
 					ev: ["soc"],
+					hc: ["power_imported"],
 				};
 			} else {
 				elementKeysToAdd = {
@@ -1243,6 +1321,7 @@ export default {
 					cp: ["energy_imported"],
 					sh: ["energy_imported", "energy_exported"],
 					ev: [],
+					hc: ["energy_imported"],
 				};
 			}
 			const datasetKey = baseObject + "." + objectKey + "." + elementKey;
