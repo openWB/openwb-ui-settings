@@ -210,7 +210,7 @@
 					</openwb-base-alert>
 					<openwb-base-select-input
 						title="Entwicklungszweig"
-						:options="getBranchOptions()"
+						:groups="getBranchGroups()"
 						:model-value="
 							$store.state.mqtt['openWB/system/current_branch']
 						"
@@ -329,19 +329,52 @@ export default {
 				data: data,
 			});
 		},
-		getBranchOptions() {
+		getBranchGroups() {
+			const releaseBranch = "Release";
+			const betaBranch = "Beta";
+			const developmentBranch = "master";
+			const officialBranches = [
+				releaseBranch,
+				betaBranch,
+				developmentBranch,
+			];
+
+			const compareBranches = (a, b) => {
+				if (a.value == b.value) return 0;
+				if (a.value == releaseBranch) return -1;
+				if (b.value == releaseBranch) return 1;
+				if (a.value == betaBranch) return -1;
+				if (b.value == betaBranch) return 1;
+				if (a.value == developmentBranch) return -1;
+				if (b.value == developmentBranch) return 1;
+				if (a.value > b.value) return 1;
+				if (a.value < b.value) return -1;
+				return 0;
+			};
+
 			var source =
 				this.$store.state.mqtt["openWB/system/available_branches"];
-			var options = [];
+			var groups = [
+				{ label: "Allgemein", options: [] },
+				{ label: "Experimentell", options: [] },
+			];
 			if (source !== undefined) {
+				var targetGroup = 0;
 				for (const [key, value] of Object.entries(source)) {
-					options.push({
+					if (officialBranches.includes(key)) {
+						targetGroup = 0;
+					} else {
+						targetGroup = 1;
+					}
+					groups[targetGroup].options.push({
 						value: key,
 						text: key + " (" + value.commit + ")",
 					});
 				}
+				groups[0].options.sort(compareBranches);
+				groups[1].options.sort(compareBranches);
 			}
-			return options;
+			return groups;
 		},
 		getBranchTagOptions() {
 			if (
