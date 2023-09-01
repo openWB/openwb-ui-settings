@@ -1165,6 +1165,44 @@
 					</openwb-base-button-group-input> -->
 				</div>
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+					<hr />
+					<openwb-base-select-input
+						title="Art der Anzeige"
+						:options="[
+							{
+								value: 'primary',
+								text: 'Primary openWB',
+							},
+							{
+								value: 'local',
+								text: 'diese(r) Ladepunkt(e)',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/extern_display_mode'
+							]
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/extern_display_mode',
+								$event
+							)
+						"
+					>
+						<template #help>
+							Wird hier "Primary openWB" ausgewählt, dann ist die
+							Darstellung identisch zum Display der regelnden
+							openWB. Alle Anzeigen und Änderungen sind möglich.
+							Je nach Einstellung in der primary openWB werden die
+							angezeigten Ladepunkte auf den/die an dieser openWB
+							vorhandenen Ladepunkte beschränkt.<br />
+							Die Option "diese(r) Ladepunkt(e)" ermöglicht eine
+							minimale Anzeige und Bedienung der an dieser openWB
+							verfügbaren Ladepunkte.
+						</template>
+					</openwb-base-select-input>
+					<hr />
 					<openwb-base-alert subtype="info">
 						Weitere Einstellungen sind nicht verfügbar, solange sich
 						diese openWB im Steuerungsmodus "secondary" befindet.
@@ -1228,6 +1266,39 @@
 							</template>
 						</openwb-base-text-input>
 					</div> -->
+					<hr />
+					<openwb-base-button-group-input
+						title="Ladepunkte auf externen openWB"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/optional/int_display/only_local_charge_points'
+							]
+						"
+						@update:model-value="
+							updateState(
+								'openWB/optional/int_display/only_local_charge_points',
+								$event
+							)
+						"
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Alle',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Nur Lokale',
+								class: 'btn-outline-success',
+							},
+						]"
+					>
+						<template #help>
+							Hiermit kann festgelegt werden, ob an angebundenen
+							externen openWB alle oder nur die jeweils lokalen
+							Ladepunkte angezeigt werden sollen.
+						</template>
+					</openwb-base-button-group-input>
 					<hr />
 					<div
 						v-if="
@@ -1378,6 +1449,7 @@ export default {
 		return {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
+				"openWB/general/extern_display_mode",
 				"openWB/optional/rfid/active",
 				"openWB/optional/led/active",
 				"ToDo/optional/led/instant_blocked",
@@ -1397,6 +1469,7 @@ export default {
 				"openWB/optional/int_display/pin_active",
 				"openWB/optional/int_display/pin_code",
 				"openWB/optional/int_display/theme",
+				"openWB/optional/int_display/only_local_charge_points",
 				"openWB/system/configurable/display_themes",
 				"openWB/optional/et/active",
 				"openWB/optional/et/config/provider",
