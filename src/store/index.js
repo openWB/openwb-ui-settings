@@ -78,7 +78,6 @@ export default createStore({
 	state: states,
 	mutations: {
 		storeLocal(state, message) {
-			console.log(message);
 			state.local[message.name] = message.value;
 		},
 		addTopic(state, message) {

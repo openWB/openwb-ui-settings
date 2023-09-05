@@ -203,7 +203,7 @@ export default {
 		sendDebugMessage() {
 			let myForm = document.forms["supportForm"];
 			if (!myForm.reportValidity()) {
-				console.log("form invalid");
+				console.warn("form invalid");
 				return;
 			} else {
 				this.$emit("sendCommand", {
