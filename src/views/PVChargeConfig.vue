@@ -16,8 +16,7 @@
 							{ buttonValue: 'import', text: 'Bezug' },
 							{ buttonValue: 'individual', text: 'Individuell' },
 						]"
-						:model-value="calculateControlMode()"
-						@update:model-value="setControlMode($event)"
+						v-model="controlMode"
 					>
 						<template #help>
 							Mit dieser Einstellung wird der angestrebte
@@ -29,14 +28,21 @@
 						</template>
 					</openwb-base-button-group-input>
 					<openwb-base-number-input
-						v-if="calculateControlMode() === 'individual'"
+						:disabled="controlMode !== 'individual'"
+						:readonly="controlMode !== 'individual'"
 						title="Minimum"
 						:step="0.01"
 						unit="kW"
 						:model-value="
-							$store.state.mqtt[
-								'openWB/general/chargemode_config/pv_charging/control_range'
-							][0] / 1000
+							Array.isArray(
+								$store.state.mqtt[
+									'openWB/general/chargemode_config/pv_charging/control_range'
+								]
+							)
+								? $store.state.mqtt[
+										'openWB/general/chargemode_config/pv_charging/control_range'
+								  ][0] / 1000
+								: undefined
 						"
 						@update:model-value="
 							updateState(
@@ -51,14 +57,21 @@
 						</template>
 					</openwb-base-number-input>
 					<openwb-base-number-input
-						v-if="calculateControlMode() === 'individual'"
+						:disabled="controlMode !== 'individual'"
+						:readonly="controlMode !== 'individual'"
 						title="Maximum"
 						:step="0.01"
 						unit="kW"
 						:model-value="
-							$store.state.mqtt[
-								'openWB/general/chargemode_config/pv_charging/control_range'
-							][1] / 1000
+							Array.isArray(
+								$store.state.mqtt[
+									'openWB/general/chargemode_config/pv_charging/control_range'
+								]
+							)
+								? $store.state.mqtt[
+										'openWB/general/chargemode_config/pv_charging/control_range'
+								  ][1] / 1000
+								: undefined
 						"
 						@update:model-value="
 							updateState(
@@ -568,40 +581,48 @@ export default {
 				"openWB/general/chargemode_config/pv_charging/rundown_power",
 				"openWB/general/chargemode_config/pv_charging/rundown_soc",
 			],
+			calculatedControlMode: undefined,
 		};
 	},
+	computed: {
+		controlMode: {
+			get() {
+				if (this.calculatedControlMode !== undefined) {
+					return this.calculatedControlMode;
+				}
+				const topic =
+					"openWB/general/chargemode_config/pv_charging/control_range";
+				let state = this.$store.state.mqtt[topic];
+				var controlMode = "individual";
+				if (typeof state != "undefined") {
+					if (state[0] === -230 && state[1] === 0) {
+						controlMode = "export";
+					} else if (state[0] === 0 && state[1] === 230) {
+						controlMode = "import";
+					} else {
+						controlMode = "individual";
+					}
+				}
+				return controlMode;
+			},
+			set(newMode) {
+				const topic =
+					"openWB/general/chargemode_config/pv_charging/control_range";
+				this.calculatedControlMode = newMode;
+				switch (newMode) {
+					case "export":
+						this.updateState(topic, [-230, 0]);
+						break;
+					case "import":
+						this.updateState(topic, [0, 230]);
+						break;
+					case "individual":
+						break;
+				}
+			},
+		},
+	},
 	methods: {
-		calculateControlMode() {
-			const topic =
-				"openWB/general/chargemode_config/pv_charging/control_range";
-			let state = this.$store.state.mqtt[topic];
-			// console.log(typeof state);
-			if (typeof state != "undefined") {
-				if (state[0] === -230 && state[1] === 0) {
-					return "export";
-				}
-				if (state[0] === 0 && state[1] === 230) {
-					return "import";
-				}
-				return "individual";
-			}
-		},
-		setControlMode(newMode) {
-			const topic =
-				"openWB/general/chargemode_config/pv_charging/control_range";
-			console.debug("set controlMode", newMode);
-			switch (newMode) {
-				case "export":
-					this.updateState(topic, [-230, 0]);
-					break;
-				case "import":
-					this.updateState(topic, [0, 230]);
-					break;
-				case "individual":
-					this.updateState(topic, [-230, 230]);
-					break;
-			}
-		},
 		updateBatterySwitchOnSoc(event) {
 			this.updateState(
 				"openWB/general/chargemode_config/pv_charging/switch_on_soc",
@@ -635,6 +656,11 @@ export default {
 					event + 5
 				);
 			}
+		},
+	},
+	watch: {
+		controlMode(newMode) {
+			this.calculatedControlMode = newMode;
 		},
 	},
 };
