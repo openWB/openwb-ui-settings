@@ -33,7 +33,7 @@ export default {
 			const startedMessage =
 				"Die Aktualisierung der openWB Pro wird gestartet...";
 			this.$root.postClientMessage(startedMessage, "info");
-			console.log(location);
+			console.debug(location);
 			this.axios
 				.post(
 					location.protocol +
@@ -43,8 +43,7 @@ export default {
 					formData,
 					{ timeout: 5000 }
 				)
-				.then((response) => {
-					console.log("POST response", response.data);
+				.then(() => {
 					const successMessage =
 						"Die Aktualisierung der openWB Pro wurde erfolgreich gestartet.";
 					this.$root.postClientMessage(successMessage, "success");
@@ -54,19 +53,22 @@ export default {
 					if (error.response) {
 						// The request was made and the server responded with a status code
 						// that falls out of the range of 2xx
-						console.log(error.response.status, error.response.data);
+						console.error(
+							error.response.status,
+							error.response.data
+						);
 						alertMessage +=
 							error.response.status + ": " + error.response.data;
 					} else if (error.request) {
 						// The request was made but no response was received
 						// `error.request` is an instance of XMLHttpRequest in the browser and an instance of
 						// http.ClientRequest in node.js
-						console.log(error.request);
+						console.error(error.request);
 						alertMessage +=
 							"Es wurde keine Antwort vom Server empfangen.";
 					} else {
 						// Something happened in setting up the request that triggered an Error
-						console.log("Error", error.message);
+						console.error("Error", error.message);
 						alertMessage +=
 							"Es ist ein unbekannter Fehler aufgetreten.";
 					}

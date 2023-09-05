@@ -539,7 +539,7 @@ export default {
 		requestChargeLog() {
 			let myForm = document.forms["chargeLogForm"];
 			if (!myForm.reportValidity()) {
-				console.log("form invalid");
+				console.warn("form invalid");
 				return;
 			} else {
 				this.cleanRequestData();

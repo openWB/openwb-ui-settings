@@ -208,7 +208,7 @@ export default {
 				options,
 				(error) => {
 					if (error) {
-						console.log("Publish error", error);
+						console.error("Publish error", error);
 					}
 				}
 			);

@@ -978,7 +978,6 @@ export default {
 				let chargePoints = this.getWildcardTopics(
 					"openWB/chargepoint/+/config"
 				);
-				console.log(chargePoints);
 				let myObj = {};
 				for (const [key, element] of Object.entries(chargePoints)) {
 					if (
@@ -989,7 +988,6 @@ export default {
 						myObj[key] = element;
 					}
 				}
-				console.log(myObj);
 				return myObj;
 			},
 		},
@@ -1002,13 +1000,11 @@ export default {
 			get() {
 				let myList = [];
 				Object.keys(this.chargePointTemplates).forEach((key) => {
-					// console.log(key);
 					let index = parseInt(key.match(/([0-9]+)/g)[0]);
 					let name =
 						this.$store.state.mqtt[
 							"openWB/chargepoint/template/" + index
 						].name;
-					// console.log("index: " + index, "name: " + name);
 					myList.push({ value: index, text: name });
 				});
 				return myList;

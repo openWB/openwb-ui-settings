@@ -307,7 +307,6 @@ export default {
 					}
 				} else {
 					if (newValue == "") {
-						console.log(this.emptyValue);
 						newValue = this.emptyValue;
 					}
 					this.$emit("update:modelValue", newValue);

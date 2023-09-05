@@ -171,7 +171,7 @@ export default {
 				.update(this.code_verifier)
 				.digest();
 			this.code_challenge = encode(hash);
-			console.log(
+			console.debug(
 				this.code_verifier,
 				this.code_verifier.length,
 				this.code_challenge,

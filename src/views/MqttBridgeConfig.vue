@@ -439,7 +439,6 @@ export default {
 				);
 				for (const [key, value] of Object.entries(bridges)) {
 					if (value.remote.is_openwb_cloud) {
-						console.log("filtering bridge " + key, value);
 						delete bridges[key];
 					}
 				}
@@ -462,7 +461,6 @@ export default {
 		removeMqttBridgeModal(mqttBridge, event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
-			console.log("removeMqttBridgeModal", mqttBridge);
 			this.modalMqttBridgeIndex = this.getMqttBridgeIndex(mqttBridge);
 			this.showMqttBridgeModal = true;
 		},

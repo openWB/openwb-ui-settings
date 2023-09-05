@@ -29,11 +29,6 @@
 							:icon="['fas', 'edit']"
 							@click="elementEdit(element.id)"
 						/>
-						<font-awesome-icon
-							fixed-width
-							:icon="['fas', 'trash']"
-							@click="elementDelete(element.id)"
-						/>
 					</span> -->
 				</div>
 				<openwb-nested-list
@@ -114,9 +109,6 @@ export default {
 		},
 		// elementEdit(id) {
 		// 	console.log("edit Element:", id);
-		// },
-		// elementDelete(id) {
-		// 	console.log("delete Element:", id);
 		// },
 	},
 };
