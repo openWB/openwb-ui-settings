@@ -1165,7 +1165,7 @@
 					</openwb-base-button-group-input> -->
 				</div>
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-					<hr />
+					<!-- <hr />
 					<openwb-base-select-input
 						title="Art der Anzeige"
 						:options="[
@@ -1201,7 +1201,7 @@
 							minimale Anzeige und Bedienung der an dieser openWB
 							verfügbaren Ladepunkte.
 						</template>
-					</openwb-base-select-input>
+					</openwb-base-select-input> -->
 					<hr />
 					<openwb-base-alert subtype="info">
 						Weitere Einstellungen sind nicht verfügbar, solange sich
@@ -1449,7 +1449,7 @@ export default {
 		return {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
-				"openWB/general/extern_display_mode",
+				// "openWB/general/extern_display_mode",
 				"openWB/optional/rfid/active",
 				"openWB/optional/led/active",
 				"ToDo/optional/led/instant_blocked",
