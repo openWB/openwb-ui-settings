@@ -49,6 +49,46 @@
 					"
 				>
 				</openwb-base-button-group-input>
+				<openwb-base-button-group-input
+					title="Steuerung über Modbus"
+					:buttons="[
+						{
+							buttonValue: false,
+							text: 'Aus',
+							class: 'btn-outline-danger',
+						},
+						{
+							buttonValue: true,
+							text: 'An',
+							class: 'btn-outline-success',
+						},
+					]"
+					:model-value="
+						$store.state.mqtt['openWB/general/modbus_control']
+					"
+					@update:model-value="
+						updateState('openWB/general/modbus_control', $event)
+					"
+				>
+					<template #help>
+						Im secondary-Modus kann die openWB über die
+						Modbus-Schnittstelle gesteuert werden. Die Register sind
+						hier dokumentiert. Bei aktivierter Modbus-Schnittstelle
+						darf die openWB nicht von einer primary-openWB gesteuert
+						werden.
+					</template>
+				</openwb-base-button-group-input>
+				<div
+					v-if="
+						$store.state.mqtt['openWB/general/modbus_control'] ===
+						!0
+					"
+				>
+					<openwb-base-alert subtype="info">
+						Wenn die Steuerung über Modbus auf "aus" geändert wird,
+						muss danach ein Neustart durchgeführt werden!
+					</openwb-base-alert>
+				</div>
 			</openwb-base-card>
 			<openwb-base-card title="Hardware">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
@@ -474,6 +514,7 @@ export default {
 				"openWB/general/control_interval",
 				"openWB/general/grid_protection_configured",
 				"openWB/general/external_buttons_hw",
+				"openWB/general/modbus_control",
 				"openWB/general/notifications/selected",
 				"openWB/general/notifications/configuration",
 				"openWB/general/notifications/start_charging",
