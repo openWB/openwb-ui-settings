@@ -50,7 +50,7 @@
 				>
 				</openwb-base-button-group-input>
 				<openwb-base-button-group-input
-					title="Steuerung über Modbus"
+					title="Steuerung über Modbus als secondary"
 					:buttons="[
 						{
 							buttonValue: false,
