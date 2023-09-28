@@ -2,7 +2,7 @@
 	<div class="status">
 		<!-- all charge points -->
 		<openwb-base-card
-			v-if="numChargePointsInstalled > 1"
+			v-if="numChargePointsInstalled > 1 && $store.state.mqtt['openWB/general/extern'] === false"
 			subtype="primary"
 			:collapsible="true"
 			:collapsed="true"
@@ -390,6 +390,7 @@
 		<!-- counters -->
 		<openwb-base-card
 			v-for="counter in counterConfigs"
+			v-if="$store.state.mqtt['openWB/general/extern'] === false"
 			:key="counter.id"
 			:title="counter.name + ' (ID: ' + counter.id + ')'"
 			:collapsible="true"
@@ -567,7 +568,7 @@
 		</openwb-base-card>
 		<!-- all inverters -->
 		<openwb-base-card
-			v-if="numInvertersInstalled > 1"
+			v-if="numInvertersInstalled > 1 && $store.state.mqtt['openWB/general/extern'] === false"
 			subtype="success"
 			:collapsible="true"
 			:collapsed="true"
@@ -646,6 +647,7 @@
 		<!-- individual inverters -->
 		<openwb-base-card
 			v-for="inverter in inverterConfigs"
+			v-if="$store.state.mqtt['openWB/general/extern'] === false"
 			:key="inverter.id"
 			:collapsible="true"
 			:collapsed="true"
@@ -727,7 +729,7 @@
 		</openwb-base-card>
 		<!-- all batteries -->
 		<openwb-base-card
-			v-if="numBatteriesInstalled > 1"
+			v-if="numBatteriesInstalled > 1 && $store.state.mqtt['openWB/general/extern'] === false"
 			subtype="warning"
 			:collapsible="true"
 			:collapsed="true"
@@ -810,6 +812,7 @@
 		<!-- individual batteries -->
 		<openwb-base-card
 			v-for="battery in batteryConfigs"
+			v-if="$store.state.mqtt['openWB/general/extern'] === false"
 			:key="battery.id"
 			:collapsible="true"
 			:collapsed="true"
@@ -918,6 +921,7 @@
 		<!-- vehicles -->
 		<openwb-base-card
 			v-for="(vehicleName, vehicleKey) of vehicleNames"
+			v-if="$store.state.mqtt['openWB/general/extern'] === false"
 			:key="vehicleKey"
 			:collapsible="true"
 			:collapsed="true"
@@ -1094,7 +1098,20 @@ export default {
 	computed: {
 		installedChargePoints: {
 			get() {
-				return this.getWildcardTopics("openWB/chargepoint/+/config");
+				let chargePoints = this.getWildcardTopics(
+					"openWB/chargepoint/+/config"
+				);
+				let myObj = {};
+				for (const [key, element] of Object.entries(chargePoints)) {
+					if (
+						element.type === "internal_openwb" ||
+						this.$store.state.mqtt["openWB/general/extern"] ===
+							false
+					) {
+						myObj[key] = element;
+					}
+				}
+				return myObj;
 			},
 		},
 		numChargePointsInstalled: {
