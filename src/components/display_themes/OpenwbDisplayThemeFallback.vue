@@ -32,9 +32,6 @@
 			</openwb-base-alert>
 		</div>
 	</div>
-	<openwb-base-alert v-else subtype="info">
-		Das Display Theme "{{ displayThemeType }}" kann nicht angepasst werden.
-	</openwb-base-alert>
 </template>
 
 <script>
