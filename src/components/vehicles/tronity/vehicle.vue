@@ -14,7 +14,8 @@
 			"
 		>
 			<template #help>
-				Vehicle ID aus Tronity angeben. Diese ist in den Assigned Vehicles zu finden.
+				Vehicle ID aus Tronity angeben. Diese ist in den Assigned
+				Vehicles zu finden.
 			</template>
 		</openwb-base-text-input>
 		<openwb-base-text-input
@@ -26,7 +27,8 @@
 			"
 		>
 			<template #help>
-				Client ID aus Tronity angeben. Diese ist in den Application Settings zu finden.
+				Client ID aus Tronity angeben. Diese ist in den Application
+				Settings zu finden.
 			</template>
 		</openwb-base-text-input>
 		<openwb-base-text-input
@@ -38,9 +40,10 @@
 			"
 		>
 			<template #help>
-				Client Secret aus Tronity angeben. Diese ist in den Application Settings zu finden.
-				Das Client Secret kann nur einmalig abgerufen werden. Ggf. neu erzeugen, womit frühere
-				Client Secrets ungültig werden.
+				Client Secret aus Tronity angeben. Diese ist in den Application
+				Settings zu finden. Das Client Secret kann nur einmalig
+				abgerufen werden. Ggf. neu erzeugen, womit frühere Client
+				Secrets ungültig werden.
 			</template>
 		</openwb-base-text-input>
 	</div>

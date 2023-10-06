@@ -375,9 +375,7 @@
 							>
 								<openwb-base-click-button
 									class="btn-danger clickable"
-									@buttonClicked="
-										sendSystemCommand('factoryReset', {})
-									"
+									@buttonClicked="factoryReset()"
 								>
 									<font-awesome-icon
 										fixed-width
@@ -883,6 +881,13 @@ export default {
 		},
 		dataMigration() {
 			this.sendSystemCommand("dataMigration", this.dataMigrationMapping);
+		},
+		factoryReset() {
+			this.sendSystemCommand("factoryReset", {});
+			this.$store.commit("storeLocal", {
+				name: "reloadRequired",
+				value: true,
+			});
 		},
 	},
 };
