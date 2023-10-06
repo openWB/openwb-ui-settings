@@ -21,10 +21,18 @@
 				>
 					https://backend.powerfox.energy/api/2.0/my/all/devices
 				</a>
-				aufrufen und dort Benutzername und Passwort eingeben. Die Device
-				ID ist exakt so einzutragen, wie in der Antwort des Servers. Das
-				bedeutet insbesondere auch, die Groß-/KLeinschreibung ist zu
-				beachten!
+				aufrufen und dort Benutzername und Passwort eingeben. Die
+				DeviceID ist exakt so einzutragen, wie in der Antwort des
+				Servers. Das bedeutet insbesondere auch, die
+				Groß-/Kleinschreibung ist zu beachten! In dem Feld ist nur die
+				Zeichenfolge direkt hinter
+				<span
+					class="font-weight-bold text-monospace"
+					style="display: contents"
+				>
+					"DeviceID"
+				</span>
+				ohne den Doppelpunkt und Anführungszeichen einzutragen.
 			</template>
 		</openwb-base-text-input>
 	</div>
