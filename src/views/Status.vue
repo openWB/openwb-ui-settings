@@ -391,196 +391,183 @@
 			/>
 		</openwb-base-card>
 		<!-- counters -->
-		<div v-if="$store.state.mqtt['openWB/general/extern'] === false">
-			<openwb-base-card
-				v-for="counter in counterConfigs"
-				:key="counter.id"
-				:title="counter.name + ' (ID: ' + counter.id + ')'"
-				:collapsible="true"
-				:collapsed="true"
-				subtype="danger"
-			>
-				<template #header>
-					<font-awesome-icon
-						fixed-width
-						:icon="['fas', 'gauge-high']"
-					/>
-					{{ counter.name }} (ID: {{ counter.id }})
-				</template>
-				<openwb-base-alert
-					:subtype="
-						statusLevel[
-							$store.state.mqtt[
-								'openWB/counter/' +
-									counter.id +
-									'/get/fault_state'
-							]
-						]
-					"
-				>
-					<font-awesome-icon
-						v-if="
-							$store.state.mqtt[
-								'openWB/counter/' +
-									counter.id +
-									'/get/fault_state'
-							] == 1
-						"
-						fixed-width
-						:icon="['fas', 'exclamation-triangle']"
-					/>
-					<font-awesome-icon
-						v-else-if="
-							$store.state.mqtt[
-								'openWB/counter/' +
-									counter.id +
-									'/get/fault_state'
-							] == 2
-						"
-						fixed-width
-						:icon="['fas', 'times-circle']"
-					/>
-					<font-awesome-icon
-						v-else
-						fixed-width
-						:icon="['fas', 'check-circle']"
-					/>
-					Modulmeldung:<br />
-					{{
+		<openwb-base-card
+			v-for="counter in counterConfigs"
+			:key="counter.id"
+			:title="counter.name + ' (ID: ' + counter.id + ')'"
+			:collapsible="true"
+			:collapsed="true"
+			subtype="danger"
+		>
+			<template #header>
+				<font-awesome-icon fixed-width :icon="['fas', 'gauge-high']" />
+				{{ counter.name }} (ID: {{ counter.id }})
+			</template>
+			<openwb-base-alert
+				:subtype="
+					statusLevel[
 						$store.state.mqtt[
-							"openWB/counter/" + counter.id + "/get/fault_str"
+							'openWB/counter/' + counter.id + '/get/fault_state'
 						]
-					}}
-				</openwb-base-alert>
-				<openwb-base-alert
+					]
+				"
+			>
+				<font-awesome-icon
 					v-if="
 						$store.state.mqtt[
-							'openWB/counter/' + counter.id + '/get/state_str'
-						] != undefined
+							'openWB/counter/' + counter.id + '/get/fault_state'
+						] == 1
 					"
-					subtype="info"
-				>
-					Statusmeldung:<br />
-					{{
+					fixed-width
+					:icon="['fas', 'exclamation-triangle']"
+				/>
+				<font-awesome-icon
+					v-else-if="
 						$store.state.mqtt[
-							"openWB/counter/" + counter.id + "/get/state_str"
-						]
-					}}
-				</openwb-base-alert>
-				<openwb-base-heading>Zählerstände</openwb-base-heading>
-				<openwb-base-text-input
-					title="Export"
-					readonly
-					class="text-right text-monospace"
-					step="0.001"
-					unit="kWh"
-					:model-value="
-						formatNumberTopic(
-							'openWB/counter/' + counter.id + '/get/exported',
-							3,
-							3,
-							0.001
-						)
+							'openWB/counter/' + counter.id + '/get/fault_state'
+						] == 2
 					"
+					fixed-width
+					:icon="['fas', 'times-circle']"
 				/>
-				<openwb-base-text-input
-					title="Import"
-					readonly
-					class="text-right text-monospace"
-					step="0.001"
-					unit="kWh"
-					:model-value="
-						formatNumberTopic(
-							'openWB/counter/' + counter.id + '/get/imported',
-							3,
-							3,
-							0.001
-						)
-					"
+				<font-awesome-icon
+					v-else
+					fixed-width
+					:icon="['fas', 'check-circle']"
 				/>
-				<openwb-base-heading>Saldierte Werte</openwb-base-heading>
-				<openwb-base-text-input
-					title="Wirkleistung"
-					readonly
-					class="text-right text-monospace"
-					step="0.001"
-					unit="kW"
-					:model-value="
-						formatNumberTopic(
-							'openWB/counter/' + counter.id + '/get/power',
-							3,
-							3,
-							0.001
-						)
-					"
-				/>
-				<openwb-base-text-input
-					title="Netzfrequenz"
-					readonly
-					class="text-right text-monospace"
-					step="0.001"
-					unit="Hz"
-					:model-value="
-						formatNumberTopic(
-							'openWB/counter/' + counter.id + '/get/frequency',
-							3
-						)
-					"
-				/>
-				<openwb-base-heading>Werte pro Phase</openwb-base-heading>
-				<openwb-base-text-input
-					title="Spannung"
-					readonly
-					class="text-right text-monospace"
-					unit="V"
-					:model-value="
-						formatPhaseArrayNumberTopic(
-							'openWB/counter/' + counter.id + '/get/voltages',
-							1
-						)
-					"
-				/>
-				<openwb-base-text-input
-					title="Strom"
-					readonly
-					class="text-right text-monospace"
-					unit="A"
-					:model-value="
-						formatPhaseArrayNumberTopic(
-							'openWB/counter/' + counter.id + '/get/currents',
-							2
-						)
-					"
-				/>
-				<openwb-base-text-input
-					title="Wirkleistung"
-					readonly
-					class="text-right text-monospace"
-					unit="kW"
-					:model-value="
-						formatPhaseArrayNumberTopic(
-							'openWB/counter/' + counter.id + '/get/powers',
-							3,
-							3,
-							0.001
-						)
-					"
-				/>
-				<openwb-base-text-input
-					title="Leistungsfaktor"
-					readonly
-					class="text-right text-monospace"
-					:model-value="
-						formatPhaseArrayNumberTopic(
-							'openWB/counter/' +
-								counter.id +
-								'/get/power_factors',
-							2
-						)
-					"
-				/>
-			</openwb-base-card>
-		</div>
+				Modulmeldung:<br />
+				{{
+					$store.state.mqtt[
+						"openWB/counter/" + counter.id + "/get/fault_str"
+					]
+				}}
+			</openwb-base-alert>
+			<openwb-base-alert
+				v-if="
+					$store.state.mqtt[
+						'openWB/counter/' + counter.id + '/get/state_str'
+					] != undefined
+				"
+				subtype="info"
+			>
+				Statusmeldung:<br />
+				{{
+					$store.state.mqtt[
+						"openWB/counter/" + counter.id + "/get/state_str"
+					]
+				}}
+			</openwb-base-alert>
+			<openwb-base-heading>Zählerstände</openwb-base-heading>
+			<openwb-base-text-input
+				title="Export"
+				readonly
+				class="text-right text-monospace"
+				step="0.001"
+				unit="kWh"
+				:model-value="
+					formatNumberTopic(
+						'openWB/counter/' + counter.id + '/get/exported',
+						3,
+						3,
+						0.001
+					)
+				"
+			/>
+			<openwb-base-text-input
+				title="Import"
+				readonly
+				class="text-right text-monospace"
+				step="0.001"
+				unit="kWh"
+				:model-value="
+					formatNumberTopic(
+						'openWB/counter/' + counter.id + '/get/imported',
+						3,
+						3,
+						0.001
+					)
+				"
+			/>
+			<openwb-base-heading>Saldierte Werte</openwb-base-heading>
+			<openwb-base-text-input
+				title="Wirkleistung"
+				readonly
+				class="text-right text-monospace"
+				step="0.001"
+				unit="kW"
+				:model-value="
+					formatNumberTopic(
+						'openWB/counter/' + counter.id + '/get/power',
+						3,
+						3,
+						0.001
+					)
+				"
+			/>
+			<openwb-base-text-input
+				title="Netzfrequenz"
+				readonly
+				class="text-right text-monospace"
+				step="0.001"
+				unit="Hz"
+				:model-value="
+					formatNumberTopic(
+						'openWB/counter/' + counter.id + '/get/frequency',
+						3
+					)
+				"
+			/>
+			<openwb-base-heading>Werte pro Phase</openwb-base-heading>
+			<openwb-base-text-input
+				title="Spannung"
+				readonly
+				class="text-right text-monospace"
+				unit="V"
+				:model-value="
+					formatPhaseArrayNumberTopic(
+						'openWB/counter/' + counter.id + '/get/voltages',
+						1
+					)
+				"
+			/>
+			<openwb-base-text-input
+				title="Strom"
+				readonly
+				class="text-right text-monospace"
+				unit="A"
+				:model-value="
+					formatPhaseArrayNumberTopic(
+						'openWB/counter/' + counter.id + '/get/currents',
+						2
+					)
+				"
+			/>
+			<openwb-base-text-input
+				title="Wirkleistung"
+				readonly
+				class="text-right text-monospace"
+				unit="kW"
+				:model-value="
+					formatPhaseArrayNumberTopic(
+						'openWB/counter/' + counter.id + '/get/powers',
+						3,
+						3,
+						0.001
+					)
+				"
+			/>
+			<openwb-base-text-input
+				title="Leistungsfaktor"
+				readonly
+				class="text-right text-monospace"
+				:model-value="
+					formatPhaseArrayNumberTopic(
+						'openWB/counter/' + counter.id + '/get/power_factors',
+						2
+					)
+				"
+			/>
+		</openwb-base-card>
 		<!-- all inverters -->
 		<openwb-base-card
 			v-if="
@@ -663,92 +650,87 @@
 			/>
 		</openwb-base-card>
 		<!-- individual inverters -->
-		<div v-if="$store.state.mqtt['openWB/general/extern'] === false">
-			<openwb-base-card
-				v-for="inverter in inverterConfigs"
-				:key="inverter.id"
-				:collapsible="true"
-				:collapsed="true"
-				subtype="success"
-			>
-				<template #header>
-					<font-awesome-icon
-						fixed-width
-						:icon="['fas', 'solar-panel']"
-					/>
-					{{ inverter.name }} (ID: {{ inverter.id }})
-				</template>
-				<openwb-base-alert
-					:subtype="
-						statusLevel[
-							$store.state.mqtt[
-								'openWB/pv/' + inverter.id + '/get/fault_state'
-							]
-						]
-					"
-				>
-					<font-awesome-icon
-						v-if="
-							$store.state.mqtt[
-								'openWB/pv/' + inverter.id + '/get/fault_state'
-							] == 1
-						"
-						fixed-width
-						:icon="['fas', 'exclamation-triangle']"
-					/>
-					<font-awesome-icon
-						v-else-if="
-							$store.state.mqtt[
-								'openWB/pv/' + inverter.id + '/get/fault_state'
-							] == 2
-						"
-						fixed-width
-						:icon="['fas', 'times-circle']"
-					/>
-					<font-awesome-icon
-						v-else
-						fixed-width
-						:icon="['fas', 'check-circle']"
-					/>
-					Modulmeldung:<br />
-					{{
+		<openwb-base-card
+			v-for="inverter in inverterConfigs"
+			:key="inverter.id"
+			:collapsible="true"
+			:collapsed="true"
+			subtype="success"
+		>
+			<template #header>
+				<font-awesome-icon fixed-width :icon="['fas', 'solar-panel']" />
+				{{ inverter.name }} (ID: {{ inverter.id }})
+			</template>
+			<openwb-base-alert
+				:subtype="
+					statusLevel[
 						$store.state.mqtt[
-							"openWB/pv/" + inverter.id + "/get/fault_str"
+							'openWB/pv/' + inverter.id + '/get/fault_state'
 						]
-					}}
-				</openwb-base-alert>
-				<openwb-base-text-input
-					title="Zählerstand"
-					readonly
-					class="text-right text-monospace"
-					step="0.001"
-					unit="kWh"
-					:model-value="
-						formatNumberTopic(
-							'openWB/pv/' + inverter.id + '/get/exported',
-							3,
-							3,
-							0.001
-						)
+					]
+				"
+			>
+				<font-awesome-icon
+					v-if="
+						$store.state.mqtt[
+							'openWB/pv/' + inverter.id + '/get/fault_state'
+						] == 1
 					"
+					fixed-width
+					:icon="['fas', 'exclamation-triangle']"
 				/>
-				<openwb-base-text-input
-					title="Leistung"
-					readonly
-					class="text-right text-monospace"
-					step="0.001"
-					unit="kW"
-					:model-value="
-						formatNumberTopic(
-							'openWB/pv/' + inverter.id + '/get/power',
-							3,
-							3,
-							0.001
-						)
+				<font-awesome-icon
+					v-else-if="
+						$store.state.mqtt[
+							'openWB/pv/' + inverter.id + '/get/fault_state'
+						] == 2
 					"
+					fixed-width
+					:icon="['fas', 'times-circle']"
 				/>
-			</openwb-base-card>
-		</div>
+				<font-awesome-icon
+					v-else
+					fixed-width
+					:icon="['fas', 'check-circle']"
+				/>
+				Modulmeldung:<br />
+				{{
+					$store.state.mqtt[
+						"openWB/pv/" + inverter.id + "/get/fault_str"
+					]
+				}}
+			</openwb-base-alert>
+			<openwb-base-text-input
+				title="Zählerstand"
+				readonly
+				class="text-right text-monospace"
+				step="0.001"
+				unit="kWh"
+				:model-value="
+					formatNumberTopic(
+						'openWB/pv/' + inverter.id + '/get/exported',
+						3,
+						3,
+						0.001
+					)
+				"
+			/>
+			<openwb-base-text-input
+				title="Leistung"
+				readonly
+				class="text-right text-monospace"
+				step="0.001"
+				unit="kW"
+				:model-value="
+					formatNumberTopic(
+						'openWB/pv/' + inverter.id + '/get/power',
+						3,
+						3,
+						0.001
+					)
+				"
+			/>
+		</openwb-base-card>
 		<!-- all batteries -->
 		<openwb-base-card
 			v-if="
@@ -835,230 +817,221 @@
 			/>
 		</openwb-base-card>
 		<!-- individual batteries -->
-		<div v-if="$store.state.mqtt['openWB/general/extern'] === false">
-			<openwb-base-card
-				v-for="battery in batteryConfigs"
-				:key="battery.id"
-				:collapsible="true"
-				:collapsed="true"
-				subtype="warning"
+		<openwb-base-card
+			v-for="battery in batteryConfigs"
+			:key="battery.id"
+			:collapsible="true"
+			:collapsed="true"
+			subtype="warning"
+		>
+			<template #header>
+				<font-awesome-icon fixed-width :icon="['fas', 'car-battery']" />
+				{{ battery.name }} (ID: {{ battery.id }})
+			</template>
+			<openwb-base-alert
+				:subtype="
+					statusLevel[
+						$store.state.mqtt[
+							'openWB/bat/' + battery.id + '/get/fault_state'
+						]
+					]
+				"
 			>
-				<template #header>
-					<font-awesome-icon
-						fixed-width
-						:icon="['fas', 'car-battery']"
-					/>
-					{{ battery.name }} (ID: {{ battery.id }})
-				</template>
-				<openwb-base-alert
-					:subtype="
-						statusLevel[
-							$store.state.mqtt[
-								'openWB/bat/' + battery.id + '/get/fault_state'
-							]
-						]
-					"
-				>
-					<font-awesome-icon
-						v-if="
-							$store.state.mqtt[
-								'openWB/bat/' + battery.id + '/get/fault_state'
-							] == 1
-						"
-						fixed-width
-						:icon="['fas', 'exclamation-triangle']"
-					/>
-					<font-awesome-icon
-						v-else-if="
-							$store.state.mqtt[
-								'openWB/bat/' + battery.id + '/get/fault_state'
-							] == 2
-						"
-						fixed-width
-						:icon="['fas', 'times-circle']"
-					/>
-					<font-awesome-icon
-						v-else
-						fixed-width
-						:icon="['fas', 'check-circle']"
-					/>
-					Modulmeldung:<br />
-					{{
+				<font-awesome-icon
+					v-if="
 						$store.state.mqtt[
-							"openWB/bat/" + battery.id + "/get/fault_str"
-						]
-					}}
-				</openwb-base-alert>
-				<openwb-base-heading>Aktuelle Werte</openwb-base-heading>
-				<openwb-base-text-input
-					title="Leistung"
-					readonly
-					class="text-right text-monospace"
-					step="0.001"
-					unit="kW"
-					:model-value="
-						formatNumberTopic(
-							'openWB/bat/' + battery.id + '/get/power',
-							3,
-							3,
-							0.001
-						)
+							'openWB/bat/' + battery.id + '/get/fault_state'
+						] == 1
 					"
+					fixed-width
+					:icon="['fas', 'exclamation-triangle']"
 				/>
-				<openwb-base-number-input
-					title="Ladestand"
-					readonly
-					class="text-right text-monospace"
-					unit="%"
-					:model-value="
+				<font-awesome-icon
+					v-else-if="
 						$store.state.mqtt[
-							'openWB/bat/' + battery.id + '/get/soc'
-						]
+							'openWB/bat/' + battery.id + '/get/fault_state'
+						] == 2
 					"
+					fixed-width
+					:icon="['fas', 'times-circle']"
 				/>
-				<openwb-base-heading>Zählerstände</openwb-base-heading>
-				<openwb-base-text-input
-					title="Ladung"
-					readonly
-					class="text-right text-monospace"
-					step="0.001"
-					unit="kWh"
-					:model-value="
-						formatNumberTopic(
-							'openWB/bat/' + battery.id + '/get/imported',
-							3,
-							3,
-							0.001
-						)
-					"
+				<font-awesome-icon
+					v-else
+					fixed-width
+					:icon="['fas', 'check-circle']"
 				/>
-				<openwb-base-text-input
-					title="Entladung"
-					readonly
-					class="text-right text-monospace"
-					step="0.001"
-					unit="kWh"
-					:model-value="
-						formatNumberTopic(
-							'openWB/bat/' + battery.id + '/get/exported',
-							3,
-							3,
-							0.001
-						)
-					"
-				/>
-			</openwb-base-card>
-		</div>
+				Modulmeldung:<br />
+				{{
+					$store.state.mqtt[
+						"openWB/bat/" + battery.id + "/get/fault_str"
+					]
+				}}
+			</openwb-base-alert>
+			<openwb-base-heading>Aktuelle Werte</openwb-base-heading>
+			<openwb-base-text-input
+				title="Leistung"
+				readonly
+				class="text-right text-monospace"
+				step="0.001"
+				unit="kW"
+				:model-value="
+					formatNumberTopic(
+						'openWB/bat/' + battery.id + '/get/power',
+						3,
+						3,
+						0.001
+					)
+				"
+			/>
+			<openwb-base-number-input
+				title="Ladestand"
+				readonly
+				class="text-right text-monospace"
+				unit="%"
+				:model-value="
+					$store.state.mqtt['openWB/bat/' + battery.id + '/get/soc']
+				"
+			/>
+			<openwb-base-heading>Zählerstände</openwb-base-heading>
+			<openwb-base-text-input
+				title="Ladung"
+				readonly
+				class="text-right text-monospace"
+				step="0.001"
+				unit="kWh"
+				:model-value="
+					formatNumberTopic(
+						'openWB/bat/' + battery.id + '/get/imported',
+						3,
+						3,
+						0.001
+					)
+				"
+			/>
+			<openwb-base-text-input
+				title="Entladung"
+				readonly
+				class="text-right text-monospace"
+				step="0.001"
+				unit="kWh"
+				:model-value="
+					formatNumberTopic(
+						'openWB/bat/' + battery.id + '/get/exported',
+						3,
+						3,
+						0.001
+					)
+				"
+			/>
+		</openwb-base-card>
 		<!-- vehicles -->
-		<div v-if="$store.state.mqtt['openWB/general/extern'] === false">
-			<openwb-base-card
-				v-for="(vehicleName, vehicleKey) of vehicleNames"
-				:key="vehicleKey"
-				:collapsible="true"
-				:collapsed="true"
-				subtype="info"
+		<openwb-base-card
+			v-for="(vehicleName, vehicleKey) of vehicleNames"
+			:key="vehicleKey"
+			:collapsible="true"
+			:collapsed="true"
+			subtype="info"
+		>
+			<template #header>
+				<font-awesome-icon fixed-width :icon="['fas', 'car']" />
+				{{ vehicleName }} (ID: {{ getVehicleIndex(vehicleKey) }})
+			</template>
+			<openwb-base-alert
+				v-if="
+					$store.state.mqtt[
+						'openWB/vehicle/' +
+							getVehicleIndex(vehicleKey) +
+							'/get/fault_state'
+					] !== undefined
+				"
+				:subtype="
+					statusLevel[
+						$store.state.mqtt[
+							'openWB/vehicle/' +
+								getVehicleIndex(vehicleKey) +
+								'/get/fault_state'
+						]
+					]
+				"
 			>
-				<template #header>
-					<font-awesome-icon fixed-width :icon="['fas', 'car']" />
-					{{ vehicleName }} (ID: {{ getVehicleIndex(vehicleKey) }})
-				</template>
-				<openwb-base-alert
+				<font-awesome-icon
 					v-if="
 						$store.state.mqtt[
 							'openWB/vehicle/' +
 								getVehicleIndex(vehicleKey) +
 								'/get/fault_state'
-						] !== undefined
+						] == 1
 					"
-					:subtype="
-						statusLevel[
-							$store.state.mqtt[
-								'openWB/vehicle/' +
-									getVehicleIndex(vehicleKey) +
-									'/get/fault_state'
-							]
-						]
-					"
-				>
-					<font-awesome-icon
-						v-if="
-							$store.state.mqtt[
-								'openWB/vehicle/' +
-									getVehicleIndex(vehicleKey) +
-									'/get/fault_state'
-							] == 1
-						"
-						fixed-width
-						:icon="['fas', 'exclamation-triangle']"
-					/>
-					<font-awesome-icon
-						v-else-if="
-							$store.state.mqtt[
-								'openWB/vehicle/' +
-									getVehicleIndex(vehicleKey) +
-									'/get/fault_state'
-							] == 2
-						"
-						fixed-width
-						:icon="['fas', 'times-circle']"
-					/>
-					<font-awesome-icon
-						v-else
-						fixed-width
-						:icon="['fas', 'check-circle']"
-					/>
-					Modulmeldung:<br />
-					{{
-						$store.state.mqtt[
-							"openWB/vehicle/" +
-								getVehicleIndex(vehicleKey) +
-								"/get/fault_str"
-						]
-					}}
-				</openwb-base-alert>
-				<openwb-base-heading>Fahrzeugdaten</openwb-base-heading>
-				<openwb-base-number-input
-					title="Ladestand"
-					readonly
-					class="text-right text-monospace"
-					unit="%"
-					:model-value="
+					fixed-width
+					:icon="['fas', 'exclamation-triangle']"
+				/>
+				<font-awesome-icon
+					v-else-if="
 						$store.state.mqtt[
 							'openWB/vehicle/' +
 								getVehicleIndex(vehicleKey) +
-								'/get/soc'
-						]
+								'/get/fault_state'
+						] == 2
 					"
+					fixed-width
+					:icon="['fas', 'times-circle']"
 				/>
-				<openwb-base-number-input
-					title="Reichweite"
-					readonly
-					class="text-right text-monospace"
-					unit="km"
-					:model-value="
-						Math.round(
-							$store.state.mqtt[
-								'openWB/vehicle/' +
-									getVehicleIndex(vehicleKey) +
-									'/get/range'
-							]
-						)
-					"
+				<font-awesome-icon
+					v-else
+					fixed-width
+					:icon="['fas', 'check-circle']"
 				/>
-				<openwb-base-text-input
-					title="Letzter Zeitstempel"
-					readonly
-					class="text-right text-monospace"
-					:model-value="
+				Modulmeldung:<br />
+				{{
+					$store.state.mqtt[
+						"openWB/vehicle/" +
+							getVehicleIndex(vehicleKey) +
+							"/get/fault_str"
+					]
+				}}
+			</openwb-base-alert>
+			<openwb-base-heading>Fahrzeugdaten</openwb-base-heading>
+			<openwb-base-number-input
+				title="Ladestand"
+				readonly
+				class="text-right text-monospace"
+				unit="%"
+				:model-value="
+					$store.state.mqtt[
+						'openWB/vehicle/' +
+							getVehicleIndex(vehicleKey) +
+							'/get/soc'
+					]
+				"
+			/>
+			<openwb-base-number-input
+				title="Reichweite"
+				readonly
+				class="text-right text-monospace"
+				unit="km"
+				:model-value="
+					Math.round(
 						$store.state.mqtt[
 							'openWB/vehicle/' +
 								getVehicleIndex(vehicleKey) +
-								'/get/soc_timestamp'
+								'/get/range'
 						]
-					"
-				/>
-			</openwb-base-card>
-		</div>
+					)
+				"
+			/>
+			<openwb-base-text-input
+				title="Letzter Zeitstempel"
+				readonly
+				class="text-right text-monospace"
+				:model-value="
+					$store.state.mqtt[
+						'openWB/vehicle/' +
+							getVehicleIndex(vehicleKey) +
+							'/get/soc_timestamp'
+					]
+				"
+			/>
+		</openwb-base-card>
 	</div>
 </template>
 
@@ -1153,6 +1126,9 @@ export default {
 		},
 		counterConfigs: {
 			get() {
+				if (this.$store.state.mqtt["openWB/general/extern"] === true) {
+					return {};
+				}
 				return this.filterComponentsByType(
 					this.getWildcardTopics(
 						"openWB/system/device/+/component/+/config"
@@ -1168,6 +1144,9 @@ export default {
 		},
 		inverterConfigs: {
 			get() {
+				if (this.$store.state.mqtt["openWB/general/extern"] === true) {
+					return {};
+				}
 				return this.filterComponentsByType(
 					this.getWildcardTopics(
 						"openWB/system/device/+/component/+/config"
@@ -1183,6 +1162,9 @@ export default {
 		},
 		batteryConfigs: {
 			get() {
+				if (this.$store.state.mqtt["openWB/general/extern"] === true) {
+					return {};
+				}
 				return this.filterComponentsByType(
 					this.getWildcardTopics(
 						"openWB/system/device/+/component/+/config"
@@ -1193,6 +1175,9 @@ export default {
 		},
 		vehicleNames: {
 			get() {
+				if (this.$store.state.mqtt["openWB/general/extern"] === true) {
+					return {};
+				}
 				return this.getWildcardTopics("openWB/vehicle/+/name");
 			},
 		},
