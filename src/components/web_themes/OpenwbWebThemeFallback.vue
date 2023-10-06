@@ -1,16 +1,16 @@
 <template>
 	<div
-		class="display-theme-fallback"
+		class="web-theme-fallback"
 		v-if="Object.keys(configuration).length > 0"
 	>
 		<openwb-base-alert subtype="warning">
-			Es wurde keine Konfigurationsseite für das Display Theme "{{
-				displayThemeType
+			Es wurde keine Konfigurationsseite für das Web Theme "{{
+				webThemeType
 			}}" gefunden. Die Einstellungen können als JSON direkt bearbeitet
 			werden.
 		</openwb-base-alert>
 		<openwb-base-textarea
-			title="Konfiguration"
+			title="Theme Konfiguration"
 			subtype="json"
 			:model-value="configuration"
 			@update:model-value="updateConfiguration($event, 'configuration')"
@@ -24,17 +24,17 @@
 		</openwb-base-alert>
 	</div>
 	<openwb-base-alert v-else subtype="info">
-		Das Display Theme "{{ displayThemeType }}" kann nicht angepasst werden.
+		Das Web Theme "{{ webThemeType }}" kann nicht angepasst werden.
 	</openwb-base-alert>
 </template>
 
 <script>
 export default {
-	name: "DisplayThemeFallback",
+	name: "WebThemeFallback",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
-		displayThemeType: { type: String },
+		webThemeType: { type: String },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {

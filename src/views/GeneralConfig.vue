@@ -411,7 +411,7 @@
 					</div>
 				</div>
 			</openwb-base-card> -->
-			<openwb-base-card title="Lade-Log">
+			<openwb-base-card title="Darstellung">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
 						Diese Einstellungen sind nicht verfügbar, solange sich
@@ -419,6 +419,48 @@
 					</openwb-base-alert>
 				</div>
 				<div v-else>
+					<openwb-base-heading class="mt-0">
+						Hauptseite
+					</openwb-base-heading>
+					<div
+						v-if="
+							$store.state.mqtt['openWB/general/web_theme'] !==
+							undefined
+						"
+					>
+						<openwb-base-select-input
+							class="mb-2"
+							title="Theme"
+							:options="webThemeList"
+							:model-value="
+								$store.state.mqtt['openWB/general/web_theme']
+									.type
+							"
+							@update:model-value="updateSelectedWebTheme($event)"
+						/>
+						<openwb-web-theme-proxy
+							v-if="
+								$store.state.mqtt['openWB/general/web_theme']
+									.type
+							"
+							:webThemeType="
+								$store.state.mqtt['openWB/general/web_theme']
+									.type
+							"
+							:configuration="
+								$store.state.mqtt['openWB/general/web_theme']
+									.configuration
+							"
+							@update:configuration="
+								updateConfiguration(
+									'openWB/general/web_theme',
+									$event
+								)
+							"
+						/>
+					</div>
+					<hr />
+					<openwb-base-heading> Lade-Log </openwb-base-heading>
 					<openwb-base-number-input
 						title="Preis je kWh"
 						:min="0"
@@ -463,10 +505,12 @@
 
 <script>
 import ComponentState from "../components/mixins/ComponentState.vue";
+import OpenwbWebThemeProxy from "../components/web_themes/OpenwbWebThemeProxy.vue";
 
 export default {
 	name: "OpenwbGeneralConfig",
 	mixins: [ComponentState],
+	components: { OpenwbWebThemeProxy },
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
@@ -482,8 +526,51 @@ export default {
 				"openWB/general/notifications/smart_home",
 				"openWB/general/price_kwh",
 				"openWB/general/range_unit",
+				"openWB/general/web_theme",
+				"openWB/system/configurable/web_themes",
 			],
 		};
+	},
+	computed: {
+		webThemeList: {
+			get() {
+				return this.$store.state.mqtt[
+					"openWB/system/configurable/web_themes"
+				];
+			},
+		},
+	},
+	methods: {
+		getWebThemeDefaultConfiguration(webThemeType) {
+			const webThemeDefaults = this.webThemeList.find(
+				(element) => element.value == webThemeType
+			);
+			if (
+				Object.prototype.hasOwnProperty.call(
+					webThemeDefaults,
+					"defaults"
+				)
+			) {
+				return { ...webThemeDefaults.defaults.configuration };
+			}
+			console.warn(
+				"no default configuration found for web theme type!",
+				webThemeType
+			);
+			return {};
+		},
+		updateSelectedWebTheme($event) {
+			this.updateState("openWB/general/web_theme", $event, "type");
+			this.updateState(
+				"openWB/general/web_theme",
+				this.getWebThemeDefaultConfiguration($event),
+				"configuration"
+			);
+		},
+		updateConfiguration(key, event) {
+			console.debug("updateConfiguration", key, event);
+			this.updateState(key, event.value, event.object);
+		},
 	},
 };
 </script>
