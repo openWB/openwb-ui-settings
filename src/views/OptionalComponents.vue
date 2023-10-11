@@ -1497,7 +1497,13 @@ export default {
 					"defaults"
 				)
 			) {
-				return { ...displayThemeDefaults.defaults.configuration };
+				return {
+					...JSON.parse(
+						JSON.stringify(
+							displayThemeDefaults.defaults.configuration
+						)
+					),
+				};
 			}
 			console.warn(
 				"no default configuration found for display theme type!",
