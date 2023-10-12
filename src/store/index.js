@@ -4,6 +4,7 @@ let states = {
 	mqtt: {},
 	local: {
 		reloadRequired: false,
+		savingData: false,
 	},
 	text: {
 		rfidWiki:

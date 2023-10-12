@@ -76,8 +76,15 @@ export default {
 		 * Send topics to broker
 		 * @param {Array} topicsToSave - The topics to save
 		 */
-		saveValues(topicsToSave = undefined) {
+		async saveValues(topicsToSave = undefined) {
+			function sleep(milliseconds) {
+				return new Promise((resolve) =>
+					setTimeout(resolve, milliseconds)
+				);
+			}
+
 			console.debug("saving values...");
+			this.$store.state.local.savingData = true;
 			// collect data
 			let topics = {};
 			if (topicsToSave === undefined) {
@@ -98,7 +105,11 @@ export default {
 				let setTopic = topic.replace("openWB/", "openWB/set/");
 				console.debug("saving data:", setTopic, payload);
 				this.doPublish(setTopic, payload);
+				// publishing without sleeping is inconsistent! (mqtt v4.3.7) This may change with newer versions.
+				await sleep(100);
 			}
+			console.debug("done saving data");
+			this.$store.state.local.savingData = false;
 		},
 		/**
 		 * Reload topics from broker

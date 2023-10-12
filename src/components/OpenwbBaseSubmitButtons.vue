@@ -93,12 +93,16 @@ export default {
 	},
 	data() {
 		return {
-			showModalSave: false,
 			showModalReset: false,
 			showModalDefaults: false,
 		};
 	},
 	emits: ["reset", "defaults", "save"],
+	computed: {
+		showModalSave() {
+			return this.$store.state.local.savingData;
+		},
+	},
 	methods: {
 		showResetModal() {
 			this.showModalReset = true;
@@ -128,10 +132,7 @@ export default {
 			} else {
 				console.debug("no form to validate");
 			}
-			this.showModalSave = true;
 			this.$emit("save");
-			// ToDo: find a better way to hide modal
-			window.setTimeout(() => (this.showModalSave = false), 3000);
 		},
 	},
 };
