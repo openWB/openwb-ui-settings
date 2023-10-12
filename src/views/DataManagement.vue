@@ -725,7 +725,9 @@ export default {
 					"defaults"
 				)
 			) {
-				return { ...backupCloudDefaults.defaults };
+				return {
+					...JSON.parse(JSON.stringify(backupCloudDefaults.defaults)),
+				};
 			}
 			console.warn(
 				"no default configuration found for backup cloud type!",

@@ -2279,7 +2279,7 @@ export default {
 				(element) => element.value == socType
 			);
 			if (Object.prototype.hasOwnProperty.call(socDefaults, "defaults")) {
-				return { ...socDefaults.defaults };
+				return { ...JSON.parse(JSON.stringify(socDefaults.defaults)) };
 			}
 			console.warn(
 				"no default configuration found for soc type!",

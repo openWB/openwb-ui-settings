@@ -551,7 +551,11 @@ export default {
 					"defaults"
 				)
 			) {
-				return { ...webThemeDefaults.defaults.configuration };
+				return {
+					...JSON.parse(
+						JSON.stringify(webThemeDefaults.defaults.configuration)
+					),
+				};
 			}
 			console.warn(
 				"no default configuration found for web theme type!",
