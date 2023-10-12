@@ -108,7 +108,7 @@ export default {
 				// publishing without sleeping is inconsistent! (mqtt v4.3.7) This may change with newer versions.
 				await sleep(100);
 			}
-			console.log("done saving data");
+			console.debug("done saving data");
 			this.$store.state.local.savingData = false;
 		},
 		/**
