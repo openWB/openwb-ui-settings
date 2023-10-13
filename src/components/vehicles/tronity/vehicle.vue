@@ -21,6 +21,7 @@
 		<openwb-base-text-input
 			title="Client ID"
 			subtype="text"
+			required
 			:model-value="configuration.client_id"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.client_id')
@@ -34,6 +35,7 @@
 		<openwb-base-text-input
 			title="Client Secret"
 			subtype="password"
+			required
 			:model-value="configuration.client_secret"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.client_secret')
