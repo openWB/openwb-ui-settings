@@ -73,8 +73,14 @@
 					<template #help>
 						Im secondary-Modus kann die openWB über die
 						Modbus-Schnittstelle gesteuert werden. Die Register sind
-						hier dokumentiert. Bei aktivierter Modbus-Schnittstelle
-						darf die openWB nicht von einer primary-openWB gesteuert
+						<a
+							href="https://openwb.de/main/wp-content/uploads/2023/10/ModbusTCP-openWB-series2-Pro-1.pdf"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							hier</a
+						>dokumentiert. Bei aktivierter Modbus-Schnittstelle darf
+						die openWB nicht von einer primary-openWB gesteuert
 						werden.
 					</template>
 				</openwb-base-button-group-input>
