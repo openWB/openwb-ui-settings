@@ -120,6 +120,92 @@
 					</openwb-base-button-group-input>
 				</div>
 			</openwb-base-card>
+			<openwb-base-card title="Optional">
+				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+					<openwb-base-alert subtype="info">
+						Diese Einstellungen sind nicht verfügbar, solange sich
+						diese openWB im Steuerungsmodus "secondary" befindet.
+					</openwb-base-alert>
+				</div>
+				<div v-else>
+					<openwb-base-heading>
+						Strompreisbasiertes Laden
+					</openwb-base-heading>
+					<openwb-base-alert subtype="info">
+						Bei Sofortladen wird nur geladen, wenn der Strompreis
+						unter dem maximalen angegeben Strompreis liegt. Für
+						Zielladen wird die Ladedauer ermittelt und dann zu den
+						günstigsten Stunden geladen.
+					</openwb-base-alert>
+					<openwb-base-select-input
+						class="mb-2"
+						title="Anbieter"
+						:options="electricityTariffList"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/optional/et/config/provider'
+							]
+								? $store.state.mqtt[
+										'openWB/optional/et/config/provider'
+								  ].type
+								: ''
+						"
+						@update:model-value="
+							updateSelectedElectricityTariff($event)
+						"
+					/>
+					<div
+						v-if="
+							$store.state.mqtt[
+								'openWB/optional/et/config/provider'
+							] &&
+							$store.state.mqtt[
+								'openWB/optional/et/config/provider'
+							].type
+						"
+					>
+						<openwb-electricity-tariff-proxy
+							:electricityTariffType="
+								$store.state.mqtt[
+									'openWB/optional/et/config/provider'
+								].type
+							"
+							:configuration="
+								$store.state.mqtt[
+									'openWB/optional/et/config/provider'
+								].configuration
+							"
+							@update:configuration="
+								updateConfiguration(
+									'openWB/optional/et/config/provider',
+									$event
+								)
+							"
+						/>
+						<openwb-base-heading>
+								Einstellungen für strompreisbasiertes Laden
+							</openwb-base-heading>
+						<openwb-base-number-input
+								title="Maximaler Strompreis für Sofortladen"
+								min="-80"
+								max="80"
+								step="0.01"
+								unit="ct/kWh"
+								:model-value="
+									$store.state.mqtt[
+										'openWB/optional/et/config/max_price'
+									] * 100000
+								"
+								@update:model-value="
+									updateState(
+										'openWB/optional/et/config/max_price',
+										$event / 100000
+									)
+								"
+							/>
+					</div>
+				</div>
+			</openwb-base-card>
 			<openwb-base-submit-buttons
 				formName="generalChargeConfigForm"
 				@save="$emit('save')"
@@ -132,10 +218,14 @@
 
 <script>
 import ComponentState from "../components/mixins/ComponentState.vue";
+import OpenwbElectricityTariffProxy from "../components/electricity_tariffs/OpenwbElectricityTariffProxy.vue";
 
 export default {
 	name: "OpenwbGeneralChargeConfig",
 	mixins: [ComponentState],
+	components: {
+		OpenwbElectricityTariffProxy,
+	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
@@ -143,8 +233,53 @@ export default {
 				"openWB/general/chargemode_config/retry_failed_phase_switches",
 				"openWB/general/chargemode_config/unbalanced_load",
 				"openWB/general/chargemode_config/unbalanced_load_limit",
+				"openWB/optional/et/config/provider",
+				"openWB/optional/et/config/max_price",
+				"openWB/system/configurable/electricity_tariffs",
 			],
 		};
+	},
+	computed: {
+		electricityTariffList() {
+			return this.$store.state.mqtt[
+				"openWB/system/configurable/electricity_tariffs"
+			];
+		},
+	},
+	methods: {
+		getElectricityTariffDefaultConfiguration(electricityTariffType) {
+			const electricityTariffDefaults = this.electricityTariffList.find(
+				(element) => element.value == electricityTariffType
+			);
+			if (
+				Object.prototype.hasOwnProperty.call(
+					electricityTariffDefaults,
+					"defaults"
+				)
+			) {
+				return { ...electricityTariffDefaults.defaults };
+			}
+			console.warn(
+				"no default configuration found for electricity tariff type!",
+				electricityTariffType
+			);
+			return {};
+		},
+		updateSelectedElectricityTariff($event) {
+			this.updateState(
+				"openWB/optional/et/config/provider",
+				$event,
+				"type"
+			);
+			this.updateState(
+				"openWB/optional/et/config/provider",
+				this.getElectricityTariffDefaultConfiguration($event)
+			);
+		},
+		updateConfiguration(key, event) {
+			console.debug("updateConfiguration", key, event);
+			this.updateState(key, event.value, event.object);
+		},
 	},
 };
 </script>
