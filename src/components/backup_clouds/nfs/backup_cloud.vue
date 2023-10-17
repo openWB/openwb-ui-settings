@@ -6,6 +6,7 @@
 		</openwb-base-heading>
 		<openwb-base-text-input
 			title="Pfad zum NFS Share"
+			pattern="^([^/: ]+):(\/[^/: ]+)+$"
 			:model-value="configuration.nfs_share"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.nfs_share')
