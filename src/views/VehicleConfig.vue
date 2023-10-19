@@ -326,7 +326,12 @@
 								"
 							>
 								<template #help>
-									Wenn Ladepunkt und Fahrzeug das Aulsesen des SoCs unterstützen, wird nach dem Anstecken der SoC aus dem Fahrzeug ausgelesen und während der Ladung berechnet. Das Auslesen des SoC aus dem Fahrzeug ist akutell nur mit einer openWB Pro möglich.
+									Wenn Ladepunkt und Fahrzeug das Auslesen des
+									SoCs unterstützen, wird nach dem Anstecken
+									der SoC aus dem Fahrzeug ausgelesen und
+									während der Ladung berechnet. Das Auslesen
+									des SoC aus dem Fahrzeug ist aktuell nur mit
+									einer openWB Pro möglich.
 								</template>
 							</openwb-base-button-group-input>
 							<openwb-base-number-input
@@ -351,32 +356,36 @@
 								"
 							>
 								<template #help>
-									Durch Verluste in der Ladeelektronik (z. B. Umwandlung
-									Wechselspannung in Gleichspannung) gelangt nicht die komplette
-									Energie, welche durch den Zähler in der Wallbox gemessen wird,
-									in den Akku des Fahrzeugs. Der anzugebende Wert liegt bei
-									gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der
-									Zoe dar, dessen Chameleonlader je nach Modellversion und
-									freigegebener Leistung der Wallbox teilweise nur auf ca. 50%
-									kommt.<br />
-									Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung
-									mehrere Prozent auseinander, dann kann mit dieser Einstellung
-									eine Feinabstimmung erfolgen: <br />
-									SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent
-									reduzieren<br />
-									SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent
-									erhöhen<br />
+									Durch Verluste in der Ladeelektronik (z. B.
+									Umwandlung Wechselspannung in
+									Gleichspannung) gelangt nicht die komplette
+									Energie, welche durch den Zähler in der
+									Wallbox gemessen wird, in den Akku des
+									Fahrzeugs. Der anzugebende Wert liegt bei
+									gängigen Fahrzeugen im Bereich 90-95%. Eine
+									Ausnahme stellt der Zoe dar, dessen
+									Chameleon-Lader je nach Modellversion und
+									freigegebener Leistung der Wallbox teilweise
+									nur auf ca. 50% kommt.<br />
+									Liegen die Angaben der Wallbox und des
+									Fahrzeugs nach der Ladung mehrere Prozent
+									auseinander, dann kann mit dieser
+									Einstellung eine Feinabstimmung erfolgen:
+									<br />
+									SoC an der Wallbox zu hoch: Wirkungsgrad um
+									ein paar Prozent reduzieren<br />
+									SoC an der Wallbox zu gering: Wirkungsgrad
+									um ein paar Prozent erhöhen<br />
 								</template>
 							</openwb-base-number-input>
 							<openwb-base-heading>
 								Aktualisierung der Fahrzeugdaten
 								<template #help>
-									Einige Hersteller begrenzen die
-									möglichen Abfragen. Sobald ein gewisses
-									Limit in einem Zeitraum überschritten
-									wird, werden weitere Anfragen blockiert.
-									Die Zeitintervalle sollten daher nicht
-									zu klein gewählt werden.
+									Einige Hersteller begrenzen die möglichen
+									Abfragen. Sobald ein gewisses Limit in einem
+									Zeitraum überschritten wird, werden weitere
+									Anfragen blockiert. Die Zeitintervalle
+									sollten daher nicht zu klein gewählt werden.
 								</template>
 							</openwb-base-heading>
 							<openwb-base-number-input
@@ -400,9 +409,9 @@
 								"
 							>
 								<template #help>
-									Der Ladestand des Fahrzeugs (SoC) wird
-									bei einem laufenden Ladevorgang in dem
-									hier eingestellten Intervall in Minuten
+									Der Ladestand des Fahrzeugs (SoC) wird bei
+									einem laufenden Ladevorgang in dem hier
+									eingestellten Intervall in Minuten
 									abgefragt.
 								</template>
 							</openwb-base-number-input>
@@ -427,10 +436,9 @@
 								"
 							>
 								<template #help>
-									Der Ladestand des Fahrzeugs (SoC) wird
-									in dem hier eingestellten Intervall in
-									Minuten abgefragt, falls kein
-									Ladevorgang aktiv ist.
+									Der Ladestand des Fahrzeugs (SoC) wird in
+									dem hier eingestellten Intervall in Minuten
+									abgefragt, falls kein Ladevorgang aktiv ist.
 								</template>
 							</openwb-base-number-input>
 							<openwb-base-button-group-input
@@ -466,8 +474,8 @@
 							>
 								<template #help>
 									Wird hier "Ja" ausgewählt, dann wird der
-									Ladestand des Fahrzeugs nur abgefragt,
-									wenn das Ladekabel angesteckt ist.
+									Ladestand des Fahrzeugs nur abgefragt, wenn
+									das Ladekabel angesteckt ist.
 								</template>
 							</openwb-base-button-group-input>
 							<openwb-vehicle-proxy
