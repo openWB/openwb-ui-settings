@@ -135,6 +135,44 @@
 			</template>
 			<pre>{{ updateLog }}</pre>
 		</openwb-base-card>
+		<openwb-base-card
+			title="Protokoll des Remote-Dienstes"
+			class="mt-3"
+			:collapsible="true"
+			:collapsed="true"
+		>
+			<template #actions>
+				<openwb-base-avatar
+					class="bg-success clickable"
+					@click="loadRemoteSupportLog($event)"
+				>
+					<font-awesome-icon
+						fixed-width
+						:icon="['fas', 'file-download']"
+					/>
+				</openwb-base-avatar>
+			</template>
+			<pre>{{ remoteSupportLog }}</pre>
+		</openwb-base-card>
+		<openwb-base-card
+			title="Protokoll des SmartHome Dienstes"
+			class="mt-3"
+			:collapsible="true"
+			:collapsed="true"
+		>
+			<template #actions>
+				<openwb-base-avatar
+					class="bg-success clickable"
+					@click="loadSmartHomeLog($event)"
+				>
+					<font-awesome-icon
+						fixed-width
+						:icon="['fas', 'file-download']"
+					/>
+				</openwb-base-avatar>
+			</template>
+			<pre>{{ smartHomeLog }}</pre>
+		</openwb-base-card>
 	</div>
 </template>
 
@@ -164,6 +202,8 @@ export default {
 			mqttLog: "-- noch nicht geladen --",
 			socLog: "-- noch nicht geladen --",
 			updateLog: "-- noch nicht geladen --",
+			remoteSupportLog: "--noch nicht geladen --",
+			smartHomeLog: "--noch nicht geladen --",
 		};
 	},
 	methods: {
@@ -228,6 +268,24 @@ export default {
 			this.getFilePromise("/openWB/data/log/update.log").then(
 				(result) => {
 					this.updateLog = result;
+				}
+			);
+		},
+		loadRemoteSupportLog(event) {
+			event.stopPropagation();
+			this.remoteSupportLog = "wird aktualisiert...";
+			this.getFilePromise("/openWB/ramdisk/remote_support.log").then(
+				(result) => {
+					this.remoteSupportLog = result;
+				}
+			);
+		},
+		loadSmartHomeLog(event) {
+			event.stopPropagation();
+			this.smartHomeLog = "wird aktualisiert...";
+			this.getFilePromise("/openWB/ramdisk/smarthome.log").then(
+				(result) => {
+					this.smartHomeLog = result;
 				}
 			);
 		},

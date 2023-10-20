@@ -12,13 +12,6 @@
 	</openwb-base-modal-dialog>
 	<!-- main content -->
 	<div class="cloud-config">
-		<openwb-base-alert subtype="danger">
-			Für diese Version gibt es noch keine Weboberfläche in der Cloud!
-			Wenn der Zugang eingerichtet wurde, können z. B. Daten mit einem
-			MQTT-Client von dem MQTT-Broker web.openwb.de abgerufen werden.
-			Ebenfalls kann ein Support-Tunnel aufgebaut werden. Weitere
-			Funktionen sind in der Entwicklung.
-		</openwb-base-alert>
 		<openwb-base-alert
 			v-if="
 				$store.state.mqtt[
@@ -73,7 +66,7 @@
 						<openwb-base-alert subtype="info">
 							Diese openWB befindet sich im Steuerungsmodus
 							"secondary". Bitte richten Sie die openWB Cloud auf
-							der regelnden openWB ein.
+							der übergeordneten primary openWB ein.
 						</openwb-base-alert>
 					</div>
 					<div v-else>
@@ -167,7 +160,7 @@
 						<openwb-base-alert subtype="info">
 							Diese openWB befindet sich im Steuerungsmodus
 							"secondary". Bitte richten Sie die openWB Cloud auf
-							der regelnden openWB ein.
+							der übergeordneten primary openWB ein.
 						</openwb-base-alert>
 					</div>
 					<div v-else>
@@ -246,10 +239,11 @@
 						<span>
 							Mit diesen Zugangsdaten können Sie sich in der
 							<a
-								href="https://web.openwb.de/"
+								href="https://remote.openwb.de/"
 								target="_blank"
 								rel="noopener noreferrer"
-								>openWB Cloud
+							>
+								openWB Cloud
 							</a>
 							anmelden.
 						</span>
