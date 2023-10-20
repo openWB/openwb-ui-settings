@@ -19,12 +19,19 @@
 						v-model="controlMode"
 					>
 						<template #help>
-							Mit dieser Einstellung wird der angestrebte
-							Regelbereich festgelegt. "Einspeisung" und "Bezug"
-							definieren einen Bereich mit minimaler Einspeisung
-							(-230W, 0W) bzw. minimalem Netzbezug (0W, 230W). Mit
-							der Auswahl "individuell" kann ein eigener
-							Regelbereich definiert werden.
+							Der Regelbereich wird auf den gesamten Überschuss
+							angewendet, bevor die PV-Regelung durchgeführt wird.
+							D.h. der Regelbereich wird auf alle Einstellungen
+							für das PV-Laden angewendet und nur einmal
+							unabhängig von der Anzahl der angesteckten
+							Fahrzeuge. Liegt der Überschuss im vorgebenen
+							Regelbereich, wird nicht nachgeregelt. Liegt der
+							Überschuss außerhalb des Regelbereichs, wird in die
+							Mitte des Regelbereichs nachgeregelt.<br />
+							"Einspeisung" und "Bezug" definieren einen Bereich
+							mit minimaler Einspeisung (-230W, 0W) bzw. minimalem
+							Netzbezug (0W, 230W). Mit der Auswahl "individuell"
+							kann ein eigener Regelbereich definiert werden.
 						</template>
 					</openwb-base-button-group-input>
 					<openwb-base-number-input
