@@ -5,8 +5,23 @@
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
-			title="Pfad zur Freigabe"
+			title="Server"
 			required
+			:model-value="configuration.smb_server"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.smb_server')
+			"
+		/>
+		<openwb-base-text-input
+			title="Freigabe"
+			required
+			:model-value="configuration.smb_share"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.smb_share')
+			"
+		/>
+		<openwb-base-text-input
+			title="Unterordner (optional)"
 			:model-value="configuration.smb_path"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.smb_path')
