@@ -24,6 +24,7 @@
 		<openwb-base-text-input
 			title="Unterordner (optional)"
 			:model-value="configuration.smb_path"
+			pattern="(.*/)*"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.smb_path')
 			"
