@@ -6,6 +6,7 @@
 		</openwb-base-heading>
 		<openwb-base-text-input
 			title="Server"
+			subtype="host"
 			required
 			:model-value="configuration.smb_server"
 			@update:model-value="
@@ -26,9 +27,16 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.smb_path')
 			"
-		/>
+			>
+			<template #help>
+				Jeder Unterordner muss mit / enden.<br />
+				Beispiel 1: openwb/ <br />
+				Beispiel 2: openwb/lp2/
+			</template>	
+		</openwb-base-text-input>
 		<openwb-base-text-input
 			title="Benutzer"
+			subtype="user"
 			:model-value="configuration.smb_user"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.smb_user')
