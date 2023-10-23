@@ -24,13 +24,14 @@
 		<openwb-base-text-input
 			title="Unterordner (optional)"
 			:model-value="configuration.smb_path"
-			pattern="(.*/)*"
+			pattern='([^\\:"\|*?<>]+/)*'
 			@update:model-value="
 				updateConfiguration($event, 'configuration.smb_path')
 			"
 			>
 			<template #help>
 				Jeder Unterordner muss mit / enden.<br />
+				Die Zeichen \:"|*?&lt&gt sind verboten!<br />
 				Beispiel 1: openwb/ <br />
 				Beispiel 2: openwb/lp2/
 			</template>	
