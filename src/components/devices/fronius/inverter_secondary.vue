@@ -1,5 +1,5 @@
 <template>
-	<div class="device-fronius-inverter">
+	<div class="device-fronius-inverter-secondary">
 		<openwb-base-heading>
 			Einstellungen für einen zusätzlichen Fronius Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
@@ -17,7 +17,7 @@
 
 <script>
 export default {
-	name: "DeviceFroniusInverter",
+	name: "DeviceFroniusSecondaryInverter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
