@@ -200,7 +200,7 @@
 				},
 			]"
 		/>
-		<!-- <openwb-base-heading>Ansicht "Status"</openwb-base-heading>
+		<openwb-base-heading>Ansicht "Status"</openwb-base-heading>
 		<openwb-base-button-group-input
 			title="Status anzeigen"
 			:model-value="configuration.enable_status_view"
@@ -219,7 +219,7 @@
 					class: 'btn-outline-success',
 				},
 			]"
-		/> -->
+		/>
 	</div>
 </template>
 
