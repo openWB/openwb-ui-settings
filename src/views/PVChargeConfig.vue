@@ -138,7 +138,6 @@
 					<hr />
 					<openwb-base-number-input
 						title="Abschaltschwelle"
-						:min="0"
 						:step="0.05"
 						unit="kW"
 						:model-value="
