@@ -334,50 +334,6 @@
 									einer openWB Pro möglich.
 								</template>
 							</openwb-base-button-group-input>
-							<openwb-base-number-input
-								title="Wirkungsgrad der Ladeelektronik"
-								unit="%"
-								required
-								:model-value="
-									$store.state.mqtt[
-										'openWB/vehicle/' +
-											vehicleId +
-											'/soc_module/general_config'
-									].efficiency
-								"
-								@update:model-value="
-									updateState(
-										'openWB/vehicle/' +
-											vehicleId +
-											'/soc_module/general_config',
-										$event,
-										'efficiency'
-									)
-								"
-							>
-								<template #help>
-									Durch Verluste in der Ladeelektronik (z. B.
-									Umwandlung Wechselspannung in
-									Gleichspannung) gelangt nicht die komplette
-									Energie, welche durch den Zähler in der
-									Wallbox gemessen wird, in den Akku des
-									Fahrzeugs. Der anzugebende Wert liegt bei
-									gängigen Fahrzeugen im Bereich 90-95%. Eine
-									Ausnahme stellt der Zoe dar, dessen
-									Chameleon-Lader je nach Modellversion und
-									freigegebener Leistung der Wallbox teilweise
-									nur auf ca. 50% kommt.<br />
-									Liegen die Angaben der Wallbox und des
-									Fahrzeugs nach der Ladung mehrere Prozent
-									auseinander, dann kann mit dieser
-									Einstellung eine Feinabstimmung erfolgen:
-									<br />
-									SoC an der Wallbox zu hoch: Wirkungsgrad um
-									ein paar Prozent reduzieren<br />
-									SoC an der Wallbox zu gering: Wirkungsgrad
-									um ein paar Prozent erhöhen<br />
-								</template>
-							</openwb-base-number-input>
 							<openwb-base-heading>
 								Aktualisierung der Fahrzeugdaten
 								<template #help>
@@ -684,6 +640,44 @@
 								absichtlich, um eine höhere Lebensdauer der
 								Akkus zu erreichen. Gängig sind eine Drosselung
 								auf 90% der angegebenen Brutto-Kapazität.
+							</template>
+						</openwb-base-number-input>
+						<openwb-base-number-input
+							title="Wirkungsgrad der Ladeelektronik"
+							unit="%"
+							required
+							:model-value="template.efficiency"
+							@update:model-value="
+								updateState(
+									key,
+									$event,
+									'efficiency'
+								)
+							"
+						>
+							<template #help>
+								<template #help>
+									Durch Verluste in der Ladeelektronik (z. B.
+									Umwandlung Wechselspannung in
+									Gleichspannung) gelangt nicht die komplette
+									Energie, welche durch den Zähler in der
+									Wallbox gemessen wird, in den Akku des
+									Fahrzeugs. Der anzugebende Wert liegt bei
+									gängigen Fahrzeugen im Bereich 90-95%. Eine
+									Ausnahme stellt der Zoe dar, dessen
+									Chameleon-Lader je nach Modellversion und
+									freigegebener Leistung der Wallbox teilweise
+									nur auf ca. 50% kommt.<br />
+									Liegen die Angaben der Wallbox und des
+									Fahrzeugs nach der Ladung mehrere Prozent
+									auseinander, dann kann mit dieser
+									Einstellung eine Feinabstimmung erfolgen:
+									<br />
+									SoC an der Wallbox zu hoch: Wirkungsgrad um
+									ein paar Prozent reduzieren<br />
+									SoC an der Wallbox zu gering: Wirkungsgrad
+									um ein paar Prozent erhöhen<br />
+								</template>
 							</template>
 						</openwb-base-number-input>
 						<openwb-base-number-input
