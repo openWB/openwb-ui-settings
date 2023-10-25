@@ -1,7 +1,7 @@
 <template>
 	<div class="device-fronius-inverter-secondary">
 		<openwb-base-heading>
-			Einstellungen für einen zusätzlichen Fronius Wechselrichter
+			Einstellungen für einen sekundären Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-number-input
