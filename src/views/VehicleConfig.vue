@@ -648,11 +648,7 @@
 							required
 							:model-value="template.efficiency"
 							@update:model-value="
-								updateState(
-									key,
-									$event,
-									'efficiency'
-								)
+								updateState(key, $event, 'efficiency')
 							"
 						>
 							<template #help>
