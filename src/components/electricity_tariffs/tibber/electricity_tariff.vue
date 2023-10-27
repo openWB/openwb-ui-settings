@@ -32,7 +32,7 @@
 			title="Home-ID"
 			:model-value="configuration.home_id"
 			@update:model-value="
-			updateConfiguration($event, 'configuration.home_id')
+				updateConfiguration($event, 'configuration.home_id')
 			"
 		/>
 	</div>

@@ -135,7 +135,11 @@
 						Bei Sofortladen wird nur geladen, wenn der Strompreis
 						unter dem maximalen angegeben Strompreis liegt. Für
 						Zielladen wird die Ladedauer ermittelt und dann zu den
-						günstigsten Stunden geladen.
+						günstigsten Stunden geladen.<br />
+						Wenn keine Preise abgefragt werden können, wird bei
+						Sofortladen immer geladen und bei Zielladen zunächst mit
+						PV-Überschuss und zum Erreichen des Zieltermins mit
+						Netzstrom.
 					</openwb-base-alert>
 					<openwb-base-select-input
 						class="mb-2"
@@ -183,26 +187,26 @@
 							"
 						/>
 						<openwb-base-heading>
-								Einstellungen für strompreisbasiertes Laden
-							</openwb-base-heading>
+							Einstellungen für strompreisbasiertes Laden
+						</openwb-base-heading>
 						<openwb-base-number-input
-								title="Maximaler Strompreis für Sofortladen"
-								min="-80"
-								max="80"
-								step="0.01"
-								unit="ct/kWh"
-								:model-value="
-									$store.state.mqtt[
-										'openWB/optional/et/config/max_price'
-									] * 100000
-								"
-								@update:model-value="
-									updateState(
-										'openWB/optional/et/config/max_price',
-										$event / 100000
-									)
-								"
-							/>
+							title="Maximaler Strompreis für Sofortladen"
+							min="-80"
+							max="80"
+							step="0.01"
+							unit="ct/kWh"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/optional/et/config/max_price'
+								] * 100000
+							"
+							@update:model-value="
+								updateState(
+									'openWB/optional/et/config/max_price',
+									$event / 100000
+								)
+							"
+						/>
 					</div>
 				</div>
 			</openwb-base-card>
