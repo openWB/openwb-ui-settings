@@ -745,6 +745,31 @@
 				<font-awesome-icon fixed-width :icon="['fas', 'car-battery']" />
 				Alle Speicher
 			</template>
+			<openwb-base-alert
+				:subtype="
+					statusLevel[$store.state.mqtt['openWB/bat/get/fault_state']]
+				"
+			>
+				<font-awesome-icon
+					v-if="$store.state.mqtt['openWB/bat/get/fault_state'] == 1"
+					fixed-width
+					:icon="['fas', 'exclamation-triangle']"
+				/>
+				<font-awesome-icon
+					v-else-if="
+						$store.state.mqtt['openWB/bat/get/fault_state'] == 2
+					"
+					fixed-width
+					:icon="['fas', 'times-circle']"
+				/>
+				<font-awesome-icon
+					v-else
+					fixed-width
+					:icon="['fas', 'check-circle']"
+				/>
+				Modulmeldung:<br />
+				{{ $store.state.mqtt["openWB/bat/get/fault_str"] }}
+			</openwb-base-alert>
 			<openwb-base-heading>Zählerstände</openwb-base-heading>
 			<openwb-base-text-input
 				title="Ladung"
