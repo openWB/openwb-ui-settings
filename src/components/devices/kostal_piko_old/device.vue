@@ -5,14 +5,20 @@
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
-			title="IP oder Hostname"
-			subtype="host"
+			title="URL"
+			subtype="url"
 			required
-			:model-value="configuration.ip_address"
+			:model-value="configuration.url"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.ip_address')
+				updateConfiguration($event, 'configuration.url')
 			"
-		/>
+		>
+			<template #help>
+				Es wird eine komplette URL inklusive Protokoll erwartet.
+				Normalerweise ist der Wechselrichter über "http://IP" zu
+				erreichen.
+			</template>
+		</openwb-base-text-input>
 		<openwb-base-text-input
 			title="Benutzername"
 			subtype="user"
