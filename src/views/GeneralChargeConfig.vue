@@ -132,25 +132,23 @@
 						Strompreisbasiertes Laden
 					</openwb-base-heading>
 					<openwb-base-alert subtype="info">
-						Bei Sofortladen wird nur geladen, wenn der Strompreis
-						unter dem maximalen angegeben Strompreis liegt. Für
-						Zielladen wird die Ladedauer ermittelt und dann zu den
-						günstigsten Stunden geladen.<br />
+						Bei Sofort- und Zeitladen wird nur geladen, wenn der
+						Strompreis unter dem maximalen angegeben Strompreis
+						liegt. Für Zielladen wird die Ladedauer ermittelt und
+						dann zu den günstigsten Stunden geladen.<br />
 						Wenn keine Preise abgefragt werden können, wird bei
-						Sofortladen immer geladen und bei Zielladen zunächst mit
-						PV-Überschuss und zum Erreichen des Zieltermins mit
-						Netzstrom.
+						Sofort- und Zeitladen immer geladen und bei Zielladen
+						zunächst mit PV-Überschuss und zum Erreichen des
+						Zieltermins mit Netzstrom.
 					</openwb-base-alert>
 					<openwb-base-select-input
 						class="mb-2"
 						title="Anbieter"
 						:options="electricityTariffList"
 						:model-value="
-							$store.state.mqtt[
-								'openWB/optional/et/config/provider'
-							]
+							$store.state.mqtt['openWB/optional/et/provider']
 								? $store.state.mqtt[
-										'openWB/optional/et/config/provider'
+										'openWB/optional/et/provider'
 								  ].type
 								: ''
 						"
@@ -160,50 +158,24 @@
 					/>
 					<div
 						v-if="
-							$store.state.mqtt[
-								'openWB/optional/et/config/provider'
-							] &&
-							$store.state.mqtt[
-								'openWB/optional/et/config/provider'
-							].type
+							$store.state.mqtt['openWB/optional/et/provider'] &&
+							$store.state.mqtt['openWB/optional/et/provider']
+								.type
 						"
 					>
 						<openwb-electricity-tariff-proxy
 							:electricityTariffType="
-								$store.state.mqtt[
-									'openWB/optional/et/config/provider'
-								].type
+								$store.state.mqtt['openWB/optional/et/provider']
+									.type
 							"
 							:configuration="
-								$store.state.mqtt[
-									'openWB/optional/et/config/provider'
-								].configuration
+								$store.state.mqtt['openWB/optional/et/provider']
+									.configuration
 							"
 							@update:configuration="
 								updateConfiguration(
-									'openWB/optional/et/config/provider',
+									'openWB/optional/et/provider',
 									$event
-								)
-							"
-						/>
-						<openwb-base-heading>
-							Einstellungen für strompreisbasiertes Laden
-						</openwb-base-heading>
-						<openwb-base-number-input
-							title="Maximaler Strompreis für Sofortladen"
-							min="-80"
-							max="80"
-							step="0.01"
-							unit="ct/kWh"
-							:model-value="
-								$store.state.mqtt[
-									'openWB/optional/et/config/max_price'
-								] * 100000
-							"
-							@update:model-value="
-								updateState(
-									'openWB/optional/et/config/max_price',
-									$event / 100000
 								)
 							"
 						/>
@@ -237,8 +209,7 @@ export default {
 				"openWB/general/chargemode_config/retry_failed_phase_switches",
 				"openWB/general/chargemode_config/unbalanced_load",
 				"openWB/general/chargemode_config/unbalanced_load_limit",
-				"openWB/optional/et/config/provider",
-				"openWB/optional/et/config/max_price",
+				"openWB/optional/et/provider",
 				"openWB/system/configurable/electricity_tariffs",
 			],
 		};
@@ -270,13 +241,9 @@ export default {
 			return {};
 		},
 		updateSelectedElectricityTariff($event) {
+			this.updateState("openWB/optional/et/provider", $event, "type");
 			this.updateState(
-				"openWB/optional/et/config/provider",
-				$event,
-				"type"
-			);
-			this.updateState(
-				"openWB/optional/et/config/provider",
+				"openWB/optional/et/provider",
 				this.getElectricityTariffDefaultConfiguration($event)
 			);
 		},
