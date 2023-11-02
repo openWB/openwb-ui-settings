@@ -118,6 +118,62 @@
 							zurückgesetzt.
 						</template>
 					</openwb-base-button-group-input>
+					<hr />
+					<openwb-base-heading>
+						Berechnung der Ladekosten
+						<template #help>
+							Zur Berechnung der Ladekosten im Lade-Log werden
+							stundenweise die Anteile der Stromquellen (Speicher,
+							Netz, PV) berechnet und mit den hier angegebenen
+							Preisen multipliziert.<br />
+							Ist die Abrechnung über das Ladelog, z.B. mit dem
+							Arbeitgeber, vereinbart, ist bei allen drei Feldern
+							der vereinbarte Preis einzutragen.
+						</template>
+					</openwb-base-heading>
+					<openwb-base-number-input
+						title="Preis für Netzbezug"
+						:min="0"
+						:step="0.0001"
+						unit="ct/kWh"
+						:model-value="
+							$store.state.mqtt['openWB/general/prices/grid']
+						"
+						@update:model-value="
+							updateState('openWB/general/prices/grid', $event)
+						"
+					>
+						<template #help>
+							Ist ein Anbieter für strompreisbasiertes Laden
+							konfiguriert, wird statt des hier angegebenen
+							Netzpreises der Strompreis des Anbieters verwendet.
+						</template>
+					</openwb-base-number-input>
+					<openwb-base-number-input
+						title="Preis für Speicherentladung"
+						:min="0"
+						:step="0.0001"
+						unit="ct/kWh"
+						:model-value="
+							$store.state.mqtt['openWB/general/prices/bat']
+						"
+						@update:model-value="
+							updateState('openWB/general/prices/bat', $event)
+						"
+					>
+					</openwb-base-number-input>
+					<openwb-base-number-input
+						title="Preis für PV-Strom"
+						:min="0"
+						:step="0.0001"
+						unit="ct/kWh"
+						:model-value="
+							$store.state.mqtt['openWB/general/prices/pv']
+						"
+						@update:model-value="
+							updateState('openWB/general/prices/pv', $event)
+						"
+					/>
 				</div>
 			</openwb-base-card>
 			<openwb-base-card title="Optional">
