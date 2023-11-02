@@ -1156,11 +1156,11 @@
 								max="80"
 								step="0.01"
 								unit="ct/kWh"
-								:model-value="template.et.max_price"
+								:model-value="template.et.max_price * 100000"
 								@update:model-value="
 									updateState(
 										templateKey,
-										$event,
+										$event / 100000,
 										'et.max_price'
 									)
 								"
