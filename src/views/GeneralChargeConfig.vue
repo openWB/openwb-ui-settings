@@ -98,13 +98,13 @@
 					<openwb-base-number-input
 						title="Preis für Netzbezug"
 						:min="0"
-						:step="0.0001"
+						:step="0.00001"
 						unit="ct/kWh"
 						:model-value="
-							$store.state.mqtt['openWB/general/prices/grid']
+							$store.state.mqtt['openWB/general/prices/grid'] * 100000
 						"
 						@update:model-value="
-							updateState('openWB/general/prices/grid', $event)
+							updateState('openWB/general/prices/grid', $event / 100000)
 						"
 					>
 						<template #help>
@@ -118,26 +118,26 @@
 					<openwb-base-number-input
 						title="Preis für Speicherentladung"
 						:min="0"
-						:step="0.0001"
+						:step="0.00001"
 						unit="ct/kWh"
 						:model-value="
-							$store.state.mqtt['openWB/general/prices/bat']
+							$store.state.mqtt['openWB/general/prices/bat'] * 100000
 						"
 						@update:model-value="
-							updateState('openWB/general/prices/bat', $event)
+							updateState('openWB/general/prices/bat', $event / 100000)
 						"
 					>
 					</openwb-base-number-input>
 					<openwb-base-number-input
 						title="Preis für PV-Strom"
 						:min="0"
-						:step="0.0001"
+						:step="0.00001"
 						unit="ct/kWh"
 						:model-value="
-							$store.state.mqtt['openWB/general/prices/pv']
+							$store.state.mqtt['openWB/general/prices/pv'] * 100000
 						"
 						@update:model-value="
-							updateState('openWB/general/prices/pv', $event)
+							updateState('openWB/general/prices/pv', $event / 100000)
 						"
 					/>
 				</div>
@@ -230,6 +230,9 @@ export default {
 				"openWB/general/extern",
 				"openWB/general/chargemode_config/unbalanced_load",
 				"openWB/general/chargemode_config/unbalanced_load_limit",
+				"openWB/general/prices/bat",
+				"openWB/general/prices/grid",
+				"openWB/general/prices/pv",
 				"openWB/optional/et/provider",
 				"openWB/system/configurable/electricity_tariffs",
 			],
