@@ -31,7 +31,7 @@
 			>
 			<template #help>
 				Jeder Unterordner muss mit / enden.<br />
-				Die Zeichen \:"|*?&lt&gt sind verboten!<br />
+				Die Zeichen \:"|*?&lt;&gt; sind verboten!<br />
 				Beispiel 1: openwb/ <br />
 				Beispiel 2: openwb/lp2/
 			</template>	
