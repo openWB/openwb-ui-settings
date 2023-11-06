@@ -146,7 +146,9 @@
 						<template #help>
 							Ist ein Anbieter für strompreisbasiertes Laden
 							konfiguriert, wird statt des hier angegebenen
-							Netzpreises der Strompreis des Anbieters verwendet.
+							Netzpreises der dynamische Strompreis des Anbieters
+							verwendet (stündliche Aktualisierung durch den
+							Anbieter).
 						</template>
 					</openwb-base-number-input>
 					<openwb-base-number-input
