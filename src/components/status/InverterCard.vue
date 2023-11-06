@@ -4,44 +4,73 @@
 			<font-awesome-icon fixed-width :icon="['fas', 'solar-panel']" />
 			{{ inverter.name }} (ID: {{ inverter.id }})
 		</template>
-		<openwb-base-alert :subtype="statusLevel[
-			$store.state.mqtt[
-			'openWB/pv/' + inverter.id + '/get/fault_state'
-			]
-		]
-			">
-			<font-awesome-icon v-if="$store.state.mqtt[
-				'openWB/pv/' + inverter.id + '/get/fault_state'
-			] == 1
-				" fixed-width :icon="['fas', 'exclamation-triangle']" />
-			<font-awesome-icon v-else-if="$store.state.mqtt[
-				'openWB/pv/' + inverter.id + '/get/fault_state'
-			] == 2
-				" fixed-width :icon="['fas', 'times-circle']" />
-			<font-awesome-icon v-else fixed-width :icon="['fas', 'check-circle']" />
+		<openwb-base-alert
+			:subtype="
+				statusLevel[
+					$store.state.mqtt[
+						'openWB/pv/' + inverter.id + '/get/fault_state'
+					]
+				]
+			"
+		>
+			<font-awesome-icon
+				v-if="
+					$store.state.mqtt[
+						'openWB/pv/' + inverter.id + '/get/fault_state'
+					] == 1
+				"
+				fixed-width
+				:icon="['fas', 'exclamation-triangle']"
+			/>
+			<font-awesome-icon
+				v-else-if="
+					$store.state.mqtt[
+						'openWB/pv/' + inverter.id + '/get/fault_state'
+					] == 2
+				"
+				fixed-width
+				:icon="['fas', 'times-circle']"
+			/>
+			<font-awesome-icon
+				v-else
+				fixed-width
+				:icon="['fas', 'check-circle']"
+			/>
 			Modulmeldung:<br />
 			{{
-				$store.state.mqtt[
-					"openWB/pv/" + inverter.id + "/get/fault_str"
-				]
+				$store.state.mqtt["openWB/pv/" + inverter.id + "/get/fault_str"]
 			}}
 		</openwb-base-alert>
-		<openwb-base-text-input title="Zählerstand" readonly class="text-right text-monospace" step="0.001" unit="kWh"
-			:model-value="formatNumberTopic(
-						'openWB/pv/' + inverter.id + '/get/exported',
-						3,
-						3,
-						0.001
-					)
-					" />
-		<openwb-base-text-input title="Leistung" readonly class="text-right text-monospace" step="0.001" unit="kW"
-			:model-value="formatNumberTopic(
-				'openWB/pv/' + inverter.id + '/get/power',
-				3,
-				3,
-				0.001
-			)
-				" />
+		<openwb-base-text-input
+			title="Zählerstand"
+			readonly
+			class="text-right text-monospace"
+			step="0.001"
+			unit="kWh"
+			:model-value="
+				formatNumberTopic(
+					'openWB/pv/' + inverter.id + '/get/exported',
+					3,
+					3,
+					0.001
+				)
+			"
+		/>
+		<openwb-base-text-input
+			title="Leistung"
+			readonly
+			class="text-right text-monospace"
+			step="0.001"
+			unit="kW"
+			:model-value="
+				formatNumberTopic(
+					'openWB/pv/' + inverter.id + '/get/power',
+					3,
+					3,
+					0.001
+				)
+			"
+		/>
 	</openwb-base-card>
 </template>
 
@@ -76,7 +105,7 @@ export default {
 	data() {
 		return {
 			statusLevel: ["success", "warning", "danger"],
-		}
+		};
 	},
-}
+};
 </script>

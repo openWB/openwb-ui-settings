@@ -1,89 +1,86 @@
 <template>
-	<openwb-base-card
-		subtype="info"
-		:collapsible="true"
-		:collapsed="true"
-	>
+	<openwb-base-card subtype="info" :collapsible="true" :collapsed="true">
 		<template #header>
 			<font-awesome-icon fixed-width :icon="['fas', 'car']" />
 			{{ vehicleName }} (ID: {{ vehicleIndex }})
 		</template>
-		<openwb-base-alert v-if="$store.state.mqtt[
-			'openWB/vehicle/' +
-			vehicleIndex +
-			'/get/fault_state'
-			] !== undefined
-			" :subtype="statusLevel[
-		$store.state.mqtt[
-		'openWB/vehicle/' +
-		vehicleIndex +
-		'/get/fault_state'
-		]
-		]
-		">
-			<font-awesome-icon v-if="$store.state.mqtt[
-				'openWB/vehicle/' +
-				vehicleIndex +
-				'/get/fault_state'
-				] == 1
-				" fixed-width :icon="['fas', 'exclamation-triangle']" />
-			<font-awesome-icon v-else-if="$store.state.mqtt[
-				'openWB/vehicle/' +
-				vehicleIndex +
-				'/get/fault_state'
-				] == 2
-				" fixed-width :icon="['fas', 'times-circle']" />
-			<font-awesome-icon v-else fixed-width :icon="['fas', 'check-circle']" />
+		<openwb-base-alert
+			v-if="
+				$store.state.mqtt[
+					'openWB/vehicle/' + vehicleIndex + '/get/fault_state'
+				] !== undefined
+			"
+			:subtype="
+				statusLevel[
+					$store.state.mqtt[
+						'openWB/vehicle/' + vehicleIndex + '/get/fault_state'
+					]
+				]
+			"
+		>
+			<font-awesome-icon
+				v-if="
+					$store.state.mqtt[
+						'openWB/vehicle/' + vehicleIndex + '/get/fault_state'
+					] == 1
+				"
+				fixed-width
+				:icon="['fas', 'exclamation-triangle']"
+			/>
+			<font-awesome-icon
+				v-else-if="
+					$store.state.mqtt[
+						'openWB/vehicle/' + vehicleIndex + '/get/fault_state'
+					] == 2
+				"
+				fixed-width
+				:icon="['fas', 'times-circle']"
+			/>
+			<font-awesome-icon
+				v-else
+				fixed-width
+				:icon="['fas', 'check-circle']"
+			/>
 			Modulmeldung:<br />
 			{{
 				$store.state.mqtt[
-				"openWB/vehicle/" +
-				vehicleIndex +
-				"/get/fault_str"
+					"openWB/vehicle/" + vehicleIndex + "/get/fault_str"
 				]
 			}}
 		</openwb-base-alert>
 		<openwb-base-heading>Fahrzeugdaten</openwb-base-heading>
-			<openwb-base-number-input
-				title="Ladestand"
-				readonly
-				class="text-right text-monospace"
-				unit="%"
-				:model-value="
+		<openwb-base-number-input
+			title="Ladestand"
+			readonly
+			class="text-right text-monospace"
+			unit="%"
+			:model-value="
+				$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/soc']
+			"
+		/>
+		<openwb-base-number-input
+			title="Reichweite"
+			readonly
+			class="text-right text-monospace"
+			unit="km"
+			:model-value="
+				Math.round(
 					$store.state.mqtt[
-						'openWB/vehicle/' +
-							vehicleIndex +
-							'/get/soc'
+						'openWB/vehicle/' + vehicleIndex + '/get/range'
 					]
-				"
-			/>
-			<openwb-base-number-input
-				title="Reichweite"
-				readonly
-				class="text-right text-monospace"
-				unit="km"
-				:model-value="
-					Math.round(
-						$store.state.mqtt[
-							'openWB/vehicle/' +
-								vehicleIndex +
-								'/get/range'
-						]
-					)
-				"
-			/>
-			<openwb-base-text-input
-				title="Letzter Zeitstempel"
-				readonly
-				class="text-right text-monospace"
-				:model-value="
-					$store.state.mqtt[
-						'openWB/vehicle/' +
-							vehicleIndex +
-							'/get/soc_timestamp'
-					]
-				"
-			/>
+				)
+			"
+		/>
+		<openwb-base-text-input
+			title="Letzter Zeitstempel"
+			readonly
+			class="text-right text-monospace"
+			:model-value="
+				$store.state.mqtt[
+					'openWB/vehicle/' + vehicleIndex + '/get/soc_timestamp'
+				]
+			"
+		/>
 	</openwb-base-card>
 </template>
 
@@ -99,12 +96,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(
-	fasCheckCircle,
-	fasExclamationTriangle,
-	fasTimesCircle,
-	fasCar
-);
+library.add(fasCheckCircle, fasExclamationTriangle, fasTimesCircle, fasCar);
 
 export default {
 	name: "VehicleCard",
@@ -120,7 +112,7 @@ export default {
 	data() {
 		return {
 			statusLevel: ["success", "warning", "danger"],
-		}
+		};
 	},
 	computed: {
 		vehicleIndex: {
@@ -129,5 +121,5 @@ export default {
 			},
 		},
 	},
-}
+};
 </script>
