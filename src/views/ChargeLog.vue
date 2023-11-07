@@ -77,6 +77,15 @@
 							Es können mehrere Elemente ausgewählt werden.
 						</template>
 					</openwb-base-select-input>
+					<openwb-base-array-input
+						title="RFID-Tags"
+						v-model="chargeLogRequestData.filter.vehicle.tag"
+						@update:model-value="requestChargeLog()"
+					>
+						<template #help>
+							Es können mehrere Tags als Filter verwendet werden.
+						</template>
+					</openwb-base-array-input>
 				</openwb-base-card>
 			</openwb-base-card>
 			<openwb-base-alert subtype="info">
@@ -179,7 +188,7 @@ export default {
 					},
 					vehicle: {
 						id: [],
-						// rfid: [],  // still required?
+						rfid: [],
 						chargemode: [],
 						prio: undefined,
 					},
@@ -280,6 +289,11 @@ export default {
 						display: (row) => {
 							return this.translateBool(row.vehicle_prio);
 						},
+					},
+					{
+						label: "RFID-Tag",
+						field: "vehicle_rfid",
+						sortable: true,
 					},
 				],
 				sortable: {
@@ -429,6 +443,7 @@ export default {
 						"Fahrzeug",
 						"Lademodus",
 						"Priorität",
+						"RFID-Tag",
 						"Beginn",
 						"Ende",
 						"Zeitstempel Beginn",
@@ -446,6 +461,7 @@ export default {
 						'"' + row.vehicle_name + '"',
 						'"' + row.vehicle_chargemode + '"',
 						'"' + this.translateBool(row.vehicle_prio, false) + '"',
+						'"' + row.vehicle_rfid + '"',
 						'"' + row.time_begin + '"',
 						'"' + row.time_end + '"',
 						'"' + row.timestamp_begin + '"',
