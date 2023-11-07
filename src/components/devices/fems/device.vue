@@ -1,7 +1,7 @@
 <template>
 	<div class="device-fems">
 		<openwb-base-heading>
-			Einstellungen für openEMS, Fenecon FEMS, Kaco Hy-Control
+			Einstellungen für openEMS, Fenecon FEMS, CENTURIO 10, Kaco Hy-Control
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input

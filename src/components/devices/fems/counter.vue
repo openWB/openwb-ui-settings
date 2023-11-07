@@ -1,7 +1,7 @@
 <template>
 	<div class="device-fems-counter">
 		<openwb-base-heading>
-			Einstellungen für openEMS, Fenecon FEMS, Kaco Hy-Control Zähler
+			Einstellungen für openEMS, Fenecon FEMS, CENTURIO 10, Kaco Hy-Control Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
