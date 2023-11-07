@@ -1,7 +1,7 @@
 <template>
 	<div class="device-fems-bat">
 		<openwb-base-heading>
-			Einstellungen für openEMS, Fenecon FEMS, Kaco Hy-Control
+			Einstellungen für openEMS, Fenecon FEMS, CENTURIO 10, Kaco Hy-Control
 			Batteriespeicher
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>

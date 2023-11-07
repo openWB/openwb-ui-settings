@@ -1,7 +1,7 @@
 <template>
 	<div class="device-fems-inverter">
 		<openwb-base-heading>
-			Einstellungen für openEMS, Fenecon FEMS, Kaco Hy-Control
+			Einstellungen für openEMS, Fenecon FEMS, CENTURIO 10, Kaco Hy-Control
 			Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
