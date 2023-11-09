@@ -655,7 +655,14 @@
 							<template #actions="slotProps">
 								<span
 									v-if="slotProps.collapsed == true"
-									class="subheader pill"
+									@click.stop="
+										updateState(
+											autolockPlanKey,
+											!autolockPlan.active,
+											'active'
+										)
+									"
+									class="subheader pill clickable"
 									:class="
 										autolockPlan.active
 											? 'bg-success'

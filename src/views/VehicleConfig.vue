@@ -1485,7 +1485,14 @@
 							<template #actions="slotProps">
 								<span
 									v-if="slotProps.collapsed == true"
-									class="subheader pill"
+									@click.stop="
+										updateState(
+											planKey,
+											!plan.active,
+											'active'
+										)
+									"
+									class="subheader pill clickable"
 									:class="
 										plan.active ? 'bg-success' : 'bg-danger'
 									"
@@ -1836,7 +1843,14 @@
 							<template #actions="slotProps">
 								<span
 									v-if="slotProps.collapsed == true"
-									class="subheader pill"
+									@click.stop="
+										updateState(
+											planKey,
+											!plan.active,
+											'active'
+										)
+									"
+									class="subheader pill clickable"
 									:class="
 										plan.active ? 'bg-success' : 'bg-danger'
 									"
