@@ -502,23 +502,6 @@
 					</div>
 					<hr />
 					<openwb-base-heading> Lade-Log </openwb-base-heading>
-					<openwb-base-number-input
-						title="Preis je kWh"
-						:min="0"
-						:step="0.0001"
-						unit="€"
-						:model-value="
-							$store.state.mqtt['openWB/general/price_kwh']
-						"
-						@update:model-value="
-							updateState('openWB/general/price_kwh', $event)
-						"
-					>
-						<template #help>
-							Dient zur Berechnung der Ladekosten im Lade-Log.<br />
-							Es können bis zu 4 Nachkommastellen genutzt werden.
-						</template>
-					</openwb-base-number-input>
 					<openwb-base-button-group-input
 						title="Einheit für Entfernungen"
 						:model-value="
