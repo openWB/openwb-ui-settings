@@ -1,22 +1,22 @@
 <template>
 	<div class="web-theme-fallback">
 		<openwb-base-alert
-			v-if="Object.keys(configuration).length == 0"
+			v-if="Object.keys(webTheme.configuration).length == 0"
 			subtype="info"
 		>
-			Das Web Theme "{{ webThemeType }}" bietet keine Einstellungen.
+			Das Web Theme "{{ webTheme.name }}" bietet keine Einstellungen.
 		</openwb-base-alert>
 		<div v-else>
 			<openwb-base-alert subtype="warning">
 				Es wurde keine Konfigurationsseite für das Web Theme "{{
-					webThemeType
+					webTheme.name
 				}}" gefunden. Die Einstellungen können als JSON direkt
 				bearbeitet werden.
 			</openwb-base-alert>
 			<openwb-base-textarea
 				title="Theme Konfiguration"
 				subtype="json"
-				:model-value="configuration"
+				:model-value="webTheme.configuration"
 				@update:model-value="
 					updateConfiguration($event, 'configuration')
 				"
@@ -27,7 +27,9 @@
 				</template>
 			</openwb-base-textarea>
 			<openwb-base-alert subtype="info">
-				<pre>{{ JSON.stringify(configuration, undefined, 2) }}</pre>
+				<pre>{{
+					JSON.stringify(webTheme.configuration, undefined, 2)
+				}}</pre>
 			</openwb-base-alert>
 		</div>
 	</div>
@@ -38,8 +40,7 @@ export default {
 	name: "WebThemeFallback",
 	emits: ["update:configuration"],
 	props: {
-		configuration: { type: Object, required: true },
-		webThemeType: { type: String },
+		webTheme: { type: Object, required: true },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {

@@ -7,7 +7,7 @@
 		<openwb-base-heading>Bediensperre</openwb-base-heading>
 		<openwb-base-button-group-input
 			title="Bedienung sperren"
-			:model-value="configuration.lock_changes"
+			:model-value="displayTheme.configuration.lock_changes"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.lock_changes')
 			"
@@ -25,12 +25,12 @@
 			]"
 		/>
 		<openwb-base-text-input
-			v-if="configuration.lock_changes"
+			v-if="displayTheme.configuration.lock_changes"
 			title="PIN zur Freigabe"
 			subtype="password"
 			required
 			pattern="[0-9]{4,10}"
-			:model-value="configuration.lock_changes_code"
+			:model-value="displayTheme.configuration.lock_changes_code"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.lock_changes_code')
 			"
@@ -42,7 +42,7 @@
 		<openwb-base-heading>Ansicht "Übersicht"</openwb-base-heading>
 		<openwb-base-button-group-input
 			title="Übersicht anzeigen"
-			:model-value="configuration.enable_dashboard_view"
+			:model-value="displayTheme.configuration.enable_dashboard_view"
 			@update:model-value="
 				updateConfiguration(
 					$event,
@@ -63,9 +63,9 @@
 			]"
 		/>
 		<openwb-base-button-group-input
-			v-if="configuration.enable_dashboard_view"
+			v-if="displayTheme.configuration.enable_dashboard_view"
 			title="EVU anzeigen"
-			:model-value="configuration.enable_dashboard_card_grid"
+			:model-value="displayTheme.configuration.enable_dashboard_card_grid"
 			@update:model-value="
 				updateConfiguration(
 					$event,
@@ -86,9 +86,12 @@
 			]"
 		/>
 		<openwb-base-button-group-input
-			v-if="configuration.enable_dashboard_view"
+			v-if="displayTheme.configuration.enable_dashboard_view"
 			title="Hausverbrauch anzeigen"
-			:model-value="configuration.enable_dashboard_card_home_consumption"
+			:model-value="
+				displayTheme.configuration
+					.enable_dashboard_card_home_consumption
+			"
 			@update:model-value="
 				updateConfiguration(
 					$event,
@@ -109,9 +112,11 @@
 			]"
 		/>
 		<openwb-base-button-group-input
-			v-if="configuration.enable_dashboard_view"
+			v-if="displayTheme.configuration.enable_dashboard_view"
 			title="Batteriespeicher anzeigen"
-			:model-value="configuration.enable_dashboard_card_battery_sum"
+			:model-value="
+				displayTheme.configuration.enable_dashboard_card_battery_sum
+			"
 			@update:model-value="
 				updateConfiguration(
 					$event,
@@ -132,9 +137,12 @@
 			]"
 		/>
 		<openwb-base-button-group-input
-			v-if="configuration.enable_dashboard_view"
+			v-if="displayTheme.configuration.enable_dashboard_view"
 			title="Ladepunkte anzeigen"
-			:model-value="configuration.enable_dashboard_card_charge_point_sum"
+			:model-value="
+				displayTheme.configuration
+					.enable_dashboard_card_charge_point_sum
+			"
 			@update:model-value="
 				updateConfiguration(
 					$event,
@@ -155,9 +163,11 @@
 			]"
 		/>
 		<openwb-base-button-group-input
-			v-if="configuration.enable_dashboard_view"
+			v-if="displayTheme.configuration.enable_dashboard_view"
 			title="PV anzeigen"
-			:model-value="configuration.enable_dashboard_card_inverter_sum"
+			:model-value="
+				displayTheme.configuration.enable_dashboard_card_inverter_sum
+			"
 			@update:model-value="
 				updateConfiguration(
 					$event,
@@ -180,7 +190,7 @@
 		<openwb-base-heading>Ansicht "Ladepunkte"</openwb-base-heading>
 		<openwb-base-button-group-input
 			title="Ladepunkte anzeigen"
-			:model-value="configuration.enable_charge_points_view"
+			:model-value="displayTheme.configuration.enable_charge_points_view"
 			@update:model-value="
 				updateConfiguration(
 					$event,
@@ -203,7 +213,7 @@
 		<openwb-base-heading>Ansicht "Status"</openwb-base-heading>
 		<openwb-base-button-group-input
 			title="Status anzeigen"
-			:model-value="configuration.enable_status_view"
+			:model-value="displayTheme.configuration.enable_status_view"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.enable_status_view')
 			"
@@ -228,7 +238,7 @@ export default {
 	name: "DisplayThemeCards",
 	emits: ["update:configuration"],
 	props: {
-		configuration: { type: Object, required: true },
+		displayTheme: { type: Object, required: true },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {
