@@ -1,23 +1,23 @@
 <template>
 	<div class="display-theme-fallback">
 		<openwb-base-alert
-			v-if="Object.keys(configuration).length == 0"
+			v-if="Object.keys(displayTheme.configuration).length == 0"
 			subtype="info"
 		>
-			Das Display-Theme "{{ displayThemeType }}" bietet keine
+			Das Display-Theme "{{ displayTheme.name }}" bietet keine
 			Einstellungen.
 		</openwb-base-alert>
 		<div v-else>
 			<openwb-base-alert subtype="warning">
 				Es wurde keine Konfigurationsseite für das Display-Theme "{{
-					displayThemeType
+					displayTheme.name
 				}}" gefunden. Die Einstellungen können als JSON direkt
 				bearbeitet werden.
 			</openwb-base-alert>
 			<openwb-base-textarea
 				title="Konfiguration"
 				subtype="json"
-				:model-value="configuration"
+				:model-value="displayTheme.configuration"
 				@update:model-value="
 					updateConfiguration($event, 'configuration')
 				"
@@ -28,7 +28,9 @@
 				</template>
 			</openwb-base-textarea>
 			<openwb-base-alert subtype="info">
-				<pre>{{ JSON.stringify(configuration, undefined, 2) }}</pre>
+				<pre>{{
+					JSON.stringify(displayTheme.configuration, undefined, 2)
+				}}</pre>
 			</openwb-base-alert>
 		</div>
 	</div>
@@ -39,8 +41,7 @@ export default {
 	name: "DisplayThemeFallback",
 	emits: ["update:configuration"],
 	props: {
-		configuration: { type: Object, required: true },
-		displayThemeType: { type: String },
+		displayTheme: { type: Object, required: true },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {

@@ -477,7 +477,7 @@
 						<openwb-base-select-input
 							class="mb-2"
 							title="Theme"
-							:options="webThemeList"
+							:groups="webThemeGroupList"
 							:model-value="
 								$store.state.mqtt['openWB/general/web_theme']
 									.type
@@ -489,13 +489,8 @@
 								$store.state.mqtt['openWB/general/web_theme']
 									.type
 							"
-							:webThemeType="
+							:webTheme="
 								$store.state.mqtt['openWB/general/web_theme']
-									.type
-							"
-							:configuration="
-								$store.state.mqtt['openWB/general/web_theme']
-									.configuration
 							"
 							@update:configuration="
 								updateConfiguration(
@@ -586,9 +581,25 @@ export default {
 				];
 			},
 		},
+		webThemeGroupList: {
+			get() {
+				let groups = [
+					{ label: "openWB", options: [] },
+					{ label: "Community", options: [] },
+				];
+				this.webThemeList.forEach((theme) => {
+					if (theme.official === true) {
+						groups[0].options.push(theme);
+					} else {
+						groups[1].options.push(theme);
+					}
+				});
+				return groups;
+			},
+		},
 	},
 	methods: {
-		getWebThemeDefaultConfiguration(webThemeType) {
+		getWebThemeDefaults(webThemeType) {
 			const webThemeDefaults = this.webThemeList.find(
 				(element) => element.value == webThemeType
 			);
@@ -599,9 +610,7 @@ export default {
 				)
 			) {
 				return {
-					...JSON.parse(
-						JSON.stringify(webThemeDefaults.defaults.configuration)
-					),
+					...JSON.parse(JSON.stringify(webThemeDefaults.defaults)),
 				};
 			}
 			console.warn(
@@ -611,11 +620,9 @@ export default {
 			return {};
 		},
 		updateSelectedWebTheme($event) {
-			this.updateState("openWB/general/web_theme", $event, "type");
 			this.updateState(
 				"openWB/general/web_theme",
-				this.getWebThemeDefaultConfiguration($event),
-				"configuration"
+				this.getWebThemeDefaults($event)
 			);
 		},
 		updateConfiguration(key, event) {

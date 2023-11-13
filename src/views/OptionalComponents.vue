@@ -1310,7 +1310,7 @@
 						<openwb-base-select-input
 							class="mb-2"
 							title="Theme des Displays"
-							:options="displayThemeList"
+							:groups="displayThemeGroupList"
 							:model-value="
 								$store.state.mqtt[
 									'openWB/optional/int_display/theme'
@@ -1333,15 +1333,10 @@
 									'openWB/optional/int_display/theme'
 								].type
 							"
-							:displayThemeType="
+							:displayTheme="
 								$store.state.mqtt[
 									'openWB/optional/int_display/theme'
-								].type
-							"
-							:configuration="
-								$store.state.mqtt[
-									'openWB/optional/int_display/theme'
-								].configuration
+								]
 							"
 							@update:configuration="
 								updateConfiguration(
@@ -1485,9 +1480,25 @@ export default {
 				];
 			},
 		},
+		displayThemeGroupList: {
+			get() {
+				let groups = [
+					{ label: "openWB", options: [] },
+					{ label: "Community", options: [] },
+				];
+				this.displayThemeList.forEach((theme) => {
+					if (theme.official === true) {
+						groups[0].options.push(theme);
+					} else {
+						groups[1].options.push(theme);
+					}
+				});
+				return groups;
+			},
+		},
 	},
 	methods: {
-		getDisplayThemeDefaultConfiguration(displayThemeType) {
+		getDisplayThemeDefaults(displayThemeType) {
 			const displayThemeDefaults = this.displayThemeList.find(
 				(element) => element.value == displayThemeType
 			);
@@ -1500,7 +1511,7 @@ export default {
 				return {
 					...JSON.parse(
 						JSON.stringify(
-							displayThemeDefaults.defaults.configuration
+							displayThemeDefaults.defaults
 						)
 					),
 				};
@@ -1514,13 +1525,7 @@ export default {
 		updateSelectedDisplayTheme($event) {
 			this.updateState(
 				"openWB/optional/int_display/theme",
-				$event,
-				"type"
-			);
-			this.updateState(
-				"openWB/optional/int_display/theme",
-				this.getDisplayThemeDefaultConfiguration($event),
-				"configuration"
+				this.getDisplayThemeDefaults($event)
 			);
 		},
 		updateConfiguration(key, event) {
