@@ -1,8 +1,7 @@
 <template>
 	<div class="display-theme-cards">
 		<openwb-base-heading>
-			Einstellungen für Display Theme Cards
-			<span class="small">(Modul: {{ $options.name }})</span>
+			Einstellungen für Display Theme {{ displayTheme.name }}
 		</openwb-base-heading>
 		<openwb-base-heading>Bediensperre</openwb-base-heading>
 		<openwb-base-button-group-input
