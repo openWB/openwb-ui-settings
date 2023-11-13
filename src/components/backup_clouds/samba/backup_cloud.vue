@@ -28,13 +28,13 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.smb_path')
 			"
-			>
+		>
 			<template #help>
 				Jeder Unterordner muss mit / enden.<br />
 				Die Zeichen \:"|*?&lt;&gt; sind verboten!<br />
 				Beispiel 1: openwb/ <br />
 				Beispiel 2: openwb/lp2/
-			</template>	
+			</template>
 		</openwb-base-text-input>
 		<openwb-base-text-input
 			title="Benutzer"
