@@ -39,6 +39,10 @@
 					value: 'v_1_10',
 					text: 'ET(bis 15)/EH/BH/EHB/AES/ABP/BTC Series Ver 1.10, E G2/ET(15-30) Series Ver 1.0',
 				},
+				{
+					value: 'v_1_1',
+					text: ' E G2/ET(15-30) Series Ver 1.1',
+				},
 			]"
 			:model-value="configuration.version"
 			@update:model-value="
