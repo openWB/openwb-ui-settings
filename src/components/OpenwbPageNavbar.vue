@@ -341,4 +341,17 @@ export default {
 		padding-bottom: 5px;
 	}
 }
+
+@media (max-height: 700px) {
+	#collapsibleNavbar {
+		max-height: 85vh;
+		overflow: scroll;
+	}
+}
+
+@media (max-height: 450px) {
+	#collapsibleNavbar {
+		max-height: 75vh;
+	}
+}
 </style>
