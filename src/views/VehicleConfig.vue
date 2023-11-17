@@ -617,7 +617,7 @@
 						<openwb-base-number-input
 							title="Kapazität der Batterie"
 							unit="kWh"
-							:min="10"
+							:min="1"
 							:step="1"
 							:model-value="template.battery_capacity / 1000"
 							@update:model-value="
