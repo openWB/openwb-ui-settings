@@ -22,7 +22,7 @@
 <script>
 export default {
 	name: "OpenwbToast",
-	emits: ["dismiss"],
+	emits: ["dismiss", "hide"],
 	props: {
 		topic: { type: String, required: true },
 		subtype: {
@@ -53,6 +53,7 @@ export default {
 		return {
 			handle: undefined,
 			relativeTime: undefined,
+			hidden: false,
 		};
 	},
 	methods: {
@@ -80,6 +81,11 @@ export default {
 					);
 					break;
 				}
+			}
+			// hide after 10 seconds
+			if (elapsed > 10 * 1000 && !this.hidden) {
+				this.hidden = true;
+				this.$emit("hide", { topic: this.topic });
 			}
 		},
 	},

@@ -4,7 +4,7 @@
 			<span>openWB</span>
 		</a>
 		<button
-			class="navbar-toggler"
+			class="navbar-toggler mr-5"
 			type="button"
 			data-toggle="collapse"
 			data-target="#collapsibleNavbar"
