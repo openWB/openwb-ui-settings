@@ -55,6 +55,7 @@ export default {
 			this.clientMessages.forEach((message) => {
 				myMessages.push(message);
 			});
+			myMessages.sort(this.compareMessagesByTimestamp);
 			return myMessages;
 		},
 		/**
@@ -87,6 +88,10 @@ export default {
 		},
 	},
 	methods: {
+		compareMessagesByTimestamp(a, b) {
+			// last messages first
+			return b.timestamp - a.timestamp;
+		},
 		clearTopic(topic) {
 			this.$root.doPublish(topic, undefined);
 		},
