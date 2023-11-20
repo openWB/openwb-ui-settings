@@ -1510,9 +1510,7 @@ export default {
 			) {
 				return {
 					...JSON.parse(
-						JSON.stringify(
-							displayThemeDefaults.defaults
-						)
+						JSON.stringify(displayThemeDefaults.defaults)
 					),
 				};
 			}
