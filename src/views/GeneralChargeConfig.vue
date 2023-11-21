@@ -75,12 +75,12 @@
 							)
 						"
 					>
-						<template #help
-							>Hiermit wird festgelegt, welche Schieflast am
+						<template #help>
+							Hiermit wird festgelegt, welche Schieflast am
 							Netzanschlusspunkt erlaubt ist. Bei Überschreitung
 							werden gezielt einzelne Ladevorgänge in der Leistung
-							begrenzt.</template
-						>
+							begrenzt.
+						</template>
 					</openwb-base-range-input>
 					<openwb-base-button-group-input
 						title="Phasenumschaltung wiederholt anstoßen"
@@ -126,9 +126,9 @@
 							stundenweise die Anteile der Stromquellen (Speicher,
 							Netz, PV) berechnet und mit den hier angegebenen
 							Preisen multipliziert.<br />
-							Ist die Abrechnung über das Ladelog, z.B. mit dem
-							Arbeitgeber, vereinbart, ist bei allen drei Feldern
-							der vereinbarte Preis einzutragen.
+							Ist die Abrechnung über das Ladeprotokoll, z.B. mit
+							dem Arbeitgeber, vereinbart, ist bei allen drei
+							Feldern der vereinbarte Preis einzutragen.
 						</template>
 					</openwb-base-heading>
 					<openwb-base-number-input
@@ -137,14 +137,18 @@
 						:step="0.00001"
 						unit="ct/kWh"
 						:model-value="
-							$store.state.mqtt['openWB/general/prices/grid'] * 100000
+							$store.state.mqtt['openWB/general/prices/grid'] *
+							100000
 						"
 						@update:model-value="
-							updateState('openWB/general/prices/grid', $event / 100000)
+							updateState(
+								'openWB/general/prices/grid',
+								$event / 100000
+							)
 						"
 					>
 						<template #help>
-							Ist ein Anbieter für strompreisbasiertes Laden
+							Ist ein Anbieter für variable Stromtarife
 							konfiguriert, wird statt des hier angegebenen
 							Netzpreises der dynamische Strompreis des Anbieters
 							verwendet (stündliche Aktualisierung durch den
@@ -157,10 +161,14 @@
 						:step="0.00001"
 						unit="ct/kWh"
 						:model-value="
-							$store.state.mqtt['openWB/general/prices/bat'] * 100000
+							$store.state.mqtt['openWB/general/prices/bat'] *
+							100000
 						"
 						@update:model-value="
-							updateState('openWB/general/prices/bat', $event / 100000)
+							updateState(
+								'openWB/general/prices/bat',
+								$event / 100000
+							)
 						"
 					>
 					</openwb-base-number-input>
@@ -170,10 +178,14 @@
 						:step="0.00001"
 						unit="ct/kWh"
 						:model-value="
-							$store.state.mqtt['openWB/general/prices/pv'] * 100000
+							$store.state.mqtt['openWB/general/prices/pv'] *
+							100000
 						"
 						@update:model-value="
-							updateState('openWB/general/prices/pv', $event / 100000)
+							updateState(
+								'openWB/general/prices/pv',
+								$event / 100000
+							)
 						"
 					/>
 				</div>
@@ -187,7 +199,7 @@
 				</div>
 				<div v-else>
 					<openwb-base-heading>
-						Strompreisbasiertes Laden
+						Variable Stromtarife
 					</openwb-base-heading>
 					<openwb-base-alert subtype="info">
 						Bei Sofort- und Zeitladen wird nur geladen, wenn der

@@ -55,6 +55,8 @@
 			:vehicleKey="vehicleKey"
 			:vehicleName="vehicleName"
 		/>
+		<!-- electricity tariff -->
+		<electricity-tariff-card />
 	</div>
 </template>
 
@@ -67,6 +69,7 @@ import InverterCard from "../components/status/InverterCard.vue";
 import BatterySumCard from "../components/status/BatterySumCard.vue";
 import BatteryCard from "../components/status/BatteryCard.vue";
 import VehicleCard from "../components/status/VehicleCard.vue";
+import ElectricityTariffCard from "../components/status/ElectricityTariffCard.vue";
 import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
@@ -81,6 +84,7 @@ export default {
 		BatterySumCard,
 		BatteryCard,
 		VehicleCard,
+		ElectricityTariffCard,
 	},
 	data() {
 		return {
