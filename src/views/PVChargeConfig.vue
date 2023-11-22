@@ -14,6 +14,7 @@
 						:buttons="[
 							{ buttonValue: 'export', text: 'Einspeisung' },
 							{ buttonValue: 'import', text: 'Bezug' },
+							{ buttonValue: 'balanced', text: 'Ausgewogen' },
 							{ buttonValue: 'individual', text: 'Individuell' },
 						]"
 						v-model="controlMode"
@@ -28,10 +29,15 @@
 							Regelbereich, wird nicht nachgeregelt. Liegt der
 							Überschuss außerhalb des Regelbereichs, wird in die
 							Mitte des Regelbereichs nachgeregelt.<br />
-							"Einspeisung" und "Bezug" definieren einen Bereich
-							mit minimaler Einspeisung (-230W, 0W) bzw. minimalem
-							Netzbezug (0W, 230W). Mit der Auswahl "individuell"
-							kann ein eigener Regelbereich definiert werden.
+							"Einspeisung" definiert einen Bereich mit minimaler
+							Einspeisung (-230W, 0W), "Bezug" mit minimalem
+							Netzbezug (0W, 230W), "Ausgewogen" mit ausgewogenem
+							Netzbezug (-115W, 115W). Mit der Auswahl
+							"individuell" kann ein eigener Regelbereich
+							definiert werden.<br />
+							Bei Speichervorrang erzeugt die Regelung bei Bedarf
+							unabhängig vom eingestellten Regelmodus Einspeisung,
+							damit der Speicher seine Ladeleistung erhöht.
 						</template>
 					</openwb-base-button-group-input>
 					<openwb-base-number-input
@@ -621,6 +627,9 @@ export default {
 						break;
 					case "import":
 						this.updateState(topic, [0, 230]);
+						break;
+					case "balanced":
+						this.updateState(topic, [-115, 115]);
 						break;
 					case "individual":
 						break;
