@@ -1220,7 +1220,7 @@
 						<hr />
 						<openwb-base-heading>PV-Laden</openwb-base-heading>
 						<openwb-base-range-input
-							title="Mindeststrom"
+							title="Minimaler Dauerstrom"
 							:min="0"
 							:max="11"
 							:step="1"
@@ -1251,7 +1251,7 @@
 							"
 						>
 							<template #help>
-								Hier kann ein Mindeststrom eingestellt werden,
+								Hier kann eine Stromstärke eingestellt werden,
 								mit dem unabhängig vom vorhandenen Überschuss
 								durchgeladen wird. Hierdurch wird z.B. an Tagen
 								mit häufigem Sonne/Wolken-Wechsel oder mit nur
