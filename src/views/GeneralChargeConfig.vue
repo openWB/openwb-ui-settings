@@ -82,6 +82,42 @@
 							begrenzt.</template
 						>
 					</openwb-base-range-input>
+					<openwb-base-button-group-input
+						title="Phasenumschaltung wiederholt anstoßen"
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/chargemode_config/retry_failed_phase_switches'
+							]
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/chargemode_config/retry_failed_phase_switches',
+								$event
+							)
+						"
+					>
+						<template #help>
+							Wenn diese Option aktiviert ist, werden bis zu drei
+							Umschaltversuche vorgenommen, wenn die vorgegebene
+							und genutzte Phasenzahl nicht übereinstimmen. Wird
+							die Option deaktiviert, wird nur eine Umschaltung
+							durchgeführt.<br />
+							Die gezählten Fehlversuche werden mit dem Abstecken
+							zurückgesetzt.
+						</template>
+					</openwb-base-button-group-input>
 				</div>
 			</openwb-base-card>
 			<openwb-base-submit-buttons
@@ -104,6 +140,7 @@ export default {
 		return {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
+				"openWB/general/chargemode_config/retry_failed_phase_switches",
 				"openWB/general/chargemode_config/unbalanced_load",
 				"openWB/general/chargemode_config/unbalanced_load_limit",
 			],
