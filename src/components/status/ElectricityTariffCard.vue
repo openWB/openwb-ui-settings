@@ -120,7 +120,7 @@ export default {
 				datasets: [
 					{
 						label: "Stromtarif",
-						unit: "€/kWh",
+						unit: "ct/kWh",
 						type: "line",
 						stepped: true,
 						borderColor: "rgba(255, 0, 0, 0.7)",
@@ -200,7 +200,7 @@ export default {
 								size: 12,
 							},
 							display: true,
-							text: "Preis [€/kW]",
+							text: "Preis [ct/kWh]",
 							// color: fontColor
 						},
 						grid: {
@@ -241,7 +241,10 @@ export default {
 				// timestamp: seconds -> milliseconds
 				// price: €/Wh -> €/kWh
 				for (const [key, value] of Object.entries(chartEntries)) {
-					myData.push({ timestamp: key * 1000, price: value * 1000 });
+					myData.push({
+						timestamp: key * 1000,
+						price: value * 100000,
+					});
 				}
 				// repeat last dataset with 59min 95sec offset
 				const lastData = myData.slice(-1)[0];
