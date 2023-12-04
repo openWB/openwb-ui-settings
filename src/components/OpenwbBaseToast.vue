@@ -71,7 +71,7 @@ export default {
 			};
 			var rtf = new Intl.RelativeTimeFormat("de", { numeric: "auto" });
 			const now = new Date();
-			const elapsed = this.timestamp * 1000 - now;
+			const elapsed = now - this.timestamp * 1000;
 			for (var unit in units) {
 				if (Math.abs(elapsed) > units[unit]) {
 					this.relativeTime = rtf.format(

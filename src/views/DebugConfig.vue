@@ -207,7 +207,7 @@ export default {
 		};
 	},
 	methods: {
-		async getFilePromise(myFile) {
+		async getFilePromise(myFile, ignore404 = false) {
 			return this.axios
 				.get(location.protocol + "//" + location.host + myFile)
 				.then((response) => {
@@ -215,11 +215,20 @@ export default {
 				})
 				.catch((error) => {
 					if (error.response) {
+						console.log(error.response);
 						// The request was made and the server responded with a status code
 						// that falls out of the range of 2xx
+						if (error.response.status == 404 && ignore404) {
+							// ignore a 404 if requested, used for rotated log files which may not exist yet
+							return "";
+						}
 						return (
 							"A 404 is expected if running node.js dev server!\n" +
-							error.response.data
+							error.response.status +
+							" " +
+							error.response.statusText +
+							": " +
+							error.response.request.responseURL
 						);
 					} else if (error.request) {
 						// The request was made but no response was received
@@ -238,6 +247,11 @@ export default {
 			this.getFilePromise("/openWB/ramdisk/main.log").then((result) => {
 				this.mainLog = result;
 			});
+			this.getFilePromise("/openWB/ramdisk/main.log.1", true).then(
+				(result) => {
+					this.mainLog += result;
+				}
+			);
 		},
 		loadInternalChargepointLog(event) {
 			event.stopPropagation();
@@ -247,6 +261,12 @@ export default {
 			).then((result) => {
 				this.internalChargepointLog = result;
 			});
+			this.getFilePromise(
+				"/openWB/ramdisk/internal_chargepoint.log.1",
+				true
+			).then((result) => {
+				this.internalChargepointLog += result;
+			});
 		},
 		loadMqttLog(event) {
 			event.stopPropagation();
@@ -254,6 +274,11 @@ export default {
 			this.getFilePromise("/openWB/ramdisk/mqtt.log").then((result) => {
 				this.mqttLog = result;
 			});
+			this.getFilePromise("/openWB/ramdisk/mqtt.log.1", true).then(
+				(result) => {
+					this.mqttLog += result;
+				}
+			);
 		},
 		loadSocLog(event) {
 			event.stopPropagation();
@@ -261,6 +286,11 @@ export default {
 			this.getFilePromise("/openWB/ramdisk/soc.log").then((result) => {
 				this.socLog = result;
 			});
+			this.getFilePromise("/openWB/ramdisk/soc.log.1", true).then(
+				(result) => {
+					this.socLog += result;
+				}
+			);
 		},
 		loadUpdateLog(event) {
 			event.stopPropagation();
@@ -268,6 +298,11 @@ export default {
 			this.getFilePromise("/openWB/data/log/update.log").then(
 				(result) => {
 					this.updateLog = result;
+				}
+			);
+			this.getFilePromise("/openWB/data/log/update.log.1", true).then(
+				(result) => {
+					this.updateLog += result;
 				}
 			);
 		},
@@ -279,6 +314,12 @@ export default {
 					this.remoteSupportLog = result;
 				}
 			);
+			this.getFilePromise(
+				"/openWB/ramdisk/remote_support.log.1",
+				true
+			).then((result) => {
+				this.remoteSupportLog += result;
+			});
 		},
 		loadSmartHomeLog(event) {
 			event.stopPropagation();
@@ -286,6 +327,11 @@ export default {
 			this.getFilePromise("/openWB/ramdisk/smarthome.log").then(
 				(result) => {
 					this.smartHomeLog = result;
+				}
+			);
+			this.getFilePromise("/openWB/ramdisk/smarthome.log.1").then(
+				(result) => {
+					this.smartHomeLog += result;
 				}
 			);
 		},

@@ -22,7 +22,12 @@
 					class: 'btn-outline-success',
 				},
 			]"
-		/>
+		>
+			<template #help>
+				Die Bedienung wird automatisch nach der eingestellten
+				Ausschaltzeit (siehe "Display Standby") wieder gesperrt.
+			</template>
+		</openwb-base-button-group-input>
 		<openwb-base-text-input
 			v-if="displayTheme.configuration.lock_changes"
 			title="PIN zur Freigabe"

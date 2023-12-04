@@ -13,7 +13,7 @@
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div
-			class="collapse navbar-collapse"
+			class="collapse navbar-collapse navbar-nav-scroll"
 			id="collapsibleNavbar"
 			ref="collapsibleNavbar"
 		>
@@ -240,7 +240,7 @@
 						</router-link>
 					</div>
 				</li>
-				<li
+				<!-- <li
 					v-if="nodeEnv !== 'production'"
 					class="nav-item dropdown nav-separator-before"
 				>
@@ -262,7 +262,7 @@
 							VUEX Store
 						</router-link>
 					</div>
-				</li>
+				</li> -->
 				<li class="nav-item nav-separator-before">
 					<a
 						class="nav-link"
@@ -322,7 +322,7 @@ export default {
 	padding-right: 5px;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 991px) {
 	.nav-item.nav-separator-before {
 		border-left: none;
 		margin-left: 0px;

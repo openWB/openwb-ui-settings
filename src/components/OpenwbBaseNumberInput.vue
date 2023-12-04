@@ -61,6 +61,7 @@ export default {
 		title: String,
 		modelValue: { type: Number },
 		unit: String,
+		precision: { type: Number, default: undefined },
 		emptyValue: { required: false, default: null },
 	},
 	emits: ["update:modelValue"],
@@ -72,6 +73,13 @@ export default {
 	computed: {
 		value: {
 			get() {
+				if (this.precision !== undefined) {
+					return parseFloat(
+						Math.round(
+							this.modelValue * Math.pow(10, this.precision)
+						) / Math.pow(10, this.precision)
+					);
+				}
 				return this.modelValue;
 			},
 			set(newValue) {
@@ -112,6 +120,7 @@ input[disabled]::-webkit-inner-spin-button {
 /* Firefox */
 input[readonly][type="number"],
 input[disabled][type="number"] {
+	appearance: textfield;
 	-moz-appearance: textfield;
 }
 </style>

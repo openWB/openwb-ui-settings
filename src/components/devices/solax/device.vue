@@ -16,14 +16,19 @@
 		<openwb-base-number-input
 			title="Modbus-ID"
 			required
-			:min="1"
+			:min="0"
 			:max="255"
 			:model-value="configuration.modbus_id"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.modbus_id')
 			"
 		>
-			<template #help> Für Gen3 ID=0, für Gen4 meistens > 2. </template>
+			<template #help>
+				Laut der Schnittstellenbeschreibung ist die ID bei Solax ab Werk
+				auf 1 gesetzt. Entgegen der Beschreibung ist meist für Gen4 eine
+				ID größer als 2 eingestellt. Bei Gen3 sogar (gegen jeglicher
+				Modbus Standards) eine 0.
+			</template>
 		</openwb-base-number-input>
 	</div>
 </template>

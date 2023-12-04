@@ -83,6 +83,34 @@
 						>Eingabefeld für Zahlen ohne Einheit</template
 					>
 				</openwb-base-number-input>
+				<openwb-base-number-input
+					title="3. Zahl"
+					:min="-30"
+					:max="30"
+					:step="0.01"
+					:precision="2"
+					unit="ct/kWh"
+					:model-value="$store.state.examples.number3 * 100000"
+					@update:model-value="
+						updateState(
+							'number3',
+							parseFloat(($event / 100000).toFixed(7))
+						)
+					"
+				>
+					<template #help>
+						Eingabefeld für Zahlen mit Einheit und
+						Nachkommastellen<br />
+						Zusätzlich zum optionalen Parameter "step" sollte immer
+						auch "precision" gesetzt sein, um unvermeidbare
+						Darstellungsfehler zu vermeiden.<br />
+						Wenn der dargestellte Wert eine andere
+						Genauigkeit/Einheit als der Wert im Backend hat (z.B.
+						€/Wh &lt;-&gt; ct/kWh), dann ist bei der Umrechnung
+						darauf zu achten, dass es nicht erneut zu
+						Ungenauigkeiten bei Dezimalzahlen kommt.
+					</template>
+				</openwb-base-number-input>
 				<openwb-base-text-input
 					title="1. Passwort"
 					subtype="password"

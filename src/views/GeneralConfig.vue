@@ -50,6 +50,7 @@
 				>
 				</openwb-base-button-group-input>
 				<openwb-base-button-group-input
+					v-if="$store.state.mqtt['openWB/general/extern'] === true"
 					title="Steuerung über Modbus als secondary"
 					:buttons="[
 						{
@@ -78,20 +79,22 @@
 							target="_blank"
 							rel="noopener noreferrer"
 						>
-							hier</a
-						>dokumentiert. Bei aktivierter Modbus-Schnittstelle darf
+							hier
+						</a>
+						dokumentiert. Bei aktivierter Modbus-Schnittstelle darf
 						die openWB nicht von einer primary-openWB gesteuert
 						werden.
 					</template>
 				</openwb-base-button-group-input>
 				<div
 					v-if="
-						$store.state.mqtt['openWB/general/modbus_control'] ===
-						!0
+						$store.state.mqtt['openWB/general/extern'] === true &&
+						$store.state.mqtt['openWB/general/modbus_control'] !==
+							true
 					"
 				>
 					<openwb-base-alert subtype="info">
-						Wenn die Steuerung über Modbus auf "aus" geändert wird,
+						Wenn die Steuerung über Modbus auf "Aus" geändert wird,
 						muss danach ein Neustart durchgeführt werden!
 					</openwb-base-alert>
 				</div>
