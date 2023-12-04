@@ -224,7 +224,11 @@ export default {
 						}
 						return (
 							"A 404 is expected if running node.js dev server!\n" +
-							error.response.status + " " + error.response.statusText + ": " + error.response.request.responseURL
+							error.response.status +
+							" " +
+							error.response.statusText +
+							": " +
+							error.response.request.responseURL
 						);
 					} else if (error.request) {
 						// The request was made but no response was received
@@ -243,9 +247,11 @@ export default {
 			this.getFilePromise("/openWB/ramdisk/main.log").then((result) => {
 				this.mainLog = result;
 			});
-			this.getFilePromise("/openWB/ramdisk/main.log.1", true).then((result) => {
-				this.mainLog += result;
-			});
+			this.getFilePromise("/openWB/ramdisk/main.log.1", true).then(
+				(result) => {
+					this.mainLog += result;
+				}
+			);
 		},
 		loadInternalChargepointLog(event) {
 			event.stopPropagation();
@@ -268,9 +274,11 @@ export default {
 			this.getFilePromise("/openWB/ramdisk/mqtt.log").then((result) => {
 				this.mqttLog = result;
 			});
-			this.getFilePromise("/openWB/ramdisk/mqtt.log.1", true).then((result) => {
-				this.mqttLog += result;
-			});
+			this.getFilePromise("/openWB/ramdisk/mqtt.log.1", true).then(
+				(result) => {
+					this.mqttLog += result;
+				}
+			);
 		},
 		loadSocLog(event) {
 			event.stopPropagation();
@@ -278,9 +286,11 @@ export default {
 			this.getFilePromise("/openWB/ramdisk/soc.log").then((result) => {
 				this.socLog = result;
 			});
-			this.getFilePromise("/openWB/ramdisk/soc.log.1", true).then((result) => {
-				this.socLog += result;
-			});
+			this.getFilePromise("/openWB/ramdisk/soc.log.1", true).then(
+				(result) => {
+					this.socLog += result;
+				}
+			);
 		},
 		loadUpdateLog(event) {
 			event.stopPropagation();
@@ -304,11 +314,12 @@ export default {
 					this.remoteSupportLog = result;
 				}
 			);
-			this.getFilePromise("/openWB/ramdisk/remote_support.log.1", true).then(
-				(result) => {
-					this.remoteSupportLog += result;
-				}
-			);
+			this.getFilePromise(
+				"/openWB/ramdisk/remote_support.log.1",
+				true
+			).then((result) => {
+				this.remoteSupportLog += result;
+			});
 		},
 		loadSmartHomeLog(event) {
 			event.stopPropagation();

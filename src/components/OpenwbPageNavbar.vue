@@ -341,5 +341,4 @@ export default {
 		padding-bottom: 5px;
 	}
 }
-
 </style>
