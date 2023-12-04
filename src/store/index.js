@@ -26,6 +26,7 @@ if (import.meta.env.MODE !== "production") {
 		text7: "2021-10-31",
 		number1: 5,
 		number2: 10,
+		number3: 0.00028,
 		password1: "GeHeiM!",
 		textarea1: "Langer Text...",
 		range1: 6,
