@@ -133,8 +133,8 @@
 					</openwb-base-heading>
 					<openwb-base-number-input
 						title="Preis für Netzbezug"
-						:min="0"
-						:step="0.00001"
+						:step="0.001"
+						:precision="3"
 						unit="ct/kWh"
 						:model-value="
 							$store.state.mqtt['openWB/general/prices/grid'] *
@@ -143,7 +143,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/prices/grid',
-								$event / 100000
+								parseFloat(($event / 100000).toFixed(7))
 							)
 						"
 					>
@@ -157,8 +157,8 @@
 					</openwb-base-number-input>
 					<openwb-base-number-input
 						title="Preis für Speicherentladung"
-						:min="0"
-						:step="0.00001"
+						:step="0.001"
+						:precision="3"
 						unit="ct/kWh"
 						:model-value="
 							$store.state.mqtt['openWB/general/prices/bat'] *
@@ -167,15 +167,15 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/prices/bat',
-								$event / 100000
+								parseFloat(($event / 100000).toFixed(7))
 							)
 						"
 					>
 					</openwb-base-number-input>
 					<openwb-base-number-input
 						title="Preis für PV-Strom"
-						:min="0"
-						:step="0.00001"
+						:step="0.001"
+						:precision="3"
 						unit="ct/kWh"
 						:model-value="
 							$store.state.mqtt['openWB/general/prices/pv'] *
@@ -184,7 +184,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/prices/pv',
-								$event / 100000
+								parseFloat(($event / 100000).toFixed(7))
 							)
 						"
 					/>
