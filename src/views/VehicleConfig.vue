@@ -352,14 +352,14 @@
 										'openWB/vehicle/' +
 											vehicleId +
 											'/soc_module/general_config'
-									].request_interval_charging
+									].request_interval_charging / 60
 								"
 								@update:model-value="
 									updateState(
 										'openWB/vehicle/' +
 											vehicleId +
 											'/soc_module/general_config',
-										$event,
+										$event * 60,
 										'request_interval_charging'
 									)
 								"
@@ -379,14 +379,14 @@
 										'openWB/vehicle/' +
 											vehicleId +
 											'/soc_module/general_config'
-									].request_interval_not_charging
+									].request_interval_not_charging / 60
 								"
 								@update:model-value="
 									updateState(
 										'openWB/vehicle/' +
 											vehicleId +
 											'/soc_module/general_config',
-										$event,
+										$event * 60,
 										'request_interval_not_charging'
 									)
 								"
@@ -617,7 +617,7 @@
 						<openwb-base-number-input
 							title="Kapazität der Batterie"
 							unit="kWh"
-							:min="10"
+							:min="1"
 							:step="1"
 							:model-value="template.battery_capacity / 1000"
 							@update:model-value="
