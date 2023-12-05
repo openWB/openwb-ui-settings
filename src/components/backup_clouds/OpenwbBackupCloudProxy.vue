@@ -1,9 +1,12 @@
 <template>
+	<openwb-base-heading>
+		Einstellungen für Backup-Cloud Modul "{{ backupCloud.name }}"
+	</openwb-base-heading>
 	<component
 		:is="myComponent"
-		:configuration="configuration"
-		:backupCloudType="backupCloudType"
+		:backupCloud="backupCloud"
 		@update:configuration="updateConfiguration($event)"
+		@sendCommand="sendCommand($event)"
 	/>
 </template>
 
@@ -13,24 +16,28 @@ import OpenwbBackupCloudFallback from "./OpenwbBackupCloudConfigFallback.vue";
 
 export default {
 	name: "OpenwbBackupCloudProxy",
-	emits: ["update:configuration"],
+	emits: ["update:configuration", "sendCommand"],
 	props: {
-		backupCloudType: { type: String, required: true },
-		configuration: { type: Object, required: true },
+		backupCloud: { type: Object, required: true },
 	},
 	computed: {
 		myComponent() {
-			console.debug(`loading backup cloud: ${this.backupCloudType}`);
+			console.debug(`loading backup cloud: ${this.backupCloud.type}`);
 			return defineAsyncComponent({
 				loader: () =>
-					import(`./${this.backupCloudType}/backup_cloud.vue`),
+					import(`./${this.backupCloud.type}/backup_cloud.vue`),
 				errorComponent: OpenwbBackupCloudFallback,
 			});
 		},
 	},
 	methods: {
+		// event pass through
 		updateConfiguration(event) {
 			this.$emit("update:configuration", event);
+		},
+		// event pass through
+		sendCommand(event) {
+			this.$emit("sendCommand", event);
 		},
 	},
 };

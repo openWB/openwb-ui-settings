@@ -198,15 +198,10 @@
 							"
 						/>
 						<openwb-backup-cloud-proxy
-							:backupCloudType="
+							:backupCloud="
 								$store.state.mqtt[
 									'openWB/system/backup_cloud/config'
-								].type
-							"
-							:configuration="
-								$store.state.mqtt[
-									'openWB/system/backup_cloud/config'
-								].configuration
+								]
 							"
 							@update:configuration="
 								updateConfiguration(
