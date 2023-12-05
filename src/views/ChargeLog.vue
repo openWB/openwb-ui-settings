@@ -78,7 +78,7 @@
 						</template>
 					</openwb-base-select-input>
 					<openwb-base-array-input
-						title="RFID-Tags"
+						title="ID-Tags"
 						v-model="chargeLogRequestData.filter.vehicle.tag"
 						@update:model-value="requestChargeLog()"
 					>
@@ -291,7 +291,7 @@ export default {
 						},
 					},
 					{
-						label: "RFID-Tag",
+						label: "ID-Tag",
 						field: "vehicle_rfid",
 						sortable: true,
 					},
@@ -443,7 +443,7 @@ export default {
 						"Fahrzeug",
 						"Lademodus",
 						"Priorität",
-						"RFID-Tag",
+						"ID-Tag",
 						"Beginn",
 						"Ende",
 						"Zeitstempel Beginn",

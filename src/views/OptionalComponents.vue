@@ -1,9 +1,9 @@
 <template>
 	<div class="optionalComponents">
 		<form name="optionalComponentsForm">
-			<openwb-base-card title="RFID">
+			<openwb-base-card title="Identifikation von Fahrzeugen">
 				<openwb-base-button-group-input
-					title="RFID aktivieren"
+					title="Identifikation aktivieren"
 					:model-value="
 						$store.state.mqtt['openWB/optional/rfid/active']
 					"
@@ -24,9 +24,12 @@
 					]"
 				>
 					<template #help>
-						Dies bedingt das Vorhandensein eines RFID-Readers in
-						deiner openWB. Bitte prüfe zuerst die
-						Hardwareausstattung deiner openWB (z.B. Lieferschein).
+						Die Identifikation von Fahrzeugen kann auf mehreren Wegen erfolgen:
+						<ul>
+							<li>Über einen in der openWB verbauten RFID-Reader (optional, z.B. anhand des Lieferscheins prüfen).</li>
+							<li>Durch die automatische Erkennung an einer openWB Pro (muss in den Einstellungen aktiviert werden).</li>
+							<!-- <li>Durch manuelle Eingabe einer ID am Display einer openWB.</li> ToDo! -->
+						</ul>
 					</template>
 				</openwb-base-button-group-input>
 				<div
@@ -36,16 +39,16 @@
 					"
 				>
 					<openwb-base-alert subtype="info">
-						Die RFID-Tags, die an dem jeweiligen Ladepunkt gültig
+						Die ID-Tags, die an dem jeweiligen Ladepunkt gültig
 						sind, müssen in dem Ladepunkt-Profil hinterlegt werden.
-						Der RFID-Tag muss in den Einstellungen des Fahrzeugs
-						diesem zugeordnet werden.<br />
-						Es kann zuerst angesteckt und dann der RFID-Tag gescannt
-						werden oder zuerst der RFID-Tag gescannt werden. Dann
-						muss innerhalb von 5 Minuten ein Auto angesteckt werden,
-						sonst wird der RFID-Tag verworfen. Das Auto wird erst
+						Die ID-Tags müssen auch in den Einstellungen der Fahrzeuge
+						diesen zugeordnet werden.<br />
+						Es kann zuerst das Fahrzeug angesteckt und dann der ID-Tag erfasst
+						werden oder anders herum. Im letzten Fall
+						muss innerhalb von 5 Minuten ein Fahrzeug angesteckt werden,
+						sonst wird der ID-Tag verworfen. Das Fahrzeug wird erst
 						nach dem Anstecken zugeordnet.<br />
-						<span v-html="$store.state.text.rfidWiki"></span>
+						<span v-html="$store.state.text.rfidWiki" />
 					</openwb-base-alert>
 				</div>
 			</openwb-base-card>
