@@ -1,13 +1,17 @@
 <template>
 	<openwb-base-alert v-if="displayTheme.official" subtype="success">
 		<font-awesome-icon fixed-width :icon="['fas', 'certificate']" />
-		Das ausgewählte Theme wird von openWB gepflegt.
+		Das ausgewählte Display Theme "{{ displayTheme.name }}" wird von openWB
+		gepflegt.
 	</openwb-base-alert>
 	<openwb-base-alert v-else subtype="info">
 		<font-awesome-icon fixed-width :icon="['fas', 'people-group']" />
-		Das ausgewählte Theme wird in unserer Community gepflegt. Rückfragen
-		oder Probleme bitte im Forum diskutieren.
+		Das ausgewählte Display Theme "{{ displayTheme.name }}" wird in unserer
+		Community gepflegt. Rückfragen oder Probleme bitte im Forum diskutieren.
 	</openwb-base-alert>
+	<openwb-base-heading>
+		Einstellungen für Display Theme "{{ displayTheme.name }}"
+	</openwb-base-heading>
 	<component
 		:is="myComponent"
 		:displayTheme="displayTheme"

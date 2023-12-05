@@ -1,8 +1,5 @@
 <template>
 	<div class="display-theme-cards">
-		<openwb-base-heading>
-			Einstellungen für Display Theme {{ displayTheme.name }}
-		</openwb-base-heading>
 		<openwb-base-heading>Bediensperre</openwb-base-heading>
 		<openwb-base-button-group-input
 			title="Bedienung sperren"
