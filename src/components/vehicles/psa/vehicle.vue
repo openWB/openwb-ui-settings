@@ -1,14 +1,10 @@
 <template>
 	<div class="vehicle-soc-psa">
-		<openwb-base-heading>
-			Einstellungen für PSA SoC
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
 		<openwb-base-text-input
 			title="Benutzername"
 			required
 			subtype="user"
-			:model-value="configuration.user_id"
+			:model-value="vehicle.configuration.user_id"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.user_id')
 			"
@@ -21,7 +17,7 @@
 			title="Kennwort"
 			required
 			subtype="password"
-			:model-value="configuration.password"
+			:model-value="vehicle.configuration.password"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.password')
 			"
@@ -41,7 +37,7 @@
 				{ value: 'Opel', text: 'Opel' },
 				{ value: 'Vauxhall', text: 'Vauxhall' },
 			]"
-			:model-value="configuration.manufacturer"
+			:model-value="vehicle.configuration.manufacturer"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.manufacturer')
 			"
@@ -51,7 +47,7 @@
 
 		<openwb-base-text-input
 			title="VIN"
-			:model-value="configuration.vin"
+			:model-value="vehicle.configuration.vin"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.vin')
 			"
@@ -70,7 +66,7 @@
 			<openwb-base-text-input
 				title="Client ID"
 				subtype="user"
-				:model-value="configuration.client_id"
+				:model-value="vehicle.configuration.client_id"
 				@update:model-value="
 					updateConfiguration($event, 'configuration.client_id')
 				"
@@ -84,7 +80,7 @@
 			<openwb-base-text-input
 				title="Client Secret"
 				subtype="password"
-				:model-value="configuration.client_secret"
+				:model-value="vehicle.configuration.client_secret"
 				@update:model-value="
 					updateConfiguration($event, 'configuration.client_secret')
 				"
@@ -103,8 +99,8 @@ export default {
 	name: "VehicleSocPSA",
 	emits: ["update:configuration"],
 	props: {
-		configuration: { type: Object, required: true },
-		vehicleId: { required: false },
+		vehicleId: { required: true, type: Number },
+		vehicle: { required: true, type: Object },
 	},
 	data() {
 		return {};

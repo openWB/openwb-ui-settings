@@ -1,14 +1,10 @@
 <template>
 	<div class="vehicle-soc-http">
-		<openwb-base-heading>
-			Einstellungen für HTTP SoC
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
 		<openwb-base-text-input
 			title="SoC URL"
 			subtype="url"
 			required
-			:model-value="configuration.soc_url"
+			:model-value="vehicle.configuration.soc_url"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.soc_url')
 			"
@@ -22,7 +18,7 @@
 		<openwb-base-text-input
 			title="Reichweiten URL"
 			subtype="url"
-			:model-value="configuration.range_url"
+			:model-value="vehicle.configuration.range_url"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.range_url')
 			"
@@ -41,8 +37,8 @@ export default {
 	name: "VehicleSocHttp",
 	emits: ["update:configuration"],
 	props: {
-		configuration: { type: Object, required: true },
-		vehicleId: { required: true },
+		vehicleId: { required: true, type: Number },
+		vehicle: { required: true, type: Object },
 	},
 	data() {
 		return {};
