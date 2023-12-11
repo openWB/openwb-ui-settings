@@ -1,14 +1,10 @@
 <template>
 	<div class="vehicle-soc-tesla">
-		<openwb-base-heading>
-			Einstellungen für Tesla SoC
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
 		<openwb-base-number-input
 			title="Fahrzeug-ID"
 			required
 			:min="0"
-			:model-value="configuration.tesla_ev_num"
+			:model-value="vehicle.configuration.tesla_ev_num"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.tesla_ev_num')
 			"
@@ -31,9 +27,9 @@
 			</template>
 		</openwb-base-button-input>
 		<openwb-base-text-input
-			title="2. URL kopieren"
+			title="2. URL kopieren und einfügen"
 			subtype="url"
-			:emptyValue="''"
+			:emptyValue="null"
 			v-model="page_not_found_url"
 		>
 			<template #help>
@@ -46,7 +42,7 @@
 			title="3. Token abrufen"
 			buttonText="Jetzt abrufen"
 			subtype="success"
-			:disabled="page_not_found_url.length == 0"
+			:disabled="page_not_found_url === null"
 			@buttonClicked="tesla_login"
 		>
 			<template #help>
@@ -62,7 +58,9 @@
 			pattern="^(ey).*"
 			required
 			:model-value="
-				configuration.token ? configuration.token.access_token : ''
+				vehicle.configuration.token
+					? vehicle.configuration.token.access_token
+					: ''
 			"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.token.access_token')
@@ -73,7 +71,9 @@
 			pattern="^(ey).*"
 			required
 			:model-value="
-				configuration.token ? configuration.token.refresh_token : ''
+				vehicle.configuration.token
+					? vehicle.configuration.token.refresh_token
+					: ''
 			"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.token.refresh_token')
@@ -83,7 +83,9 @@
 			title="Erstellt um"
 			required
 			:model-value="
-				configuration.token ? configuration.token.created_at : 0
+				vehicle.configuration.token
+					? vehicle.configuration.token.created_at
+					: 0
 			"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.token.created_at')
@@ -98,7 +100,9 @@
 			unit="s"
 			required
 			:model-value="
-				configuration.token ? configuration.token.expires_in : 0
+				vehicle.configuration.token
+					? vehicle.configuration.token.expires_in
+					: 0
 			"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.token.expires_in')
@@ -131,8 +135,8 @@ export default {
 	name: "VehicleSocTesla",
 	emits: ["update:configuration"],
 	props: {
-		configuration: { type: Object, required: true },
-		vehicleId: { required: true },
+		vehicleId: { required: true, type: Number },
+		vehicle: { required: true, type: Object },
 	},
 	data() {
 		return {
@@ -144,7 +148,7 @@ export default {
 				"AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
 			code_challenge: null,
 			code_verifier: null,
-			page_not_found_url: "",
+			page_not_found_url: null,
 		};
 	},
 	mixins: [ComponentStateVue],

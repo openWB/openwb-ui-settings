@@ -1,9 +1,5 @@
 <template>
 	<div class="vehicle-soc-tesla">
-		<openwb-base-heading>
-			Einstellungen für manuellen SoC
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
 			Beim Anstecken des Fahrzeugs muss der aktuelle SoC über die
 			Hauptseite angegeben werden. Anhand des Zählers im Ladepunkt wird
@@ -19,8 +15,8 @@ export default {
 	name: "VehicleSocManual",
 	emits: ["update:configuration"],
 	props: {
-		configuration: { type: Object, required: true },
-		vehicleId: { required: true },
+		vehicleId: { required: true, type: Number },
+		vehicle: { required: true, type: Object },
 	},
 	data() {
 		return {};

@@ -1,9 +1,5 @@
 <template>
 	<div class="vehicle-soc-mqtt">
-		<openwb-base-heading>
-			Einstellungen für MQTT SoC
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
 			Die Daten werden immer dann aktualisiert, wenn das Topic
 			veröffentlicht wird. Die Abfrageintervalle werden nicht
@@ -44,8 +40,8 @@ export default {
 	name: "VehicleSocMqtt",
 	emits: ["update:configuration"],
 	props: {
-		configuration: { type: Object, required: true },
-		vehicleId: { required: true },
+		vehicleId: { required: true, type: Number },
+		vehicle: { required: true, type: Object },
 	},
 	data() {
 		return {};

@@ -434,19 +434,12 @@
 							</openwb-base-button-group-input>
 							<openwb-vehicle-proxy
 								:vehicleId="vehicleId"
-								:vehicleType="
+								:vehicle="
 									$store.state.mqtt[
 										'openWB/vehicle/' +
 											vehicleId +
 											'/soc_module/config'
-									].type
-								"
-								:configuration="
-									$store.state.mqtt[
-										'openWB/vehicle/' +
-											vehicleId +
-											'/soc_module/config'
-									].configuration
+									]
 								"
 								@update:configuration="
 									updateConfiguration(

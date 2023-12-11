@@ -1,14 +1,10 @@
 <template>
 	<div class="vehicle-soc-smarteq">
-		<openwb-base-heading>
-			Einstellungen für SmartEQ SoC
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
 		<openwb-base-text-input
 			title="Benutzername"
 			required
 			subtype="user"
-			:model-value="configuration.user_id"
+			:model-value="vehicle.configuration.user_id"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.user_id')
 			"
@@ -21,7 +17,7 @@
 			title="Kennwort"
 			required
 			subtype="password"
-			:model-value="configuration.password"
+			:model-value="vehicle.configuration.password"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.password')
 			"
@@ -33,7 +29,7 @@
 		<openwb-base-text-input
 			title="VIN"
 			required
-			:model-value="configuration.vin"
+			:model-value="vehicle.configuration.vin"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.vin')
 			"
@@ -48,8 +44,8 @@ export default {
 	name: "VehicleSocSmarteq",
 	emits: ["update:configuration"],
 	props: {
-		configuration: { type: Object, required: true },
-		vehicleId: { required: true },
+		vehicleId: { required: true, type: Number },
+		vehicle: { required: true, type: Object },
 	},
 	data() {
 		return {};

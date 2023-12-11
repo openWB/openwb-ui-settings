@@ -1,14 +1,10 @@
 <template>
-	<div class="backup-cloud-nextcloud">
-		<openwb-base-heading>
-			Einstellungen für NextCloud-Backup Cloud
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
+	<div class="backup-cloud-next-cloud">
 		<openwb-base-text-input
 			title="Cloud-URL"
 			subtype="host"
 			required
-			:model-value="configuration.ip_address"
+			:model-value="backupCloud.configuration.ip_address"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.ip_address')
 			"
@@ -24,7 +20,7 @@
 		<openwb-base-text-input
 			title="Benutzername"
 			subtype="user"
-			:model-value="configuration.user"
+			:model-value="backupCloud.configuration.user"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.user')
 			"
@@ -32,7 +28,7 @@
 		<openwb-base-text-input
 			title="Passwort"
 			subtype="password"
-			:model-value="configuration.password"
+			:model-value="backupCloud.configuration.password"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.password')
 			"
@@ -45,7 +41,7 @@ export default {
 	name: "BackupCloudNextCloud",
 	emits: ["update:configuration"],
 	props: {
-		configuration: { type: Object, required: true },
+		backupCloud: { type: Object, required: true },
 	},
 	data() {
 		return {};

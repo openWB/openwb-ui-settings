@@ -1,13 +1,9 @@
 <template>
 	<div class="backup-cloud-nfs">
-		<openwb-base-heading>
-			Einstellungen für NFS-Backup Cloud
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
 		<openwb-base-text-input
 			title="Pfad zum NFS Share"
 			pattern="^([^/: ]+):(\/[^/: ]+)+$"
-			:model-value="configuration.nfs_share"
+			:model-value="backupCloud.configuration.nfs_share"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.nfs_share')
 			"
@@ -20,7 +16,7 @@ export default {
 	name: "BackupCloudNfs",
 	emits: ["update:configuration"],
 	props: {
-		configuration: { type: Object, required: true },
+		backupCloud: { type: Object, required: true },
 	},
 	data() {
 		return {};

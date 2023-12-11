@@ -1,23 +1,23 @@
 <template>
 	<div class="backup-cloud-fallback">
 		<openwb-base-alert
-			v-if="Object.keys(configuration).length == 0"
+			v-if="Object.keys(backupCloud.configuration).length == 0"
 			subtype="info"
 		>
-			Der Backup-Cloud-Typ "{{ backupCloudType }}" bietet keine
+			Die Backup-Cloud "{{ backupCloud.name }}" bietet keine
 			Einstellungen.
 		</openwb-base-alert>
 		<div v-else>
 			<openwb-base-alert subtype="warning">
-				Es wurde keine Konfigurationsseite für den Backup-Cloud-Typ "{{
-					backupCloudType
+				Es wurde keine Konfigurationsseite für die Backup-Cloud "{{
+					backupCloud.name
 				}}" gefunden. Die Einstellungen können als JSON direkt
 				bearbeitet werden.
 			</openwb-base-alert>
 			<openwb-base-textarea
 				title="Konfiguration"
 				subtype="json"
-				:model-value="configuration"
+				:model-value="backupCloud.configuration"
 				@update:model-value="
 					updateConfiguration($event, 'configuration')
 				"
@@ -28,7 +28,9 @@
 				</template>
 			</openwb-base-textarea>
 			<openwb-base-alert subtype="info">
-				<pre>{{ JSON.stringify(configuration, undefined, 2) }}</pre>
+				<pre>{{
+					JSON.stringify(backupCloud.configuration, undefined, 2)
+				}}</pre>
 			</openwb-base-alert>
 		</div>
 	</div>
@@ -39,8 +41,7 @@ export default {
 	name: "BackupCloudConfigFallback",
 	emits: ["update:configuration"],
 	props: {
-		configuration: { type: Object, required: true },
-		backupCloudType: String,
+		backupCloud: { type: Object, required: true },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {

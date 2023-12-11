@@ -169,9 +169,14 @@ export default {
 		},
 	},
 	mounted() {
-		this.mqttTopicsToSubscribe.push(
-			"openWB/log/" + this.mqttClientId + "/data"
-		);
+		// ToDo: Check Topic! This topic contains requested charge log data!
+		if (
+			!(`openWB/log/${this.mqttClientId}/data` in this.$store.state.mqtt)
+		) {
+			this.mqttTopicsToSubscribe.push(
+				"openWB/log/" + this.mqttClientId + "/data"
+			);
+		}
 		this.mqttTopicsToSubscribe.forEach((topic) => {
 			if (topic.includes("#") || topic.includes("+")) {
 				console.debug("skipping init of wildcard topic:", topic);

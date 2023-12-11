@@ -1,14 +1,10 @@
 <template>
 	<div class="vehicle-soc-mercedeseq">
-		<openwb-base-heading>
-			Einstellungen für Mercedes EQ SoC
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
 		<openwb-base-text-input
 			title="Client-ID"
 			required
 			subtype="user"
-			:model-value="configuration.client_id"
+			:model-value="vehicle.configuration.client_id"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.client_id')
 			"
@@ -21,7 +17,7 @@
 			title="Client Secret"
 			required
 			subtype="password"
-			:model-value="configuration.client_secret"
+			:model-value="vehicle.configuration.client_secret"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.client_secret')
 			"
@@ -33,7 +29,7 @@
 		<openwb-base-text-input
 			title="VIN"
 			required
-			:model-value="configuration.vin"
+			:model-value="vehicle.configuration.vin"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.vin')
 			"
@@ -70,8 +66,8 @@ export default {
 	name: "VehicleSocMercedesEq",
 	emits: ["update:configuration"],
 	props: {
-		configuration: { type: Object, required: true },
-		vehicleId: { required: true },
+		vehicleId: { required: true, type: Number },
+		vehicle: { required: true, type: Object },
 	},
 	data() {
 		return {};
@@ -83,15 +79,15 @@ export default {
 		login_url() {
 			return (
 				"https://ssoalpha.dvb.corpinter.net/v1/auth?response_type=code" +
-				`&state=${this.vehicleId}&client_id=${this.configuration.client_id}&redirect_uri=${this.callback_url}` +
+				`&state=${this.vehicleId}&client_id=${this.vehicle.configuration.client_id}&redirect_uri=${this.callback_url}` +
 				"&scope=mb:vehicle:mbdata:evstatus%20offline_access%20openid"
 			);
 		},
 		input_complete() {
 			return (
-				this.configuration.client_id &&
-				this.configuration.client_secret &&
-				this.configuration.vin
+				this.vehicle.configuration.client_id &&
+				this.vehicle.configuration.client_secret &&
+				this.vehicle.configuration.vin
 			);
 		},
 	},
