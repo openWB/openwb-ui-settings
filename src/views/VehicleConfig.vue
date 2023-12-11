@@ -209,7 +209,7 @@
 							"
 						>
 							<openwb-base-array-input
-								title="Zugeordnete Tags"
+								title="Zugeordnete ID-Tags"
 								:model-value="
 									$store.state.mqtt[
 										'openWB/vehicle/' +
@@ -227,13 +227,11 @@
 								"
 							/>
 							<openwb-base-alert subtype="info">
-								Der/die RFID-Tag(s) müssen in dem
-								Ladepunkt-Profil eingetragen werden, um
-								zuzuordnen, an welchem Ladepunkt die Tags
-								verwendet werden dürfen.<br />
-								<span
-									v-html="$store.state.text.rfidWiki"
-								></span>
+								Die ID-Tags müssen auch in den Ladepunkt-Profil
+								eingetragen werden, um zuzuordnen, an welchen
+								Ladepunkten die ID-Tags verwendet werden
+								dürfen.<br />
+								<span v-html="$store.state.text.rfidWiki" />
 							</openwb-base-alert>
 							<hr />
 						</div>

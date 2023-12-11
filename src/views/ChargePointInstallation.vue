@@ -469,7 +469,7 @@
 								Zugangskontrolle
 							</openwb-base-heading>
 							<openwb-base-button-group-input
-								title="Freigabe mit RFID"
+								title="Freigabe durch ID-Tags"
 								:buttons="[
 									{ buttonValue: false, text: 'Nein' },
 									{ buttonValue: true, text: 'Ja' },
@@ -484,8 +484,8 @@
 								"
 							/>
 							<openwb-base-array-input
-								title="Zugeordnete Tags"
-								noElementsMessage="Keine Tags zugeordnet."
+								title="Zugeordnete ID-Tags"
+								noElementsMessage="Keine ID-Tags zugeordnet."
 								:model-value="chargePointTemplate.valid_tags"
 								@update:model-value="
 									updateState(
@@ -497,8 +497,10 @@
 							>
 								<template #help>
 									An allen Ladepunkten, denen dieses
-									Ladepunkt-Profil zugeordnet ist, können die
-									hier eingetragenen Tags verwendet werden.<br />
+									Ladepunkt-Profil zugeordnet ist, werden die
+									hier eingetragenen ID-Tags zur Freischaltung
+									verwendet.
+									<br />
 									<span
 										v-html="$store.state.text.rfidWiki"
 									></span>
@@ -506,8 +508,8 @@
 							</openwb-base-array-input>
 							<hr />
 						</div>
-						<openwb-base-heading
-							>Angaben zum konfigurierten Ladestrom der openWB
+						<openwb-base-heading>
+							Angaben zum konfigurierten Ladestrom der openWB
 						</openwb-base-heading>
 						<openwb-base-alert subtype="info">
 							Hier werden die maximalen Ladeströme entsprechend
@@ -1089,7 +1091,7 @@ export default {
 		removeChargePointTemplate(chargePointTemplateIndex, event) {
 			this.showChargePointTemplateModal = false;
 			if (event == "confirm") {
-				console.info(
+				console.debug(
 					"request removal of chargePoint template '" +
 						chargePointTemplateIndex +
 						"'"
@@ -1134,7 +1136,7 @@ export default {
 		) {
 			this.showChargePointTemplateAutolockPlanModal = false;
 			if (event == "confirm") {
-				console.info(
+				console.debug(
 					"request removal of chargePoint template '" +
 						chargePointTemplateIndex +
 						"' autolock plan '" +
