@@ -24,11 +24,23 @@
 					]"
 				>
 					<template #help>
-						Die Identifikation von Fahrzeugen kann auf mehreren Wegen erfolgen:
+						Die Identifikation von Fahrzeugen kann auf mehreren
+						Wegen erfolgen:
 						<ul>
-							<li>Über einen in der openWB verbauten RFID-Reader (optional, z.B. anhand des Lieferscheins prüfen).</li>
-							<li>Durch die automatische Erkennung an einer openWB Pro (muss in den Einstellungen aktiviert werden).</li>
-							<!-- <li>Durch manuelle Eingabe einer ID am Display einer openWB.</li> ToDo! -->
+							<li>
+								Über einen in der openWB verbauten RFID-Reader
+								(optional, z.B. anhand des Lieferscheins
+								prüfen).
+							</li>
+							<li>
+								Durch die automatische Erkennung an einer openWB
+								Pro (muss in den Einstellungen aktiviert
+								werden).
+							</li>
+							<li>
+								Durch manuelle Eingabe einer ID am Display einer
+								openWB.
+							</li>
 						</ul>
 					</template>
 				</openwb-base-button-group-input>
@@ -38,18 +50,29 @@
 						true
 					"
 				>
-					<openwb-base-alert subtype="info">
+					<openwb-base-alert subtype="info" class="mb-1">
 						Die ID-Tags, die an dem jeweiligen Ladepunkt gültig
 						sind, müssen in dem Ladepunkt-Profil hinterlegt werden.
-						Die ID-Tags müssen auch in den Einstellungen der Fahrzeuge
-						diesen zugeordnet werden.<br />
-						Es kann zuerst das Fahrzeug angesteckt und dann der ID-Tag erfasst
-						werden oder anders herum. Im letzten Fall
-						muss innerhalb von 5 Minuten ein Fahrzeug angesteckt werden,
-						sonst wird der ID-Tag verworfen. Das Fahrzeug wird erst
-						nach dem Anstecken zugeordnet.<br />
+						Die ID-Tags müssen auch in den Einstellungen der
+						Fahrzeuge diesen zugeordnet werden.<br />
+						Es kann zuerst das Fahrzeug angesteckt und dann der
+						ID-Tag erfasst werden oder anders herum. Im letzten Fall
+						muss innerhalb von 5 Minuten ein Fahrzeug angesteckt
+						werden, sonst wird der ID-Tag verworfen. Das Fahrzeug
+						wird erst nach dem Anstecken zugeordnet.<br />
 						<span v-html="$store.state.text.rfidWiki" />
 					</openwb-base-alert>
+					<openwb-base-textarea
+						title="Erkannte ID-Tags"
+						readonly
+						disabled
+						:model-value="idTagList.join('\n')"
+					>
+						<template #help>
+							Solange diese Seite geöffnet ist, werden alle
+							erfassten ID-Tags in dieser Liste aufgeführt.
+						</template>
+					</openwb-base-textarea>
 				</div>
 			</openwb-base-card>
 			<!-- <openwb-base-card title="LED-Ausgänge">
@@ -1448,6 +1471,10 @@ export default {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
 				// "openWB/general/extern_display_mode",
+				"openWB/chargepoint/+/config",
+				"openWB/chargepoint/+/get/rfid",
+				"openWB/chargepoint/+/get/rfid_timestamp",
+				"openWB/chargepoint/+/set/rfid",
 				"openWB/optional/rfid/active",
 				"openWB/optional/led/active",
 				"ToDo/optional/led/instant_blocked",
@@ -1473,34 +1500,66 @@ export default {
 				"openWB/optional/et/config/provider",
 				"openWB/optional/et/config/max_price",
 			],
+			tempIdTagList: {},
 		};
 	},
 	computed: {
-		displayThemeList: {
-			get() {
-				return this.$store.state.mqtt[
-					"openWB/system/configurable/display_themes"
-				];
-			},
+		idTagList() {
+			return Object.values(this.updateIdTagList());
 		},
-		displayThemeGroupList: {
-			get() {
-				let groups = [
-					{ label: "openWB", options: [] },
-					{ label: "Community", options: [] },
-				];
-				this.displayThemeList.forEach((theme) => {
-					if (theme.official === true) {
-						groups[0].options.push(theme);
-					} else {
-						groups[1].options.push(theme);
-					}
-				});
-				return groups;
-			},
+		displayThemeList() {
+			return this.$store.state.mqtt[
+				"openWB/system/configurable/display_themes"
+			];
+		},
+		displayThemeGroupList() {
+			let groups = [
+				{ label: "openWB", options: [] },
+				{ label: "Community", options: [] },
+			];
+			this.displayThemeList.forEach((theme) => {
+				if (theme.official === true) {
+					groups[0].options.push(theme);
+				} else {
+					groups[1].options.push(theme);
+				}
+			});
+			return groups;
 		},
 	},
 	methods: {
+		getIdFromTopic(topic) {
+			return topic
+				.match(/(?:\/)([0-9]+)(?=\/)*/g)[0]
+				.replace(/[^0-9]+/g, "");
+		},
+		updateIdTagList() {
+			Object.entries(
+				// get all id-tag topics/values
+				this.getWildcardTopics(
+					"^openWB/chargepoint/[^+/]+/[gs]et/rfid$",
+					true
+				)
+			).forEach((entry) => {
+				if (entry[1] !== null) {
+					this.tempIdTagList[entry[1]] = `${entry[1]} (${
+						entry[0].includes("/set/") ? "zugewiesen" : "erfasst"
+					} an ${this.getChargePointName(
+						this.getIdFromTopic(entry[0])
+					)})`;
+				}
+			});
+			return this.tempIdTagList;
+		},
+		getChargePointName(chargePointIndex) {
+			return this.$store.state.mqtt[
+				"openWB/chargepoint/" + chargePointIndex + "/config"
+			]
+				? this.$store.state.mqtt[
+						"openWB/chargepoint/" + chargePointIndex + "/config"
+				  ].name
+				: "Ladepunkt " + chargePointIndex;
+		},
 		getDisplayThemeDefaults(displayThemeType) {
 			const displayThemeDefaults = this.displayThemeList.find(
 				(element) => element.value == displayThemeType

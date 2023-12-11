@@ -497,8 +497,10 @@
 							>
 								<template #help>
 									An allen Ladepunkten, denen dieses
-									Ladepunkt-Profil zugeordnet ist, können die
-									hier eingetragenen ID-Tags verwendet werden.<br />
+									Ladepunkt-Profil zugeordnet ist, werden die
+									hier eingetragenen ID-Tags zur Freischaltung
+									verwendet.
+									<br />
 									<span
 										v-html="$store.state.text.rfidWiki"
 									></span>

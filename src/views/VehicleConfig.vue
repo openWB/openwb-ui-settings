@@ -227,10 +227,10 @@
 								"
 							/>
 							<openwb-base-alert subtype="info">
-								Die ID-Tags müssen auch in den
-								Ladepunkt-Profil eingetragen werden, um
-								zuzuordnen, an welchen Ladepunkten die ID-Tags
-								verwendet werden dürfen.<br />
+								Die ID-Tags müssen auch in den Ladepunkt-Profil
+								eingetragen werden, um zuzuordnen, an welchen
+								Ladepunkten die ID-Tags verwendet werden
+								dürfen.<br />
 								<span v-html="$store.state.text.rfidWiki" />
 							</openwb-base-alert>
 							<hr />
