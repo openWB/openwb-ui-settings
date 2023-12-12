@@ -25,7 +25,7 @@
 							D.h. der Regelbereich wird auf alle Einstellungen
 							für das PV-Laden angewendet und nur einmal
 							unabhängig von der Anzahl der angesteckten
-							Fahrzeuge. Liegt der Überschuss im vorgebenen
+							Fahrzeuge. Liegt der Überschuss im vorgegebenen
 							Regelbereich, wird nicht nachgeregelt. Liegt der
 							Überschuss außerhalb des Regelbereichs, wird in die
 							Mitte des Regelbereichs nachgeregelt.<br />
@@ -44,7 +44,7 @@
 						:disabled="controlMode !== 'individual'"
 						:readonly="controlMode !== 'individual'"
 						title="Minimum"
-						:step="0.01"
+						:step="0.005"
 						unit="kW"
 						:model-value="
 							Array.isArray(
@@ -73,7 +73,7 @@
 						:disabled="controlMode !== 'individual'"
 						:readonly="controlMode !== 'individual'"
 						title="Maximum"
-						:step="0.01"
+						:step="0.005"
 						unit="kW"
 						:model-value="
 							Array.isArray(
@@ -611,6 +611,8 @@ export default {
 						controlMode = "export";
 					} else if (state[0] === 0 && state[1] === 230) {
 						controlMode = "import";
+					} else if (state[0] === -115 && state[1] === 115) {
+						controlMode = "balanced";
 					} else {
 						controlMode = "individual";
 					}
