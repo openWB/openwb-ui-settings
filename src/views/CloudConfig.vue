@@ -124,6 +124,18 @@
 								)
 							"
 						>
+							<template #input-prefix>
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'user-gear']"
+								/>
+							</template>
+							<template #element-prefix>
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'user-gear']"
+								/>
+							</template>
 							<template #help>
 								Die Partner-ID erhältst Du von Deinem
 								Installateur. Ist hier keine Partner-ID
@@ -238,6 +250,18 @@
 								)
 							"
 						>
+							<template #input-prefix>
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'user-gear']"
+								/>
+							</template>
+							<template #element-prefix>
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'user-gear']"
+								/>
+							</template>
 							<template #help>
 								Die Partner-ID erhältst Du von Deinem
 								Installateur. Ist hier keine Partner-ID
@@ -356,6 +380,18 @@
 							)
 						"
 					>
+						<template #input-prefix>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'user-gear']"
+							/>
+						</template>
+						<template #element-prefix>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'user-gear']"
+							/>
+						</template>
 						<template #help>
 							Die Partner-ID erhältst Du von Deinem Installateur.
 							Ist hier keine Partner-ID eingetragen, dann kann
@@ -394,12 +430,21 @@
 </template>
 
 <script>
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faUserGear as fasUserGear } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(fasUserGear);
+
 import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
 	name: "OpenwbCloudConfig",
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
+	components: {
+		FontAwesomeIcon,
+	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
