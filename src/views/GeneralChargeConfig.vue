@@ -234,13 +234,8 @@
 						"
 					>
 						<openwb-electricity-tariff-proxy
-							:electricityTariffType="
+							:electricityTariff="
 								$store.state.mqtt['openWB/optional/et/provider']
-									.type
-							"
-							:configuration="
-								$store.state.mqtt['openWB/optional/et/provider']
-									.configuration
 							"
 							@update:configuration="
 								updateConfiguration(

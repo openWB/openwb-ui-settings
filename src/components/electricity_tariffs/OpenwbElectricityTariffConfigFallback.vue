@@ -2,14 +2,14 @@
 	<div class="backup-cloud-fallback">
 		<openwb-base-alert subtype="warning">
 			Es wurde keine Konfigurationsseite für den Anbieter "{{
-				electricityTariffType
+				electricityTariff.name
 			}}" gefunden. Die Einstellungen können als JSON direkt bearbeitet
 			werden.
 		</openwb-base-alert>
 		<openwb-base-textarea
 			title="Konfiguration"
 			subtype="json"
-			:model-value="configuration"
+			:model-value="electricityTariff.configuration"
 			@update:model-value="updateConfiguration($event, 'configuration')"
 		>
 			<template #help>
@@ -17,7 +17,9 @@
 			</template>
 		</openwb-base-textarea>
 		<openwb-base-alert subtype="info">
-			<pre>{{ JSON.stringify(configuration, undefined, 2) }}</pre>
+			<pre>{{
+				JSON.stringify(electricityTariff.configuration, undefined, 2)
+			}}</pre>
 		</openwb-base-alert>
 	</div>
 </template>
@@ -27,8 +29,7 @@ export default {
 	name: "ElectricityTariffConfigFallback",
 	emits: ["update:configuration"],
 	props: {
-		configuration: { type: Object, required: true },
-		electricityTariffType: String,
+		electricityTariff: { type: Object, required: true },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {
