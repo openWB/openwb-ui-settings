@@ -1,38 +1,27 @@
 <template>
-	<div class="electricity-tariff-tibber">
-		<openwb-base-heading>
-			Einstellungen für Tibber
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
+	<div class="electricity-tariff-voltego">
 		<openwb-base-alert subtype="info">
-			Ihren persönlichen Tibber-Token erhalten Sie über die
-			<a
-				href="https://developer.tibber.com/explorer"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				Tibber-Developer-Seite
-			</a>
-			. Behandeln Sie Ihren Token wie ein Passwort, da sich darüber auch
-			persönliche Daten aus Ihrem Tibber-Account abfragen lassen! Die
-			Home-ID können Sie (wenn bekannt) in das Eingabefeld selbst
-			eintragen oder nach Eingabe Ihres Token durch Klick auf den Button
-			von der openWB ermitteln lassen. Unerlaubte Zeichen werden aus dem
-			Token und der Home-ID automatisch gelöscht.
+			Ihre persönlichen Zugangsdaten (Client-ID und Client-Secret)
+			erhalten Sie direkt von Voltego. Behandeln Sie diese Daten wie ein
+			Passwort, da sich darüber auch persönliche Daten aus Ihrem
+			Voltego-Account abfragen lassen!
 		</openwb-base-alert>
 		<openwb-base-text-input
-			title="Token"
+			title="Client-ID"
+			subtype="user"
 			required
-			:model-value="configuration.token"
+			:model-value="electricityTariff.configuration.client_id"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.token')
+				updateConfiguration($event, 'configuration.client_id')
 			"
 		/>
 		<openwb-base-text-input
-			title="Home-ID"
-			:model-value="configuration.home_id"
+			title="Client-Secret"
+			subtype="password"
+			required
+			:model-value="electricityTariff.configuration.client_secret"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.home_id')
+				updateConfiguration($event, 'configuration.client_secret')
 			"
 		/>
 	</div>
@@ -40,10 +29,10 @@
 
 <script>
 export default {
-	name: "ElectricityTariffTibber",
+	name: "ElectricityTariffVoltego",
 	emits: ["update:configuration"],
 	props: {
-		configuration: { type: Object, required: true },
+		electricityTariff: { type: Object, required: true },
 	},
 	data() {
 		return {};

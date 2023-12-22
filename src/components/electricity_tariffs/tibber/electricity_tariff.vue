@@ -1,9 +1,5 @@
 <template>
 	<div class="electricity-tariff-tibber">
-		<openwb-base-heading>
-			Einstellungen für Tibber
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
 			Ihren persönlichen Tibber-Token erhalten Sie über die
 			<a
@@ -23,14 +19,32 @@
 		<openwb-base-text-input
 			title="Token"
 			required
-			:model-value="configuration.token"
+			ref="tokenInput"
+			:model-value="electricityTariff.configuration.token"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.token')
 			"
 		/>
+		<openwb-base-button-input
+			title="Home-IDs abrufen"
+			buttonText="Jetzt abrufen"
+			subtype="success"
+			:disabled="!electricityTariff.configuration.token?.length"
+			@buttonClicked="getTibberHomeList"
+		/>
+		<openwb-base-select-input
+			title="Verfügbare Home-IDs"
+			required
+			:options="tibberHomeList"
+			:model-value="electricityTariff.configuration.home_id"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.home_id')
+			"
+		/>
 		<openwb-base-text-input
 			title="Home-ID"
-			:model-value="configuration.home_id"
+			required
+			:model-value="electricityTariff.configuration.home_id"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.home_id')
 			"
@@ -43,14 +57,71 @@ export default {
 	name: "ElectricityTariffTibber",
 	emits: ["update:configuration"],
 	props: {
-		configuration: { type: Object, required: true },
+		electricityTariff: { type: Object, required: true },
 	},
 	data() {
-		return {};
+		return {
+			tibberAPI: "https://api.tibber.com/v1-beta/gql",
+			tibberHomeList: [],
+		};
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {
 			this.$emit("update:configuration", { value: event, object: path });
+		},
+		async getTibberHomeList() {
+			if (this.electricityTariff.configuration.token === null) {
+				return;
+			}
+			const homeQuery =
+				'{ "query": "{viewer {homes{id address{address1 address2 address3 postalCode city country}}}}" }';
+			try {
+				const response = await this.axios.post(
+					this.tibberAPI,
+					homeQuery,
+					{
+						headers: {
+							Authorization:
+								"Bearer " +
+								this.electricityTariff.configuration.token,
+							"Content-Type": "application/json",
+						},
+					}
+				);
+				this.tibberHomeList = response.data.data.viewer.homes.map(
+					(home) => {
+						let text = home.address.address1;
+						if (home.address.address2) {
+							text = text + ", " + home.address.address2;
+						}
+						if (home.address.address3) {
+							text = text + ", " + home.address.address3;
+						}
+						text =
+							text +
+							`, ${home.address.postalCode} ${home.address.city}, ${home.address.country}`;
+						return { value: home.id, text: text };
+					}
+				);
+				if (!this.electricityTariff.configuration.home_id) {
+					this.updateConfiguration(
+						this.tibberHomeList[0].value,
+						"configuration.home_id"
+					);
+				}
+				this.$root.postClientMessage(
+					"Home IDs erfolgreich abgerufen.",
+					"success"
+				);
+			} catch (error) {
+				console.error(error);
+				this.$root.postClientMessage(
+					"Beim Abfragen der Tibber API ist ein Fehler aufgetreten!<pre>" +
+						error +
+						"</pre>",
+					"danger"
+				);
+			}
 		},
 	},
 };

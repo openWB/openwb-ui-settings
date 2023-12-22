@@ -1,9 +1,5 @@
 <template>
 	<div class="electricity-tariff-awattar">
-		<openwb-base-heading>
-			Einstellungen für aWATTar Hourly
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
 		<openwb-base-select-input
 			title="Land"
 			notSelected="Bitte auswählen"
@@ -11,7 +7,7 @@
 				{ value: 'de', text: 'Deutschland' },
 				{ value: 'at', text: 'Österreich' },
 			]"
-			:model-value="configuration.country"
+			:model-value="electricityTariff.configuration.country"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.country')
 			"
@@ -30,7 +26,7 @@ export default {
 	name: "ElectricityTariffAwattar",
 	emits: ["update:configuration"],
 	props: {
-		configuration: { type: Object, required: true },
+		electricityTariff: { type: Object, required: true },
 	},
 	data() {
 		return {};
