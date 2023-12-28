@@ -57,6 +57,8 @@
 		/>
 		<!-- electricity tariff -->
 		<electricity-tariff-card />
+		<!-- ripple-control-receiver -->
+		<ripple-control-receiver-card />
 	</div>
 </template>
 
@@ -68,6 +70,7 @@ import InverterSumCard from "../components/status/InverterSumCard.vue";
 import InverterCard from "../components/status/InverterCard.vue";
 import BatterySumCard from "../components/status/BatterySumCard.vue";
 import BatteryCard from "../components/status/BatteryCard.vue";
+import RippleControlReceiverCard from "../components/status/RippleControlReceiver.vue";
 import VehicleCard from "../components/status/VehicleCard.vue";
 import ElectricityTariffCard from "../components/status/ElectricityTariffCard.vue";
 import ComponentState from "../components/mixins/ComponentState.vue";
@@ -83,6 +86,7 @@ export default {
 		InverterCard,
 		BatterySumCard,
 		BatteryCard,
+		RippleControlReceiverCard,
 		VehicleCard,
 		ElectricityTariffCard,
 	},

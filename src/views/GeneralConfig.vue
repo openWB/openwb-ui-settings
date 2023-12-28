@@ -247,6 +247,66 @@
 						</template>
 					</openwb-base-button-group-input> -->
 				</div>
+				<hr />
+				<openwb-base-heading class="mt-0">
+					Steuerbare Verbrauchseinrichtung
+				</openwb-base-heading>
+				<openwb-base-alert sub_type="info">
+					Aktuell unterstützt openWB die Steuerung von
+					Verbrauchseinrichtungen nur über die
+					Rundsteuerempfängerkontakte (RSE). Ist der Kontakt geschlossen,
+					darf Strom bezogen werden. Ist einer der Kontakte geöffnet, darf
+					kein Strom bezogen werden und die openWB stoppt die Ladung.
+				</openwb-base-alert>
+				<openwb-base-text-input
+					title="Abschaltung durch Netzbetreiber"
+					readonly
+					:model-value="
+						$store.state.mqtt[
+							'openWB/general/ripple_control_receiver/configured'
+						]
+							? 'Aktiv'
+							: 'Inaktiv'
+					"
+				>
+					<template #help>
+						Die Bundesnetzuagentur schreibt vor, das die
+						Aktivierung/Deaktivierung des
+						Rundsteuerempfängerkontakts nicht laienbedienbar sein
+						darf. Deshalb kann diese Einstellung nicht von Dir
+						verändert werden, sondern nur durch unseren Support.
+					</template>
+				</openwb-base-text-input>
+				<div
+					v-if="$store.state.mqtt['openWB/general/ripple_control_receiver/configured']"
+				>
+					<openwb-base-select-input
+						class="mb-2"
+						title="Anbindung RSE-Kontakt"
+						:options="rippleControlReceiverList"
+						:model-value="
+							$store.state.mqtt['openWB/general/ripple_control_receiver/module']
+								? $store.state.mqtt[
+										'openWB/general/ripple_control_receiver/module'
+									].type
+								: ''
+						"
+						@update:model-value="
+							updateSelectedRippleControlReceiverModule($event)
+						"
+					/>
+					<openwb-ripple-control-receiver-proxy
+						:rippleControlReceiver="
+							$store.state.mqtt['openWB/general/ripple_control_receiver/module']
+						"
+						@update:configuration="
+							updateConfiguration(
+								'openWB/general/ripple_control_receiver/module',
+								$event
+							)
+						"
+					/>
+				</div>
 			</openwb-base-card>
 			<!-- <openwb-base-card title="Benachrichtigungen">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
@@ -533,11 +593,13 @@
 <script>
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbWebThemeProxy from "../components/web_themes/OpenwbWebThemeProxy.vue";
+import OpenwbRippleControlReceiverProxy from "../components/ripple_control_receivers/OpenwbRippleControlReceiverProxy.vue";
 
 export default {
 	name: "OpenwbGeneralConfig",
 	mixins: [ComponentState],
-	components: { OpenwbWebThemeProxy },
+	components: { OpenwbWebThemeProxy,
+		OpenwbRippleControlReceiverProxy, },
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
@@ -554,7 +616,10 @@ export default {
 				"openWB/general/notifications/smart_home",
 				"openWB/general/price_kwh",
 				"openWB/general/range_unit",
+				"openWB/general/ripple_control_receiver/configured",
+				"openWB/general/ripple_control_receiver/module",
 				"openWB/general/web_theme",
+				"openWB/system/configurable/ripple_control_receivers",
 				"openWB/system/configurable/web_themes",
 			],
 		};
@@ -583,6 +648,11 @@ export default {
 				return groups;
 			},
 		},
+		rippleControlReceiverList() {
+			return this.$store.state.mqtt[
+				"openWB/system/configurable/ripple_control_receivers"
+			];
+		},
 	},
 	methods: {
 		getWebThemeDefaults(webThemeType) {
@@ -609,6 +679,35 @@ export default {
 			this.updateState(
 				"openWB/general/web_theme",
 				this.getWebThemeDefaults($event)
+			);
+		},
+		updateConfiguration(key, event) {
+			console.debug("updateConfiguration", key, event);
+			this.updateState(key, event.value, event.object);
+		},
+		getRippleControlReceiverDefaultConfiguration(rippleControlReceiverType) {
+			const rippleControlReceiverDefaults = this.rippleControlReceiverList.find(
+				(element) => element.value == rippleControlReceiverType
+			);
+			if (
+				Object.prototype.hasOwnProperty.call(
+					rippleControlReceiverDefaults,
+					"defaults"
+				)
+			) {
+				return { ...rippleControlReceiverDefaults.defaults };
+			}
+			console.warn(
+				"no default configuration found for electricity tariff type!",
+				rippleControlReceiverType
+			);
+			return {};
+		},
+		updateSelectedRippleControlReceiverModule($event) {
+			this.updateState("openWB/general/ripple_control_receiver/module", $event, "type");
+			this.updateState(
+				"openWB/general/ripple_control_receiver/module",
+				this.getRippleControlReceiverDefaultConfiguration($event)
 			);
 		},
 		updateConfiguration(key, event) {
