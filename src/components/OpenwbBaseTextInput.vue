@@ -74,6 +74,7 @@
 					</div>
 					<input
 						v-if="['text', 'user'].includes(subtype)"
+						ref="textInput"
 						type="text"
 						class="form-control"
 						:class="{ invalid: inputInvalid }"
@@ -92,6 +93,7 @@
 					/>
 					<input
 						v-if="subtype == 'password'"
+						ref="passwordInput"
 						:type="showPassword ? 'text' : 'password'"
 						class="form-control"
 						v-model="value"
@@ -100,6 +102,7 @@
 					/>
 					<input
 						v-if="subtype == 'host'"
+						ref="hostInput"
 						type="text"
 						class="form-control"
 						v-model="value"
@@ -107,29 +110,15 @@
 					/>
 					<input
 						v-if="['email', 'url'].includes(subtype)"
+						refs="urlInput"
 						:type="subtype"
 						class="form-control"
 						v-model="value"
 						v-bind="$attrs"
 					/>
-					<div
-						v-if="subtype == 'password'"
-						class="input-group-append clickable"
-						@click="togglePassword"
-					>
-						<div class="input-group-text">
-							<font-awesome-icon
-								fixed-width
-								:icon="
-									showPassword
-										? ['far', 'eye']
-										: ['far', 'eye-slash']
-								"
-							/>
-						</div>
-					</div>
 					<input
 						v-if="subtype == 'time'"
+						ref="timeInput"
 						type="time"
 						class="form-control"
 						v-model="value"
@@ -162,6 +151,22 @@
 					<div v-if="unit" class="input-group-append">
 						<div class="input-group-text">
 							{{ unit }}
+						</div>
+					</div>
+					<div
+						v-if="subtype == 'password'"
+						class="input-group-append clickable"
+						@click="togglePassword"
+					>
+						<div class="input-group-text">
+							<font-awesome-icon
+								fixed-width
+								:icon="
+									showPassword
+										? ['far', 'eye']
+										: ['far', 'eye-slash']
+								"
+							/>
 						</div>
 					</div>
 					<div
@@ -313,6 +318,29 @@ export default {
 				}
 			},
 		},
+		inputRef() {
+			switch (this.subtype) {
+				case "json":
+					return this.$refs.jsonInput;
+				case "password":
+					return this.$refs.passwordInput;
+				case "host":
+					return this.$refs.hostInput;
+				case "email":
+				case "url":
+					return this.$refs.urlInput;
+				case "time":
+					return this.$refs.timeInput;
+				case "date":
+					return this.$refs.dateInput;
+				case "month":
+					return this.$refs.monthInput;
+				case "year":
+					return this.$refs.yearInput;
+			}
+			// default to textInput
+			return this.$refs.textInput;
+		},
 	},
 	methods: {
 		toggleHelp() {
@@ -322,7 +350,7 @@ export default {
 			this.showPassword = !this.showPassword;
 		},
 		modify(offset) {
-			var inputRef, newValue;
+			var newValue;
 			var newDate = new Date(this.modelValue);
 			switch (this.subtype) {
 				case "date":
@@ -333,7 +361,6 @@ export default {
 						String(newDate.getMonth() + 1).padStart(2, "0") +
 						"-" +
 						String(newDate.getDate()).padStart(2, "0");
-					inputRef = this.$refs.dateInput;
 					break;
 				case "month":
 					newDate.setMonth(newDate.getMonth() + offset);
@@ -341,12 +368,10 @@ export default {
 						String(newDate.getFullYear()) +
 						"-" +
 						String(newDate.getMonth() + 1).padStart(2, "0");
-					inputRef = this.$refs.monthInput;
 					break;
 				case "year":
 					newDate.setYear(newDate.getFullYear() + offset);
 					newValue = String(newDate.getFullYear());
-					inputRef = this.$refs.yearInput;
 					break;
 				default:
 					console.warn(
@@ -354,7 +379,7 @@ export default {
 					);
 					return;
 			}
-			if (newValue > inputRef.max || newValue < inputRef.min) {
+			if (newValue > this.inputRef.max || newValue < this.inputRef.min) {
 				return;
 			}
 			this.value = newValue;

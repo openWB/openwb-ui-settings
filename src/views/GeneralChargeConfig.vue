@@ -75,12 +75,12 @@
 							)
 						"
 					>
-						<template #help
-							>Hiermit wird festgelegt, welche Schieflast am
+						<template #help>
+							Hiermit wird festgelegt, welche Schieflast am
 							Netzanschlusspunkt erlaubt ist. Bei Überschreitung
 							werden gezielt einzelne Ladevorgänge in der Leistung
-							begrenzt.</template
-						>
+							begrenzt.
+						</template>
 					</openwb-base-range-input>
 					<openwb-base-button-group-input
 						title="Phasenumschaltung wiederholt anstoßen"
@@ -118,6 +118,133 @@
 							zurückgesetzt.
 						</template>
 					</openwb-base-button-group-input>
+					<hr />
+					<openwb-base-heading>
+						Berechnung der Ladekosten
+						<template #help>
+							Zur Berechnung der Ladekosten im Lade-Log werden
+							stundenweise die Anteile der Stromquellen (Speicher,
+							Netz, PV) berechnet und mit den hier angegebenen
+							Preisen multipliziert.<br />
+							Ist die Abrechnung über das Ladeprotokoll, z.B. mit
+							dem Arbeitgeber, vereinbart, ist bei allen drei
+							Feldern der vereinbarte Preis einzutragen.
+						</template>
+					</openwb-base-heading>
+					<openwb-base-number-input
+						title="Preis für Netzbezug"
+						:step="0.001"
+						:precision="3"
+						unit="ct/kWh"
+						:model-value="
+							$store.state.mqtt['openWB/general/prices/grid'] *
+							100000
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/prices/grid',
+								parseFloat(($event / 100000).toFixed(7))
+							)
+						"
+					>
+						<template #help>
+							Ist ein Anbieter für variable Stromtarife
+							konfiguriert, wird statt des hier angegebenen
+							Netzpreises der dynamische Strompreis des Anbieters
+							verwendet (stündliche Aktualisierung durch den
+							Anbieter).
+						</template>
+					</openwb-base-number-input>
+					<openwb-base-number-input
+						title="Preis für Speicherentladung"
+						:step="0.001"
+						:precision="3"
+						unit="ct/kWh"
+						:model-value="
+							$store.state.mqtt['openWB/general/prices/bat'] *
+							100000
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/prices/bat',
+								parseFloat(($event / 100000).toFixed(7))
+							)
+						"
+					>
+					</openwb-base-number-input>
+					<openwb-base-number-input
+						title="Preis für PV-Strom"
+						:step="0.001"
+						:precision="3"
+						unit="ct/kWh"
+						:model-value="
+							$store.state.mqtt['openWB/general/prices/pv'] *
+							100000
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/prices/pv',
+								parseFloat(($event / 100000).toFixed(7))
+							)
+						"
+					/>
+				</div>
+			</openwb-base-card>
+			<openwb-base-card title="Optional">
+				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+					<openwb-base-alert subtype="info">
+						Diese Einstellungen sind nicht verfügbar, solange sich
+						diese openWB im Steuerungsmodus "secondary" befindet.
+					</openwb-base-alert>
+				</div>
+				<div v-else>
+					<openwb-base-heading>
+						Variable Stromtarife
+					</openwb-base-heading>
+					<openwb-base-alert subtype="info">
+						Bei Sofort- und Zeitladen wird nur geladen, wenn der
+						Strompreis unter dem maximalen angegeben Strompreis
+						liegt. Für Zielladen wird die Ladedauer ermittelt und
+						dann zu den günstigsten Stunden geladen.<br />
+						Wenn keine Preise abgefragt werden können, wird bei
+						Sofort- und Zeitladen immer geladen und bei Zielladen
+						zunächst mit PV-Überschuss und zum Erreichen des
+						Zieltermins mit Netzstrom.
+					</openwb-base-alert>
+					<openwb-base-select-input
+						class="mb-2"
+						title="Anbieter"
+						:options="electricityTariffList"
+						:model-value="
+							$store.state.mqtt['openWB/optional/et/provider']
+								? $store.state.mqtt[
+										'openWB/optional/et/provider'
+								  ].type
+								: ''
+						"
+						@update:model-value="
+							updateSelectedElectricityTariff($event)
+						"
+					/>
+					<div
+						v-if="
+							$store.state.mqtt['openWB/optional/et/provider'] &&
+							$store.state.mqtt['openWB/optional/et/provider']
+								.type
+						"
+					>
+						<openwb-electricity-tariff-proxy
+							:electricityTariff="
+								$store.state.mqtt['openWB/optional/et/provider']
+							"
+							@update:configuration="
+								updateConfiguration(
+									'openWB/optional/et/provider',
+									$event
+								)
+							"
+						/>
+					</div>
 				</div>
 			</openwb-base-card>
 			<openwb-base-submit-buttons
@@ -132,10 +259,14 @@
 
 <script>
 import ComponentState from "../components/mixins/ComponentState.vue";
+import OpenwbElectricityTariffProxy from "../components/electricity_tariffs/OpenwbElectricityTariffProxy.vue";
 
 export default {
 	name: "OpenwbGeneralChargeConfig",
 	mixins: [ComponentState],
+	components: {
+		OpenwbElectricityTariffProxy,
+	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
@@ -143,8 +274,51 @@ export default {
 				"openWB/general/chargemode_config/retry_failed_phase_switches",
 				"openWB/general/chargemode_config/unbalanced_load",
 				"openWB/general/chargemode_config/unbalanced_load_limit",
+				"openWB/general/prices/bat",
+				"openWB/general/prices/grid",
+				"openWB/general/prices/pv",
+				"openWB/optional/et/provider",
+				"openWB/system/configurable/electricity_tariffs",
 			],
 		};
+	},
+	computed: {
+		electricityTariffList() {
+			return this.$store.state.mqtt[
+				"openWB/system/configurable/electricity_tariffs"
+			];
+		},
+	},
+	methods: {
+		getElectricityTariffDefaultConfiguration(electricityTariffType) {
+			const electricityTariffDefaults = this.electricityTariffList.find(
+				(element) => element.value == electricityTariffType
+			);
+			if (
+				Object.prototype.hasOwnProperty.call(
+					electricityTariffDefaults,
+					"defaults"
+				)
+			) {
+				return { ...electricityTariffDefaults.defaults };
+			}
+			console.warn(
+				"no default configuration found for electricity tariff type!",
+				electricityTariffType
+			);
+			return {};
+		},
+		updateSelectedElectricityTariff($event) {
+			this.updateState("openWB/optional/et/provider", $event, "type");
+			this.updateState(
+				"openWB/optional/et/provider",
+				this.getElectricityTariffDefaultConfiguration($event)
+			);
+		},
+		updateConfiguration(key, event) {
+			console.debug("updateConfiguration", key, event);
+			this.updateState(key, event.value, event.object);
+		},
 	},
 };
 </script>
