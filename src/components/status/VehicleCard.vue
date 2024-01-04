@@ -63,23 +63,13 @@
 			readonly
 			class="text-right text-monospace"
 			unit="km"
-			:model-value="
-				Math.round(
-					$store.state.mqtt[
-						'openWB/vehicle/' + vehicleIndex + '/get/range'
-					]
-				)
-			"
+			:model-value="socRange"
 		/>
 		<openwb-base-text-input
 			title="Letzter Zeitstempel"
 			readonly
 			class="text-right text-monospace"
-			:model-value="
-				$store.state.mqtt[
-					'openWB/vehicle/' + vehicleIndex + '/get/soc_timestamp'
-				]
-			"
+			:model-value="socTimestamp"
 		/>
 	</openwb-base-card>
 </template>
@@ -118,6 +108,42 @@ export default {
 		vehicleIndex: {
 			get() {
 				return parseInt(this.vehicleKey.match(/(?:\/)(\d+)(?=\/)/)[1]);
+			},
+		},
+		socTimestamp: {
+			get() {
+				if (
+					this.$store.state.mqtt[
+						"openWB/vehicle/" +
+							this.vehicleIndex +
+							"/get/soc_timestamp"
+					] !== undefined
+				) {
+					return new Date(
+						this.$store.state.mqtt[
+							"openWB/vehicle/" +
+								this.vehicleIndex +
+								"/get/soc_timestamp"
+						] * 1000
+					).toLocaleString();
+				} else {
+					return "-";
+				}
+			},
+		},
+		socRange: {
+			get() {
+				if (this.$store.state.mqtt[
+							'openWB/vehicle/' + this.vehicleIndex + '/get/range'
+						] !== undefined) {
+					return Math.round(
+						this.$store.state.mqtt[
+							'openWB/vehicle/' + this.vehicleIndex + '/get/range'
+						]
+					);
+				} else {
+					return 0;
+				}
 			},
 		},
 	},
