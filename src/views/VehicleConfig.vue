@@ -1142,7 +1142,7 @@
 								</openwb-base-alert>
 							</div>
 							<openwb-base-number-input
-								title="Maximaler Strompreis"
+								title="Preisgrenze für Zeit- & Sofortladen"
 								min="-80"
 								max="80"
 								step="0.01"
@@ -1158,7 +1158,11 @@
 										'et.max_price'
 									)
 								"
-							/>
+							>
+							<template #help>
+								Für Zielladen werden die günstigsten Stunden ermittelt.
+							</template>
+						</openwb-base-number-input>
 						</div>
 						<hr />
 						<openwb-base-heading>Sofortladen</openwb-base-heading>
