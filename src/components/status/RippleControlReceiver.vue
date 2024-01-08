@@ -57,18 +57,7 @@
 			readonly
 			:model-value="
 				$store.state.mqtt[
-					'openWB/general/ripple_control_receiver/get/r1_blocking'
-				]
-					? 'Laden gesperrt'
-					: 'Laden erlaubt'
-			"
-		/>
-		<openwb-base-text-input
-			title="RSE-Kontakt 2"
-			readonly
-			:model-value="
-				$store.state.mqtt[
-					'openWB/general/ripple_control_receiver/get/r2_blocking'
+					'openWB/general/ripple_control_receiver/get/override_value'
 				]
 					? 'Laden gesperrt'
 					: 'Laden erlaubt'
@@ -108,8 +97,7 @@ export default {
 				"openWB/general/ripple_control_receiver/configured",
 				"openWB/general/ripple_control_receiver/get/fault_state",
 				"openWB/general/ripple_control_receiver/get/fault_str",
-				"openWB/general/ripple_control_receiver/get/r1_blocking",
-				"openWB/general/ripple_control_receiver/get/r2_blocking",
+				"openWB/general/ripple_control_receiver/get/override_value",
 				"openWB/general/ripple_control_receiver/module",
 			],
 			statusLevel: ["success", "warning", "danger"],
