@@ -53,7 +53,7 @@
 			}}
 		</openwb-base-alert>
 		<openwb-base-text-input
-			title="RSE-Kontakt 1"
+			title="Status"
 			readonly
 			:model-value="
 				$store.state.mqtt[
