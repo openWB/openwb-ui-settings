@@ -29,7 +29,11 @@
 			</openwb-base-textarea>
 			<openwb-base-alert subtype="info">
 				<pre>{{
-					JSON.stringify(rippleControlReceiver.configuration, undefined, 2)
+					JSON.stringify(
+						rippleControlReceiver.configuration,
+						undefined,
+						2
+					)
 				}}</pre>
 			</openwb-base-alert>
 		</div>

@@ -22,10 +22,14 @@ export default {
 	},
 	computed: {
 		myComponent() {
-			console.debug(`loading backup cloud: ${this.rippleControlReceiver.type}`);
+			console.debug(
+				`loading backup cloud: ${this.rippleControlReceiver.type}`
+			);
 			return defineAsyncComponent({
 				loader: () =>
-					import(`./${this.rippleControlReceiver.type}/ripple_control_receiver.vue`),
+					import(
+						`./${this.rippleControlReceiver.type}/ripple_control_receiver.vue`
+					),
 				errorComponent: OpenwbRippleControlReceiverFallback,
 			});
 		},

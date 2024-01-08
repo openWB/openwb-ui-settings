@@ -254,9 +254,10 @@
 				<openwb-base-alert sub_type="info">
 					Aktuell unterstützt openWB die Steuerung von
 					Verbrauchseinrichtungen nur über die
-					Rundsteuerempfängerkontakte (RSE). Ist der Kontakt geschlossen,
-					darf Strom bezogen werden. Ist einer der Kontakte geöffnet, darf
-					kein Strom bezogen werden und die openWB stoppt die Ladung.
+					Rundsteuerempfängerkontakte (RSE). Ist der Kontakt
+					geschlossen, darf Strom bezogen werden. Ist einer der
+					Kontakte geöffnet, darf kein Strom bezogen werden und die
+					openWB stoppt die Ladung.
 				</openwb-base-alert>
 				<openwb-base-text-input
 					title="Abschaltung durch Netzbetreiber"
@@ -278,17 +279,23 @@
 					</template>
 				</openwb-base-text-input>
 				<div
-					v-if="$store.state.mqtt['openWB/general/ripple_control_receiver/configured']"
+					v-if="
+						$store.state.mqtt[
+							'openWB/general/ripple_control_receiver/configured'
+						]
+					"
 				>
 					<openwb-base-select-input
 						class="mb-2"
 						title="Anbindung RSE-Kontakt"
 						:options="rippleControlReceiverList"
 						:model-value="
-							$store.state.mqtt['openWB/general/ripple_control_receiver/module']
+							$store.state.mqtt[
+								'openWB/general/ripple_control_receiver/module'
+							]
 								? $store.state.mqtt[
 										'openWB/general/ripple_control_receiver/module'
-									].type
+								  ].type
 								: ''
 						"
 						@update:model-value="
@@ -297,7 +304,9 @@
 					/>
 					<openwb-ripple-control-receiver-proxy
 						:rippleControlReceiver="
-							$store.state.mqtt['openWB/general/ripple_control_receiver/module']
+							$store.state.mqtt[
+								'openWB/general/ripple_control_receiver/module'
+							]
 						"
 						@update:configuration="
 							updateConfiguration(
@@ -598,8 +607,7 @@ import OpenwbRippleControlReceiverProxy from "../components/ripple_control_recei
 export default {
 	name: "OpenwbGeneralConfig",
 	mixins: [ComponentState],
-	components: { OpenwbWebThemeProxy,
-		OpenwbRippleControlReceiverProxy, },
+	components: { OpenwbWebThemeProxy, OpenwbRippleControlReceiverProxy },
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
@@ -685,10 +693,13 @@ export default {
 			console.debug("updateConfiguration", key, event);
 			this.updateState(key, event.value, event.object);
 		},
-		getRippleControlReceiverDefaultConfiguration(rippleControlReceiverType) {
-			const rippleControlReceiverDefaults = this.rippleControlReceiverList.find(
-				(element) => element.value == rippleControlReceiverType
-			);
+		getRippleControlReceiverDefaultConfiguration(
+			rippleControlReceiverType
+		) {
+			const rippleControlReceiverDefaults =
+				this.rippleControlReceiverList.find(
+					(element) => element.value == rippleControlReceiverType
+				);
 			if (
 				Object.prototype.hasOwnProperty.call(
 					rippleControlReceiverDefaults,
@@ -704,7 +715,11 @@ export default {
 			return {};
 		},
 		updateSelectedRippleControlReceiverModule($event) {
-			this.updateState("openWB/general/ripple_control_receiver/module", $event, "type");
+			this.updateState(
+				"openWB/general/ripple_control_receiver/module",
+				$event,
+				"type"
+			);
 			this.updateState(
 				"openWB/general/ripple_control_receiver/module",
 				this.getRippleControlReceiverDefaultConfiguration($event)
