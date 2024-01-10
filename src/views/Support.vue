@@ -44,7 +44,7 @@
 								</li>
 								<li>
 									Vergewissern Sie sich, dass mindestens die
-									aktuelle "Stable" Version installiert ist.
+									aktuelle "Release" Version installiert ist.
 								</li>
 								<li>
 									Stellen Sie beim Absenden des Berichtes die
