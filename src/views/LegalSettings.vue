@@ -44,9 +44,28 @@
 						]
 					"
 					subtype="danger"
+					class="mb-1"
 				>
 					Sie müssen die Nutzungsbedingungen akzeptieren, bevor openWB
 					eingesetzt werden kann.
+					<div class="row justify-content-center">
+						<div
+							class="col-md-4 d-flex justify-content-center"
+						>
+							<openwb-base-click-button
+								class="btn-danger"
+								@buttonClicked="
+									sendSystemCommand('systemShutdown')
+								"
+							>
+								Nicht akzeptieren und ausschalten
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'power-off']"
+								/>
+							</openwb-base-click-button>
+						</div>
+					</div>
 				</openwb-base-alert>
 				<openwb-base-button-group-input
 					title="Datenschutzerklärung"
@@ -101,11 +120,20 @@
 </template>
 
 <script>
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faPowerOff as fasPowerOff } from "@fortawesome/free-solid-svg-icons";
+library.add(fasPowerOff);
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
 import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
 	name: "OpenwbDataProtection",
+	components: {
+		FontAwesomeIcon,
+	},
 	mixins: [ComponentState],
+	emits: ["sendCommand"],
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
@@ -113,6 +141,14 @@ export default {
 				// "openWB/system/usage_terms_acknowledged", // already done in app.vue
 			],
 		};
+	},
+	methods: {
+		sendSystemCommand(command, data = {}) {
+			this.$emit("sendCommand", {
+				command: command,
+				data: data,
+			});
+		},
 	},
 };
 </script>
