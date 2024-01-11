@@ -140,7 +140,11 @@ library.add(
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 
-import { Line as ChartjsLine, getElementAtEvent } from "vue-chartjs";
+import {
+	Line as ChartjsLine,
+	Bar as ChartjsBar,
+	getElementAtEvent,
+} from "vue-chartjs";
 import "chartjs-adapter-luxon";
 import "hammerjs";
 import ZoomPlugin from "chartjs-plugin-zoom";
@@ -150,6 +154,7 @@ import {
 	Legend,
 	LineController,
 	LineElement,
+	BarElement,
 	PointElement,
 	LinearScale,
 	TimeScale,
@@ -160,6 +165,7 @@ Chart.register(
 	Legend,
 	LineController,
 	LineElement,
+	BarElement,
 	PointElement,
 	LinearScale,
 	TimeScale,
@@ -438,6 +444,72 @@ export default {
 						yAxisKey: null,
 					},
 				},
+				"cp-energy_imported_grid": {
+					label: "Ladepunkt (Netzanteil)",
+					unit: "kWh",
+					type: "bar",
+					jsonKey: null,
+					borderColor: "rgba(255, 0, 0, 0.7)",
+					backgroundColor: "rgba(0, 0, 255, 0.3)",
+					fill: true,
+					pointStyle: "circle",
+					pointRadius: 0,
+					pointHoverRadius: 4,
+					cubicInterpolationMode: "monotone",
+					hidden: true,
+					borderWidth: 3,
+					data: null,
+					yAxisID: "y2",
+					stack: "charge-point-imported-source",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
+				"cp-energy_imported_pv": {
+					label: "Ladepunkt (PV-Anteil)",
+					unit: "kWh",
+					type: "bar",
+					jsonKey: null,
+					borderColor: "rgba(40, 167, 69, 0.7)",
+					backgroundColor: "rgba(0, 0, 255, 0.3)",
+					fill: true,
+					pointStyle: "circle",
+					pointRadius: 0,
+					pointHoverRadius: 4,
+					cubicInterpolationMode: "monotone",
+					hidden: true,
+					borderWidth: 3,
+					data: null,
+					yAxisID: "y2",
+					stack: "charge-point-imported-source",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
+				"cp-energy_imported_bat": {
+					label: "Ladepunkt (PV-Anteil)",
+					unit: "kWh",
+					type: "bar",
+					jsonKey: null,
+					borderColor: "rgba(253, 126, 20, 0.7)",
+					backgroundColor: "rgba(0, 0, 255, 0.3)",
+					fill: true,
+					pointStyle: "circle",
+					pointRadius: 0,
+					pointHoverRadius: 4,
+					cubicInterpolationMode: "monotone",
+					hidden: true,
+					borderWidth: 3,
+					data: null,
+					yAxisID: "y2",
+					stack: "charge-point-imported-source",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
 				"ev-soc": {
 					label: "Fahrzeug SoC",
 					unit: "%",
@@ -559,6 +631,72 @@ export default {
 						yAxisKey: null,
 					},
 				},
+				"hc-energy_imported_grid": {
+					label: "Hausverbrauch (Netzanteil)",
+					unit: "kWh",
+					type: "bar",
+					jsonKey: null,
+					borderColor: "rgba(255, 0, 0, 0.7)",
+					backgroundColor: "rgba(120, 122, 124, 0.3)",
+					fill: true,
+					pointStyle: "circle",
+					pointRadius: 0,
+					pointHoverRadius: 4,
+					cubicInterpolationMode: "monotone",
+					hidden: true,
+					borderWidth: 3,
+					data: null,
+					yAxisID: "y2",
+					stack: "hc-energy-imported-source",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
+				"hc-energy_imported_pv": {
+					label: "Hausverbrauch (PV-Anteil)",
+					unit: "kWh",
+					type: "bar",
+					jsonKey: null,
+					borderColor: "rgba(40, 167, 69, 0.7)",
+					backgroundColor: "rgba(120, 122, 124, 0.3)",
+					fill: true,
+					pointStyle: "circle",
+					pointRadius: 0,
+					pointHoverRadius: 4,
+					cubicInterpolationMode: "monotone",
+					hidden: true,
+					borderWidth: 3,
+					data: null,
+					yAxisID: "y2",
+					stack: "hc-energy-imported-source",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
+				"hc-energy_imported_bat": {
+					label: "Hausverbrauch (PV-Anteil)",
+					unit: "kWh",
+					type: "bar",
+					jsonKey: null,
+					borderColor: "rgba(253, 126, 20, 0.7)",
+					backgroundColor: "rgba(120, 122, 124, 0.3)",
+					fill: true,
+					pointStyle: "circle",
+					pointRadius: 0,
+					pointHoverRadius: 4,
+					cubicInterpolationMode: "monotone",
+					hidden: true,
+					borderWidth: 3,
+					data: null,
+					yAxisID: "y2",
+					stack: "hc-energy-imported-source",
+					parsing: {
+						xAxisKey: "timestamp",
+						yAxisKey: null,
+					},
+				},
 			},
 			chartOptions: {
 				plugins: {
@@ -636,7 +774,7 @@ export default {
 						},
 					},
 					y: {
-						// horizontal line for values displayed on the left side (power, kW)
+						// left side (power, kW)
 						position: "left",
 						type: "linear",
 						display: "auto",
@@ -663,7 +801,7 @@ export default {
 						},
 					},
 					y2: {
-						// horizontal line for values displayed on the left side (energy, kWh)
+						// left side (energy, kWh)
 						position: "left",
 						type: "linear",
 						display: "auto",
@@ -690,7 +828,7 @@ export default {
 						},
 					},
 					y3: {
-						// horizontal line for values displayed on the right side (SoC, %)
+						// right side (SoC, %)
 						position: "right",
 						type: "linear",
 						display: "auto",
@@ -1228,6 +1366,18 @@ export default {
 						case "energy_exported":
 							details.push("Entladung");
 							break;
+						case "energy_imported_grid":
+							details.push("Netz-Anteil");
+							break;
+						case "energy_imported_pv":
+							details.push("PV-Anteil");
+							break;
+						case "energy_imported_bat":
+							details.push("Speicher-Anteil");
+							break;
+						case "energy_imported_cp":
+							details.push("Ladepunkt-Anteil");
+							break;
 					}
 					break;
 				case "counter":
@@ -1247,6 +1397,22 @@ export default {
 							break;
 						case "energy_exported":
 							details.push("Erzeugung");
+							break;
+					}
+					break;
+				case "hc":
+					switch (elementKey) {
+						case "energy_imported_grid":
+							details.push("Netz-Anteil");
+							break;
+						case "energy_imported_pv":
+							details.push("PV-Anteil");
+							break;
+						case "energy_imported_bat":
+							details.push("Speicher-Anteil");
+							break;
+						case "energy_imported_cp":
+							details.push("Ladepunkt-Anteil");
 							break;
 					}
 					break;
@@ -1285,10 +1451,12 @@ export default {
 						newDataset.label + newDataset.labelSuffix;
 				}
 				if (objectKey == "all") {
-					// only display totals on load
-					newDataset.hidden = false;
-					// do not stack totals
-					delete newDataset.stack;
+					if (!["grid", "pv", "bat", "cp"].includes(elementKey.split("_").slice(-1)[0])){
+						// only display general totals on load
+						newDataset.hidden = false;
+						// do not stack general totals
+						delete newDataset.stack;
+					}
 				}
 				return this.chartDatasets.datasets.push(newDataset) - 1;
 			} else {
@@ -1318,10 +1486,10 @@ export default {
 					counter: ["energy_imported", "energy_exported"],
 					pv: ["energy_exported"],
 					bat: ["energy_imported", "energy_exported"],
-					cp: ["energy_imported"],
+					cp: ["energy_imported", "energy_imported_grid", "energy_imported_pv", "energy_imported_bat"],
 					sh: ["energy_imported", "energy_exported"],
 					ev: [],
-					hc: ["energy_imported"],
+					hc: ["energy_imported", "energy_imported_grid", "energy_imported_pv", "energy_imported_bat"],
 				};
 			}
 			const datasetKey = baseObject + "." + objectKey + "." + elementKey;
