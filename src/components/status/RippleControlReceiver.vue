@@ -1,9 +1,11 @@
 <template>
 	<openwb-base-card
 		v-if="
-			this.$store.state.mqtt[
-				'openWB/general/ripple_control_receiver/configured'
-			]
+			$store.state.mqtt[
+				'openWB/general/ripple_control_receiver/module'
+			] &&
+			$store.state.mqtt['openWB/general/ripple_control_receiver/module']
+				.type
 		"
 		subtype="secondary"
 		:collapsible="true"
@@ -94,7 +96,6 @@ export default {
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
-				"openWB/general/ripple_control_receiver/configured",
 				"openWB/general/ripple_control_receiver/get/fault_state",
 				"openWB/general/ripple_control_receiver/get/fault_str",
 				"openWB/general/ripple_control_receiver/get/override_value",

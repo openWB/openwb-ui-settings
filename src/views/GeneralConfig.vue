@@ -259,49 +259,33 @@
 					Kontakte geöffnet, darf kein Strom bezogen werden und die
 					openWB stoppt die Ladung.
 				</openwb-base-alert>
-				<openwb-base-text-input
-					title="Abschaltung durch Netzbetreiber"
-					readonly
+				<openwb-base-select-input
+					class="mb-2"
+					title="Anbindung RSE-Kontakt"
+					:options="rippleControlReceiverList"
 					:model-value="
 						$store.state.mqtt[
-							'openWB/general/ripple_control_receiver/configured'
+							'openWB/general/ripple_control_receiver/module'
 						]
-							? 'Aktiv'
-							: 'Inaktiv'
+							? $store.state.mqtt[
+									'openWB/general/ripple_control_receiver/module'
+							  ].type
+							: ''
 					"
-				>
-					<template #help>
-						Die Bundesnetzuagentur schreibt vor, das die
-						Aktivierung/Deaktivierung des
-						Rundsteuerempfängerkontakts nicht laienbedienbar sein
-						darf. Deshalb kann diese Einstellung nicht von Dir
-						verändert werden, sondern nur durch unseren Support.
-					</template>
-				</openwb-base-text-input>
+					@update:model-value="
+						updateSelectedRippleControlReceiverModule($event)
+					"
+				/>
 				<div
 					v-if="
 						$store.state.mqtt[
-							'openWB/general/ripple_control_receiver/configured'
-						]
+							'openWB/general/ripple_control_receiver/module'
+						] &&
+						$store.state.mqtt[
+							'openWB/general/ripple_control_receiver/module'
+						].type
 					"
 				>
-					<openwb-base-select-input
-						class="mb-2"
-						title="Anbindung RSE-Kontakt"
-						:options="rippleControlReceiverList"
-						:model-value="
-							$store.state.mqtt[
-								'openWB/general/ripple_control_receiver/module'
-							]
-								? $store.state.mqtt[
-										'openWB/general/ripple_control_receiver/module'
-								  ].type
-								: ''
-						"
-						@update:model-value="
-							updateSelectedRippleControlReceiverModule($event)
-						"
-					/>
 					<openwb-ripple-control-receiver-proxy
 						:rippleControlReceiver="
 							$store.state.mqtt[
@@ -624,7 +608,6 @@ export default {
 				"openWB/general/notifications/smart_home",
 				"openWB/general/price_kwh",
 				"openWB/general/range_unit",
-				"openWB/general/ripple_control_receiver/configured",
 				"openWB/general/ripple_control_receiver/module",
 				"openWB/general/web_theme",
 				"openWB/system/configurable/ripple_control_receivers",
@@ -724,10 +707,6 @@ export default {
 				"openWB/general/ripple_control_receiver/module",
 				this.getRippleControlReceiverDefaultConfiguration($event)
 			);
-		},
-		updateConfiguration(key, event) {
-			console.debug("updateConfiguration", key, event);
-			this.updateState(key, event.value, event.object);
 		},
 	},
 };
