@@ -142,7 +142,6 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 
 import {
 	Line as ChartjsLine,
-	Bar as ChartjsBar,
 	getElementAtEvent,
 } from "vue-chartjs";
 import "chartjs-adapter-luxon";
@@ -1007,9 +1006,17 @@ export default {
 						"totals"
 					)
 				) {
-					return this.$store.state.mqtt[
+					var totals = JSON.parse(JSON.stringify(this.$store.state.mqtt[
 						this.baseTopic + this.commandData.date
-					].totals;
+					].totals));
+					// remove not relevant data for easier parsing
+					delete totals.energy_source;
+					Object.keys(totals.counter).forEach((component) => {
+						if (totals.counter[component].hasOwnProperty("grid")) {
+							delete totals.counter[component].grid;
+						}
+					});
+					return totals;
 				}
 			}
 			return undefined;
@@ -1216,6 +1223,14 @@ export default {
 							case "exported":
 							case "energy_exported":
 								return "Entladung";
+							case "energy_imported_grid":
+								return "Ladung (Netz-Anteil)"
+							case "energy_imported_pv":
+								return "Ladung (PV-Anteil)"
+							case "energy_imported_bat":
+								return "Ladung (Speicher-Anteil)"
+							case "energy_imported_cp":
+								return "Ladung (Ladepunkt-Anteil)"
 							default:
 								console.warn(
 									"unknown measurement key:",
@@ -1274,6 +1289,14 @@ export default {
 							case "imported":
 							case "energy_imported":
 								return "Verbrauch";
+							case "energy_imported_grid":
+								return "Verbrauch (Netz-Anteil)"
+							case "energy_imported_pv":
+								return "Verbrauch (PV-Anteil)"
+							case "energy_imported_bat":
+								return "Verbrauch (Speicher-Anteil)"
+							case "energy_imported_cp":
+								return "Verbrauch (Ladepunkt-Anteil)"
 							default:
 								console.warn(
 									"unknown measurement key:",
