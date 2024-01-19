@@ -224,7 +224,6 @@ export default {
 			const provider =
 				this.$store.state.mqtt["openWB/optional/et/provider"];
 			if (provider !== undefined) {
-				console.log(provider.type);
 				return provider.type !== null;
 			}
 			return false;
