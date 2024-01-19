@@ -30,6 +30,13 @@
 		<openwb-base-alert v-if="recentMessages.length == 0" subtype="info">
 			Keine Nachrichten vorhanden.
 		</openwb-base-alert>
+		<openwb-base-click-button
+			v-else-if="showAllMessages"
+			class="btn-sm btn-secondary mb-1"
+			@buttonClicked="dismissAllMessages"
+		>
+			Alle Nachrichten löschen
+		</openwb-base-click-button>
 		<openwb-base-toast
 			v-for="message in recentMessages"
 			:key="message.topic"
@@ -197,6 +204,12 @@ export default {
 			if (index > -1) {
 				this.hiddenMessages.splice(index, 1);
 			}
+		},
+		dismissAllMessages() {
+			this.messages.forEach((message) => {
+				this.clearTopic(message.topic);
+			});
+			this.hiddenMessages = [];
 		},
 		hideMessage(event) {
 			if (!this.hiddenMessages.includes(event.topic)) {
