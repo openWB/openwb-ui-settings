@@ -190,7 +190,7 @@
 					/>
 				</openwb-base-avatar>
 			</template>
-			<pre>{{ updateLog }}</pre>
+			<pre>{{ dataMigrationLog }}</pre>
 		</openwb-base-card>
 	</div>
 </template>
