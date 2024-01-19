@@ -252,12 +252,14 @@
 					Steuerbare Verbrauchseinrichtung
 				</openwb-base-heading>
 				<openwb-base-alert sub_type="info">
-					Aktuell unterstützt openWB die Steuerung von
-					Verbrauchseinrichtungen nur über die
-					Rundsteuerempfängerkontakte (RSE). Ist der Kontakt
-					geschlossen, darf Strom bezogen werden. Ist einer der
-					Kontakte geöffnet, darf kein Strom bezogen werden und die
-					openWB stoppt die Ladung.
+					Aktuell unterstützt openWB die eingehende Steuerung als
+					"Steuerbare Verbrauchseinrichtung" nur über potentialfreie
+					Kontakte (Rundsteuerempfänger, RSE).
+					Ebenfalls können derzeit bei Auslösung des RSE nur alle
+					Ladevorgänge komplett beendet werden. Die Unterstützung
+					von "Dimmung" im Sinne von §14a EnWG wird umgesetzt,
+					sobald wir weitere Informationen von den Netzbetreibern
+					erhalten, wie die Ansteuerung technisch umgesetzt wird.
 				</openwb-base-alert>
 				<openwb-base-select-input
 					class="mb-2"
