@@ -62,9 +62,11 @@
 					'openWB/general/ripple_control_receiver/get/override_value'
 				] == 0
 					? 'Laden gesperrt'
-					: 'Laden erlaubt (' + $store.state.mqtt[
-							 'openWB/general/ripple_control_receiver/get/override_value'
-						] + '%)'
+					: 'Laden erlaubt (' +
+					  $store.state.mqtt[
+							'openWB/general/ripple_control_receiver/get/override_value'
+					  ] +
+					  '%)'
 			"
 		/>
 	</openwb-base-card>
