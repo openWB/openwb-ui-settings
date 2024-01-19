@@ -173,6 +173,25 @@
 			</template>
 			<pre>{{ smartHomeLog }}</pre>
 		</openwb-base-card>
+		<openwb-base-card
+			title="Protokoll der Datenmigration"
+			class="mt-3"
+			:collapsible="true"
+			:collapsed="true"
+		>
+			<template #actions>
+				<openwb-base-avatar
+					class="bg-success clickable"
+					@click="loadDataMigrationLog($event)"
+				>
+					<font-awesome-icon
+						fixed-width
+						:icon="['fas', 'file-download']"
+					/>
+				</openwb-base-avatar>
+			</template>
+			<pre>{{ updateLog }}</pre>
+		</openwb-base-card>
 	</div>
 </template>
 
@@ -197,6 +216,7 @@ export default {
 				"openWB/general/extern",
 				"openWB/system/debug_level",
 			],
+			dataMigrationLogLog: "-- noch nicht geladen --",
 			mainLog: "-- noch nicht geladen --",
 			internalChargepointLog: "-- noch nicht geladen --",
 			mqttLog: "-- noch nicht geladen --",
@@ -239,6 +259,21 @@ export default {
 						return error.message;
 					}
 				});
+		},
+		loadDataMigrationLog(event) {
+			event.stopPropagation();
+			this.dataMigrationLog = "wird aktualisiert...";
+			this.getFilePromise("/openWB/data/log/data_migration.log").then(
+				(result) => {
+					this.dataMigrationLog = result;
+				}
+			);
+			this.getFilePromise(
+				"/openWB/data/log/data_migration.log.1",
+				true
+			).then((result) => {
+				this.dataMigrationLog += result;
+			});
 		},
 		loadMainLog(event) {
 			event.stopPropagation();
