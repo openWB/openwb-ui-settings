@@ -76,7 +76,7 @@ export default {
 			for (var unit in units) {
 				if (Math.abs(elapsed) > units[unit]) {
 					this.relativeTime = rtf.format(
-						Math.round(elapsed / units[unit]),
+						Math.round(-elapsed / units[unit]), // negative time diff!
 						unit
 					);
 					break;
@@ -102,5 +102,8 @@ export default {
 .toast {
 	opacity: 1;
 	border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.toast:not(:last-child) {
+	margin-bottom: 0.25rem!important;
 }
 </style>
