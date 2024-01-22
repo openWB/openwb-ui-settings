@@ -119,7 +119,9 @@
 						<template #help>
 							Wird der Regelbereich in Richtung Einspeisung um
 							diese Leistung überschritten, so wird der
-							Ladevorgang gestartet.
+							Ladevorgang gestartet.<br />
+							Dieser Wert wird pro Phase genutzt und ist daher
+							immer für eine Phase anzugeben.
 						</template>
 					</openwb-base-number-input>
 					<openwb-base-number-input
@@ -168,7 +170,9 @@
 						<template #help>
 							Wird der Regelbereich in Richtung Netzbezug um diese
 							Leistung überschritten, so wird der Ladevorgang
-							beendet.
+							beendet.<br />
+							Dieser Wert ist unabhängig von der Anzahl genutzter
+							Phasen.
 						</template>
 					</openwb-base-number-input>
 					<openwb-base-number-input
@@ -279,8 +283,8 @@
 							Modus "Automatik" entscheidet die Regelung, welche
 							Einstellung genutzt wird, um den verfügbaren
 							Überschuss in die Fahrzeuge zu laden. Voraussetzung
-							ist die verbaute Umschaltmöglichkeit zwischen 1- und
-							3-phasig (s.g. 1p3p).
+							ist die verbaute Umschaltmöglichkeit zwischen einer
+							und drei Phasen (s.g. 1p3p).
 						</template>
 					</openwb-base-button-group-input>
 					<openwb-base-range-input
