@@ -1159,10 +1159,11 @@
 									)
 								"
 							>
-							<template #help>
-								Für Zielladen werden die günstigsten Stunden ermittelt.
-							</template>
-						</openwb-base-number-input>
+								<template #help>
+									Für Zielladen werden die günstigsten Stunden
+									ermittelt.
+								</template>
+							</openwb-base-number-input>
 						</div>
 						<hr />
 						<openwb-base-heading>Sofortladen</openwb-base-heading>

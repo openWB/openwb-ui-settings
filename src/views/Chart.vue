@@ -140,10 +140,7 @@ library.add(
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 
-import {
-	Line as ChartjsLine,
-	getElementAtEvent,
-} from "vue-chartjs";
+import { Line as ChartjsLine, getElementAtEvent } from "vue-chartjs";
 import "chartjs-adapter-luxon";
 import "hammerjs";
 import ZoomPlugin from "chartjs-plugin-zoom";
@@ -1008,13 +1005,22 @@ export default {
 						"totals"
 					)
 				) {
-					var totals = JSON.parse(JSON.stringify(this.$store.state.mqtt[
-						this.baseTopic + this.commandData.date
-					].totals));
+					var totals = JSON.parse(
+						JSON.stringify(
+							this.$store.state.mqtt[
+								this.baseTopic + this.commandData.date
+							].totals
+						)
+					);
 					// remove not relevant data for easier parsing
 					delete totals.energy_source;
 					Object.keys(totals.counter).forEach((component) => {
-						if (totals.counter[component].hasOwnProperty("grid")) {
+						if (
+							Object.prototype.hasOwnProperty.call(
+								totals.counter[component],
+								"grid"
+							)
+						) {
 							delete totals.counter[component].grid;
 						}
 					});
@@ -1226,13 +1232,13 @@ export default {
 							case "energy_exported":
 								return "Entladung";
 							case "energy_imported_grid":
-								return "Ladung (Netz-Anteil)"
+								return "Ladung (Netz-Anteil)";
 							case "energy_imported_pv":
-								return "Ladung (PV-Anteil)"
+								return "Ladung (PV-Anteil)";
 							case "energy_imported_bat":
-								return "Ladung (Speicher-Anteil)"
+								return "Ladung (Speicher-Anteil)";
 							case "energy_imported_cp":
-								return "Ladung (Ladepunkt-Anteil)"
+								return "Ladung (Ladepunkt-Anteil)";
 							default:
 								console.warn(
 									"unknown measurement key:",
@@ -1292,13 +1298,13 @@ export default {
 							case "energy_imported":
 								return "Verbrauch";
 							case "energy_imported_grid":
-								return "Verbrauch (Netz-Anteil)"
+								return "Verbrauch (Netz-Anteil)";
 							case "energy_imported_pv":
-								return "Verbrauch (PV-Anteil)"
+								return "Verbrauch (PV-Anteil)";
 							case "energy_imported_bat":
-								return "Verbrauch (Speicher-Anteil)"
+								return "Verbrauch (Speicher-Anteil)";
 							case "energy_imported_cp":
-								return "Verbrauch (Ladepunkt-Anteil)"
+								return "Verbrauch (Ladepunkt-Anteil)";
 							default:
 								console.warn(
 									"unknown measurement key:",
@@ -1476,7 +1482,11 @@ export default {
 						newDataset.label + newDataset.labelSuffix;
 				}
 				if (objectKey == "all") {
-					if (!["grid", "pv", "bat", "cp"].includes(elementKey.split("_").slice(-1)[0])){
+					if (
+						!["grid", "pv", "bat", "cp"].includes(
+							elementKey.split("_").slice(-1)[0]
+						)
+					) {
 						// only display general totals on load
 						newDataset.hidden = false;
 						// do not stack general totals
@@ -1511,10 +1521,20 @@ export default {
 					counter: ["energy_imported", "energy_exported"],
 					pv: ["energy_exported"],
 					bat: ["energy_imported", "energy_exported"],
-					cp: ["energy_imported", "energy_imported_grid", "energy_imported_pv", "energy_imported_bat"],
+					cp: [
+						"energy_imported",
+						"energy_imported_grid",
+						"energy_imported_pv",
+						"energy_imported_bat",
+					],
 					sh: ["energy_imported", "energy_exported"],
 					ev: [],
-					hc: ["energy_imported", "energy_imported_grid", "energy_imported_pv", "energy_imported_bat"],
+					hc: [
+						"energy_imported",
+						"energy_imported_grid",
+						"energy_imported_pv",
+						"energy_imported_bat",
+					],
 				};
 			}
 			const datasetKey = baseObject + "." + objectKey + "." + elementKey;
