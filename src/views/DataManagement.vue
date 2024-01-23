@@ -237,11 +237,14 @@
 						(Diagramme und Ladeprotokolle) sowie Cloud-Daten und
 						Seriennummer in diese Installation zu importieren. Die
 						Zuordnung zwischen den alten und neuen Komponenten muss
-						manuell durchgeführt werden.<br />
-						Die Portierung kann einige Minuten dauern. Du erhältst
-						eine Meldung, wenn die Datenübernahme abgeschlossen ist.
+						manuell durchgeführt werden.
 					</openwb-base-alert>
 					<openwb-base-alert subtype="danger">
+						Die Portierung kann bei vielen historischen Daten von
+						mehreren Jahren durchaus bis zu 30 Minuten dauern. Die
+						openWB in dieser Zeit bitte nicht herunterfahren! Du
+						erhältst eine Meldung, wenn die Datenübernahme
+						abgeschlossen ist.<br />
 						Vor der Datenübernahme unbedingt eine Sicherung
 						erstellen.<br />
 						Die Datenübernahme kann nur durch Einspielen einer

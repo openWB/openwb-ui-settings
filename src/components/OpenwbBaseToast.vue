@@ -104,6 +104,6 @@ export default {
 	border: 1px solid rgba(0, 0, 0, 0.1);
 }
 .toast:not(:last-child) {
-	margin-bottom: 0.25rem!important;
+	margin-bottom: 0.25rem !important;
 }
 </style>
