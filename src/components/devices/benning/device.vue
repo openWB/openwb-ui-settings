@@ -13,7 +13,6 @@
 				updateConfiguration($event, 'configuration.url')
 			"
 		/>
-		
 	</div>
 </template>
 
