@@ -17,6 +17,24 @@
 				updateConfiguration($event, 'configuration.hostname')
 			"
 		/>
+		<openwb-base-text-input
+			title="Benutzer"
+			subtype="user"
+			required
+			:model-value="configuration.user"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.user')
+			"
+		/>
+		<openwb-base-text-input
+			title="Benutzer"
+			subtype="password"
+			required
+			:model-value="configuration.password"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.password')
+			"
+		/>
 	</div>
 </template>
 
