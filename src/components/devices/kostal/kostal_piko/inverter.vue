@@ -2,7 +2,6 @@
 	<div class="device-kostalpiko-inverter">
 		<openwb-base-heading>
 			Einstellungen für Kostal Piko Wechselrichter
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-button-group-input
 			title="Speicher"
@@ -19,18 +18,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../componentConfigMixin.vue";
+
 export default {
 	name: "DeviceKostalPikoInverter",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ComponentConfigMixin],
 };
 </script>

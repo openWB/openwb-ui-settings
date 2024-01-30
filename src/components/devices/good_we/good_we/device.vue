@@ -1,9 +1,6 @@
 <template>
 	<div class="device-goodwe">
-		<openwb-base-heading>
-			Einstellungen für GoodWe
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
+		<openwb-base-heading>Einstellungen für GoodWe</openwb-base-heading>
 		<openwb-base-alert subtype="info">
 			GoodWe-Wechselrichter verfügen über 3 Dongle: Den WiFi-Dongle, das
 			Wifi-Lan-Kit und das Wifi-Lan-Kit 2.0. Die Einbindung über dieses
@@ -15,7 +12,7 @@
 			title="IP oder Hostname"
 			subtype="host"
 			required
-			:model-value="configuration.ip_address"
+			:model-value="device.configuration.ip_address"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.ip_address')
 			"
@@ -33,7 +30,7 @@
 		<openwb-base-number-input
 			title="Modbus ID"
 			required
-			:model-value="configuration.modbus_id"
+			:model-value="device.configuration.modbus_id"
 			min="1"
 			max="255"
 			@update:model-value="
@@ -78,17 +75,10 @@
 </template>
 
 <script>
+import DeviceConfigMixin from "../deviceConfigMixin.vue";
+
 export default {
 	name: "DeviceGoodWe",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [DeviceConfigMixin],
 };
 </script>

@@ -2,7 +2,6 @@
 	<div class="device-mqtt-inverter">
 		<openwb-base-heading>
 			Einstellungen für MQTT Wechselrichter
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
 			Die folgenden Topics sind für einen reibungslosen Betrieb unbedingt
@@ -13,7 +12,7 @@
 						class="text-info"
 						tooltip="Topic kopieren"
 						>openWB/set/pv/{{
-							componentId
+							component.id
 						}}/get/power</openwb-base-copy-to-clipboard
 					><br />
 					PV-Leistung in Watt als Zahl mit oder ohne Nachkommastellen
@@ -29,7 +28,7 @@
 						class="text-info"
 						tooltip="Topic kopieren"
 						>openWB/set/pv/{{
-							componentId
+							component.id
 						}}/get/exported</openwb-base-copy-to-clipboard
 					><br />
 					Erzeugte Energie in Wh, Zahl mit oder ohne Nachkommastellen
@@ -43,18 +42,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../componentConfigMixin.vue";
+
 export default {
 	name: "DeviceMqttInverter",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ComponentConfigMixin],
 };
 </script>

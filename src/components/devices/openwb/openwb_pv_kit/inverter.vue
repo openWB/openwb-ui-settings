@@ -2,7 +2,6 @@
 	<div class="device-openwb-pvkit-inverter">
 		<openwb-base-heading>
 			Einstellungen für openWB PV-Kit Wechselrichter
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-select-input
 			title="Zählermodell"
@@ -12,7 +11,7 @@
 				{ value: 1, text: 'Lovato' },
 				{ value: 2, text: 'SDM630/SDM72D-M' },
 			]"
-			:model-value="configuration.version"
+			:model-value="component.configuration.version"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.version')
 			"
@@ -21,18 +20,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../componentConfigMixin.vue";
+
 export default {
 	name: "DeviceOpenwbPvkitInverter",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ComponentConfigMixin],
 };
 </script>

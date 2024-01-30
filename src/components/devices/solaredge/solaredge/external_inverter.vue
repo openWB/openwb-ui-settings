@@ -2,7 +2,6 @@
 	<div class="device-solaredge-external-inverter">
 		<openwb-base-heading>
 			Einstellungen für SolarEdge externen Wechselrichter
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
 			Diese Komponente nur konfigurieren, wenn ein weiteres Solaredge
@@ -14,7 +13,7 @@
 		<openwb-base-number-input
 			title="SolarEdge-Geräte-ID"
 			required
-			:model-value="configuration.modbus_id"
+			:model-value="component.configuration.modbus_id"
 			min="1"
 			max="255"
 			@update:model-value="
@@ -23,7 +22,7 @@
 		/>
 		<openwb-base-number-input
 			title="SolarEdge-Meter-ID"
-			:model-value="configuration.meter_id"
+			:model-value="component.configuration.meter_id"
 			min="1"
 			max="255"
 			@update:model-value="
@@ -52,18 +51,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../componentConfigMixin.vue";
+
 export default {
-	name: "DeviceSolarEdgeExternalInverter",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	name: "DeviceSolaredgeExternalInverter",
+	mixins: [ComponentConfigMixin],
 };
 </script>

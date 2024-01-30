@@ -106,10 +106,7 @@
 						/>
 						<hr />
 						<openwb-config-proxy
-							:deviceId="installedDevice.id"
-							:deviceType="installedDevice.type"
-							:deviceVendor="installedDevice.vendor"
-							:configuration="installedDevice.configuration"
+							:device="installedDevice"
 							@update:configuration="
 								updateConfiguration(installedDeviceKey, $event)
 							"
@@ -219,14 +216,8 @@
 							</openwb-base-text-input>
 							<hr />
 							<openwb-config-proxy
-								:deviceId="installedDevice.id"
-								:deviceType="installedDevice.type"
-								:deviceVendor="installedDevice.vendor"
-								:componentId="installedComponent.id"
-								:componentType="installedComponent.type"
-								:configuration="
-									installedComponent.configuration
-								"
+								:device="installedDevice"
+								:component="installedComponent"
 								@update:configuration="
 									updateConfiguration(
 										installedComponentKey,

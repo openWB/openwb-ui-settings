@@ -1,14 +1,11 @@
 <template>
 	<div class="device-solar-view">
-		<openwb-base-heading>
-			Einstellungen für SolarView
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
+		<openwb-base-heading> Einstellungen für SolarView </openwb-base-heading>
 		<openwb-base-text-input
 			title="IP oder Hostname"
 			subtype="host"
 			required
-			:model-value="configuration.ip_address"
+			:model-value="device.configuration.ip_address"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.ip_address')
 			"
@@ -18,7 +15,7 @@
 			required
 			:min="1"
 			:max="65535"
-			:model-value="configuration.port"
+			:model-value="device.configuration.port"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.port')
 			"
@@ -26,7 +23,7 @@
 		<openwb-base-number-input
 			title="Timeout"
 			required
-			:model-value="configuration.timeout"
+			:model-value="device.configuration.timeout"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.timeout')
 			"
@@ -35,17 +32,10 @@
 </template>
 
 <script>
+import DeviceConfigMixin from "../deviceConfigMixin.vue";
+
 export default {
 	name: "DeviceSolarView",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [DeviceConfigMixin],
 };
 </script>

@@ -2,7 +2,6 @@
 	<div class="device-solaredge-counter">
 		<openwb-base-heading>
 			Einstellungen für SolarEdge Zähler
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
 			Hierfür muss ein EVU-Zähler am SolarEdge Wechselrichter per Modbus
@@ -12,7 +11,7 @@
 		<openwb-base-number-input
 			title="SolarEdge-Geräte-ID"
 			required
-			:model-value="configuration.modbus_id"
+			:model-value="component.configuration.modbus_id"
 			min="1"
 			max="255"
 			@update:model-value="
@@ -21,7 +20,7 @@
 		/>
 		<openwb-base-number-input
 			title="SolarEdge-Meter-ID"
-			:model-value="configuration.meter_id"
+			:model-value="component.configuration.meter_id"
 			min="1"
 			max="255"
 			@update:model-value="
@@ -32,18 +31,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../componentConfigMixin.vue";
+
 export default {
-	name: "DeviceSolarEdgeCounter",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	name: "DeviceSolaredgeCounter",
+	mixins: [ComponentConfigMixin],
 };
 </script>

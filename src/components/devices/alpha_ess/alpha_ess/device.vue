@@ -1,9 +1,6 @@
 <template>
 	<div class="device-alphaess">
-		<openwb-base-heading>
-			Einstellungen für Alpha ESS
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
+		<openwb-base-heading> Einstellungen für Alpha ESS </openwb-base-heading>
 		<openwb-base-select-input
 			title="Ausleseart"
 			notSelected="Bitte auswählen"
@@ -11,17 +8,17 @@
 				{ value: 0, text: 'Alpha ESS-Kit' },
 				{ value: 1, text: 'Hi 5/10' },
 			]"
-			:model-value="configuration.source"
+			:model-value="device.configuration.source"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.source')
 			"
 		/>
 		<openwb-base-text-input
 			title="IP oder Hostname"
-			v-if="configuration.source == 1"
+			v-if="device.configuration.source == 1"
 			subtype="host"
 			required
-			:model-value="configuration.ip_address"
+			:model-value="device.configuration.ip_address"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.ip_address')
 			"
@@ -56,7 +53,7 @@
 				{ value: 0, text: 'EMS älter als 1.23V' },
 				{ value: 1, text: 'EMS 1.23V oder neuer' },
 			]"
-			:model-value="configuration.version"
+			:model-value="device.configuration.version"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.version')
 			"
@@ -65,17 +62,10 @@
 </template>
 
 <script>
+import DeviceConfigMixin from "../deviceConfigMixin.vue";
+
 export default {
 	name: "DeviceAlphaess",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [DeviceConfigMixin],
 };
 </script>

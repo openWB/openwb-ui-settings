@@ -2,7 +2,6 @@
 	<div class="device-mqtt-counter">
 		<openwb-base-heading>
 			Einstellungen für MQTT Zähler
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
 			Die folgenden Topics sind für einen reibungslosen Betrieb unbedingt
@@ -13,7 +12,7 @@
 						class="text-info"
 						tooltip="Topic kopieren"
 						>openWB/set/counter/{{
-							componentId
+							component.id
 						}}/get/power</openwb-base-copy-to-clipboard
 					><br />
 					Bezugsleistung in Watt, Zahl mit oder ohne Nachkommastellen
@@ -26,7 +25,7 @@
 						class="text-info"
 						tooltip="Topic kopieren"
 						>openWB/set/counter/{{
-							componentId
+							component.id
 						}}/get/imported</openwb-base-copy-to-clipboard
 					><br />
 					Bezogene Energie in Wh, Zahl mit oder ohne Nachkommastellen
@@ -39,7 +38,7 @@
 						class="text-info"
 						tooltip="Topic kopieren"
 						>openWB/set/counter/{{
-							componentId
+							component.id
 						}}/get/exported</openwb-base-copy-to-clipboard
 					><br />
 					Eingespeiste Energie in Wh, Zahl mit oder ohne
@@ -57,7 +56,7 @@
 						class="text-info"
 						tooltip="Topic kopieren"
 						>openWB/set/counter/{{
-							componentId
+							component.id
 						}}/get/currents</openwb-base-copy-to-clipboard
 					><br />
 					Array mit den Strömen je Phase in Ampere, mit
@@ -74,7 +73,7 @@
 						class="text-info"
 						tooltip="Topic kopieren"
 						>openWB/set/counter/{{
-							componentId
+							component.id
 						}}/get/frequency</openwb-base-copy-to-clipboard
 					><br />
 					Netzfrequenz in Hz, Zahl mit oder ohne Nachkommastellen
@@ -86,7 +85,7 @@
 						class="text-info"
 						tooltip="Topic kopieren"
 						>openWB/set/counter/{{
-							componentId
+							component.id
 						}}/get/voltages</openwb-base-copy-to-clipboard
 					><br />
 					Array mit den Spannungen je Phase in Volt, mit
@@ -98,7 +97,7 @@
 						class="text-info"
 						tooltip="Topic kopieren"
 						>openWB/set/counter/{{
-							componentId
+							component.id
 						}}/get/powers</openwb-base-copy-to-clipboard
 					><br />
 					Array mit den Leistungen je Phase in Watt, mit
@@ -110,7 +109,7 @@
 						class="text-info"
 						tooltip="Topic kopieren"
 						>openWB/set/counter/{{
-							componentId
+							component.id
 						}}/get/power_factors</openwb-base-copy-to-clipboard
 					><br />
 					Array mit den Leistungsfaktoren je Phase, mit
@@ -123,18 +122,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../componentConfigMixin.vue";
+
 export default {
 	name: "DeviceMqttCounter",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ComponentConfigMixin],
 };
 </script>

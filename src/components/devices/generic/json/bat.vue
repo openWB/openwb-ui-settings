@@ -2,13 +2,12 @@
 	<div class="device-json-bat">
 		<openwb-base-heading>
 			Einstellungen für JSON Batteriespeicher
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
 			title="Abfrage für Leistung"
 			subtype="text"
 			required
-			:model-value="configuration.jq_power"
+			:model-value="component.configuration.jq_power"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.jq_power')
 			"
@@ -30,7 +29,7 @@
 			title="Abfrage für Ladestand"
 			subtype="text"
 			required
-			:model-value="configuration.jq_soc"
+			:model-value="component.configuration.jq_soc"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.jq_soc')
 			"
@@ -38,7 +37,7 @@
 		<openwb-base-text-input
 			title="Abfrage für Zählerstand Ladung"
 			subtype="text"
-			:model-value="configuration.jq_imported"
+			:model-value="component.configuration.jq_imported"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.jq_imported')
 			"
@@ -51,7 +50,7 @@
 		<openwb-base-text-input
 			title="Abfrage für Zählerstand Entladung"
 			subtype="text"
-			:model-value="configuration.jq_exported"
+			:model-value="component.configuration.jq_exported"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.jq_exported')
 			"
@@ -65,18 +64,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../componentConfigMixin.vue";
+
 export default {
 	name: "DeviceJsonBat",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ComponentConfigMixin],
 };
 </script>

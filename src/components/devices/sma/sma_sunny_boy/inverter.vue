@@ -2,7 +2,6 @@
 	<div class="device-sunnyboy-inverter">
 		<openwb-base-heading>
 			Einstellungen für SMA Sunny Boy/Tripower Wechselrichter
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-button-group-input
 			title="Hybrid-System"
@@ -10,7 +9,7 @@
 				{ buttonValue: false, text: 'nicht vorhanden' },
 				{ buttonValue: true, text: 'vorhanden' },
 			]"
-			:model-value="configuration.hybrid"
+			:model-value="component.configuration.hybrid"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.hybrid')
 			"
@@ -28,7 +27,7 @@
 				{ value: 1, text: 'Core-2' },
 				{ value: 2, text: 'Data Manager/Cluster Controller' },
 			]"
-			:model-value="configuration.version"
+			:model-value="component.configuration.version"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.version')
 			"
@@ -53,18 +52,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../componentConfigMixin.vue";
+
 export default {
 	name: "DeviceSunnyBoyInverter",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ComponentConfigMixin],
 };
 </script>

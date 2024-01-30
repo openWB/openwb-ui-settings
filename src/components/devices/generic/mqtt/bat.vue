@@ -2,7 +2,6 @@
 	<div class="device-mqtt-bat">
 		<openwb-base-heading>
 			Einstellungen für MQTT Batteriespeicher
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
 			Die folgenden Topics sind für einen reibungslosen Betrieb unbedingt
@@ -13,7 +12,7 @@
 						class="text-info"
 						tooltip="Topic kopieren"
 						>openWB/set/bat/{{
-							componentId
+							component.id
 						}}/get/power</openwb-base-copy-to-clipboard
 					><br />
 					Speicherleistung in Watt, Zahl mit oder ohne
@@ -26,7 +25,7 @@
 						class="text-info"
 						tooltip="Topic kopieren"
 						>openWB/set/bat/{{
-							componentId
+							component.id
 						}}/get/imported</openwb-base-copy-to-clipboard
 					><br />
 					Geladene Energie in Wh, Zahl mit oder ohne Nachkommastellen
@@ -39,7 +38,7 @@
 						class="text-info"
 						tooltip="Topic kopieren"
 						>openWB/set/bat/{{
-							componentId
+							component.id
 						}}/get/exported</openwb-base-copy-to-clipboard
 					><br />
 					Entladene Energie in Wh, Zahl mit oder ohne Nachkommastellen
@@ -52,7 +51,7 @@
 						class="text-info"
 						tooltip="Topic kopieren"
 						>openWB/set/bat/{{
-							componentId
+							component.id
 						}}/get/soc</openwb-base-copy-to-clipboard
 					><br />
 					Ladestand des Speichers, Zahl mit oder ohne Nachkommastellen
@@ -66,18 +65,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../componentConfigMixin.vue";
+
 export default {
 	name: "DeviceMqttBat",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ComponentConfigMixin],
 };
 </script>

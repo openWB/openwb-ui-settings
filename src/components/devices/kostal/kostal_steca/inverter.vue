@@ -3,7 +3,6 @@
 		<openwb-base-heading>
 			Einstellungen für Kostal Piko MP oder Steca Grid Coolcept
 			Wechselrichter
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-button-group-input
 			title="Variante"
@@ -14,7 +13,7 @@
 					text: 'Kostal Piko MP oder Steca Grid Coolcept',
 				},
 			]"
-			:model-value="configuration.variant_steca"
+			:model-value="component.configuration.variant_steca"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.variant_steca')
 			"
@@ -23,18 +22,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../componentConfigMixin.vue";
+
 export default {
 	name: "DeviceKostalStecaInverter",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ComponentConfigMixin],
 };
 </script>

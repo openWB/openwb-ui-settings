@@ -2,12 +2,11 @@
 	<div class="device-victron-counter">
 		<openwb-base-heading>
 			Einstellungen für Victron Zähler
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-number-input
 			title="Modbus ID"
 			required
-			:model-value="configuration.modbus_id"
+			:model-value="component.configuration.modbus_id"
 			min="1"
 			max="255"
 			@update:model-value="
@@ -20,7 +19,7 @@
 				{ buttonValue: false, text: 'AC-In Victron GX' },
 				{ buttonValue: true, text: 'Energy Meter' },
 			]"
-			:model-value="configuration.energy_meter"
+			:model-value="component.configuration.energy_meter"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.energy_meter')
 			"
@@ -29,18 +28,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../componentConfigMixin.vue";
+
 export default {
 	name: "DeviceVictronCounter",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ComponentConfigMixin],
 };
 </script>

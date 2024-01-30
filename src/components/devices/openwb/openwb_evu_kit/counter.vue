@@ -2,7 +2,6 @@
 	<div class="device-openwb-evukit-counter">
 		<openwb-base-heading>
 			Einstellungen für openWB EVU-Kit Zähler
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-select-input
 			title="Zählermodell"
@@ -13,7 +12,7 @@
 				{ value: 0, text: 'MPM3PM' },
 				{ value: 2, text: 'SDM630/SDM72D-M' },
 			]"
-			:model-value="configuration.version"
+			:model-value="component.configuration.version"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.version')
 			"
@@ -22,18 +21,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../componentConfigMixin.vue";
+
 export default {
 	name: "DeviceOpenwbEvukitCounter",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ComponentConfigMixin],
 };
 </script>

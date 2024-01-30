@@ -11,17 +11,10 @@
 </template>
 
 <script>
+import DeviceConfigMixin from "../deviceConfigMixin.vue";
+
 export default {
 	name: "DeviceOpenwbEvuKit",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [DeviceConfigMixin],
 };
 </script>

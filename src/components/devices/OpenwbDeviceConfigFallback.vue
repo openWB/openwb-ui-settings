@@ -4,19 +4,19 @@
 			v-if="Object.keys(configuration).length == 0"
 			subtype="info"
 		>
-			<span v-if="componentType">
-				Der Komponenten-Typ "{{ componentType }}"
+			<span v-if="component">
+				Der Komponenten-Typ "{{ component.type }}"
 			</span>
-			<span v-else>Der Gerät-Typ "{{ deviceType }}"</span>
+			<span v-else>Der Gerät-Typ "{{ device.type }}"</span>
 			bietet keine Einstellungen.
 		</openwb-base-alert>
 		<div v-else>
 			<openwb-base-alert subtype="warning">
 				Es wurde keine Konfigurationsseite für den
-				<span v-if="componentType">
-					Komponenten-Typ "{{ componentType }}"
+				<span v-if="component">
+					Komponenten-Typ "{{ component.type }}"
 				</span>
-				<span v-else>Geräte-Typ "{{ deviceType }}"</span>
+				<span v-else>Geräte-Typ "{{ device.type }}"</span>
 				gefunden. Die Einstellungen können als JSON direkt bearbeitet
 				werden.
 			</openwb-base-alert>
@@ -45,11 +45,15 @@ export default {
 	name: "DeviceFallback",
 	emits: ["update:configuration"],
 	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		deviceType: String,
-		componentId: { default: undefined },
-		componentType: String,
+		device: { type: Object, required: true },
+		component: { type: Object, required: false, default: undefined },
+	},
+	computed: {
+		configuration() {
+			return this.component !== undefined
+				? this.component.configuration
+				: this.device.configuration;
+		},
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {

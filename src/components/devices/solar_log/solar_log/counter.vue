@@ -1,9 +1,5 @@
 <template>
 	<div class="device-solar_log-counter">
-		<openwb-base-heading>
-			Einstellungen für Solar-Log Zähler
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
 			<span class="text-danger">
 				Solar-Log Zähler geben keine Ströme aus, sodass nur ein
@@ -26,18 +22,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../componentConfigMixin.vue";
+
 export default {
 	name: "DeviceSolarLogCounter",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ComponentConfigMixin],
 };
 </script>

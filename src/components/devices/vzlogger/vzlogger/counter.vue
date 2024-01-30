@@ -13,7 +13,7 @@
 			title="Zeile der Leistung"
 			required
 			:min="0"
-			:model-value="configuration.line_power"
+			:model-value="component.configuration.line_power"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.line_power')
 			"
@@ -21,7 +21,7 @@
 		<openwb-base-number-input
 			title="Zeile der Einspeisung"
 			:min="0"
-			:model-value="configuration.line_exported"
+			:model-value="component.configuration.line_exported"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.line_exported')
 			"
@@ -29,7 +29,7 @@
 		<openwb-base-number-input
 			title="Zeile des Bezugs"
 			:min="0"
-			:model-value="configuration.line_imported"
+			:model-value="component.configuration.line_imported"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.line_imported')
 			"
@@ -38,18 +38,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../componentConfigMixin.vue";
+
 export default {
 	name: "DeviceVZLoggerCounter",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ComponentConfigMixin],
 };
 </script>

@@ -2,12 +2,11 @@
 	<div class="device-solar-view-inverter">
 		<openwb-base-heading>
 			Einstellungen für SolarView Wechselrichter
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
 			title="Kommando für die Abfrage"
 			required
-			:model-value="configuration.command"
+			:model-value="component.configuration.command"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.command')
 			"
@@ -21,18 +20,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../componentConfigMixin.vue";
+
 export default {
 	name: "DeviceSolarViewInverter",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ComponentConfigMixin],
 };
 </script>
