@@ -4,7 +4,7 @@
 			title="IP oder Hostname"
 			subtype="host"
 			required
-			:model-value="configuration.ip_address"
+			:model-value="chargePoint.configuration.ip_address"
 			@update:model-value="updateConfiguration($event, 'ip_address')"
 		/>
 		<openwb-base-number-input
@@ -13,7 +13,7 @@
 			:min="2"
 			:max="10"
 			unit="s"
-			:model-value="configuration.timeout"
+			:model-value="chargePoint.configuration.timeout"
 			@update:model-value="updateConfiguration($event, 'timeout')"
 		>
 			<template #help>
@@ -30,8 +30,7 @@ export default {
 	name: "ChargePointSmartwb",
 	emits: ["update:configuration"],
 	props: {
-		configuration: { type: Object, required: true },
-		chargePointId: { default: undefined },
+		chargePoint: { type: Object, required: true },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {

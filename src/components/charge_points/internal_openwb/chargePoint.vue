@@ -11,16 +11,16 @@
 				{ value: 'duo', text: 'openWB series1/2 Duo' },
 				{ value: 'socket', text: 'openWB series1/2 Buchse' },
 			]"
-			:model-value="configuration.mode"
+			:model-value="chargePoint.configuration.mode"
 			@update:model-value="updateConfiguration($event, 'mode')"
 		/>
 		<openwb-base-number-input
-			v-if="configuration.mode == 'duo'"
+			v-if="chargePoint.configuration.mode == 'duo'"
 			title="Ladepunkt-Nummer"
 			required
 			:min="1"
 			:max="2"
-			:model-value="configuration.duo_num + 1"
+			:model-value="chargePoint.configuration.duo_num + 1"
 			@update:model-value="updateConfiguration($event - 1, 'duo_num')"
 		>
 			<template #help>
@@ -37,8 +37,7 @@ export default {
 	name: "ChargePointInternalOpenwb",
 	emits: ["update:configuration"],
 	props: {
-		configuration: { type: Object, required: true },
-		chargePointId: { default: undefined },
+		chargePoint: { type: Object, required: true },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {

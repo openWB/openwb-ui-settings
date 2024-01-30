@@ -4,7 +4,7 @@
 			title="Ladepunkt aktualisieren"
 			buttonText="Update anfordern"
 			subtype="success"
-			:disabled="configuration.ip_address == undefined"
+			:disabled="chargePoint.configuration.ip_address == undefined"
 			@buttonClicked="triggerUpdate"
 		>
 			<template #help>
@@ -19,8 +19,7 @@
 export default {
 	name: "ChargePointCommandsOpenwbPro",
 	props: {
-		configuration: { type: Object, required: true },
-		chargePointId: { default: undefined },
+		chargePoint: { type: Object, required: true },
 	},
 	methods: {
 		async triggerUpdate() {

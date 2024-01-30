@@ -138,14 +138,7 @@
 					</span>
 					<hr />
 					<openwb-charge-point-proxy
-						:chargePointId="installedChargePoint.id"
-						:chargePointType="
-							$store.state.mqtt[installedChargePointKey].type
-						"
-						:moduleName="
-							$store.state.mqtt[installedChargePointKey].name
-						"
-						:configuration="installedChargePoint.configuration"
+						:chargePoint="installedChargePoint"
 						@update:configuration="
 							updateConfiguration(installedChargePointKey, $event)
 						"
