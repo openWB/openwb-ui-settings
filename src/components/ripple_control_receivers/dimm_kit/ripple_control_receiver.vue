@@ -1,5 +1,5 @@
 <template>
-	<div class="ripple-control-receiver-io-lan-hf">
+	<div class="ripple-control-receiver-dimm-kit">
 		<openwb-base-alert subtype="info">
 			Wenn mindestens ein Kontakt offen ist, wird die Ladung gesperrt.
 			Wenn beide Kontakte geschlossen sind, darf geladen werden.
@@ -36,7 +36,7 @@
 
 <script>
 export default {
-	name: "RippleControlReceiverIoLanHf",
+	name: "RippleControlReceiverDimmKit",
 	emits: ["update:configuration"],
 	props: {
 		rippleControlReceiver: { type: Object, required: true },
