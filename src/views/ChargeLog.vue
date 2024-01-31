@@ -295,6 +295,11 @@ export default {
 						field: "vehicle_rfid",
 						sortable: true,
 					},
+					{
+						label: "Seriennummer",
+						field: "chargepoint_serial_number",
+						sortable: true,
+					},
 				],
 				sortable: {
 					order: "timestamp_begin",
@@ -426,6 +431,7 @@ export default {
 								entry["data"]["imported_since_plugged"],
 							data_imported_since_mode_switch:
 								entry["data"]["imported_since_mode_switch"],
+							chargepoint_serial_number: entry["chargepoint"]["serial_number"],
 						};
 					});
 				} catch (error) {
@@ -444,6 +450,7 @@ export default {
 						"Lademodus",
 						"Priorität",
 						"ID-Tag",
+						"Seriennummer",
 						"Beginn",
 						"Ende",
 						"Zeitstempel Beginn",
@@ -462,6 +469,7 @@ export default {
 						'"' + row.vehicle_chargemode + '"',
 						'"' + this.translateBool(row.vehicle_prio, false) + '"',
 						'"' + row.vehicle_rfid + '"',
+						'"' + row.chargepoint_serial_number + '"',
 						'"' + row.time_begin + '"',
 						'"' + row.time_end + '"',
 						'"' + row.timestamp_begin + '"',
