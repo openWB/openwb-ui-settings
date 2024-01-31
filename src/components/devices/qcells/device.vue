@@ -25,6 +25,7 @@
 		/>
 		<openwb-base-number-input
 			title="Modbus ID"
+			required
 			:model-value="configuration.modbus_id"
 			min="1"
 			max="255"
@@ -37,7 +38,7 @@
 
 <script>
 export default {
-	name: "DeviceQCellls",
+	name: "DeviceQCells",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
