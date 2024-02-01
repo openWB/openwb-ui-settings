@@ -44,10 +44,9 @@
 			"
 		>
 			<template #help>
-				Für die Standardversion ist die Standardmodbus-ID 3, 
-				für Core-2 ist sie 1 und für Data Manager/Cluster 
-				Controller 2. Wurde eine abweichende Modbus ID konfiguriert, 
-				entsprechend anpassen.
+				Für die Standardversion ist die Standardmodbus-ID 3, für Core-2
+				ist sie 1 und für Data Manager/Cluster Controller 2. Wurde eine
+				abweichende Modbus ID konfiguriert, entsprechend anpassen.
 			</template>
 		</openwb-base-number-input>
 	</div>

@@ -4,7 +4,7 @@
 			Einstellungen für SMA Sunny Boy Smart Energy Batteriespeicher
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		
+
 		<openwb-base-number-input
 			title="Modbus ID"
 			required
