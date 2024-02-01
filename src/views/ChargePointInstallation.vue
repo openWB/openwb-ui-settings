@@ -496,7 +496,11 @@
 								"
 							>
 								<template #help>
-									Wenn hier Tags eingetragen werden, können nur die eingetragenen Tags zur Fahrzeug-Zuordnung genutzt werden. Sind keine Tags eingetragen, wird nur die Zuordnung zum Fahrzeug geprüft.
+									Wenn hier Tags eingetragen werden, können
+									nur die eingetragenen Tags zur
+									Fahrzeug-Zuordnung genutzt werden. Sind
+									keine Tags eingetragen, wird nur die
+									Zuordnung zum Fahrzeug geprüft.
 									<br />
 									<span
 										v-html="$store.state.text.rfidWiki"
