@@ -496,10 +496,7 @@
 								"
 							>
 								<template #help>
-									An allen Ladepunkten, denen dieses
-									Ladepunkt-Profil zugeordnet ist, werden die
-									hier eingetragenen ID-Tags zur Freischaltung
-									verwendet.
+									Wenn hier Tags eingetragen werden, können nur die eingetragenen Tags zur Fahrzeug-Zuordnung genutzt werden. Sind keine Tags eingetragen, wird nur die Zuordnung zum Fahrzeug geprüft.
 									<br />
 									<span
 										v-html="$store.state.text.rfidWiki"
