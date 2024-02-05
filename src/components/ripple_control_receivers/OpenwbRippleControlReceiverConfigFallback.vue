@@ -32,7 +32,7 @@
 					JSON.stringify(
 						rippleControlReceiver.configuration,
 						undefined,
-						2
+						2,
 					)
 				}}</pre>
 			</openwb-base-alert>

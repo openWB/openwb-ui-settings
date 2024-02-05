@@ -132,7 +132,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/control_interval',
-								$event
+								$event,
 							)
 						"
 					>
@@ -178,7 +178,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/grid_protection_configured',
-								$event
+								$event,
 							)
 						"
 					>
@@ -271,7 +271,7 @@
 						]
 							? $store.state.mqtt[
 									'openWB/general/ripple_control_receiver/module'
-							  ].type
+								].type
 							: ''
 					"
 					@update:model-value="
@@ -297,7 +297,7 @@
 						@update:configuration="
 							updateConfiguration(
 								'openWB/general/ripple_control_receiver/module',
-								$event
+								$event,
 							)
 						"
 					/>
@@ -553,7 +553,7 @@
 							@update:configuration="
 								updateConfiguration(
 									'openWB/general/web_theme',
-									$event
+									$event,
 								)
 							"
 						/>
@@ -650,12 +650,12 @@ export default {
 	methods: {
 		getWebThemeDefaults(webThemeType) {
 			const webThemeDefaults = this.webThemeList.find(
-				(element) => element.value == webThemeType
+				(element) => element.value == webThemeType,
 			);
 			if (
 				Object.prototype.hasOwnProperty.call(
 					webThemeDefaults,
-					"defaults"
+					"defaults",
 				)
 			) {
 				return {
@@ -664,14 +664,14 @@ export default {
 			}
 			console.warn(
 				"no default configuration found for web theme type!",
-				webThemeType
+				webThemeType,
 			);
 			return {};
 		},
 		updateSelectedWebTheme($event) {
 			this.updateState(
 				"openWB/general/web_theme",
-				this.getWebThemeDefaults($event)
+				this.getWebThemeDefaults($event),
 			);
 		},
 		updateConfiguration(key, event) {
@@ -679,23 +679,23 @@ export default {
 			this.updateState(key, event.value, event.object);
 		},
 		getRippleControlReceiverDefaultConfiguration(
-			rippleControlReceiverType
+			rippleControlReceiverType,
 		) {
 			const rippleControlReceiverDefaults =
 				this.rippleControlReceiverList.find(
-					(element) => element.value == rippleControlReceiverType
+					(element) => element.value == rippleControlReceiverType,
 				);
 			if (
 				Object.prototype.hasOwnProperty.call(
 					rippleControlReceiverDefaults,
-					"defaults"
+					"defaults",
 				)
 			) {
 				return { ...rippleControlReceiverDefaults.defaults };
 			}
 			console.warn(
 				"no default configuration found for electricity tariff type!",
-				rippleControlReceiverType
+				rippleControlReceiverType,
 			);
 			return {};
 		},
@@ -703,11 +703,11 @@ export default {
 			this.updateState(
 				"openWB/general/ripple_control_receiver/module",
 				$event,
-				"type"
+				"type",
 			);
 			this.updateState(
 				"openWB/general/ripple_control_receiver/module",
-				this.getRippleControlReceiverDefaultConfiguration($event)
+				this.getRippleControlReceiverDefaultConfiguration($event),
 			);
 		},
 	},

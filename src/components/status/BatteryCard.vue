@@ -53,7 +53,7 @@
 					'openWB/bat/' + battery.id + '/get/power',
 					3,
 					3,
-					0.001
+					0.001,
 				)
 			"
 		/>
@@ -78,7 +78,7 @@
 					'openWB/bat/' + battery.id + '/get/imported',
 					3,
 					3,
-					0.001
+					0.001,
 				)
 			"
 		/>
@@ -93,7 +93,7 @@
 					'openWB/bat/' + battery.id + '/get/exported',
 					3,
 					3,
-					0.001
+					0.001,
 				)
 			"
 		/>
@@ -116,7 +116,7 @@ library.add(
 	fasCheckCircle,
 	fasExclamationTriangle,
 	fasTimesCircle,
-	fasCarBattery
+	fasCarBattery,
 );
 
 export default {

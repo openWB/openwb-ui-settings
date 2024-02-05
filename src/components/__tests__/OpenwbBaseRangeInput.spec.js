@@ -46,7 +46,7 @@ describe("OpenwbBaseRangeInput.vue", () => {
 		expect(wrapper.find("div.alert.alert-info").exists()).toBe(false);
 		await titleLabel.trigger("click");
 		expect(wrapper.find("div.alert.alert-info").html()).toContain(
-			helpContent
+			helpContent,
 		);
 	});
 	// check initial value

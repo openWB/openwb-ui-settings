@@ -27,7 +27,7 @@ export default {
 	computed: {
 		myComponent() {
 			console.debug(
-				`loading component: ${this.deviceType} / ${this.componentType}`
+				`loading component: ${this.deviceType} / ${this.componentType}`,
 			);
 			if (this.componentType !== undefined) {
 				return defineAsyncComponent({

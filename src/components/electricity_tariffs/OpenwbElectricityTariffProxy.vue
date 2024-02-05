@@ -22,7 +22,7 @@ export default {
 	computed: {
 		myComponent() {
 			console.debug(
-				`loading electricity tariff cloud: ${this.electricityTariff.type}`
+				`loading electricity tariff cloud: ${this.electricityTariff.type}`,
 			);
 			return defineAsyncComponent({
 				loader: () =>

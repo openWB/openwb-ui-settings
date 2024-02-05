@@ -52,7 +52,7 @@
 					'openWB/pv/' + inverter.id + '/get/exported',
 					3,
 					3,
-					0.001
+					0.001,
 				)
 			"
 		/>
@@ -67,7 +67,7 @@
 					'openWB/pv/' + inverter.id + '/get/power',
 					3,
 					3,
-					0.001
+					0.001,
 				)
 			"
 		/>
@@ -90,7 +90,7 @@ library.add(
 	fasCheckCircle,
 	fasExclamationTriangle,
 	fasTimesCircle,
-	fasSolarPanel
+	fasSolarPanel,
 );
 
 export default {

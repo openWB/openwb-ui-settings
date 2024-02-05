@@ -78,7 +78,7 @@
 										>{{
 											getTotalsLabel(
 												groupKey,
-												componentKey
+												componentKey,
 											)
 										}}</openwb-base-heading
 									>
@@ -93,7 +93,7 @@
 												getTotalsLabel(
 													groupKey,
 													componentKey,
-													measurementKey
+													measurementKey,
 												)
 											"
 											readonly
@@ -102,7 +102,7 @@
 											:model-value="
 												formatNumber(
 													measurement / 1000,
-													3
+													3,
 												)
 											"
 										/>
@@ -135,7 +135,7 @@ library.add(
 	fasSolarPanel,
 	fasGaugeHigh,
 	fasHouseSignal,
-	fasHouse
+	fasHouse,
 );
 
 import ComponentState from "../components/mixins/ComponentState.vue";
@@ -168,7 +168,7 @@ Chart.register(
 	LinearScale,
 	TimeScale,
 	Filler,
-	ZoomPlugin
+	ZoomPlugin,
 );
 
 export default {
@@ -1002,15 +1002,15 @@ export default {
 						this.$store.state.mqtt[
 							this.baseTopic + this.commandData.date
 						],
-						"totals"
+						"totals",
 					)
 				) {
 					var totals = JSON.parse(
 						JSON.stringify(
 							this.$store.state.mqtt[
 								this.baseTopic + this.commandData.date
-							].totals
-						)
+							].totals,
+						),
 					);
 					// remove not relevant data for easier parsing
 					delete totals.energy_source;
@@ -1018,7 +1018,7 @@ export default {
 						if (
 							Object.prototype.hasOwnProperty.call(
 								totals.counter[component],
-								"grid"
+								"grid",
 							)
 						) {
 							delete totals.counter[component].grid;
@@ -1040,7 +1040,7 @@ export default {
 				if (
 					Object.prototype.hasOwnProperty.call(
 						chartEntries,
-						"entries"
+						"entries",
 					)
 				) {
 					chartEntries = chartEntries.entries;
@@ -1049,7 +1049,7 @@ export default {
 					(row) => {
 						row.timestamp = row.timestamp * 1000;
 						return row;
-					}
+					},
 				);
 				return myData;
 			}
@@ -1074,7 +1074,7 @@ export default {
 						if (
 							Object.prototype.hasOwnProperty.call(
 								lastElement,
-								baseObject
+								baseObject,
 							)
 						) {
 							Object.entries(lastElement[baseObject]).forEach(
@@ -1083,10 +1083,10 @@ export default {
 										this.initDataset(
 											baseObject,
 											key,
-											entryKey
+											entryKey,
 										);
 									});
-								}
+								},
 							);
 						}
 					});
@@ -1180,7 +1180,7 @@ export default {
 		getTotalsLabel(
 			groupKey,
 			componentKey = undefined,
-			measurementKey = undefined
+			measurementKey = undefined,
 		) {
 			var label = "*test*";
 			if (!componentKey && !measurementKey) {
@@ -1211,7 +1211,7 @@ export default {
 							this.$store.state.mqtt[
 								this.baseTopic + this.commandData.date
 							],
-							"names"
+							"names",
 						)
 					) {
 						return this.$store.state.mqtt[
@@ -1243,7 +1243,7 @@ export default {
 								console.warn(
 									"unknown measurement key:",
 									groupKey,
-									measurementKey
+									measurementKey,
 								);
 						}
 						break;
@@ -1259,7 +1259,7 @@ export default {
 								console.warn(
 									"unknown measurement key:",
 									groupKey,
-									measurementKey
+									measurementKey,
 								);
 						}
 						break;
@@ -1272,7 +1272,7 @@ export default {
 								console.warn(
 									"unknown measurement key:",
 									groupKey,
-									measurementKey
+									measurementKey,
 								);
 						}
 						break;
@@ -1288,7 +1288,7 @@ export default {
 								console.warn(
 									"unknown measurement key:",
 									groupKey,
-									measurementKey
+									measurementKey,
 								);
 						}
 						break;
@@ -1309,7 +1309,7 @@ export default {
 								console.warn(
 									"unknown measurement key:",
 									groupKey,
-									measurementKey
+									measurementKey,
 								);
 						}
 						break;
@@ -1367,13 +1367,13 @@ export default {
 						this.$store.state.mqtt[
 							this.baseTopic + this.commandData.date
 						],
-						"names"
+						"names",
 					) &&
 					Object.prototype.hasOwnProperty.call(
 						this.$store.state.mqtt[
 							this.baseTopic + this.commandData.date
 						].names,
-						objectKey
+						objectKey,
 					)
 				) {
 					label = [
@@ -1465,7 +1465,7 @@ export default {
 			var datasetTemplate = baseObject + "-" + elementKey;
 			if (this.datasetTemplates[datasetTemplate]) {
 				var newDataset = JSON.parse(
-					JSON.stringify(this.datasetTemplates[datasetTemplate])
+					JSON.stringify(this.datasetTemplates[datasetTemplate]),
 				);
 				newDataset.parsing.yAxisKey = datasetKey;
 				newDataset.jsonKey = datasetKey;
@@ -1475,7 +1475,7 @@ export default {
 					baseObject,
 					objectKey,
 					elementKey,
-					datasetKey
+					datasetKey,
 				);
 				if (newDataset.labelSuffix != undefined) {
 					newDataset.label =
@@ -1484,7 +1484,7 @@ export default {
 				if (objectKey == "all") {
 					if (
 						!["grid", "pv", "bat", "cp"].includes(
-							elementKey.split("_").slice(-1)[0]
+							elementKey.split("_").slice(-1)[0],
 						)
 					) {
 						// only display general totals on load
@@ -1499,7 +1499,7 @@ export default {
 					"no matching template found for: " +
 						datasetKey +
 						" with template: " +
-						datasetTemplate
+						datasetTemplate,
 				);
 			}
 			return;
@@ -1546,7 +1546,7 @@ export default {
 						baseObject,
 						objectKey,
 						elementKey,
-						datasetKey
+						datasetKey,
 					);
 				}
 				if (index != undefined && hidden) {

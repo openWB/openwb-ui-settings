@@ -72,7 +72,7 @@ library.add(
 	fasCheckCircle,
 	fasExclamationTriangle,
 	fasTimesCircle,
-	fasSolarPanel
+	fasSolarPanel,
 );
 
 export default {

@@ -238,7 +238,7 @@ library.add(
 	fasClock,
 	fasCalendarDay,
 	farEye,
-	farEyeSlash
+	farEyeSlash,
 );
 
 export default {
@@ -306,7 +306,7 @@ export default {
 						console.error("parsing JSON failed: " + newValue);
 						this.inputInvalid = true;
 						this.$refs.jsonInput.setCustomValidity(
-							"Ungültiger JSON Ausdruck!"
+							"Ungültiger JSON Ausdruck!",
 						);
 						this.tempValue = newValue;
 					}
@@ -375,7 +375,7 @@ export default {
 					break;
 				default:
 					console.warn(
-						`cannot modify input of subtype '${this.subtype}'`
+						`cannot modify input of subtype '${this.subtype}'`,
 					);
 					return;
 			}

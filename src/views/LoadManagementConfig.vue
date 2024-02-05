@@ -35,7 +35,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/counter/config/reserve_for_not_charging',
-								$event
+								$event,
 							)
 						"
 					>
@@ -106,7 +106,7 @@
 									'openWB/counter/' +
 										counter.id +
 										'/config/max_total_power',
-									$event * 1000
+									$event * 1000,
 								)
 							"
 						>
@@ -133,7 +133,7 @@
 										counter.id +
 										'/config/max_currents',
 									$event,
-									'0'
+									'0',
 								)
 							"
 						>
@@ -160,7 +160,7 @@
 										counter.id +
 										'/config/max_currents',
 									$event,
-									'1'
+									'1',
 								)
 							"
 						>
@@ -187,7 +187,7 @@
 										counter.id +
 										'/config/max_currents',
 									$event,
-									'2'
+									'2',
 								)
 							"
 						>
@@ -231,7 +231,7 @@
 									'openWB/pv/' +
 										inverter.id +
 										'/config/max_ac_out',
-									$event * 1000
+									$event * 1000,
 								)
 							"
 						>
@@ -332,12 +332,12 @@ export default {
 		counterConfigs: {
 			get() {
 				let installedComponentsConfigs = this.getWildcardTopics(
-					"openWB/system/device/+/component/+/config"
+					"openWB/system/device/+/component/+/config",
 				);
 				return Object.keys(installedComponentsConfigs)
 					.filter((key) => {
 						return installedComponentsConfigs[key].type.includes(
-							"counter"
+							"counter",
 						);
 					})
 					.reduce((obj, key) => {
@@ -351,12 +351,12 @@ export default {
 		inverterConfigs: {
 			get() {
 				let installedComponentsConfigs = this.getWildcardTopics(
-					"openWB/system/device/+/component/+/config"
+					"openWB/system/device/+/component/+/config",
 				);
 				return Object.keys(installedComponentsConfigs)
 					.filter((key) => {
 						return installedComponentsConfigs[key].type.includes(
-							"inverter"
+							"inverter",
 						);
 					})
 					.reduce((obj, key) => {
@@ -371,7 +371,7 @@ export default {
 			get() {
 				let labels = {};
 				for (const element of Object.values(
-					this.$store.state.mqtt["openWB/counter/get/hierarchy"]
+					this.$store.state.mqtt["openWB/counter/get/hierarchy"],
 				)) {
 					labels = {
 						...labels,
@@ -408,7 +408,7 @@ export default {
 					value.match(
 						"^openWB/system/device/[0-9]+/component/" +
 							componentIndex +
-							"/config$"
+							"/config$",
 					)
 				) {
 					myComponent = this.$store.state.mqtt[value];
@@ -421,7 +421,7 @@ export default {
 			Object.keys(this.$store.state.mqtt).forEach((value) => {
 				if (
 					value.match(
-						"^openWB/chargepoint/" + chargePointIndex + "/config$"
+						"^openWB/chargepoint/" + chargePointIndex + "/config$",
 					)
 				) {
 					myChargePoint = this.$store.state.mqtt[value];

@@ -86,7 +86,7 @@ export default {
 								this.electricityTariff.configuration.token,
 							"Content-Type": "application/json",
 						},
-					}
+					},
 				);
 				this.tibberHomeList = response.data.data.viewer.homes.map(
 					(home) => {
@@ -101,17 +101,17 @@ export default {
 							text +
 							`, ${home.address.postalCode} ${home.address.city}, ${home.address.country}`;
 						return { value: home.id, text: text };
-					}
+					},
 				);
 				if (!this.electricityTariff.configuration.home_id) {
 					this.updateConfiguration(
 						this.tibberHomeList[0].value,
-						"configuration.home_id"
+						"configuration.home_id",
 					);
 				}
 				this.$root.postClientMessage(
 					"Home IDs erfolgreich abgerufen.",
-					"success"
+					"success",
 				);
 			} catch (error) {
 				console.error(error);
@@ -119,7 +119,7 @@ export default {
 					"Beim Abfragen der Tibber API ist ein Fehler aufgetreten!<pre>" +
 						error +
 						"</pre>",
-					"danger"
+					"danger",
 				);
 			}
 		},

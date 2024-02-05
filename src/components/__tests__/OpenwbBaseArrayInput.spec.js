@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { shallowMount } from "@vue/test-utils";
 import OpenwbBaseArrayInput from "../OpenwbBaseArrayInput.vue";
 
-describe("OpenwbBaseNumberInput.vue", () => {
+describe("OpenwbBaseArrayInput.vue", () => {
 	// check title prop
 	it("render title", () => {
 		const title = "Array Input Test";
@@ -36,7 +36,7 @@ describe("OpenwbBaseNumberInput.vue", () => {
 		expect(wrapper.find("span.alert.alert-info").exists()).toBe(false);
 		await titleLabel.trigger("click");
 		expect(wrapper.find("span.alert.alert-info").html()).toContain(
-			helpContent
+			helpContent,
 		);
 	});
 	// check initial value
@@ -57,7 +57,7 @@ describe("OpenwbBaseNumberInput.vue", () => {
 		const renderedTextInput = wrapper.find("input[type=text]");
 		await renderedTextInput.setValue(newTag);
 		const renderedAddButton = wrapper.find(
-			".input-group-append font-awesome-icon-stub"
+			".input-group-append font-awesome-icon-stub",
 		);
 		await renderedAddButton.trigger("click");
 		expect(wrapper.emitted("update:modelValue")[0]).toStrictEqual([

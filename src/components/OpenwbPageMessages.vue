@@ -91,11 +91,11 @@ export default {
 				if (
 					(total == "light" &&
 						["info", "success", "warning", "danger"].includes(
-							currentMessage.type
+							currentMessage.type,
 						)) ||
 					(total == "info" &&
 						["success", "warning", "danger"].includes(
-							currentMessage.type
+							currentMessage.type,
 						)) ||
 					(total == "success" &&
 						["warning", "danger"].includes(currentMessage.type)) ||
@@ -157,7 +157,7 @@ export default {
 		},
 		systemMessages() {
 			let messageTopics = this.getWildcardTopics(
-				"openWB/system/messages/+"
+				"openWB/system/messages/+",
 			);
 			var messageList = [];
 			for (const [key, element] of Object.entries(messageTopics)) {
@@ -167,7 +167,7 @@ export default {
 		},
 		clientMessages() {
 			let messageTopics = this.getWildcardTopics(
-				"openWB/command/" + this.$root.mqttClientId + "/messages/+"
+				"openWB/command/" + this.$root.mqttClientId + "/messages/+",
 			);
 			var messageList = [];
 			for (const [key, element] of Object.entries(messageTopics)) {
@@ -192,7 +192,7 @@ export default {
 		 */
 		dismissError() {
 			this.clearTopic(
-				"openWB/command/" + this.$root.mqttClientId + "/error"
+				"openWB/command/" + this.$root.mqttClientId + "/error",
 			);
 		},
 		/**

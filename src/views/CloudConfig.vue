@@ -282,7 +282,7 @@
 							updateState(
 								cloudBridgeKey,
 								$event,
-								'access.partner'
+								'access.partner',
 							)
 						"
 					>
@@ -355,7 +355,7 @@ export default {
 		cloudBridge: {
 			get() {
 				let bridges = this.getWildcardTopics(
-					"openWB/system/mqtt/bridge/+"
+					"openWB/system/mqtt/bridge/+",
 				);
 				for (const [key, value] of Object.entries(bridges)) {
 					if (!value.remote.is_openwb_cloud) {
