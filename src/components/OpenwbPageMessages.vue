@@ -205,12 +205,19 @@ export default {
 				this.hiddenMessages.splice(index, 1);
 			}
 		},
+		/**
+		 * Removes all received message topics from broker
+		 */
 		dismissAllMessages() {
 			this.messages.forEach((message) => {
 				this.clearTopic(message.topic);
 			});
 			this.hiddenMessages = [];
+			this.toggleAllMessages();
 		},
+		/**
+		 * add message topic to list of hidden messages
+		 */
 		hideMessage(event) {
 			if (!this.hiddenMessages.includes(event.topic)) {
 				this.hiddenMessages.push(event.topic);
