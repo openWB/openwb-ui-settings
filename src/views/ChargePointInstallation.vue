@@ -500,7 +500,9 @@
 									nur die eingetragenen Tags zur
 									Fahrzeug-Zuordnung genutzt werden. Sind
 									keine Tags eingetragen, wird nur die
-									Zuordnung zum Fahrzeug geprüft.
+									Zuordnung zum Fahrzeug geprüft. In diesem
+									Fall können alle Fahrzeuge diesen
+									Ladepunkt nutzen.
 									<br />
 									<span
 										v-html="$store.state.text.rfidWiki"
