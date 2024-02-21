@@ -14,14 +14,13 @@
 			"
 		/>
 		<openwb-base-select-input
-			title="Modell"
+			title="Generation"
 			notSelected="Bitte auswählen"
 			:options="[
 				{ value: 1, text: 'Shelly 1pm' },
-				{ value: 2, text: 'Shelly 1pm plus' },
-				{ value: 3, text: 'Shelly Pro3EM' },
+				{ value: 2, text: 'Shelly 1pm plus/ Shelly Pro3EM' },
 			]"
-			:model-value="configuration.type"
+			:model-value="configuration.generation"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.generation')
 			"
