@@ -115,5 +115,10 @@ export default {
 	components: {
 		FontAwesomeIcon,
 	},
+	data() {
+		return {
+			statusLevel: ["success", "warning", "danger"],
+		};
+	},
 };
 </script>
