@@ -82,7 +82,7 @@ export default {
 			validator: function (value) {
 				return (
 					["around", "between", "center", "end", "start"].indexOf(
-						value
+						value,
 					) !== -1
 				);
 			},

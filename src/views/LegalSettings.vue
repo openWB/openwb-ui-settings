@@ -33,7 +33,7 @@
 					@update:model-value="
 						updateState(
 							'openWB/system/usage_terms_acknowledged',
-							$event
+							$event,
 						)
 					"
 				/>
@@ -87,7 +87,7 @@
 					@update:model-value="
 						updateState(
 							'openWB/system/dataprotection_acknowledged',
-							$event
+							$event,
 						)
 					"
 				/>

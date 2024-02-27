@@ -124,7 +124,7 @@ export default {
 							"openWB/vehicle/" +
 								this.vehicleIndex +
 								"/get/soc_timestamp"
-						] * 1000
+						] * 1000,
 					).toLocaleString();
 				} else {
 					return "-";
@@ -141,7 +141,7 @@ export default {
 					return Math.round(
 						this.$store.state.mqtt[
 							"openWB/vehicle/" + this.vehicleIndex + "/get/range"
-						]
+						],
 					);
 				} else {
 					return 0;

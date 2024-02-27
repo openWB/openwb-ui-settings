@@ -91,7 +91,7 @@
 					'openWB/chargepoint/' + chargePointIndex + '/get/imported',
 					3,
 					3,
-					0.001
+					0.001,
 				)
 			"
 		/>
@@ -106,7 +106,7 @@
 					'openWB/chargepoint/' + chargePointIndex + '/get/exported',
 					3,
 					3,
-					0.001
+					0.001,
 				)
 			"
 		/>
@@ -123,7 +123,7 @@
 						'/get/daily_imported',
 					3,
 					3,
-					0.001
+					0.001,
 				)
 			"
 		/>
@@ -140,7 +140,7 @@
 						'/get/daily_exported',
 					3,
 					3,
-					0.001
+					0.001,
 				)
 			"
 		/>
@@ -155,7 +155,7 @@
 					'openWB/chargepoint/' + chargePointIndex + '/get/power',
 					3,
 					3,
-					0.001
+					0.001,
 				)
 			"
 		/>
@@ -168,7 +168,7 @@
 			:model-value="
 				formatNumberTopic(
 					'openWB/chargepoint/' + chargePointIndex + '/set/current',
-					2
+					2,
 				)
 			"
 		/>
@@ -181,7 +181,7 @@
 			:model-value="
 				formatNumberTopic(
 					'openWB/chargepoint/' + chargePointIndex + '/get/frequency',
-					2
+					2,
 				)
 			"
 		/>
@@ -194,7 +194,7 @@
 			:model-value="
 				formatPhaseArrayNumberTopic(
 					'openWB/chargepoint/' + chargePointIndex + '/get/voltages',
-					1
+					1,
 				)
 			"
 		/>
@@ -206,7 +206,7 @@
 			:model-value="
 				formatPhaseArrayNumberTopic(
 					'openWB/chargepoint/' + chargePointIndex + '/get/currents',
-					2
+					2,
 				)
 			"
 		/>
@@ -220,7 +220,7 @@
 					'openWB/chargepoint/' + chargePointIndex + '/get/powers',
 					3,
 					3,
-					0.001
+					0.001,
 				)
 			"
 		/>
@@ -233,7 +233,7 @@
 					'openWB/chargepoint/' +
 						chargePointIndex +
 						'/get/power_factors',
-					2
+					2,
 				)
 			"
 		/>
@@ -246,7 +246,7 @@
 				formatNumberTopic(
 					'openWB/chargepoint/' +
 						chargePointIndex +
-						'/set/phases_to_use'
+						'/set/phases_to_use',
 				)
 			"
 		/>
@@ -258,7 +258,7 @@
 				formatNumberTopic(
 					'openWB/chargepoint/' +
 						chargePointIndex +
-						'/get/phases_in_use'
+						'/get/phases_in_use',
 				)
 			"
 		/>
@@ -286,7 +286,7 @@ library.add(
 	fasExclamationTriangle,
 	fasTimesCircle,
 	// 	fasCar,
-	fasChargingStation
+	fasChargingStation,
 	// 	fasCarBattery,
 	// 	fasSolarPanel,
 	// 	fasGaugeHigh
@@ -311,7 +311,7 @@ export default {
 		chargePointIndex: {
 			get() {
 				return parseInt(
-					this.installedChargePointKey.match(/(?:\/)(\d+)(?=\/)/)[1]
+					this.installedChargePointKey.match(/(?:\/)(\d+)(?=\/)/)[1],
 				);
 			},
 		},

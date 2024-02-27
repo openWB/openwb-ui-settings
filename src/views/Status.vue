@@ -125,7 +125,7 @@ export default {
 		installedChargePoints: {
 			get() {
 				let chargePoints = this.getWildcardTopics(
-					"openWB/chargepoint/+/config"
+					"openWB/chargepoint/+/config",
 				);
 				let myObj = {};
 				for (const [key, element] of Object.entries(chargePoints)) {
@@ -152,9 +152,9 @@ export default {
 				}
 				return this.filterComponentsByType(
 					this.getWildcardTopics(
-						"openWB/system/device/+/component/+/config"
+						"openWB/system/device/+/component/+/config",
 					),
-					"counter"
+					"counter",
 				);
 			},
 		},
@@ -170,9 +170,9 @@ export default {
 				}
 				return this.filterComponentsByType(
 					this.getWildcardTopics(
-						"openWB/system/device/+/component/+/config"
+						"openWB/system/device/+/component/+/config",
 					),
-					"inverter"
+					"inverter",
 				);
 			},
 		},
@@ -188,9 +188,9 @@ export default {
 				}
 				return this.filterComponentsByType(
 					this.getWildcardTopics(
-						"openWB/system/device/+/component/+/config"
+						"openWB/system/device/+/component/+/config",
 					),
-					"bat"
+					"bat",
 				);
 			},
 		},

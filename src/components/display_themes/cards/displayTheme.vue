@@ -47,7 +47,7 @@
 			@update:model-value="
 				updateConfiguration(
 					$event,
-					'configuration.enable_dashboard_view'
+					'configuration.enable_dashboard_view',
 				)
 			"
 			:buttons="[
@@ -70,7 +70,7 @@
 			@update:model-value="
 				updateConfiguration(
 					$event,
-					'configuration.enable_dashboard_card_grid'
+					'configuration.enable_dashboard_card_grid',
 				)
 			"
 			:buttons="[
@@ -96,7 +96,7 @@
 			@update:model-value="
 				updateConfiguration(
 					$event,
-					'configuration.enable_dashboard_card_home_consumption'
+					'configuration.enable_dashboard_card_home_consumption',
 				)
 			"
 			:buttons="[
@@ -121,7 +121,7 @@
 			@update:model-value="
 				updateConfiguration(
 					$event,
-					'configuration.enable_dashboard_card_battery_sum'
+					'configuration.enable_dashboard_card_battery_sum',
 				)
 			"
 			:buttons="[
@@ -147,7 +147,7 @@
 			@update:model-value="
 				updateConfiguration(
 					$event,
-					'configuration.enable_dashboard_card_charge_point_sum'
+					'configuration.enable_dashboard_card_charge_point_sum',
 				)
 			"
 			:buttons="[
@@ -172,7 +172,7 @@
 			@update:model-value="
 				updateConfiguration(
 					$event,
-					'configuration.enable_dashboard_card_inverter_sum'
+					'configuration.enable_dashboard_card_inverter_sum',
 				)
 			"
 			:buttons="[
@@ -195,7 +195,7 @@
 			@update:model-value="
 				updateConfiguration(
 					$event,
-					'configuration.enable_charge_points_view'
+					'configuration.enable_charge_points_view',
 				)
 			"
 			:buttons="[

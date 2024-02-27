@@ -120,7 +120,7 @@
 								updateState(
 									mqttBridgeKey,
 									$event,
-									'remote.host'
+									'remote.host',
 								)
 							"
 						/>
@@ -134,7 +134,7 @@
 								updateState(
 									mqttBridgeKey,
 									$event,
-									'remote.port'
+									'remote.port',
 								)
 							"
 						/>
@@ -148,7 +148,7 @@
 								updateState(
 									mqttBridgeKey,
 									$event,
-									'remote.username'
+									'remote.username',
 								)
 							"
 						/>
@@ -161,7 +161,7 @@
 								updateState(
 									mqttBridgeKey,
 									$event,
-									'remote.password'
+									'remote.password',
 								)
 							"
 						/>
@@ -174,7 +174,7 @@
 								updateState(
 									mqttBridgeKey,
 									$event,
-									'remote.prefix'
+									'remote.prefix',
 								)
 							"
 						>
@@ -196,7 +196,7 @@
 								updateState(
 									mqttBridgeKey,
 									$event,
-									'remote.client_id'
+									'remote.client_id',
 								)
 							"
 						>
@@ -224,7 +224,7 @@
 								updateState(
 									mqttBridgeKey,
 									$event,
-									'remote.protocol'
+									'remote.protocol',
 								)
 							"
 						/>
@@ -256,7 +256,7 @@
 								updateState(
 									mqttBridgeKey,
 									$event,
-									'remote.tls_version'
+									'remote.tls_version',
 								)
 							"
 						>
@@ -288,7 +288,7 @@
 								updateState(
 									mqttBridgeKey,
 									$event,
-									'remote.try_private'
+									'remote.try_private',
 								)
 							"
 						>
@@ -326,7 +326,7 @@
 								updateState(
 									mqttBridgeKey,
 									$event,
-									'data_transfer.status'
+									'data_transfer.status',
 								)
 							"
 						>
@@ -351,7 +351,7 @@
 								updateState(
 									mqttBridgeKey,
 									$event,
-									'data_transfer.graph'
+									'data_transfer.graph',
 								)
 							"
 						>
@@ -378,7 +378,7 @@
 								updateState(
 									mqttBridgeKey,
 									$event,
-									'data_transfer.configuration'
+									'data_transfer.configuration',
 								)
 							"
 						>
@@ -435,7 +435,7 @@ export default {
 		configuredMqttBridges: {
 			get() {
 				let bridges = this.getWildcardTopics(
-					"openWB/system/mqtt/bridge/+"
+					"openWB/system/mqtt/bridge/+",
 				);
 				for (const [key, value] of Object.entries(bridges)) {
 					if (value.remote.is_openwb_cloud) {
@@ -468,7 +468,7 @@ export default {
 			this.showMqttBridgeModal = false;
 			if (event == "confirm") {
 				console.info(
-					"request removal of mqtt bridge '" + mqttBridgeIndex + "'"
+					"request removal of mqtt bridge '" + mqttBridgeIndex + "'",
 				);
 				this.$emit("sendCommand", {
 					command: "removeMqttBridge",
@@ -482,7 +482,7 @@ export default {
 			]
 				? this.$store.state.mqtt[
 						"openWB/system/mqtt/bridge/" + mqttBridgeIndex
-				  ].name
+					].name
 				: mqttBridgeIndex;
 		},
 	},

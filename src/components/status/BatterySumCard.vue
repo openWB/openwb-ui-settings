@@ -106,7 +106,7 @@ library.add(
 	fasCheckCircle,
 	fasExclamationTriangle,
 	fasTimesCircle,
-	fasCarBattery
+	fasCarBattery,
 );
 
 export default {

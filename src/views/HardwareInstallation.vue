@@ -63,7 +63,7 @@
 									removeDeviceModal(
 										installedDevice.id,
 										installedDevice.name,
-										$event
+										$event,
 									)
 								"
 							>
@@ -75,13 +75,13 @@
 							<div v-else>
 								<openwb-base-avatar
 									v-for="installedComponent in getMyInstalledComponents(
-										installedDevice.id
+										installedDevice.id,
 									)"
 									:key="installedComponent.id"
 									:class="
 										'ml-1 bg-' +
 										getComponentTypeClass(
-											installedComponent.type
+											installedComponent.type,
 										)
 									"
 								>
@@ -89,7 +89,7 @@
 										fixed-width
 										:icon="
 											getComponentTypeIcon(
-												installedComponent.type
+												installedComponent.type,
 											)
 										"
 									/>
@@ -118,7 +118,7 @@
 						<openwb-base-alert
 							v-if="
 								!deviceHasConfiguredComponents(
-									installedDevice.id
+									installedDevice.id,
 								)
 							"
 							subtype="warning"
@@ -142,7 +142,7 @@
 									fixed-width
 									:icon="
 										getComponentTypeIcon(
-											installedComponent.type
+											installedComponent.type,
 										)
 									"
 								/>
@@ -158,7 +158,7 @@
 											installedComponent.id,
 											installedComponent.type,
 											installedComponent.name,
-											$event
+											$event,
 										)
 									"
 								>
@@ -176,7 +176,7 @@
 									updateState(
 										installedComponentKey,
 										$event,
-										'name'
+										'name',
 									)
 								"
 							/>
@@ -192,7 +192,7 @@
 								@update:configuration="
 									updateConfiguration(
 										installedComponentKey,
-										$event
+										$event,
 									)
 								"
 							/>
@@ -230,7 +230,7 @@
 												installedDevice.type,
 												componentToAdd[
 													installedDevice.id
-												]
+												],
 											)
 										"
 									>
@@ -340,7 +340,7 @@ library.add(
 	fasTrash,
 	fasCarBattery,
 	fasSolarPanel,
-	fasGaugeHigh
+	fasGaugeHigh,
 );
 
 import ComponentState from "../components/mixins/ComponentState.vue";
@@ -382,7 +382,7 @@ export default {
 		installedComponents: {
 			get() {
 				return this.getWildcardTopics(
-					"openWB/system/device/+/component/+/config"
+					"openWB/system/device/+/component/+/config",
 				);
 			},
 		},
@@ -414,7 +414,7 @@ export default {
 		},
 		getMyInstalledComponents(deviceId) {
 			return this.getWildcardTopics(
-				"openWB/system/device/" + deviceId + "/component/+/config"
+				"openWB/system/device/" + deviceId + "/component/+/config",
 			);
 		},
 		deviceHasConfiguredComponents(deviceId) {
@@ -441,7 +441,7 @@ export default {
 			this.showDeviceRemoveModal = false;
 			if (event == "confirm") {
 				console.info(
-					"request removal of device '" + this.modalDevice + "'"
+					"request removal of device '" + this.modalDevice + "'",
 				);
 				this.$emit("sendCommand", {
 					command: "removeDevice",
@@ -469,7 +469,7 @@ export default {
 			componentId,
 			componentType,
 			componentName,
-			event
+			event,
 		) {
 			// prevent further processing of the click event
 			event.stopPropagation();
@@ -491,7 +491,7 @@ export default {
 						this.modalComponent.deviceId +
 						"' type '" +
 						this.modalComponent.type +
-						"'"
+						"'",
 				);
 				this.$emit("sendCommand", {
 					command: "removeComponent",

@@ -66,12 +66,11 @@
 			<template #help>
 				Berechnet den Ladestand (SoC) während der Ladung. Dies ist
 				notwendig, wenn der SoC nicht über die Schnittstelle des
-				Fahrzeugs abgerufen werden kann. Die Berechnung erfolgt über
-				die Ladeleistung und die Ladedauer. <br>
+				Fahrzeugs abgerufen werden kann. Die Berechnung erfolgt über die
+				Ladeleistung und die Ladedauer. <br />
 				Derzeit notwendig für Peugeot, Opel, Citroen und DS.
 			</template>
 		</openwb-base-button-group-input>
-
 	</div>
 </template>
 

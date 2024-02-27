@@ -50,18 +50,18 @@
 							Array.isArray(
 								$store.state.mqtt[
 									'openWB/general/chargemode_config/pv_charging/control_range'
-								]
+								],
 							)
 								? $store.state.mqtt[
 										'openWB/general/chargemode_config/pv_charging/control_range'
-								  ][0] / 1000
+									][0] / 1000
 								: undefined
 						"
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/control_range',
 								$event * 1000,
-								'0'
+								'0',
 							)
 						"
 					>
@@ -79,18 +79,18 @@
 							Array.isArray(
 								$store.state.mqtt[
 									'openWB/general/chargemode_config/pv_charging/control_range'
-								]
+								],
 							)
 								? $store.state.mqtt[
 										'openWB/general/chargemode_config/pv_charging/control_range'
-								  ][1] / 1000
+									][1] / 1000
 								: undefined
 						"
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/control_range',
 								$event * 1000,
-								'1'
+								'1',
 							)
 						"
 					>
@@ -112,7 +112,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/switch_on_threshold',
-								$event * 1000
+								$event * 1000,
 							)
 						"
 					>
@@ -137,7 +137,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/switch_on_delay',
-								$event
+								$event,
 							)
 						"
 					>
@@ -163,7 +163,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/switch_off_threshold',
-								$event * 1000
+								$event * 1000,
 							)
 						"
 					>
@@ -188,7 +188,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/switch_off_delay',
-								$event
+								$event,
 							)
 						"
 					>
@@ -215,7 +215,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/feed_in_yield',
-								$event * 1000
+								$event * 1000,
 							)
 						"
 					>
@@ -271,7 +271,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/phases_to_use',
-								$event
+								$event,
 							)
 						"
 					>
@@ -306,7 +306,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/phase_switch_delay',
-								$event
+								$event,
 							)
 						"
 					>
@@ -347,7 +347,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/bat_prio',
-								$event
+								$event,
 							)
 						"
 					>
@@ -387,7 +387,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/charging_power_reserve',
-								$event * 1000
+								$event * 1000,
 							)
 						"
 					>
@@ -411,7 +411,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/rundown_power',
-								$event * 1000
+								$event * 1000,
 							)
 						"
 					>
@@ -460,7 +460,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/rundown_soc',
-								$event
+								$event,
 							)
 						"
 					>
@@ -647,7 +647,7 @@ export default {
 		updateBatterySwitchOnSoc(event) {
 			this.updateState(
 				"openWB/general/chargemode_config/pv_charging/switch_on_soc",
-				event
+				event,
 			);
 			if (
 				event <=
@@ -657,14 +657,14 @@ export default {
 			) {
 				this.updateState(
 					"openWB/general/chargemode_config/pv_charging/switch_off_soc",
-					Math.max(0, event - 5)
+					Math.max(0, event - 5),
 				);
 			}
 		},
 		updateBatterySwitchOffSoc(event) {
 			this.updateState(
 				"openWB/general/chargemode_config/pv_charging/switch_off_soc",
-				event
+				event,
 			);
 			if (
 				event >=
@@ -674,7 +674,7 @@ export default {
 			) {
 				this.updateState(
 					"openWB/general/chargemode_config/pv_charging/switch_on_soc",
-					event + 5
+					event + 5,
 				);
 			}
 		},

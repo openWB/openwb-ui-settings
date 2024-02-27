@@ -23,7 +23,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/instant_charging/phases_to_use',
-								$event
+								$event,
 							)
 						"
 					>

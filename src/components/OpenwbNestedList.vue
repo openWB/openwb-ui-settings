@@ -58,7 +58,7 @@ library.add(
 	fasChargingStation,
 	fasCarBattery,
 	fasSolarPanel,
-	fasGaugeHigh
+	fasGaugeHigh,
 );
 
 export default {

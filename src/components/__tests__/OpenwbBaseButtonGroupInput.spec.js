@@ -36,7 +36,7 @@ describe("OpenwbBaseButtonGroupInput.vue", () => {
 		expect(wrapper.find("span.alert.alert-info").exists()).toBe(false);
 		await titleLabel.trigger("click");
 		expect(wrapper.find("span.alert.alert-info").html()).toContain(
-			helpContent
+			helpContent,
 		);
 	});
 	// check buttons

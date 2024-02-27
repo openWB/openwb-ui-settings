@@ -93,7 +93,7 @@ library.add(
 	fasTag,
 	fasTimesCircle,
 	fasPlus,
-	fasInfoCircle
+	fasInfoCircle,
 );
 
 export default {

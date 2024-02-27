@@ -63,10 +63,10 @@
 				] == 0
 					? 'Laden gesperrt'
 					: 'Laden erlaubt (' +
-					  $store.state.mqtt[
+						$store.state.mqtt[
 							'openWB/general/ripple_control_receiver/get/override_value'
-					  ] +
-					  '%)'
+						] +
+						'%)'
 			"
 		/>
 	</openwb-base-card>
@@ -88,7 +88,7 @@ library.add(
 	fasCheckCircle,
 	fasExclamationTriangle,
 	fasTimesCircle,
-	fasTowerBroadcast
+	fasTowerBroadcast,
 );
 
 export default {

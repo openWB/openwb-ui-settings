@@ -206,7 +206,7 @@
 							@update:configuration="
 								updateConfiguration(
 									'openWB/system/backup_cloud/config',
-									$event
+									$event,
 								)
 							"
 							@sendCommand="
@@ -408,7 +408,7 @@ library.add(
 	fasArchive,
 	fasFileArchive,
 	fasUpload,
-	fasBoxOpen
+	fasBoxOpen,
 );
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -636,12 +636,12 @@ export default {
 		},
 		componentConfigurations() {
 			return this.getWildcardTopics(
-				"openWB/system/device/+/component/+/config"
+				"openWB/system/device/+/component/+/config",
 			);
 		},
 		chargePointOptions() {
 			let chargePoints = this.getWildcardTopics(
-				"openWB/chargepoint/+/config"
+				"openWB/chargepoint/+/config",
 			);
 			var myOptions = [];
 			for (const element of Object.values(chargePoints)) {
@@ -687,7 +687,7 @@ export default {
 		},
 		smartHomeOptions() {
 			let smartHomeDevices = this.getWildcardTopics(
-				"openWB/LegacySmartHome/config/get/Devices/+/device_configured"
+				"openWB/LegacySmartHome/config/get/Devices/+/device_configured",
 			);
 			var myOptions = [];
 			for (const [key, value] of Object.entries(smartHomeDevices)) {
@@ -715,12 +715,12 @@ export default {
 		},
 		getBackupCloudDefaultConfiguration(backupCloudType) {
 			const backupCloudDefaults = this.backupCloudList.find(
-				(element) => element.value == backupCloudType
+				(element) => element.value == backupCloudType,
 			);
 			if (
 				Object.prototype.hasOwnProperty.call(
 					backupCloudDefaults,
-					"defaults"
+					"defaults",
 				)
 			) {
 				return {
@@ -729,7 +729,7 @@ export default {
 			}
 			console.warn(
 				"no default configuration found for backup cloud type!",
-				backupCloudType
+				backupCloudType,
 			);
 			return {};
 		},
@@ -774,11 +774,11 @@ export default {
 			this.updateState(
 				"openWB/system/backup_cloud/config",
 				$event,
-				"type"
+				"type",
 			);
 			this.updateState(
 				"openWB/system/backup_cloud/config",
-				this.getBackupCloudDefaultConfiguration($event)
+				this.getBackupCloudDefaultConfiguration($event),
 			);
 		},
 		updateSelectedRestoreFile(event) {
@@ -804,12 +804,12 @@ export default {
 								headers: {
 									"Content-Type": "multipart/form-data",
 								},
-							}
+							},
 						)
 						.then(() => {
 							this.$root.postClientMessage(
 								successMessage,
-								"success"
+								"success",
 							);
 							resolve(true);
 						})
@@ -819,7 +819,7 @@ export default {
 								// that falls out of the range of 2xx
 								console.error(
 									error.response.status,
-									error.response.data
+									error.response.data,
 								);
 								var alertMessage =
 									"Hochladen der Datei fehlgeschlagen!" +
@@ -842,7 +842,7 @@ export default {
 							}
 							this.$root.postClientMessage(
 								alertMessage,
-								"danger"
+								"danger",
 							);
 							resolve(false);
 						});
@@ -859,7 +859,7 @@ export default {
 			this.restoreUploadDone = await this.uploadFile(
 				"restore",
 				this.selectedRestoreFile,
-				successMessage
+				successMessage,
 			);
 		},
 		async uploadDataMigrationFile() {
@@ -869,7 +869,7 @@ export default {
 			this.dataMigrationUploadDone = await this.uploadFile(
 				"migrate",
 				this.selectedDataMigrationFile,
-				successMessage
+				successMessage,
 			);
 		},
 		restoreBackup() {

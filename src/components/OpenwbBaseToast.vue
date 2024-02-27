@@ -77,7 +77,7 @@ export default {
 				if (Math.abs(elapsed) > units[unit]) {
 					this.relativeTime = rtf.format(
 						Math.round(-elapsed / units[unit]), // negative time diff!
-						unit
+						unit,
 					);
 					break;
 				}

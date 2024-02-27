@@ -63,7 +63,7 @@ export default {
 				array[index] = parseInt(
 					topic
 						.match(/(?:\/)([0-9]+)(?=\/)*/g)[0]
-						.replace(/[^0-9]+/g, "")
+						.replace(/[^0-9]+/g, ""),
 				);
 			});
 			return myTopics;
@@ -94,7 +94,7 @@ export default {
 		},
 		formatDate(
 			dateString,
-			format = { year: "numeric", month: "2-digit", day: "2-digit" }
+			format = { year: "numeric", month: "2-digit", day: "2-digit" },
 		) {
 			let date = new Date(dateString);
 			return date.toLocaleDateString(undefined, format);
@@ -103,7 +103,7 @@ export default {
 			value,
 			minNumDigits = 0,
 			maxNumDigit = minNumDigits,
-			scale = 1
+			scale = 1,
 		) {
 			return (value * scale).toLocaleString(undefined, {
 				minimumFractionDigits: minNumDigits,
@@ -114,14 +114,14 @@ export default {
 			topic,
 			minNumDigits = 0,
 			maxNumDigits = minNumDigits,
-			scale = 1
+			scale = 1,
 		) {
 			if (this.$store.state.mqtt[topic]) {
 				return this.formatNumber(
 					this.$store.state.mqtt[topic],
 					minNumDigits,
 					maxNumDigits,
-					scale
+					scale,
 				);
 			} else {
 				return "-";
@@ -131,7 +131,7 @@ export default {
 			topic,
 			minNumDigits = 0,
 			maxNumDigits = minNumDigits,
-			scale = 1
+			scale = 1,
 		) {
 			if (this.$store.state.mqtt[topic]) {
 				return this.$store.state.mqtt[topic]
@@ -140,7 +140,7 @@ export default {
 							element,
 							minNumDigits,
 							maxNumDigits,
-							scale
+							scale,
 						);
 					})
 					.join(" / ");
@@ -174,7 +174,7 @@ export default {
 			!(`openWB/log/${this.mqttClientId}/data` in this.$store.state.mqtt)
 		) {
 			this.mqttTopicsToSubscribe.push(
-				"openWB/log/" + this.mqttClientId + "/data"
+				"openWB/log/" + this.mqttClientId + "/data",
 			);
 		}
 		this.mqttTopicsToSubscribe.forEach((topic) => {
@@ -203,7 +203,7 @@ export default {
 					(wildcardTopic) => {
 						console.debug("removing wildcardTopic:", wildcardTopic);
 						this.$store.commit("removeTopic", wildcardTopic);
-					}
+					},
 				);
 			} else {
 				this.$store.commit("removeTopic", topic);

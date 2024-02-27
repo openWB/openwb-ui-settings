@@ -270,7 +270,7 @@ library.add(
 	fasUndo,
 	fasPowerOff,
 	fasDownload,
-	fasSkullCrossbones
+	fasSkullCrossbones,
 );
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 

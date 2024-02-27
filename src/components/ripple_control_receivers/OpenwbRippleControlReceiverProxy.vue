@@ -23,7 +23,7 @@ export default {
 	computed: {
 		myComponent() {
 			console.debug(
-				`loading backup cloud: ${this.rippleControlReceiver.type}`
+				`loading backup cloud: ${this.rippleControlReceiver.type}`,
 			);
 			return defineAsyncComponent({
 				loader: () =>

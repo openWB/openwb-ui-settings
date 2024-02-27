@@ -66,7 +66,7 @@ library.add(
 	fasQuestionCircle,
 	farQuestionCircle,
 	fasStepForward,
-	fasStepBackward
+	fasStepBackward,
 );
 
 export default {
@@ -138,7 +138,7 @@ export default {
 							"sliderValue: not found in values: ",
 							this.modelValue,
 							"using min as default: ",
-							this.min
+							this.min,
 						);
 						return this.min;
 					} else {
@@ -164,7 +164,7 @@ export default {
 		increment() {
 			var newSliderValue = Math.min(
 				this.sliderValue + this.step,
-				this.max
+				this.max,
 			);
 			// rounding needed!
 			this.sliderValue =
@@ -174,7 +174,7 @@ export default {
 		decrement() {
 			var newSliderValue = Math.max(
 				this.sliderValue - this.step,
-				this.min
+				this.min,
 			);
 			// rounding needed!
 			this.sliderValue =

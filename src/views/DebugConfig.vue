@@ -266,11 +266,11 @@ export default {
 			this.getFilePromise("/openWB/data/log/data_migration.log").then(
 				(result) => {
 					this.dataMigrationLog = result;
-				}
+				},
 			);
 			this.getFilePromise(
 				"/openWB/data/log/data_migration.log.1",
-				true
+				true,
 			).then((result) => {
 				this.dataMigrationLog += result;
 			});
@@ -284,20 +284,20 @@ export default {
 			this.getFilePromise("/openWB/ramdisk/main.log.1", true).then(
 				(result) => {
 					this.mainLog += result;
-				}
+				},
 			);
 		},
 		loadInternalChargepointLog(event) {
 			event.stopPropagation();
 			this.internalChargepointLog = "wird aktualisiert...";
 			this.getFilePromise(
-				"/openWB/ramdisk/internal_chargepoint.log"
+				"/openWB/ramdisk/internal_chargepoint.log",
 			).then((result) => {
 				this.internalChargepointLog = result;
 			});
 			this.getFilePromise(
 				"/openWB/ramdisk/internal_chargepoint.log.1",
-				true
+				true,
 			).then((result) => {
 				this.internalChargepointLog += result;
 			});
@@ -311,7 +311,7 @@ export default {
 			this.getFilePromise("/openWB/ramdisk/mqtt.log.1", true).then(
 				(result) => {
 					this.mqttLog += result;
-				}
+				},
 			);
 		},
 		loadSocLog(event) {
@@ -323,7 +323,7 @@ export default {
 			this.getFilePromise("/openWB/ramdisk/soc.log.1", true).then(
 				(result) => {
 					this.socLog += result;
-				}
+				},
 			);
 		},
 		loadUpdateLog(event) {
@@ -332,12 +332,12 @@ export default {
 			this.getFilePromise("/openWB/data/log/update.log").then(
 				(result) => {
 					this.updateLog = result;
-				}
+				},
 			);
 			this.getFilePromise("/openWB/data/log/update.log.1", true).then(
 				(result) => {
 					this.updateLog += result;
-				}
+				},
 			);
 		},
 		loadRemoteSupportLog(event) {
@@ -346,11 +346,11 @@ export default {
 			this.getFilePromise("/openWB/ramdisk/remote_support.log").then(
 				(result) => {
 					this.remoteSupportLog = result;
-				}
+				},
 			);
 			this.getFilePromise(
 				"/openWB/ramdisk/remote_support.log.1",
-				true
+				true,
 			).then((result) => {
 				this.remoteSupportLog += result;
 			});
@@ -361,12 +361,12 @@ export default {
 			this.getFilePromise("/openWB/ramdisk/smarthome.log").then(
 				(result) => {
 					this.smartHomeLog = result;
-				}
+				},
 			);
 			this.getFilePromise("/openWB/ramdisk/smarthome.log.1").then(
 				(result) => {
 					this.smartHomeLog += result;
-				}
+				},
 			);
 		},
 	},
