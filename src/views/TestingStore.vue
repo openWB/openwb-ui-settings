@@ -1,6 +1,43 @@
 <template>
   <div class="testingStore">
     <form name="testingStoreForm">
+      <openwb-base-card title="Elemente mit BaseSettingElement">
+        <OpenwbBaseHeading>
+          Basiselement
+        </OpenwbBaseHeading>
+        <OpenwbBaseSettingElement>
+          <template #help>
+            Basis-Element für alle weiteren Elemente.
+            Das ist ein <a href="test">Link</a>.
+          </template>
+        </OpenwbBaseSettingElement>
+        <OpenwbBaseHeading>
+          Abgeleitete Elemente
+        </OpenwbBaseHeading>
+        <openwb-base-button-input2
+          title="Button Input"
+          buttonText="Klick mich"
+          subtype="info"
+        >
+          <template #help>
+            Einfacher Click-Button für Aktionen.
+          </template>
+        </openwb-base-button-input2>
+        <openwb-base-button-group-input2
+          title="Button Group Input"
+          :buttons="[
+            { buttonValue: 1, text: 'Eins' },
+            { buttonValue: 2, text: 'Zwei' },
+          ]"
+          :model-value="$store.state.examples.buttonGroup1"
+          @update:model-value="updateState('buttonGroup1', $event)"
+        >
+          <template #help>
+            Button-Group Element zur Auswahl weniger Optionen.
+            Bei vielen Optionen besser ein Dropdown verwenden.
+          </template>
+        </openwb-base-button-group-input2>
+      </openwb-base-card>
       <openwb-base-card title="Einfache Eingabefelder">
         <openwb-base-text-input
           title="1. Text"
