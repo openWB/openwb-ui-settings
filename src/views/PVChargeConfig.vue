@@ -220,6 +220,8 @@
 						"
 					>
 						<template #help>
+							Ein Wert größer 0kW bewirkt, dass weniger
+							PV-Leistung zum Laden benutzt wird.<br />
 							Die Nutzung dieser Option ergibt nur Sinn, wenn ein
 							Wechselrichter mit separatem Smart-Meter am
 							EVU-Punkt verbaut ist (nicht der originale Zähler
@@ -395,7 +397,8 @@
 							Die "reservierte Ladeleistung" des Speichers wird
 							von der Regelung auch bei "Fahrzeuge"-Vorrang NICHT
 							für das Fahrzeugladen verwendet und bleibt immer dem
-							Speicher vorbehalten.
+							Speicher vorbehalten, sofern dieser nicht zu 100%
+							geladen ist.
 						</template>
 					</openwb-base-number-input>
 					<openwb-base-number-input
@@ -472,7 +475,7 @@
 					</openwb-base-range-input>
 					<hr />
 					<openwb-base-heading>
-						Laden mit Mindeststrom
+						Laden mit minimalem Dauerstrom
 					</openwb-base-heading>
 					<openwb-base-range-input
 						title="Einschalt-SoC"
