@@ -108,6 +108,42 @@
 								freigegeben werden.
 							</template>
 						</openwb-base-button-group-input>
+						<openwb-base-array-input
+							v-if="newCloudData.partner"
+							title="Gültige Partner-IDs"
+							noElementsMessage="Keine Partner-ID zugeordnet."
+							:model-value="
+								$store.state.mqtt[
+									'openWB/system/mqtt/valid_partner_ids'
+								]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/system/mqtt/valid_partner_ids',
+									$event
+								)
+							"
+						>
+							<template #input-prefix>
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'user-gear']"
+								/>
+							</template>
+							<template #element-prefix>
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'user-gear']"
+								/>
+							</template>
+							<template #help>
+								Die Partner-ID erhältst Du von Deinem
+								Installateur. Ist hier keine Partner-ID
+								eingetragen, dann kann auch niemand - trotz
+								aktiviertem Zugang für Partner - über das
+								Partner-Portal auf diese openWB zugreifen!
+							</template>
+						</openwb-base-array-input>
 					</div>
 					<template
 						#footer
@@ -198,6 +234,42 @@
 								freigegeben werden.
 							</template>
 						</openwb-base-button-group-input>
+						<openwb-base-array-input
+							v-if="connectCloudData.partner"
+							title="Gültige Partner-IDs"
+							noElementsMessage="Keine Partner-ID zugeordnet."
+							:model-value="
+								$store.state.mqtt[
+									'openWB/system/mqtt/valid_partner_ids'
+								]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/system/mqtt/valid_partner_ids',
+									$event
+								)
+							"
+						>
+							<template #input-prefix>
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'user-gear']"
+								/>
+							</template>
+							<template #element-prefix>
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'user-gear']"
+								/>
+							</template>
+							<template #help>
+								Die Partner-ID erhältst Du von Deinem
+								Installateur. Ist hier keine Partner-ID
+								eingetragen, dann kann auch niemand - trotz
+								aktiviertem Zugang für Partner - über das
+								Partner-Portal auf diese openWB zugreifen!
+							</template>
+						</openwb-base-array-input>
 					</div>
 					<template
 						#footer
@@ -292,6 +364,42 @@
 							werden.
 						</template>
 					</openwb-base-button-group-input>
+					<openwb-base-array-input
+						v-if="cloudSettings.partner"
+						title="Gültige Partner-IDs"
+						noElementsMessage="Keine Partner-ID zugeordnet."
+						:model-value="
+							$store.state.mqtt[
+								'openWB/system/mqtt/valid_partner_ids'
+							]
+						"
+						@update:model-value="
+							updateState(
+								'openWB/system/mqtt/valid_partner_ids',
+								$event
+							)
+						"
+					>
+						<template #input-prefix>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'user-gear']"
+							/>
+						</template>
+						<template #element-prefix>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'user-gear']"
+							/>
+						</template>
+						<template #help>
+							Die Partner-ID erhältst Du von Deinem Installateur.
+							Ist hier keine Partner-ID eingetragen, dann kann
+							auch niemand - trotz aktiviertem Zugang für Partner
+							- über das Partner-Portal auf diese openWB
+							zugreifen!
+						</template>
+					</openwb-base-array-input>
 					<template #footer>
 						<div class="row justify-content-center">
 							<openwb-base-click-button
@@ -322,18 +430,28 @@
 </template>
 
 <script>
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faUserGear as fasUserGear } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(fasUserGear);
+
 import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
 	name: "OpenwbCloudConfig",
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
+	components: {
+		FontAwesomeIcon,
+	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
 				"openWB/system/dataprotection_acknowledged",
 				"openWB/system/mqtt/bridge/+",
+				"openWB/system/mqtt/valid_partner_ids",
 			],
 			enableNewCloudButton: true,
 			newCloudData: {
@@ -395,6 +513,7 @@ export default {
 		},
 		createCloud() {
 			if (document.forms.cloudConfigCreateForm.reportValidity()) {
+				this.$emit("save");
 				this.$emit("sendCommand", {
 					command: "initCloud",
 					data: this.newCloudData,
@@ -404,6 +523,7 @@ export default {
 		},
 		connectCloud() {
 			if (document.forms.cloudConfigConnectForm.reportValidity()) {
+				this.$emit("save");
 				this.$emit("sendCommand", {
 					command: "connectCloud",
 					data: this.connectCloudData,
@@ -420,6 +540,8 @@ export default {
 			this.showCloudRemoveModal = false;
 			if (event == "confirm") {
 				console.info("request removal of cloud");
+				// clear valid_partner_ids
+				this.updateState("openWB/system/mqtt/valid_partner_ids", []);
 				this.$emit("sendCommand", {
 					command: "removeMqttBridge",
 					data: {
