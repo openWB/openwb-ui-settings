@@ -221,8 +221,8 @@
 					>
 						<template #help>
 							Ein Wert größer 0kW bewirkt, dass weniger
-							PV-Leistung zum Laden benutzt wird:<br />Die Nutzung
-							dieser Option ergibt nur Sinn, wenn ein
+							PV-Leistung zum Laden benutzt wird.<br />
+							Die Nutzung dieser Option ergibt nur Sinn, wenn ein
 							Wechselrichter mit separatem Smart-Meter am
 							EVU-Punkt verbaut ist (nicht der originale Zähler
 							des Versorgers!), welches eine dynamische Begrenzung
