@@ -4,10 +4,6 @@
 			Einstellungen für Enphase Envoy / IQ Gateway
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-alert subtype="info">
-			Geräte mit Firmware-Versionen 7.0 oder neuer werden derzeit nicht
-			unterstützt.
-		</openwb-base-alert>
 		<openwb-base-text-input
 			title="IP oder Hostname"
 			subtype="host"
@@ -17,24 +13,58 @@
 				updateConfiguration($event, 'configuration.hostname')
 			"
 		/>
+		<openwb-base-select-input
+			title="Version"
+			required
+			:options="[
+				{ value: 1, text: 'Firmware < 7.0' },
+				{ value: 2, text: 'Firmware ab 7.0' },
+			]"
+			:model-value="configuration.version"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.version')
+			"
+		/>
 		<openwb-base-text-input
+			v-if="configuration.version > 1"
 			title="Benutzer"
 			subtype="user"
-			required
 			:model-value="configuration.user"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.user')
 			"
 		/>
 		<openwb-base-text-input
-			title="Benutzer"
+			v-if="configuration.version > 1"
+			title="Kennwort"
 			subtype="password"
-			required
 			:model-value="configuration.password"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.password')
 			"
 		/>
+		<openwb-base-text-input
+			v-if="configuration.version > 1"
+			title="Token"
+			subtype="password"
+			:model-value="configuration.token"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.token')
+			"
+		>
+			<template #help>
+				Wenn Benutzer und Kennwort angegeben werden, wird das Token
+				automatisch beim Speichern abgerufen. Ebenfalls wird ein
+				abgelaufenes Token (derzeit nach einem Jahr) automatisch
+				erneuert.<br />
+				Wenn Sie ein Token manuell erstellen möchten, können Sie dies
+				auf der <a
+					href="https://developer.enphase.com/docs/quickstart.html"
+					target="_blank"
+					rel="noopener"
+				>Enphase-Webseite</a> erledigen.
+			</template>
+		</openwb-base-text-input>
 	</div>
 </template>
 
