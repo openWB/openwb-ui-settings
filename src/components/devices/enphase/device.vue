@@ -59,6 +59,14 @@
 		/>
 		<openwb-base-text-input
 			v-if="configuration.version > 1"
+			title="Envoy Seriennummer"
+			:model-value="configuration.serial"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.serial')
+			"
+		/>
+		<openwb-base-text-input
+			v-if="configuration.version > 1"
 			title="Token"
 			subtype="password"
 			:model-value="configuration.token"
