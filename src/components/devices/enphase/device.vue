@@ -75,10 +75,10 @@
 			"
 		>
 			<template #help>
-				Wenn Benutzer und Kennwort angegeben werden, wird das Token
-				automatisch beim Speichern abgerufen. Ebenfalls wird ein
-				abgelaufenes Token (derzeit nach einem Jahr) automatisch
-				erneuert.<br />
+				Wenn Benutzer, Kennwort und Seriennummer des Envoys angegeben
+				werden, wird das Token automatisch beim Speichern abgerufen.
+				Ebenfalls wird ein abgelaufenes Token (derzeit nach einem Jahr)
+				automatisch erneuert.<br />
 				Wenn Sie ein Token manuell erstellen möchten, können Sie dies
 				auf der <a
 					href="https://developer.enphase.com/docs/quickstart.html"
