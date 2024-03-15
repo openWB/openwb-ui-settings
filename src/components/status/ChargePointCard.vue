@@ -239,6 +239,20 @@
 		/>
 		<openwb-base-heading>Phasen</openwb-base-heading>
 		<openwb-base-text-input
+			v-if="$store.state.mqtt['openWB/general/extern'] === true"
+			title="Vorgabe"
+			readonly
+			class="text-right text-monospace"
+			:model-value="
+				formatNumberTopic(
+					'openWB/internal_chargepoint/' +
+						chargePointIndex +
+						'/data/phases_to_use',
+				)
+			"
+		/>
+		<openwb-base-text-input
+			v-else
 			title="Vorgabe"
 			readonly
 			class="text-right text-monospace"
