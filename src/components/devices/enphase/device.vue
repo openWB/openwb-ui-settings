@@ -12,7 +12,13 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.hostname')
 			"
-		/>
+		>
+			<template #help>
+				Bitte geben Sie die IP-Adresse oder den Hostnamen des Enphase
+				Envoy oder IQ Gateway an. Die Info finden Sie in Ihrem Router.
+				Ab Werk ist der Hostname "envoy" oder "envoy.local".
+			</template>
+		</openwb-base-text-input>
 		<openwb-base-select-input
 			title="Version"
 			required
@@ -24,7 +30,15 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.version')
 			"
-		/>
+		>
+			<template #help>
+				Bitte wählen Sie die Version des Enphase Envoy oder IQ Gateway
+				aus. Die Version 1 ist für Geräte mit einer Firmware-Version
+				unter 7.0, die Version 2 für Geräte mit einer Firmware-Version
+				ab 7.0. Ein angebundener Speicher wird nur bei Version 2
+				unterstützt.
+			</template>
+		</openwb-base-select-input>
 		<openwb-base-text-input
 			v-if="configuration.version > 1"
 			title="Benutzer"
