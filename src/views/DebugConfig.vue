@@ -40,158 +40,12 @@
 				@defaults="$emit('defaults')"
 			/>
 		</form>
-		<openwb-base-card
-			title="Main-Log"
-			class="mt-3"
-			:collapsible="true"
-			:collapsed="true"
-		>
-			<template #actions>
-				<openwb-base-avatar
-					class="bg-success clickable"
-					@click="loadMainLog($event)"
-				>
-					<font-awesome-icon
-						fixed-width
-						:icon="['fas', 'file-download']"
-					/>
-				</openwb-base-avatar>
-			</template>
-			<pre>{{ mainLog }}</pre>
-		</openwb-base-card>
-		<openwb-base-card
-			title="Log des internen Ladepunktes"
-			class="mt-3"
-			:collapsible="true"
-			:collapsed="true"
-		>
-			<template #actions>
-				<openwb-base-avatar
-					class="bg-success clickable"
-					@click="loadInternalChargepointLog($event)"
-				>
-					<font-awesome-icon
-						fixed-width
-						:icon="['fas', 'file-download']"
-					/>
-				</openwb-base-avatar>
-			</template>
-			<pre>{{ internalChargepointLog }}</pre>
-		</openwb-base-card>
-		<openwb-base-card
-			title="MQTT-Log"
-			class="mt-3"
-			:collapsible="true"
-			:collapsed="true"
-		>
-			<template #actions>
-				<openwb-base-avatar
-					class="bg-success clickable"
-					@click="loadMqttLog($event)"
-				>
-					<font-awesome-icon
-						fixed-width
-						:icon="['fas', 'file-download']"
-					/>
-				</openwb-base-avatar>
-			</template>
-			<pre>{{ mqttLog }}</pre>
-		</openwb-base-card>
-		<openwb-base-card
-			title="SoC-Log"
-			class="mt-3"
-			:collapsible="true"
-			:collapsed="true"
-		>
-			<template #actions>
-				<openwb-base-avatar
-					class="bg-success clickable"
-					@click="loadSocLog($event)"
-				>
-					<font-awesome-icon
-						fixed-width
-						:icon="['fas', 'file-download']"
-					/>
-				</openwb-base-avatar>
-			</template>
-			<pre>{{ socLog }}</pre>
-		</openwb-base-card>
-		<openwb-base-card
-			title="Protokoll des letzten Updates"
-			class="mt-3"
-			:collapsible="true"
-			:collapsed="true"
-		>
-			<template #actions>
-				<openwb-base-avatar
-					class="bg-success clickable"
-					@click="loadUpdateLog($event)"
-				>
-					<font-awesome-icon
-						fixed-width
-						:icon="['fas', 'file-download']"
-					/>
-				</openwb-base-avatar>
-			</template>
-			<pre>{{ updateLog }}</pre>
-		</openwb-base-card>
-		<openwb-base-card
-			title="Protokoll des Remote-Dienstes"
-			class="mt-3"
-			:collapsible="true"
-			:collapsed="true"
-		>
-			<template #actions>
-				<openwb-base-avatar
-					class="bg-success clickable"
-					@click="loadRemoteSupportLog($event)"
-				>
-					<font-awesome-icon
-						fixed-width
-						:icon="['fas', 'file-download']"
-					/>
-				</openwb-base-avatar>
-			</template>
-			<pre>{{ remoteSupportLog }}</pre>
-		</openwb-base-card>
-		<openwb-base-card
-			title="Protokoll des SmartHome Dienstes"
-			class="mt-3"
-			:collapsible="true"
-			:collapsed="true"
-		>
-			<template #actions>
-				<openwb-base-avatar
-					class="bg-success clickable"
-					@click="loadSmartHomeLog($event)"
-				>
-					<font-awesome-icon
-						fixed-width
-						:icon="['fas', 'file-download']"
-					/>
-				</openwb-base-avatar>
-			</template>
-			<pre>{{ smartHomeLog }}</pre>
-		</openwb-base-card>
-		<openwb-base-card
-			title="Protokoll der Datenmigration"
-			class="mt-3"
-			:collapsible="true"
-			:collapsed="true"
-		>
-			<template #actions>
-				<openwb-base-avatar
-					class="bg-success clickable"
-					@click="loadDataMigrationLog($event)"
-				>
-					<font-awesome-icon
-						fixed-width
-						:icon="['fas', 'file-download']"
-					/>
-				</openwb-base-avatar>
-			</template>
-			<pre>{{ dataMigrationLog }}</pre>
-		</openwb-base-card>
+		<openwb-log-card
+			v-for="logFile in logFiles"
+			:key="logFile.fileName"
+			:title="logFile.title"
+			:log-file="logFile.fileName"
+		/>
 	</div>
 </template>
 
@@ -203,12 +57,14 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasFileDownload);
 
 import ComponentState from "../components/mixins/ComponentState.vue";
+import OpenwbLogCard from "../components/debug_config/LogCard.vue";
 
 export default {
 	name: "OpenwbDebugging",
 	mixins: [ComponentState],
 	components: {
 		FontAwesomeIcon,
+		OpenwbLogCard,
 	},
 	data() {
 		return {
@@ -216,159 +72,41 @@ export default {
 				"openWB/general/extern",
 				"openWB/system/debug_level",
 			],
-			dataMigrationLogLog: "-- noch nicht geladen --",
-			mainLog: "-- noch nicht geladen --",
-			internalChargepointLog: "-- noch nicht geladen --",
-			mqttLog: "-- noch nicht geladen --",
-			socLog: "-- noch nicht geladen --",
-			updateLog: "-- noch nicht geladen --",
-			remoteSupportLog: "--noch nicht geladen --",
-			smartHomeLog: "--noch nicht geladen --",
+			logFiles: [
+				{
+					title: "Main-Log",
+					fileName: "/openWB/ramdisk/main.log",
+				},
+				{
+					title: "Log des internen Ladepunktes",
+					fileName: "/openWB/ramdisk/internal_chargepoint.log",
+				},
+				{
+					title: "MQTT-Log",
+					fileName: "/openWB/ramdisk/mqtt.log",
+				},
+				{
+					title: "SoC-Log",
+					fileName: "/openWB/ramdisk/soc.log",
+				},
+				{
+					title: "Protokoll des letzten Updates",
+					fileName: "/openWB/ramdisk/update.log",
+				},
+				{
+					title: "Protokoll des Remote-Dienstes",
+					fileName: "/openWB/ramdisk/remote_support.log",
+				},
+				{
+					title: "Protokoll des SmartHome Dienstes",
+					fileName: "/openWB/ramdisk/smarthome.log",
+				},
+				{
+					title: "Protokoll der Datenmigration",
+					fileName: "/openWB/data/log/data_migration.log",
+				},
+			]
 		};
-	},
-	methods: {
-		async getFilePromise(myFile, ignore404 = false) {
-			return this.axios
-				.get(location.protocol + "//" + location.host + myFile)
-				.then((response) => {
-					return response.data;
-				})
-				.catch((error) => {
-					if (error.response) {
-						// The request was made and the server responded with a status code
-						// that falls out of the range of 2xx
-						if (error.response.status == 404 && ignore404) {
-							// ignore a 404 if requested, used for rotated log files which may not exist yet
-							return "";
-						}
-						return (
-							"A 404 is expected if running node.js dev server!\n" +
-							error.response.status +
-							" " +
-							error.response.statusText +
-							": " +
-							error.response.request.responseURL
-						);
-					} else if (error.request) {
-						// The request was made but no response was received
-						// `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-						// http.ClientRequest in node.js
-						return error.request;
-					} else {
-						// Something happened in setting up the request that triggered an Error
-						return error.message;
-					}
-				});
-		},
-		loadDataMigrationLog(event) {
-			event.stopPropagation();
-			this.dataMigrationLog = "wird aktualisiert...";
-			this.getFilePromise("/openWB/data/log/data_migration.log").then(
-				(result) => {
-					this.dataMigrationLog = result;
-				},
-			);
-			this.getFilePromise(
-				"/openWB/data/log/data_migration.log.1",
-				true,
-			).then((result) => {
-				this.dataMigrationLog += result;
-			});
-		},
-		loadMainLog(event) {
-			event.stopPropagation();
-			this.mainLog = "wird aktualisiert...";
-			this.getFilePromise("/openWB/ramdisk/main.log").then((result) => {
-				this.mainLog = result;
-			});
-			this.getFilePromise("/openWB/ramdisk/main.log.1", true).then(
-				(result) => {
-					this.mainLog += result;
-				},
-			);
-		},
-		loadInternalChargepointLog(event) {
-			event.stopPropagation();
-			this.internalChargepointLog = "wird aktualisiert...";
-			this.getFilePromise(
-				"/openWB/ramdisk/internal_chargepoint.log",
-			).then((result) => {
-				this.internalChargepointLog = result;
-			});
-			this.getFilePromise(
-				"/openWB/ramdisk/internal_chargepoint.log.1",
-				true,
-			).then((result) => {
-				this.internalChargepointLog += result;
-			});
-		},
-		loadMqttLog(event) {
-			event.stopPropagation();
-			this.mqttLog = "wird aktualisiert...";
-			this.getFilePromise("/openWB/ramdisk/mqtt.log").then((result) => {
-				this.mqttLog = result;
-			});
-			this.getFilePromise("/openWB/ramdisk/mqtt.log.1", true).then(
-				(result) => {
-					this.mqttLog += result;
-				},
-			);
-		},
-		loadSocLog(event) {
-			event.stopPropagation();
-			this.socLog = "wird aktualisiert...";
-			this.getFilePromise("/openWB/ramdisk/soc.log").then((result) => {
-				this.socLog = result;
-			});
-			this.getFilePromise("/openWB/ramdisk/soc.log.1", true).then(
-				(result) => {
-					this.socLog += result;
-				},
-			);
-		},
-		loadUpdateLog(event) {
-			event.stopPropagation();
-			this.updateLog = "wird aktualisiert...";
-			this.getFilePromise("/openWB/data/log/update.log").then(
-				(result) => {
-					this.updateLog = result;
-				},
-			);
-			this.getFilePromise("/openWB/data/log/update.log.1", true).then(
-				(result) => {
-					this.updateLog += result;
-				},
-			);
-		},
-		loadRemoteSupportLog(event) {
-			event.stopPropagation();
-			this.remoteSupportLog = "wird aktualisiert...";
-			this.getFilePromise("/openWB/ramdisk/remote_support.log").then(
-				(result) => {
-					this.remoteSupportLog = result;
-				},
-			);
-			this.getFilePromise(
-				"/openWB/ramdisk/remote_support.log.1",
-				true,
-			).then((result) => {
-				this.remoteSupportLog += result;
-			});
-		},
-		loadSmartHomeLog(event) {
-			event.stopPropagation();
-			this.smartHomeLog = "wird aktualisiert...";
-			this.getFilePromise("/openWB/ramdisk/smarthome.log").then(
-				(result) => {
-					this.smartHomeLog = result;
-				},
-			);
-			this.getFilePromise("/openWB/ramdisk/smarthome.log.1").then(
-				(result) => {
-					this.smartHomeLog += result;
-				},
-			);
-		},
 	},
 };
 </script>
