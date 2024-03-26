@@ -13,6 +13,16 @@
 				updateConfiguration($event, 'configuration.address')
 			"
 		/>
+		<openwb-base-number-input
+			title="Port"
+			required
+			:min="1"
+			:max="65535"
+			:model-value="configuration.port"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.port')
+			"
+		/>
 	</div>
 </template>
 

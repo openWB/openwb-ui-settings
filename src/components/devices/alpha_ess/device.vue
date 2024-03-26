@@ -26,6 +26,18 @@
 				updateConfiguration($event, 'configuration.ip_address')
 			"
 		/>
+		<openwb-base-number-input
+			title="Port"
+			v-if="configuration.source == 1"
+			subtype="host"
+			required
+			:min="1"
+			:max="65535"
+			:model-value="configuration.port"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.port')
+			"
+		/>
 		<openwb-base-select-input
 			title="Firmware Version"
 			notSelected="Bitte auswählen"
