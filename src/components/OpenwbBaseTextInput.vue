@@ -13,189 +13,187 @@
 			/>
 		</label>
 		<div class="col-md-8">
-			<div class="form-row">
-				<div class="input-group">
-					<div class="input-group-prepend">
-						<div class="input-group-text">
-							<font-awesome-icon
-								fixed-width
-								v-if="subtype == 'text'"
-								:icon="['fas', 'keyboard']"
-							/>
-							<font-awesome-icon
-								fixed-width
-								v-if="subtype == 'email'"
-								:icon="['fas', 'envelope']"
-							/>
-							<font-awesome-icon
-								fixed-width
-								v-if="subtype == 'host'"
-								:icon="['fas', 'network-wired']"
-							/>
-							<font-awesome-icon
-								fixed-width
-								v-if="subtype == 'url'"
-								:icon="['fas', 'globe']"
-							/>
-							<font-awesome-icon
-								fixed-width
-								v-if="subtype == 'user'"
-								:icon="['fas', 'user']"
-							/>
-							<font-awesome-icon
-								fixed-width
-								v-if="subtype == 'json'"
-								:icon="['fas', 'code']"
-							/>
-							<font-awesome-icon
-								fixed-width
-								v-if="subtype == 'password'"
-								:icon="
-									showPassword
-										? ['fas', 'unlock']
-										: ['fas', 'lock']
-								"
-							/>
-							<font-awesome-icon
-								fixed-width
-								v-if="subtype == 'time'"
-								:icon="['fas', 'clock']"
-							/>
-							<font-awesome-icon
-								fixed-width
-								v-if="
-									subtype == 'date' ||
-									subtype == 'month' ||
-									subtype == 'year'
-								"
-								:icon="['fas', 'calendar-day']"
-							/>
-						</div>
-					</div>
-					<input
-						v-if="['text', 'user'].includes(subtype)"
-						ref="textInput"
-						type="text"
-						class="form-control"
-						:class="{ invalid: inputInvalid }"
-						v-model="value"
-						v-bind="$attrs"
-						:pattern="pattern"
-					/>
-					<input
-						v-if="subtype == 'json'"
-						ref="jsonInput"
-						type="text"
-						class="form-control"
-						v-model="value"
-						v-bind="$attrs"
-						:pattern="pattern"
-					/>
-					<input
-						v-if="subtype == 'password'"
-						ref="passwordInput"
-						:type="showPassword ? 'text' : 'password'"
-						class="form-control"
-						v-model="value"
-						v-bind="$attrs"
-						:pattern="pattern"
-					/>
-					<input
-						v-if="subtype == 'host'"
-						ref="hostInput"
-						type="text"
-						class="form-control"
-						v-model="value"
-						v-bind="$attrs"
-					/>
-					<input
-						v-if="['email', 'url'].includes(subtype)"
-						refs="urlInput"
-						:type="subtype"
-						class="form-control"
-						v-model="value"
-						v-bind="$attrs"
-					/>
-					<input
-						v-if="subtype == 'time'"
-						ref="timeInput"
-						type="time"
-						class="form-control"
-						v-model="value"
-						v-bind="$attrs"
-					/>
-					<input
-						v-if="subtype == 'date'"
-						type="date"
-						ref="dateInput"
-						class="form-control"
-						v-model="value"
-						v-bind="$attrs"
-					/>
-					<input
-						v-if="subtype == 'month'"
-						type="month"
-						ref="monthInput"
-						class="form-control"
-						v-model="value"
-						v-bind="$attrs"
-					/>
-					<input
-						v-if="subtype == 'year'"
-						type="number"
-						ref="yearInput"
-						class="form-control"
-						v-model="value"
-						v-bind="$attrs"
-					/>
-					<div v-if="unit" class="input-group-append">
-						<div class="input-group-text">
-							{{ unit }}
-						</div>
-					</div>
-					<div
-						v-if="subtype == 'password'"
-						class="input-group-append clickable"
-						@click="togglePassword"
-					>
-						<div class="input-group-text">
-							<font-awesome-icon
-								fixed-width
-								:icon="
-									showPassword
-										? ['far', 'eye']
-										: ['far', 'eye-slash']
-								"
-							/>
-						</div>
-					</div>
-					<div
-						v-if="
-							showQuickButtons &&
-							(subtype == 'date' ||
+			<div class="input-group">
+				<div class="input-group-prepend">
+					<div class="input-group-text">
+						<font-awesome-icon
+							fixed-width
+							v-if="subtype == 'text'"
+							:icon="['fas', 'keyboard']"
+						/>
+						<font-awesome-icon
+							fixed-width
+							v-if="subtype == 'email'"
+							:icon="['fas', 'envelope']"
+						/>
+						<font-awesome-icon
+							fixed-width
+							v-if="subtype == 'host'"
+							:icon="['fas', 'network-wired']"
+						/>
+						<font-awesome-icon
+							fixed-width
+							v-if="subtype == 'url'"
+							:icon="['fas', 'globe']"
+						/>
+						<font-awesome-icon
+							fixed-width
+							v-if="subtype == 'user'"
+							:icon="['fas', 'user']"
+						/>
+						<font-awesome-icon
+							fixed-width
+							v-if="subtype == 'json'"
+							:icon="['fas', 'code']"
+						/>
+						<font-awesome-icon
+							fixed-width
+							v-if="subtype == 'password'"
+							:icon="
+								showPassword
+									? ['fas', 'unlock']
+									: ['fas', 'lock']
+							"
+						/>
+						<font-awesome-icon
+							fixed-width
+							v-if="subtype == 'time'"
+							:icon="['fas', 'clock']"
+						/>
+						<font-awesome-icon
+							fixed-width
+							v-if="
+								subtype == 'date' ||
 								subtype == 'month' ||
-								subtype == 'year')
-						"
-						class="input-group-append clickable"
-						@click="modify(-1)"
-					>
-						<div class="input-group-text">-</div>
-					</div>
-					<div
-						v-if="
-							showQuickButtons &&
-							(subtype == 'date' ||
-								subtype == 'month' ||
-								subtype == 'year')
-						"
-						class="input-group-append clickable"
-						@click="modify(1)"
-					>
-						<div class="input-group-text">+</div>
+								subtype == 'year'
+							"
+							:icon="['fas', 'calendar-day']"
+						/>
 					</div>
 				</div>
+				<input
+					v-if="['text', 'user'].includes(subtype)"
+					ref="textInput"
+					type="text"
+					class="form-control"
+					:class="{ invalid: inputInvalid }"
+					v-model="value"
+					v-bind="$attrs"
+					:pattern="pattern"
+				/>
+				<input
+					v-if="subtype == 'json'"
+					ref="jsonInput"
+					type="text"
+					class="form-control"
+					v-model="value"
+					v-bind="$attrs"
+					:pattern="pattern"
+				/>
+				<input
+					v-if="subtype == 'password'"
+					ref="passwordInput"
+					:type="showPassword ? 'text' : 'password'"
+					class="form-control"
+					v-model="value"
+					v-bind="$attrs"
+					:pattern="pattern"
+				/>
+				<input
+					v-if="subtype == 'host'"
+					ref="hostInput"
+					type="text"
+					class="form-control"
+					v-model="value"
+					v-bind="$attrs"
+				/>
+				<input
+					v-if="['email', 'url'].includes(subtype)"
+					refs="urlInput"
+					:type="subtype"
+					class="form-control"
+					v-model="value"
+					v-bind="$attrs"
+				/>
+				<input
+					v-if="subtype == 'time'"
+					ref="timeInput"
+					type="time"
+					class="form-control"
+					v-model="value"
+					v-bind="$attrs"
+				/>
+				<input
+					v-if="subtype == 'date'"
+					type="date"
+					ref="dateInput"
+					class="form-control"
+					v-model="value"
+					v-bind="$attrs"
+				/>
+				<input
+					v-if="subtype == 'month'"
+					type="month"
+					ref="monthInput"
+					class="form-control"
+					v-model="value"
+					v-bind="$attrs"
+				/>
+				<input
+					v-if="subtype == 'year'"
+					type="number"
+					ref="yearInput"
+					class="form-control"
+					v-model="value"
+					v-bind="$attrs"
+				/>
+				<div v-if="unit" class="input-group-append">
+					<div class="input-group-text">
+						{{ unit }}
+					</div>
+				</div>
+				<div
+					v-if="subtype == 'password'"
+					class="input-group-append clickable"
+					@click="togglePassword"
+				>
+					<div class="input-group-text">
+						<font-awesome-icon
+							fixed-width
+							:icon="
+								showPassword
+									? ['far', 'eye']
+									: ['far', 'eye-slash']
+							"
+						/>
+					</div>
+				</div>
+				<div
+					v-if="
+						showQuickButtons &&
+						(subtype == 'date' ||
+							subtype == 'month' ||
+							subtype == 'year')
+					"
+					class="input-group-append clickable"
+					@click="modify(-1)"
+				>
+					<div class="input-group-text">-</div>
+				</div>
+				<div
+					v-if="
+						showQuickButtons &&
+						(subtype == 'date' ||
+							subtype == 'month' ||
+							subtype == 'year')
+					"
+					class="input-group-append clickable"
+					@click="modify(1)"
+				>
+					<div class="input-group-text">+</div>
+				</div>
 			</div>
-			<span v-if="showHelp" class="form-row alert alert-info my-1 small">
+			<span v-if="showHelp" class="form-text alert alert-info my-1 small">
 				<slot name="help"></slot>
 			</span>
 		</div>
