@@ -174,6 +174,14 @@ const routes = [
 		},
 		component: () => import("../views/DataManagement.vue"),
 	},
+	{
+		path: "/System/InstallAssistant",
+		name: "InstallAssistant",
+		meta: {
+			heading: "System - Einrichtungsassistent",
+		},
+		component: () => import("../views/InstallAssistant.vue"),
+	},
 ];
 /* examples for development only start here */
 if (import.meta.env.MODE !== "production") {
