@@ -18,7 +18,7 @@
 			notSelected="Bitte auswählen"
 			:options="[
 				{ value: 1, text: 'Shelly 1pm' },
-				{ value: 2, text: 'Shelly 1pm plus' },
+				{ value: 2, text: 'Shelly 1pm plus/ Shelly Pro3EM' },
 			]"
 			:model-value="configuration.generation"
 			@update:model-value="
