@@ -172,5 +172,32 @@ export default createStore({
 				}
 			});
 		},
+		installWizard(state) {
+			return new Promise((resolve) => {
+				
+				if (state.mqtt["openWB/system/installWizard"] !== undefined) {
+					resolve(state.mqtt["openWB/system/installWizard"],
+					);
+				} else {
+					var timer, interval;
+					// add general timeout if topic not set
+					timer = setTimeout(() => {
+						clearInterval(interval);
+						resolve(false);
+					}, 5000);
+					// check until we received valid data
+					interval = setInterval(() => {
+						if (
+							state.mqtt["openWB/system/installWizard"] !==
+							undefined
+						) {
+							clearTimeout(timer);
+							clearInterval(interval);
+							resolve(state.mqtt["openWB/system/installWizard"]);
+						}
+					}, 100);
+				}
+			});
+		},
 	},
 });

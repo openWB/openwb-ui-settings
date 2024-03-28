@@ -190,6 +190,13 @@
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 						<router-link
+							to="/System/InstallAssistant"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							Einrichtungsassistent
+						</router-link>
+						<router-link
 							to="/System/CloudConfiguration"
 							class="dropdown-item"
 							active-class="active disabled"
