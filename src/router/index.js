@@ -218,6 +218,13 @@ router.beforeEach(async (to) => {
 			}
 		}
 	}
+	if (to.name !== "InstallAssistant"){
+		const wizardDone = 
+			await store.getters.installWizard;
+		if (!wizardDone) {
+			return { name: "InstallAssistant" };
+		}
+	}
 });
 
 router.afterEach((to) => {

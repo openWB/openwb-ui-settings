@@ -1,4 +1,5 @@
 <template>
+	<!--Damit der InstallAssistent nicht mehr startet muss einmal speichern gedrückt werden-->
 	<div>
 		<!-- modal confirm end assistant -->
 		<openwb-base-modal-dialog
