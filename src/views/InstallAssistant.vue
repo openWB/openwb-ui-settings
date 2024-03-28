@@ -9,14 +9,16 @@
 				Dieser Assistent führt Sie durch die Konfiguration der einzelnen
 				Module:
 			</h3>
-			<h4>- Update des Systems</h4>
-			<h4>- Auswahl primary / secondary openWB</h4>
-			<h4>- Einrichten der Geräte und Komponenten</h4>
-			<h4>- Konfiguration von Geräten und Komponenten</h4>
-			<h4>- Konfiguration Lastmanagement</h4>
-			<h4>- Einrichten der Ladepunkte</h4>
-			<h4>- Einrichten der Fahrzeuge</h4>
-			<h4>- Sicherung der Erstkonfiguration</h4>
+			<ol>
+			<h4><li>Update des Systems</li></h4>
+			<h4><li>Auswahl primary / secondary openWB</li></h4>
+			<h4><li>Einrichten der Geräte und Komponenten</li></h4>
+			<h4><li>Konfiguration von Geräten und Komponenten</li></h4>
+			<h4><li>Konfiguration Lastmanagement</li></h4>
+			<h4><li>Einrichten der Ladepunkte</li></h4>
+			<h4><li>Einrichten der Fahrzeuge</li></h4>
+			<h4><li>Sicherung der Erstkonfiguration</li></h4>
+			</ol>
 
 			<div class="pageZero"
 				><openwb-base-click-button
