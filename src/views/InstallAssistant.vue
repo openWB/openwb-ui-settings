@@ -1,5 +1,5 @@
 <template>
-	<!--Damit der InstallAssistent nicht mehr startet muss einmal speichern gedrückt werden-->
+	<!--InstallWizard boots at startup until starting wizard and press save-->
 	<div>
 		<div v-if="!instAssist">
 			<openwb-base-heading>
@@ -10,27 +10,25 @@
 				Module:
 			</h3>
 			<ol>
-			<h4><li>Update des Systems</li></h4>
-			<h4><li>Auswahl primary / secondary openWB</li></h4>
-			<h4><li>Einrichten der Geräte und Komponenten</li></h4>
-			<h4><li>Konfiguration von Geräten und Komponenten</li></h4>
-			<h4><li>Konfiguration Lastmanagement</li></h4>
-			<h4><li>Einrichten der Ladepunkte</li></h4>
-			<h4><li>Einrichten der Fahrzeuge</li></h4>
-			<h4><li>Sicherung der Erstkonfiguration</li></h4>
+				<h4><li>Update des Systems</li></h4>
+				<h4><li>Auswahl primary / secondary openWB</li></h4>
+				<h4><li>Einrichten der Geräte und Komponenten</li></h4>
+				<h4><li>Konfiguration von Geräten und Komponenten</li></h4>
+				<h4><li>Konfiguration Lastmanagement</li></h4>
+				<h4><li>Einrichten der Ladepunkte</li></h4>
+				<h4><li>Einrichten der Fahrzeuge</li></h4>
+				<h4><li>Sicherung der Erstkonfiguration</li></h4>
 			</ol>
 
-			<div class="pageZero"
-				><openwb-base-click-button
+			<div class="pageZero">
+				<openwb-base-click-button
 					class="buttonStart"
 					@buttonClicked="toDatamanagement1"
 				>
 					Assistent starten
-					<font-awesome-icon
-						fixed-width
-						:icon="['fas', 'undo']"
-					/> </openwb-base-click-button
-			></div>
+					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
+				</openwb-base-click-button>
+			</div>
 		</div>
 
 		<div v-if="page1">
@@ -48,8 +46,8 @@
 					<p>
 						Es wird empfohlen regelmäßige Sicherungen der Daten zu
 						erstellen.
-					</p></div
-				>
+					</p>
+				</div>
 				<div class="pageEmbedded">
 					<DataManagement
 						formName="cloudBackupForm"
@@ -89,7 +87,6 @@
 					Assistent beenden
 					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
 				</openwb-base-click-button>
-			
 			</div>
 		</div>
 
@@ -104,8 +101,8 @@
 					<p>
 						Das garantiert, dass die openWB mit den neuesten
 						Features und Funktionen ausgestattet ist.
-					</p></div
-				>
+					</p>
+				</div>
 				<div class="pageEmbedded">
 					<System @sendCommand="$emit('sendCommand', $event)" />
 				</div>
@@ -155,11 +152,8 @@
 						werden, wenn Sie nur openWBs besitzen und die
 						openWB-Software zur Steuerung nutzen wollen.
 					</p>
-					<p>
-						<h4
-							>Änderungen werden nur bei klicken auf speichern
-							wirksam</h4
-						>
+					<p class="fw-bold">
+						Änderungen werden nur bei klicken auf speichern wirksam
 					</p>
 				</div>
 				<div class="pageEmbedded">
@@ -172,9 +166,7 @@
 				</div>
 			</div>
 			<div class="buttons">
-				<div
-					v-if="$store.state.mqtt['openWB/general/extern'] === true"
-				>
+				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-click-button
 						class="buttonForward"
 						@buttonClicked="secChoice"
@@ -184,8 +176,9 @@
 						<font-awesome-icon
 							fixed-width
 							:icon="['fas', 'undo']"
-						/> </openwb-base-click-button
-				></div>
+						/>
+					</openwb-base-click-button>
+				</div>
 				<div v-else>
 					<openwb-base-click-button
 						class="buttonForward"
@@ -200,13 +193,14 @@
 					</openwb-base-click-button>
 				</div>
 
-				<!--openwb-base-click-button 
-			class="buttonBack" 
-			@buttonClicked="toSystem"
-			@buttonClicked.once="scrollToTop">
-				Zurück...
-			<font-awesome-icon fixed-width :icon="['fas', 'undo']"/>
-		</openwb-base-click-button-->
+				<openwb-base-click-button
+					class="buttonBack"
+					@buttonClicked="toSystem"
+					@buttonClicked.once="scrollToTop"
+				>
+					Zurück...
+					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
+				</openwb-base-click-button>
 
 				<openwb-base-click-button
 					class="buttonEnd"
@@ -243,11 +237,8 @@
 						Assistent kann nach drücken von speichern beendet
 						werden.
 					</p>
-					<p>
-						<h4
-							>Änderungen werden nur bei klicken auf speichern
-							wirksam</h4
-						>
+					<p class="fw-bold">
+						Änderungen werden nur bei klicken auf speichern wirksam
 					</p>
 				</div>
 				<div class="pageEmbedded">
@@ -261,13 +252,14 @@
 				</div>
 			</div>
 			<div class="buttons">
-				<!--openwb-base-click-button 
-				class="buttonBack" 
-				@buttonClicked="toGenConfig"
-				@buttonClicked.once="scrollToTop">
+				<openwb-base-click-button
+					class="buttonBack"
+					@buttonClicked="toGenConfig"
+					@buttonClicked.once="scrollToTop"
+				>
 					Zurück...
-				<font-awesome-icon fixed-width :icon="['fas', 'undo']"/>
-			</openwb-base-click-button-->
+					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
+				</openwb-base-click-button>
 
 				<openwb-base-click-button
 					class="buttonEnd"
@@ -302,11 +294,8 @@
 						in openWB, denn die PV wird automatisch mitgerechnet,
 						wenn die openWB an den EVU-Zähler angeschlossen ist.
 					</p>
-					<p>
-						<h4
-							>Änderungen werden nur bei klicken auf speichern
-							wirksam</h4
-						>
+					<p class="fw-bold">
+						Änderungen werden nur bei klicken auf speichern wirksam
 					</p>
 				</div>
 				<div class="pageEmbedded">
@@ -329,13 +318,14 @@
 					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
 				</openwb-base-click-button>
 
-				<!--openwb-base-click-button 
-			class="buttonBack" 
-			@buttonClicked="toGenConfig"
-			@buttonClicked.once="scrollToTop">
+				<openwb-base-click-button
+					class="buttonBack"
+					@buttonClicked="toGenConfig"
+					@buttonClicked.once="scrollToTop"
+				>
 					Zurück...
-				<font-awesome-icon fixed-width :icon="['fas', 'undo']"/>
-			</openwb-base-click-button-->
+					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
+				</openwb-base-click-button>
 
 				<openwb-base-click-button
 					class="buttonEnd"
@@ -384,11 +374,8 @@
 						zurück und die entsprechenden Geräte und Komponenten
 						hinzufügen.
 					</p>
-					<p>
-						<h4
-							>Änderungen werden nur bei klicken auf speichern
-							wirksam</h4
-						>
+					<p class="fw-bold">
+						Änderungen werden nur bei klicken auf speichern wirksam
 					</p>
 				</div>
 				<div class="pageEmbedded">
@@ -410,13 +397,14 @@
 					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
 				</openwb-base-click-button>
 
-				<!--openwb-base-click-button 
-				class="buttonBack" 
-				@buttonClicked="toHardwareInst"
-				@buttonClicked.once="scrollToTop">
+				<openwb-base-click-button
+					class="buttonBack"
+					@buttonClicked="toHardwareInst"
+					@buttonClicked.once="scrollToTop"
+				>
 					Zurück...
-				<font-awesome-icon fixed-width :icon="['fas', 'undo']"/>
-			</openwb-base-click-button-->
+					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
+				</openwb-base-click-button>
 
 				<openwb-base-click-button
 					class="buttonEnd"
@@ -465,11 +453,8 @@
 						vorgenommen werden sowie eine automatische Sperre
 						eingerichtet und Zeitpläne dafür angelegt werden.
 					</p>
-					<p>
-						<h4
-							>Änderungen werden nur bei klicken auf speichern
-							wirksam</h4
-						>
+					<p class="fw-bold">
+						Änderungen werden nur bei klicken auf speichern wirksam
 					</p>
 				</div>
 				<div class="pageEmbedded">
@@ -492,13 +477,14 @@
 					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
 				</openwb-base-click-button>
 
-				<!--openwb-base-click-button 
-				class="buttonBack" 
-				@buttonClicked="toLoadManagement1"
-				@buttonClicked.once="scrollToTop">
+				<openwb-base-click-button
+					class="buttonBack"
+					@buttonClicked="toLoadManagement1"
+					@buttonClicked.once="scrollToTop"
+				>
 					Zurück...
-				<font-awesome-icon fixed-width :icon="['fas', 'undo']"/>
-			</openwb-base-click-button-->
+					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
+				</openwb-base-click-button>
 
 				<openwb-base-click-button
 					class="buttonEnd"
@@ -535,11 +521,8 @@
 						Wenn alles ok ist, kann dieser Schritt ohne weitere
 						Anpassungen beendet werden.
 					</p>
-					<p>
-						<h4
-							>Änderungen werden nur bei klicken auf speichern
-							wirksam</h4
-						>
+					<p class="fw-bold">
+						Änderungen werden nur bei klicken auf speichern wirksam
 					</p>
 				</div>
 				<div class="pageEmbedded">
@@ -561,13 +544,14 @@
 					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
 				</openwb-base-click-button>
 
-				<!--openwb-base-click-button 
-				class="buttonBack" 
-				@buttonClicked="toChargePointInst"
-				@buttonClicked.once="scrollToTop">
+				<openwb-base-click-button
+					class="buttonBack"
+					@buttonClicked="toChargePointInst"
+					@buttonClicked.once="scrollToTop"
+				>
 					Zurück...
-				<font-awesome-icon fixed-width :icon="['fas', 'undo']"/>
-			</openwb-base-click-button-->
+					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
+				</openwb-base-click-button>
 
 				<openwb-base-click-button
 					class="buttonEnd"
@@ -614,20 +598,18 @@
 						Sofortladen), dann ist für jedes Fahrzeug ein eigenes
 						Lade-Profil anzulegen.
 					</p>
+					<p class="fw-bold">
+						Wichtig: Die Phasigkeit des Fahrzeugs ist richtig
+						einzutragen!
+					</p>
+
 					<p>
-						<h4
-							>Wichtig: Die Phasigkeit des Fahrzeugs ist richtig
-							einzutragen!</h4
-						>
 						Kennt man die Phasigkeit des Fahrzeugs nicht (z.B.
 						Besucherfahrzeug) besser ein Besucherfahrzeugprofil
 						anlegen, welches die Phasenumschaltung unterdrückt.
 					</p>
-					<p>
-						<h4
-							>Änderungen werden nur bei klicken auf speichern
-							wirksam</h4
-						>
+					<p class="fw-bold">
+						Änderungen werden nur bei klicken auf speichern wirksam
 					</p>
 				</div>
 				<div class="pageEmbedded">
@@ -650,13 +632,14 @@
 					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
 				</openwb-base-click-button>
 
-				<!--openwb-base-click-button 
-				class="buttonBack" 
-				@buttonClicked="toLoadManagement2"
-				@buttonClicked.once="scrollToTop">
+				<openwb-base-click-button
+					class="buttonBack"
+					@buttonClicked="toLoadManagement2"
+					@buttonClicked.once="scrollToTop"
+				>
 					Zurück...
-				<font-awesome-icon fixed-width :icon="['fas', 'undo']"/>
-			</openwb-base-click-button-->
+					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
+				</openwb-base-click-button>
 
 				<openwb-base-click-button
 					class="buttonEnd"
@@ -691,13 +674,14 @@
 				</div>
 			</div>
 			<div class="buttons">
-				<!--openwb-base-click-button 
-				class="buttonBack" 
+				<openwb-base-click-button
+					class="buttonBack"
 					@buttonClicked="toVehicleConfig"
-					@buttonClicked.once="scrollToTop">
-						Zurück...
-				<font-awesome-icon fixed-width :icon="['fas', 'undo']"/>
-			</openwb-base-click-button-->
+					@buttonClicked.once="scrollToTop"
+				>
+					Zurück...
+					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
+				</openwb-base-click-button>
 
 				<openwb-base-click-button
 					class="buttonEnd"
@@ -726,7 +710,7 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 export default {
 	name: "InstallAssistant",
 	mixins: [ComponentState],
-	emits: ["save", "reset", "default", "sendCommand",],
+	emits: ["save", "reset", "default", "sendCommand"],
 	props: [],
 	components: {
 		FontAwesomeIcon,
@@ -755,13 +739,16 @@ export default {
 			loadManage: false,
 		};
 	},
-	computed: {
-	},
+	computed: {},
 	methods: {
 		scrollToTop() {
 			window.scrollTo(0, 0);
 		},
 		toDatamanagement1() {
+			//First time access to InstallWizard if pressed save somewhere -> Wizard will not show on Startup anymore!
+			if (!this.$store.state.mqtt["openWB/system/installWizard"]) {
+				this.updateState("openWB/system/installWizard", true);
+			}
 			this.instAssist = true;
 			this.page1 = true;
 		},
@@ -827,16 +814,6 @@ export default {
 			this.page10 = true;
 		},
 		toEnd() {
-			//First time access to InstallWizard if pressed save somewhere -> Wizard will not show on Startup anymore!
-			if(!this.$store.state.mqtt
-				[
-					'openWB/system/installWizard'
-				]){
-						this.updateState(
-							'openWB/system/installWizard',
-							true,
-						)
-					}
 			this.$router.push("/Status");
 		},
 	},
@@ -894,5 +871,8 @@ export default {
 }
 .pageEmbedded {
 	flex-grow: 1;
+}
+.fw-bold {
+	font-weight: bold;
 }
 </style>
