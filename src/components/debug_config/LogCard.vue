@@ -13,7 +13,9 @@
 				<font-awesome-icon
 					fixed-width
 					:class="loading ? 'fa-spin-pulse' : ''"
-					:icon="loading ? ['fas', 'spinner'] : ['fas', 'file-download']"
+					:icon="
+						loading ? ['fas', 'spinner'] : ['fas', 'file-download']
+					"
 				/>
 			</openwb-base-avatar>
 		</template>
@@ -100,7 +102,7 @@ export default {
 			});
 		},
 	},
-}
+};
 </script>
 
 <style scoped>

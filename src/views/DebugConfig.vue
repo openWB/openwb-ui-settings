@@ -50,12 +50,6 @@
 </template>
 
 <script>
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faFileDownload as fasFileDownload } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-
-library.add(fasFileDownload);
-
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbLogCard from "../components/debug_config/LogCard.vue";
 
@@ -63,7 +57,6 @@ export default {
 	name: "OpenwbDebugging",
 	mixins: [ComponentState],
 	components: {
-		FontAwesomeIcon,
 		OpenwbLogCard,
 	},
 	data() {
@@ -105,7 +98,7 @@ export default {
 					title: "Protokoll der Datenmigration",
 					fileName: "/openWB/data/log/data_migration.log",
 				},
-			]
+			],
 		};
 	},
 };
