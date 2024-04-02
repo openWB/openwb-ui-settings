@@ -4,16 +4,6 @@
 			Einstellungen für Fronius SmartMeter
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-number-input
-			title="Meter ID"
-			required
-			min="0"
-			max="65535"
-			:model-value="configuration.meter_id"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.meter_id')
-			"
-		/>
 		<openwb-base-select-input
 			title="Kompatibilitätsmodus"
 			notSelected="Bitte auswählen"
@@ -36,6 +26,34 @@
 				andere Variante ausprobieren.
 			</template>
 		</openwb-base-select-input>
+		<openwb-base-number-input
+			title="Meter ID"
+			required
+			min="0"
+			max="65535"
+			:model-value="configuration.meter_id"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.meter_id')
+			"
+		>
+			<template #help>
+				Die Meter ID des SmartMeters. Diese ist normalerweise 1. Bei
+				mehreren SmartMetern im System kann es notwendig sein, die Meter
+				ID zu ändern. Zur Ermittlung kann der folgende Link verwendet
+				werden. Die Meter ID kann den zurückgegebenen JSON Daten
+				entnommen werden.
+				<a
+					:href="meterRealtimeUrl"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					{{ meterRealtimeUrl }} </a
+				><br />
+				Im Abschnitt "Body" -> "Data" werden die installierten
+				SmartMeter mit aktuellen Messwerten angezeigt. Die Meter ID ist
+				die Zahl vor dem Doppelpunkt und den zugehörigen Messwerten.
+			</template>
+		</openwb-base-number-input>
 	</div>
 </template>
 
@@ -47,6 +65,20 @@ export default {
 		configuration: { type: Object, required: true },
 		deviceId: { default: undefined },
 		componentId: { required: true },
+	},
+	computed: {
+		meterRealtimeUrl: {
+			get() {
+				return `http://${this.deviceIpAddress}/solar_api/v1/GetMeterRealtimeData.cgi?Scope=System`;
+			},
+		},
+		deviceIpAddress: {
+			get() {
+				return this.$store.state.mqtt[
+					`openWB/system/device/${this.deviceId}/config`
+				]?.configuration.ip_address;
+			},
+		},
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {

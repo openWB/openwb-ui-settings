@@ -120,7 +120,7 @@
 							@update:model-value="
 								updateState(
 									'openWB/system/mqtt/valid_partner_ids',
-									$event
+									$event,
 								)
 							"
 						>
@@ -246,7 +246,7 @@
 							@update:model-value="
 								updateState(
 									'openWB/system/mqtt/valid_partner_ids',
-									$event
+									$event,
 								)
 							"
 						>
@@ -376,7 +376,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/system/mqtt/valid_partner_ids',
-								$event
+								$event,
 							)
 						"
 					>
