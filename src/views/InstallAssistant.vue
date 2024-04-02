@@ -1,5 +1,5 @@
 <template>
-	<!--InstallWizard boots at startup until starting wizard and press save-->
+	<!--InstallWizard boots at startup until Wizard is closed once-->
 	<div>
 		<div v-if="!instAssist">
 			<openwb-base-heading>
@@ -736,7 +736,6 @@ export default {
 			page9: false,
 			page10: false,
 			second_choice: false,
-			loadManage: false,
 		};
 	},
 	computed: {},
@@ -745,10 +744,6 @@ export default {
 			window.scrollTo(0, 0);
 		},
 		toDatamanagement1() {
-			//First time access to InstallWizard if pressed save somewhere -> Wizard will not show on Startup anymore!
-			if (!this.$store.state.mqtt["openWB/system/installWizard"]) {
-				this.updateState("openWB/system/installWizard", true);
-			}
 			this.instAssist = true;
 			this.page1 = true;
 		},
@@ -814,6 +809,11 @@ export default {
 			this.page10 = true;
 		},
 		toEnd() {
+			//First time access to InstallWizard if "Assistent beenden" is pressed -> Wizard will not show on Startup anymore!
+			if (!this.$store.state.mqtt["openWB/system/installWizard"]) {
+				this.updateState("openWB/system/installWizard", true);
+				this.$emit("save");
+			}
 			this.$router.push("/Status");
 		},
 	},
