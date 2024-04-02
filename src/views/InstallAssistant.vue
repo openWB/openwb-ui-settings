@@ -1,5 +1,5 @@
 <template>
-	<!--InstallWizard boots at startup until starting wizard and press save-->
+	<!--InstallWizard boots at startup until Wizard is closed once-->
 	<div>
 		<!-- modal confirm end assistant -->
 		<openwb-base-modal-dialog
