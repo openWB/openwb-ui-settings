@@ -10,7 +10,8 @@
 			"
 		>
 			<template #help>
-				EVCC Sponsor Token angeben, dies ist notwendig um SoC über EVCC abrufen zu können. https://sponsor.evcc.io/
+				EVCC Sponsor Token angeben, dies ist notwendig um SoC über EVCC
+				abrufen zu können. https://sponsor.evcc.io/
 			</template>
 		</openwb-base-text-input>
 		<openwb-base-text-input
@@ -22,9 +23,7 @@
 				updateConfiguration($event, 'configuration.user_id')
 			"
 		>
-			<template #help>
-				Benutzername beim Fahrzeughersteller.
-			</template>
+			<template #help> Benutzername beim Fahrzeughersteller. </template>
 		</openwb-base-text-input>
 		<openwb-base-text-input
 			title="Kennwort"
@@ -35,45 +34,44 @@
 				updateConfiguration($event, 'configuration.password')
 			"
 		>
-			<template #help>
-				Kennwort beim Fahrzeughersteller.
-			</template>
+			<template #help> Kennwort beim Fahrzeughersteller. </template>
 		</openwb-base-text-input>
 		<openwb-base-select-input
 			title="Marke"
 			required
 			notSelected="Bitte auswählen"
-			:options="[{ value: 'aiways', text: 'Aiways'},
-			{ value: 'audi', text: 'Audi'},
-			{ value: 'etron', text: 'Audi e-tron'},
-			{ value: 'bmw', text: 'BMW'},
-			{ value: 'dacia', text: 'Dacia'},
-			{ value: 'fiat', text: 'Fiat'},
-			{ value: 'ford', text: 'Ford'},
-			{ value: 'hyundai', text: 'Hyundai'},
-			{ value: 'jaguar', text: 'Jaguar'},
-			{ value: 'kia', text: 'Kia'},
-			{ value: 'landrover', text: 'Landrover'},
-			{ value: 'mg', text: 'Mg'},
-			{ value: 'mini', text: 'Mini'},
-			{ value: 'nissan', text: 'Nissan'},
-			{ value: 'carwings', text: 'Nissan (Leaf pre 2019)'},
-			{ value: 'ovms', text: 'OVMS'},
-			{ value: 'polestar', text: 'Polestar'},
-			{ value: 'porsche', text: 'Porsche'},
-			{ value: 'renault', text: 'Renault'},
-			{ value: 'seat', text: 'Seat'},
-			{ value: 'cupra', text: 'Seat Cupra'},
-			{ value: 'skoda', text: 'Škoda'},
-			{ value: 'enyaq', text: 'Škoda Enyaq'},
-			{ value: 'smart', text: 'Smart'},
-			{ value: 'smart-hello', text: 'Smart-Hello'},
-			{ value: 'template', text: 'Template'},
-			{ value: 'volvo', text: 'Volvo'},
-			{ value: 'volvo-connected', text: 'Volvo-Connected'},
-			{ value: 'vw', text: 'VW'},
-			{ value: 'id', text: 'VW ID'}]"
-			
+			:options="[
+				{ value: 'aiways', text: 'Aiways' },
+				{ value: 'audi', text: 'Audi' },
+				{ value: 'etron', text: 'Audi e-tron' },
+				{ value: 'bmw', text: 'BMW' },
+				{ value: 'dacia', text: 'Dacia' },
+				{ value: 'fiat', text: 'Fiat' },
+				{ value: 'ford', text: 'Ford' },
+				{ value: 'hyundai', text: 'Hyundai' },
+				{ value: 'jaguar', text: 'Jaguar' },
+				{ value: 'kia', text: 'Kia' },
+				{ value: 'landrover', text: 'Landrover' },
+				{ value: 'mg', text: 'Mg' },
+				{ value: 'mini', text: 'Mini' },
+				{ value: 'nissan', text: 'Nissan' },
+				{ value: 'carwings', text: 'Nissan (Leaf pre 2019)' },
+				{ value: 'ovms', text: 'OVMS' },
+				{ value: 'polestar', text: 'Polestar' },
+				{ value: 'porsche', text: 'Porsche' },
+				{ value: 'renault', text: 'Renault' },
+				{ value: 'seat', text: 'Seat' },
+				{ value: 'cupra', text: 'Seat Cupra' },
+				{ value: 'skoda', text: 'Škoda' },
+				{ value: 'enyaq', text: 'Škoda Enyaq' },
+				{ value: 'smart', text: 'Smart' },
+				{ value: 'smart-hello', text: 'Smart-Hello' },
+				{ value: 'template', text: 'Template' },
+				{ value: 'volvo', text: 'Volvo' },
+				{ value: 'volvo-connected', text: 'Volvo-Connected' },
+				{ value: 'vw', text: 'VW' },
+				{ value: 'id', text: 'VW ID' },
+			]"
 			:model-value="vehicle.configuration.vehicle_type"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.vehicle_type')
@@ -90,10 +88,10 @@
 			"
 		>
 			<template #help>
-				Fahrzeuggestellnummer (VIN) des Fahrzeugs. Notwendig falls mehrere Fahrzeuge im Account des Herstellers vorhanden sind.
+				Fahrzeuggestellnummer (VIN) des Fahrzeugs. Notwendig falls
+				mehrere Fahrzeuge im Account des Herstellers vorhanden sind.
 			</template>
 		</openwb-base-text-input>
-
 	</div>
 </template>
 
