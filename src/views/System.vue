@@ -95,7 +95,7 @@
 									class="btn-info"
 									@buttonClicked="
 										sendSystemCommand('systemFetchVersions')
-									"
+									" 								
 								>
 									Informationen aktualisieren
 									<font-awesome-icon
@@ -114,7 +114,7 @@
 											: 'btn-outline-success'
 									"
 									:disabled="!updateAvailable"
-									@buttonClicked="systemUpdate()"
+									@buttonClicked="uploadBackupOnUpdate(); systemUpdate();"
 								>
 									Update
 									<font-awesome-icon
@@ -291,6 +291,7 @@ export default {
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
+				"openWB/system/optionBackup",
 				"openWB/system/current_commit",
 				"openWB/system/current_branch_commit",
 				"openWB/system/current_missing_commits",
@@ -333,6 +334,15 @@ export default {
 				command: command,
 				data: data,
 			});
+		},
+		uploadBackupOnUpdate(){
+			if(this.$store.state.mqtt['openWB/system/optionBackup'] === true){
+				this.$emit("sendCommand", {
+				command: "createCloudBackup",
+				data: {},
+			});
+			}
+			
 		},
 		getBranchGroups() {
 			const releaseBranch = "Release";
