@@ -71,6 +71,37 @@
 				)
 			"
 		/>
+		<openwb-base-heading>Erträge</openwb-base-heading>
+		<openwb-base-text-input
+			title="Heute"
+			readonly
+			class="text-right text-monospace"
+			step="0.001"
+			unit="kWh"
+			:model-value="
+				formatNumberTopic('openWB/pv/' + inverter.id + '/get/daily_exported', 3, 3, 0.001)
+			"
+		/>
+		<openwb-base-text-input
+			title="Dieser Monat"
+			readonly
+			class="text-right text-monospace"
+			step="0.001"
+			unit="kWh"
+			:model-value="
+				formatNumberTopic('openWB/pv/' + inverter.id + '/get/monthly_exported', 3, 3, 0.001)
+			"
+		/>
+		<openwb-base-text-input
+			title="Dieses Jahr"
+			readonly
+			class="text-right text-monospace"
+			step="0.001"
+			unit="kWh"
+			:model-value="
+				formatNumberTopic('openWB/pv/' + inverter.id + '/get/yearly_exported', 3, 3, 0.001)
+			"
+		/>
 	</openwb-base-card>
 </template>
 
