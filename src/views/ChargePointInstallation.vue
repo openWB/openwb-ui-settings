@@ -152,8 +152,9 @@
 					/>
 					<div
 						v-if="
-							installedChargePoint.type !== 'internal_openwb' ||
-							$store.state.mqtt['openWB/general/extern'] === false
+							(installedChargePoint.type !== 'internal_openwb' ||
+							$store.state.mqtt['openWB/general/extern'] === false) &&
+							installedChargePoint.charging_type !== 'DC'
 						"
 					>
 						<hr />
