@@ -458,6 +458,25 @@
 								Das Standard-Profil kann nicht umbenannt werden.
 							</template>
 						</openwb-base-text-input>
+						<openwb-base-button-group-input
+							v-if="
+								$store.state.mqtt[
+									'openWB/optional/dc_charging'
+								] === true"
+							title="Typ des Ladeprofils"
+							:buttons="[
+								{ buttonValue: 'AC', text: 'AC' },
+								{ buttonValue: 'DC', text: 'DC' },
+							]"
+							:model-value="chargePointTemplate.charging_type"
+							@update:model-value="
+								updateState(
+									chargePointTemplateKey,
+									$event,
+									'charging_type',
+								)
+							"
+						/>
 						<hr />
 						<div
 							v-if="
@@ -542,42 +561,59 @@
 							>
 							beschrieben.
 						</openwb-base-alert>
-						<openwb-base-range-input
-							title="Maximalstrom bei einer Phase"
-							:min="6"
-							:max="32"
-							:step="1"
-							unit="A"
-							:model-value="
-								chargePointTemplate.max_current_single_phase
-							"
+						<div v-if="chargePointTemplate.charging_type === 'AC' || $store.state.mqtt['openWB/optional/dc_charging'] !== true">
+							<openwb-base-range-input
+								title="Maximalstrom bei einer Phase"
+								:min="6"
+								:max="32"
+								:step="1"
+								unit="A"
+								:model-value="
+									chargePointTemplate.max_current_single_phase
+								"
+								@update:model-value="
+									updateState(
+										chargePointTemplateKey,
+										$event,
+										'max_current_single_phase',
+									)
+								"
+							/>
+							<openwb-base-range-input
+								title="Maximalstrom mehrere Phasen"
+								:min="6"
+								:max="32"
+								:step="1"
+								unit="A"
+								:model-value="
+									chargePointTemplate.max_current_multi_phases
+								"
+								@update:model-value="
+									updateState(
+										chargePointTemplateKey,
+										$event,
+										'max_current_multi_phases',
+									)
+								"
+							/>
+						</div>
+						<openwb-base-number-input
+							v-else
+							title="Maximalleistung"
+							:min="75"
+							:max="300"
+							:step="75"
+							unit="kW"
+							:precision="5"
+							:model-value="chargePointTemplate.max_current_multi_phases * 230 * 3 / 1000"
 							@update:model-value="
 								updateState(
 									chargePointTemplateKey,
-									$event,
-									'max_current_single_phase',
-								)
-							"
-						>
-						</openwb-base-range-input>
-						<openwb-base-range-input
-							title="Maximalstrom mehrere Phasen"
-							:min="6"
-							:max="32"
-							:step="1"
-							unit="A"
-							:model-value="
-								chargePointTemplate.max_current_multi_phases
-							"
-							@update:model-value="
-								updateState(
-									chargePointTemplateKey,
-									$event,
+									$event * 1000 / 230 / 3,
 									'max_current_multi_phases',
 								)
 							"
-						>
-						</openwb-base-range-input>
+						/>
 						<hr />
 						<openwb-base-heading
 							>Automatische Sperre</openwb-base-heading
@@ -963,6 +999,7 @@ export default {
 		return {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
+				"openWB/optional/dc_charging",
 				"openWB/optional/rfid/active",
 				"openWB/chargepoint/+/config",
 				"openWB/chargepoint/template/+",
