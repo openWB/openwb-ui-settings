@@ -29,7 +29,7 @@
 				/>
 			</span>
 		</div>
-		<div class="card-body" v-if="isCollapsed === false">
+		<div class="card-body" v-if="isCollapsed === false" v-bind="$attrs">
 			<slot></slot>
 		</div>
 		<div v-if="$slots.footer && isCollapsed === false" class="card-footer">
@@ -50,6 +50,7 @@ library.add(fasChevronRight, fasChevronDown);
 
 export default {
 	name: "OpenwbCard",
+	inheritAttrs: false,
 	components: {
 		FontAwesomeIcon,
 	},
