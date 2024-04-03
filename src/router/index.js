@@ -210,9 +210,9 @@ router.beforeEach(async (to) => {
 		}
 	}
 	if (to.name !== "InstallAssistant"){
-		const wizardDone = 
-			await store.getters.installWizard;
-		if (!wizardDone) {
+		const installAssistantDone = 
+			await store.getters.installAssistantDone;
+		if (!installAssistantDone) {
 			return { name: "InstallAssistant" };
 		}
 	}
