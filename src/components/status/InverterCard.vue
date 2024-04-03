@@ -79,7 +79,12 @@
 			step="0.001"
 			unit="kWh"
 			:model-value="
-				formatNumberTopic('openWB/pv/' + inverter.id + '/get/daily_exported', 3, 3, 0.001)
+				formatNumberTopic(
+					'openWB/pv/' + inverter.id + '/get/daily_exported',
+					3,
+					3,
+					0.001,
+				)
 			"
 		/>
 		<openwb-base-text-input
@@ -89,7 +94,12 @@
 			step="0.001"
 			unit="kWh"
 			:model-value="
-				formatNumberTopic('openWB/pv/' + inverter.id + '/get/monthly_exported', 3, 3, 0.001)
+				formatNumberTopic(
+					'openWB/pv/' + inverter.id + '/get/monthly_exported',
+					3,
+					3,
+					0.001,
+				)
 			"
 		/>
 		<openwb-base-text-input
@@ -99,7 +109,12 @@
 			step="0.001"
 			unit="kWh"
 			:model-value="
-				formatNumberTopic('openWB/pv/' + inverter.id + '/get/yearly_exported', 3, 3, 0.001)
+				formatNumberTopic(
+					'openWB/pv/' + inverter.id + '/get/yearly_exported',
+					3,
+					3,
+					0.001,
+				)
 			"
 		/>
 	</openwb-base-card>
