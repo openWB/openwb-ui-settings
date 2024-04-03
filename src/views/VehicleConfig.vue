@@ -491,7 +491,10 @@
 				</div>
 				<div v-else>
 					<openwb-base-alert subtype="info">
-						Ein anderes Fahrzeug-Profil wird erst NACH dem Abstecken
+						Ein anderes Fahrzeug-Profil wird erst
+						<span class="text-uppercase font-weight-bold">
+							nach dem Abstecken
+						</span>
 						übernommen, da es sonst durch die Änderung bestimmter
 						Einstellungen im laufenden Ladevorgang zu Widersprüchen
 						kommen kann.
@@ -536,6 +539,9 @@
 						</openwb-base-text-input>
 						<openwb-base-heading>
 							Angaben zum Ladestrom
+							<span v-if="dcChargingEnabled === true">
+								(AC)
+							</span>
 						</openwb-base-heading>
 						<openwb-base-range-input
 							title="Mindeststrom"
@@ -547,8 +553,7 @@
 							@update:model-value="
 								updateState(key, $event, 'min_current')
 							"
-						>
-						</openwb-base-range-input>
+						/>
 						<openwb-base-range-input
 							title="Maximalstrom bei einer Phase"
 							:min="6"
@@ -563,8 +568,7 @@
 									'max_current_single_phase',
 								)
 							"
-						>
-						</openwb-base-range-input>
+						/>
 						<openwb-base-range-input
 							title="Maximalstrom mehrere Phasen"
 							:min="6"
@@ -579,8 +583,7 @@
 									'max_current_multi_phases',
 								)
 							"
-						>
-						</openwb-base-range-input>
+						/>
 						<openwb-base-number-input
 							title="Erlaubte Stromabweichung"
 							:step="0.1"
@@ -599,6 +602,34 @@
 								eingestellt werden.
 							</template>
 						</openwb-base-number-input>
+						<div
+							v-if="dcChargingEnabled === true"
+						>
+							<openwb-base-heading>
+								Angaben zur Ladeleistung (DC)
+							</openwb-base-heading>
+							<openwb-base-number-input
+								title="MindestLeistung TOPIC!"
+								:min="0"
+								unit="kW"
+								:model-value="template.dc_min_current"
+								@update:model-value="
+									updateState(key, $event, 'dc_min_current')
+								"
+							/>
+							<openwb-base-number-input
+								title="Maximalleistung TOPIC!"
+								unit="kW"
+								:model-value="template.dc_max_current"
+								@update:model-value="
+									updateState(
+										key,
+										$event,
+										'dc_max_current',
+									)
+								"
+							/>
+						</div>
 						<openwb-base-heading>
 							Angaben zur Batterie
 						</openwb-base-heading>
@@ -674,10 +705,12 @@
 									'average_consump',
 								)
 							"
-						>
-						</openwb-base-number-input>
+						/>
 						<openwb-base-heading>
 							Angaben zur Handhabung von Phasen
+							<span v-if="dcChargingEnabled === true">
+								(AC)
+							</span>
 						</openwb-base-heading>
 						<openwb-base-button-group-input
 							title="Unterstützte Phasen"
@@ -742,8 +775,7 @@
 									'control_pilot_interruption_duration',
 								)
 							"
-						>
-						</openwb-base-number-input>
+						/>
 						<openwb-base-button-group-input
 							title="Phasenumschaltung blockieren"
 							:buttons="[
@@ -804,8 +836,7 @@
 							@update:model-value="
 								updateState(key, $event, 'phase_switch_pause')
 							"
-						>
-						</openwb-base-number-input>
+						/>
 						<openwb-base-number-input
 							title="Mindestzeit zwischen Umschaltungen"
 							unit="s"
@@ -1119,8 +1150,7 @@
 							@update:model-value="
 								updateState(templateKey, $event, 'et.active')
 							"
-						>
-						</openwb-base-button-group-input>
+						/>
 						<div v-if="template.et.active == true">
 							<div
 								v-if="
@@ -1165,7 +1195,7 @@
 						<hr />
 						<openwb-base-heading>Sofortladen</openwb-base-heading>
 						<openwb-base-range-input
-							title="Soll-Ladestrom"
+							:title="'Soll-Ladestrom' + (dcChargingEnabled ? ' (AC)' : '')"
 							:min="6"
 							:max="32"
 							:step="1"
@@ -1180,8 +1210,23 @@
 									'chargemode.instant_charging.current',
 								)
 							"
-						>
-						</openwb-base-range-input>
+						/>
+						<openwb-base-number-input
+							v-if="dcChargingEnabled === true"
+							title="Soll-Ladeleistung (DC) TOPIC!"
+							:step="5"
+							unit="kW"
+							:model-value="
+								template.chargemode.instant_charging.dc_current
+							"
+							@update:model-value="
+								updateState(
+									templateKey,
+									$event,
+									'chargemode.instant_charging.dc_current',
+								)
+							"
+						/>
 						<openwb-base-button-group-input
 							title="Begrenzung"
 							:buttons="[
@@ -1246,7 +1291,6 @@
 							title="Energie-Limit"
 							unit="kWh"
 							:min="1"
-							:max="100"
 							:step="1"
 							:model-value="
 								template.chargemode.instant_charging.limit
@@ -1269,7 +1313,7 @@
 						<hr />
 						<openwb-base-heading>PV-Laden</openwb-base-heading>
 						<openwb-base-range-input
-							title="Minimaler Dauerstrom"
+							:title="'Minimaler Dauerstrom' + (dcChargingEnabled ? ' (AC)' : '')"
 							:min="0"
 							:max="11"
 							:step="1"
@@ -1312,6 +1356,32 @@
 								der Version 1.x.
 							</template>
 						</openwb-base-range-input>
+						<openwb-base-number-input
+							v-if="dcChargingEnabled === true"
+							title="Minimale Dauerleistung (DC) TOPIC!"
+							unit="kW"
+							:model-value="
+								template.chargemode.pv_charging.dc_min_current
+							"
+							@update:model-value="
+								updateState(
+									templateKey,
+									$event,
+									'chargemode.pv_charging.dc_min_current',
+								)
+							"
+						>
+							<template #help>
+								Hier kann eine Leistung eingestellt werden,
+								mit dem unabhängig vom vorhandenen Überschuss
+								durchgeladen wird. Hierdurch wird z.B. an Tagen
+								mit häufigem Sonne/Wolken-Wechsel oder mit nur
+								wenig PV-Ertrag ein Laden ohne Unterbrechung
+								ermöglicht. Folglich kann auch Netzbezug für das
+								Fahrzeugladen entstehen, weshalb der niedrigste
+								Leistungswert empfohlen wird.
+							</template>
+						</openwb-base-number-input>
 						<openwb-base-range-input
 							title="SoC-Limit"
 							:min="0"
@@ -1424,7 +1494,7 @@
 							</template>
 						</openwb-base-range-input>
 						<openwb-base-range-input
-							title="Mindest-SoC-Strom"
+							:title="'Mindest-SoC-Strom' + (dcChargingEnabled ? ' (AC)' : '')"
 							:min="6"
 							:max="32"
 							:step="1"
@@ -1448,6 +1518,30 @@
 								mit anteilig Netzbezug).
 							</template>
 						</openwb-base-range-input>
+						<openwb-base-number-input
+							v-if="dcChargingEnabled === true"
+							title="Mindest-SoC-Leistung (DC) TOPIC!"
+							:step="5"
+							unit="kW"
+							:model-value="
+								template.chargemode.pv_charging.dc_min_soc_current
+							"
+							@update:model-value="
+								updateState(
+									templateKey,
+									$event,
+									'chargemode.pv_charging.dc_min_soc_current',
+								)
+							"
+						>
+							<template #help>
+								Wird der oben eingestellte "Mindest-SoC" des
+								Fahrzeuges unterschritten, dann wird unabhängig
+								vom Überschuss ein Ladevorgang mit der hier
+								festgelegten "Mindest-SoC-Leistung" initiiert (ggf.
+								mit anteilig Netzbezug).
+							</template>
+						</openwb-base-number-input>
 						<openwb-base-button-group-input
 							title="Einspeisegrenze beachten"
 							:buttons="[
@@ -1658,7 +1752,7 @@
 								</template>
 							</openwb-base-text-input>
 							<openwb-base-range-input
-								title="Ladestrom"
+								:title="'Ladestrom' + (dcChargingEnabled ? ' (AC)' : '')"
 								:min="6"
 								:max="32"
 								:step="1"
@@ -1680,6 +1774,16 @@
 									Maximalstromstärke des Fahrzeugs zu wählen.
 								</template>
 							</openwb-base-range-input>
+							<openwb-base-number-input
+								title="Ladeleistung (DC) TOPIC!"
+								v-if="dcChargingEnabled === true"
+								:step="5"
+								unit="kW"
+								:model-value="plan.dc_current"
+								@update:model-value="
+									updateState(planKey, $event, 'dc_current')
+								"
+							/>
 							<openwb-base-button-group-input
 								title="Ziel"
 								:buttons="[
@@ -2016,7 +2120,7 @@
 							>
 							</openwb-base-button-group-input>
 							<openwb-base-range-input
-								title="Ladestrom"
+								:title="'Ladestrom' + (dcChargingEnabled ? ' (AC)' : '')"
 								:min="6"
 								:max="32"
 								:step="1"
@@ -2025,8 +2129,17 @@
 								@update:model-value="
 									updateState(planKey, $event, 'current')
 								"
-							>
-							</openwb-base-range-input>
+							/>
+							<openwb-base-number-input
+								title="Ladeleistung (DC) TOPIC!"
+								v-if="dcChargingEnabled === true"
+								:step="5"
+								unit="kW"
+								:model-value="plan.dc_current"
+								@update:model-value="
+									updateState(planKey, $event, 'dc_current')
+								"
+							/>
 							<openwb-base-button-group-input
 								title="Ziel"
 								:buttons="[
@@ -2101,8 +2214,7 @@
 								@update:model-value="
 									updateState(planKey, $event, 'time.0')
 								"
-							>
-							</openwb-base-text-input>
+							/>
 							<openwb-base-text-input
 								title="Zeitpunkt des Ladeendes"
 								subtype="time"
@@ -2110,8 +2222,7 @@
 								@update:model-value="
 									updateState(planKey, $event, 'time.1')
 								"
-							>
-							</openwb-base-text-input>
+							/>
 							<openwb-base-button-group-input
 								title="Wiederholungen"
 								:buttons="[
@@ -2139,8 +2250,7 @@
 										'frequency.selected',
 									)
 								"
-							>
-							</openwb-base-button-group-input>
+							/>
 							<openwb-base-text-input
 								v-if="plan.frequency.selected == 'once'"
 								title="Gültig ab"
@@ -2262,6 +2372,7 @@ export default {
 		return {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
+				"openWB/optional/dc_charging",
 				"openWB/optional/et/provider",
 				"openWB/optional/rfid/active",
 				"openWB/vehicle/template/ev_template/+",
@@ -2289,6 +2400,11 @@ export default {
 		};
 	},
 	computed: {
+		dcChargingEnabled: {
+			get() {
+				return this.$store.state.mqtt["openWB/optional/dc_charging"];
+			},
+		},
 		vehicleIndexes: {
 			get() {
 				return this.getWildcardIndexList("openWB/vehicle/+/name");
