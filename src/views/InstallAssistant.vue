@@ -10,14 +10,14 @@
 				Module:
 			</h3>
 			<ol>
-				<h4><li>Update des Systems</li></h4>
-				<h4><li>Auswahl primary / secondary openWB</li></h4>
-				<h4><li>Einrichten der Geräte und Komponenten</li></h4>
-				<h4><li>Konfiguration von Geräten und Komponenten</li></h4>
-				<h4><li>Konfiguration Lastmanagement</li></h4>
-				<h4><li>Einrichten der Ladepunkte</li></h4>
-				<h4><li>Einrichten der Fahrzeuge</li></h4>
-				<h4><li>Sicherung der Erstkonfiguration</li></h4>
+				<li>Update des Systems</li>
+				<li>Auswahl primary / secondary openWB</li>
+				<li>Einrichten der Geräte und Komponenten</li>
+				<li>Konfiguration von Geräten und Komponenten</li>
+				<li>Konfiguration Lastmanagement</li>
+				<li>Einrichten der Ladepunkte</li>
+				<li>Einrichten der Fahrzeuge</li>
+				<li>Sicherung der Erstkonfiguration</li>
 			</ol>
 
 			<div class="pageZero">
@@ -810,9 +810,9 @@ export default {
 		},
 		toEnd() {
 			//First time access to InstallWizard if "Assistent beenden" is pressed -> Wizard will not show on Startup anymore!
-			if (!this.$store.state.mqtt["openWB/system/installWizard"]) {
-				this.updateState("openWB/system/installWizard", true);
-				this.$emit("save");
+			if (!this.$store.state.mqtt["openWB/system/installAssistantDone"]) {
+				this.updateState("openWB/system/installAssistantDone", true);
+				this.$root.doPublish("openWB/set/system/installAssistantDone", true);
 			}
 			this.$router.push("/Status");
 		},

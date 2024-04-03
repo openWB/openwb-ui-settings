@@ -172,11 +172,11 @@ export default createStore({
 				}
 			});
 		},
-		installWizard(state) {
+		installWizardDone(state) {
 			return new Promise((resolve) => {
 				
-				if (state.mqtt["openWB/system/installWizard"] !== undefined) {
-					resolve(state.mqtt["openWB/system/installWizard"],
+				if (state.mqtt["openWB/system/installAssistantDone"] !== undefined) {
+					resolve(state.mqtt["openWB/system/installAssistantDone"],
 					);
 				} else {
 					var timer, interval;
@@ -188,12 +188,12 @@ export default createStore({
 					// check until we received valid data
 					interval = setInterval(() => {
 						if (
-							state.mqtt["openWB/system/installWizard"] !==
+							state.mqtt["openWB/system/installAssistant"] !==
 							undefined
 						) {
 							clearTimeout(timer);
 							clearInterval(interval);
-							resolve(state.mqtt["openWB/system/installWizard"]);
+							resolve(state.mqtt["openWB/system/installAssistant"]);
 						}
 					}, 100);
 				}
