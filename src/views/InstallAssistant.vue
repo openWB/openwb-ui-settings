@@ -2,6 +2,7 @@
 	<div>
 		<openwb-base-card
 			:title="(currentPage + 1) + '. ' + pages[currentPage].title"
+			:class="currentPage > 0 && !isLastPage ? 'p-0' : ''"
 		>
 			<template #footer>
 				<div class="row justify-content-center mb-1">
@@ -33,9 +34,9 @@
 					</div>
 				</div>
 			</template>
-			<div v-if="currentPage == 0">
+			<div v-if="currentPage == 0" class="p-2">
 				<h2>
-					Vielen Dank, dass Du Dich für openWB entschieden haben.
+					Vielen Dank, dass Du Dich für openWB entschieden hast.
 				</h2>
 				<p>
 					Dieser Assistent führt Dich durch die Konfiguration der einzelnen
@@ -53,7 +54,7 @@
 				</ol>
 			</div>
 			<div v-if="currentPage == 1" class="page">
-				<div class="pageText pr-2">
+				<div class="pageText">
 					<p>
 						Sicherung erzeugen wenn der Assistent erneut ausgeführt
 						wird und die openWB bereits im Einsatz war.
@@ -81,7 +82,7 @@
 			</div>
 
 			<div v-if="currentPage == 2" class="page">
-				<div class="pageText pr-2">
+				<div class="pageText">
 					<p>
 						Ein System Update durchführen um die Software auf den
 						neuesten Stand zu bringen.
@@ -97,7 +98,7 @@
 			</div>
 
 			<div v-if="currentPage == 3" class="page">
-				<div class="pageText pr-2">
+				<div class="pageText">
 					<p>
 						Hier wird abgefragt, ob ihr System mit mehreren openWBs
 						oder nur mit einer openWB betrieben wird. Eine openWB
@@ -133,7 +134,7 @@
 			</div>
 
 			<div v-if="currentPage == 4" class="page">
-				<div class="pageText pr-2">
+				<div class="pageText">
 					<p>
 						Diese openWB wurde als "secondary" konfiguriert und wird
 						von einer anderen openWB ferngesteuert.
@@ -170,7 +171,7 @@
 			</div>
 
 			<div v-if="currentPage == 5" class="page">
-				<div class="pageText pr-2">
+				<div class="pageText">
 					<p>
 						Diese openWB wurde als "primary" konfiguriert und
 						übernimmt die Steuerung anderer openWBs, falls vorhanden
@@ -205,7 +206,7 @@
 			</div>
 
 			<div v-if="currentPage == 6" class="page">
-				<div class="pageText pr-2">
+				<div class="pageText">
 					<p>
 						Im Lastmanagement werden die maximale Leistung sowie die
 						maximalen Ströme für jede Phase des Zählermoduls sowie
@@ -253,7 +254,7 @@
 			</div>
 
 			<div v-if="currentPage == 7" class="page">
-				<div class="pageText pr-2">
+				<div class="pageText">
 					<p>
 						Enthält die steuernde openWB Ladetechnik wird bei
 						verfügbarer Ladepunkt "Interne openWB" ausgewählt.
@@ -302,7 +303,7 @@
 			</div>
 
 			<div v-if="currentPage == 8" class="page">
-				<div class="pageText pr-2">
+				<div class="pageText">
 					<p>
 						Nachdem die Geräte konfiguriert und die Ladepunkte
 						eingerichtet wurden, wird abschließend nochmal ein Blick
@@ -338,7 +339,7 @@
 			</div>
 
 			<div v-if="currentPage == 9" class="page">
-				<div class="pageText pr-2">
+				<div class="pageText">
 					<p>
 						Zuerst Fahrzeug-Profile und Lade- Profile konfigurieren.
 						In den meisten Fällen reicht das
@@ -395,7 +396,7 @@
 			</div>
 
 			<div v-if="currentPage == 10" class="page">
-				<div class="pageText pr-2">
+				<div class="pageText">
 					<p>
 						Zum Schluss eine Sicherung der vorgenommenen
 						Konfiguration anfertigen, falls gewünscht.
@@ -516,9 +517,12 @@ export default {
 	display: block;
 	width: 20%;
 	flex-shrink: 0;
-	border-right: 1px solid #000000;
+	border-right: 1px solid rgba(0,0,0,.125);
+	background-color: rgba(0, 0, 0, 0.03);
+	padding: 1.25rem;
 }
 .pageEmbedded {
 	flex-grow: 1;
+	padding: 1.25rem;
 }
 </style>
