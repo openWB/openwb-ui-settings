@@ -323,8 +323,7 @@ export default {
 				(this.selectedTag in
 					this.$store.state.mqtt["openWB/system/available_branches"][
 						this.$store.state.mqtt["openWB/system/current_branch"]
-					]["tags"] ||
-					this.selectedTag == "*HEAD*")
+					]["tags"])
 			);
 		},
 	},
@@ -404,10 +403,6 @@ export default {
 					});
 				}
 			}
-			options.unshift({
-				value: "*HEAD*",
-				text: "Aktuellster Stand",
-			});
 			return options;
 		},
 		updateConfiguration(key, event) {
