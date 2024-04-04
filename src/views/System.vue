@@ -40,6 +40,11 @@
 						"
 					/>
 					<openwb-base-text-input
+						title="Bezeichnung"
+						readonly
+						v-model="$store.state.mqtt['openWB/system/version']"
+					/>
+					<openwb-base-text-input
 						title="installierte Version"
 						readonly
 						:class="
@@ -291,6 +296,7 @@ export default {
 				"openWB/system/current_missing_commits",
 				"openWB/system/available_branches",
 				"openWB/system/current_branch",
+				"openWB/system/version",
 			],
 			warningAcknowledged: false,
 			selectedTag: "*HEAD*",
