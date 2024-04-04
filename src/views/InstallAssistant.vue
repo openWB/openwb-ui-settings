@@ -12,6 +12,7 @@
 							class="btn-block btn-warning"
 							@buttonClicked="previousPage()"
 						>
+							<font-awesome-icon fixed-width :icon="['fas', 'caret-left']" />
 							Zurück
 						</openwb-base-click-button>
 					</div>
@@ -22,6 +23,7 @@
 							@buttonClicked="nextPage()"
 						>
 							Weiter
+							<font-awesome-icon fixed-width :icon="['fas', 'caret-right']" />
 						</openwb-base-click-button>
 					</div>
 					<div class="col-md-4 d-flex py-1 justify-content-center">
@@ -53,8 +55,8 @@
 					<li>Sicherung der Erstkonfiguration</li>
 				</ol>
 			</div>
-			<div v-if="currentPage == 1" class="page">
-				<div class="pageText">
+			<div v-if="currentPage == 1" class="row m-0">
+				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Sicherung erzeugen wenn der Assistent erneut ausgeführt
 						wird und die openWB bereits im Einsatz war.
@@ -68,7 +70,7 @@
 						erstellen.
 					</p>
 				</div>
-				<div class="pageEmbedded">
+				<div class="col py-2">
 					<DataManagement
 						formName="cloudBackupForm"
 						:hideReset="true"
@@ -81,8 +83,8 @@
 				</div>
 			</div>
 
-			<div v-if="currentPage == 2" class="page">
-				<div class="pageText">
+			<div v-if="currentPage == 2" class="row m-0">
+				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Ein System Update durchführen um die Software auf den
 						neuesten Stand zu bringen.
@@ -92,13 +94,13 @@
 						Features und Funktionen ausgestattet ist.
 					</p>
 				</div>
-				<div class="pageEmbedded">
+				<div class="col py-2">
 					<System @sendCommand="$emit('sendCommand', $event)" />
 				</div>
 			</div>
 
-			<div v-if="currentPage == 3" class="page">
-				<div class="pageText">
+			<div v-if="currentPage == 3" class="row m-0">
+				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Hier wird abgefragt, ob ihr System mit mehreren openWBs
 						oder nur mit einer openWB betrieben wird. Eine openWB
@@ -123,7 +125,7 @@
 						Änderungen werden nur bei klicken auf speichern wirksam
 					</p>
 				</div>
-				<div class="pageEmbedded">
+				<div class="col py-2">
 					<GeneralConfig
 						formName="generalConfigForm"
 						@save="$emit('save')"
@@ -133,8 +135,8 @@
 				</div>
 			</div>
 
-			<div v-if="currentPage == 4" class="page">
-				<div class="pageText">
+			<div v-if="currentPage == 4" class="row m-0">
+				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Diese openWB wurde als "secondary" konfiguriert und wird
 						von einer anderen openWB ferngesteuert.
@@ -159,7 +161,7 @@
 						Änderungen werden nur bei klicken auf speichern wirksam
 					</p>
 				</div>
-				<div class="pageEmbedded">
+				<div class="col py-2">
 					<!--ChargePointInstallation formName="chargePointInstallationForm"-->
 					<ChargePointInstallation
 						@save="$emit('save')"
@@ -170,8 +172,8 @@
 				</div>
 			</div>
 
-			<div v-if="currentPage == 5" class="page">
-				<div class="pageText">
+			<div v-if="currentPage == 5" class="row m-0">
+				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Diese openWB wurde als "primary" konfiguriert und
 						übernimmt die Steuerung anderer openWBs, falls vorhanden
@@ -194,7 +196,7 @@
 						Änderungen werden nur bei klicken auf speichern wirksam
 					</p>
 				</div>
-				<div class="pageEmbedded">
+				<div class="col py-2">
 					<!--HardwareInstallation formName="hardwareInstallationForm"-->
 					<HardwareInstallation
 						@save="$emit('save')"
@@ -205,8 +207,8 @@
 				</div>
 			</div>
 
-			<div v-if="currentPage == 6" class="page">
-				<div class="pageText">
+			<div v-if="currentPage == 6" class="row m-0">
+				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Im Lastmanagement werden die maximale Leistung sowie die
 						maximalen Ströme für jede Phase des Zählermoduls sowie
@@ -243,7 +245,7 @@
 						Änderungen werden nur bei klicken auf speichern wirksam
 					</p>
 				</div>
-				<div class="pageEmbedded">
+				<div class="col py-2">
 					<LoadManagementConfig
 						formName="loadManagementConfigForm"
 						@save="$emit('save')"
@@ -253,8 +255,8 @@
 				</div>
 			</div>
 
-			<div v-if="currentPage == 7" class="page">
-				<div class="pageText">
+			<div v-if="currentPage == 7" class="row m-0">
+				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Enthält die steuernde openWB Ladetechnik wird bei
 						verfügbarer Ladepunkt "Interne openWB" ausgewählt.
@@ -291,7 +293,7 @@
 						Änderungen werden nur bei klicken auf speichern wirksam
 					</p>
 				</div>
-				<div class="pageEmbedded">
+				<div class="col py-2">
 					<!--ChargePointInstallation formName="chargePointInstallationForm"-->
 					<ChargePointInstallation
 						@save="$emit('save')"
@@ -302,8 +304,8 @@
 				</div>
 			</div>
 
-			<div v-if="currentPage == 8" class="page">
-				<div class="pageText">
+			<div v-if="currentPage == 8" class="row m-0">
+				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Nachdem die Geräte konfiguriert und die Ladepunkte
 						eingerichtet wurden, wird abschließend nochmal ein Blick
@@ -328,7 +330,7 @@
 						Änderungen werden nur bei klicken auf speichern wirksam
 					</p>
 				</div>
-				<div class="pageEmbedded">
+				<div class="col py-2">
 					<LoadManagementConfig
 						formName="loadManagementConfigForm"
 						@save="$emit('save')"
@@ -338,8 +340,8 @@
 				</div>
 			</div>
 
-			<div v-if="currentPage == 9" class="page">
-				<div class="pageText">
+			<div v-if="currentPage == 9" class="row m-0">
+				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Zuerst Fahrzeug-Profile und Lade- Profile konfigurieren.
 						In den meisten Fällen reicht das
@@ -384,7 +386,7 @@
 						Änderungen werden nur bei klicken auf speichern wirksam
 					</p>
 				</div>
-				<div class="pageEmbedded">
+				<div class="col py-2">
 					<!--VehicleConfig formName="vehicleConfigForm"-->
 					<VehicleConfig
 						@save="$emit('save')"
@@ -395,14 +397,14 @@
 				</div>
 			</div>
 
-			<div v-if="currentPage == 10" class="page">
-				<div class="pageText">
+			<div v-if="currentPage == 10" class="row m-0">
+				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Zum Schluss eine Sicherung der vorgenommenen
 						Konfiguration anfertigen, falls gewünscht.
 					</p>
 				</div>
-				<div class="pageEmbedded">
+				<div class="col py-2">
 					<DataManagement
 						formName="cloudBackupForm"
 						:hideReset="true"
@@ -430,7 +432,6 @@
 </template>
 
 <script>
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import DataManagement from "./DataManagement.vue";
 import System from "./System.vue";
 import GeneralConfig from "./GeneralConfig.vue";
@@ -439,6 +440,18 @@ import HardwareInstallation from "./HardwareInstallation.vue";
 import LoadManagementConfig from "./LoadManagementConfig.vue";
 import VehicleConfig from "./VehicleConfig.vue";
 import ComponentState from "../components/mixins/ComponentState.vue";
+
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+	faCaretLeft as fasCaretLeft,
+	faCaretRight as fasCaretRight,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(
+	fasCaretLeft,
+	fasCaretRight,
+);
 
 export default {
 	name: "InstallAssistant",
@@ -509,20 +522,9 @@ export default {
 </script>
 
 <style scoped>
-.page {
-	display: flex;
-	gap: 10px;
-}
-.pageText {
-	display: block;
-	width: 20%;
-	flex-shrink: 0;
+.page-help-text {
 	border-right: 1px solid rgba(0,0,0,.125);
+	border-bottom: 1px solid rgba(0,0,0,.125);
 	background-color: rgba(0, 0, 0, 0.03);
-	padding: 1.25rem;
-}
-.pageEmbedded {
-	flex-grow: 1;
-	padding: 1.25rem;
 }
 </style>
