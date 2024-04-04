@@ -5,10 +5,10 @@
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
-			Bei saldierend Zählern (B23) werden die
-			Zählerstände für Einspeisung und Bezug aus dem Zähler ausgelesen.
-			Bei Zählern, die nicht saldierend arbeiten (SDM120, SDM630, SDM72D-M), wird der
-			Zählerstand für die Einspeisung ausgelesen.
+			Bei saldierenden Zählern (B23) werden die Zählerstände für
+			Einspeisung und Bezug aus dem Zähler ausgelesen. Bei Zählern, die
+			nicht saldierend arbeiten (SDM120, SDM630, SDM72D-M), wird der
+			Zählerstand für die Einspeisung berechnet.
 		</openwb-base-alert>
 		<openwb-base-select-input
 			title="Zählermodell"
