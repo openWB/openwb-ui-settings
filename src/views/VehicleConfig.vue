@@ -538,99 +538,6 @@
 							</template>
 						</openwb-base-text-input>
 						<openwb-base-heading>
-							Angaben zum Ladestrom
-							<span v-if="dcChargingEnabled === true">
-								(AC)
-							</span>
-						</openwb-base-heading>
-						<openwb-base-range-input
-							title="Mindeststrom"
-							:min="6"
-							:max="16"
-							:step="1"
-							unit="A"
-							:model-value="template.min_current"
-							@update:model-value="
-								updateState(key, $event, 'min_current')
-							"
-						/>
-						<openwb-base-range-input
-							title="Maximalstrom bei einer Phase"
-							:min="6"
-							:max="32"
-							:step="1"
-							unit="A"
-							:model-value="template.max_current_single_phase"
-							@update:model-value="
-								updateState(
-									key,
-									$event,
-									'max_current_single_phase',
-								)
-							"
-						/>
-						<openwb-base-range-input
-							title="Maximalstrom mehrere Phasen"
-							:min="6"
-							:max="32"
-							:step="1"
-							unit="A"
-							:model-value="template.max_current_multi_phases"
-							@update:model-value="
-								updateState(
-									key,
-									$event,
-									'max_current_multi_phases',
-								)
-							"
-						/>
-						<openwb-base-number-input
-							title="Erlaubte Stromabweichung"
-							:step="0.1"
-							unit="A"
-							:model-value="template.nominal_difference"
-							@update:model-value="
-								updateState(key, $event, 'nominal_difference')
-							"
-						>
-							<template #help>
-								In manchen Lademodi, z.B. bei der automatischen
-								Phasenumschaltung, wird geprüft, ob das Fahrzeug
-								mit der vorgegebenen Stromstärke lädt. Manche
-								Fahrzeuge laden nicht exakt mit der vorgegebenen
-								Stromstärke. Die erlaubte Abweichung kann hier
-								eingestellt werden.
-							</template>
-						</openwb-base-number-input>
-						<div
-							v-if="dcChargingEnabled === true"
-						>
-							<openwb-base-heading>
-								Angaben zur Ladeleistung (DC)
-							</openwb-base-heading>
-							<openwb-base-number-input
-								title="MindestLeistung TOPIC!"
-								:min="0"
-								unit="kW"
-								:model-value="template.dc_min_current"
-								@update:model-value="
-									updateState(key, $event, 'dc_min_current')
-								"
-							/>
-							<openwb-base-number-input
-								title="Maximalleistung TOPIC!"
-								unit="kW"
-								:model-value="template.dc_max_current"
-								@update:model-value="
-									updateState(
-										key,
-										$event,
-										'dc_max_current',
-									)
-								"
-							/>
-						</div>
-						<openwb-base-heading>
 							Angaben zur Batterie
 						</openwb-base-heading>
 						<openwb-base-number-input
@@ -706,6 +613,93 @@
 								)
 							"
 						/>
+						<div v-if="dcChargingEnabled === true">
+							<openwb-base-heading>
+								Angaben zur Ladeleistung (DC)
+							</openwb-base-heading>
+							<openwb-base-number-input
+								title="MindestLeistung TOPIC!"
+								:min="0"
+								unit="kW"
+								:model-value="template.dc_min_current"
+								@update:model-value="
+									updateState(key, $event, 'dc_min_current')
+								"
+							/>
+							<openwb-base-number-input
+								title="Maximalleistung TOPIC!"
+								unit="kW"
+								:model-value="template.dc_max_current"
+								@update:model-value="
+									updateState(key, $event, 'dc_max_current')
+								"
+							/>
+						</div>
+						<openwb-base-heading>
+							Angaben zum Ladestrom
+							<span v-if="dcChargingEnabled === true">
+								(AC)
+							</span>
+						</openwb-base-heading>
+						<openwb-base-range-input
+							title="Mindeststrom"
+							:min="6"
+							:max="16"
+							:step="1"
+							unit="A"
+							:model-value="template.min_current"
+							@update:model-value="
+								updateState(key, $event, 'min_current')
+							"
+						/>
+						<openwb-base-range-input
+							title="Maximalstrom bei einer Phase"
+							:min="6"
+							:max="32"
+							:step="1"
+							unit="A"
+							:model-value="template.max_current_single_phase"
+							@update:model-value="
+								updateState(
+									key,
+									$event,
+									'max_current_single_phase',
+								)
+							"
+						/>
+						<openwb-base-range-input
+							title="Maximalstrom mehrere Phasen"
+							:min="6"
+							:max="32"
+							:step="1"
+							unit="A"
+							:model-value="template.max_current_multi_phases"
+							@update:model-value="
+								updateState(
+									key,
+									$event,
+									'max_current_multi_phases',
+								)
+							"
+						/>
+						<openwb-base-number-input
+							title="Erlaubte Stromabweichung"
+							:step="0.1"
+							unit="A"
+							:model-value="template.nominal_difference"
+							@update:model-value="
+								updateState(key, $event, 'nominal_difference')
+							"
+						>
+							<template #help>
+								In manchen Lademodi, z.B. bei der automatischen
+								Phasenumschaltung, wird geprüft, ob das Fahrzeug
+								mit der vorgegebenen Stromstärke lädt. Manche
+								Fahrzeuge laden nicht exakt mit der vorgegebenen
+								Stromstärke. Die erlaubte Abweichung kann hier
+								eingestellt werden.
+							</template>
+						</openwb-base-number-input>
 						<openwb-base-heading>
 							Angaben zur Handhabung von Phasen
 							<span v-if="dcChargingEnabled === true">
@@ -1195,7 +1189,10 @@
 						<hr />
 						<openwb-base-heading>Sofortladen</openwb-base-heading>
 						<openwb-base-range-input
-							:title="'Soll-Ladestrom' + (dcChargingEnabled ? ' (AC)' : '')"
+							:title="
+								'Soll-Ladestrom' +
+								(dcChargingEnabled ? ' (AC)' : '')
+							"
 							:min="6"
 							:max="32"
 							:step="1"
@@ -1313,7 +1310,10 @@
 						<hr />
 						<openwb-base-heading>PV-Laden</openwb-base-heading>
 						<openwb-base-range-input
-							:title="'Minimaler Dauerstrom' + (dcChargingEnabled ? ' (AC)' : '')"
+							:title="
+								'Minimaler Dauerstrom' +
+								(dcChargingEnabled ? ' (AC)' : '')
+							"
 							:min="0"
 							:max="11"
 							:step="1"
@@ -1372,8 +1372,8 @@
 							"
 						>
 							<template #help>
-								Hier kann eine Leistung eingestellt werden,
-								mit dem unabhängig vom vorhandenen Überschuss
+								Hier kann eine Leistung eingestellt werden, mit
+								dem unabhängig vom vorhandenen Überschuss
 								durchgeladen wird. Hierdurch wird z.B. an Tagen
 								mit häufigem Sonne/Wolken-Wechsel oder mit nur
 								wenig PV-Ertrag ein Laden ohne Unterbrechung
@@ -1494,7 +1494,10 @@
 							</template>
 						</openwb-base-range-input>
 						<openwb-base-range-input
-							:title="'Mindest-SoC-Strom' + (dcChargingEnabled ? ' (AC)' : '')"
+							:title="
+								'Mindest-SoC-Strom' +
+								(dcChargingEnabled ? ' (AC)' : '')
+							"
 							:min="6"
 							:max="32"
 							:step="1"
@@ -1524,7 +1527,8 @@
 							:step="5"
 							unit="kW"
 							:model-value="
-								template.chargemode.pv_charging.dc_min_soc_current
+								template.chargemode.pv_charging
+									.dc_min_soc_current
 							"
 							@update:model-value="
 								updateState(
@@ -1538,8 +1542,8 @@
 								Wird der oben eingestellte "Mindest-SoC" des
 								Fahrzeuges unterschritten, dann wird unabhängig
 								vom Überschuss ein Ladevorgang mit der hier
-								festgelegten "Mindest-SoC-Leistung" initiiert (ggf.
-								mit anteilig Netzbezug).
+								festgelegten "Mindest-SoC-Leistung" initiiert
+								(ggf. mit anteilig Netzbezug).
 							</template>
 						</openwb-base-number-input>
 						<openwb-base-button-group-input
@@ -1752,7 +1756,10 @@
 								</template>
 							</openwb-base-text-input>
 							<openwb-base-range-input
-								:title="'Ladestrom' + (dcChargingEnabled ? ' (AC)' : '')"
+								:title="
+									'Ladestrom' +
+									(dcChargingEnabled ? ' (AC)' : '')
+								"
 								:min="6"
 								:max="32"
 								:step="1"
@@ -2120,7 +2127,10 @@
 							>
 							</openwb-base-button-group-input>
 							<openwb-base-range-input
-								:title="'Ladestrom' + (dcChargingEnabled ? ' (AC)' : '')"
+								:title="
+									'Ladestrom' +
+									(dcChargingEnabled ? ' (AC)' : '')
+								"
 								:min="6"
 								:max="32"
 								:step="1"

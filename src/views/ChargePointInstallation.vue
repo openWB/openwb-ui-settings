@@ -543,12 +543,18 @@
 							Generell gilt, dass diese Werte in Übereinstimmung
 							mit der Ausführung des Ladepunktes und des
 							elektrischen Anschlusses bzw. der Absicherung zu
-							wählen sind. Bei einer openWB mit 22kW
-							Maximalleistung sind hier jeweils 32A einzustellen.
-							Ist die openWB beispielsweise auf 11kW begrenzt
-							(KfW-Förderung oder die Zuleitung ist mit 16A
-							abgesichert), dann sind hier jeweils 16A
-							einzustellen.<br />
+							wählen sind.
+							<span
+								v-if="
+									chargePointTemplate.charging_type === 'AC'
+								"
+							>
+								Bei einer openWB mit 22kW Maximalleistung sind
+								hier jeweils 32A einzustellen. Ist die openWB
+								beispielsweise auf 11kW begrenzt (KfW-Förderung
+								oder die Zuleitung ist mit 16A abgesichert),
+								dann sind hier jeweils 16A einzustellen.
+							</span><br />
 							Komplexere Installationen mit mehreren Ladepunkten
 							werden im
 							<a
