@@ -105,6 +105,7 @@ export default {
 				"openWB/chargepoint/+/get/+",
 				"openWB/chargepoint/+/get/connected_vehicle/info",
 				"openWB/chargepoint/+/set/+",
+				"openWB/internal_chargepoint/+/data/phases_to_use",
 				// components
 				"openWB/system/device/+/component/+/config",
 				// counter
