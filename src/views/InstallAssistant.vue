@@ -28,6 +28,18 @@
 import { defineAsyncComponent } from "vue";
 import ComponentState from "../components/mixins/ComponentState.vue";
 
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+	faCaretLeft as fasCaretLeft,
+	faCaretRight as fasCaretRight,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(
+	fasCaretLeft,
+	fasCaretRight,
+);
+
 export default {
 	name: "InstallAssistantView",
 	mixins: [ComponentState],
