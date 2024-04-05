@@ -84,7 +84,7 @@ export default {
 				},
 				{
 					title: "Protokoll des letzten Updates",
-					fileName: "/openWB/ramdisk/update.log",
+					fileName: "/openWB/data/log/update.log",
 				},
 				{
 					title: "Protokoll des Remote-Dienstes",
