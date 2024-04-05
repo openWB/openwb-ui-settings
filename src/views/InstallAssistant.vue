@@ -1,40 +1,63 @@
 <template>
-	<!--InstallWizard boots at startup until Wizard is closed once-->
 	<div>
-		<div v-if="!instAssist">
-			<openwb-base-heading>
-				Vielen Dank, dass Sie sich für openWB entschieden haben
-			</openwb-base-heading>
-			<h3>
-				Dieser Assistent führt Sie durch die Konfiguration der einzelnen
-				Module:
-			</h3>
-			<ol>
-				<li>Update des Systems</li>
-				<li>Auswahl primary / secondary openWB</li>
-				<li>Einrichten der Geräte und Komponenten</li>
-				<li>Konfiguration von Geräten und Komponenten</li>
-				<li>Konfiguration Lastmanagement</li>
-				<li>Einrichten der Ladepunkte</li>
-				<li>Einrichten der Fahrzeuge</li>
-				<li>Sicherung der Erstkonfiguration</li>
-			</ol>
-
-			<div class="pageZero">
-				<openwb-base-click-button
-					class="buttonStart"
-					@buttonClicked="toDatamanagement1"
-				>
-					Assistent starten
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
+		<openwb-base-card
+			:title="(currentPage + 1) + '. ' + pages[currentPage].title"
+			:class="currentPage > 0 && !isLastPage ? 'p-0' : ''"
+		>
+			<template #footer>
+				<div class="row justify-content-center mb-1">
+					<div class="col-md-4 d-flex py-1 justify-content-center">
+						<openwb-base-click-button
+							v-if="currentPage > 0"
+							class="btn-block btn-warning"
+							@buttonClicked="previousPage()"
+						>
+							<font-awesome-icon fixed-width :icon="['fas', 'caret-left']" />
+							Zurück
+						</openwb-base-click-button>
+					</div>
+					<div class="col-md-4 d-flex py-1 justify-content-center">
+						<openwb-base-click-button
+							v-if="(!isLastPage && currentPage !=4)"
+							class="btn-block btn-success"
+							@buttonClicked="nextPage()"
+						>
+							Weiter
+							<font-awesome-icon fixed-width :icon="['fas', 'caret-right']" />
+						</openwb-base-click-button>
+					</div>
+					<div class="col-md-4 d-flex py-1 justify-content-center">
+						<openwb-base-click-button
+							:class="'btn-block btn-' + (isLastPage ? 'success' : 'danger')"
+							@buttonClicked="endAssistant()"
+						>
+							Assistent beenden
+						</openwb-base-click-button>
+					</div>
+				</div>
+			</template>
+			<div v-if="currentPage == 0" class="p-2">
+				<h2>
+					Vielen Dank, dass Du Dich für openWB entschieden hast.
+				</h2>
+				<p>
+					Dieser Assistent führt Dich durch die Konfiguration der einzelnen
+					Module:
+				</p>
+				<ol>
+					<li>Datenverwaltung</li>
+					<li>Update des Systems</li>
+					<li>Auswahl primary / secondary openWB</li>
+					<li>Einrichten der Geräte und Komponenten</li>
+					<li>Konfiguration von Geräten und Komponenten</li>
+					<li>Konfiguration Lastmanagement</li>
+					<li>Einrichten der Ladepunkte</li>
+					<li>Einrichten der Fahrzeuge</li>
+					<li>Sicherung der Erstkonfiguration</li>
+				</ol>
 			</div>
-		</div>
-
-		<div v-if="page1">
-			<h2>System - Datenverwaltung</h2>
-			<div class="page">
-				<div class="pageText">
+			<div v-if="currentPage == 1" class="row m-0">
+				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Sicherung erzeugen wenn der Assistent erneut ausgeführt
 						wird und die openWB bereits im Einsatz war.
@@ -47,8 +70,11 @@
 						Es wird empfohlen regelmäßige Sicherungen der Daten zu
 						erstellen.
 					</p>
+					<p>
+						Dieser Schritt kann auch übersprungen werden.
+					</p>
 				</div>
-				<div class="pageEmbedded">
+				<div class="col py-2">
 					<DataManagement
 						formName="cloudBackupForm"
 						:hideReset="true"
@@ -60,83 +86,42 @@
 					/>
 				</div>
 			</div>
-			<div class="buttons">
-				<openwb-base-click-button
-					class="buttonForward"
-					@buttonClicked="toSystem"
-					@buttonClicked.once="scrollToTop"
-				>
-					Weiter...
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
 
-				<openwb-base-click-button
-					class="buttonBack"
-					@buttonClicked="toSystem"
-					@buttonClicked.once="scrollToTop"
-				>
-					Überspringen...
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
-
-				<openwb-base-click-button
-					class="buttonEnd"
-					@buttonClicked="toEnd"
-					@buttonClicked.once="scrollToTop"
-				>
-					Assistent beenden
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
-			</div>
-		</div>
-
-		<div v-if="page2">
-			<h2>System - System</h2>
-			<div class="page">
-				<div class="pageText">
+			<div v-if="currentPage == 2" class="row m-0">
+				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Ein System Update durchführen um die Software auf den
 						neuesten Stand zu bringen.
 					</p>
 					<p>
 						Das garantiert, dass die openWB mit den neuesten
-						Features und Funktionen ausgestattet ist.
+						Features und Funktionen ausgestattet ist. 
+					</p>
+					<p>
+						Dazu Warnung akzeptieren, auf Versions-Information / Aktualisierung gehen,
+						Informationen aktualisieren und falls ein Update verfügbar ist, wird der
+						Update button grün und kann bei Bedarf gedrückt werden.
+					</p>
+					<p>
+						Dieser Schritt kann auch übersprungen werden.
 					</p>
 				</div>
-				<div class="pageEmbedded">
+				<div class="col py-2">
 					<System @sendCommand="$emit('sendCommand', $event)" />
 				</div>
 			</div>
-			<div class="buttons">
-				<openwb-base-click-button
-					class="buttonForward"
-					@buttonClicked="toGenConfig"
-					@buttonClicked.once="scrollToTop"
-				>
-					Weiter...
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
 
-				<openwb-base-click-button
-					class="buttonEnd"
-					@buttonClicked="toEnd"
-					@buttonClicked.once="scrollToTop"
-				>
-					Assistent beenden
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
-			</div>
-		</div>
-
-		<div v-if="page3">
-			<h2>Einstellungen - Allgemein</h2>
-			<div class="page">
-				<div class="pageText">
+			<div v-if="currentPage == 3" class="row m-0">
+				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Hier wird abgefragt, ob ihr System mit mehreren openWBs
 						oder nur mit einer openWB betrieben wird. Eine openWB
 						kann andere openWBs steuern, wobei für jeden Ladepunkt
 						eine openWB benötigt wird.
+					</p>
+					<p>
+						Beim ersten Konfigurieren reicht es meist aus das Feld Steuerungsmodus
+						(primary oder secondary) anzuwählen.
 					</p>
 					<p>
 						Eine openWB standalone hat keinen Ladepunkt (nur
@@ -152,11 +137,11 @@
 						werden, wenn Sie nur openWBs besitzen und die
 						openWB-Software zur Steuerung nutzen wollen.
 					</p>
-					<p class="fw-bold">
+					<p class="font-weight-bold">
 						Änderungen werden nur bei klicken auf speichern wirksam
 					</p>
 				</div>
-				<div class="pageEmbedded">
+				<div class="col py-2">
 					<GeneralConfig
 						formName="generalConfigForm"
 						@save="$emit('save')"
@@ -165,64 +150,16 @@
 					/>
 				</div>
 			</div>
-			<div class="buttons">
-				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-					<openwb-base-click-button
-						class="buttonForward"
-						@buttonClicked="secChoice"
-						@buttonClicked.once="scrollToTop"
-					>
-						Weiter...
-						<font-awesome-icon
-							fixed-width
-							:icon="['fas', 'undo']"
-						/>
-					</openwb-base-click-button>
-				</div>
-				<div v-else>
-					<openwb-base-click-button
-						class="buttonForward"
-						@buttonClicked="toHardwareInst"
-						@buttonClicked.once="scrollToTop"
-					>
-						Weiter...
-						<font-awesome-icon
-							fixed-width
-							:icon="['fas', 'undo']"
-						/>
-					</openwb-base-click-button>
-				</div>
 
-				<openwb-base-click-button
-					class="buttonBack"
-					@buttonClicked="toSystem"
-					@buttonClicked.once="scrollToTop"
-				>
-					Zurück...
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
-
-				<openwb-base-click-button
-					class="buttonEnd"
-					@buttonClicked="toEnd"
-					@buttonClicked.once="scrollToTop"
-				>
-					Assistent beenden
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
-			</div>
-		</div>
-
-		<div v-if="page4">
-			<h2>Konfiguration - Ladepunkte</h2>
-			<div class="page">
-				<div class="pageText">
+			<div v-if="currentPage == 4" class="row m-0">
+				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Diese openWB wurde als "secondary" konfiguriert und wird
 						von einer anderen openWB ferngesteuert.
 					</p>
 					<p>
-						Tragen Sie in Ladepunkte Interne openWB ein und wählen
+						Tragen Sie unter Ladepunkte bei verfügbare Ladepunkte
+						"Interne openWB" ein und wählen
 						Sie die Bauart der openWB (z.B. openWB series 1/2
 						custom, Standard (+) oder Buchse) aus.
 					</p>
@@ -237,11 +174,11 @@
 						Assistent kann nach drücken von speichern beendet
 						werden.
 					</p>
-					<p class="fw-bold">
+					<p class="font-weight-bold">
 						Änderungen werden nur bei klicken auf speichern wirksam
 					</p>
 				</div>
-				<div class="pageEmbedded">
+				<div class="col py-2">
 					<!--ChargePointInstallation formName="chargePointInstallationForm"-->
 					<ChargePointInstallation
 						@save="$emit('save')"
@@ -251,31 +188,9 @@
 					/>
 				</div>
 			</div>
-			<div class="buttons">
-				<openwb-base-click-button
-					class="buttonBack"
-					@buttonClicked="toGenConfig"
-					@buttonClicked.once="scrollToTop"
-				>
-					Zurück...
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
 
-				<openwb-base-click-button
-					class="buttonEnd"
-					@buttonClicked="toEnd"
-					@buttonClicked.once="scrollToTop"
-				>
-					Assistent beenden
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
-			</div>
-		</div>
-
-		<div v-if="page5">
-			<h2>Konfiguration - Geräte und Komponenten</h2>
-			<div class="page">
-				<div class="pageText">
+			<div v-if="currentPage == 5" class="row m-0">
+				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Diese openWB wurde als "primary" konfiguriert und
 						übernimmt die Steuerung anderer openWBs, falls vorhanden
@@ -294,11 +209,11 @@
 						in openWB, denn die PV wird automatisch mitgerechnet,
 						wenn die openWB an den EVU-Zähler angeschlossen ist.
 					</p>
-					<p class="fw-bold">
+					<p class="font-weight-bold">
 						Änderungen werden nur bei klicken auf speichern wirksam
 					</p>
 				</div>
-				<div class="pageEmbedded">
+				<div class="col py-2">
 					<!--HardwareInstallation formName="hardwareInstallationForm"-->
 					<HardwareInstallation
 						@save="$emit('save')"
@@ -308,40 +223,9 @@
 					/>
 				</div>
 			</div>
-			<div class="buttons">
-				<openwb-base-click-button
-					class="buttonForward"
-					@buttonClicked="toLoadManagement1"
-					@buttonClicked.once="scrollToTop"
-				>
-					Weiter...
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
 
-				<openwb-base-click-button
-					class="buttonBack"
-					@buttonClicked="toGenConfig"
-					@buttonClicked.once="scrollToTop"
-				>
-					Zurück...
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
-
-				<openwb-base-click-button
-					class="buttonEnd"
-					@buttonClicked="toEnd"
-					@buttonClicked.once="scrollToTop"
-				>
-					Assistent beenden
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
-			</div>
-		</div>
-
-		<div v-if="page6">
-			<h2>Konfiguration - Lastmanagement</h2>
-			<div class="page">
-				<div class="pageText">
+			<div v-if="currentPage == 6" class="row m-0">
+				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Im Lastmanagement werden die maximale Leistung sowie die
 						maximalen Ströme für jede Phase des Zählermoduls sowie
@@ -374,11 +258,11 @@
 						zurück und die entsprechenden Geräte und Komponenten
 						hinzufügen.
 					</p>
-					<p class="fw-bold">
+					<p class="font-weight-bold">
 						Änderungen werden nur bei klicken auf speichern wirksam
 					</p>
 				</div>
-				<div class="pageEmbedded">
+				<div class="col py-2">
 					<LoadManagementConfig
 						formName="loadManagementConfigForm"
 						@save="$emit('save')"
@@ -387,40 +271,9 @@
 					/>
 				</div>
 			</div>
-			<div class="buttons">
-				<openwb-base-click-button
-					class="buttonForward"
-					@buttonClicked="toChargePointInst"
-					@buttonClicked.once="scrollToTop"
-				>
-					Weiter...
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
 
-				<openwb-base-click-button
-					class="buttonBack"
-					@buttonClicked="toHardwareInst"
-					@buttonClicked.once="scrollToTop"
-				>
-					Zurück...
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
-
-				<openwb-base-click-button
-					class="buttonEnd"
-					@buttonClicked="toEnd"
-					@buttonClicked.once="scrollToTop"
-				>
-					Assistent beenden
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
-			</div>
-		</div>
-
-		<div v-if="page7">
-			<h2>Konfiguration - Ladepunkte</h2>
-			<div class="page">
-				<div class="pageText">
+			<div v-if="currentPage == 7" class="row m-0">
+				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Enthält die steuernde openWB Ladetechnik wird bei
 						verfügbarer Ladepunkt "Interne openWB" ausgewählt.
@@ -453,11 +306,11 @@
 						vorgenommen werden sowie eine automatische Sperre
 						eingerichtet und Zeitpläne dafür angelegt werden.
 					</p>
-					<p class="fw-bold">
+					<p class="font-weight-bold">
 						Änderungen werden nur bei klicken auf speichern wirksam
 					</p>
 				</div>
-				<div class="pageEmbedded">
+				<div class="col py-2">
 					<!--ChargePointInstallation formName="chargePointInstallationForm"-->
 					<ChargePointInstallation
 						@save="$emit('save')"
@@ -467,40 +320,9 @@
 					/>
 				</div>
 			</div>
-			<div class="buttons">
-				<openwb-base-click-button
-					class="buttonForward"
-					@buttonClicked="toLoadManagement2"
-					@buttonClicked.once="scrollToTop"
-				>
-					Weiter...
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
 
-				<openwb-base-click-button
-					class="buttonBack"
-					@buttonClicked="toLoadManagement1"
-					@buttonClicked.once="scrollToTop"
-				>
-					Zurück...
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
-
-				<openwb-base-click-button
-					class="buttonEnd"
-					@buttonClicked="toEnd"
-					@buttonClicked.once="scrollToTop"
-				>
-					Assistent beenden
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
-			</div>
-		</div>
-
-		<div v-if="page8">
-			<h2>Konfiguration - Lastmanagement</h2>
-			<div class="page">
-				<div class="pageText">
+			<div v-if="currentPage == 8" class="row m-0">
+				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Nachdem die Geräte konfiguriert und die Ladepunkte
 						eingerichtet wurden, wird abschließend nochmal ein Blick
@@ -521,11 +343,11 @@
 						Wenn alles ok ist, kann dieser Schritt ohne weitere
 						Anpassungen beendet werden.
 					</p>
-					<p class="fw-bold">
+					<p class="font-weight-bold">
 						Änderungen werden nur bei klicken auf speichern wirksam
 					</p>
 				</div>
-				<div class="pageEmbedded">
+				<div class="col py-2">
 					<LoadManagementConfig
 						formName="loadManagementConfigForm"
 						@save="$emit('save')"
@@ -534,40 +356,9 @@
 					/>
 				</div>
 			</div>
-			<div class="buttons">
-				<openwb-base-click-button
-					class="buttonForward"
-					@buttonClicked="toVehicleConfig"
-					@buttonClicked.once="scrollToTop"
-				>
-					Weiter...
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
 
-				<openwb-base-click-button
-					class="buttonBack"
-					@buttonClicked="toChargePointInst"
-					@buttonClicked.once="scrollToTop"
-				>
-					Zurück...
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
-
-				<openwb-base-click-button
-					class="buttonEnd"
-					@buttonClicked="toEnd"
-					@buttonClicked.once="scrollToTop"
-				>
-					Assistent beenden
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
-			</div>
-		</div>
-
-		<div v-if="page9">
-			<h2>Konfiguration - Fahrzeuge</h2>
-			<div class="page">
-				<div class="pageText">
+			<div v-if="currentPage == 9" class="row m-0">
+				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Zuerst Fahrzeug-Profile und Lade- Profile konfigurieren.
 						In den meisten Fällen reicht das
@@ -598,7 +389,7 @@
 						Sofortladen), dann ist für jedes Fahrzeug ein eigenes
 						Lade-Profil anzulegen.
 					</p>
-					<p class="fw-bold">
+					<p class="font-weight-bold">
 						Wichtig: Die Phasigkeit des Fahrzeugs ist richtig
 						einzutragen!
 					</p>
@@ -608,11 +399,11 @@
 						Besucherfahrzeug) besser ein Besucherfahrzeugprofil
 						anlegen, welches die Phasenumschaltung unterdrückt.
 					</p>
-					<p class="fw-bold">
+					<p class="font-weight-bold">
 						Änderungen werden nur bei klicken auf speichern wirksam
 					</p>
 				</div>
-				<div class="pageEmbedded">
+				<div class="col py-2">
 					<!--VehicleConfig formName="vehicleConfigForm"-->
 					<VehicleConfig
 						@save="$emit('save')"
@@ -622,46 +413,15 @@
 					/>
 				</div>
 			</div>
-			<div class="buttons">
-				<openwb-base-click-button
-					class="buttonForward"
-					@buttonClicked="toDatamanagement2"
-					@buttonClicked.once="scrollToTop"
-				>
-					Weiter...
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
 
-				<openwb-base-click-button
-					class="buttonBack"
-					@buttonClicked="toLoadManagement2"
-					@buttonClicked.once="scrollToTop"
-				>
-					Zurück...
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
-
-				<openwb-base-click-button
-					class="buttonEnd"
-					@buttonClicked="toEnd"
-					@buttonClicked.once="scrollToTop"
-				>
-					Assistent beenden
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
-			</div>
-		</div>
-
-		<div v-if="page10">
-			<h2>System - Datenverwaltung</h2>
-			<div class="page">
-				<div class="pageText">
+			<div v-if="currentPage == 10" class="row m-0">
+				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Zum Schluss eine Sicherung der vorgenommenen
 						Konfiguration anfertigen, falls gewünscht.
 					</p>
 				</div>
-				<div class="pageEmbedded">
+				<div class="col py-2">
 					<DataManagement
 						formName="cloudBackupForm"
 						:hideReset="true"
@@ -673,31 +433,22 @@
 					/>
 				</div>
 			</div>
-			<div class="buttons">
-				<openwb-base-click-button
-					class="buttonBack"
-					@buttonClicked="toVehicleConfig"
-					@buttonClicked.once="scrollToTop"
-				>
-					Zurück...
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
 
-				<openwb-base-click-button
-					class="buttonEnd"
-					@buttonClicked="toEnd"
-					@buttonClicked.once="scrollToTop"
-				>
-					Assistent beenden
-					<font-awesome-icon fixed-width :icon="['fas', 'undo']" />
-				</openwb-base-click-button>
+			<div v-if="isLastPage">
+				<h2>
+					Die Grundkonfiguration ist jetzt abgeschlossen.
+				</h2>
+				<p>
+					Bitte überprüfe die Ergebnisse im Status und
+					passe bei Unstimmigkeiten die Einstellungen an.
+				</p>
 			</div>
-		</div>
+
+		</openwb-base-card>
 	</div>
 </template>
 
 <script>
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import DataManagement from "./DataManagement.vue";
 import System from "./System.vue";
 import GeneralConfig from "./GeneralConfig.vue";
@@ -706,6 +457,18 @@ import HardwareInstallation from "./HardwareInstallation.vue";
 import LoadManagementConfig from "./LoadManagementConfig.vue";
 import VehicleConfig from "./VehicleConfig.vue";
 import ComponentState from "../components/mixins/ComponentState.vue";
+
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+	faCaretLeft as fasCaretLeft,
+	faCaretRight as fasCaretRight,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(
+	fasCaretLeft,
+	fasCaretRight,
+);
 
 export default {
 	name: "InstallAssistant",
@@ -724,91 +487,65 @@ export default {
 	},
 	data() {
 		return {
-			instAssist: false,
-			page1: false,
-			page2: false,
-			page3: false,
-			page4: false,
-			page5: false,
-			page6: false,
-			page7: false,
-			page8: false,
-			page9: false,
-			page10: false,
-			second_choice: false,
+			currentPage: 0,
+			prevent_err: 0,
+			pages: [
+				{ title: "Start" },
+				{ title: "Datenverwaltung" },
+				{ title: "System" },
+				{ title: "Allgemein" },
+				{ title: "Ladepunkte" },
+				{ title: "Geräte und Komponenten" },
+				{ title: "Lastmanagement" },
+				{ title: "Ladepunkte" },
+				{ title: "Lastmanagement" },
+				{ title: "Fahrzeuge" },
+				{ title: "Datenverwaltung" },
+				{ title: "Abgeschlossen" },
+			],
 		};
 	},
-	computed: {},
+	computed: {
+		isLastPage() {
+			return this.currentPage == this.pages.length - 1;
+		},
+	},
 	methods: {
-		scrollToTop() {
-			window.scrollTo(0, 0);
-		},
-		toDatamanagement1() {
-			this.instAssist = true;
-			this.page1 = true;
-		},
-		toSystem() {
-			this.page1 = false;
-			this.page2 = true;
-			if (this.page3) {
-				this.page3 = false;
+		nextPage() {
+			if (!this.isLastPage) {
+				this.currentPage++;
+				window.scrollTo(0, 0);
+			} 
+			if(this.$store.state.mqtt['openWB/general/extern'] != true && this.currentPage == 4){
+				this.currentPage = 5;
+			}
+			else {
+				console.warn("currentPage is already at lastPage");
 			}
 		},
-		toGenConfig() {
-			this.page2 = false;
-			this.page3 = true;
-			if (this.page5) {
-				this.page5 = false;
+		previousPage() {
+			if (this.currentPage) {
+				this.prevent_err = this.currentPage;
+				this.currentPage--;
+				window.scrollTo(0, 0);
 			}
-			if (this.page4) {
-				this.page4 = false;
+			if(this.currentPage == 4 && this.prevent_err == 5){
+				this.currentPage = 5;
 			}
-		},
-		secChoice() {
-			this.second_choice = true;
-			this.page3 = false;
-			this.page4 = true;
-		},
-		toHardwareInst() {
-			this.page3 = false;
-			this.page5 = true;
-			if (this.page6) {
-				this.page6 = false;
+			if(this.currentPage == 5){
+				this.currentPage = 3;
+				if(this.prevent_err == 6){
+					this.currentPage = 5;
+				}
 			}
-		},
-		toLoadManagement1() {
-			this.page5 = false;
-			this.page6 = true;
-			if (this.page7) {
-				this.page7 = false;
+			if(this.prevent_err == 6){
+				this.prevent_err = 0;
+			}
+			else {
+				console.warn("currentPage is already at 0");
 			}
 		},
-		toChargePointInst() {
-			this.page6 = false;
-			this.page7 = true;
-			if (this.page8) {
-				this.page8 = false;
-			}
-		},
-		toLoadManagement2() {
-			this.page7 = false;
-			this.page8 = true;
-			if (this.page9) {
-				this.page9 = false;
-			}
-		},
-		toVehicleConfig() {
-			this.page8 = false;
-			this.page9 = true;
-			if (this.page10) {
-				this.page10 = false;
-			}
-		},
-		toDatamanagement2() {
-			this.page9 = false;
-			this.page10 = true;
-		},
-		toEnd() {
+		endAssistant() {
 			//First time access to InstallWizard if "Assistent beenden" is pressed -> Wizard will not show on Startup anymore!
 			if (!this.$store.state.mqtt["openWB/system/installAssistantDone"]) {
 				this.updateState("openWB/system/installAssistantDone", true);
@@ -821,58 +558,9 @@ export default {
 </script>
 
 <style scoped>
-.missing-commits {
-	overflow-y: scroll;
-	max-height: 20rem;
-}
-.btn {
-	display: inline-block;
-	margin: 60px;
-	width: 20%;
-}
-.pageZero {
-	display: flex;
-	justify-content: center;
-}
-.buttonStart {
-	width: 200px;
-	background-color: rgb(8, 207, 8);
-	margin: 10px;
-}
-.buttons {
-	display: flex;
-	justify-content: space-around;
-}
-.buttonForward {
-	width: 200px;
-	background-color: rgb(8, 207, 8);
-	margin: 50px;
-	margin-left: 0px;
-}
-.buttonBack {
-	width: 200px;
-	background-color: rgb(123, 137, 238);
-	margin: 50px;
-	margin-left: 10px;
-}
-.buttonEnd {
-	width: 200px;
-	background-color: rgb(215, 239, 27);
-	margin: 50px;
-}
-.page {
-	display: flex;
-	gap: 10px;
-}
-.pageText {
-	display: block;
-	width: 20%;
-	flex-shrink: 0;
-}
-.pageEmbedded {
-	flex-grow: 1;
-}
-.fw-bold {
-	font-weight: bold;
+.page-help-text {
+	border-right: 1px solid rgba(0,0,0,.125);
+	border-bottom: 1px solid rgba(0,0,0,.125);
+	background-color: rgba(0, 0, 0, 0.03);
 }
 </style>

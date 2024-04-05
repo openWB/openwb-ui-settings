@@ -86,7 +86,19 @@ export default createStore({
 			state.mqtt[message.topic] = message.payload;
 		},
 		removeTopic(state, topic) {
-			delete state.mqtt[topic];
+			//prevent bug in installAssistent when browsing back: undefined state because of 
+			//removed topic in Steuerungsmodus (primary <-> secondary)
+			//and HardwareInstallation (missing devices and components)
+			//topic will be removed after mounting of page therefore prevent removing
+			if(topic!= 'openWB/general/extern'){
+				if(topic!= 'openWB/counter/get/hierarchy'){
+						var re = new RegExp("^([/device])$")
+						if(re.test(topic)){
+							delete state.mqtt[topic];
+							console.info("REMOVED: ", topic)
+						}
+					}
+				}
 		},
 		updateTopic(state, message) {
 			// helper function to update nested objects py path
@@ -172,9 +184,8 @@ export default createStore({
 				}
 			});
 		},
-		installWizardDone(state) {
+		installAssistant(state) {
 			return new Promise((resolve) => {
-				
 				if (state.mqtt["openWB/system/installAssistantDone"] !== undefined) {
 					resolve(state.mqtt["openWB/system/installAssistantDone"],
 					);
@@ -188,12 +199,12 @@ export default createStore({
 					// check until we received valid data
 					interval = setInterval(() => {
 						if (
-							state.mqtt["openWB/system/installAssistant"] !==
+							state.mqtt["openWB/system/installAssistantDone"] !==
 							undefined
 						) {
 							clearTimeout(timer);
 							clearInterval(interval);
-							resolve(state.mqtt["openWB/system/installAssistant"]);
+							resolve(state.mqtt["openWB/system/installAssistantDone"]);
 						}
 					}, 100);
 				}
