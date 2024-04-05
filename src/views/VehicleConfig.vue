@@ -618,20 +618,32 @@
 								Angaben zur Ladeleistung (DC)
 							</openwb-base-heading>
 							<openwb-base-number-input
-								title="MindestLeistung TOPIC!"
+								title="Mindestleistung"
 								:min="0"
 								unit="kW"
-								:model-value="template.dc_min_current"
+								:model-value="
+									ac_current2dc_power(template.dc_min_current)
+								"
 								@update:model-value="
-									updateState(key, $event, 'dc_min_current')
+									updateState(
+										key,
+										dc_power2ac_current($event),
+										'dc_min_current',
+									)
 								"
 							/>
 							<openwb-base-number-input
-								title="Maximalleistung TOPIC!"
+								title="Maximalleistung"
 								unit="kW"
-								:model-value="template.dc_max_current"
+								:model-value="
+									ac_current2dc_power(template.dc_max_current)
+								"
 								@update:model-value="
-									updateState(key, $event, 'dc_max_current')
+									updateState(
+										key,
+										dc_power2ac_current($event),
+										'dc_max_current',
+									)
 								"
 							/>
 						</div>
@@ -1210,16 +1222,19 @@
 						/>
 						<openwb-base-number-input
 							v-if="dcChargingEnabled === true"
-							title="Soll-Ladeleistung (DC) TOPIC!"
+							title="Soll-Ladeleistung (DC)"
 							:step="5"
 							unit="kW"
 							:model-value="
-								template.chargemode.instant_charging.dc_current
+								ac_current2dc_power(
+									template.chargemode.instant_charging
+										.dc_current,
+								)
 							"
 							@update:model-value="
 								updateState(
 									templateKey,
-									$event,
+									dc_power2ac_current($event),
 									'chargemode.instant_charging.dc_current',
 								)
 							"
@@ -1358,15 +1373,18 @@
 						</openwb-base-range-input>
 						<openwb-base-number-input
 							v-if="dcChargingEnabled === true"
-							title="Minimale Dauerleistung (DC) TOPIC!"
+							title="Minimale Dauerleistung (DC)"
 							unit="kW"
 							:model-value="
-								template.chargemode.pv_charging.dc_min_current
+								ac_current2dc_power(
+									template.chargemode.pv_charging
+										.dc_min_current,
+								)
 							"
 							@update:model-value="
 								updateState(
 									templateKey,
-									$event,
+									dc_power2ac_current($event),
 									'chargemode.pv_charging.dc_min_current',
 								)
 							"
@@ -1523,17 +1541,19 @@
 						</openwb-base-range-input>
 						<openwb-base-number-input
 							v-if="dcChargingEnabled === true"
-							title="Mindest-SoC-Leistung (DC) TOPIC!"
+							title="Mindest-SoC-Leistung (DC)"
 							:step="5"
 							unit="kW"
 							:model-value="
-								template.chargemode.pv_charging
-									.dc_min_soc_current
+								ac_current2dc_power(
+									template.chargemode.pv_charging
+										.dc_min_soc_current,
+								)
 							"
 							@update:model-value="
 								updateState(
 									templateKey,
-									$event,
+									dc_power2ac_current($event),
 									'chargemode.pv_charging.dc_min_soc_current',
 								)
 							"
@@ -1782,13 +1802,19 @@
 								</template>
 							</openwb-base-range-input>
 							<openwb-base-number-input
-								title="Ladeleistung (DC) TOPIC!"
+								title="Ladeleistung (DC)"
 								v-if="dcChargingEnabled === true"
 								:step="5"
 								unit="kW"
-								:model-value="plan.dc_current"
+								:model-value="
+									ac_current2dc_power(plan.dc_current)
+								"
 								@update:model-value="
-									updateState(planKey, $event, 'dc_current')
+									updateState(
+										planKey,
+										dc_power2ac_current($event),
+										'dc_current',
+									)
 								"
 							/>
 							<openwb-base-button-group-input
@@ -2141,13 +2167,19 @@
 								"
 							/>
 							<openwb-base-number-input
-								title="Ladeleistung (DC) TOPIC!"
+								title="Ladeleistung (DC)"
 								v-if="dcChargingEnabled === true"
 								:step="5"
 								unit="kW"
-								:model-value="plan.dc_current"
+								:model-value="
+									ac_current2dc_power(plan.dc_current)
+								"
 								@update:model-value="
-									updateState(planKey, $event, 'dc_current')
+									updateState(
+										planKey,
+										dc_power2ac_current($event),
+										'dc_current',
+									)
 								"
 							/>
 							<openwb-base-button-group-input

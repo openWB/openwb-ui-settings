@@ -43,6 +43,12 @@ export default {
 				payload: value,
 			});
 		},
+		ac_current2dc_power(current) {
+			return (current * 3 * 230) / 1000;
+		},
+		dc_power2ac_current(power) {
+			return (power * 1000) / 230 / 3;
+		},
 		getWildcardIndexList(baseTopic, isRegex = false) {
 			let baseTopicRegex = baseTopic;
 			if (!isRegex) {

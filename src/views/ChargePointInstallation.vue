@@ -553,8 +553,8 @@
 								hier jeweils 32A einzustellen. Ist die openWB
 								beispielsweise auf 11kW begrenzt (KfW-Förderung
 								oder die Zuleitung ist mit 16A abgesichert),
-								dann sind hier jeweils 16A einzustellen.
-							</span><br />
+								dann sind hier jeweils 16A einzustellen. </span
+							><br />
 							Komplexere Installationen mit mehreren Ladepunkten
 							werden im
 							<a
@@ -615,16 +615,15 @@
 							unit="kW"
 							:precision="5"
 							:model-value="
-								(chargePointTemplate.max_current_multi_phases *
-									230 *
-									3) /
-								1000
+								ac_current2dc_power(
+									chargePointTemplate.dc_max_current,
+								)
 							"
 							@update:model-value="
 								updateState(
 									chargePointTemplateKey,
-									($event * 1000) / 230 / 3,
-									'max_current_multi_phases',
+									dc_power2ac_current($event),
+									'dc_max_current',
 								)
 							"
 						/>
