@@ -196,7 +196,11 @@
 						übernimmt die Steuerung anderer openWBs, falls vorhanden
 						sowie die alleinige Regelung des Systems. Dazu müssen im
 						Folgenden die Geräte und Komponenten eingerichtet
-						werden.
+						werden. 
+					</p>
+					<p>
+						Dazu bei verfügbare Geräte die entsprechenden Komponenten auswählen und hinzufügen.
+						Danach auf das neue Gerät klicken und die Komponenten unter verfügbare Komponenten hinzufügen.
 					</p>
 					<p>Zuerst wird der EVU-Zähler eingerichtet.</p>
 					<p>
@@ -275,8 +279,8 @@
 			<div v-if="currentPage == 7" class="row m-0">
 				<div class="page-help-text col-md-3 py-2">
 					<p>
-						Enthält die steuernde openWB Ladetechnik wird bei
-						verfügbarer Ladepunkt "Interne openWB" ausgewählt.
+						Enthält die steuernde openWB Ladetechnik wird bei Ladepunkte unter
+						verfügbare Ladepunkte "Interne openWB" ausgewählt.
 						Ansonsten wird "Externe openWB" und Bauart (der
 						secondary openWB) ausgewählt und die IP-Adresse der
 						anderen openWB (secondary openWB) und Ladepunkt-Nummer
