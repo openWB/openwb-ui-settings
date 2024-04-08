@@ -204,9 +204,9 @@
 							class: 'btn-outline-success',
 						},
 					]"
-					:model-value="$store.state.mqtt['openWB/system/optionBackup']"
+					:model-value="$store.state.mqtt['openWB/system/backup_cloud/backup_before_update']"
 					@update:model-value="
-						updateState('openWB/system/optionBackup', $event)
+						updateState('openWB/system/backup_cloud/backup_before_update', $event)
 					"
 				></openwb-base-button-group-input>
 						<openwb-base-button-input
@@ -446,9 +446,9 @@ export default {
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
-				"openWB/system/optionBackup",
 				"openWB/system/configurable/backup_clouds",
 				"openWB/system/backup_cloud/config",
+				"openWB/system/backup_cloud/backup_before_update",
 				"openWB/system/device/+/component/+/config",
 				"openWB/chargepoint/+/config",
 				"openWB/vehicle/+/name",

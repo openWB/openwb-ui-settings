@@ -114,7 +114,7 @@
 											: 'btn-outline-success'
 									"
 									:disabled="!updateAvailable"
-									@buttonClicked="uploadBackupOnUpdate(); systemUpdate();"
+									@buttonClicked="systemUpdate()"
 								>
 									Update
 									<font-awesome-icon
@@ -334,15 +334,6 @@ export default {
 				command: command,
 				data: data,
 			});
-		},
-		uploadBackupOnUpdate(){
-			if(this.$store.state.mqtt['openWB/system/optionBackup'] === true){
-				this.$emit("sendCommand", {
-				command: "createCloudBackup",
-				data: {},
-			});
-			}
-			
 		},
 		getBranchGroups() {
 			const releaseBranch = "Release";
