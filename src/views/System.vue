@@ -95,7 +95,7 @@
 									class="btn-info"
 									@buttonClicked="
 										sendSystemCommand('systemFetchVersions')
-									"
+									" 								
 								>
 									Informationen aktualisieren
 									<font-awesome-icon
@@ -291,6 +291,7 @@ export default {
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
+				"openWB/system/optionBackup",
 				"openWB/system/current_commit",
 				"openWB/system/current_branch_commit",
 				"openWB/system/current_missing_commits",

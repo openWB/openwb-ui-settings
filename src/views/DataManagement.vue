@@ -189,6 +189,26 @@
 							].type
 						"
 					>
+
+					<openwb-base-button-group-input
+					title="Option Sicherung vor System Update"
+					:buttons="[
+						{
+							buttonValue: false,
+							text: 'Nein',
+							class: 'btn-outline-danger',
+						},
+						{
+							buttonValue: true,
+							text: 'Ja',
+							class: 'btn-outline-success',
+						},
+					]"
+					:model-value="$store.state.mqtt['openWB/system/backup_cloud/backup_before_update']"
+					@update:model-value="
+						updateState('openWB/system/backup_cloud/backup_before_update', $event)
+					"
+				></openwb-base-button-group-input>
 						<openwb-base-button-input
 							title="Manuelle Cloud-Sicherung"
 							buttonText="Sicherung erstellen und hochladen"
@@ -428,6 +448,7 @@ export default {
 			mqttTopicsToSubscribe: [
 				"openWB/system/configurable/backup_clouds",
 				"openWB/system/backup_cloud/config",
+				"openWB/system/backup_cloud/backup_before_update",
 				"openWB/system/device/+/component/+/config",
 				"openWB/chargepoint/+/config",
 				"openWB/vehicle/+/name",
