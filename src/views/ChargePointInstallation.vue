@@ -35,14 +35,14 @@
 			removeChargePointTemplateAutolockPlan(
 				modalChargePointTemplateIndex,
 				modalChargePointTemplateAutolockPlanIndex,
-				$event
+				$event,
 			)
 		"
 	>
 		Wollen Sie den Autolock Zeitplan "{{
 			getChargePointTemplateAutolockPlanName(
 				modalChargePointTemplateIndex,
-				modalChargePointTemplateAutolockPlanIndex
+				modalChargePointTemplateAutolockPlanIndex,
 			)
 		}}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht
 		werden!
@@ -86,7 +86,7 @@
 							@click="
 								removeChargePointModal(
 									installedChargePointKey,
-									$event
+									$event,
 								)
 							"
 						>
@@ -130,7 +130,7 @@
 								updateState(
 									installedChargePointKey,
 									$event,
-									'template'
+									'template',
 								)
 							"
 						>
@@ -173,7 +173,7 @@
 								updateState(
 									installedChargePointKey,
 									$event,
-									'auto_phase_switch_hw'
+									'auto_phase_switch_hw',
 								)
 							"
 						/>
@@ -190,7 +190,7 @@
 								updateState(
 									installedChargePointKey,
 									$event,
-									'control_pilot_interruption_hw'
+									'control_pilot_interruption_hw',
 								)
 							"
 						>
@@ -224,7 +224,7 @@
 								updateState(
 									installedChargePointKey,
 									$event,
-									'connected_phases'
+									'connected_phases',
 								)
 							"
 						/>
@@ -257,7 +257,7 @@
 								updateState(
 									installedChargePointKey,
 									$event,
-									'phase_1'
+									'phase_1',
 								)
 							"
 						>
@@ -410,7 +410,7 @@
 							chargePointTemplate.name +
 							' (ID: ' +
 							getChargePointTemplateIndex(
-								chargePointTemplateKey
+								chargePointTemplateKey,
 							) +
 							')'
 						"
@@ -427,7 +427,7 @@
 								@click="
 									removeChargePointTemplateModal(
 										chargePointTemplateKey,
-										$event
+										$event,
 									)
 								"
 							>
@@ -445,7 +445,7 @@
 								updateState(
 									chargePointTemplateKey,
 									$event,
-									'name'
+									'name',
 								)
 							"
 							:disabled="chargePointTemplateKey.endsWith('/0')"
@@ -479,7 +479,7 @@
 									updateState(
 										chargePointTemplateKey,
 										$event,
-										'rfid_enabling'
+										'rfid_enabling',
 									)
 								"
 							/>
@@ -491,15 +491,18 @@
 									updateState(
 										chargePointTemplateKey,
 										$event,
-										'valid_tags'
+										'valid_tags',
 									)
 								"
 							>
 								<template #help>
-									An allen Ladepunkten, denen dieses
-									Ladepunkt-Profil zugeordnet ist, werden die
-									hier eingetragenen ID-Tags zur Freischaltung
-									verwendet.
+									Wenn hier Tags eingetragen werden, können
+									nur die eingetragenen Tags zur
+									Fahrzeug-Zuordnung genutzt werden. Sind
+									keine Tags eingetragen, wird nur die
+									Zuordnung zum Fahrzeug geprüft. In diesem
+									Fall können alle Fahrzeuge diesen Ladepunkt
+									nutzen.
 									<br />
 									<span
 										v-html="$store.state.text.rfidWiki"
@@ -547,7 +550,7 @@
 								updateState(
 									chargePointTemplateKey,
 									$event,
-									'max_current_single_phase'
+									'max_current_single_phase',
 								)
 							"
 						>
@@ -565,7 +568,7 @@
 								updateState(
 									chargePointTemplateKey,
 									$event,
-									'max_current_multi_phases'
+									'max_current_multi_phases',
 								)
 							"
 						>
@@ -585,7 +588,7 @@
 								updateState(
 									chargePointTemplateKey,
 									$event,
-									'autolock.active'
+									'autolock.active',
 								)
 							"
 						>
@@ -612,7 +615,7 @@
 								updateState(
 									chargePointTemplateKey,
 									$event,
-									'autolock.wait_for_charging_end'
+									'autolock.wait_for_charging_end',
 								)
 							"
 						>
@@ -633,7 +636,7 @@
 									@click="
 										addChargePointTemplateAutolockPlan(
 											chargePointTemplateKey,
-											$event
+											$event,
 										)
 									"
 								>
@@ -648,7 +651,7 @@
 							v-for="(
 								autolockPlan, autolockPlanKey
 							) in getChargePointTemplateAutolockPlans(
-								chargePointTemplateKey
+								chargePointTemplateKey,
 							)"
 							:key="autolockPlanKey"
 							:title="autolockPlan.name"
@@ -662,7 +665,7 @@
 										updateState(
 											autolockPlanKey,
 											!autolockPlan.active,
-											'active'
+											'active',
 										)
 									"
 									class="subheader pill clickable"
@@ -690,24 +693,24 @@
 										/>
 										{{
 											formatDate(
-												autolockPlan.frequency.once[0]
+												autolockPlan.frequency.once[0],
 											) ==
 											formatDate(
-												autolockPlan.frequency.once[1]
+												autolockPlan.frequency.once[1],
 											)
 												? formatDate(
 														autolockPlan.frequency
-															.once[0]
-												  )
+															.once[0],
+													)
 												: formatDate(
 														autolockPlan.frequency
-															.once[0]
-												  ) +
-												  " - " +
-												  formatDate(
+															.once[0],
+													) +
+													" - " +
+													formatDate(
 														autolockPlan.frequency
-															.once[1]
-												  )
+															.once[1],
+													)
 										}}
 									</span>
 									<span
@@ -740,7 +743,7 @@
 										removeChargePointTemplateAutolockPlanModal(
 											chargePointTemplateKey,
 											autolockPlanKey,
-											$event
+											$event,
 										)
 									"
 								>
@@ -777,7 +780,7 @@
 									updateState(
 										autolockPlanKey,
 										$event,
-										'active'
+										'active',
 									)
 								"
 							>
@@ -790,7 +793,7 @@
 									updateState(
 										autolockPlanKey,
 										$event,
-										'time.0'
+										'time.0',
 									)
 								"
 							>
@@ -803,7 +806,7 @@
 									updateState(
 										autolockPlanKey,
 										$event,
-										'time.1'
+										'time.1',
 									)
 								"
 							>
@@ -832,7 +835,7 @@
 									updateState(
 										autolockPlanKey,
 										$event,
-										'frequency.selected'
+										'frequency.selected',
 									)
 								"
 							>
@@ -846,7 +849,7 @@
 									updateState(
 										autolockPlanKey,
 										$event,
-										'frequency.once.0'
+										'frequency.once.0',
 									)
 								"
 							/>
@@ -860,7 +863,7 @@
 									updateState(
 										autolockPlanKey,
 										$event,
-										'frequency.once.1'
+										'frequency.once.1',
 									)
 								"
 							/>
@@ -892,7 +895,7 @@
 										updateState(
 											autolockPlanKey,
 											$event,
-											'frequency.weekly.' + dayIndex
+											'frequency.weekly.' + dayIndex,
 										)
 									"
 								>
@@ -936,7 +939,7 @@ library.add(
 	fasCalendarAlt,
 	fasCalendarWeek,
 	fasChargingStation,
-	farFile
+	farFile,
 );
 
 import ComponentState from "../components/mixins/ComponentState.vue";
@@ -976,7 +979,7 @@ export default {
 			get() {
 				// only show internal chargepoint(s) when configured as external chargepoint
 				let chargePoints = this.getWildcardTopics(
-					"openWB/chargepoint/+/config"
+					"openWB/chargepoint/+/config",
 				);
 				let myObj = {};
 				for (const [key, element] of Object.entries(chargePoints)) {
@@ -1024,7 +1027,7 @@ export default {
 			// prevent further processing of the click event
 			event.stopPropagation();
 			this.modalChargePointIndex = parseInt(
-				chargePoint.match(/(?:\/)(\d+)(?=\/)/)[1]
+				chargePoint.match(/(?:\/)(\d+)(?=\/)/)[1],
 			);
 			this.showChargePointModal = true;
 		},
@@ -1032,7 +1035,9 @@ export default {
 			this.showChargePointModal = false;
 			if (event == "confirm") {
 				console.debug(
-					"request removal of charge point '" + chargePointIndex + "'"
+					"request removal of charge point '" +
+						chargePointIndex +
+						"'",
 				);
 				this.$emit("sendCommand", {
 					command: "removeChargepoint",
@@ -1057,7 +1062,7 @@ export default {
 			]
 				? this.$store.state.mqtt[
 						"openWB/chargepoint/" + chargePointIndex + "/config"
-				  ].name
+					].name
 				: "Ladepunkt " + chargePointIndex;
 		},
 		getChargePointTemplateName(chargePointTemplateIndex) {
@@ -1067,7 +1072,7 @@ export default {
 				? this.$store.state.mqtt[
 						"openWB/chargepoint/template/" +
 							chargePointTemplateIndex
-				  ].name
+					].name
 				: "Profil " + chargePointTemplateIndex;
 		},
 		addChargePointTemplate(event) {
@@ -1095,7 +1100,7 @@ export default {
 				console.debug(
 					"request removal of chargePoint template '" +
 						chargePointTemplateIndex +
-						"'"
+						"'",
 				);
 				this.$emit("sendCommand", {
 					command: "removeChargepointTemplate",
@@ -1107,7 +1112,7 @@ export default {
 			// prevent further processing of the click event
 			event.stopPropagation();
 			console.info(
-				"requesting new charge point template autolock plan..."
+				"requesting new charge point template autolock plan...",
 			);
 			let chargePointTemplateIndex =
 				this.getChargePointTemplateIndex(chargePointTemplate);
@@ -1119,21 +1124,21 @@ export default {
 		removeChargePointTemplateAutolockPlanModal(
 			chargePointTemplate,
 			autolockPlan,
-			event
+			event,
 		) {
 			// prevent further processing of the click event
 			event.stopPropagation();
 			this.modalChargePointTemplateIndex =
 				this.getChargePointTemplateIndex(chargePointTemplate);
 			this.modalChargePointTemplateAutolockPlanIndex = parseInt(
-				autolockPlan.match(/([^/]+)$/)[0]
+				autolockPlan.match(/([^/]+)$/)[0],
 			);
 			this.showChargePointTemplateAutolockPlanModal = true;
 		},
 		removeChargePointTemplateAutolockPlan(
 			chargePointTemplateIndex,
 			autolockPlanIndex,
-			event
+			event,
 		) {
 			this.showChargePointTemplateAutolockPlanModal = false;
 			if (event == "confirm") {
@@ -1142,7 +1147,7 @@ export default {
 						chargePointTemplateIndex +
 						"' autolock plan '" +
 						autolockPlanIndex +
-						"'"
+						"'",
 				);
 				this.$emit("sendCommand", {
 					command: "removeAutolockPlan",
@@ -1165,7 +1170,7 @@ export default {
 							templateIndex +
 							"/autolock/" +
 							planIndex
-				  ].name
+					].name
 				: "Autolock Zeitplan " + templateIndex + "/" + planIndex;
 		},
 		getChargePointTemplateAutolockPlans(chargePointTemplate) {
@@ -1174,7 +1179,7 @@ export default {
 			let result = this.getWildcardTopics(
 				"openWB/chargepoint/template/" +
 					chargePointTemplateIndex +
-					"/autolock/+"
+					"/autolock/+",
 			);
 			return result;
 		},

@@ -45,11 +45,11 @@ export default {
 						},
 						() => {
 							console.error("copy to clipboard failed");
-						}
+						},
 					);
 			} else {
 				console.debug(
-					"clipboard api not supported/enabled, fallback to select"
+					"clipboard api not supported/enabled, fallback to select",
 				);
 				if (window.getSelection) {
 					console.debug("using 'window.getSelection'");

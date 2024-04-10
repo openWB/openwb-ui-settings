@@ -241,14 +241,14 @@ export default {
 							return this.alignEnd(
 								this.formatNumber(
 									row.data_imported_since_mode_switch / 1000,
-									2
+									2,
 								) +
 									"&nbsp;kWh / " +
 									this.formatNumber(
 										row.data_range_charged,
-										0
+										0,
 									) +
-									"&nbsp;km"
+									"&nbsp;km",
 							);
 						},
 					},
@@ -258,7 +258,8 @@ export default {
 						sortable: true,
 						display: (row) => {
 							return this.alignEnd(
-								this.formatNumber(row.data_costs, 2) + "&nbsp;€"
+								this.formatNumber(row.data_costs, 2) +
+									"&nbsp;€",
 							);
 						},
 					},
@@ -270,7 +271,7 @@ export default {
 							return (
 								'<div class="td-center tag ' +
 								this.getChargeModeClass(
-									row.vehicle_chargemode
+									row.vehicle_chargemode,
 								) +
 								'">' +
 								row.vehicle_chargemode +
@@ -319,8 +320,8 @@ export default {
 							return this.alignEnd(
 								this.formatNumber(
 									row.imported_since_mode_switch / 1000,
-									2
-								) + "&nbsp;kWh"
+									2,
+								) + "&nbsp;kWh",
 							);
 						},
 					},
@@ -331,7 +332,7 @@ export default {
 						display: (row) => {
 							return this.alignEnd(
 								this.formatNumber(row.range_charged, 0) +
-									"&nbsp;km"
+									"&nbsp;km",
 							);
 						},
 					},
@@ -341,7 +342,7 @@ export default {
 						sortable: false,
 						display: (row) => {
 							return this.alignEnd(
-								this.formatNumber(row.costs, 2) + "&nbsp;€"
+								this.formatNumber(row.costs, 2) + "&nbsp;€",
 							);
 						},
 					},
@@ -397,7 +398,7 @@ export default {
 					]["entries"].map((entry) => {
 						// ToDo: timestamps should already be in unix timestamp format from backend
 						var timestamp_begin = Date.parse(
-							entry["time"]["begin"]
+							entry["time"]["begin"],
 						);
 						var timestamp_end = Date.parse(entry["time"]["end"]);
 						return {
@@ -406,17 +407,17 @@ export default {
 							vehicle_id: entry["vehicle"]["id"],
 							vehicle_name: entry["vehicle"]["name"],
 							vehicle_chargemode: this.translateChargeMode(
-								entry["vehicle"]["chargemode"]
+								entry["vehicle"]["chargemode"],
 							),
 							vehicle_rfid: entry["vehicle"]["rfid"],
 							vehicle_prio: entry["vehicle"]["prio"],
 							timestamp_begin: timestamp_begin / 1000,
 							time_begin: this.dateTimeFormat.format(
-								new Date(timestamp_begin)
+								new Date(timestamp_begin),
 							),
 							timestamp_end: timestamp_end / 1000,
 							time_end: this.dateTimeFormat.format(
-								new Date(timestamp_end)
+								new Date(timestamp_end),
 							),
 							time_time_charged: entry["time"]["time_charged"],
 							data_power: entry["data"]["power"],
@@ -470,7 +471,7 @@ export default {
 						this.formatNumber(row.data_power / 1000, 3),
 						this.formatNumber(
 							row.data_imported_since_mode_switch / 1000,
-							2
+							2,
 						),
 						this.formatNumber(row.data_range_charged, 0),
 						this.formatNumber(row.data_costs, 2),
@@ -513,7 +514,7 @@ export default {
 		},
 		chargePointList() {
 			let chargePoints = this.getWildcardTopics(
-				"openWB/chargepoint/+/config"
+				"openWB/chargepoint/+/config",
 			);
 			var chargePointList = [{ value: undefined, text: "Alle" }];
 			for (const [, element] of Object.entries(chargePoints)) {
@@ -536,19 +537,19 @@ export default {
 			if ("id" in this.chargeLogRequestData.filter.chargepoint) {
 				this.chargeLogRequestData.filter.chargepoint.id =
 					this.chargeLogRequestData.filter.chargepoint.id.filter(
-						(element) => element != undefined
+						(element) => element != undefined,
 					);
 			}
 			if ("chargemode" in this.chargeLogRequestData.filter.vehicle) {
 				this.chargeLogRequestData.filter.vehicle.chargemode =
 					this.chargeLogRequestData.filter.vehicle.chargemode.filter(
-						(element) => element != undefined
+						(element) => element != undefined,
 					);
 			}
 			if ("id" in this.chargeLogRequestData.filter.vehicle) {
 				this.chargeLogRequestData.filter.vehicle.id =
 					this.chargeLogRequestData.filter.vehicle.id.filter(
-						(element) => element != undefined
+						(element) => element != undefined,
 					);
 			}
 		},
@@ -579,13 +580,13 @@ export default {
 			// based on: http://jsfiddle.net/k56eezxp/
 			this.$refs.downloadChargeLogLink.setAttribute(
 				"download",
-				"Ladeprotokoll-" + this.chargeLogDate + ".csv"
+				"Ladeprotokoll-" + this.chargeLogDate + ".csv",
 			);
 			this.$refs.downloadChargeLogLink.href = this.makeTextFile(
-				this.chargeLogCsv
+				this.chargeLogCsv,
 			);
 			this.$refs.downloadChargeLogLink.dispatchEvent(
-				new MouseEvent("click")
+				new MouseEvent("click"),
 			);
 		},
 		alignEnd(content) {

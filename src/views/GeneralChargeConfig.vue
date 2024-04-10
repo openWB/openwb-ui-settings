@@ -31,7 +31,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/unbalanced_load',
-								$event
+								$event,
 							)
 						"
 					>
@@ -71,7 +71,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/unbalanced_load_limit',
-								$event
+								$event,
 							)
 						"
 					>
@@ -104,7 +104,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/retry_failed_phase_switches',
-								$event
+								$event,
 							)
 						"
 					>
@@ -143,7 +143,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/prices/grid',
-								parseFloat(($event / 100000).toFixed(7))
+								parseFloat(($event / 100000).toFixed(7)),
 							)
 						"
 					>
@@ -167,7 +167,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/prices/bat',
-								parseFloat(($event / 100000).toFixed(7))
+								parseFloat(($event / 100000).toFixed(7)),
 							)
 						"
 					>
@@ -184,7 +184,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/prices/pv',
-								parseFloat(($event / 100000).toFixed(7))
+								parseFloat(($event / 100000).toFixed(7)),
 							)
 						"
 					/>
@@ -219,7 +219,7 @@
 							$store.state.mqtt['openWB/optional/et/provider']
 								? $store.state.mqtt[
 										'openWB/optional/et/provider'
-								  ].type
+									].type
 								: ''
 						"
 						@update:model-value="
@@ -240,7 +240,7 @@
 							@update:configuration="
 								updateConfiguration(
 									'openWB/optional/et/provider',
-									$event
+									$event,
 								)
 							"
 						/>
@@ -292,19 +292,19 @@ export default {
 	methods: {
 		getElectricityTariffDefaultConfiguration(electricityTariffType) {
 			const electricityTariffDefaults = this.electricityTariffList.find(
-				(element) => element.value == electricityTariffType
+				(element) => element.value == electricityTariffType,
 			);
 			if (
 				Object.prototype.hasOwnProperty.call(
 					electricityTariffDefaults,
-					"defaults"
+					"defaults",
 				)
 			) {
 				return { ...electricityTariffDefaults.defaults };
 			}
 			console.warn(
 				"no default configuration found for electricity tariff type!",
-				electricityTariffType
+				electricityTariffType,
 			);
 			return {};
 		},
@@ -312,7 +312,7 @@ export default {
 			this.updateState("openWB/optional/et/provider", $event, "type");
 			this.updateState(
 				"openWB/optional/et/provider",
-				this.getElectricityTariffDefaultConfiguration($event)
+				this.getElectricityTariffDefaultConfiguration($event),
 			);
 		},
 		updateConfiguration(key, event) {

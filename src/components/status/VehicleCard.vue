@@ -124,7 +124,7 @@ export default {
 							"openWB/vehicle/" +
 								this.vehicleIndex +
 								"/get/soc_timestamp"
-						] * 1000
+						] * 1000,
 					).toLocaleString();
 				} else {
 					return "-";
@@ -133,13 +133,15 @@ export default {
 		},
 		socRange: {
 			get() {
-				if (this.$store.state.mqtt[
-							'openWB/vehicle/' + this.vehicleIndex + '/get/range'
-						] !== undefined) {
+				if (
+					this.$store.state.mqtt[
+						"openWB/vehicle/" + this.vehicleIndex + "/get/range"
+					] !== undefined
+				) {
 					return Math.round(
 						this.$store.state.mqtt[
-							'openWB/vehicle/' + this.vehicleIndex + '/get/range'
-						]
+							"openWB/vehicle/" + this.vehicleIndex + "/get/range"
+						],
 					);
 				} else {
 					return 0;

@@ -4,6 +4,29 @@
 			<font-awesome-icon fixed-width :icon="['fas', 'solar-panel']" />
 			Alle Wechselrichter
 		</template>
+		<openwb-base-alert
+			:subtype="
+				statusLevel[$store.state.mqtt['openWB/pv/get/fault_state']]
+			"
+		>
+			<font-awesome-icon
+				v-if="$store.state.mqtt['openWB/pv/get/fault_state'] == 1"
+				fixed-width
+				:icon="['fas', 'exclamation-triangle']"
+			/>
+			<font-awesome-icon
+				v-else-if="$store.state.mqtt['openWB/pv/get/fault_state'] == 2"
+				fixed-width
+				:icon="['fas', 'times-circle']"
+			/>
+			<font-awesome-icon
+				v-else
+				fixed-width
+				:icon="['fas', 'check-circle']"
+			/>
+			Modulmeldung:<br />
+			{{ $store.state.mqtt["openWB/pv/get/fault_str"] }}
+		</openwb-base-alert>
 		<openwb-base-text-input
 			title="Zählerstand"
 			readonly
@@ -72,7 +95,7 @@ library.add(
 	fasCheckCircle,
 	fasExclamationTriangle,
 	fasTimesCircle,
-	fasSolarPanel
+	fasSolarPanel,
 );
 
 export default {
@@ -80,6 +103,11 @@ export default {
 	mixins: [ComponentState],
 	components: {
 		FontAwesomeIcon,
+	},
+	data() {
+		return {
+			statusLevel: ["success", "warning", "danger"],
+		};
 	},
 };
 </script>

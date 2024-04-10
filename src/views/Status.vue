@@ -57,6 +57,8 @@
 		/>
 		<!-- electricity tariff -->
 		<electricity-tariff-card />
+		<!-- ripple-control-receiver -->
+		<ripple-control-receiver-card />
 	</div>
 </template>
 
@@ -68,6 +70,7 @@ import InverterSumCard from "../components/status/InverterSumCard.vue";
 import InverterCard from "../components/status/InverterCard.vue";
 import BatterySumCard from "../components/status/BatterySumCard.vue";
 import BatteryCard from "../components/status/BatteryCard.vue";
+import RippleControlReceiverCard from "../components/status/RippleControlReceiver.vue";
 import VehicleCard from "../components/status/VehicleCard.vue";
 import ElectricityTariffCard from "../components/status/ElectricityTariffCard.vue";
 import ComponentState from "../components/mixins/ComponentState.vue";
@@ -83,6 +86,7 @@ export default {
 		InverterCard,
 		BatterySumCard,
 		BatteryCard,
+		RippleControlReceiverCard,
 		VehicleCard,
 		ElectricityTariffCard,
 	},
@@ -101,6 +105,7 @@ export default {
 				"openWB/chargepoint/+/get/+",
 				"openWB/chargepoint/+/get/connected_vehicle/info",
 				"openWB/chargepoint/+/set/+",
+				"openWB/internal_chargepoint/+/data/phases_to_use",
 				// components
 				"openWB/system/device/+/component/+/config",
 				// counter
@@ -121,7 +126,7 @@ export default {
 		installedChargePoints: {
 			get() {
 				let chargePoints = this.getWildcardTopics(
-					"openWB/chargepoint/+/config"
+					"openWB/chargepoint/+/config",
 				);
 				let myObj = {};
 				for (const [key, element] of Object.entries(chargePoints)) {
@@ -148,9 +153,9 @@ export default {
 				}
 				return this.filterComponentsByType(
 					this.getWildcardTopics(
-						"openWB/system/device/+/component/+/config"
+						"openWB/system/device/+/component/+/config",
 					),
-					"counter"
+					"counter",
 				);
 			},
 		},
@@ -166,9 +171,9 @@ export default {
 				}
 				return this.filterComponentsByType(
 					this.getWildcardTopics(
-						"openWB/system/device/+/component/+/config"
+						"openWB/system/device/+/component/+/config",
 					),
-					"inverter"
+					"inverter",
 				);
 			},
 		},
@@ -184,9 +189,9 @@ export default {
 				}
 				return this.filterComponentsByType(
 					this.getWildcardTopics(
-						"openWB/system/device/+/component/+/config"
+						"openWB/system/device/+/component/+/config",
 					),
-					"bat"
+					"bat",
 				);
 			},
 		},

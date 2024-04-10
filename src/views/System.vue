@@ -40,6 +40,11 @@
 						"
 					/>
 					<openwb-base-text-input
+						title="Bezeichnung"
+						readonly
+						v-model="$store.state.mqtt['openWB/system/version']"
+					/>
+					<openwb-base-text-input
 						title="installierte Version"
 						readonly
 						:class="
@@ -90,7 +95,7 @@
 									class="btn-info"
 									@buttonClicked="
 										sendSystemCommand('systemFetchVersions')
-									"
+									" 								
 								>
 									Informationen aktualisieren
 									<font-awesome-icon
@@ -270,7 +275,7 @@ library.add(
 	fasUndo,
 	fasPowerOff,
 	fasDownload,
-	fasSkullCrossbones
+	fasSkullCrossbones,
 );
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -286,11 +291,13 @@ export default {
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
+				"openWB/system/optionBackup",
 				"openWB/system/current_commit",
 				"openWB/system/current_branch_commit",
 				"openWB/system/current_missing_commits",
 				"openWB/system/available_branches",
 				"openWB/system/current_branch",
+				"openWB/system/version",
 			],
 			warningAcknowledged: false,
 			selectedTag: "*HEAD*",
@@ -317,8 +324,7 @@ export default {
 				(this.selectedTag in
 					this.$store.state.mqtt["openWB/system/available_branches"][
 						this.$store.state.mqtt["openWB/system/current_branch"]
-					]["tags"] ||
-					this.selectedTag == "*HEAD*")
+					]["tags"])
 			);
 		},
 	},
@@ -398,10 +404,6 @@ export default {
 					});
 				}
 			}
-			options.unshift({
-				value: "*HEAD*",
-				text: "Aktuellster Stand",
-			});
 			return options;
 		},
 		updateConfiguration(key, event) {

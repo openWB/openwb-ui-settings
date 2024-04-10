@@ -27,8 +27,8 @@ Object.entries(componentFiles).forEach(([path, module]) => {
 			path
 				.split("/")
 				.pop()
-				.replace(/\.\w+$/, "")
-		)
+				.replace(/\.\w+$/, ""),
+		),
 	);
 	vApp.component(componentName, module.default);
 });

@@ -6,8 +6,9 @@
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
 			<span class="text-danger">
-				Solar-Log Zähler geben keine Ströme aus, sodass kein
-				Lastmanagement möglich ist.<br />
+				Solar-Log Zähler geben keine Ströme aus, sodass nur ein
+				Lastmanagement anhand der Gesamtleistung, aber nicht
+				phasenbasiert möglich ist.<br />
 			</span>
 			Solar-Log Zähler sind Hausverbrauchs-Zähler. Um die Werte am
 			EVU-Punkt zu ermitteln, muss ein virtueller Zähler konfiguriert

@@ -28,7 +28,7 @@
 					'openWB/chargepoint/get/imported',
 					3,
 					3,
-					0.001
+					0.001,
 				)
 			"
 		/>
@@ -43,7 +43,7 @@
 					'openWB/chargepoint/get/exported',
 					3,
 					3,
-					0.001
+					0.001,
 				)
 			"
 		/>
@@ -59,7 +59,7 @@
 					'openWB/chargepoint/get/daily_imported',
 					3,
 					3,
-					0.001
+					0.001,
 				)
 			"
 		/>
@@ -74,7 +74,7 @@
 					'openWB/chargepoint/get/daily_exported',
 					3,
 					3,
-					0.001
+					0.001,
 				)
 			"
 		/>
@@ -102,7 +102,7 @@ library.add(
 	// 	fasExclamationTriangle,
 	// 	fasTimesCircle,
 	// 	fasCar,
-	fasChargingStation
+	fasChargingStation,
 	// 	fasCarBattery,
 	// 	fasSolarPanel,
 	// 	fasGaugeHigh

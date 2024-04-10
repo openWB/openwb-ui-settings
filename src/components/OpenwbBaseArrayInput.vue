@@ -17,10 +17,12 @@
 				<div class="input-group">
 					<div class="input-group-prepend">
 						<div class="input-group-text">
-							<font-awesome-icon
-								fixed-width
-								:icon="['fas', 'tag']"
-							/>
+							<slot name="input-prefix">
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'tag']"
+								/>
+							</slot>
 						</div>
 					</div>
 					<input
@@ -41,10 +43,12 @@
 							"
 							@click="addTag"
 						>
-							<font-awesome-icon
-								fixed-width
-								:icon="['fas', 'plus']"
-							/>
+							<slot name="input-add">
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'plus']"
+								/>
+							</slot>
 						</div>
 					</div>
 				</div>
@@ -59,10 +63,12 @@
 					v-for="(tag, index) in value"
 					v-bind:key="index"
 				>
-					<font-awesome-icon :icon="['fas', 'tag']" />
+					<slot name="element-prefix">
+						<font-awesome-icon :icon="['fas', 'tag']" />
+					</slot>
 					{{ tag }}
 					<font-awesome-icon
-						class="clickable"
+						class="clickable remove-element"
 						:icon="['fas', 'times-circle']"
 						@click="removeTag(index)"
 					/>
@@ -93,7 +99,7 @@ library.add(
 	fasTag,
 	fasTimesCircle,
 	fasPlus,
-	fasInfoCircle
+	fasInfoCircle,
 );
 
 export default {
@@ -172,6 +178,10 @@ export default {
 
 .notClickable {
 	cursor: not-allowed;
+}
+
+.remove-element:hover {
+	color: var(--danger);
 }
 
 input.invalid,

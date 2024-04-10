@@ -112,7 +112,7 @@ export default {
 						console.warn("parsing JSON failed: " + newValue);
 						this.inputInvalid = true;
 						this.$refs.jsonInput.setCustomValidity(
-							"Ungültiger JSON Ausdruck!"
+							"Ungültiger JSON Ausdruck!",
 						);
 						this.tempValue = newValue;
 					}

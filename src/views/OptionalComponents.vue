@@ -1001,7 +1001,7 @@
 					@update:model-value="
 						updateState(
 							'openWB/optional/int_display/active',
-							$event
+							$event,
 						)
 					"
 					:buttons="[
@@ -1041,7 +1041,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/optional/int_display/rotation',
-								$event
+								$event,
 							)
 						"
 						:buttons="[
@@ -1088,7 +1088,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/optional/int_display/standby',
-								$event
+								$event,
 							)
 						"
 						unit="Sek"
@@ -1303,7 +1303,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/optional/int_display/only_local_charge_points',
-								$event
+								$event,
 							)
 						"
 						:buttons="[
@@ -1367,7 +1367,7 @@
 							@update:configuration="
 								updateConfiguration(
 									'openWB/optional/int_display/theme',
-									$event
+									$event,
 								)
 							"
 						/>
@@ -1538,14 +1538,14 @@ export default {
 				// get all id-tag topics/values
 				this.getWildcardTopics(
 					"^openWB/chargepoint/[^+/]+/[gs]et/rfid$",
-					true
-				)
+					true,
+				),
 			).forEach((entry) => {
 				if (entry[1] !== null) {
 					this.tempIdTagList[entry[1]] = `${entry[1]} (${
 						entry[0].includes("/set/") ? "zugewiesen" : "erfasst"
 					} an ${this.getChargePointName(
-						this.getIdFromTopic(entry[0])
+						this.getIdFromTopic(entry[0]),
 					)})`;
 				}
 			});
@@ -1557,35 +1557,35 @@ export default {
 			]
 				? this.$store.state.mqtt[
 						"openWB/chargepoint/" + chargePointIndex + "/config"
-				  ].name
+					].name
 				: "Ladepunkt " + chargePointIndex;
 		},
 		getDisplayThemeDefaults(displayThemeType) {
 			const displayThemeDefaults = this.displayThemeList.find(
-				(element) => element.value == displayThemeType
+				(element) => element.value == displayThemeType,
 			);
 			if (
 				Object.prototype.hasOwnProperty.call(
 					displayThemeDefaults,
-					"defaults"
+					"defaults",
 				)
 			) {
 				return {
 					...JSON.parse(
-						JSON.stringify(displayThemeDefaults.defaults)
+						JSON.stringify(displayThemeDefaults.defaults),
 					),
 				};
 			}
 			console.warn(
 				"no default configuration found for display theme type!",
-				displayThemeType
+				displayThemeType,
 			);
 			return {};
 		},
 		updateSelectedDisplayTheme($event) {
 			this.updateState(
 				"openWB/optional/int_display/theme",
-				this.getDisplayThemeDefaults($event)
+				this.getDisplayThemeDefaults($event),
 			);
 		},
 		updateConfiguration(key, event) {

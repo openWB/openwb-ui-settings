@@ -99,7 +99,7 @@ export default createStore({
 								path.split(".").length === ++i
 									? value
 									: o[p] || {}),
-						object
+						object,
 					);
 
 			if (message.topic in state.mqtt) {
@@ -107,7 +107,7 @@ export default createStore({
 					setPath(
 						state.mqtt[message.topic],
 						message.objectPath,
-						message.payload
+						message.payload,
 					);
 				} else {
 					state.mqtt[message.topic] = message.payload;
@@ -119,7 +119,7 @@ export default createStore({
 						setPath(
 							state.examples[message.topic],
 							message.objectPath,
-							message.payload
+							message.payload,
 						);
 					} else {
 						state.examples[message.topic] = message.payload;
@@ -128,7 +128,7 @@ export default createStore({
 					console.warn(
 						"topic not found in state: ",
 						message.topic,
-						" giving up"
+						" giving up",
 					);
 				}
 			}
@@ -144,7 +144,7 @@ export default createStore({
 					undefined
 				) {
 					resolve(
-						state.mqtt["openWB/system/usage_terms_acknowledged"]
+						state.mqtt["openWB/system/usage_terms_acknowledged"],
 					);
 				} else {
 					var timer, interval;
@@ -165,7 +165,7 @@ export default createStore({
 							resolve(
 								state.mqtt[
 									"openWB/system/usage_terms_acknowledged"
-								]
+								],
 							);
 						}
 					}, 100);

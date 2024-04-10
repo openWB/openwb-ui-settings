@@ -106,7 +106,7 @@ library.add(
 	fasCheckCircle,
 	fasExclamationTriangle,
 	fasTimesCircle,
-	fasCarBattery
+	fasCarBattery,
 );
 
 export default {
@@ -114,6 +114,11 @@ export default {
 	mixins: [ComponentState],
 	components: {
 		FontAwesomeIcon,
+	},
+	data() {
+		return {
+			statusLevel: ["success", "warning", "danger"],
+		};
 	},
 };
 </script>

@@ -43,14 +43,14 @@
 			removeChargeTemplateSchedulePlan(
 				modalChargeTemplateIndex,
 				modalChargeTemplateSchedulePlanIndex,
-				$event
+				$event,
 			)
 		"
 	>
 		Wollen Sie den Zielladen Zeitplan "{{
 			getChargeTemplateSchedulePlanName(
 				modalChargeTemplateIndex,
-				modalChargeTemplateSchedulePlanIndex
+				modalChargeTemplateSchedulePlanIndex,
 			)
 		}}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht
 		werden!
@@ -64,14 +64,14 @@
 			removeChargeTemplateTimeChargingPlan(
 				modalChargeTemplateIndex,
 				modalChargeTemplateTimeChargingPlanIndex,
-				$event
+				$event,
 			)
 		"
 	>
 		Wollen Sie den Zeitladen Zeitplan "{{
 			getChargeTemplateTimeChargingPlanName(
 				modalChargeTemplateIndex,
-				modalChargeTemplateTimeChargingPlanIndex
+				modalChargeTemplateTimeChargingPlanIndex,
 			)
 		}}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht
 		werden!
@@ -146,7 +146,7 @@
 							@update:model-value="
 								updateState(
 									'openWB/vehicle/' + vehicleId + '/name',
-									$event
+									$event,
 								)
 							"
 							:disabled="vehicleId === 0"
@@ -177,7 +177,7 @@
 									'openWB/vehicle/' +
 										vehicleId +
 										'/ev_template',
-									$event
+									$event,
 								)
 							"
 						/>
@@ -196,7 +196,7 @@
 									'openWB/vehicle/' +
 										vehicleId +
 										'/charge_template',
-									$event
+									$event,
 								)
 							"
 						/>
@@ -222,7 +222,7 @@
 										'openWB/vehicle/' +
 											vehicleId +
 											'/tag_id',
-										$event
+										$event,
 									)
 								"
 							/>
@@ -319,7 +319,7 @@
 											vehicleId +
 											'/soc_module/general_config',
 										$event,
-										'use_soc_from_cp'
+										'use_soc_from_cp',
 									)
 								"
 							>
@@ -358,7 +358,7 @@
 											vehicleId +
 											'/soc_module/general_config',
 										$event * 60,
-										'request_interval_charging'
+										'request_interval_charging',
 									)
 								"
 							>
@@ -385,7 +385,7 @@
 											vehicleId +
 											'/soc_module/general_config',
 										$event * 60,
-										'request_interval_not_charging'
+										'request_interval_not_charging',
 									)
 								"
 							>
@@ -422,7 +422,7 @@
 											vehicleId +
 											'/soc_module/general_config',
 										$event,
-										'request_only_plugged'
+										'request_only_plugged',
 									)
 								"
 							>
@@ -446,7 +446,7 @@
 										'openWB/vehicle/' +
 											vehicleId +
 											'/soc_module/config',
-										$event
+										$event,
 									)
 								"
 							/>
@@ -563,7 +563,7 @@
 								updateState(
 									key,
 									$event,
-									'max_current_single_phase'
+									'max_current_single_phase',
 								)
 							"
 						>
@@ -579,7 +579,7 @@
 								updateState(
 									key,
 									$event,
-									'max_current_multi_phases'
+									'max_current_multi_phases',
 								)
 							"
 						>
@@ -615,7 +615,7 @@
 								updateState(
 									key,
 									$event * 1000,
-									'battery_capacity'
+									'battery_capacity',
 								)
 							"
 						>
@@ -674,7 +674,7 @@
 								updateState(
 									key,
 									$event * 1000,
-									'average_consump'
+									'average_consump',
 								)
 							"
 						>
@@ -720,7 +720,7 @@
 								updateState(
 									key,
 									$event,
-									'control_pilot_interruption'
+									'control_pilot_interruption',
 								)
 							"
 						>
@@ -742,7 +742,7 @@
 								updateState(
 									key,
 									$event,
-									'control_pilot_interruption_duration'
+									'control_pilot_interruption_duration',
 								)
 							"
 						>
@@ -819,7 +819,7 @@
 								updateState(
 									key,
 									$event,
-									'keep_charge_active_duration'
+									'keep_charge_active_duration',
 								)
 							"
 						>
@@ -896,7 +896,7 @@
 								@click="
 									removeChargeTemplateModal(
 										templateKey,
-										$event
+										$event,
 									)
 								"
 							>
@@ -955,7 +955,7 @@
 								updateState(
 									templateKey,
 									$event,
-									'chargemode.selected'
+									'chargemode.selected',
 								)
 							"
 						>
@@ -1035,7 +1035,7 @@
 								updateState(
 									templateKey,
 									$event,
-									'time_charging.active'
+									'time_charging.active',
 								)
 							"
 						>
@@ -1069,7 +1069,7 @@
 								updateState(
 									templateKey,
 									$event,
-									'disable_after_unplug'
+									'disable_after_unplug',
 								)
 							"
 						>
@@ -1153,16 +1153,17 @@
 									updateState(
 										templateKey,
 										parseFloat(
-											($event / 100000).toFixed(7)
+											($event / 100000).toFixed(7),
 										),
-										'et.max_price'
+										'et.max_price',
 									)
 								"
 							>
-							<template #help>
-								Für Zielladen werden die günstigsten Stunden ermittelt.
-							</template>
-						</openwb-base-number-input>
+								<template #help>
+									Für Zielladen werden die günstigsten Stunden
+									ermittelt.
+								</template>
+							</openwb-base-number-input>
 						</div>
 						<hr />
 						<openwb-base-heading>Sofortladen</openwb-base-heading>
@@ -1179,7 +1180,7 @@
 								updateState(
 									templateKey,
 									$event,
-									'chargemode.instant_charging.current'
+									'chargemode.instant_charging.current',
 								)
 							"
 						>
@@ -1208,7 +1209,7 @@
 								updateState(
 									templateKey,
 									$event,
-									'chargemode.instant_charging.limit.selected'
+									'chargemode.instant_charging.limit.selected',
 								)
 							"
 						>
@@ -1233,7 +1234,7 @@
 								updateState(
 									templateKey,
 									$event,
-									'chargemode.instant_charging.limit.soc'
+									'chargemode.instant_charging.limit.soc',
 								)
 							"
 						>
@@ -1258,7 +1259,7 @@
 								updateState(
 									templateKey,
 									$event * 1000,
-									'chargemode.instant_charging.limit.amount'
+									'chargemode.instant_charging.limit.amount',
 								)
 							"
 						>
@@ -1297,7 +1298,7 @@
 								updateState(
 									templateKey,
 									$event,
-									'chargemode.pv_charging.min_current'
+									'chargemode.pv_charging.min_current',
 								)
 							"
 						>
@@ -1350,7 +1351,7 @@
 								updateState(
 									templateKey,
 									$event,
-									'chargemode.pv_charging.max_soc'
+									'chargemode.pv_charging.max_soc',
 								)
 							"
 						>
@@ -1404,7 +1405,7 @@
 								updateState(
 									templateKey,
 									$event,
-									'chargemode.pv_charging.min_soc'
+									'chargemode.pv_charging.min_soc',
 								)
 							"
 						>
@@ -1438,7 +1439,7 @@
 								updateState(
 									templateKey,
 									$event,
-									'chargemode.pv_charging.min_soc_current'
+									'chargemode.pv_charging.min_soc_current',
 								)
 							"
 						>
@@ -1471,7 +1472,7 @@
 								updateState(
 									templateKey,
 									$event,
-									'chargemode.pv_charging.feed_in_limit'
+									'chargemode.pv_charging.feed_in_limit',
 								)
 							"
 						>
@@ -1490,7 +1491,7 @@
 									@click="
 										addChargeTemplateSchedulePlan(
 											templateKey,
-											$event
+											$event,
 										)
 									"
 								>
@@ -1526,7 +1527,7 @@
 							v-for="(
 								plan, planKey
 							) in getChargeTemplateScheduledChargingPlans(
-								templateKey
+								templateKey,
 							)"
 							:key="planKey"
 							:title="plan.name"
@@ -1540,7 +1541,7 @@
 										updateState(
 											planKey,
 											!plan.active,
-											'active'
+											'active',
 										)
 									"
 									class="subheader pill clickable"
@@ -1606,7 +1607,7 @@
 										removeChargeTemplateSchedulePlanModal(
 											templateKey,
 											planKey,
-											$event
+											$event,
 										)
 									"
 								>
@@ -1696,7 +1697,7 @@
 									updateState(
 										planKey,
 										$event,
-										'limit.selected'
+										'limit.selected',
 									)
 								"
 							>
@@ -1717,7 +1718,7 @@
 									updateState(
 										planKey,
 										$event,
-										'limit.soc_scheduled'
+										'limit.soc_scheduled',
 									)
 								"
 							>
@@ -1738,7 +1739,7 @@
 									updateState(
 										planKey,
 										$event,
-										'limit.soc_limit'
+										'limit.soc_limit',
 									)
 								"
 							>
@@ -1759,7 +1760,7 @@
 									updateState(
 										planKey,
 										$event * 1000,
-										'limit.amount'
+										'limit.amount',
 									)
 								"
 							>
@@ -1794,7 +1795,7 @@
 									updateState(
 										planKey,
 										$event,
-										'frequency.selected'
+										'frequency.selected',
 									)
 								"
 							>
@@ -1808,7 +1809,7 @@
 									updateState(
 										planKey,
 										$event,
-										'frequency.once'
+										'frequency.once',
 									)
 								"
 							>
@@ -1837,7 +1838,7 @@
 										updateState(
 											planKey,
 											$event,
-											'frequency.weekly.' + dayIndex
+											'frequency.weekly.' + dayIndex,
 										)
 									"
 								>
@@ -1853,7 +1854,7 @@
 									@click="
 										addChargeTemplateTimeChargingPlan(
 											templateKey,
-											$event
+											$event,
 										)
 									"
 								>
@@ -1884,7 +1885,7 @@
 							v-for="(
 								plan, planKey
 							) in getChargeTemplateTimeChargingPlans(
-								templateKey
+								templateKey,
 							)"
 							:key="planKey"
 							:title="plan.name"
@@ -1898,7 +1899,7 @@
 										updateState(
 											planKey,
 											!plan.active,
-											'active'
+											'active',
 										)
 									"
 									class="subheader pill clickable"
@@ -1936,19 +1937,19 @@
 										/>
 										{{
 											formatDate(
-												plan.frequency.once[0]
+												plan.frequency.once[0],
 											) ==
 											formatDate(plan.frequency.once[1])
 												? formatDate(
-														plan.frequency.once[0]
-												  )
+														plan.frequency.once[0],
+													)
 												: formatDate(
-														plan.frequency.once[0]
-												  ) +
-												  " - " +
-												  formatDate(
-														plan.frequency.once[1]
-												  )
+														plan.frequency.once[0],
+													) +
+													" - " +
+													formatDate(
+														plan.frequency.once[1],
+													)
 										}}
 									</span>
 									<span
@@ -1979,7 +1980,7 @@
 										removeChargeTemplateTimeChargingPlanModal(
 											templateKey,
 											planKey,
-											$event
+											$event,
 										)
 									"
 								>
@@ -2044,7 +2045,7 @@
 									updateState(
 										planKey,
 										$event,
-										'limit.selected'
+										'limit.selected',
 									)
 								"
 							>
@@ -2081,7 +2082,7 @@
 									updateState(
 										planKey,
 										$event * 1000,
-										'limit.amount'
+										'limit.amount',
 									)
 								"
 							>
@@ -2138,7 +2139,7 @@
 									updateState(
 										planKey,
 										$event,
-										'frequency.selected'
+										'frequency.selected',
 									)
 								"
 							>
@@ -2152,7 +2153,7 @@
 									updateState(
 										planKey,
 										$event,
-										'frequency.once.0'
+										'frequency.once.0',
 									)
 								"
 							/>
@@ -2166,7 +2167,7 @@
 									updateState(
 										planKey,
 										$event,
-										'frequency.once.1'
+										'frequency.once.1',
 									)
 								"
 							/>
@@ -2194,7 +2195,7 @@
 										updateState(
 											planKey,
 											$event,
-											'frequency.weekly.' + dayIndex
+											'frequency.weekly.' + dayIndex,
 										)
 									"
 								>
@@ -2245,7 +2246,7 @@ library.add(
 	fasBolt,
 	fasCar,
 	farFile,
-	fasPlug
+	fasPlug,
 );
 
 import ComponentState from "../components/mixins/ComponentState.vue";
@@ -2299,7 +2300,7 @@ export default {
 		evTemplates: {
 			get() {
 				return this.getWildcardTopics(
-					"openWB/vehicle/template/ev_template/+"
+					"openWB/vehicle/template/ev_template/+",
 				);
 			},
 		},
@@ -2320,7 +2321,7 @@ export default {
 		chargeTemplates: {
 			get() {
 				return this.getWildcardTopics(
-					"openWB/vehicle/template/charge_template/+"
+					"openWB/vehicle/template/charge_template/+",
 				);
 			},
 		},
@@ -2353,7 +2354,7 @@ export default {
 			let result = this.getWildcardTopics(
 				"openWB/vehicle/template/charge_template/" +
 					index +
-					"/chargemode/scheduled_charging/plans/+"
+					"/chargemode/scheduled_charging/plans/+",
 			);
 			return result;
 		},
@@ -2363,7 +2364,7 @@ export default {
 			let result = this.getWildcardTopics(
 				"openWB/vehicle/template/charge_template/" +
 					index +
-					"/time_charging/plans/+"
+					"/time_charging/plans/+",
 			);
 			return result;
 		},
@@ -2386,7 +2387,7 @@ export default {
 			this.showVehicleModal = false;
 			if (event == "confirm") {
 				console.info(
-					"request removal of vehicle '" + vehicleIndex + "'"
+					"request removal of vehicle '" + vehicleIndex + "'",
 				);
 				this.$emit("sendCommand", {
 					command: "removeVehicle",
@@ -2401,14 +2402,14 @@ export default {
 		},
 		getSocDefaultConfiguration(socType) {
 			const socDefaults = this.socModuleList.find(
-				(element) => element.value == socType
+				(element) => element.value == socType,
 			);
 			if (Object.prototype.hasOwnProperty.call(socDefaults, "defaults")) {
 				return { ...JSON.parse(JSON.stringify(socDefaults.defaults)) };
 			}
 			console.warn(
 				"no default configuration found for soc type!",
-				socType
+				socType,
 			);
 			return {};
 		},
@@ -2416,11 +2417,11 @@ export default {
 			this.updateState(
 				"openWB/vehicle/" + vehicleId + "/soc_module/config",
 				$event,
-				"type"
+				"type",
 			);
 			this.updateState(
 				"openWB/vehicle/" + vehicleId + "/soc_module/config",
-				this.getSocDefaultConfiguration($event)
+				this.getSocDefaultConfiguration($event),
 			);
 		},
 		updateConfiguration(key, event) {
@@ -2441,7 +2442,7 @@ export default {
 			event.stopPropagation();
 			// get trailing characters as index
 			this.modalEvTemplateIndex = parseInt(
-				evTemplate.match(/([^/]+)$/)[0]
+				evTemplate.match(/([^/]+)$/)[0],
 			);
 			this.showEvTemplateModal = true;
 		},
@@ -2449,7 +2450,7 @@ export default {
 			this.showEvTemplateModal = false;
 			if (event == "confirm") {
 				console.info(
-					"request removal of ev template '" + evTemplateIndex + "'"
+					"request removal of ev template '" + evTemplateIndex + "'",
 				);
 				this.$emit("sendCommand", {
 					command: "removeEvTemplate",
@@ -2463,7 +2464,7 @@ export default {
 			]
 				? this.$store.state.mqtt[
 						"openWB/vehicle/template/ev_template/" + id
-				  ].name
+					].name
 				: "Fahrzeug-Profil " + id;
 		},
 		addChargeTemplate(event) {
@@ -2492,7 +2493,7 @@ export default {
 				console.info(
 					"request removal of charge template '" +
 						chargeTemplateIndex +
-						"'"
+						"'",
 				);
 				this.$emit("sendCommand", {
 					command: "removeChargeTemplate",
@@ -2506,7 +2507,7 @@ export default {
 			]
 				? this.$store.state.mqtt[
 						"openWB/vehicle/template/charge_template/" + id
-				  ].name
+					].name
 				: "Lade-Profil " + id;
 		},
 		getChargeTemplateSchedulePlanName(templateIndex, planIndex) {
@@ -2521,7 +2522,7 @@ export default {
 							templateIndex +
 							"/chargemode/scheduled_charging/plans/" +
 							planIndex
-				  ].name
+					].name
 				: "Zielladen Zeitplan " + templateIndex + "/" + planIndex;
 		},
 		addChargeTemplateSchedulePlan(template, event) {
@@ -2540,10 +2541,10 @@ export default {
 			event.stopPropagation();
 			// get trailing characters as index
 			this.modalChargeTemplateIndex = parseInt(
-				chargeTemplate.match(/([^/]+)$/)[0]
+				chargeTemplate.match(/([^/]+)$/)[0],
 			);
 			this.modalChargeTemplateSchedulePlanIndex = parseInt(
-				plan.match(/([^/]+)$/)[0]
+				plan.match(/([^/]+)$/)[0],
 			);
 			this.showChargeTemplateSchedulePlanModal = true;
 		},
@@ -2555,7 +2556,7 @@ export default {
 						templateIndex +
 						"' schedule plan '" +
 						planIndex +
-						"'"
+						"'",
 				);
 				this.$emit("sendCommand", {
 					command: "removeChargeTemplateSchedulePlan",
@@ -2575,14 +2576,14 @@ export default {
 							templateIndex +
 							"/time_charging/plans/" +
 							planIndex
-				  ].name
+					].name
 				: "Zeitladen Zeitplan " + templateIndex + "/" + planIndex;
 		},
 		addChargeTemplateTimeChargingPlan(template, event) {
 			// prevent further processing of the click event
 			event.stopPropagation();
 			console.info(
-				"requesting new charge template time charging plan..."
+				"requesting new charge template time charging plan...",
 			);
 			// get trailing characters as index
 			let templateIndex = parseInt(template.match(/([^/]+)$/)[0]);
@@ -2596,10 +2597,10 @@ export default {
 			event.stopPropagation();
 			// get trailing characters as index
 			this.modalChargeTemplateIndex = parseInt(
-				chargeTemplate.match(/([^/]+)$/)[0]
+				chargeTemplate.match(/([^/]+)$/)[0],
 			);
 			this.modalChargeTemplateTimeChargingPlanIndex = parseInt(
-				plan.match(/([^/]+)$/)[0]
+				plan.match(/([^/]+)$/)[0],
 			);
 			this.showChargeTemplateTimeChargingPlanModal = true;
 		},
@@ -2611,7 +2612,7 @@ export default {
 						templateIndex +
 						"' time charging plan '" +
 						planIndex +
-						"'"
+						"'",
 				);
 				this.$emit("sendCommand", {
 					command: "removeChargeTemplateTimeChargingPlan",

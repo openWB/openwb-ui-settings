@@ -70,7 +70,7 @@ library.add(
 	fasCheckCircle,
 	fasExclamationTriangle,
 	fasTimesCircle,
-	fasRankingStar
+	fasRankingStar,
 );
 
 import { Line as ChartjsLine } from "vue-chartjs";
@@ -97,7 +97,7 @@ Chart.register(
 	LinearScale,
 	TimeScale,
 	Filler,
-	ZoomPlugin
+	ZoomPlugin,
 );
 
 export default {
@@ -224,7 +224,6 @@ export default {
 			const provider =
 				this.$store.state.mqtt["openWB/optional/et/provider"];
 			if (provider !== undefined) {
-				console.log(provider.type);
 				return provider.type !== null;
 			}
 			return false;

@@ -33,7 +33,7 @@
 					@update:model-value="
 						updateState(
 							'openWB/system/usage_terms_acknowledged',
-							$event
+							$event,
 						)
 					"
 				/>
@@ -49,9 +49,7 @@
 					Sie müssen die Nutzungsbedingungen akzeptieren, bevor openWB
 					eingesetzt werden kann.
 					<div class="row justify-content-center">
-						<div
-							class="col-md-4 d-flex justify-content-center"
-						>
+						<div class="col-md-4 d-flex justify-content-center">
 							<openwb-base-click-button
 								class="btn-danger"
 								@buttonClicked="
@@ -89,7 +87,7 @@
 					@update:model-value="
 						updateState(
 							'openWB/system/dataprotection_acknowledged',
-							$event
+							$event,
 						)
 					"
 				/>

@@ -50,18 +50,18 @@
 							Array.isArray(
 								$store.state.mqtt[
 									'openWB/general/chargemode_config/pv_charging/control_range'
-								]
+								],
 							)
 								? $store.state.mqtt[
 										'openWB/general/chargemode_config/pv_charging/control_range'
-								  ][0] / 1000
+									][0] / 1000
 								: undefined
 						"
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/control_range',
 								$event * 1000,
-								'0'
+								'0',
 							)
 						"
 					>
@@ -79,18 +79,18 @@
 							Array.isArray(
 								$store.state.mqtt[
 									'openWB/general/chargemode_config/pv_charging/control_range'
-								]
+								],
 							)
 								? $store.state.mqtt[
 										'openWB/general/chargemode_config/pv_charging/control_range'
-								  ][1] / 1000
+									][1] / 1000
 								: undefined
 						"
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/control_range',
 								$event * 1000,
-								'1'
+								'1',
 							)
 						"
 					>
@@ -112,14 +112,16 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/switch_on_threshold',
-								$event * 1000
+								$event * 1000,
 							)
 						"
 					>
 						<template #help>
 							Wird der Regelbereich in Richtung Einspeisung um
 							diese Leistung überschritten, so wird der
-							Ladevorgang gestartet.
+							Ladevorgang gestartet.<br />
+							Dieser Wert wird pro Phase genutzt und ist daher
+							immer für eine Phase anzugeben.
 						</template>
 					</openwb-base-number-input>
 					<openwb-base-number-input
@@ -135,7 +137,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/switch_on_delay',
-								$event
+								$event,
 							)
 						"
 					>
@@ -161,14 +163,16 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/switch_off_threshold',
-								$event * 1000
+								$event * 1000,
 							)
 						"
 					>
 						<template #help>
 							Wird der Regelbereich in Richtung Netzbezug um diese
 							Leistung überschritten, so wird der Ladevorgang
-							beendet.
+							beendet.<br />
+							Dieser Wert ist unabhängig von der Anzahl genutzter
+							Phasen.
 						</template>
 					</openwb-base-number-input>
 					<openwb-base-number-input
@@ -184,7 +188,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/switch_off_delay',
-								$event
+								$event,
 							)
 						"
 					>
@@ -211,11 +215,13 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/feed_in_yield',
-								$event * 1000
+								$event * 1000,
 							)
 						"
 					>
 						<template #help>
+							Ein Wert größer 0kW bewirkt, dass weniger
+							PV-Leistung zum Laden benutzt wird.<br />
 							Die Nutzung dieser Option ergibt nur Sinn, wenn ein
 							Wechselrichter mit separatem Smart-Meter am
 							EVU-Punkt verbaut ist (nicht der originale Zähler
@@ -267,7 +273,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/phases_to_use',
-								$event
+								$event,
 							)
 						"
 					>
@@ -279,8 +285,8 @@
 							Modus "Automatik" entscheidet die Regelung, welche
 							Einstellung genutzt wird, um den verfügbaren
 							Überschuss in die Fahrzeuge zu laden. Voraussetzung
-							ist die verbaute Umschaltmöglichkeit zwischen 1- und
-							3-phasig (s.g. 1p3p).
+							ist die verbaute Umschaltmöglichkeit zwischen einer
+							und drei Phasen (s.g. 1p3p).
 						</template>
 					</openwb-base-button-group-input>
 					<openwb-base-range-input
@@ -302,7 +308,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/phase_switch_delay',
-								$event
+								$event,
 							)
 						"
 					>
@@ -343,7 +349,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/bat_prio',
-								$event
+								$event,
 							)
 						"
 					>
@@ -383,7 +389,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/charging_power_reserve',
-								$event * 1000
+								$event * 1000,
 							)
 						"
 					>
@@ -391,7 +397,8 @@
 							Die "reservierte Ladeleistung" des Speichers wird
 							von der Regelung auch bei "Fahrzeuge"-Vorrang NICHT
 							für das Fahrzeugladen verwendet und bleibt immer dem
-							Speicher vorbehalten.
+							Speicher vorbehalten, sofern dieser nicht zu 100%
+							geladen ist.
 						</template>
 					</openwb-base-number-input>
 					<openwb-base-number-input
@@ -407,7 +414,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/rundown_power',
-								$event * 1000
+								$event * 1000,
 							)
 						"
 					>
@@ -456,7 +463,7 @@
 						@update:model-value="
 							updateState(
 								'openWB/general/chargemode_config/pv_charging/rundown_soc',
-								$event
+								$event,
 							)
 						"
 					>
@@ -468,7 +475,7 @@
 					</openwb-base-range-input>
 					<hr />
 					<openwb-base-heading>
-						Laden mit Mindeststrom
+						Laden mit minimalem Dauerstrom
 					</openwb-base-heading>
 					<openwb-base-range-input
 						title="Einschalt-SoC"
@@ -643,7 +650,7 @@ export default {
 		updateBatterySwitchOnSoc(event) {
 			this.updateState(
 				"openWB/general/chargemode_config/pv_charging/switch_on_soc",
-				event
+				event,
 			);
 			if (
 				event <=
@@ -653,14 +660,14 @@ export default {
 			) {
 				this.updateState(
 					"openWB/general/chargemode_config/pv_charging/switch_off_soc",
-					Math.max(0, event - 5)
+					Math.max(0, event - 5),
 				);
 			}
 		},
 		updateBatterySwitchOffSoc(event) {
 			this.updateState(
 				"openWB/general/chargemode_config/pv_charging/switch_off_soc",
-				event
+				event,
 			);
 			if (
 				event >=
@@ -670,7 +677,7 @@ export default {
 			) {
 				this.updateState(
 					"openWB/general/chargemode_config/pv_charging/switch_on_soc",
-					event + 5
+					event + 5,
 				);
 			}
 		},

@@ -28,11 +28,11 @@
 			"
 		/>
 		<openwb-base-number-input
-			title="Geräteadresse"
+			title="Modbus ID"
 			required
-			:min="1"
-			:max="255"
 			:model-value="configuration.modbus_id"
+			min="1"
+			max="255"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.modbus_id')
 			"

@@ -30,6 +30,13 @@
 		<openwb-base-alert v-if="recentMessages.length == 0" subtype="info">
 			Keine Nachrichten vorhanden.
 		</openwb-base-alert>
+		<openwb-base-click-button
+			v-else-if="showAllMessages"
+			class="btn-sm btn-secondary mb-1"
+			@buttonClicked="dismissAllMessages"
+		>
+			Alle Nachrichten löschen
+		</openwb-base-click-button>
 		<openwb-base-toast
 			v-for="message in recentMessages"
 			:key="message.topic"
@@ -84,11 +91,11 @@ export default {
 				if (
 					(total == "light" &&
 						["info", "success", "warning", "danger"].includes(
-							currentMessage.type
+							currentMessage.type,
 						)) ||
 					(total == "info" &&
 						["success", "warning", "danger"].includes(
-							currentMessage.type
+							currentMessage.type,
 						)) ||
 					(total == "success" &&
 						["warning", "danger"].includes(currentMessage.type)) ||
@@ -150,7 +157,7 @@ export default {
 		},
 		systemMessages() {
 			let messageTopics = this.getWildcardTopics(
-				"openWB/system/messages/+"
+				"openWB/system/messages/+",
 			);
 			var messageList = [];
 			for (const [key, element] of Object.entries(messageTopics)) {
@@ -160,7 +167,7 @@ export default {
 		},
 		clientMessages() {
 			let messageTopics = this.getWildcardTopics(
-				"openWB/command/" + this.$root.mqttClientId + "/messages/+"
+				"openWB/command/" + this.$root.mqttClientId + "/messages/+",
 			);
 			var messageList = [];
 			for (const [key, element] of Object.entries(messageTopics)) {
@@ -185,7 +192,7 @@ export default {
 		 */
 		dismissError() {
 			this.clearTopic(
-				"openWB/command/" + this.$root.mqttClientId + "/error"
+				"openWB/command/" + this.$root.mqttClientId + "/error",
 			);
 		},
 		/**
@@ -198,6 +205,19 @@ export default {
 				this.hiddenMessages.splice(index, 1);
 			}
 		},
+		/**
+		 * Removes all received message topics from broker
+		 */
+		dismissAllMessages() {
+			this.messages.forEach((message) => {
+				this.clearTopic(message.topic);
+			});
+			this.hiddenMessages = [];
+			this.toggleAllMessages();
+		},
+		/**
+		 * add message topic to list of hidden messages
+		 */
 		hideMessage(event) {
 			if (!this.hiddenMessages.includes(event.topic)) {
 				this.hiddenMessages.push(event.topic);

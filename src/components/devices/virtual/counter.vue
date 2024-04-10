@@ -14,7 +14,7 @@
 			@update:model-value="
 				updateConfiguration(
 					$event * 1000,
-					'configuration.external_consumption'
+					'configuration.external_consumption',
 				)
 			"
 		>

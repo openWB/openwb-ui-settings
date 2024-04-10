@@ -70,7 +70,7 @@
 					'openWB/counter/' + counter.id + '/get/exported',
 					3,
 					3,
-					0.001
+					0.001,
 				)
 			"
 		/>
@@ -85,7 +85,7 @@
 					'openWB/counter/' + counter.id + '/get/imported',
 					3,
 					3,
-					0.001
+					0.001,
 				)
 			"
 		/>
@@ -101,7 +101,7 @@
 					'openWB/counter/' + counter.id + '/get/power',
 					3,
 					3,
-					0.001
+					0.001,
 				)
 			"
 		/>
@@ -114,7 +114,7 @@
 			:model-value="
 				formatNumberTopic(
 					'openWB/counter/' + counter.id + '/get/frequency',
-					3
+					3,
 				)
 			"
 		/>
@@ -127,7 +127,7 @@
 			:model-value="
 				formatPhaseArrayNumberTopic(
 					'openWB/counter/' + counter.id + '/get/voltages',
-					1
+					1,
 				)
 			"
 		/>
@@ -139,7 +139,7 @@
 			:model-value="
 				formatPhaseArrayNumberTopic(
 					'openWB/counter/' + counter.id + '/get/currents',
-					2
+					2,
 				)
 			"
 		/>
@@ -153,7 +153,7 @@
 					'openWB/counter/' + counter.id + '/get/powers',
 					3,
 					3,
-					0.001
+					0.001,
 				)
 			"
 		/>
@@ -164,7 +164,7 @@
 			:model-value="
 				formatPhaseArrayNumberTopic(
 					'openWB/counter/' + counter.id + '/get/power_factors',
-					2
+					2,
 				)
 			"
 		/>
@@ -187,7 +187,7 @@ library.add(
 	fasCheckCircle,
 	fasExclamationTriangle,
 	fasTimesCircle,
-	fasGaugeHigh
+	fasGaugeHigh,
 );
 
 export default {

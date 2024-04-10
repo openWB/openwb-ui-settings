@@ -28,7 +28,7 @@ export default {
 			formData.append("command", "update");
 			formData.append(
 				"data",
-				'{"ip_address":"' + this.configuration.ip_address + '"}'
+				'{"ip_address":"' + this.configuration.ip_address + '"}',
 			);
 			const startedMessage =
 				"Die Aktualisierung der openWB Pro wird gestartet...";
@@ -41,7 +41,7 @@ export default {
 						location.host +
 						"/openWB/web/settings/modules/charge_points/openwb_pro/commands.php",
 					formData,
-					{ timeout: 5000 }
+					{ timeout: 5000 },
 				)
 				.then(() => {
 					const successMessage =
@@ -55,7 +55,7 @@ export default {
 						// that falls out of the range of 2xx
 						console.error(
 							error.response.status,
-							error.response.data
+							error.response.data,
 						);
 						alertMessage +=
 							error.response.status + ": " + error.response.data;

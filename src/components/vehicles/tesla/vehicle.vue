@@ -162,7 +162,7 @@ export default {
 			var teslaLogin = window.open(
 				this.tesla_gen_url(),
 				"TeslaLogin",
-				"width=800,height=600,status=yes,scrollbars=yes,resizable=yes"
+				"width=800,height=600,status=yes,scrollbars=yes,resizable=yes",
 			);
 			teslaLogin.focus();
 		},
@@ -179,7 +179,7 @@ export default {
 				this.code_verifier,
 				this.code_verifier.length,
 				this.code_challenge,
-				this.code_challenge.length
+				this.code_challenge.length,
 			);
 		},
 		tesla_gen_url() {
@@ -187,17 +187,17 @@ export default {
 			teslaAuthUrl.searchParams.append("client_id", "ownerapi");
 			teslaAuthUrl.searchParams.append(
 				"code_challenge",
-				this.code_challenge
+				this.code_challenge,
 			);
 			teslaAuthUrl.searchParams.append("code_challenge_method", "S256");
 			teslaAuthUrl.searchParams.append(
 				"redirect_uri",
-				this.tesla_api_redirect
+				this.tesla_api_redirect,
 			);
 			teslaAuthUrl.searchParams.append("response_type", "code");
 			teslaAuthUrl.searchParams.append(
 				"scope",
-				"openid email offline_access"
+				"openid email offline_access",
 			);
 			teslaAuthUrl.searchParams.append("state", "myteslaapp");
 			return teslaAuthUrl;
@@ -207,11 +207,11 @@ export default {
 			console.debug("queryObject", queryObject);
 			if (!queryObject.code) {
 				console.error(
-					"Something is wrong... Code does not exist in URL"
+					"Something is wrong... Code does not exist in URL",
 				);
 				this.$root.postClientMessage(
 					"Die eingegebene URL ist ungültig.",
-					"danger"
+					"danger",
 				);
 				return;
 			}
@@ -238,7 +238,7 @@ export default {
 							"Content-Type": "application/json",
 							Accept: "application/json",
 						},
-					}
+					},
 				);
 				console.debug("response", response);
 				this.updateConfiguration(
@@ -248,11 +248,11 @@ export default {
 						created_at: response.data.created_at,
 						expires_in: response.data.expires_in,
 					},
-					"configuration.token"
+					"configuration.token",
 				);
 				this.$root.postClientMessage(
 					"Token erfolgreich abgerufen.",
-					"success"
+					"success",
 				);
 			} catch (error) {
 				console.error(error);
@@ -260,7 +260,7 @@ export default {
 					"Beim Abruf der Token ist ein Fehler aufgetreten!<pre>" +
 						error +
 						"</pre>",
-					"danger"
+					"danger",
 				);
 			}
 		},

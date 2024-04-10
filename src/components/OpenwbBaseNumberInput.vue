@@ -76,8 +76,8 @@ export default {
 				if (this.precision !== undefined) {
 					return parseFloat(
 						Math.round(
-							this.modelValue * Math.pow(10, this.precision)
-						) / Math.pow(10, this.precision)
+							this.modelValue * Math.pow(10, this.precision),
+						) / Math.pow(10, this.precision),
 					);
 				}
 				return this.modelValue;

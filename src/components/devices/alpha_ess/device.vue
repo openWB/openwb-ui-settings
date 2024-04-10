@@ -26,6 +26,29 @@
 				updateConfiguration($event, 'configuration.ip_address')
 			"
 		/>
+		<openwb-base-number-input
+			title="Port"
+			v-if="configuration.source == 1"
+			subtype="host"
+			required
+			:min="1"
+			:max="65535"
+			:model-value="configuration.port"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.port')
+			"
+		/>
+		<openwb-base-number-input
+			title="Modbus ID"
+			v-if="configuration.source == 1"
+			required
+			:model-value="configuration.modbus_id"
+			min="1"
+			max="255"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.modbus_id')
+			"
+		/>
 		<openwb-base-select-input
 			title="Firmware Version"
 			notSelected="Bitte auswählen"

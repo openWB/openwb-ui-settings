@@ -189,6 +189,26 @@
 							].type
 						"
 					>
+
+					<openwb-base-button-group-input
+					title="Option Sicherung vor System Update"
+					:buttons="[
+						{
+							buttonValue: false,
+							text: 'Nein',
+							class: 'btn-outline-danger',
+						},
+						{
+							buttonValue: true,
+							text: 'Ja',
+							class: 'btn-outline-success',
+						},
+					]"
+					:model-value="$store.state.mqtt['openWB/system/backup_cloud/backup_before_update']"
+					@update:model-value="
+						updateState('openWB/system/backup_cloud/backup_before_update', $event)
+					"
+				></openwb-base-button-group-input>
 						<openwb-base-button-input
 							title="Manuelle Cloud-Sicherung"
 							buttonText="Sicherung erstellen und hochladen"
@@ -206,7 +226,7 @@
 							@update:configuration="
 								updateConfiguration(
 									'openWB/system/backup_cloud/config',
-									$event
+									$event,
 								)
 							"
 							@sendCommand="
@@ -237,11 +257,14 @@
 						(Diagramme und Ladeprotokolle) sowie Cloud-Daten und
 						Seriennummer in diese Installation zu importieren. Die
 						Zuordnung zwischen den alten und neuen Komponenten muss
-						manuell durchgeführt werden.<br />
-						Die Portierung kann einige Minuten dauern. Du erhältst
-						eine Meldung, wenn die Datenübernahme abgeschlossen ist.
+						manuell durchgeführt werden.
 					</openwb-base-alert>
 					<openwb-base-alert subtype="danger">
+						Die Portierung kann bei vielen historischen Daten von
+						mehreren Jahren durchaus bis zu 30 Minuten dauern. Die
+						openWB in dieser Zeit bitte nicht herunterfahren! Du
+						erhältst eine Meldung, wenn die Datenübernahme
+						abgeschlossen ist.<br />
 						Vor der Datenübernahme unbedingt eine Sicherung
 						erstellen.<br />
 						Die Datenübernahme kann nur durch Einspielen einer
@@ -405,7 +428,7 @@ library.add(
 	fasArchive,
 	fasFileArchive,
 	fasUpload,
-	fasBoxOpen
+	fasBoxOpen,
 );
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -425,6 +448,7 @@ export default {
 			mqttTopicsToSubscribe: [
 				"openWB/system/configurable/backup_clouds",
 				"openWB/system/backup_cloud/config",
+				"openWB/system/backup_cloud/backup_before_update",
 				"openWB/system/device/+/component/+/config",
 				"openWB/chargepoint/+/config",
 				"openWB/vehicle/+/name",
@@ -633,12 +657,12 @@ export default {
 		},
 		componentConfigurations() {
 			return this.getWildcardTopics(
-				"openWB/system/device/+/component/+/config"
+				"openWB/system/device/+/component/+/config",
 			);
 		},
 		chargePointOptions() {
 			let chargePoints = this.getWildcardTopics(
-				"openWB/chargepoint/+/config"
+				"openWB/chargepoint/+/config",
 			);
 			var myOptions = [];
 			for (const element of Object.values(chargePoints)) {
@@ -684,7 +708,7 @@ export default {
 		},
 		smartHomeOptions() {
 			let smartHomeDevices = this.getWildcardTopics(
-				"openWB/LegacySmartHome/config/get/Devices/+/device_configured"
+				"openWB/LegacySmartHome/config/get/Devices/+/device_configured",
 			);
 			var myOptions = [];
 			for (const [key, value] of Object.entries(smartHomeDevices)) {
@@ -712,12 +736,12 @@ export default {
 		},
 		getBackupCloudDefaultConfiguration(backupCloudType) {
 			const backupCloudDefaults = this.backupCloudList.find(
-				(element) => element.value == backupCloudType
+				(element) => element.value == backupCloudType,
 			);
 			if (
 				Object.prototype.hasOwnProperty.call(
 					backupCloudDefaults,
-					"defaults"
+					"defaults",
 				)
 			) {
 				return {
@@ -726,7 +750,7 @@ export default {
 			}
 			console.warn(
 				"no default configuration found for backup cloud type!",
-				backupCloudType
+				backupCloudType,
 			);
 			return {};
 		},
@@ -771,11 +795,11 @@ export default {
 			this.updateState(
 				"openWB/system/backup_cloud/config",
 				$event,
-				"type"
+				"type",
 			);
 			this.updateState(
 				"openWB/system/backup_cloud/config",
-				this.getBackupCloudDefaultConfiguration($event)
+				this.getBackupCloudDefaultConfiguration($event),
 			);
 		},
 		updateSelectedRestoreFile(event) {
@@ -801,12 +825,12 @@ export default {
 								headers: {
 									"Content-Type": "multipart/form-data",
 								},
-							}
+							},
 						)
 						.then(() => {
 							this.$root.postClientMessage(
 								successMessage,
-								"success"
+								"success",
 							);
 							resolve(true);
 						})
@@ -816,7 +840,7 @@ export default {
 								// that falls out of the range of 2xx
 								console.error(
 									error.response.status,
-									error.response.data
+									error.response.data,
 								);
 								var alertMessage =
 									"Hochladen der Datei fehlgeschlagen!" +
@@ -839,7 +863,7 @@ export default {
 							}
 							this.$root.postClientMessage(
 								alertMessage,
-								"danger"
+								"danger",
 							);
 							resolve(false);
 						});
@@ -856,7 +880,7 @@ export default {
 			this.restoreUploadDone = await this.uploadFile(
 				"restore",
 				this.selectedRestoreFile,
-				successMessage
+				successMessage,
 			);
 		},
 		async uploadDataMigrationFile() {
@@ -866,7 +890,7 @@ export default {
 			this.dataMigrationUploadDone = await this.uploadFile(
 				"migrate",
 				this.selectedDataMigrationFile,
-				successMessage
+				successMessage,
 			);
 		},
 		restoreBackup() {

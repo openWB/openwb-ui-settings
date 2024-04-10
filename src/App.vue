@@ -79,7 +79,7 @@ export default {
 		async saveValues(topicsToSave = undefined) {
 			function sleep(milliseconds) {
 				return new Promise((resolve) =>
-					setTimeout(resolve, milliseconds)
+					setTimeout(resolve, milliseconds),
 				);
 			}
 
@@ -136,7 +136,7 @@ export default {
 			this.doPublish(
 				"openWB/set/command/" + this.client.options.clientId + "/todo",
 				event,
-				false
+				false,
 			);
 		},
 		/**
@@ -162,7 +162,7 @@ export default {
 			this.client.on("connect", () => {
 				console.debug(
 					"Connection succeeded! ClientId: ",
-					this.client.options.clientId
+					this.client.options.clientId,
 				);
 				this.doSubscribe(["openWB/system/usage_terms_acknowledged"]); // required for route guard
 			});
@@ -180,7 +180,7 @@ export default {
 					} catch (error) {
 						console.debug(
 							"Json parsing failed, fallback to string: ",
-							topic
+							topic,
 						);
 						myPayload = message.toString();
 					}
@@ -221,7 +221,7 @@ export default {
 					if (error) {
 						console.error("Publish error", error);
 					}
-				}
+				},
 			);
 		},
 		postClientMessage(message, type = "secondary") {

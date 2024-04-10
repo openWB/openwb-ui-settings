@@ -102,7 +102,7 @@ export default {
 			var mercedesLogin = window.open(
 				this.login_url,
 				"MercedesLogin",
-				"width=800,height=600,status=yes,scrollbars=yes,resizable=yes"
+				"width=800,height=600,status=yes,scrollbars=yes,resizable=yes",
 			);
 			mercedesLogin.focus();
 		},

@@ -94,7 +94,7 @@
 					@update:model-value="
 						updateState(
 							'number3',
-							parseFloat(($event / 100000).toFixed(7))
+							parseFloat(($event / 100000).toFixed(7)),
 						)
 					"
 				>
@@ -263,7 +263,7 @@
 							JSON.stringify(
 								$store.state.examples.tags,
 								undefined,
-								2
+								2,
 							)
 						}}</pre>
 					</template>
@@ -311,7 +311,7 @@
 							JSON.stringify(
 								$store.state.examples.hierarchy1,
 								undefined,
-								2
+								2,
 							)
 						}}</pre>
 					</template>
