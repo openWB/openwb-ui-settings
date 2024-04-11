@@ -95,7 +95,7 @@
 									class="btn-info"
 									@buttonClicked="
 										sendSystemCommand('systemFetchVersions')
-									" 								
+									"
 								>
 									Informationen aktualisieren
 									<font-awesome-icon
@@ -321,10 +321,10 @@ export default {
 					this.$store.state.mqtt["openWB/system/available_branches"][
 						this.$store.state.mqtt["openWB/system/current_branch"]
 					] &&
-				(this.selectedTag in
+				this.selectedTag in
 					this.$store.state.mqtt["openWB/system/available_branches"][
 						this.$store.state.mqtt["openWB/system/current_branch"]
-					]["tags"])
+					]["tags"]
 			);
 		},
 	},
