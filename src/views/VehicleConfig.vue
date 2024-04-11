@@ -1223,8 +1223,8 @@
 						<openwb-base-number-input
 							v-if="dcChargingEnabled === true"
 							title="Soll-Ladeleistung (DC)"
-							:step="5"
 							unit="kW"
+							:min="0"
 							:model-value="
 								ac_current2dc_power(
 									template.chargemode.instant_charging
@@ -1375,6 +1375,7 @@
 							v-if="dcChargingEnabled === true"
 							title="Minimale Dauerleistung (DC)"
 							unit="kW"
+							:min="0"
 							:model-value="
 								ac_current2dc_power(
 									template.chargemode.pv_charging
@@ -1542,8 +1543,8 @@
 						<openwb-base-number-input
 							v-if="dcChargingEnabled === true"
 							title="Mindest-SoC-Leistung (DC)"
-							:step="5"
 							unit="kW"
+							:min="0"
 							:model-value="
 								ac_current2dc_power(
 									template.chargemode.pv_charging
@@ -1804,8 +1805,8 @@
 							<openwb-base-number-input
 								title="Ladeleistung (DC)"
 								v-if="dcChargingEnabled === true"
-								:step="5"
 								unit="kW"
+								:min="0"
 								:model-value="
 									ac_current2dc_power(plan.dc_current)
 								"
@@ -2169,8 +2170,8 @@
 							<openwb-base-number-input
 								title="Ladeleistung (DC)"
 								v-if="dcChargingEnabled === true"
-								:step="5"
 								unit="kW"
+								:min="0"
 								:model-value="
 									ac_current2dc_power(plan.dc_current)
 								"
