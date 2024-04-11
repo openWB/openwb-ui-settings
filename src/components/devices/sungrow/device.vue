@@ -53,14 +53,9 @@
 			<template #help>
 				Die Variante SH sollte möglichst über den internen LAN-Port
 				genutzt werden (befindet sich am Wechselrichter hinter dem
-				WiNet-S Dongle), da nur hier die netto AC-Leistung ausgelesen
-				werden kann. Den WiNet-S Dongle zusätzlich ins Heimnetz (per
+				WiNet-S Dongle), da nur hier alle Werte vollständig ausgelesen
+				werden können. Den WiNet-S Dongle zusätzlich ins Heimnetz (per
 				Lan oder Wlan) einbinden, um iSolarCloud nutzen zu können.
-				Wird der Dongle auch für openWB genutzt, kann nur die brutto
-				DC-Leistung angezeigt werden. In diesem Fall muss das Gerät
-				wie ein nicht-hybrider Wechselrichter in der Struktur unter
-				"Lastmanagement" eingerichtet werden, mit dem Nachteil, dass
-				Gesamt-PV-Leistung und Zählerstände ungenau angezeigt werden.
 			</template>
 		</openwb-base-select-input>
 	</div>
