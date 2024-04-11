@@ -367,15 +367,27 @@
 							Speicher-SoC. Eine aktive Speichersteuerung durch
 							openWB ist aktuell mangels Speicherschnittstelle
 							nicht möglich.<br /><br />
-							Bei Priorisierung "Fahrzeuge" wird der gesamte
-							Überschuss zum Fahrzeugladen verwendet.<br /><br />
-							Bei Priorisierung "Speicher" wird der gesamte
-							Überschuss zum Laden des Speichers verwendet.<br /><br />
+							Bei Auswahl "Fahrzeuge" wird der gesamte Überschuss
+							in das EV geladen. Ist die maximale Ladeleistung der
+							Fahrzeuge erreicht und es wird eingespeist, wird
+							dieser Überschuss in den Speicher geladen.<br /><br />
+							Bei Auswahl "Speicher" wird der gesamte Überschuss
+							in den Speicher geladen. Ist die maximale
+							Ladeleistung des Speichers erreicht und es wird
+							eingespeist, wird dieser Überschuss unter Beachtung
+							der Einschaltschwelle in die Fahrzeuge geladen.<br /><br />
+							Bei Auswahl "Mindest-SoC des Speichers" wird der
+							Überschuss bis zum Mindest-SoC in den Speicher
+							geladen. Ist die maximale Ladeleistung des Speichers
+							erreicht und es wird eingespeist, wird dieser
+							Überschuss in die Fahrzeuge geladen. Wird der
+							Mindest-SoC überschritten, wird der Überschuss ins
+							Fahrzeug geladen.
 						</template>
 					</openwb-base-button-group-input>
 					<div v-if="batMode === 'min_soc_bat_mode'">
 						<openwb-base-number-input
-							title="Ladeleistung für Fahrzeuge unterhalb des Mindest-SoC des Speichers"
+							title="Ladeleistung für Speicher unterhalb des Mindest-SoC des Speichers [optional]"
 							:min="0"
 							:step="0.1"
 							unit="kW"
@@ -391,7 +403,16 @@
 								)
 							"
 						>
-							<template #help> </template>
+							<template #help
+								>ACHTUNG: Der hier eingestellte Wert darf die
+								maximale Ladeleistung des Speichers nicht
+								überschreiten.<br />
+								Wird der Mindest-SoC des Speichers nicht
+								erreicht, wird der Speicher mit der hier
+								eingestellte Leistung geladen. Mit dem
+								verbleibenden Überschuss werden die Fahrzeuge
+								geladen.</template
+							>
 						</openwb-base-number-input>
 						<openwb-base-range-input
 							title="Mindest-SoC des Speichers"
@@ -399,6 +420,7 @@
 							:max="100"
 							:step="1"
 							unit="%"
+							:required
 							:model-value="
 								$store.state.mqtt[
 									'openWB/general/chargemode_config/pv_charging/min_bat_soc'
@@ -414,7 +436,7 @@
 							<template #help> </template>
 						</openwb-base-range-input>
 						<openwb-base-number-input
-							title="Entladeleistung des Speichers oberhalb des Mindest-SoC des Speichers"
+							title="Entladeleistung des Speichers oberhalb des Mindest-SoC des Speichers [optional]"
 							:min="0"
 							:step="0.1"
 							unit="kW"
@@ -430,7 +452,12 @@
 								)
 							"
 						>
-							<template #help> </template>
+							<template #help
+								>Wird der Mindest-SoC überschritten, wird der
+								Überschuss ins Fahrzeug geladen und der Speicher
+								mit der hier eingestellten Leistung in die
+								Fahrzeuge entladen.</template
+							>
 						</openwb-base-number-input>
 					</div>
 				</div>
@@ -514,6 +541,11 @@ export default {
 						break;
 				}
 			},
+		},
+		batMode() {
+			return this.$store.state.mqtt[
+				"openWB/general/chargemode_config/pv_charging/bat_mode"
+			];
 		},
 	},
 	methods: {
