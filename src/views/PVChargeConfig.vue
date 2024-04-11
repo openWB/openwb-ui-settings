@@ -393,12 +393,12 @@
 							unit="kW"
 							:model-value="
 								$store.state.mqtt[
-									'openWB/general/chargemode_config/pv_charging/ev_power_reserve'
+									'openWB/general/chargemode_config/pv_charging/bat_power_reserve'
 								] / 1000
 							"
 							@update:model-value="
 								updateState(
-									'openWB/general/chargemode_config/pv_charging/ev_power_reserve',
+									'openWB/general/chargemode_config/pv_charging/bat_power_reserve',
 									$event * 1000,
 								)
 							"
@@ -493,7 +493,7 @@ export default {
 				"openWB/general/chargemode_config/pv_charging/bat_mode",
 				"openWB/general/chargemode_config/pv_charging/switch_on_soc",
 				"openWB/general/chargemode_config/pv_charging/switch_off_soc",
-				"openWB/general/chargemode_config/pv_charging/ev_power_reserve",
+				"openWB/general/chargemode_config/pv_charging/bat_power_reserve",
 				"openWB/general/chargemode_config/pv_charging/bat_power_discharge",
 				"openWB/general/chargemode_config/pv_charging/min_bat_soc",
 			],
