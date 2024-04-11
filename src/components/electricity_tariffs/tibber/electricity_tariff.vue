@@ -34,7 +34,6 @@
 		/>
 		<openwb-base-select-input
 			title="Verfügbare Home-IDs"
-			required
 			:options="tibberHomeList"
 			:model-value="electricityTariff.configuration.home_id"
 			@update:model-value="
