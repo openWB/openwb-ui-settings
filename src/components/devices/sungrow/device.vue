@@ -41,9 +41,9 @@
 			title="Version"
 			:options="[
 				{ value: 0, text: 'SH (Hybrid)' },
-				{ value: 1, text: 'SH (Hybrid) über WiNet-S Dongle' },
-				{ value: 2, text: 'SG (kein Hybrid)' },
-				{ value: 3, text: 'SG (kein Hybrid) über WiNet-S Dongle' },
+				{ value: 3, text: 'SH (Hybrid) über WiNet-S Dongle' },
+				{ value: 1, text: 'SG (kein Hybrid)' },
+				{ value: 2, text: 'SG (kein Hybrid) über WiNet-S Dongle' },
 			]"
 			:model-value="configuration.version"
 			@update:model-value="
