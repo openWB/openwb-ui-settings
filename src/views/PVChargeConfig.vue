@@ -491,8 +491,6 @@ export default {
 				"openWB/general/chargemode_config/pv_charging/phases_to_use",
 				"openWB/general/chargemode_config/pv_charging/phase_switch_delay",
 				"openWB/general/chargemode_config/pv_charging/bat_mode",
-				"openWB/general/chargemode_config/pv_charging/switch_on_soc",
-				"openWB/general/chargemode_config/pv_charging/switch_off_soc",
 				"openWB/general/chargemode_config/pv_charging/bat_power_reserve",
 				"openWB/general/chargemode_config/pv_charging/bat_power_discharge",
 				"openWB/general/chargemode_config/pv_charging/min_bat_soc",
@@ -546,42 +544,6 @@ export default {
 			return this.$store.state.mqtt[
 				"openWB/general/chargemode_config/pv_charging/bat_mode"
 			];
-		},
-	},
-	methods: {
-		updateBatterySwitchOnSoc(event) {
-			this.updateState(
-				"openWB/general/chargemode_config/pv_charging/switch_on_soc",
-				event,
-			);
-			if (
-				event <=
-				this.$store.state.mqtt[
-					"openWB/general/chargemode_config/pv_charging/switch_off_soc"
-				]
-			) {
-				this.updateState(
-					"openWB/general/chargemode_config/pv_charging/switch_off_soc",
-					Math.max(0, event - 5),
-				);
-			}
-		},
-		updateBatterySwitchOffSoc(event) {
-			this.updateState(
-				"openWB/general/chargemode_config/pv_charging/switch_off_soc",
-				event,
-			);
-			if (
-				event >=
-				this.$store.state.mqtt[
-					"openWB/general/chargemode_config/pv_charging/switch_on_soc"
-				]
-			) {
-				this.updateState(
-					"openWB/general/chargemode_config/pv_charging/switch_on_soc",
-					event + 5,
-				);
-			}
 		},
 	},
 	watch: {
