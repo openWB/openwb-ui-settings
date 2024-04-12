@@ -91,13 +91,13 @@ export default createStore({
 			//and HardwareInstallation (missing devices and components)
 			//topic will be removed after mounting of page therefore prevent removing
 			if(topic!= 'openWB/general/extern'){
-				if(topic!= 'openWB/counter/get/hierarchy'){
+				//if(topic!= 'openWB/counter/get/hierarchy'){
 						//var re = new RegExp("^([/device])$")
 						//if(re.test(topic)){
 							delete state.mqtt[topic];
 						//	console.info("REMOVED: ", topic)
 						//}
-					}
+					//}
 				}
 		},
 		updateTopic(state, message) {
