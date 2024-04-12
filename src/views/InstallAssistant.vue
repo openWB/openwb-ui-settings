@@ -59,12 +59,17 @@
 			<div v-if="currentPage == 1" class="row m-0">
 				<div class="page-help-text col-md-3 py-2">
 					<p>
-						Sicherung erzeugen wenn der Assistent erneut ausgeführt
-						wird und die openWB bereits im Einsatz war.
+						Wir empfehlen an dieser Stelle eine Sicherung der openWB zu erzeugen, 
+						auf welches man später zurückgreifen könnte, insbesondere, wenn die openWB 
+						schon konfiguriert war und der Assistent nun erneut ausgeführt wird.
 					</p>
 					<p>
 						Dadurch werden gesammelte Daten/Einstellungen gesichert
 						und können wieder hergestellt werden.
+					</p>
+					<p>
+						Dazu Warnung akzeptieren, auf Sicherung / Wiederherstellung gehen
+						und unter Sicherung auf Sicherung erstellen klicken.
 					</p>
 					<p>
 						Es wird empfohlen regelmäßige Sicherungen der Daten zu
@@ -133,7 +138,7 @@
 					</p>
 					<p>
 						Die Steuerung über Modbus dient zur Fernsteuerung über
-						ein Nicht- openWB-System und sollte nicht gewählt
+						ein Nicht-openWB-System und sollte nicht gewählt
 						werden, wenn Sie nur openWBs besitzen und die
 						openWB-Software zur Steuerung nutzen wollen.
 					</p>
@@ -198,15 +203,15 @@
 						Folgenden die Geräte und Komponenten eingerichtet
 						werden. 
 					</p>
+					<p>Ab Werkseinstellung kann hier bereits ein virtueller Zähler vorkonfiguriert sein, 
+						welcher gelöscht werden kann, sobald korrekte EVU-Daten übertragen werden.</p>
 					<p>
-						Dazu bei verfügbare Geräte die entsprechenden Komponenten auswählen und hinzufügen.
-						Danach auf das neue Gerät klicken und die Komponenten unter verfügbare Komponenten hinzufügen.
-					</p>
-					<p>Zuerst wird der EVU-Zähler eingerichtet.</p>
-					<p>
-						Für jedes verfügbare Gerät eine IP-Adresse vergeben und
-						für jedes verfügbare Gerät auch Zähler, Wechselrichter
-						und falls vorhanden Speicher hinzufügen.
+						Bei verfügbare Geräte das entsprechenden Gerät auswählen und hinzufügen.
+
+						Danach auf das neue Gerät klicken und für jedes verfügbare Gerät falls nötig 
+						eine IP-Adresse oder Hostname, Benutzername und Passwort oder Server-URL eintragen.
+						Dann unter Verfügbare Komponenten falls vorhanden 
+						Zähler, Wechselrichter und Speicher hinzufügen.
 					</p>
 					<p>
 						Hier ein PV-Kit auszuwählen dient nur der Visualisierung
@@ -235,6 +240,8 @@
 						maximalen Ströme für jede Phase des Zählermoduls sowie
 						die maximale Ausgangsleistung des Wechselrichters der PV
 						Anlage eingetragen, falls eine solche vorhanden ist.
+						Unter dem Punkt Vorhandene Zählermodule auf die Komponente
+						Zähler klicken und die maximale Leistung des Hausanschlusses eintragen.
 					</p>
 					<p>
 						Der erste Zähler ist in der Regel der Zähler am
@@ -244,11 +251,15 @@
 						Hausanschluss verträgt und nicht die Anschlussleistung
 						der openWB.
 					</p>
+					<p>Ist ein Wechselrichter unter Geräte hinzugefügt worden, dann unter dem Punkt Wechselrichter 
+						noch die maximale Ausgangsleistung des Wechselrichters eintragen, wenn es sich um ein Hybrid-System
+						mit DC-Speicher handelt.
+					</p>
 					<p>
-						Es ist außerdem die Struktur des Lastmanagements zu
+						Nach klicken auf Struktur ist außerdem die Struktur des Lastmanagements zu
 						überprüfen und ggf. anzupassen. Im Normalfall befinden
 						sich Speicher und Wechselrichter in einer Ebene
-						innerhalb des EVU-Zählers.
+						innerhalb des EVU-Zählers. Dazu einfach die Komponenten per drag&drop verschieben.
 					</p>
 					<p>
 						Zwischenzähler können beliebig kaskadiert sein.
@@ -257,8 +268,8 @@
 						integriertem Zähler dar.
 					</p>
 					<p>
-						Werden hier keine vorhandenen Zählermodule oder
-						Wechselrichtermodule angezeigt, dann bitte einen Schritt
+						Werden hier die gewünschten Zählermodule oder
+						Wechselrichtermodule nicht angezeigt, dann bitte einen Schritt
 						zurück und die entsprechenden Geräte und Komponenten
 						hinzufügen.
 					</p>
@@ -283,32 +294,35 @@
 						verfügbare Ladepunkte "Interne openWB" ausgewählt.
 						Ansonsten wird "Externe openWB" und Bauart (der
 						secondary openWB) ausgewählt und die IP-Adresse der
-						anderen openWB (secondary openWB) und Ladepunkt-Nummer
+						anderen openWB (secondary openWB) und die Ladepunkt-Nummer
 						eingetragen. Bei der openWB Duo als secondary openWB
-						sind zwei Ladepunkte mit der Nummer 1 und 2
-						hinzuzufügen.
+						können zwei Ladepunkte mit der Nummer 1 und 2
+						hinzugefügt werden.
 					</p>
+					<p>Bei vorkonfigurierten openWBs kann ab Werk hier bereits ein Ladepunkt eingetragen sein.</p>
 					<p>
 						Als weitere Hardware-Optionen können Phasenumschaltung,
 						Control-Pilot-Unterbrechung, Anzahl angeschlossener
 						Phasen sowie Phase 1 des Ladekabels konfiguriert werden.
 						Jede openWB mit Phasenumschaltung kann auch
 						Control-Pilot-Unterbrechung, wobei bei openWBs ohne
-						Phasenumschaltung ist diese Option aufrüstbar. Bei
+						Phasenumschaltung diese Option aufrüstbar ist. Bei
 						mehreren openWBs ist es sinnvoll die Ladepunkte auf
 						unterschiedliche Phasen aufzuteilen.
 					</p>
-					<p>
-						Die Phase der Wallbox-Zuleitung muss korrekt ausgewählt
+					<p> Unter Elektrischer Anschluss Phase 1 des Ladekabels muss
+						die Phase der Wallbox-Zuleitung  korrekt ausgewählt
 						werden, sonst ist eine Überlastung möglich, wenn bei
 						einphasiger Ladung alle Ladepunkte auf derselben Phase
-						liegen und gleichzeitig Strom ziehen.
+						liegen und gleichzeitig Strom ziehen. Bitte lesen Sie dazu auch
+						die Hinweistexte im rechten Fenster, welche durch klicken auf das umrundete 
+						Fragezeichensymbol hinter den Menüpunkten aufgerufen werden können.
 					</p>
 					<p>
-						Im Menü Ladepunkt-Profile können Eintragungen bzgl. des
-						Maximalstroms bei einer Phase bzw. mehreren Phasen
-						vorgenommen werden sowie eine automatische Sperre
-						eingerichtet und Zeitpläne dafür angelegt werden.
+						Im Menü Ladepunkt-Profile ein Standard Ladepunkt-Profil hinzufügen und 
+						die Eintragungen bzgl. des Maximalstroms bei einer Phase bzw. mehreren Phasen
+						vornehmen sowie - falls erwünscht - eine automatische Sperre mit Zeitplänen
+						einrichten.
 					</p>
 					<p class="font-weight-bold">
 						Änderungen werden nur bei klicken auf speichern wirksam
@@ -338,7 +352,7 @@
 						beide in einer Ebene innerhalb des EVU- Zählers.
 					</p>
 					<p>
-						Die Ladepunkte (z.B. Externe openWB custom, Duo,...)
+						Die Ladepunkte (z.B. Externe openWB, interne openWB, Pro, satellit,...)
 						befinden sich dann auch in derselben Ebene wie der
 						Speicher und der Wechselrichter innerhalb der Ebene des
 						EVU-Zählers.
@@ -364,7 +378,7 @@
 			<div v-if="currentPage == 9" class="row m-0">
 				<div class="page-help-text col-md-3 py-2">
 					<p>
-						Zuerst Fahrzeug-Profile und Lade- Profile konfigurieren.
+						Zuerst Fahrzeug-Profile und Lade-Profile konfigurieren.
 						In den meisten Fällen reicht das
 						Standard-Fahrzeug-Profil aus, vor allem wenn alle Autos
 						mit dem gleichen Lademodus geladen werden oder eigene
@@ -380,8 +394,8 @@
 					</p>
 					<p>
 						In den meisten Fällen sind die Einstellungen im
-						Standard-Lade- Profil für sofortiges Laden ausreichend,
-						eventuell Soll- Ladestrom anpassen. Ansonsten ein
+						Standard-Lade-Profil für sofortiges Laden ausreichend,
+						eventuell Soll-Ladestrom anpassen. Ansonsten ein
 						eigenes Lade-Profil anlegen. Dann Fahrzeug anlegen und
 						Fahrzeug-Profil und Ladeprofil dem entsprechenden
 						Fahrzeug zuordnen.
@@ -397,7 +411,6 @@
 						Wichtig: Die Phasigkeit des Fahrzeugs ist richtig
 						einzutragen!
 					</p>
-
 					<p>
 						Kennt man die Phasigkeit des Fahrzeugs nicht (z.B.
 						Besucherfahrzeug) besser ein Besucherfahrzeugprofil
