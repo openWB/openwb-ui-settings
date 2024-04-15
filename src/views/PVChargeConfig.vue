@@ -466,7 +466,6 @@
 								)
 							"
 						>
-							<template #help> </template>
 						</openwb-base-range-input>
 						<openwb-base-button-group-input
 							title="Entladeleistung des Speichers oberhalb des Mindest-SoC des Speichers"
