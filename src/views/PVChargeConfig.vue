@@ -386,20 +386,30 @@
 						</template>
 					</openwb-base-button-group-input>
 					<div v-if="batMode === 'min_soc_bat_mode'">
-						<openwb-base-number-input
-							title="Ladeleistung für Speicher unterhalb des Mindest-SoC des Speichers [optional]"
-							:min="0"
-							:step="0.1"
-							unit="kW"
+						<openwb-base-button-group-input
+							title="Ladeleistung für Speicher unterhalb des Mindest-SoC des Speichers"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Nein',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'Ja',
+									class: 'btn-outline-success',
+								},
+							]"
+							v-model="batPowerReserveActive"
 							:model-value="
 								$store.state.mqtt[
-									'openWB/general/chargemode_config/pv_charging/bat_power_reserve'
-								] / 1000
+									'openWB/general/chargemode_config/pv_charging/bat_power_reserve_active'
+								]
 							"
 							@update:model-value="
 								updateState(
-									'openWB/general/chargemode_config/pv_charging/bat_power_reserve',
-									$event * 1000,
+									'openWB/general/chargemode_config/pv_charging/bat_power_reserve_active',
+									$event,
 								)
 							"
 						>
@@ -413,6 +423,29 @@
 								verbleibenden Überschuss werden die Fahrzeuge
 								geladen.</template
 							>
+						</openwb-base-button-group-input>
+						<openwb-base-number-input
+							v-if="
+								$store.state.mqtt[
+									'openWB/general/chargemode_config/pv_charging/bat_power_reserve_active'
+								]
+							"
+							:min="0.1"
+							:step="0.1"
+							unit="kW"
+							:required
+							:model-value="
+								$store.state.mqtt[
+									'openWB/general/chargemode_config/pv_charging/bat_power_reserve'
+								] / 1000
+							"
+							@update:model-value="
+								updateState(
+									'openWB/general/chargemode_config/pv_charging/bat_power_reserve',
+									$event * 1000,
+								)
+							"
+						>
 						</openwb-base-number-input>
 						<openwb-base-range-input
 							title="Mindest-SoC des Speichers"
@@ -433,13 +466,51 @@
 								)
 							"
 						>
-							<template #help> </template>
 						</openwb-base-range-input>
+						<openwb-base-button-group-input
+							title="Entladeleistung des Speichers oberhalb des Mindest-SoC des Speichers"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Nein',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'Ja',
+									class: 'btn-outline-success',
+								},
+							]"
+							v-model="batPowerReserveActive"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/general/chargemode_config/pv_charging/bat_power_discharge_active'
+								]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/general/chargemode_config/pv_charging/bat_power_discharge_active',
+									$event,
+								)
+							"
+						>
+							<template #help
+								>Wird der Mindest-SoC überschritten, wird der
+								Überschuss ins Fahrzeug geladen und der Speicher
+								mit der hier eingestellten Leistung in die
+								Fahrzeuge entladen.</template
+							>
+						</openwb-base-button-group-input>
 						<openwb-base-number-input
-							title="Entladeleistung des Speichers oberhalb des Mindest-SoC des Speichers [optional]"
-							:min="0"
+							v-if="
+								$store.state.mqtt[
+									'openWB/general/chargemode_config/pv_charging/bat_power_discharge_active'
+								]
+							"
+							:min="0.1"
 							:step="0.1"
 							unit="kW"
+							:required
 							:model-value="
 								$store.state.mqtt[
 									'openWB/general/chargemode_config/pv_charging/bat_power_discharge'
@@ -452,12 +523,6 @@
 								)
 							"
 						>
-							<template #help
-								>Wird der Mindest-SoC überschritten, wird der
-								Überschuss ins Fahrzeug geladen und der Speicher
-								mit der hier eingestellten Leistung in die
-								Fahrzeuge entladen.</template
-							>
 						</openwb-base-number-input>
 					</div>
 				</div>
@@ -492,7 +557,9 @@ export default {
 				"openWB/general/chargemode_config/pv_charging/phase_switch_delay",
 				"openWB/general/chargemode_config/pv_charging/bat_mode",
 				"openWB/general/chargemode_config/pv_charging/bat_power_reserve",
+				"openWB/general/chargemode_config/pv_charging/bat_power_reserve_active",
 				"openWB/general/chargemode_config/pv_charging/bat_power_discharge",
+				"openWB/general/chargemode_config/pv_charging/bat_power_discharge_active",
 				"openWB/general/chargemode_config/pv_charging/min_bat_soc",
 			],
 			calculatedControlMode: undefined,
