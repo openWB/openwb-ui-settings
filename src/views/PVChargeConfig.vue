@@ -336,19 +336,24 @@
 				</div>
 				<div v-else>
 					<openwb-base-button-group-input
-						title="Priorisierung"
+						title="Laden mit Überschuss"
 						:buttons="[
-							{ buttonValue: false, text: 'Fahrzeuge' },
-							{ buttonValue: true, text: 'Speicher' },
+							{ buttonValue: 'ev_mode', text: 'Fahrzeuge' },
+							{ buttonValue: 'bat_mode', text: 'Speicher' },
+							{
+								buttonValue: 'min_soc_bat_mode',
+								text: 'Mindest-SoC des Speichers',
+							},
 						]"
+						v-model="batMode"
 						:model-value="
 							$store.state.mqtt[
-								'openWB/general/chargemode_config/pv_charging/bat_prio'
+								'openWB/general/chargemode_config/pv_charging/bat_mode'
 							]
 						"
 						@update:model-value="
 							updateState(
-								'openWB/general/chargemode_config/pv_charging/bat_prio',
+								'openWB/general/chargemode_config/pv_charging/bat_mode',
 								$event,
 							)
 						"
@@ -362,207 +367,99 @@
 							Speicher-SoC. Eine aktive Speichersteuerung durch
 							openWB ist aktuell mangels Speicherschnittstelle
 							nicht möglich.<br /><br />
-							Bei Priorisierung "Fahrzeuge" wird die gesamte
-							PV-Leistung ABZÜGLICH der "reservierten
-							Ladeleistung" des Speichers zum Fahrzeugladen
-							verwendet.<br /><br />
-							Bei Priorisierung "Speicher" wird die gesamte
-							PV-Leistung und ZUSÄTZLICH die "erlaubte
-							Entladeleistung" des Speichers (bis zum Erreichen
-							des "minimalen Entlade-SoC" des Speichers) zum
-							Fahrzeugladen verwendet.<br /><br />
-							Beide Modi lassen sich mit den zusätzlichen
-							Einstellungen an die eigenen Bedürfnisse anpassen,
-							so dass auch ein Mischbetrieb möglich ist.
+							Bei Auswahl "Fahrzeuge" wird der gesamte Überschuss
+							in das EV geladen. Ist die maximale Ladeleistung der
+							Fahrzeuge erreicht und es wird eingespeist, wird
+							dieser Überschuss in den Speicher geladen.<br /><br />
+							Bei Auswahl "Speicher" wird der gesamte Überschuss
+							in den Speicher geladen. Ist die maximale
+							Ladeleistung des Speichers erreicht und es wird
+							eingespeist, wird dieser Überschuss unter Beachtung
+							der Einschaltschwelle in die Fahrzeuge geladen.<br /><br />
+							Bei Auswahl "Mindest-SoC des Speichers" wird der
+							Überschuss bis zum Mindest-SoC in den Speicher
+							geladen. Ist die maximale Ladeleistung des Speichers
+							erreicht und es wird eingespeist, wird dieser
+							Überschuss in die Fahrzeuge geladen. Wird der
+							Mindest-SoC überschritten, wird der Überschuss ins
+							Fahrzeug geladen.
 						</template>
 					</openwb-base-button-group-input>
-					<openwb-base-number-input
-						title="Reservierte Ladeleistung"
-						:min="0"
-						:step="0.1"
-						unit="kW"
-						:model-value="
-							$store.state.mqtt[
-								'openWB/general/chargemode_config/pv_charging/charging_power_reserve'
-							] / 1000
-						"
-						@update:model-value="
-							updateState(
-								'openWB/general/chargemode_config/pv_charging/charging_power_reserve',
-								$event * 1000,
-							)
-						"
-					>
-						<template #help>
-							Die "reservierte Ladeleistung" des Speichers wird
-							von der Regelung auch bei "Fahrzeuge"-Vorrang NICHT
-							für das Fahrzeugladen verwendet und bleibt immer dem
-							Speicher vorbehalten, sofern dieser nicht zu 100%
-							geladen ist.
-						</template>
-					</openwb-base-number-input>
-					<openwb-base-number-input
-						title="Erlaubte Entladeleistung"
-						:min="0"
-						:step="0.1"
-						unit="kW"
-						:model-value="
-							$store.state.mqtt[
-								'openWB/general/chargemode_config/pv_charging/rundown_power'
-							] / 1000
-						"
-						@update:model-value="
-							updateState(
-								'openWB/general/chargemode_config/pv_charging/rundown_power',
-								$event * 1000,
-							)
-						"
-					>
-						<template #help>
-							Die "erlaubte Entladeleistung" des Speichers wird
-							von der Regelung bei "Speicher"-Vorrang ZUSÄTZLICH
-							zur PV-Leistung für das Fahrzeugladen verwendet,
-							solange der Speicher-SoC über dem "minimalen
-							Entlade-SoC" liegt.
-						</template>
-					</openwb-base-number-input>
-					<openwb-base-range-input
-						title="Minimaler Entlade-SoC"
-						:min="0"
-						:max="20"
-						:step="1"
-						unit="%"
-						:labels="[
-							{ label: 0, value: 0 },
-							{ label: 5, value: 5 },
-							{ label: 10, value: 10 },
-							{ label: 15, value: 15 },
-							{ label: 20, value: 20 },
-							{ label: 25, value: 25 },
-							{ label: 30, value: 30 },
-							{ label: 35, value: 35 },
-							{ label: 40, value: 40 },
-							{ label: 45, value: 45 },
-							{ label: 50, value: 50 },
-							{ label: 55, value: 55 },
-							{ label: 60, value: 60 },
-							{ label: 65, value: 65 },
-							{ label: 70, value: 70 },
-							{ label: 75, value: 75 },
-							{ label: 80, value: 80 },
-							{ label: 85, value: 85 },
-							{ label: 90, value: 90 },
-							{ label: 95, value: 95 },
-							{ label: 'Aus', value: 100 },
-						]"
-						:model-value="
-							$store.state.mqtt[
-								'openWB/general/chargemode_config/pv_charging/rundown_soc'
-							]
-						"
-						@update:model-value="
-							updateState(
-								'openWB/general/chargemode_config/pv_charging/rundown_soc',
-								$event,
-							)
-						"
-					>
-						<template #help>
-							Ein vorhandener Speicher wird im Modus PV-Laden mit
-							der erlaubten Entladeleistung höchstens bis zu dem
-							hier eingestellten Ladestand entladen.
-						</template>
-					</openwb-base-range-input>
-					<hr />
-					<openwb-base-heading>
-						Laden mit minimalem Dauerstrom
-					</openwb-base-heading>
-					<openwb-base-range-input
-						title="Einschalt-SoC"
-						:min="0"
-						:max="18"
-						:step="1"
-						unit="%"
-						:labels="[
-							{ label: 'Aus', value: 0 },
-							{ label: 10, value: 10 },
-							{ label: 15, value: 15 },
-							{ label: 20, value: 20 },
-							{ label: 25, value: 25 },
-							{ label: 30, value: 30 },
-							{ label: 35, value: 35 },
-							{ label: 40, value: 40 },
-							{ label: 45, value: 45 },
-							{ label: 50, value: 50 },
-							{ label: 55, value: 55 },
-							{ label: 60, value: 60 },
-							{ label: 65, value: 65 },
-							{ label: 70, value: 70 },
-							{ label: 75, value: 75 },
-							{ label: 80, value: 80 },
-							{ label: 85, value: 85 },
-							{ label: 90, value: 90 },
-							{ label: 95, value: 95 },
-						]"
-						:model-value="
-							$store.state.mqtt[
-								'openWB/general/chargemode_config/pv_charging/switch_on_soc'
-							]
-						"
-						@update:model-value="updateBatterySwitchOnSoc($event)"
-					>
-						<template #help
-							>Ist der Speicher-SoC größer oder gleich dem
-							"Einschalt-SoC", wird der Speicher im Modus
-							"PV-Laden" bei aktiviertem Mindeststrom bis zum
-							"Ausschalt-SoC" entladen, auch wenn KEIN Überschuss
-							vorhanden ist. Der "Einschalt-SoC" muss größer oder
-							gleich dem "Ausschalt-SoC" sein.</template
+					<div v-if="batMode === 'min_soc_bat_mode'">
+						<openwb-base-number-input
+							title="Ladeleistung für Speicher unterhalb des Mindest-SoC des Speichers [optional]"
+							:min="0"
+							:step="0.1"
+							unit="kW"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/general/chargemode_config/pv_charging/bat_power_reserve'
+								] / 1000
+							"
+							@update:model-value="
+								updateState(
+									'openWB/general/chargemode_config/pv_charging/bat_power_reserve',
+									$event * 1000,
+								)
+							"
 						>
-					</openwb-base-range-input>
-					<openwb-base-range-input
-						title="Ausschalt-SoC"
-						:min="0"
-						:max="18"
-						:step="1"
-						unit="%"
-						:labels="[
-							{ label: 'Aus', value: 0 },
-							{ label: 5, value: 5 },
-							{ label: 10, value: 10 },
-							{ label: 15, value: 15 },
-							{ label: 20, value: 20 },
-							{ label: 25, value: 25 },
-							{ label: 30, value: 30 },
-							{ label: 35, value: 35 },
-							{ label: 40, value: 40 },
-							{ label: 45, value: 45 },
-							{ label: 50, value: 50 },
-							{ label: 55, value: 55 },
-							{ label: 60, value: 60 },
-							{ label: 65, value: 65 },
-							{ label: 70, value: 70 },
-							{ label: 75, value: 75 },
-							{ label: 80, value: 80 },
-							{ label: 85, value: 85 },
-							{ label: 90, value: 90 },
-						]"
-						:model-value="
-							$store.state.mqtt[
-								'openWB/general/chargemode_config/pv_charging/switch_off_soc'
-							]
-						"
-						@update:model-value="updateBatterySwitchOffSoc($event)"
-					>
-						<template #help
-							>Ist der Speicher-SoC größer oder gleich dem
-							"Einschalt-SoC", wird der Speicher im Modus
-							"PV-Laden" bei aktiviertem Mindeststrom bis zum
-							"Ausschalt-SoC" entladen, auch wenn KEIN Überschuss
-							vorhanden ist. Der "Einschalt-SoC" muss größer oder
-							gleich dem "Ausschalt-SoC" sein.</template
+							<template #help
+								>ACHTUNG: Der hier eingestellte Wert darf die
+								maximale Ladeleistung des Speichers nicht
+								überschreiten.<br />
+								Wird der Mindest-SoC des Speichers nicht
+								erreicht, wird der Speicher mit der hier
+								eingestellte Leistung geladen. Mit dem
+								verbleibenden Überschuss werden die Fahrzeuge
+								geladen.</template
+							>
+						</openwb-base-number-input>
+						<openwb-base-range-input
+							title="Mindest-SoC des Speichers"
+							:min="0"
+							:max="100"
+							:step="1"
+							unit="%"
+							:required
+							:model-value="
+								$store.state.mqtt[
+									'openWB/general/chargemode_config/pv_charging/min_bat_soc'
+								]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/general/chargemode_config/pv_charging/min_bat_soc',
+									$event,
+								)
+							"
 						>
-					</openwb-base-range-input>
+							<template #help> </template>
+						</openwb-base-range-input>
+						<openwb-base-number-input
+							title="Entladeleistung des Speichers oberhalb des Mindest-SoC des Speichers [optional]"
+							:min="0"
+							:step="0.1"
+							unit="kW"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/general/chargemode_config/pv_charging/bat_power_discharge'
+								] / 1000
+							"
+							@update:model-value="
+								updateState(
+									'openWB/general/chargemode_config/pv_charging/bat_power_discharge',
+									$event * 1000,
+								)
+							"
+						>
+							<template #help
+								>Wird der Mindest-SoC überschritten, wird der
+								Überschuss ins Fahrzeug geladen und der Speicher
+								mit der hier eingestellten Leistung in die
+								Fahrzeuge entladen.</template
+							>
+						</openwb-base-number-input>
+					</div>
 				</div>
 			</openwb-base-card>
 			<openwb-base-submit-buttons
@@ -593,12 +490,10 @@ export default {
 				"openWB/general/chargemode_config/pv_charging/switch_off_delay",
 				"openWB/general/chargemode_config/pv_charging/phases_to_use",
 				"openWB/general/chargemode_config/pv_charging/phase_switch_delay",
-				"openWB/general/chargemode_config/pv_charging/bat_prio",
-				"openWB/general/chargemode_config/pv_charging/switch_on_soc",
-				"openWB/general/chargemode_config/pv_charging/switch_off_soc",
-				"openWB/general/chargemode_config/pv_charging/charging_power_reserve",
-				"openWB/general/chargemode_config/pv_charging/rundown_power",
-				"openWB/general/chargemode_config/pv_charging/rundown_soc",
+				"openWB/general/chargemode_config/pv_charging/bat_mode",
+				"openWB/general/chargemode_config/pv_charging/bat_power_reserve",
+				"openWB/general/chargemode_config/pv_charging/bat_power_discharge",
+				"openWB/general/chargemode_config/pv_charging/min_bat_soc",
 			],
 			calculatedControlMode: undefined,
 		};
@@ -645,41 +540,10 @@ export default {
 				}
 			},
 		},
-	},
-	methods: {
-		updateBatterySwitchOnSoc(event) {
-			this.updateState(
-				"openWB/general/chargemode_config/pv_charging/switch_on_soc",
-				event,
-			);
-			if (
-				event <=
-				this.$store.state.mqtt[
-					"openWB/general/chargemode_config/pv_charging/switch_off_soc"
-				]
-			) {
-				this.updateState(
-					"openWB/general/chargemode_config/pv_charging/switch_off_soc",
-					Math.max(0, event - 5),
-				);
-			}
-		},
-		updateBatterySwitchOffSoc(event) {
-			this.updateState(
-				"openWB/general/chargemode_config/pv_charging/switch_off_soc",
-				event,
-			);
-			if (
-				event >=
-				this.$store.state.mqtt[
-					"openWB/general/chargemode_config/pv_charging/switch_on_soc"
-				]
-			) {
-				this.updateState(
-					"openWB/general/chargemode_config/pv_charging/switch_on_soc",
-					event + 5,
-				);
-			}
+		batMode() {
+			return this.$store.state.mqtt[
+				"openWB/general/chargemode_config/pv_charging/bat_mode"
+			];
 		},
 	},
 	watch: {

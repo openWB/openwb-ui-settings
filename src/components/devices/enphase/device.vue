@@ -80,11 +80,14 @@
 				Ebenfalls wird ein abgelaufenes Token (derzeit nach einem Jahr)
 				automatisch erneuert.<br />
 				Wenn Sie ein Token manuell erstellen möchten, können Sie dies
-				auf der <a
+				auf der
+				<a
 					href="https://developer.enphase.com/docs/quickstart.html"
 					target="_blank"
 					rel="noopener"
-				>Enphase-Webseite</a> erledigen.
+					>Enphase-Webseite</a
+				>
+				erledigen.
 			</template>
 		</openwb-base-text-input>
 	</div>
