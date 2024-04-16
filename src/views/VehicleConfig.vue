@@ -293,7 +293,7 @@
 							"
 						>
 							<openwb-base-button-group-input
-								title="SoC aus Fahrzeug auslesen"
+								title="SoC direkt aus Fahrzeug auslesen"
 								:buttons="[
 									{
 										buttonValue: false,
@@ -324,12 +324,13 @@
 								"
 							>
 								<template #help>
-									Wenn Ladepunkt und Fahrzeug das Auslesen des
-									SoCs unterstützen, wird nach dem Anstecken
-									der SoC aus dem Fahrzeug ausgelesen und
-									während der Ladung berechnet. Das Auslesen
-									des SoC aus dem Fahrzeug ist aktuell nur mit
-									einer openWB Pro möglich.
+									Wenn Ladepunkt und Fahrzeug das direkte
+									Auslesen des SoCs über das Ladekabel
+									unterstützen, wird der SoC nach dem
+									Anstecken aus dem Fahrzeug ausgelesen und
+									während der Ladung berechnet. Das direkte
+									Auslesen des SoC aus dem Fahrzeug ist
+									aktuell nur mit einer openWB Pro möglich.
 								</template>
 							</openwb-base-button-group-input>
 							<openwb-base-heading>
