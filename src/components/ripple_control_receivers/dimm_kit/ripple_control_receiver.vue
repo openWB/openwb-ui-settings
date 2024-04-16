@@ -1,8 +1,10 @@
 <template>
 	<div class="ripple-control-receiver-dimm-kit">
 		<openwb-base-alert subtype="info">
-			Wenn mindestens ein Kontakt offen ist, wird die Ladung gesperrt.
-			Wenn beide Kontakte geschlossen sind, darf geladen werden.
+			In der aktuellen Implementierung werden Kontakt 1 und 2 des
+			Dimm-Kits ausgewertet. Wenn mindestens ein Kontakt offen ist, wird
+			die Ladung gesperrt. Wenn beide Kontakte geschlossen sind, darf
+			geladen werden.
 		</openwb-base-alert>
 		<openwb-base-text-input
 			title="IP oder Hostname"
