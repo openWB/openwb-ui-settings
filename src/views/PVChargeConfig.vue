@@ -498,7 +498,9 @@
 								>Wird der Mindest-SoC überschritten, wird der
 								Überschuss ins Fahrzeug geladen und der Speicher
 								mit der hier eingestellten Leistung in die
-								Fahrzeuge entladen.</template
+								Fahrzeuge entladen. Die Entladeleistung des
+								Speichers wird dem Überschuss zum Erreichen der
+								Einschaltschwelle hinzugerechnet.</template
 							>
 						</openwb-base-button-group-input>
 						<openwb-base-number-input
