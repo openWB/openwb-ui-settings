@@ -277,6 +277,7 @@ export default {
 				"openWB/general/prices/bat",
 				"openWB/general/prices/grid",
 				"openWB/general/prices/pv",
+				"openWB/general/prices/basicprice",
 				"openWB/optional/et/provider",
 				"openWB/system/configurable/electricity_tariffs",
 			],
