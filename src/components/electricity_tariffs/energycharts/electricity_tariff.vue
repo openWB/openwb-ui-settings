@@ -68,15 +68,8 @@
 						:step="0.001"
 						:precision="3"
 						unit="ct/kWh"
-						:model-value="
-							$store.state.mqtt['openWB/general/prices/grid'] *
-							100000
-						"
 						@update:model-value="
-							updateState(
-								'openWB/general/prices/grid',
-								parseFloat(($event / 100000).toFixed(7)),
-							)
+						updateConfiguration(parseFloat(($event).toFixed(7)), 'configuration.servePrice')
 						"
 					>
 						<template #help>
@@ -92,10 +85,10 @@
 </template>
 
 <script>
-import ComponentState from "/opt/openWB-dev/openwb-ui-settings/src/components/mixins/ComponentState.vue";
+
 export default {
 	name: "ElectricityTariffEnergyCharts",
-	mixins: [ComponentState],
+	mixins: [],
 	emits: ["update:configuration"],
 	props: {
 		electricityTariff: { type: Object, required: true },
