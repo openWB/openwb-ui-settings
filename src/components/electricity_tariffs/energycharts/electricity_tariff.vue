@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import ComponentState from "/opt/openWB-dev/openwb-ui-settings/src/components/mixins/ComponentState.vue";
+import ComponentState from "/src/components/mixins/ComponentState.vue";
 export default {
 	name: "ElectricityTariffEnergyCharts",
 	mixins: [ComponentState],
