@@ -63,26 +63,29 @@
  			</template>
 		</openwb-base-select-input>
 		<openwb-base-number-input
-						title="Grundpreis - variabler Tarif mit Börsenpreisbindung"
+						title="Aufschlag zum Börsenstrompreis"
 						:min=0
-						:step="0.01"
-						:precision="2"
-						unit="€/Monat"
+						:step="0.001"
+						:precision="3"
+						unit="ct/kWh"
 						:model-value="
-							$store.state.mqtt['openWB/general/prices/basicprice'] *
-							10000
+							$store.state.mqtt['openWB/general/prices/grid'] *
+							100000
 						"
 						@update:model-value="
 							updateState(
-								'openWB/general/prices/basicprice',
-								parseFloat(($event / 10000).toFixed(7)),
+								'openWB/general/prices/grid',
+								parseFloat(($event / 100000).toFixed(7)),
 							)
 						"
 					>
 						<template #help>
 							Die Auswahl (Energy-Charts) kann für alle Stromanbieter ausgewählt werden,
 							die die Börsenstrompreise in einem variablen/dynamischen Tarif an die Kunden
-							weitergeben und dafür einen festen Grundpreis pro Monat an Gebühr erheben.
+							weitergeben. Das Modul soll es ermöglichen, dass zu tagesaktuellen Strompreisen
+							unter Berücksichtigung eines Aufschlags zu günstigen Zeiten automatisch geladen
+							werden kann und somit die Preisschwankungen an der Börse optimal ausgenutzt werden.
+
 						</template>
 					</openwb-base-number-input>
 	</div>
