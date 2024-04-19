@@ -94,6 +94,7 @@
 
 			<div v-if="currentPage == 2" class="row m-0">
 				<div class="page-help-text col-md-3 py-2">
+					<Popup :showPopup="isOpen" @close="closePopup"></Popup>
 					<p>
 						Ein System Update durchführen um die Software auf den
 						neuesten Stand zu bringen.
@@ -474,6 +475,7 @@ import HardwareInstallation from "./HardwareInstallation.vue";
 import LoadManagementConfig from "./LoadManagementConfig.vue";
 import VehicleConfig from "./VehicleConfig.vue";
 import ComponentState from "../components/mixins/ComponentState.vue";
+import Popup from './Popup.vue'
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -501,9 +503,11 @@ export default {
 		HardwareInstallation,
 		LoadManagementConfig,
 		VehicleConfig,
+		Popup,
 	},
 	data() {
 		return {
+			isOpen: false,
 			currentPage: 0,
 			prevent_err: 0,
 			pages: [
@@ -528,6 +532,12 @@ export default {
 		},
 	},
 	methods: {
+		openPopup() {
+			this.isOpen = true;
+		},
+		closePopup (){
+			this.isOpen = false;
+		},
 		nextPage() {
 			if (!this.isLastPage) {
 				this.currentPage++;
