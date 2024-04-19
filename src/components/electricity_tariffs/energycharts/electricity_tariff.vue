@@ -4,51 +4,9 @@
 			title="Land"
 			notSelected="Bitte auswählen"
 			:options="[
-				{ value: 'de', text: 'Deutschland' },
-				{ value: 'at', text: 'Österreich' },
-				{ value: 'be', text: 'Belgien' },
-				{ value: 'bg', text: 'Bulgarien' },
-				{ value: 'ch', text: 'Schweiz' },
-				{ value: 'cz', text: 'Tschechische Republik' },
-				{ value: 'dk1', text: 'Dänemark 1' },
-				{ value: 'dk2', text: 'Dänemark 2' },
-				{ value: 'ee', text: 'Estland' },
-				{ value: 'es', text: 'Spanien' },
-				{ value: 'fi', text: 'Finnland' },
-				{ value: 'fr', text: 'Frankreich' },
-				{ value: 'gr', text: 'Griechenland' },
-				{ value: 'hr', text: 'Kroatien' },
-				{ value: 'hu', text: 'Ungarn' },
-				{ value: 'itCAL', text: 'Italien Kalabrien' },
-				{ value: 'itCN', text: 'Italien Zentrum Nord' },
-				{ value: 'itCS', text: 'Italien Zentrum Süd' },
-				{ value: 'itN', text: 'Italien Nord' },
-				{ value: 'itSAC', text: 'Italien Sardinien Korsika AC' },
-				{ value: 'itSDC', text: 'Italien Sardinien Korsika DC' },
-				{ value: 'itSA', text: 'Italien Sardinien' },
-				{ value: 'itSI', text: 'Italien Sizilien' },
-				{ value: 'itS', text: 'Italien Süden' },
-				{ value: 'lt', text: 'Litauen' },
-				{ value: 'lv', text: 'Lettland' },
-				{ value: 'me', text: 'Montenegro' },
-				{ value: 'nl', text: 'Niederlande' },
-				{ value: 'no1', text: 'Norwegen 1' },
-				{ value: 'no2', text: 'Norwegen 2' },
-				{ value: 'no2NSL', text: 'Norwegen Nordsee-Verbindung' },
-				{ value: 'no3', text: 'Norwegen 3' },
-				{ value: 'no4', text: 'Norwegen 4' },
-				{ value: 'no5', text: 'Norwegen 5' },
-				{ value: 'pl', text: 'Polen' },
-				{ value: 'pt', text: 'Portugal' },
-				{ value: 'ro', text: 'Rumänien' },
-				{ value: 'rs', text: 'Serbien' },
-				{ value: 'se1', text: 'Schweden 1' },
-				{ value: 'se2', text: 'Schweden 2' },
-				{ value: 'se3', text: 'Schweden 3' },
-				{ value: 'se4', text: 'Schweden 4' },
-				{ value: 'si', text: 'Slovenien' },
-				{ value: 'sk', text: 'Slowakei' },
-
+				{ value: 'DE-LU', text: 'Deutschland' },
+				{ value: 'AT', text: 'Österreich' },
+				{ value: 'CH', text: 'Schweiz' },
 			]"
 			:model-value="electricityTariff.configuration.country"
 			@update:model-value="
@@ -68,16 +26,9 @@
 						:step="0.001"
 						:precision="3"
 						unit="ct/kWh"
-						:model-value="
-							$store.state.mqtt['openWB/general/prices/servePrice'] *
-							100000
-						"
+						:model-value="electricityTariff.configuration.serve_price"
 						@update:model-value="
-							updateState(
-								'openWB/general/prices/servePrice',
-								parseFloat(($event / 100000).toFixed(7)),
-							);
-							updateConfiguration(parseFloat(($event).toFixed(7)), 'configuration.servePrice')
+							updateConfiguration(parseFloat(($event).toFixed(7)), 'configuration.serve_price')
 						"
 					>
 						<template #help>
@@ -96,13 +47,14 @@
 import ComponentState from "/src/components/mixins/ComponentState.vue";
 export default {
 	name: "ElectricityTariffEnergyCharts",
-	mixins: [ComponentState],
+	mixins: [],
 	emits: ["update:configuration"],
 	props: {
 		electricityTariff: { type: Object, required: true },
 	},
 	data() {
-		return {};
+		return {
+		};
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {
