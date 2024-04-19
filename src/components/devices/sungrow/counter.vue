@@ -4,25 +4,9 @@
 			Einstellungen für Sungrow Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-select-input
-			title="Version"
-			:options="[
-				{ value: 0, text: 'SH (Hybrid)' },
-				{ value: 1, text: 'SG (kein Hybrid)' },
-				{ value: 2, text: 'SG (kein Hybrid) mit WiNet Dongle' },
-			]"
-			:model-value="configuration.version"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.version')
-			"
-		>
-			<template #help>
-				Die Variante SH ist nur über die LAN-IP mit openWB nutzbar.
-				Hierzu hinter dem WiNet-S Dongle den Lan Anschluss nutzen. Den
-				WiNet-S Dongle zusätzlich ins Heimnetz (per Lan oder Wlan)
-				einbinden, um ISolarCloud nutzen zu können.
-			</template>
-		</openwb-base-select-input>
+		<openwb-base-alert subtype="info">
+			Diese Komponente erfordert keine Einstellungen.
+		</openwb-base-alert>
 	</div>
 </template>
 
