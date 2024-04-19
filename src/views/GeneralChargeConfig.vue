@@ -279,7 +279,6 @@ export default {
 				"openWB/general/prices/pv",
 				"openWB/optional/et/provider",
 				"openWB/system/configurable/electricity_tariffs",
-				"openWB/general/prices/servePrice",
 			],
 		};
 	},
