@@ -474,8 +474,6 @@ import HardwareInstallation from "./HardwareInstallation.vue";
 import LoadManagementConfig from "./LoadManagementConfig.vue";
 import VehicleConfig from "./VehicleConfig.vue";
 import ComponentState from "../components/mixins/ComponentState.vue";
-import Popup from './Popup.vue'
-import { reactive } from 'vue';
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
