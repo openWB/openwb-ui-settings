@@ -5,9 +5,9 @@
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
-			Bei saldierenden Zählern (MPM3PM) werden die Zählerstände für
+			Bei saldierenden Zählern (MPM3PM, B23) werden die Zählerstände für
 			Einspeisung und Bezug aus dem Zähler ausgelesen. Bei Zählern, die
-			nicht saldierend arbeiten (Lovato, SDM630, SDM72D-M, B23), werden die
+			nicht saldierend arbeiten (Lovato, SDM630, SDM72D-M), werden die
 			Zählerstände von der openWB berechnet.
 		</openwb-base-alert>
 		<openwb-base-select-input
