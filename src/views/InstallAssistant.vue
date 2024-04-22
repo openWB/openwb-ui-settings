@@ -60,7 +60,7 @@
 				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Wir empfehlen an dieser Stelle eine Sicherung der openWB zu erzeugen, 
-						auf welches man später zurückgreifen könnte, insbesondere, wenn die openWB 
+						auf welche man später zurückgreifen könnte, insbesondere, wenn die openWB 
 						schon konfiguriert war und der Assistent nun erneut ausgeführt wird.
 					</p>
 					<p>
