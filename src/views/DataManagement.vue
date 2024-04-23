@@ -190,7 +190,7 @@
 						"
 					>
 						<openwb-base-button-group-input
-							title="Option Sicherung vor System Update"
+							title="Sicherung vor System Update"
 							:buttons="[
 								{
 									buttonValue: false,
@@ -214,7 +214,14 @@
 									$event,
 								)
 							"
-						></openwb-base-button-group-input>
+						>
+							<template #help>
+								Ist diese Option aktiviert, dann wird vor jedem
+								System-Update automatisch eine Sicherung
+								erstellt und diese in die Backup-Cloud
+								hochgeladen.
+							</template>
+						</openwb-base-button-group-input>
 						<openwb-base-button-input
 							title="Manuelle Cloud-Sicherung"
 							buttonText="Sicherung erstellen und hochladen"
