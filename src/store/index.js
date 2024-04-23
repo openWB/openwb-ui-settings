@@ -84,6 +84,7 @@ export default createStore({
 		},
 		addTopic(state, message) {
 			state.mqtt[message.topic] = message.payload;
+			console.info("ADD: ", message.topic)
 		},
 		removeTopic(state, topic) {
 			//prevent bug in installAssistent when browsing back: undefined state because of 
@@ -95,7 +96,7 @@ export default createStore({
 						//var re = new RegExp("^([/device])$")
 						//if(re.test(topic)){
 							delete state.mqtt[topic];
-						//	console.info("REMOVED: ", topic)
+							console.info("REMOVED: ", topic)
 						//}
 					//}
 				}

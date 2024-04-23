@@ -8,7 +8,7 @@
 				<div class="row justify-content-center mb-1">
 					<div class="col-md-4 d-flex py-1 justify-content-center">
 						<openwb-base-click-button
-							v-if="currentPage > 0"
+							v-if="currentPage > 0 && currentPage !=4"
 							class="btn-block btn-warning"
 							@buttonClicked="previousPage()"
 						>
@@ -177,7 +177,9 @@
 					<p>
 						Es sind keine weiteren Einstellungen notwendig. Der
 						Assistent kann nach drücken von speichern beendet
-						werden.
+						werden. Sollte diese openWB erneut konfiguriert und als primary 
+						eingesetzt werden, dann muss der Ladepunkt interne openWB vorher 
+						entfernt werden.
 					</p>
 					<p class="font-weight-bold">
 						Änderungen werden nur bei klicken auf speichern wirksam
