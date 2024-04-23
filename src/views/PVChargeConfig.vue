@@ -338,12 +338,9 @@
 					<openwb-base-button-group-input
 						title="Laden mit Überschuss"
 						:buttons="[
-							{ buttonValue: 'ev_mode', text: 'Fahrzeuge' },
-							{ buttonValue: 'bat_mode', text: 'Speicher' },
-							{
-								buttonValue: 'min_soc_bat_mode',
-								text: 'Mindest-SoC des Speichers',
-							},
+							{ buttonValue: 'ev_mode' },
+							{ buttonValue: 'bat_mode' },
+							{ buttonValue: 'min_soc_bat_mode' },
 						]"
 						v-model="batMode"
 						:model-value="
@@ -358,6 +355,27 @@
 							)
 						"
 					>
+						<template #label-ev_mode>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'car-side']"
+							/>
+							Fahrzeuge
+						</template>
+						<template #label-bat_mode>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'fa-car-battery']"
+							/>
+							Speicher
+						</template>
+						<template #label-min_soc_bat_mode>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'fa-battery-half']"
+							/>
+							Mindest-SoC des Speichers
+						</template>
 						<template #help>
 							<p>
 								Sofern ein Hausstromspeicher (im Folgenden
@@ -370,14 +388,23 @@
 								mangels Speicherschnittstelle nicht möglich.
 							</p>
 							<p>
-								Bei Auswahl "Fahrzeuge" wird der gesamte
-								Überschuss in das EV geladen. Ist die maximale
-								Ladeleistung der Fahrzeuge erreicht und es wird
-								eingespeist, wird dieser Überschuss in den
-								Speicher geladen.
+								Bei Auswahl "
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'car-side']"
+								/>
+								Fahrzeuge" wird der gesamte Überschuss in das EV
+								geladen. Ist die maximale Ladeleistung der
+								Fahrzeuge erreicht und es wird eingespeist, wird
+								dieser Überschuss in den Speicher geladen.
 							</p>
 							<p>
-								Bei Auswahl "Speicher" wird der gesamte
+								Bei Auswahl "
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'fa-car-battery']"
+								/>
+								Speicher" wird der gesamte
 								Überschuss in den Speicher geladen. Ist die
 								maximale Ladeleistung des Speichers erreicht und
 								es wird eingespeist, wird dieser Überschuss
@@ -385,7 +412,12 @@
 								Fahrzeuge geladen.
 							</p>
 							<p>
-								Bei Auswahl "Mindest-SoC des Speichers" wird der
+								Bei Auswahl "
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'fa-battery-half']"
+								/>
+								Mindest-SoC des Speichers" wird der
 								Überschuss bis zum Mindest-SoC in den Speicher
 								geladen. Ist die maximale Ladeleistung des
 								Speichers erreicht und es wird eingespeist, wird
@@ -562,9 +594,22 @@
 <script>
 import ComponentState from "../components/mixins/ComponentState.vue";
 
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+	faCarBattery as fasCarBattery,
+	faCarSide as fasCarSide,
+	faBatteryHalf as fasBatteryHalf,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(fasCarBattery, fasCarSide, fasBatteryHalf);
+
 export default {
 	name: "OpenwbPVChargeConfig",
 	mixins: [ComponentState],
+	components: {
+		FontAwesomeIcon,
+	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
