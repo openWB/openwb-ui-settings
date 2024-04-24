@@ -47,7 +47,7 @@
 import ComponentState from "/src/components/mixins/ComponentState.vue";
 export default {
 	name: "ElectricityTariffEnergyCharts",
-	mixins: [],
+	mixins: [ComponentState],
 	emits: ["update:configuration"],
 	props: {
 		electricityTariff: { type: Object, required: true },
