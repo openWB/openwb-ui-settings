@@ -75,6 +75,11 @@
 						Es wird empfohlen regelmäßige Sicherungen der Daten zu
 						erstellen.
 					</p>
+					<p>Soll der Assistent die openWB komplett neu einrichten, kann hier auch unter
+						Zurücksetzen auf Zurücksetzen gedrückt werden, wodurch alle Einstellungen,
+						angelegte Geräte/Komponenten, Ladepunkte und Fahrzeuge, usw... unwiederbringlich
+						gelöscht werden.
+					</p>
 					<p>
 						Dieser Schritt kann auch übersprungen werden.
 					</p>
