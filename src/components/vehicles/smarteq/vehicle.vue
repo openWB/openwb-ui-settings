@@ -14,7 +14,6 @@
 			</template>
 		</openwb-base-text-input>
 		<openwb-base-text-input
-			v-model="password"
 			id="password"
 			name="password"
 			title="Kennwort"
