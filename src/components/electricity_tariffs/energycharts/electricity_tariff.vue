@@ -18,8 +18,7 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.country')
 			"
-		>
-		</openwb-base-select-input>
+		/>
 		<openwb-base-number-input
 			title="Aufschlag zum Börsenstrompreis"
 			:min=0
