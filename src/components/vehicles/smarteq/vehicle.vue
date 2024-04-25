@@ -99,7 +99,7 @@
 						<li>w: webSocket interface</li>
 						<li>W: webSocket interface details</li>
 					</ul>
-                               	</div>
+				</div>
 			</template>
 		</openwb-base-text-input>
 	</div>
