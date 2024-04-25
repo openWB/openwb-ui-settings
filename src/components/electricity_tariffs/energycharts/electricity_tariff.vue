@@ -21,24 +21,23 @@
 		>
 		</openwb-base-select-input>
 		<openwb-base-number-input
-						title="Aufschlag zum Börsenstrompreis"
-						:min=0
-						:step="0.001"
-						:precision="3"
-						unit="ct/kWh"
-						:model-value="electricityTariff.configuration.surchar_price"
-						@update:model-value="
-							updateConfiguration(parseFloat(($event).toFixed(7)), 'configuration.surchar_price')
-						"
+			title="Aufschlag zum Börsenstrompreis"
+			:min=0
+			:step="0.001"
+			:precision="3"
+			unit="ct/kWh"
+			:model-value="electricityTariff.configuration.surcharge"
+			@update:model-value="
+				updateConfiguration(parseFloat(($event).toFixed(3)), 'configuration.surcharge')
+			"
 		>
-						<template #help>
-							Die Auswahl (Energy-Charts) kann für alle Stromanbieter ausgewählt werden,
-							die die Börsenstrompreise in einem variablen/dynamischen Tarif an die Kunden
-							weitergeben. Das Modul soll es ermöglichen, dass zu tagesaktuellen Strompreisen
-							unter Berücksichtigung eines Aufschlags zu günstigen Zeiten automatisch geladen
-							werden kann und somit die Preisschwankungen an der Börse optimal ausgenutzt werden.
-
-						</template>
+			<template #help>
+				Die Auswahl (Energy-Charts) kann für alle Stromanbieter ausgewählt werden,
+				die die Börsenstrompreise in einem variablen/dynamischen Tarif an die Kunden
+				weitergeben. Das Modul soll es ermöglichen, dass zu tagesaktuellen Strompreisen
+				unter Berücksichtigung eines Aufschlags zu günstigen Zeiten automatisch geladen
+				werden kann und somit die Preisschwankungen an der Börse optimal ausgenutzt werden.
+			</template>
 		</openwb-base-number-input>
 	</div>
 </template>
