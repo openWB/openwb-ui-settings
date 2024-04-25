@@ -15,8 +15,8 @@
 			notSelected="Bitte auswählen"
 			:options="[
 				{ value: 3, text: 'B23' },
-				{ value: 0, text: 'MPM3PM' },
 				{ value: 1, text: 'Lovato' },
+				{ value: 0, text: 'MPM3PM' },
 				{ value: 2, text: 'SDM630/SDM72D-M' },
 			]"
 			:model-value="configuration.version"
