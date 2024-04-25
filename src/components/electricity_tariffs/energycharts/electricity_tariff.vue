@@ -1,5 +1,11 @@
 <template>
 	<div class="electricity-tariff-energycharts">
+		<openwb-base-alert subtype="info">
+			Börsenstrompreise von Energy Charts (energy-charts.info)<br />
+			Die Rohdaten werden von Wissenschaftlern des Fraunhofer-Institut
+			für Solare Energiesysteme ISE aus zahlreichen Quellen stündlich
+			oder täglich abgerufen und für die Darstellung aufbereitet.
+		</openwb-base-alert>
 		<openwb-base-select-input
 			title="Land"
 			notSelected="Bitte auswählen"
@@ -13,12 +19,6 @@
 				updateConfiguration($event, 'configuration.country')
 			"
 		>
-			<template #help>
-				Börsenstrompreise von Energy Charts (energy-charts.info) 
-				Die Rohdaten werden von Wissenschaftlern des Fraunhofer-Institut 
-				für Solare Energiesysteme ISE aus zahlreichen Quellen stündlich 
-				oder täglich abgerufen und für die Darstellung aufbereitet.
- 			</template>
 		</openwb-base-select-input>
 		<openwb-base-number-input
 						title="Aufschlag zum Börsenstrompreis"
@@ -26,11 +26,11 @@
 						:step="0.001"
 						:precision="3"
 						unit="ct/kWh"
-						:model-value="electricityTariff.configuration.serve_price"
+						:model-value="electricityTariff.configuration.surchar_price"
 						@update:model-value="
-							updateConfiguration(parseFloat(($event).toFixed(7)), 'configuration.serve_price')
+							updateConfiguration(parseFloat(($event).toFixed(7)), 'configuration.surchar_price')
 						"
-					>
+		>
 						<template #help>
 							Die Auswahl (Energy-Charts) kann für alle Stromanbieter ausgewählt werden,
 							die die Börsenstrompreise in einem variablen/dynamischen Tarif an die Kunden
@@ -39,7 +39,7 @@
 							werden kann und somit die Preisschwankungen an der Börse optimal ausgenutzt werden.
 
 						</template>
-					</openwb-base-number-input>
+		</openwb-base-number-input>
 	</div>
 </template>
 
