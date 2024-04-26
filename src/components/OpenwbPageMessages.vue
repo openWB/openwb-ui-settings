@@ -79,7 +79,6 @@ export default {
 			mqttTopicsToSubscribe: [
 				"openWB/system/messages/+",
 				"openWB/command/" + this.$root.mqttClientId + "/messages/+",
-				"openWB/command/" + this.$root.mqttClientId + "/error",
 			],
 			showAllMessages: false,
 			hiddenMessages: [],
@@ -109,23 +108,6 @@ export default {
 		},
 		messages() {
 			const myMessages = [];
-			if (this.alertData) {
-				myMessages.push({
-					topic:
-						"openWB/command/" + this.$root.mqttClientId + "/error",
-					source: "command",
-					type: "danger",
-					message:
-						'Bei der Verarbeitung des Befehls \'<span class="font-weight-bold">' +
-						this.alertData.command +
-						"</span>' mit den Parametern '<span class=\"font-weight-bold\">" +
-						this.alertData.data +
-						"</span>' ist ein Fehler aufgetreten:<br />" +
-						"<pre class='font-weight-bold'>" +
-						this.alertData.error +
-						"</pre>",
-				});
-			}
 			this.systemMessages.forEach((message) => {
 				myMessages.push(message);
 			});
@@ -150,11 +132,6 @@ export default {
 		/**
 		 * get initial error message
 		 */
-		alertData() {
-			return this.$store.state.mqtt[
-				"openWB/command/" + this.$root.mqttClientId + "/error"
-			];
-		},
 		systemMessages() {
 			let messageTopics = this.getWildcardTopics(
 				"openWB/system/messages/+",
@@ -186,14 +163,6 @@ export default {
 		},
 		clearTopic(topic) {
 			this.$root.doPublish(topic, undefined);
-		},
-		/**
-		 * Removes client specific error topic from broker
-		 */
-		dismissError() {
-			this.clearTopic(
-				"openWB/command/" + this.$root.mqttClientId + "/error",
-			);
 		},
 		/**
 		 * Removes system or client specific topics from broker
