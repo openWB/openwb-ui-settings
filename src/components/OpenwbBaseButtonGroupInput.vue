@@ -30,7 +30,9 @@
 							:value="button.buttonValue"
 							v-bind="$attrs"
 						/>
-						{{ button.text }}
+						<slot :name="'label-' + button.buttonValue">
+							{{ button.text }}
+						</slot>
 						<font-awesome-icon
 							:icon="['fas', 'check']"
 							:style="[
