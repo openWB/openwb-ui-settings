@@ -227,7 +227,9 @@
 								"
 							/>
 							<openwb-base-alert subtype="info">
-								Die ID-Tags müssen auch in den Ladepunkt-Profil
+								Insofern Freigabe durch ID-Tags im Ladepunkt-Profil
+								aktiviert wurde, müssen die den Fahrzeugen zugeordnete 
+								ID-Tags auch in das entsprechende Ladepunkt-Profil
 								eingetragen werden, um zuzuordnen, an welchen
 								Ladepunkten die ID-Tags verwendet werden
 								dürfen.<br />
