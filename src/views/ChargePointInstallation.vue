@@ -457,14 +457,13 @@
 								Das Standard-Profil kann nicht umbenannt werden.
 							</template>
 						</openwb-base-text-input>
-						<hr />
+
 						<div
 							v-if="
-								$store.state.mqtt[
-									'openWB/optional/rfid/active'
-								] === true
+								$store.state.mqtt['openWB/optional/rfid/active']
 							"
 						>
+							<hr />
 							<openwb-base-heading>
 								Zugangskontrolle
 							</openwb-base-heading>
@@ -487,7 +486,9 @@
 								<openwb-base-array-input
 									title="Zugeordnete ID-Tags"
 									noElementsMessage="Keine ID-Tags zugeordnet."
-									:model-value="chargePointTemplate.valid_tags"
+									:model-value="
+										chargePointTemplate.valid_tags
+									"
 									@update:model-value="
 										updateState(
 											chargePointTemplateKey,
@@ -497,13 +498,13 @@
 									"
 								>
 									<template #help>
-										Wenn hier Tags eingetragen werden, können
-										nur die eingetragenen Tags zur
+										Wenn hier Tags eingetragen werden,
+										können nur die eingetragenen Tags zur
 										Fahrzeug-Zuordnung genutzt werden. Sind
 										keine Tags eingetragen, wird nur die
-										Zuordnung zum Fahrzeug geprüft. In diesem
-										Fall können alle Fahrzeuge diesen Ladepunkt
-										nutzen.
+										Zuordnung zum Fahrzeug geprüft. In
+										diesem Fall können alle Fahrzeuge diesen
+										Ladepunkt nutzen.
 										<br />
 										<span
 											v-html="$store.state.text.rfidWiki"
