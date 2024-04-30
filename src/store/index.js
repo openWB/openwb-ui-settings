@@ -84,22 +84,9 @@ export default createStore({
 		},
 		addTopic(state, message) {
 			state.mqtt[message.topic] = message.payload;
-			console.info("ADD: ", message.topic)
 		},
 		removeTopic(state, topic) {
-			//prevent bug in installAssistent when browsing back: undefined state because of 
-			//removed topic in Steuerungsmodus (primary <-> secondary)
-			//and HardwareInstallation (missing devices and components)
-			//topic will be removed after mounting of page therefore prevent removing
-			if(topic!= 'openWB/general/extern'){
-				//if(topic!= 'openWB/counter/get/hierarchy'){
-						//var re = new RegExp("^([/device])$")
-						//if(re.test(topic)){
-							delete state.mqtt[topic];
-							console.info("REMOVED: ", topic)
-						//}
-					//}
-				}
+			delete state.mqtt[topic];
 		},
 		updateTopic(state, message) {
 			// helper function to update nested objects py path

@@ -178,7 +178,7 @@
 						Es sind keine weiteren Einstellungen notwendig. Der
 						Assistent kann nach drücken von speichern beendet
 						werden. Sollte diese openWB erneut konfiguriert und als primary 
-						eingesetzt werden, dann muss der Ladepunkt interne openWB vorher 
+						eingesetzt werden, dann muss der angelegte Ladepunkt interne openWB vorher 
 						entfernt werden.
 					</p>
 					<p class="font-weight-bold">
@@ -432,27 +432,6 @@
 					/>
 				</div>
 			</div>
-
-			<div v-if="currentPage == 10" class="row m-0">
-				<div class="page-help-text col-md-3 py-2">
-					<p>
-						Zum Schluss eine Sicherung der vorgenommenen
-						Konfiguration anfertigen, falls gewünscht.
-					</p>
-				</div>
-				<div class="col py-2">
-					<DataManagement
-						formName="cloudBackupForm"
-						:hideReset="true"
-						:hideDefaults="true"
-						@save="$emit('save')"
-						@reset="$emit('reset')"
-						@defaults="$emit('defaults')"
-						@sendCommand="$emit('sendCommand', $event)"
-					/>
-				</div>
-			</div>
-
 			<div v-if="isLastPage">
 				<h2>
 					Die Grundkonfiguration ist jetzt abgeschlossen.
@@ -519,7 +498,6 @@ export default {
 				{ title: "Ladepunkte" },
 				{ title: "Lastmanagement" },
 				{ title: "Fahrzeuge" },
-				{ title: "Datenverwaltung" },
 				{ title: "Abgeschlossen" },
 			],
 		};
@@ -537,9 +515,6 @@ export default {
 			} 
 			if(this.$store.state.mqtt['openWB/general/extern'] != true && this.currentPage == 4){
 				this.currentPage = 5;
-			}
-			else {
-				console.warn("currentPage is already at lastPage");
 			}
 		},
 		previousPage() {
@@ -559,9 +534,6 @@ export default {
 			}
 			if(this.prevent_err == 6){
 				this.prevent_err = 0;
-			}
-			else {
-				console.warn("currentPage is already at 0");
 			}
 		},
 		endAssistant() {
