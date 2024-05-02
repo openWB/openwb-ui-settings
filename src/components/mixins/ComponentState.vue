@@ -197,14 +197,20 @@ export default {
 		this.$root.doSubscribe(this.mqttTopicsToSubscribe);
 	},
 	unmounted() {
-		if(this.mqttTopicsToSubscribe.sort().join(',') !== this.mqttTopicsAdded.sort().join(',')){
+		if (
+			this.mqttTopicsToSubscribe.sort().join(",") !==
+			this.mqttTopicsAdded.sort().join(",")
+		) {
 			this.$root.doUnsubscribe(this.mqttTopicsToSubscribe);
 			this.mqttTopicsToSubscribe.forEach((topic) => {
 				if (topic.includes("#") || topic.includes("+")) {
 					console.debug("expanding wildcard topic:", topic);
 					Object.keys(this.getWildcardTopics(topic)).forEach(
 						(wildcardTopic) => {
-							console.debug("removing wildcardTopic:", wildcardTopic);
+							console.debug(
+								"removing wildcardTopic:",
+								wildcardTopic,
+							);
 							this.$store.commit("removeTopic", wildcardTopic);
 						},
 					);

@@ -404,12 +404,11 @@
 									fixed-width
 									:icon="['fas', 'fa-car-battery']"
 								/>
-								Speicher" wird der gesamte
-								Überschuss in den Speicher geladen. Ist die
-								maximale Ladeleistung des Speichers erreicht und
-								es wird eingespeist, wird dieser Überschuss
-								unter Beachtung der Einschaltschwelle in die
-								Fahrzeuge geladen.
+								Speicher" wird der gesamte Überschuss in den
+								Speicher geladen. Ist die maximale Ladeleistung
+								des Speichers erreicht und es wird eingespeist,
+								wird dieser Überschuss unter Beachtung der
+								Einschaltschwelle in die Fahrzeuge geladen.
 							</p>
 							<p>
 								Bei Auswahl "
@@ -417,13 +416,13 @@
 									fixed-width
 									:icon="['fas', 'fa-battery-half']"
 								/>
-								Mindest-SoC des Speichers" wird der
-								Überschuss bis zum Mindest-SoC in den Speicher
-								geladen. Ist die maximale Ladeleistung des
-								Speichers erreicht und es wird eingespeist, wird
-								dieser Überschuss in die Fahrzeuge geladen. Wird
-								der Mindest-SoC überschritten, wird der
-								Überschuss ins Fahrzeug geladen.
+								Mindest-SoC des Speichers" wird der Überschuss
+								bis zum Mindest-SoC in den Speicher geladen. Ist
+								die maximale Ladeleistung des Speichers erreicht
+								und es wird eingespeist, wird dieser Überschuss
+								in die Fahrzeuge geladen. Wird der Mindest-SoC
+								überschritten, wird der Überschuss ins Fahrzeug
+								geladen.
 							</p>
 						</template>
 					</openwb-base-button-group-input>

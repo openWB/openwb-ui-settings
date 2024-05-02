@@ -174,9 +174,11 @@ export default createStore({
 		},
 		installAssistant(state) {
 			return new Promise((resolve) => {
-				if (state.mqtt["openWB/system/installAssistantDone"] !== undefined) {
-					resolve(state.mqtt["openWB/system/installAssistantDone"],
-					);
+				if (
+					state.mqtt["openWB/system/installAssistantDone"] !==
+					undefined
+				) {
+					resolve(state.mqtt["openWB/system/installAssistantDone"]);
 				} else {
 					var timer, interval;
 					// add general timeout if topic not set
@@ -192,7 +194,11 @@ export default createStore({
 						) {
 							clearTimeout(timer);
 							clearInterval(interval);
-							resolve(state.mqtt["openWB/system/installAssistantDone"]);
+							resolve(
+								state.mqtt[
+									"openWB/system/installAssistantDone"
+								],
+							);
 						}
 					}, 100);
 				}
