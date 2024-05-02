@@ -1,229 +1,208 @@
-import { createRouter, createWebHashHistory } from "vue-router";
-import store from "../store";
+import { createStore } from "vuex";
 
-const routes = [
-	{
-		path: "/",
-		redirect: "/GeneralConfig",
+let states = {
+	mqtt: {},
+	local: {
+		reloadRequired: false,
+		savingData: false,
 	},
-	{
-		path: "/Status",
-		name: "Status",
-		meta: {
-			heading: "Status",
-		},
-		component: () => import("../views/Status.vue"),
+	text: {
+		rfidWiki:
+			"Bitte auch hiervon abhängige Einstellungen beachten. Eine Übersicht gibt es im " +
+			'<a href="https://github.com/openWB/core/wiki/Ladung-nur-nach-Freischaltung" ' +
+			'target="_blank" rel="noopener noreferrer">Wiki</a>.',
 	},
-	{
-		path: "/Logging/ChargeLog",
-		name: "ChargeLog",
-		meta: {
-			heading: "Auswertungen - Ladeprotokoll",
-		},
-		component: () => import("../views/ChargeLog.vue"),
-	},
-	{
-		path: "/Logging/Chart/:chartRange?/:initialDate?",
-		name: "DailyChart",
-		meta: {
-			heading: "Auswertungen - Diagramme",
-		},
-		component: () => import("../views/Chart.vue"),
-	},
-	{
-		path: "/GeneralConfig",
-		name: "GeneralConfig",
-		meta: {
-			heading: "Einstellungen - Allgemein",
-		},
-		component: () => import("../views/GeneralConfig.vue"),
-	},
-	{
-		path: "/OptionalComponents",
-		name: "OptionalComponents",
-		meta: {
-			heading: "Einstellungen - Optionale Hardware",
-		},
-		component: () => import("../views/OptionalComponents.vue"),
-	},
-	{
-		path: "/GeneralChargeConfig",
-		name: "GeneralChargeConfig",
-		meta: {
-			heading: "Ladeeinstellungen - Übergreifendes",
-		},
-		component: () => import("../views/GeneralChargeConfig.vue"),
-	},
-	{
-		path: "/InstantChargeConfig",
-		name: "InstantChargeConfig",
-		meta: {
-			heading: "Ladeeinstellungen - Sofortladen",
-		},
-		component: () => import("../views/InstantChargeConfig.vue"),
-	},
-	{
-		path: "/PVChargeConfig",
-		name: "PVChargeConfig",
-		meta: {
-			heading: "Ladeeinstellungen - PV-Laden",
-		},
-		component: () => import("../views/PVChargeConfig.vue"),
-	},
-	{
-		path: "/TimeChargeConfig",
-		name: "TimeChargeConfig",
-		meta: {
-			heading: "Ladeeinstellungen - Zeitladen",
-		},
-		component: () => import("../views/TimeChargeConfig.vue"),
-	},
-	{
-		path: "/ScheduledChargeConfig",
-		name: "ScheduledChargeConfig",
-		meta: {
-			heading: "Ladeeinstellungen - Zielladen",
-		},
-		component: () => import("../views/ScheduledChargeConfig.vue"),
-	},
-	{
-		path: "/HardwareInstallation",
-		name: "HardwareInstallation",
-		meta: {
-			heading: "Konfiguration - Geräte und Komponenten",
-		},
-		component: () => import("../views/HardwareInstallation.vue"),
-	},
-	{
-		path: "/LoadManagementConfiguration",
-		name: "LoadManagementConfiguration",
-		meta: {
-			heading: "Konfiguration - Lastmanagement",
-		},
-		component: () => import("../views/LoadManagementConfig.vue"),
-	},
-	{
-		path: "/ChargePointInstallation",
-		name: "ChargePointInstallation",
-		meta: {
-			heading: "Konfiguration - Ladepunkte",
-		},
-		component: () => import("../views/ChargePointInstallation.vue"),
-	},
-	{
-		path: "/VehicleConfiguration/:section?/:section_index?/:section_part?/:action?",
-		name: "VehicleConfiguration",
-		meta: {
-			heading: "Konfiguration - Fahrzeuge",
-		},
-		component: () => import("../views/VehicleConfig.vue"),
-	},
-	{
-		path: "/System/CloudConfiguration",
-		name: "CloudConfig",
-		meta: {
-			heading: "System - openWB Cloud",
-		},
-		component: () => import("../views/CloudConfig.vue"),
-	},
-	{
-		path: "/System/MqttBridgeConfiguration",
-		name: "MqttBridgeConfig",
-		meta: {
-			heading: "System - MQTT-Brücken",
-		},
-		component: () => import("../views/MqttBridgeConfig.vue"),
-	},
-	{
-		path: "/System/DebugConfiguration",
-		name: "Debugging",
-		meta: {
-			heading: "System - Fehlersuche",
-		},
-		component: () => import("../views/DebugConfig.vue"),
-	},
-	{
-		path: "/System/Support",
-		name: "Support",
-		meta: {
-			heading: "System - Support",
-		},
-		component: () => import("../views/Support.vue"),
-	},
-	{
-		path: "/System/LegalSettings",
-		name: "LegalSettings",
-		meta: {
-			heading: "System - Rechtliches",
-		},
-		component: () => import("../views/LegalSettings.vue"),
-	},
-	{
-		path: "/System/SystemConfiguration",
-		name: "SystemConfig",
-		meta: {
-			heading: "System - System",
-		},
-		component: () => import("../views/System.vue"),
-	},
-	{
-		path: "/System/DataManagement",
-		name: "DataManagement",
-		meta: {
-			heading: "System - Datenverwaltung",
-		},
-		component: () => import("../views/DataManagement.vue"),
-	},
-	{
-		path: "/System/InstallAssistant",
-		name: "InstallAssistant",
-		meta: {
-			heading: "System - Einrichtungsassistent",
-		},
-		component: () => import("../views/InstallAssistant.vue"),
-	},
-];
-/* examples for development only start here */
+};
+
+/* examples start here */
 if (import.meta.env.MODE !== "production") {
-	routes.push({
-		path: "/TestingStore",
-		name: "VUEX Store",
-		meta: {
-			heading: "Beispiele - VUEX Store",
+	states["examples"] = {
+		text1: "Text...",
+		text2: "mail@domain.com",
+		text3: "openwb.local",
+		text4: "http://www.openwb.de",
+		text5: "Benutzername",
+		text6: "12:34",
+		text7: "2021-10-31",
+		number1: 5,
+		number2: 10,
+		number3: 0.00028,
+		password1: "GeHeiM!",
+		textarea1: "Langer Text...",
+		range1: 6,
+		range2: 10,
+		select1: 1,
+		select2: "three",
+		buttonGroup1: 1,
+		checkbox1: true,
+		json1: { text: "Text", number: 123 },
+		hierarchy1: [
+			{
+				id: 0,
+				type: "counter",
+				children: [
+					{
+						id: 3,
+						type: "inverter",
+						children: [],
+					},
+					{
+						id: 4,
+						type: "bat",
+						children: [],
+					},
+					{
+						id: 1,
+						type: "cp",
+						children: [],
+					},
+					{
+						id: 2,
+						type: "cp",
+						children: [],
+					},
+				],
+			},
+		],
+		hierarchy1Labels: {
+			0: "EVU",
+			1: "Ladepunkt 1",
+			2: "Ladepunkt 2",
+			3: "Wechselrichter",
+			4: "Batteriespeicher",
 		},
-		component: () => import("../views/TestingStore.vue"),
-	});
+		tags: ["1234", "2345", "3456"],
+	};
 }
 
-const router = createRouter({
-	history: createWebHashHistory(),
-	routes,
-});
+export default createStore({
+	// strict: process.env.NODE_ENV !== "production",
+	state: states,
+	mutations: {
+		storeLocal(state, message) {
+			state.local[message.name] = message.value;
+		},
+		addTopic(state, message) {
+			state.mqtt[message.topic] = message.payload;
+		},
+		removeTopic(state, topic) {
+			delete state.mqtt[topic];
+		},
+		updateTopic(state, message) {
+			// helper function to update nested objects py path
+			const setPath = (object, path, value) =>
+				path
+					.split(".")
+					.reduce(
+						(o, p, i) =>
+							(o[p] =
+								path.split(".").length === ++i
+									? value
+									: o[p] || {}),
+						object,
+					);
 
-router.beforeEach(async (to) => {
-	if (to.name !== "LegalSettings") {
-		// redirect to data protection page to force acceptance of usage terms
-		const usageTermsAcknowledged =
-			await store.getters.usageTermsAcknowledged;
-		if (!usageTermsAcknowledged) {
-			return { name: "LegalSettings" };
-		}
-	}
-	if (to.name !== "InstallAssistant") {
-		const installAssistantDone = await store.getters.installAssistant;
-		if (!installAssistantDone) {
-			return { name: "InstallAssistant" };
-		}
-	}
+			if (message.topic in state.mqtt) {
+				if (message.objectPath != undefined) {
+					setPath(
+						state.mqtt[message.topic],
+						message.objectPath,
+						message.payload,
+					);
+				} else {
+					state.mqtt[message.topic] = message.payload;
+				}
+			} else {
+				console.debug("topic not found in state.mqtt: ", message.topic);
+				if (message.topic in state.examples) {
+					if (message.objectPath != undefined) {
+						setPath(
+							state.examples[message.topic],
+							message.objectPath,
+							message.payload,
+						);
+					} else {
+						state.examples[message.topic] = message.payload;
+					}
+				} else {
+					console.warn(
+						"topic not found in state: ",
+						message.topic,
+						" giving up",
+					);
+				}
+			}
+		},
+	},
+	actions: {},
+	modules: {},
+	getters: {
+		usageTermsAcknowledged(state) {
+			return new Promise((resolve) => {
+				if (
+					state.mqtt["openWB/system/usage_terms_acknowledged"] !==
+					undefined
+				) {
+					resolve(
+						state.mqtt["openWB/system/usage_terms_acknowledged"],
+					);
+				} else {
+					var timer, interval;
+					// add general timeout if topic not set
+					timer = setTimeout(() => {
+						clearInterval(interval);
+						resolve(false);
+					}, 5000);
+					// check until we received valid data
+					interval = setInterval(() => {
+						if (
+							state.mqtt[
+								"openWB/system/usage_terms_acknowledged"
+							] !== undefined
+						) {
+							clearTimeout(timer);
+							clearInterval(interval);
+							resolve(
+								state.mqtt[
+									"openWB/system/usage_terms_acknowledged"
+								],
+							);
+						}
+					}, 100);
+				}
+			});
+		},
+		installAssistant(state) {
+			return new Promise((resolve) => {
+				if (
+					state.mqtt["openWB/system/installAssistantDone"] !==
+					undefined
+				) {
+					resolve(state.mqtt["openWB/system/installAssistantDone"]);
+				} else {
+					var timer, interval;
+					// add general timeout if topic not set
+					timer = setTimeout(() => {
+						clearInterval(interval);
+						resolve(false);
+					}, 5000);
+					// check until we received valid data
+					interval = setInterval(() => {
+						if (
+							state.mqtt["openWB/system/installAssistantDone"] !==
+							undefined
+						) {
+							clearTimeout(timer);
+							clearInterval(interval);
+							resolve(
+								state.mqtt[
+									"openWB/system/installAssistantDone"
+								],
+							);
+						}
+					}, 100);
+				}
+			});
+		},
+	},
 });
-
-router.afterEach((to) => {
-	// change page (or tab) title
-	if (to.meta.heading) {
-		document.title = "openWB | " + to.meta.heading;
-	} else {
-		document.title = "openWB";
-	}
-});
-
-export default router;
