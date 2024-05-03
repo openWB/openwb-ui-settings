@@ -17,6 +17,7 @@
 			title="Port"
 			:min="1"
 			:max="65535"
+			:placeholder="502"
 			:model-value="configuration.port"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.port')
