@@ -1104,7 +1104,7 @@
 							<template #help>
 								Falls diese Option aktiviert ist, wird der
 								betroffene Ladepunkt nach dem Abstecken auf das
-								Standard Ladeprofil zurückgesetzt.
+								Standard Fahrzeug zurückgesetzt.
 							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-button-group-input
