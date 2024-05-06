@@ -4,6 +4,7 @@ export default {
 	data() {
 		return {
 			mqttTopicsToSubscribe: [],
+			mqttTopicsAdded: [],
 		};
 	},
 	emits: ["reset", "defaults", "save"],
@@ -180,11 +181,48 @@ export default {
 		if (this.mqttTopicsToSubscribe.length > 0) {
 			this.$root.doSubscribe(this.mqttTopicsToSubscribe);
 		}
+		this.mqttTopicsToSubscribe.forEach((topic) => {
+			this.mqttTopicsAdded.push(topic);
+			if (topic.includes("#") || topic.includes("+")) {
+				console.debug("skipping init of wildcard topic:", topic);
+			} else {
+				// prevent overwriting data with multiple subscriptions
+				if (!Object.keys(this.$store.state.mqtt).includes(topic)) {
+					this.$store.commit("addTopic", {
+						topic: topic,
+						payload: undefined,
+					});
+				} else {
+					console.error("multiple subscriptions of topic!", topic);
+				}
+			}
+		});
+		this.$root.doSubscribe(this.mqttTopicsToSubscribe);
 	},
 	unmounted() {
-		if (this.mqttTopicsToSubscribe.length > 0) {
+		if (
+			this.mqttTopicsToSubscribe.sort().join(",") !==
+			this.mqttTopicsAdded.sort().join(",")
+		) {
 			this.$root.doUnsubscribe(this.mqttTopicsToSubscribe);
+			this.mqttTopicsToSubscribe.forEach((topic) => {
+				if (topic.includes("#") || topic.includes("+")) {
+					console.debug("expanding wildcard topic:", topic);
+					Object.keys(this.getWildcardTopics(topic)).forEach(
+						(wildcardTopic) => {
+							console.debug(
+								"removing wildcardTopic:",
+								wildcardTopic,
+							);
+							this.$store.commit("removeTopic", wildcardTopic);
+						},
+					);
+				} else {
+					this.$store.commit("removeTopic", topic);
+				}
+			});
 		}
+		this.mqttTopicsAdded = [];
 	},
 };
 </script>
