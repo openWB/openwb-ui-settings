@@ -74,6 +74,7 @@
 		<openwb-base-text-input
 			title="Log-Filter"
 			:model-value="vehicle.configuration.logFilter"
+                        :emptyValue=""
 			@update:model-value="
 				updateConfiguration($event, 'configuration.logFilter')
 			"
