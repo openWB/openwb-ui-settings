@@ -4,7 +4,6 @@ export default {
 	data() {
 		return {
 			mqttTopicsToSubscribe: [],
-			mqttTopicsAdded: [],
 		};
 	},
 	emits: ["reset", "defaults", "save"],
@@ -182,7 +181,6 @@ export default {
 			this.$root.doSubscribe(this.mqttTopicsToSubscribe);
 		}
 		this.mqttTopicsToSubscribe.forEach((topic) => {
-			this.mqttTopicsAdded.push(topic);
 			if (topic.includes("#") || topic.includes("+")) {
 				console.debug("skipping init of wildcard topic:", topic);
 			} else {
@@ -200,10 +198,6 @@ export default {
 		this.$root.doSubscribe(this.mqttTopicsToSubscribe);
 	},
 	unmounted() {
-		if (
-			this.mqttTopicsToSubscribe.sort().join(",") !==
-			this.mqttTopicsAdded.sort().join(",")
-		) {
 			this.$root.doUnsubscribe(this.mqttTopicsToSubscribe);
 			this.mqttTopicsToSubscribe.forEach((topic) => {
 				if (topic.includes("#") || topic.includes("+")) {
@@ -221,8 +215,6 @@ export default {
 					this.$store.commit("removeTopic", topic);
 				}
 			});
-		}
-		this.mqttTopicsAdded = [];
 	},
 };
 </script>
