@@ -6,6 +6,7 @@
 		>
 			<template #footer>
 				<div class="row justify-content-center mb-1">
+					<!-- 
 					<div class="col-md-4 d-flex py-1 justify-content-center">
 						<openwb-base-click-button
 							v-if="currentPage > 0 && currentPage != 4"
@@ -19,6 +20,7 @@
 							Zurück
 						</openwb-base-click-button>
 					</div>
+					-->
 					<div class="col-md-4 d-flex py-1 justify-content-center">
 						<openwb-base-click-button
 							v-if="!isLastPage && currentPage != 4"
@@ -64,9 +66,8 @@
 						Einrichten der Geräte und Komponenten für openWB als
 						primary
 					</li>
-					<li>Konfiguration Lastmanagement</li>
 					<li>Einrichten der Ladepunkte</li>
-					<li>Konfiguration Lastmanagement (optional)</li>
+					<li>Konfiguration Lastmanagement</li>
 					<li>Einrichten der Fahrzeuge</li>
 					<li>Grundkonfiguration abgeschlossen</li>
 				</ol>
@@ -259,66 +260,7 @@
 					/>
 				</div>
 			</div>
-
 			<div v-if="currentPage == 6" class="row m-0">
-				<div class="page-help-text col-md-3 py-2">
-					<p>
-						Im Lastmanagement werden die maximale Leistung sowie die
-						maximalen Ströme für jede Phase des Zählermoduls sowie
-						die maximale Ausgangsleistung des Wechselrichters der PV
-						Anlage eingetragen, falls eine solche vorhanden ist.
-						Unter dem Punkt Vorhandene Zählermodule auf die
-						Komponente Zähler klicken und die maximale Leistung des
-						Hausanschlusses eintragen.
-					</p>
-					<p>
-						Der erste Zähler ist in der Regel der Zähler am
-						EVU-Punkt (also der letzte Punkt im Haus vor dem
-						Verbrauchszähler des Energieversorgers) - hier muss die
-						maximale Leistung eingetragen werden, die der
-						Hausanschluss verträgt und nicht die Anschlussleistung
-						der openWB.
-					</p>
-					<p>
-						Ist ein Wechselrichter unter Geräte hinzugefügt worden,
-						dann unter dem Punkt Wechselrichter noch die maximale
-						Ausgangsleistung des Wechselrichters eintragen, wenn es
-						sich um ein Hybrid-System mit DC-Speicher handelt.
-					</p>
-					<p>
-						Nach klicken auf Struktur ist außerdem die Struktur des
-						Lastmanagements zu überprüfen und ggf. anzupassen. Im
-						Normalfall befinden sich Speicher und Wechselrichter in
-						einer Ebene innerhalb des EVU-Zählers. Dazu einfach die
-						Komponenten per drag&drop verschieben.
-					</p>
-					<p>
-						Zwischenzähler können beliebig kaskadiert sein.
-						Spezialfälle stellen Hybrid-Speicher, Solaredge mit
-						mehreren Wechselrichtern sowie bspw. Victronspeicher mit
-						integriertem Zähler dar.
-					</p>
-					<p>
-						Werden hier die gewünschten Zählermodule oder
-						Wechselrichtermodule nicht angezeigt, dann bitte einen
-						Schritt zurück und die entsprechenden Geräte und
-						Komponenten hinzufügen.
-					</p>
-					<p class="font-weight-bold">
-						Änderungen werden nur bei klicken auf speichern wirksam
-					</p>
-				</div>
-				<div class="col py-2">
-					<LoadManagementConfig
-						formName="loadManagementConfigForm"
-						@save="$emit('save')"
-						@reset="$emit('reset')"
-						@defaults="$emit('defaults')"
-					/>
-				</div>
-			</div>
-
-			<div v-if="currentPage == 7" class="row m-0">
 				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Enthält die steuernde openWB Ladetechnik wird bei
@@ -375,28 +317,46 @@
 					/>
 				</div>
 			</div>
-
-			<div v-if="currentPage == 8" class="row m-0">
+			<div v-if="currentPage == 7" class="row m-0">
 				<div class="page-help-text col-md-3 py-2">
 					<p>
-						Nachdem die Geräte konfiguriert und die Ladepunkte
-						eingerichtet wurden, wird abschließend nochmal ein Blick
-						auf das Lastmanagement geworfen. Dazu öffnet man den
-						Menüpunkt Struktur.
+						Im Lastmanagement werden die maximale Leistung sowie die
+						maximalen Ströme für jede Phase des Zählermoduls sowie
+						die maximale Ausgangsleistung des Wechselrichters der PV
+						Anlage eingetragen, falls eine solche vorhanden ist.
+						Unter dem Punkt Vorhandene Zählermodule auf die
+						Komponente Zähler klicken und die maximale Leistung des
+						Hausanschlusses eintragen.
 					</p>
 					<p>
-						Im Normalfall befinden sich Speicher und Wechselrichter
-						beide in einer Ebene innerhalb des EVU- Zählers.
+						Der erste Zähler ist in der Regel der Zähler am
+						EVU-Punkt (also der letzte Punkt im Haus vor dem
+						Verbrauchszähler des Energieversorgers) - hier muss die
+						maximale Leistung eingetragen werden, die der
+						Hausanschluss verträgt und nicht die Anschlussleistung
+						der openWB.
 					</p>
 					<p>
-						Die Ladepunkte (z.B. Externe openWB, interne openWB,
-						Pro, satellit,...) befinden sich dann auch in derselben
+						Ist ein Wechselrichter unter Geräte hinzugefügt worden,
+						dann unter dem Punkt Wechselrichter noch die maximale
+						Ausgangsleistung des Wechselrichters eintragen, wenn es
+						sich um ein Hybrid-System mit DC-Speicher handelt.
+					</p>
+					<p>
+						Nach klicken auf Struktur ist außerdem die Struktur des
+						Lastmanagements zu überprüfen und ggf. anzupassen. Im
+						Normalfall befinden sich Speicher und Wechselrichter in
+						einer Ebene innerhalb des EVU-Zählers. Die Ladepunkte 
+						(z.B. Externe openWB, interne openWB,
+						Pro, satellit,...) befinden sich auch in derselben
 						Ebene wie der Speicher und der Wechselrichter innerhalb
 						der Ebene des EVU-Zählers.
 					</p>
 					<p>
-						Wenn alles ok ist, kann dieser Schritt ohne weitere
-						Anpassungen beendet werden.
+						Zwischenzähler können beliebig kaskadiert sein.
+						Spezialfälle stellen Hybrid-Speicher, Solaredge mit
+						mehreren Wechselrichtern sowie bspw. Victronspeicher mit
+						integriertem Zähler dar.
 					</p>
 					<p class="font-weight-bold">
 						Änderungen werden nur bei klicken auf speichern wirksam
@@ -412,7 +372,7 @@
 				</div>
 			</div>
 
-			<div v-if="currentPage == 9" class="row m-0">
+			<div v-if="currentPage == 8" class="row m-0">
 				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Zuerst Fahrzeug-Profile und Lade-Profile konfigurieren.
@@ -495,6 +455,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
+
 library.add(fasCaretLeft, fasCaretRight);
 
 export default {
@@ -523,7 +484,6 @@ export default {
 				{ title: "Allgemein" },
 				{ title: "Ladepunkte" },
 				{ title: "Geräte und Komponenten" },
-				{ title: "Lastmanagement" },
 				{ title: "Ladepunkte" },
 				{ title: "Lastmanagement" },
 				{ title: "Fahrzeuge" },
