@@ -2,7 +2,6 @@
 	<div>
 		<openwb-base-card
 			:title="currentPage + 1 + '. ' + pages[currentPage].title"
-			:class="currentPage > 0 && !isLastPage ? 'p-0' : ''"
 		>
 			<template #footer>
 				<div class="row justify-content-center mb-1">
