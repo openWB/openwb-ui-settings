@@ -1,34 +1,43 @@
 <template>
 	<div>
 		<openwb-base-card
-			:title="(currentPage + 1) + '. ' + pages[currentPage].title"
+			:title="currentPage + 1 + '. ' + pages[currentPage].title"
 			:class="currentPage > 0 && !isLastPage ? 'p-0' : ''"
 		>
 			<template #footer>
 				<div class="row justify-content-center mb-1">
 					<div class="col-md-4 d-flex py-1 justify-content-center">
 						<openwb-base-click-button
-							v-if="currentPage > 0"
+							v-if="currentPage > 0 && currentPage != 4"
 							class="btn-block btn-warning"
 							@buttonClicked="previousPage()"
 						>
-							<font-awesome-icon fixed-width :icon="['fas', 'caret-left']" />
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'caret-left']"
+							/>
 							Zurück
 						</openwb-base-click-button>
 					</div>
 					<div class="col-md-4 d-flex py-1 justify-content-center">
 						<openwb-base-click-button
-							v-if="!isLastPage"
+							v-if="!isLastPage && currentPage != 4"
 							class="btn-block btn-success"
 							@buttonClicked="nextPage()"
 						>
 							Weiter
-							<font-awesome-icon fixed-width :icon="['fas', 'caret-right']" />
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'caret-right']"
+							/>
 						</openwb-base-click-button>
 					</div>
 					<div class="col-md-4 d-flex py-1 justify-content-center">
 						<openwb-base-click-button
-							:class="'btn-block btn-' + (isLastPage ? 'success' : 'danger')"
+							:class="
+								'btn-block btn-' +
+								(isLastPage ? 'success' : 'danger')
+							"
 							@buttonClicked="endAssistant()"
 						>
 							Assistent beenden
@@ -37,38 +46,60 @@
 				</div>
 			</template>
 			<div v-if="currentPage == 0" class="p-2">
-				<h2>
-					Vielen Dank, dass Du Dich für openWB entschieden hast.
-				</h2>
+				<h2>Vielen Dank, dass Du Dich für openWB entschieden hast.</h2>
 				<p>
-					Dieser Assistent führt Dich durch die Konfiguration der einzelnen
-					Module:
+					Dieser Assistent führt Dich durch die Konfiguration der
+					einzelnen Module:
 				</p>
 				<ol>
-					<li>Update des Systems</li>
-					<li>Auswahl primary / secondary openWB</li>
-					<li>Einrichten der Geräte und Komponenten</li>
-					<li>Konfiguration von Geräten und Komponenten</li>
+					<li>Start des Assistenten</li>
+					<li>Datenverwaltung (optional)</li>
+					<li>Update des Systems (optional)</li>
+					<li>
+						Auswahl primary / secondary openWB - Allgemeine
+						Einstellungen
+					</li>
+					<li>Ladepunkte konfigurieren für openWB als secondary</li>
+					<li>
+						Einrichten der Geräte und Komponenten für openWB als
+						primary
+					</li>
 					<li>Konfiguration Lastmanagement</li>
 					<li>Einrichten der Ladepunkte</li>
+					<li>Konfiguration Lastmanagement (optional)</li>
 					<li>Einrichten der Fahrzeuge</li>
-					<li>Sicherung der Erstkonfiguration</li>
+					<li>Grundkonfiguration abgeschlossen</li>
 				</ol>
 			</div>
 			<div v-if="currentPage == 1" class="row m-0">
 				<div class="page-help-text col-md-3 py-2">
 					<p>
-						Sicherung erzeugen wenn der Assistent erneut ausgeführt
-						wird und die openWB bereits im Einsatz war.
+						Wir empfehlen an dieser Stelle eine Sicherung der openWB
+						zu erzeugen, auf welche man später zurückgreifen könnte,
+						insbesondere, wenn die openWB schon konfiguriert war und
+						der Assistent nun erneut ausgeführt wird.
 					</p>
 					<p>
 						Dadurch werden gesammelte Daten/Einstellungen gesichert
 						und können wieder hergestellt werden.
 					</p>
 					<p>
-						Es wird empfohlen regelmäßige Sicherungen der Daten zu
+						Dazu Warnung akzeptieren, auf Sicherung /
+						Wiederherstellung gehen und unter Sicherung auf
+						Sicherung erstellen klicken.
+					</p>
+					<p>
+						Es wird empfohlen regelmäßig Sicherungen der Daten zu
 						erstellen.
 					</p>
+					<p>
+						Soll der Assistent die openWB komplett neu einrichten,
+						kann hier auch unter Zurücksetzen auf Zurücksetzen
+						gedrückt werden, wodurch alle Einstellungen, angelegte
+						Geräte/Komponenten, Ladepunkte und Fahrzeuge, usw...
+						unwiederbringlich gelöscht werden.
+					</p>
+					<p>Dieser Schritt kann auch übersprungen werden.</p>
 				</div>
 				<div class="col py-2">
 					<DataManagement
@@ -93,6 +124,13 @@
 						Das garantiert, dass die openWB mit den neuesten
 						Features und Funktionen ausgestattet ist.
 					</p>
+					<p>
+						Dazu Warnung akzeptieren, auf Versions-Information /
+						Aktualisierung gehen, Informationen aktualisieren und
+						falls ein Update verfügbar ist, wird der Update button
+						grün und kann bei Bedarf gedrückt werden.
+					</p>
+					<p>Dieser Schritt kann auch übersprungen werden.</p>
 				</div>
 				<div class="col py-2">
 					<System @sendCommand="$emit('sendCommand', $event)" />
@@ -108,18 +146,22 @@
 						eine openWB benötigt wird.
 					</p>
 					<p>
+						Beim ersten Konfigurieren reicht es meist aus das Feld
+						Steuerungsmodus (primary oder secondary) anzuwählen.
+					</p>
+					<p>
 						Eine openWB standalone hat keinen Ladepunkt (nur
 						primary). Eine openWB Standard(+), custom, Duo und
 						Buchse können als primary oder secondary betrieben
 						werden. Eine openWB Pro und Satellit können nur als
-						secondary (als ein Ladepunkt) angeschlossen werden.Eine
+						secondary (als ein Ladepunkt) angeschlossen werden. Eine
 						openWB Duo kann zwei Ladepunkte bedienen.
 					</p>
 					<p>
 						Die Steuerung über Modbus dient zur Fernsteuerung über
-						ein Nicht- openWB-System und sollte nicht gewählt
-						werden, wenn Sie nur openWBs besitzen und die
-						openWB-Software zur Steuerung nutzen wollen.
+						ein Nicht-openWB-System und sollte nicht gewählt werden,
+						wenn Sie nur openWBs besitzen und die openWB-Software
+						zur Steuerung nutzen wollen.
 					</p>
 					<p class="font-weight-bold">
 						Änderungen werden nur bei klicken auf speichern wirksam
@@ -142,9 +184,10 @@
 						von einer anderen openWB ferngesteuert.
 					</p>
 					<p>
-						Tragen Sie in Ladepunkte Interne openWB ein und wählen
-						Sie die Bauart der openWB (z.B. openWB series 1/2
-						custom, Standard (+) oder Buchse) aus.
+						Tragen Sie unter Ladepunkte bei verfügbare Ladepunkte
+						"Interne openWB" ein und wählen Sie die Bauart der
+						openWB (z.B. openWB series 1/2 custom, Standard (+) oder
+						Buchse) aus.
 					</p>
 					<p>
 						Wenn eine openWB Duo gewählt wurde, können zwei
@@ -155,7 +198,9 @@
 					<p>
 						Es sind keine weiteren Einstellungen notwendig. Der
 						Assistent kann nach drücken von speichern beendet
-						werden.
+						werden. Sollte diese openWB erneut konfiguriert und als
+						primary eingesetzt werden, dann muss der angelegte
+						Ladepunkt interne openWB vorher entfernt werden.
 					</p>
 					<p class="font-weight-bold">
 						Änderungen werden nur bei klicken auf speichern wirksam
@@ -181,11 +226,19 @@
 						Folgenden die Geräte und Komponenten eingerichtet
 						werden.
 					</p>
-					<p>Zuerst wird der EVU-Zähler eingerichtet.</p>
 					<p>
-						Für jedes verfügbare Gerät eine IP-Adresse vergeben und
-						für jedes verfügbare Gerät auch Zähler, Wechselrichter
-						und falls vorhanden Speicher hinzufügen.
+						Ab Werkseinstellung kann hier bereits ein virtueller
+						Zähler vorkonfiguriert sein, welcher gelöscht werden
+						kann, sobald korrekte EVU-Daten übertragen werden.
+					</p>
+					<p>
+						Bei verfügbare Geräte das entsprechenden Gerät auswählen
+						und hinzufügen. Danach auf das neue Gerät klicken und
+						für jedes verfügbare Gerät falls nötig eine IP-Adresse
+						oder Hostname, Benutzername und Passwort oder Server-URL
+						eintragen. Dann unter Verfügbare Komponenten falls
+						vorhanden Zähler, Wechselrichter und Speicher
+						hinzufügen.
 					</p>
 					<p>
 						Hier ein PV-Kit auszuwählen dient nur der Visualisierung
@@ -214,6 +267,9 @@
 						maximalen Ströme für jede Phase des Zählermoduls sowie
 						die maximale Ausgangsleistung des Wechselrichters der PV
 						Anlage eingetragen, falls eine solche vorhanden ist.
+						Unter dem Punkt Vorhandene Zählermodule auf die
+						Komponente Zähler klicken und die maximale Leistung des
+						Hausanschlusses eintragen.
 					</p>
 					<p>
 						Der erste Zähler ist in der Regel der Zähler am
@@ -224,10 +280,17 @@
 						der openWB.
 					</p>
 					<p>
-						Es ist außerdem die Struktur des Lastmanagements zu
-						überprüfen und ggf. anzupassen. Im Normalfall befinden
-						sich Speicher und Wechselrichter in einer Ebene
-						innerhalb des EVU-Zählers.
+						Ist ein Wechselrichter unter Geräte hinzugefügt worden,
+						dann unter dem Punkt Wechselrichter noch die maximale
+						Ausgangsleistung des Wechselrichters eintragen, wenn es
+						sich um ein Hybrid-System mit DC-Speicher handelt.
+					</p>
+					<p>
+						Nach klicken auf Struktur ist außerdem die Struktur des
+						Lastmanagements zu überprüfen und ggf. anzupassen. Im
+						Normalfall befinden sich Speicher und Wechselrichter in
+						einer Ebene innerhalb des EVU-Zählers. Dazu einfach die
+						Komponenten per drag&drop verschieben.
 					</p>
 					<p>
 						Zwischenzähler können beliebig kaskadiert sein.
@@ -236,10 +299,10 @@
 						integriertem Zähler dar.
 					</p>
 					<p>
-						Werden hier keine vorhandenen Zählermodule oder
-						Wechselrichtermodule angezeigt, dann bitte einen Schritt
-						zurück und die entsprechenden Geräte und Komponenten
-						hinzufügen.
+						Werden hier die gewünschten Zählermodule oder
+						Wechselrichtermodule nicht angezeigt, dann bitte einen
+						Schritt zurück und die entsprechenden Geräte und
+						Komponenten hinzufügen.
 					</p>
 					<p class="font-weight-bold">
 						Änderungen werden nur bei klicken auf speichern wirksam
@@ -259,13 +322,17 @@
 				<div class="page-help-text col-md-3 py-2">
 					<p>
 						Enthält die steuernde openWB Ladetechnik wird bei
-						verfügbarer Ladepunkt "Interne openWB" ausgewählt.
-						Ansonsten wird "Externe openWB" und Bauart (der
-						secondary openWB) ausgewählt und die IP-Adresse der
-						anderen openWB (secondary openWB) und Ladepunkt-Nummer
-						eingetragen. Bei der openWB Duo als secondary openWB
-						sind zwei Ladepunkte mit der Nummer 1 und 2
-						hinzuzufügen.
+						Ladepunkte unter verfügbare Ladepunkte "Interne openWB"
+						ausgewählt. Ansonsten wird "Externe openWB" und Bauart
+						(der secondary openWB) ausgewählt und die IP-Adresse der
+						anderen openWB (secondary openWB) und die
+						Ladepunkt-Nummer eingetragen. Bei der openWB Duo als
+						secondary openWB können zwei Ladepunkte mit der Nummer 1
+						und 2 hinzugefügt werden.
+					</p>
+					<p>
+						Bei vorkonfigurierten openWBs kann ab Werk hier bereits
+						ein Ladepunkt eingetragen sein.
 					</p>
 					<p>
 						Als weitere Hardware-Optionen können Phasenumschaltung,
@@ -273,21 +340,26 @@
 						Phasen sowie Phase 1 des Ladekabels konfiguriert werden.
 						Jede openWB mit Phasenumschaltung kann auch
 						Control-Pilot-Unterbrechung, wobei bei openWBs ohne
-						Phasenumschaltung ist diese Option aufrüstbar. Bei
+						Phasenumschaltung diese Option aufrüstbar ist. Bei
 						mehreren openWBs ist es sinnvoll die Ladepunkte auf
 						unterschiedliche Phasen aufzuteilen.
 					</p>
 					<p>
-						Die Phase der Wallbox-Zuleitung muss korrekt ausgewählt
+						Unter Elektrischer Anschluss Phase 1 des Ladekabels muss
+						die Phase der Wallbox-Zuleitung korrekt ausgewählt
 						werden, sonst ist eine Überlastung möglich, wenn bei
 						einphasiger Ladung alle Ladepunkte auf derselben Phase
-						liegen und gleichzeitig Strom ziehen.
+						liegen und gleichzeitig Strom ziehen. Bitte lesen Sie
+						dazu auch die Hinweistexte im rechten Fenster, welche
+						durch klicken auf das umrundete Fragezeichensymbol
+						hinter den Menüpunkten aufgerufen werden können.
 					</p>
 					<p>
-						Im Menü Ladepunkt-Profile können Eintragungen bzgl. des
-						Maximalstroms bei einer Phase bzw. mehreren Phasen
-						vorgenommen werden sowie eine automatische Sperre
-						eingerichtet und Zeitpläne dafür angelegt werden.
+						Im Menü Ladepunkt-Profile ein Standard Ladepunkt-Profil
+						hinzufügen und die Eintragungen bzgl. des Maximalstroms
+						bei einer Phase bzw. mehreren Phasen vornehmen sowie -
+						falls erwünscht - eine automatische Sperre mit
+						Zeitplänen einrichten.
 					</p>
 					<p class="font-weight-bold">
 						Änderungen werden nur bei klicken auf speichern wirksam
@@ -317,10 +389,10 @@
 						beide in einer Ebene innerhalb des EVU- Zählers.
 					</p>
 					<p>
-						Die Ladepunkte (z.B. Externe openWB custom, Duo,...)
-						befinden sich dann auch in derselben Ebene wie der
-						Speicher und der Wechselrichter innerhalb der Ebene des
-						EVU-Zählers.
+						Die Ladepunkte (z.B. Externe openWB, interne openWB,
+						Pro, satellit,...) befinden sich dann auch in derselben
+						Ebene wie der Speicher und der Wechselrichter innerhalb
+						der Ebene des EVU-Zählers.
 					</p>
 					<p>
 						Wenn alles ok ist, kann dieser Schritt ohne weitere
@@ -343,7 +415,7 @@
 			<div v-if="currentPage == 9" class="row m-0">
 				<div class="page-help-text col-md-3 py-2">
 					<p>
-						Zuerst Fahrzeug-Profile und Lade- Profile konfigurieren.
+						Zuerst Fahrzeug-Profile und Lade-Profile konfigurieren.
 						In den meisten Fällen reicht das
 						Standard-Fahrzeug-Profil aus, vor allem wenn alle Autos
 						mit dem gleichen Lademodus geladen werden oder eigene
@@ -359,9 +431,9 @@
 					</p>
 					<p>
 						In den meisten Fällen sind die Einstellungen im
-						Standard-Lade- Profil für sofortiges Laden ausreichend,
-						eventuell Soll- Ladestrom anpassen. Ansonsten ein
-						eigenes Lade-Profil anlegen. Dann Fahrzeug anlegen und
+						Standard-Lade-Profil für sofortiges Laden ausreichend,
+						eventuell Soll-Ladestrom anpassen. Ansonsten ein eigenes
+						Lade-Profil anlegen. Dann Fahrzeug anlegen und
 						Fahrzeug-Profil und Ladeprofil dem entsprechenden
 						Fahrzeug zuordnen.
 					</p>
@@ -376,7 +448,6 @@
 						Wichtig: Die Phasigkeit des Fahrzeugs ist richtig
 						einzutragen!
 					</p>
-
 					<p>
 						Kennt man die Phasigkeit des Fahrzeugs nicht (z.B.
 						Besucherfahrzeug) besser ein Besucherfahrzeugprofil
@@ -396,37 +467,13 @@
 					/>
 				</div>
 			</div>
-
-			<div v-if="currentPage == 10" class="row m-0">
-				<div class="page-help-text col-md-3 py-2">
-					<p>
-						Zum Schluss eine Sicherung der vorgenommenen
-						Konfiguration anfertigen, falls gewünscht.
-					</p>
-				</div>
-				<div class="col py-2">
-					<DataManagement
-						formName="cloudBackupForm"
-						:hideReset="true"
-						:hideDefaults="true"
-						@save="$emit('save')"
-						@reset="$emit('reset')"
-						@defaults="$emit('defaults')"
-						@sendCommand="$emit('sendCommand', $event)"
-					/>
-				</div>
-			</div>
-
 			<div v-if="isLastPage">
-				<h2>
-					Die Grundkonfiguration ist jetzt abgeschlossen.
-				</h2>
+				<h2>Die Grundkonfiguration ist jetzt abgeschlossen.</h2>
 				<p>
-					Bitte überprüfe die Ergebnisse im Status und
-					passe bei Unstimmigkeiten die Einstellungen an.
+					Bitte überprüfe die Ergebnisse im Status und passe bei
+					Unstimmigkeiten die Einstellungen an.
 				</p>
 			</div>
-
 		</openwb-base-card>
 	</div>
 </template>
@@ -448,10 +495,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(
-	fasCaretLeft,
-	fasCaretRight,
-);
+library.add(fasCaretLeft, fasCaretRight);
 
 export default {
 	name: "InstallAssistant",
@@ -471,6 +515,7 @@ export default {
 	data() {
 		return {
 			currentPage: 0,
+			prevent_err: 0,
 			pages: [
 				{ title: "Start" },
 				{ title: "Datenverwaltung" },
@@ -482,7 +527,6 @@ export default {
 				{ title: "Ladepunkte" },
 				{ title: "Lastmanagement" },
 				{ title: "Fahrzeuge" },
-				{ title: "Datenverwaltung" },
 				{ title: "Abgeschlossen" },
 			],
 		};
@@ -497,23 +541,41 @@ export default {
 			if (!this.isLastPage) {
 				this.currentPage++;
 				window.scrollTo(0, 0);
-			} else {
-				console.warn("currentPage is already at lastPage");
+			}
+			if (
+				this.$store.state.mqtt["openWB/general/extern"] != true &&
+				this.currentPage == 4
+			) {
+				this.currentPage = 5;
 			}
 		},
 		previousPage() {
-			if (this.currentPage > 0) {
+			if (this.currentPage) {
+				this.prevent_err = this.currentPage;
 				this.currentPage--;
 				window.scrollTo(0, 0);
-			} else {
-				console.warn("currentPage is already at 0");
+			}
+			if (this.currentPage == 4 && this.prevent_err == 5) {
+				this.currentPage = 5;
+			}
+			if (this.currentPage == 5) {
+				this.currentPage = 3;
+				if (this.prevent_err == 6) {
+					this.currentPage = 5;
+				}
+			}
+			if (this.prevent_err == 6) {
+				this.prevent_err = 0;
 			}
 		},
 		endAssistant() {
 			//First time access to InstallWizard if "Assistent beenden" is pressed -> Wizard will not show on Startup anymore!
 			if (!this.$store.state.mqtt["openWB/system/installAssistantDone"]) {
 				this.updateState("openWB/system/installAssistantDone", true);
-				this.$root.doPublish("openWB/set/system/installAssistantDone", true);
+				this.$root.doPublish(
+					"openWB/set/system/installAssistantDone",
+					true,
+				);
 			}
 			this.$router.push("/Status");
 		},
@@ -523,8 +585,8 @@ export default {
 
 <style scoped>
 .page-help-text {
-	border-right: 1px solid rgba(0,0,0,.125);
-	border-bottom: 1px solid rgba(0,0,0,.125);
+	border-right: 1px solid rgba(0, 0, 0, 0.125);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.125);
 	background-color: rgba(0, 0, 0, 0.03);
 }
 </style>
