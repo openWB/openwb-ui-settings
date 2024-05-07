@@ -180,8 +180,81 @@ const routes = [
 		meta: {
 			heading: "System - Einrichtungsassistent",
 		},
-		component: () => import("../views/InstallAssistant.vue"),
+		component: () => import("../InstallAssistent/InstallAssistant_0.vue"),
 	},
+	{
+		path: "/System/InstallAssistant1",
+		name: "InstallAssistant1",
+		meta: {
+			heading: "System - Einrichtungsassistent",
+		},
+		component: () => import("../InstallAssistent/InstallAssistant_1.vue"),
+	},
+	{
+		path: "/System/InstallAssistant2",
+		name: "InstallAssistant2",
+		meta: {
+			heading: "System - Einrichtungsassistent",
+		},
+		component: () => import("../InstallAssistent/InstallAssistant_2.vue"),
+	},
+	{
+		path: "/System/InstallAssistant3",
+		name: "InstallAssistant3",
+		meta: {
+			heading: "System - Einrichtungsassistent",
+		},
+		component: () => import("../InstallAssistent/InstallAssistant_3.vue"),
+	},
+	{
+		path: "/System/InstallAssistant4",
+		name: "InstallAssistant4",
+		meta: {
+			heading: "System - Einrichtungsassistent",
+		},
+		component: () => import("../InstallAssistent/InstallAssistant_4.vue"),
+	},
+	{
+		path: "/System/InstallAssistant5",
+		name: "InstallAssistant5",
+		meta: {
+			heading: "System - Einrichtungsassistent",
+		},
+		component: () => import("../InstallAssistent/InstallAssistant_5.vue"),
+	},
+	{
+		path: "/System/InstallAssistant6",
+		name: "InstallAssistant6",
+		meta: {
+			heading: "System - Einrichtungsassistent",
+		},
+		component: () => import("../InstallAssistent/InstallAssistant_6.vue"),
+	},
+	{
+		path: "/System/InstallAssistant7",
+		name: "InstallAssistant7",
+		meta: {
+			heading: "System - Einrichtungsassistent",
+		},
+		component: () => import("../InstallAssistent/InstallAssistant_7.vue"),
+	},
+	{
+		path: "/System/InstallAssistant8",
+		name: "InstallAssistant8",
+		meta: {
+			heading: "System - Einrichtungsassistent",
+		},
+		component: () => import("../InstallAssistent/InstallAssistant_8.vue"),
+	},
+	{
+		path: "/System/InstallAssistant9",
+		name: "InstallAssistant9",
+		meta: {
+			heading: "System - Einrichtungsassistent",
+		},
+		component: () => import("../InstallAssistent/InstallAssistant_9.vue"),
+	},
+
 ];
 /* examples for development only start here */
 if (import.meta.env.MODE !== "production") {
