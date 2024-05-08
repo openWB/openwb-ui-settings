@@ -180,7 +180,7 @@ const routes = [
 		meta: {
 			heading: "System - Einrichtungsassistent",
 		},
-		component: () => import("../views/InstallAssistant.vue"),
+		component: () => import("../components/InstallAssistant/InstallAssistant_template.vue"),
 	},
 ];
 /* examples for development only start here */
