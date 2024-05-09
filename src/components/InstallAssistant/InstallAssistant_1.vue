@@ -1,8 +1,10 @@
 <template>
+	
 	<div class="system">
 		<openwb-base-alert subtype="danger">
 			<h2>Achtung!</h2>
 			<p>
+				
 				Vor allen Aktionen auf dieser Seite ist sicherzustellen, dass
 				kein Ladevorgang aktiv ist! Zur Sicherheit bitte zusätzlich alle
 				Fahrzeuge von der Ladestation / den Ladestationen abstecken!
@@ -26,7 +28,7 @@
 		</openwb-base-alert>
 		<div v-if="warningAcknowledged">
 			<openwb-base-card
-				title="Sicherung / Wiederherstellung"
+				title="Sicherung"
 				subtype="success"
 				:collapsible="true"
 				:collapsed="true"
@@ -67,7 +69,7 @@
 					</div>
 				</form>
 				<hr />
-				<form name="restoreForm">
+				<form name="restoreForm" v-show="expertMode">
 					<openwb-base-heading>Wiederherstellung</openwb-base-heading>
 					<openwb-base-alert subtype="danger">
 						Für die Wiederherstellung wird eine aktive
@@ -149,7 +151,7 @@
 					</div>
 				</form>
 				<hr />
-				<form name="cloudBackupForm">
+				<form name="cloudBackupForm" v-show="expertMode">
 					<openwb-base-heading>
 						Automatische Sicherung in einen Cloud-Dienst
 					</openwb-base-heading>
@@ -257,7 +259,7 @@
 					/>
 				</form>
 			</openwb-base-card>
-			<openwb-base-card
+			<openwb-base-card v-show="expertMode"
 				title="Datenübernahme"
 				subtype="success"
 				:collapsible="true"
@@ -451,6 +453,7 @@ export default {
 	name: "InstallAssistantPage1",
 	mixins: [ComponentStateVue],
 	emits: ["sendCommand"],
+	props: ['expertMode'],
 	components: {
 		FontAwesomeIcon,
 		OpenwbBackupCloudProxy,

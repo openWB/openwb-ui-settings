@@ -102,7 +102,7 @@
 					</openwb-base-alert>
 				</div>
 			</openwb-base-card>
-			<openwb-base-card title="Hardware">
+			<openwb-base-card title="Hardware" v-show="expertMode">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
 						Diese Einstellungen sind nicht verfügbar, solange sich
@@ -518,7 +518,7 @@
 					</div>
 				</div>
 			</openwb-base-card> -->
-			<openwb-base-card title="Darstellung">
+			<openwb-base-card title="Darstellung" v-show="expertMode">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
 						Diese Einstellungen sind nicht verfügbar, solange sich
@@ -597,6 +597,7 @@ export default {
 	name: "InstallAssistantPage3",
 	mixins: [ComponentStateVue],
 	components: { OpenwbWebThemeProxy, OpenwbRippleControlReceiverProxy },
+	props: ['expertMode'],
 	data() {
 		return {
 			mqttTopicsToSubscribe: [

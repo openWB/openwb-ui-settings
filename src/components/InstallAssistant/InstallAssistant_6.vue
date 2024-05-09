@@ -951,6 +951,7 @@ export default {
 	name: "InstallAssistantPage6",
 	mixins: [ComponentStateVue],
 	emits: ["sendCommand"],
+	props: ['expertMode'],
 	components: {
 		FontAwesomeIcon,
 		FontAwesomeLayers,

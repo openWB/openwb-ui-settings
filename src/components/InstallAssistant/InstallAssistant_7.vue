@@ -313,6 +313,7 @@ export default {
 	name: "InstallAssistantPage7",
 	mixins: [ComponentStateVue],
 	emits: ["sendCommand"],
+	props: ['expertMode'],
 	components: {
 		SortableList,
 		FontAwesomeIcon,

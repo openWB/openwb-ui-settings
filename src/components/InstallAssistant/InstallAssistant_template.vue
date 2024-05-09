@@ -66,6 +66,28 @@
 					<li>Einrichten der Fahrzeuge</li>
 					<li>Grundkonfiguration abgeschlossen</li>
 				</ol>
+				<openwb-base-button-group-input
+							title="Expertenmodus"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Nein',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'Ja',
+									class: 'btn-outline-success',
+								},
+							]"
+						:model-value="this.expertMode"
+						@update:model-value="expertModeActivate()"
+						>
+							<template #help>
+								Ist diese Option aktiviert, dann werden sämtliche zur Verfügung stehenden Optionen angezeigt.
+								Ist diese Option deaktiviert werden nur die Grundeinstellungen angezeigt, die zu einer Erstkonfiguration notwendig sind.
+							</template>
+						</openwb-base-button-group-input>
 			</div>
 			<div v-if="currentPage ==9">
 						<h2>Die Grundkonfiguration ist jetzt abgeschlossen.</h2>
@@ -80,28 +102,28 @@
 				<div class="col py-2">
 					<slot name="pageContent">
 						<div v-if="currentPage ==1">
-							<InstallAssistantPage1/>
+							<InstallAssistantPage1 :expertMode="this.expertMode"/>
 						</div>
-						<div v-if="currentPage ==2">
-							<InstallAssistantPage2/>
+						<div v-if="currentPage ==2 ">
+							<InstallAssistantPage2 :expertMode="this.expertMode"/>
 						</div>
 						<div v-if="currentPage ==3">
-							<InstallAssistantPage3/>
+							<InstallAssistantPage3 :expertMode="this.expertMode"/>
 						</div>
 						<div v-if="currentPage ==4">
-							<InstallAssistantPage4/>
+							<InstallAssistantPage4 :expertMode="this.expertMode"/>
 						</div>
 						<div v-if="currentPage ==5">
-							<InstallAssistantPage5/>
+							<InstallAssistantPage5 :expertMode="this.expertMode"/>
 						</div>
 						<div v-if="currentPage ==6">
-							<InstallAssistantPage6/>
+							<InstallAssistantPage6 :expertMode="this.expertMode"/>
 						</div>
 						<div v-if="currentPage ==7">
-							<InstallAssistantPage7/>
+							<InstallAssistantPage7 :expertMode="this.expertMode"/>
 						</div>
 						<div v-if="currentPage ==8">
-							<InstallAssistantPage8/>
+							<InstallAssistantPage8 :expertMode="this.expertMode"/>
 						</div>
 					</slot>
 				</div>
@@ -127,7 +149,6 @@ import InstallAssistantPage6 from './InstallAssistant_6.vue'
 import InstallAssistantPage7 from './InstallAssistant_7.vue'
 import InstallAssistantPage8 from './InstallAssistant_8.vue'
 
-
 library.add(fasCaretLeft, fasCaretRight);
 
 export default {
@@ -135,7 +156,6 @@ export default {
 	mixins: [ComponentStateVue],
 	emits: [],
 	props: {
-		
 	},
 	components: {
 		FontAwesomeIcon,
@@ -152,6 +172,7 @@ export default {
 		return {
 			currentPage: 0,
 			prevent_err: 0,
+			expertMode: false,
 			hidePrevious: true,
 			hideNext: false,
 			pages: [
@@ -181,6 +202,10 @@ export default {
 		};
 	},
 	methods: {
+		expertModeActivate(){
+			console.info(this.expertMode)
+			this.expertMode = !this.expertMode;
+		},
 		nextPage() {
 			window.scrollTo(0, 0);
 			this.currentPage += 1;

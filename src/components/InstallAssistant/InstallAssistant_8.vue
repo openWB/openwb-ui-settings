@@ -2259,6 +2259,7 @@ export default {
 	name: "InstallAssistantPage8",
 	mixins: [ComponentStateVue],
 	emits: ["sendCommand"],
+	props: ['expertMode'],
 	components: {
 		FontAwesomeIcon,
 		FontAwesomeLayers,

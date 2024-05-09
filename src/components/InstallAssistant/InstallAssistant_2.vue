@@ -127,7 +127,7 @@
 					</template>
 				</openwb-base-card>
 			</form>
-			<form name="powerForm">
+			<form name="powerForm" v-show="expertMode">
 				<openwb-base-card
 					title="Betrieb"
 					:collapsible="true"
@@ -177,7 +177,7 @@
 					</template>
 				</openwb-base-card>
 			</form>
-			<form name="releaseChangeForm">
+			<form name="releaseChangeForm" v-show="expertMode">
 				<openwb-base-card
 					title="Entwicklungszweig"
 					subtype="danger"
@@ -285,6 +285,7 @@ export default {
 	name: "InstallAssistantPage2",
 	mixins: [ComponentStateVue],
 	emits: ["sendCommand"],
+	props: ['expertMode'],
 	components: {
 		FontAwesomeIcon,
 	},

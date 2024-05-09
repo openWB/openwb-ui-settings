@@ -359,6 +359,7 @@ export default {
 	name: "InstallAssistantPage5",
 	mixins: [ComponentStateVue],
 	emits: ["sendCommand"],
+	props: ['expertMode'],
 	components: {
 		FontAwesomeIcon,
 		OpenwbConfigProxy,
