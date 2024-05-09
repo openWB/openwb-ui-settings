@@ -948,7 +948,7 @@ import ComponentStateVue from '../mixins/ComponentState.vue';
 import OpenwbChargePointProxy from "../charge_points/OpenwbChargePointProxy.vue";
 
 export default {
-	name: "InstallAssistantPage4",
+	name: "InstallAssistantPage6",
 	mixins: [ComponentStateVue],
 	emits: ["sendCommand"],
 	components: {

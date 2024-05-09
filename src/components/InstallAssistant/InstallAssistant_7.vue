@@ -1,170 +1,437 @@
 <template>
-	<div>
-		<openwb-base-card
-			:title="currentPage + 1 + '. ' + pages[currentPage].title"
-		>
-			<template #footer>
-				<div class="row justify-content-center mb-1">
-					<div class="col-md-4 d-flex py-1 justify-content-center">
-						<openwb-base-click-button
-							class="btn-block btn-warning"
-							@buttonClicked="previousPage()"
-						>
+	<div class="loadManagementConfig">
+		<form name="loadManagementConfigForm">
+			<openwb-base-card
+				title="Einstellungen"
+				:collapsible="true"
+				:collapsed="false"
+			>
+				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+					<openwb-base-alert subtype="info">
+						Diese Einstellungen sind nicht verfügbar, solange sich
+						diese openWB im Steuerungsmodus "secondary" befindet.
+					</openwb-base-alert>
+				</div>
+				<div v-else>
+					<openwb-base-button-group-input
+						title="Nicht-ladende Fahrzeuge"
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'nicht berücksichtigen',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'berücksichtigen',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/counter/config/reserve_for_not_charging'
+							]
+						"
+						@update:model-value="
+							updateState(
+								'openWB/counter/config/reserve_for_not_charging',
+								$event,
+							)
+						"
+					>
+						<template #help>
+							<p>
+								Wenn angesteckte Fahrzeuge, die nicht laden, im
+								Lastmanagement berücksichtigt werden, wird für
+								diese der Fahrzeug-Mindeststrom bei vorliegender
+								Ladefreigabe reserviert. Dadurch können bei
+								Eingreifen des Lastmanagements andere Fahrzeuge
+								möglicherweise nur mit reduzierter Stromstärke
+								laden und der reservierte Strom wird nicht
+								genutzt. Wenn die Fahrzeuge wieder Leistung
+								beziehen, z.B. um vorzuklimatisieren, nutzen sie
+								den für sie reservierten Strom.
+							</p>
+							<p>
+								Wenn angesteckte Fahrzeuge, die nicht laden,
+								nicht im Lastmanagement berücksichtigt werden,
+								wird für diese auch kein Strom bei vorliegender
+								Ladefreigabe reserviert. Andere Fahrzeuge können
+								dadurch mit höherer Stromstärke laden. Wenn die
+								maximalen Lastmanagement-Grenzen fast erreicht
+								sind und die Fahrzeuge wieder Leistung beziehen,
+								z.B. um vorzuklimatisieren, kann es zu einer
+								kurzzeitigen Überschreitung der
+								Lastmanagement-Grenzen kommen, bis im nächsten
+								Zyklus die Stromstärken aller Ladepunkte an die
+								neue Situation angepasst wurden. Das kurzzeitige
+								Überschreiten der Maximal-Werte stellt für die
+								Sicherungen in der Regel kein Problem dar.
+							</p>
+						</template>
+					</openwb-base-button-group-input>
+					<openwb-base-heading>
+						Vorhandene Zählermodule
+					</openwb-base-heading>
+					<openwb-base-alert subtype="info">
+						Die maximale Leistung wird nur für den EVU-Zähler
+						berücksichtigt. Bei Zwischenzählern begrenzt das
+						Lastmanagement rein anhand der maximalen Phasenströme.
+					</openwb-base-alert>
+					<openwb-base-card
+						v-for="counter in counterConfigs"
+						:key="counter.id"
+						:collapsible="true"
+						:collapsed="true"
+						subtype="danger"
+					>
+						<template #header>
 							<font-awesome-icon
 								fixed-width
-								:icon="['fas', 'caret-left']"
+								:icon="['fas', 'gauge-high']"
 							/>
-							Zurück
-						</openwb-base-click-button>
-					</div>
-					<div class="col-md-4 d-flex py-1 justify-content-center">
-						<openwb-base-click-button
-							class="btn-block btn-success"
-							@buttonClicked="nextPage()"
+							{{ counter.name }}
+						</template>
+						<openwb-base-number-input
+							title="Maximale Leistung"
+							:min="1"
+							:step="1"
+							unit="kW"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/counter/' +
+										counter.id +
+										'/config/max_total_power'
+								] / 1000
+							"
+							@update:model-value="
+								updateState(
+									'openWB/counter/' +
+										counter.id +
+										'/config/max_total_power',
+									$event * 1000,
+								)
+							"
 						>
-							Weiter
+							<template #help>
+								Maximal zulässige Leistung für diesen
+								(Zwischen-)Zähler.
+							</template>
+						</openwb-base-number-input>
+						<openwb-base-number-input
+							title="Maximaler Strom L1"
+							:min="16"
+							:step="1"
+							unit="A"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/counter/' +
+										counter.id +
+										'/config/max_currents'
+								][0]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/counter/' +
+										counter.id +
+										'/config/max_currents',
+									$event,
+									'0',
+								)
+							"
+						>
+							<template #help>
+								Maximal zulässiger Strom für die Phase 1 dieses
+								(Zwischen-)Zählers.
+							</template>
+						</openwb-base-number-input>
+						<openwb-base-number-input
+							title="Maximaler Strom L2"
+							:min="16"
+							:step="1"
+							unit="A"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/counter/' +
+										counter.id +
+										'/config/max_currents'
+								][1]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/counter/' +
+										counter.id +
+										'/config/max_currents',
+									$event,
+									'1',
+								)
+							"
+						>
+							<template #help>
+								Maximal zulässiger Strom für die Phase 2 dieses
+								(Zwischen-)Zählers.
+							</template>
+						</openwb-base-number-input>
+						<openwb-base-number-input
+							title="Maximaler Strom L3"
+							:min="16"
+							:step="1"
+							unit="A"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/counter/' +
+										counter.id +
+										'/config/max_currents'
+								][2]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/counter/' +
+										counter.id +
+										'/config/max_currents',
+									$event,
+									'2',
+								)
+							"
+						>
+							<template #help>
+								Maximal zulässiger Strom für die Phase 3 dieses
+								(Zwischen-)Zählers.
+							</template>
+						</openwb-base-number-input>
+					</openwb-base-card>
+					<openwb-base-heading>
+						Vorhandene Wechselrichtermodule
+					</openwb-base-heading>
+					<openwb-base-card
+						v-for="inverter in inverterConfigs"
+						:key="inverter.id"
+						:collapsible="true"
+						:collapsed="true"
+						subtype="success"
+					>
+						<template #header>
 							<font-awesome-icon
 								fixed-width
-								:icon="['fas', 'caret-right']"
+								:icon="['fas', 'solar-panel']"
 							/>
-						</openwb-base-click-button>
-					</div>
-					<div class="col-md-4 d-flex py-1 justify-content-center">
-						<openwb-base-click-button
-							class="btn-block btn-danger"
-							@buttonClicked="endAssistant()"
+							{{ inverter.name }}
+						</template>
+						<openwb-base-number-input
+							title="Maximale Ausgangsleistung des Wechselrichters"
+							:min="0"
+							:step="0.1"
+							unit="kW"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/pv/' +
+										inverter.id +
+										'/config/max_ac_out'
+								] / 1000
+							"
+							@update:model-value="
+								updateState(
+									'openWB/pv/' +
+										inverter.id +
+										'/config/max_ac_out',
+									$event * 1000,
+								)
+							"
 						>
-							Assistent beenden
-						</openwb-base-click-button>
-					</div>
+							<template #help>
+								Relevant bei Hybrid-Systemen mit DC-Speicher.
+							</template>
+						</openwb-base-number-input>
+					</openwb-base-card>
 				</div>
-			</template>
-			<div class="row justify-content-center mb-1">
-				<div class="page-help-text col-md-3 py-2">
-					<p>
-						Im Lastmanagement werden die maximale Leistung sowie die
-						maximalen Ströme für jede Phase des Zählermoduls sowie
-						die maximale Ausgangsleistung des Wechselrichters der PV
-						Anlage eingetragen, falls eine solche vorhanden ist.
-						Unter dem Punkt Vorhandene Zählermodule auf die
-						Komponente Zähler klicken und die maximale Leistung des
-						Hausanschlusses eintragen.
-					</p>
-					<p>
-						Der erste Zähler ist in der Regel der Zähler am
-						EVU-Punkt (also der letzte Punkt im Haus vor dem
-						Verbrauchszähler des Energieversorgers) - hier muss die
-						maximale Leistung eingetragen werden, die der
-						Hausanschluss verträgt und nicht die Anschlussleistung
-						der openWB.
-					</p>
-					<p>
-						Ist ein Wechselrichter unter Geräte hinzugefügt worden,
-						dann unter dem Punkt Wechselrichter noch die maximale
-						Ausgangsleistung des Wechselrichters eintragen, wenn es
-						sich um ein Hybrid-System mit DC-Speicher handelt.
-					</p>
-					<p>
-						Nach klicken auf Struktur ist außerdem die Struktur des
-						Lastmanagements zu überprüfen und ggf. anzupassen. Im
-						Normalfall befinden sich Speicher und Wechselrichter in
-						einer Ebene innerhalb des EVU-Zählers. Die Ladepunkte 
-						(z.B. Externe openWB, interne openWB,
-						Pro, satellit,...) befinden sich auch in derselben
-						Ebene wie der Speicher und der Wechselrichter innerhalb
-						der Ebene des EVU-Zählers.
-					</p>
-					<p>
-						Zwischenzähler können beliebig kaskadiert sein.
-						Spezialfälle stellen Hybrid-Speicher, Solaredge mit
-						mehreren Wechselrichtern sowie bspw. Victronspeicher mit
-						integriertem Zähler dar.
-					</p>
-					<p class="font-weight-bold">
-						Änderungen werden nur bei klicken auf speichern wirksam
-					</p>
+			</openwb-base-card>
+			<openwb-base-card
+				title="Struktur"
+				:collapsible="true"
+				:collapsed="true"
+			>
+				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+					<openwb-base-alert subtype="info">
+						Diese Einstellungen sind nicht verfügbar, solange sich
+						diese openWB im Steuerungsmodus "secondary" befindet.
+					</openwb-base-alert>
 				</div>
-				<div class="col py-2">
-					<LoadManagementConfig
-						formName="loadManagementConfigForm"
-						@save="$emit('save')"
-						@reset="$emit('reset')"
-						@defaults="$emit('defaults')"
-					/>
+				<div v-else>
+					<!-- ToDo: Fix: nested lists bypass store commits! -->
+					<sortable-list
+						title="Anordnung der Komponenten"
+						:model-value="
+							$store.state.mqtt['openWB/counter/get/hierarchy']
+						"
+						@update:model-value="
+							updateState('openWB/counter/get/hierarchy', $event)
+						"
+						:labels="hierarchyLabels"
+					>
+						<template #help>
+							Durch die Anordnung der Komponenten werden
+							Abhängigkeiten abgebildet.<br />
+							An erster Stelle muss eine Zählerkomponente stehen,
+							die den Netzanschlusspunkt erfasst. Dafür kann auch
+							ein virtueller Zähler genutzt werden.<br />
+							Die weiteren Komponenten müssen hierarchisch so
+							angeordnet werden, wie sie auch physisch im
+							Stromnetz angeschlossen werden.<br />
+							Bei DC-gekoppelten Speichern sind diese hinter dem
+							zugehörigen Wechselrichter zu platzieren, damit die
+							Abhängigkeit in der Regelung berücksichtigt werden
+							kann.
+						</template>
+					</sortable-list>
 				</div>
-			</div>
-		</openwb-base-card>
+			</openwb-base-card>
+
+			<openwb-base-submit-buttons
+				formName="loadManagementConfigForm"
+				@save="$emit('save')"
+				@reset="$emit('reset')"
+				@defaults="$emit('defaults')"
+			/>
+		</form>
 	</div>
 </template>
 
 <script>
-import LoadManagementConfig from "../views/LoadManagementConfig.vue";
-import ComponentState from "../components/mixins/ComponentState.vue";
-
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-	faCaretLeft as fasCaretLeft,
-	faCaretRight as fasCaretRight,
+	faSolarPanel as fasSolarPanel,
+	faGaugeHigh as fasGaugeHigh,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
+library.add(fasSolarPanel, fasGaugeHigh);
 
-library.add(fasCaretLeft, fasCaretRight);
+import SortableList from "../OpenwbSortableList.vue";
+import ComponentStateVue from '../mixins/ComponentState.vue';
 
 export default {
-	name: "InstallAssistant7",
-	mixins: [ComponentState],
-	emits: ["save", "reset", "default", "sendCommand"],
-	props: [],
+	name: "InstallAssistantPage7",
+	mixins: [ComponentStateVue],
+	emits: ["sendCommand"],
 	components: {
+		SortableList,
 		FontAwesomeIcon,
-		LoadManagementConfig,
 	},
 	data() {
 		return {
-			currentPage: 7,
-			pages: [
-				{ title: "Start" },
-				{ title: "Datenverwaltung" },
-				{ title: "System" },
-				{ title: "Allgemein" },
-				{ title: "Ladepunkte" },
-				{ title: "Geräte und Komponenten" },
-				{ title: "Ladepunkte" },
-				{ title: "Lastmanagement" },
-				{ title: "Fahrzeuge" },
-				{ title: "Abgeschlossen" },
+			mqttTopicsToSubscribe: [
+				"openWB/general/extern",
+				"openWB/counter/config/reserve_for_not_charging",
+				"openWB/counter/get/hierarchy",
+				"openWB/system/device/+/component/+/config",
+				"openWB/counter/+/config/max_currents",
+				"openWB/counter/+/config/max_total_power",
+				"openWB/pv/+/config/max_ac_out",
+				"openWB/chargepoint/+/config",
 			],
 		};
 	},
-	methods: {
-		nextPage() {
-			window.scrollTo(0, 0);
-			this.$router.push('InstallAssistant8');
-		},
-		previousPage() {
-			window.scrollTo(0, 0);
-			this.$router.push('InstallAssistant6');
-		},
-		endAssistant() {
-			//First time access to InstallWizard if "Assistent beenden" is pressed -> Wizard will not show on Startup anymore!
-			if (!this.$store.state.mqtt["openWB/system/installAssistantDone"]) {
-				this.updateState("openWB/system/installAssistantDone", true);
-				this.$root.doPublish(
-					"openWB/set/system/installAssistantDone",
-					true,
+	computed: {
+		counterConfigs: {
+			get() {
+				let installedComponentsConfigs = this.getWildcardTopics(
+					"openWB/system/device/+/component/+/config",
 				);
+				return Object.keys(installedComponentsConfigs)
+					.filter((key) => {
+						return installedComponentsConfigs[key].type.includes(
+							"counter",
+						);
+					})
+					.reduce((obj, key) => {
+						return {
+							...obj,
+							[key]: installedComponentsConfigs[key],
+						};
+					}, {});
+			},
+		},
+		inverterConfigs: {
+			get() {
+				let installedComponentsConfigs = this.getWildcardTopics(
+					"openWB/system/device/+/component/+/config",
+				);
+				return Object.keys(installedComponentsConfigs)
+					.filter((key) => {
+						return installedComponentsConfigs[key].type.includes(
+							"inverter",
+						);
+					})
+					.reduce((obj, key) => {
+						return {
+							...obj,
+							[key]: installedComponentsConfigs[key],
+						};
+					}, {});
+			},
+		},
+		hierarchyLabels: {
+			get() {
+				let labels = {};
+				for (const element of Object.values(
+					this.$store.state.mqtt["openWB/counter/get/hierarchy"],
+				)) {
+					labels = {
+						...labels,
+						...this.getElementTreeNames(element),
+					};
+				}
+				return labels;
+			},
+		},
+	},
+	methods: {
+		getElementTreeNames(element) {
+			let myNames = {};
+			if (element.type == "cp") {
+				let chargePoint = this.getChargePoint(element.id);
+				if (chargePoint) {
+					myNames[element.id] = chargePoint.name;
+				}
+			} else {
+				let component = this.getComponent(element.id);
+				if (component) {
+					myNames[element.id] = component.name;
+				}
 			}
-			this.$router.push("/Status");
+			element.children.forEach((child) => {
+				myNames = { ...myNames, ...this.getElementTreeNames(child) };
+			});
+			return myNames;
+		},
+		getComponent(componentIndex) {
+			let myComponent = undefined;
+			Object.keys(this.$store.state.mqtt).forEach((value) => {
+				if (
+					value.match(
+						"^openWB/system/device/[0-9]+/component/" +
+							componentIndex +
+							"/config$",
+					)
+				) {
+					myComponent = this.$store.state.mqtt[value];
+				}
+			});
+			return myComponent;
+		},
+		getChargePoint(chargePointIndex) {
+			let myChargePoint = undefined;
+			Object.keys(this.$store.state.mqtt).forEach((value) => {
+				if (
+					value.match(
+						"^openWB/chargepoint/" + chargePointIndex + "/config$",
+					)
+				) {
+					myChargePoint = this.$store.state.mqtt[value];
+				}
+			});
+			return myChargePoint;
 		},
 	},
 };
 </script>
-
-<style scoped>
-.page-help-text {
-	border-right: 1px solid rgba(0, 0, 0, 0.125);
-	border-bottom: 1px solid rgba(0, 0, 0, 0.125);
-	background-color: rgba(0, 0, 0, 0.03);
-}
-</style>
