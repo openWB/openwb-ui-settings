@@ -85,7 +85,7 @@
 						>
 							<template #help>
 								Ist diese Option aktiviert, dann werden sämtliche zur Verfügung stehenden Optionen angezeigt.
-								Ist diese Option deaktiviert werden nur die Eininstellungen angezeigt, die zu einer Erstkonfiguration notwendig sind.
+								Ist diese Option deaktiviert werden nur die Einstellungen angezeigt, die zu einer Minimalkonfiguration notwendig sind.
 							</template>
 						</openwb-base-button-group-input>
 			</div>
