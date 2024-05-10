@@ -55,7 +55,7 @@
 						Auswahl primary / secondary openWB - Allgemeine
 						Einstellungen
 					</li>
-					<li>Ladepunkte konfigurieren für openWB als secondary</li>
+					<li>Ladepunkte einrichten falls openWB als secondary konfiguriert</li>
 					<li>
 						Einrichten der Geräte und Komponenten für openWB als
 						primary
