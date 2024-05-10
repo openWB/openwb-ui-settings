@@ -174,6 +174,15 @@ const routes = [
 		},
 		component: () => import("../views/DataManagement.vue"),
 	},
+	{
+		path: "/System/RFIDAssistant",
+		name: "RFIDAssistant",
+		meta: {
+			heading: "System - RFIDAssistant",
+		},
+		component: () => import("../components/RFID_Assistent/RFID_Assistent_Template.vue"),
+	},
+
 ];
 /* examples for development only start here */
 if (import.meta.env.MODE !== "production") {

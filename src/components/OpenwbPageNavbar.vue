@@ -238,6 +238,13 @@
 						>
 							Rechtliches
 						</router-link>
+						<router-link
+							to="/System/RFIDAssistant"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							RFID Einrichtungsassistent
+						</router-link>
 					</div>
 				</li>
 				<!-- <li
