@@ -60,9 +60,8 @@
 						Einrichten der Geräte und Komponenten für openWB als
 						primary
 					</li>
-					<li>Konfiguration Lastmanagement</li>
 					<li>Einrichten der Ladepunkte</li>
-					<li>Konfiguration Lastmanagement (optional)</li>
+					<li>Konfiguration Lastmanagement</li>
 					<li>Einrichten der Fahrzeuge</li>
 					<li>Grundkonfiguration abgeschlossen</li>
 				</ol>
