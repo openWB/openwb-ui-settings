@@ -2,6 +2,7 @@
 	<div class="generalConfig">
 		<form name="generalConfigForm">
 			<openwb-base-card title="Steuerungsmodus">
+				<div v-show="expertMode">
 				<openwb-base-alert subtype="info">
 					<p>
 						Wird für den Steuerungsmodus "primary" gewählt,
@@ -32,6 +33,7 @@
 						>.
 					</p>
 				</openwb-base-alert>
+			</div>
 				<openwb-base-button-group-input
 					title="Steuerungsmodus"
 					:buttons="[
