@@ -13,6 +13,7 @@
 					</openwb-base-alert>
 				</div>
 				<div v-else>
+					<div v-show="expertMode">
 					<openwb-base-button-group-input
 						title="Nicht-ladende Fahrzeuge"
 						:buttons="[
@@ -70,6 +71,7 @@
 							</p>
 						</template>
 					</openwb-base-button-group-input>
+				</div>
 					<openwb-base-heading>
 						Vorhandene Zählermodule
 					</openwb-base-heading>

@@ -52,6 +52,7 @@
 					"
 				>
 				</openwb-base-button-group-input>
+				<div v-show="expertMode">
 				<openwb-base-button-group-input
 					v-if="$store.state.mqtt['openWB/general/extern'] === true"
 					title="Steuerung über Modbus als secondary"
@@ -89,6 +90,7 @@
 						werden.
 					</template>
 				</openwb-base-button-group-input>
+			
 				<div
 					v-if="
 						$store.state.mqtt['openWB/general/extern'] === true &&
@@ -101,6 +103,7 @@
 						muss danach ein Neustart durchgeführt werden!
 					</openwb-base-alert>
 				</div>
+			</div>
 			</openwb-base-card>
 			<openwb-base-card title="Hardware" v-show="expertMode">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">

@@ -201,6 +201,7 @@
 							"
 						/>
 						<hr />
+						<div v-show="expertMode">
 						<div
 							v-if="
 								$store.state.mqtt[
@@ -237,6 +238,7 @@
 							</openwb-base-alert>
 							<hr />
 						</div>
+					</div>
 						<openwb-base-select-input
 							class="mb-2"
 							title="SoC-Modul"
@@ -587,6 +589,7 @@
 							"
 						>
 						</openwb-base-range-input>
+						<div v-show="expertMode">
 						<openwb-base-number-input
 							title="Erlaubte Stromabweichung"
 							:step="0.1"
@@ -605,6 +608,7 @@
 								eingestellt werden.
 							</template>
 						</openwb-base-number-input>
+					</div>
 						<openwb-base-heading>
 							Angaben zur Batterie
 						</openwb-base-heading>
@@ -704,6 +708,7 @@
 								E-Autos meist 2 bis 3 Phasen.
 							</template>
 						</openwb-base-button-group-input>
+						<div v-show="expertMode">
 						<openwb-base-button-group-input
 							title="CP-Unterbrechung"
 							:buttons="[
@@ -750,6 +755,7 @@
 							"
 						>
 						</openwb-base-number-input>
+						</div>
 						<openwb-base-button-group-input
 							title="Phasenumschaltung blockieren"
 							:buttons="[
@@ -801,6 +807,7 @@
 								Ladungsunterbrechung keine Ladung mehr starten.
 							</template>
 						</openwb-base-button-group-input>
+						<div v-show="expertMode">
 						<openwb-base-number-input
 							title="Pause bei Phasenumschaltung"
 							unit="s"
@@ -833,6 +840,7 @@
 								Phasenumschaltung angestoßen.
 							</template>
 						</openwb-base-number-input>
+					</div>
 					</openwb-base-card>
 				</div>
 			</openwb-base-card>
@@ -924,6 +932,40 @@
 						<openwb-base-heading>
 							Allgemeine Optionen
 						</openwb-base-heading>
+
+						<div v-show="!expertMode">
+							<openwb-base-button-group-input
+							title="Aktiver Lademodus"
+							:buttons="[
+								{
+									buttonValue: 'instant_charging',
+									text: 'Sofortladen',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: 'stop',
+									text: 'Stop',
+									class: 'btn-outline-dark',
+								},
+							]"
+							:model-value="template.chargemode.selected"
+							@update:model-value="
+								updateState(
+									templateKey,
+									$event,
+									'chargemode.selected',
+								)
+							"
+						>
+							<template #help>
+								Diese Einstellung entspricht dem gewählten
+								Lademodus auf der Hauptseite und ist aktiv, wenn
+								ein zugehöriges Fahrzeug angesteckt ist.<br />
+							</template>
+						</openwb-base-button-group-input>
+						</div>
+
+						<div v-show="expertMode">
 						<openwb-base-button-group-input
 							title="Aktiver Lademodus"
 							:buttons="[
@@ -969,6 +1011,7 @@
 								Die zur Verfügung stehende Leistung wird intern
 								anhand folgender Prioritätenliste auf die
 								Fahrzeuge bzw. Ladepunkte verteilt:<br />
+								
 								<ol>
 									<li>
 										Zielladen (Sofortladen) mit Priorität
@@ -987,6 +1030,8 @@
 								</ol>
 							</template>
 						</openwb-base-button-group-input>
+					</div>
+						<div v-show="expertMode">
 						<openwb-base-button-group-input
 							title="Priorität"
 							:buttons="[
@@ -1168,6 +1213,7 @@
 								</template>
 							</openwb-base-number-input>
 						</div>
+					</div>
 						<hr />
 						<openwb-base-heading>Sofortladen</openwb-base-heading>
 						<openwb-base-range-input
@@ -1273,6 +1319,7 @@
 							</template>
 						</openwb-base-number-input>
 						<hr />
+						<div v-show="expertMode">
 						<openwb-base-heading>PV-Laden</openwb-base-heading>
 						<openwb-base-range-input
 							title="Minimaler Dauerstrom"
@@ -2205,6 +2252,7 @@
 								</openwb-base-button-group-input>
 							</div>
 						</openwb-base-card>
+					</div>
 					</openwb-base-card>
 				</div>
 			</openwb-base-card>

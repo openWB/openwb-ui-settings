@@ -137,7 +137,7 @@
 						</openwb-base-select-input>
 					</span>
 					<hr />
-					<openwb-charge-point-proxy
+					<openwb-charge-point-proxy 
 						:chargePointId="installedChargePoint.id"
 						:chargePointType="
 							$store.state.mqtt[installedChargePointKey].type
@@ -157,7 +157,8 @@
 						"
 					>
 						<hr />
-						<openwb-base-heading
+						<div v-show="expertMode">
+						<openwb-base-heading 
 							>Hardware-Optionen</openwb-base-heading
 						>
 						<openwb-base-button-group-input
@@ -209,6 +210,7 @@
 								ab.
 							</template>
 						</openwb-base-button-group-input>
+					</div>
 						<openwb-base-heading>
 							Elektrischer Anschluss
 						</openwb-base-heading>
@@ -458,7 +460,8 @@
 							</template>
 						</openwb-base-text-input>
 						<hr />
-						<div
+						<div v-show="expertMode">
+						<div 
 							v-if="
 								$store.state.mqtt[
 									'openWB/optional/rfid/active'
@@ -513,6 +516,7 @@
 								<hr />
 							</div>
 						</div>
+					</div>
 						<openwb-base-heading>
 							Angaben zum konfigurierten Ladestrom der openWB
 						</openwb-base-heading>
@@ -576,6 +580,7 @@
 						>
 						</openwb-base-range-input>
 						<hr />
+						<div v-show="expertMode">
 						<openwb-base-heading
 							>Automatische Sperre</openwb-base-heading
 						>
@@ -904,6 +909,7 @@
 								</openwb-base-button-group-input>
 							</div>
 						</openwb-base-card>
+						</div>
 					</openwb-base-card>
 				</div>
 			</openwb-base-card>
