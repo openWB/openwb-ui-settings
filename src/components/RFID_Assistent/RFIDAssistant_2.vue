@@ -930,34 +930,7 @@
 						</template>
 					</openwb-base-textarea>
 
-					<openwb-base-array-input
-							class="mb-2"
-							:options="tempIdTagListTest"
-							notSelected="Bitte auswählen"
-							v-for="(
-							chargePointTemplate, chargePointTemplateKey
-							) in chargePointTemplates"
-							:key="chargePointTemplateKey"
-							:title="
-									chargePointTemplate.name +
-							' (ID: ' +
-							getChargePointTemplateIndex(
-								chargePointTemplateKey,
-							) +
-							')'
-						"
-						:collapsible="true"
-						:collapsed="true"
-						:model-value="tempIdTagListTest"
-									@update:model-value="
-										updateState(
-											chargePointTemplateKey,
-											$event,
-											'valid_tags',
-										)
-									"
-						>
-						</openwb-base-array-input>
+		
 						
 			<openwb-base-submit-buttons
 				formName="chargePointInstallationForm"
