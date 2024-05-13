@@ -515,6 +515,16 @@
 										></span>
 									</template>
 								</openwb-base-array-input>
+									<openwb-base-click-button
+										class="btn-block btn-success"
+										@buttonClicked="updateState(chargePointTemplateKey, transferIDTags(chargePointTemplate.valid_tags), 'valid_tags');"
+									>
+										<font-awesome-icon
+											fixed-width
+											:icon="['fas', 'caret-right']"
+										/>
+										ID-Tags übertragen
+									</openwb-base-click-button>
 								<hr />
 							</div>
 						</div>
@@ -982,8 +992,8 @@ export default {
 	},
 	data() {
 		return {
+			IdTagListArr: [],
 			tempIdTagList: {},
-			tempIdTagListTest: [],
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
 				"openWB/optional/rfid/active",
@@ -1049,6 +1059,24 @@ export default {
 		},
 	},
 	methods: {
+		transferIDTags(value){
+			console.info("value: ", value);
+			for(let i = 0; i < value.length; i++){
+				if(!this.IdTagListArr.includes(value[i])){
+			this.IdTagListArr.push(value[i].toString());
+			}
+		}
+ 			const keys = Object.keys(this.tempIdTagList);
+			if(keys.length > 0){
+			for(let i = 0; i < keys.length; i++){
+				if(!this.IdTagListArr.includes(keys[i])){
+					this.IdTagListArr.push(keys[i]);
+					
+					}
+				}
+			}
+			return this.IdTagListArr;
+		},
 		getIdFromTopic(topic) {
 			return topic
 				.match(/(?:\/)([0-9]+)(?=\/)*/g)[0]
