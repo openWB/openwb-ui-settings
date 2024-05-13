@@ -619,7 +619,7 @@
 							</openwb-base-heading>
 							<openwb-base-number-input
 								title="Mindestleistung"
-								:min="0"
+								:min="5"
 								unit="kW"
 								:model-value="
 									ac_current2dc_power(template.dc_min_current)
