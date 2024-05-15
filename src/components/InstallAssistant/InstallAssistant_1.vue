@@ -1,7 +1,7 @@
 <template>
 	
 	<div class="system">
-		<openwb-base-alert subtype="danger">
+		<openwb-base-alert subtype="danger" v-show="!this.installAssistantActive || this.normalMode">
 			<h2>Achtung!</h2>
 			<p>
 				
@@ -26,14 +26,14 @@
 				v-model="this.warningAcknowledged"
 			/>
 		</openwb-base-alert>
-		<div v-if="warningAcknowledged">
+		<div v-if="warningAcknowledged || this.installAssistantActive">
 			<openwb-base-card
 				title="Sicherung"
 				subtype="success"
 				:collapsible="true"
 				:collapsed="true"
 			>
-				<form name="backupForm">
+				<form name="backupForm" v-show="this.installAssistantActive || this.normalMode">
 					<openwb-base-heading>Sicherung</openwb-base-heading>
 					<openwb-base-alert subtype="danger">
 						Aktuell können nur Sicherungen wiederhergestellt werden,
@@ -69,7 +69,7 @@
 					</div>
 				</form>
 				<hr />
-				<form name="restoreForm" v-show="expertMode">
+				<form name="restoreForm" v-show="this.normalMode">
 					<openwb-base-heading>Wiederherstellung</openwb-base-heading>
 					<openwb-base-alert subtype="danger">
 						Für die Wiederherstellung wird eine aktive
@@ -151,7 +151,7 @@
 					</div>
 				</form>
 				<hr />
-				<form name="cloudBackupForm" v-show="expertMode">
+				<form name="cloudBackupForm" v-show="this.normalMode">
 					<openwb-base-heading>
 						Automatische Sicherung in einen Cloud-Dienst
 					</openwb-base-heading>
@@ -259,7 +259,7 @@
 					/>
 				</form>
 			</openwb-base-card>
-			<openwb-base-card v-show="expertMode"
+			<openwb-base-card v-show="this.normalMode"
 				title="Datenübernahme"
 				subtype="success"
 				:collapsible="true"
@@ -384,7 +384,7 @@
 					</div>
 				</form>
 			</openwb-base-card>
-			<form name="resetForm">
+			<form name="resetForm" v-show="this.normalMode">
 				<openwb-base-card
 					title="Zurücksetzen"
 					subtype="danger"
@@ -453,7 +453,7 @@ export default {
 	name: "InstallAssistantPage1",
 	mixins: [ComponentStateVue],
 	emits: ["sendCommand"],
-	props: ['expertMode'],
+	props: ['installAssistantActive', 'normalMode'],
 	components: {
 		FontAwesomeIcon,
 		OpenwbBackupCloudProxy,

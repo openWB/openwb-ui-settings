@@ -65,28 +65,6 @@
 					<li>Einrichten der Fahrzeuge</li>
 					<li>Grundkonfiguration abgeschlossen</li>
 				</ol>
-				<openwb-base-button-group-input
-							title="Expertenmodus"
-							:buttons="[
-								{
-									buttonValue: false,
-									text: 'Nein',
-									class: 'btn-outline-danger',
-								},
-								{
-									buttonValue: true,
-									text: 'Ja',
-									class: 'btn-outline-success',
-								},
-							]"
-						:model-value="this.expertMode"
-						@update:model-value="expertModeActivate()"
-						>
-							<template #help>
-								Ist diese Option aktiviert, dann werden sämtliche zur Verfügung stehenden Optionen angezeigt.
-								Ist diese Option deaktiviert werden nur die Einstellungen angezeigt, die zu einer Minimalkonfiguration notwendig sind.
-							</template>
-						</openwb-base-button-group-input>
 			</div>
 			<div v-if="currentPage ==9">
 						<h2>Die Grundkonfiguration ist jetzt abgeschlossen.</h2>
@@ -101,56 +79,56 @@
 				<div class="col py-2">
 					<slot name="pageContent">
 						<div v-if="currentPage ==1">
-							<InstallAssistantPage1 :expertMode="this.expertMode"
+							<InstallAssistantPage1 :installAssistantActive="this.installAssistantActive" :normalMode="this.normalMode"
 							@save="$emit('save')"
 							@reset="$emit('reset')"
 							@defaults="$emit('defaults')"
 							@sendCommand="$emit('sendCommand', $event)"/>
 						</div>
 						<div v-if="currentPage ==2 ">
-							<InstallAssistantPage2 :expertMode="this.expertMode"
+							<InstallAssistantPage2 :installAssistantActive="this.installAssistantActive"
 							@save="$emit('save')"
 							@reset="$emit('reset')"
 							@defaults="$emit('defaults')"
 							@sendCommand="$emit('sendCommand', $event)"/>
 						</div>
 						<div v-if="currentPage ==3">
-							<InstallAssistantPage3 :expertMode="this.expertMode"
+							<InstallAssistantPage3 :installAssistantActive="this.installAssistantActive"
 							@save="$emit('save')"
 							@reset="$emit('reset')"
 							@defaults="$emit('defaults')"
 							@sendCommand="$emit('sendCommand', $event)"/>
 						</div>
 						<div v-if="currentPage ==4">
-							<InstallAssistantPage4 :expertMode="this.expertMode"
+							<InstallAssistantPage4 :installAssistantActive="this.installAssistantActive"
 							@save="$emit('save')"
 							@reset="$emit('reset')"
 							@defaults="$emit('defaults')"
 							@sendCommand="$emit('sendCommand', $event)"/>
 						</div>
 						<div v-if="currentPage ==5">
-							<InstallAssistantPage5 :expertMode="this.expertMode"
+							<InstallAssistantPage5 :installAssistantActive="this.installAssistantActive" 
 							@save="$emit('save')"
 							@reset="$emit('reset')"
 							@defaults="$emit('defaults')"
 							@sendCommand="$emit('sendCommand', $event)"/>
 						</div>
 						<div v-if="currentPage ==6">
-							<InstallAssistantPage6 :expertMode="this.expertMode"
+							<InstallAssistantPage6 :installAssistantActive="this.installAssistantActive"
 							@save="$emit('save')"
 							@reset="$emit('reset')"
 							@defaults="$emit('defaults')"
 							@sendCommand="$emit('sendCommand', $event)"/>
 						</div>
 						<div v-if="currentPage ==7">
-							<InstallAssistantPage7 :expertMode="this.expertMode"
+							<InstallAssistantPage7 :installAssistantActive="this.installAssistantActive"
 							@save="$emit('save')"
 							@reset="$emit('reset')"
 							@defaults="$emit('defaults')"
 							@sendCommand="$emit('sendCommand', $event)"/>
 						</div>
 						<div v-if="currentPage ==8">
-							<InstallAssistantPage8 :expertMode="this.expertMode"
+							<InstallAssistantPage8 :installAssistantActive="this.installAssistantActive"
 							@save="$emit('save')"
 							@reset="$emit('reset')"
 							@defaults="$emit('defaults')"
@@ -203,7 +181,8 @@ export default {
 		return {
 			currentPage: 0,
 			prevent_err: 0,
-			expertMode: false,
+			installAssistantActive: false,
+			normalMode: true,
 			hidePrevious: true,
 			hideNext: false,
 			pages: [
@@ -233,11 +212,11 @@ export default {
 		};
 	},
 	methods: {
-		expertModeActivate(){
-			console.info(this.expertMode)
-			this.expertMode = !this.expertMode;
-		},
 		nextPage() {
+			if(!this.installAssistantActive){
+				this.installAssistantActive = true;
+				this.normalMode = false;
+			}
 			window.scrollTo(0, 0);
 			this.currentPage += 1;
 			this.hidePrevious = false;
@@ -272,6 +251,10 @@ export default {
 			}
 		},
 		endAssistant() {
+			if(!this.installAssistantActive){
+				this.installAssistantActive = false;
+				this.normalMode = true;
+			}
 			//First time access to InstallAssistant if "Assistent beenden" pushed-> Assistant will not show on Startup anymore!
 			if (!this.$store.state.mqtt["openWB/system/installAssistantDone"]) {
 				this.updateState("openWB/system/installAssistantDone", true);
