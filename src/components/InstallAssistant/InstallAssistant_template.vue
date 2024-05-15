@@ -79,7 +79,7 @@
 				<div class="col py-2">
 					<slot name="pageContent">
 						<div v-if="currentPage ==1">
-							<InstallAssistantPage1 :installAssistantActive="this.installAssistantActive" :normalMode="this.normalMode"
+							<DataManagement :installAssistantActive="this.installAssistantActive" :normalMode="this.normalMode"
 							@save="$emit('save')"
 							@reset="$emit('reset')"
 							@defaults="$emit('defaults')"
@@ -149,25 +149,28 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import ComponentStateVue from '../mixins/ComponentState.vue';
-import InstallAssistantPage1 from './InstallAssistant_1.vue'
-import InstallAssistantPage2 from './InstallAssistant_2.vue'
-import InstallAssistantPage3 from './InstallAssistant_3.vue'
-import InstallAssistantPage4 from './InstallAssistant_4.vue'
-import InstallAssistantPage5 from './InstallAssistant_5.vue'
-import InstallAssistantPage6 from './InstallAssistant_6.vue'
-import InstallAssistantPage7 from './InstallAssistant_7.vue'
-import InstallAssistantPage8 from './InstallAssistant_8.vue'
+import DataManagement from "../../views/DataManagement.vue";
+import InstallAssistantPage1 from './InstallAssistant_1.vue';
+import InstallAssistantPage2 from './InstallAssistant_2.vue';
+import InstallAssistantPage3 from './InstallAssistant_3.vue';
+import InstallAssistantPage4 from './InstallAssistant_4.vue';
+import InstallAssistantPage5 from './InstallAssistant_5.vue';
+import InstallAssistantPage6 from './InstallAssistant_6.vue';
+import InstallAssistantPage7 from './InstallAssistant_7.vue';
+import InstallAssistantPage8 from './InstallAssistant_8.vue';
+
 
 library.add(fasCaretLeft, fasCaretRight);
 
 export default {
-	name: "InstallAssistantTemplate",
+	name: "InstallAssistant",
 	mixins: [ComponentStateVue],
 	emits: ["save", "reset", "default", "sendCommand"],
 	props: {
 	},
 	components: {
 		FontAwesomeIcon,
+		DataManagement,
 		InstallAssistantPage1,
 		InstallAssistantPage2,
 		InstallAssistantPage3,
@@ -251,7 +254,7 @@ export default {
 			}
 		},
 		endAssistant() {
-			if(!this.installAssistantActive){
+			if(this.installAssistantActive){
 				this.installAssistantActive = false;
 				this.normalMode = true;
 			}
@@ -263,7 +266,8 @@ export default {
 					true,
 				);
 			}
-			this.$router.push("/Status");
+			this.$router.push("/System/Datamanagement");
+			//this.$router.go("/Status");
 		},
 	},
 };
