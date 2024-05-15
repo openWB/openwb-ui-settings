@@ -216,6 +216,9 @@ export default {
 			window.scrollTo(0, 0);
 			this.currentPage += 1;
 			this.hidePrevious = false;
+			if(this.currentpage == 3 || this.currentPage == 4){
+				this.$emit("save");
+			}
 			if(this.currentPage == 4 && this.$store.state.mqtt["openWB/general/extern"] == true || this.currentPage == 9){
 				this.hideNext = true;
 			}

@@ -1,10 +1,8 @@
 <template>
-	
 	<div class="system">
-		<openwb-base-alert subtype="danger"">
+		<openwb-base-alert subtype="danger">
 			<h2>Achtung!</h2>
 			<p>
-				
 				Vor allen Aktionen auf dieser Seite ist sicherzustellen, dass
 				kein Ladevorgang aktiv ist! Zur Sicherheit bitte zusätzlich alle
 				Fahrzeuge von der Ladestation / den Ladestationen abstecken!
@@ -28,7 +26,7 @@
 		</openwb-base-alert>
 		<div v-if="warningAcknowledged">
 			<openwb-base-card
-				title="Sicherung"
+				title="Sicherung / Wiederherstellung"
 				subtype="success"
 				:collapsible="true"
 				:collapsed="true"
@@ -446,11 +444,12 @@ library.add(
 	fasBoxOpen,
 );
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbBackupCloudProxy from "../components/backup_clouds/OpenwbBackupCloudProxy.vue";
 
 export default {
-	name: "DataManagement",
+	name: "OpenwbSystem",
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {

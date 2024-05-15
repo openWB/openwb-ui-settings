@@ -1,6 +1,6 @@
 <template>
 	<div class="system">
-		<openwb-base-alert subtype="danger">
+		<openwb-base-alert subtype="danger" v-show="!this.installAssistantActive || this.normalMode">
 			<h2>Achtung!</h2>
 			<p>
 				Vor allen Aktionen auf dieser Seite ist sicherzustellen, dass
@@ -24,7 +24,7 @@
 				v-model="this.warningAcknowledged"
 			/>
 		</openwb-base-alert>
-		<div v-if="warningAcknowledged">
+		<div v-if="warningAcknowledged || this.installAssistantActive">
 			<form name="versionInfoForm">
 				<openwb-base-card
 					title="Versions-Informationen / Aktualisierung"
@@ -127,7 +127,7 @@
 					</template>
 				</openwb-base-card>
 			</form>
-			<form name="powerForm">
+			<form name="powerForm" v-show="this.normalMode">
 				<openwb-base-card
 					title="Betrieb"
 					:collapsible="true"
@@ -177,7 +177,7 @@
 					</template>
 				</openwb-base-card>
 			</form>
-			<form name="releaseChangeForm">
+			<form name="releaseChangeForm" v-show="this.normalMode">
 				<openwb-base-card
 					title="Entwicklungszweig"
 					subtype="danger"
@@ -287,6 +287,16 @@ export default {
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,
+	},
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			default: false
+		},
+		normalMode: {
+			type: Boolean,
+			default: true
+		}
 	},
 	data() {
 		return {

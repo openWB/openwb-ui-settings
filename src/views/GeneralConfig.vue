@@ -1,8 +1,8 @@
 <template>
 	<div class="generalConfig">
 		<form name="generalConfigForm">
-			<openwb-base-card title="Steuerungsmodus">
-				<openwb-base-alert subtype="info">
+			<openwb-base-card title="Steuerungsmodus" >
+				<openwb-base-alert subtype="info" v-show="this.normalMode">
 					<p>
 						Wird für den Steuerungsmodus "primary" gewählt,
 						übernimmt diese openWB die alleinige Regelung und
@@ -52,7 +52,7 @@
 					"
 				>
 				</openwb-base-button-group-input>
-				<openwb-base-button-group-input
+				<openwb-base-button-group-input v-show="this.normalMode"
 					v-if="$store.state.mqtt['openWB/general/extern'] === true"
 					title="Steuerung über Modbus als secondary"
 					:buttons="[
@@ -89,20 +89,20 @@
 						werden.
 					</template>
 				</openwb-base-button-group-input>
-				<div
+				<div v-show="this.normalMode"
 					v-if="
 						$store.state.mqtt['openWB/general/extern'] === true &&
 						$store.state.mqtt['openWB/general/modbus_control'] !==
 							true
 					"
 				>
-					<openwb-base-alert subtype="info">
+					<openwb-base-alert subtype="info" >
 						Wenn die Steuerung über Modbus auf "Aus" geändert wird,
 						muss danach ein Neustart durchgeführt werden!
 					</openwb-base-alert>
 				</div>
 			</openwb-base-card>
-			<openwb-base-card title="Hardware">
+			<openwb-base-card title="Hardware" v-show="this.normalMode">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
 						Diese Einstellungen sind nicht verfügbar, solange sich
@@ -159,7 +159,7 @@
 							</span>
 						</template>
 					</openwb-base-button-group-input>
-					<openwb-base-button-group-input
+					<openwb-base-button-group-input 
 						title="Netzschutz"
 						:buttons="[
 							{
@@ -518,7 +518,7 @@
 					</div>
 				</div>
 			</openwb-base-card> -->
-			<openwb-base-card title="Darstellung">
+			<openwb-base-card title="Darstellung" v-show="this.normalMode">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
 						Diese Einstellungen sind nicht verfügbar, solange sich
@@ -597,6 +597,16 @@ export default {
 	name: "OpenwbGeneralConfig",
 	mixins: [ComponentState],
 	components: { OpenwbWebThemeProxy, OpenwbRippleControlReceiverProxy },
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			default: false
+		},
+		normalMode: {
+			type: Boolean,
+			default: true
+		}
+	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [

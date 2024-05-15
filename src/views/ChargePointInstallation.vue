@@ -157,10 +157,10 @@
 						"
 					>
 						<hr />
-						<openwb-base-heading
+						<openwb-base-heading 
 							>Hardware-Optionen</openwb-base-heading
 						>
-						<openwb-base-button-group-input
+						<openwb-base-button-group-input 
 							title="automatische Phasenumschaltung vorhanden"
 							:buttons="[
 								{ buttonValue: false, text: 'Nein' },
@@ -177,7 +177,7 @@
 								)
 							"
 						/>
-						<openwb-base-button-group-input
+						<openwb-base-button-group-input v-show="this.normalMode"
 							title="Control-Pilot-Unterbrechung vorhanden"
 							:buttons="[
 								{ buttonValue: false, text: 'Nein' },
@@ -361,7 +361,7 @@
 			</openwb-base-card>
 			<hr class="border-secondary" />
 			<!-- charge point template card -->
-			<openwb-base-card
+			<openwb-base-card v-show="this.normalMode"
 				title="Ladepunkt-Profile"
 				:collapsible="true"
 				:collapsed="true"
@@ -955,6 +955,16 @@ export default {
 		FontAwesomeIcon,
 		FontAwesomeLayers,
 		OpenwbChargePointProxy,
+	},
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			default: false
+		},
+		normalMode: {
+			type: Boolean,
+			default: true
+		}
 	},
 	data() {
 		return {

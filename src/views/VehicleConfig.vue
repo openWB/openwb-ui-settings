@@ -208,7 +208,7 @@
 								] === true
 							"
 						>
-							<openwb-base-array-input
+							<openwb-base-array-input v-show="this.normalMode"
 								title="Zugeordnete ID-Tags"
 								:model-value="
 									$store.state.mqtt[
@@ -226,7 +226,7 @@
 									)
 								"
 							/>
-							<openwb-base-alert subtype="info">
+							<openwb-base-alert subtype="info" v-show="this.normalMode">
 								Insofern Freigabe durch ID-Tags im Ladepunkt-Profil
 								aktiviert wurde, müssen die den Fahrzeugen zugeordnete 
 								ID-Tags auch in das entsprechende Ladepunkt-Profil
@@ -704,7 +704,7 @@
 								E-Autos meist 2 bis 3 Phasen.
 							</template>
 						</openwb-base-button-group-input>
-						<openwb-base-button-group-input
+						<openwb-base-button-group-input v-show="this.normalMode"
 							title="CP-Unterbrechung"
 							:buttons="[
 								{
@@ -732,7 +732,7 @@
 								-> Hardware-Optionen
 							</template>
 						</openwb-base-button-group-input>
-						<openwb-base-number-input
+						<openwb-base-number-input v-show="this.normalMode"
 							title="Dauer der CP-Unterbrechung"
 							v-if="template.control_pilot_interruption"
 							:min="4"
@@ -773,7 +773,7 @@
 								Erläuterung zu 1p3p siehe "Ladeeinstellungen"
 							</template>
 						</openwb-base-button-group-input>
-						<openwb-base-button-group-input
+						<openwb-base-button-group-input v-show="this.normalMode"
 							title="Ladung aktiv halten"
 							:buttons="[
 								{
@@ -987,7 +987,7 @@
 								</ol>
 							</template>
 						</openwb-base-button-group-input>
-						<openwb-base-button-group-input
+						<openwb-base-button-group-input v-show="this.normalMode"
 							title="Priorität"
 							:buttons="[
 								{
@@ -1019,7 +1019,7 @@
 								freigegeben.
 							</template>
 						</openwb-base-button-group-input>
-						<openwb-base-button-group-input
+						<openwb-base-button-group-input v-show="this.normalMode"
 							title="Zeitladen"
 							:buttons="[
 								{
@@ -1054,7 +1054,7 @@
 							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-button-group-input
-							title="Sperre nach Abstecken"
+							title="Sperre nach Abstecken" v-show="this.normalMode"
 							:buttons="[
 								{
 									buttonValue: false,
@@ -1083,7 +1083,7 @@
 							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-button-group-input
-							title="Standard nach Abstecken"
+							title="Standard nach Abstecken" v-show="this.normalMode"
 							:buttons="[
 								{
 									buttonValue: false,
@@ -1107,7 +1107,7 @@
 								Standard Fahrzeug zurückgesetzt.
 							</template>
 						</openwb-base-button-group-input>
-						<openwb-base-button-group-input
+						<openwb-base-button-group-input v-show="this.normalMode"
 							title="Strompreisbasiert Laden"
 							:buttons="[
 								{
@@ -1849,7 +1849,8 @@
 							</div>
 						</openwb-base-card>
 						<hr />
-						<openwb-base-heading>
+						<div v-show="this.normalMode">
+						<openwb-base-heading >
 							Laden nach Zeitplan
 							<template #actions>
 								<openwb-base-avatar
@@ -2205,6 +2206,7 @@
 								</openwb-base-button-group-input>
 							</div>
 						</openwb-base-card>
+					</div>
 					</openwb-base-card>
 				</div>
 			</openwb-base-card>
@@ -2263,6 +2265,16 @@ export default {
 		FontAwesomeIcon,
 		FontAwesomeLayers,
 		OpenwbVehicleProxy,
+	},
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			default: false
+		},
+		normalMode: {
+			type: Boolean,
+			default: true
+		}
 	},
 	data() {
 		return {

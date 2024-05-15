@@ -23,7 +23,7 @@
 	<!-- main content -->
 	<div class="hardwareInstallation">
 		<form name="hardwareInstallationForm">
-			<openwb-base-alert subtype="info">
+			<openwb-base-alert subtype="info" v-show="this.normalMode">
 				Wenn neue Komponenten - insbesondere Zähler - konfiguriert
 				wurden, ist auch das
 				<router-link to="/LoadManagementConfiguration">
@@ -362,6 +362,16 @@ export default {
 	components: {
 		FontAwesomeIcon,
 		OpenwbConfigProxy,
+	},
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			default: false
+		},
+		normalMode: {
+			type: Boolean,
+			default: true
+		}
 	},
 	data() {
 		return {

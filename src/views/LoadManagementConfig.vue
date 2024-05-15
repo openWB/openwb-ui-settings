@@ -13,7 +13,7 @@
 					</openwb-base-alert>
 				</div>
 				<div v-else>
-					<openwb-base-button-group-input
+					<openwb-base-button-group-input v-show="this.normalMode"
 						title="Nicht-ladende Fahrzeuge"
 						:buttons="[
 							{
@@ -316,6 +316,16 @@ export default {
 	components: {
 		SortableList,
 		FontAwesomeIcon,
+	},
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			default: false
+		},
+		normalMode: {
+			type: Boolean,
+			default: true
+		}
 	},
 	data() {
 		return {
