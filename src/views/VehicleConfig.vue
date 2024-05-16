@@ -237,6 +237,7 @@
 							</openwb-base-alert>
 							<hr />
 						</div>
+						<div v-show="this.normalMode">
 						<openwb-base-select-input
 							class="mb-2"
 							title="SoC-Modul"
@@ -285,6 +286,7 @@
 								primär im openWB-Forum.
 							</template>
 						</openwb-base-select-input>
+					</div>
 						<div
 							v-if="
 								$store.state.mqtt[
@@ -460,7 +462,7 @@
 			<hr class="border-secondary" />
 			<openwb-base-heading>Profile</openwb-base-heading>
 			<!-- vehicle template card -->
-			<openwb-base-card :collapsible="true" :collapsed="true">
+			<openwb-base-card :collapsible="true" :collapsed="true" v-show="this.normalMode">
 				<template #header>
 					<font-awesome-layers fixed-width class="fa-lg">
 						<font-awesome-icon
@@ -987,6 +989,7 @@
 								</ol>
 							</template>
 						</openwb-base-button-group-input>
+						<div v-show="this.normalMode">
 						<openwb-base-button-group-input
 							title="Priorität"
 							:buttons="[
@@ -1019,7 +1022,7 @@
 								freigegeben.
 							</template>
 						</openwb-base-button-group-input>
-						<openwb-base-button-group-input
+						<openwb-base-button-group-input v-show="this.normalMode"
 							title="Zeitladen"
 							:buttons="[
 								{
@@ -1053,6 +1056,7 @@
 								der bei "Aktiver Lademodus" ausgewählt ist.
 							</template>
 						</openwb-base-button-group-input>
+					</div>
 						<openwb-base-button-group-input
 							title="Sperre nach Abstecken"
 							:buttons="[
@@ -1107,7 +1111,8 @@
 								Standard Fahrzeug zurückgesetzt.
 							</template>
 						</openwb-base-button-group-input>
-						<openwb-base-button-group-input
+						<div v-show="this.normalMode">
+						<openwb-base-button-group-input 
 							title="Strompreisbasiert Laden"
 							:buttons="[
 								{
@@ -1127,6 +1132,7 @@
 							"
 						>
 						</openwb-base-button-group-input>
+					</div>
 						<div v-if="template.et.active == true">
 							<div
 								v-if="
@@ -1168,9 +1174,10 @@
 								</template>
 							</openwb-base-number-input>
 						</div>
+					<div v-show="this.normalMode">
 						<hr />
 						<openwb-base-heading>Sofortladen</openwb-base-heading>
-						<openwb-base-range-input
+						<openwb-base-range-input 
 							title="Soll-Ladestrom"
 							:min="6"
 							:max="32"
@@ -1272,6 +1279,8 @@
 								Sofortladen schon ausgewählt ist, neu gezählt.
 							</template>
 						</openwb-base-number-input>
+					</div>
+					<div v-show="this.normalMode">
 						<hr />
 						<openwb-base-heading>PV-Laden</openwb-base-heading>
 						<openwb-base-range-input
@@ -1485,6 +1494,8 @@
 								Einspeisegrenze"
 							</template>
 						</openwb-base-button-group-input>
+					</div>
+					<div v-show="this.normalMode">
 						<hr />
 						<openwb-base-heading>
 							Zielladen
@@ -1526,6 +1537,7 @@
 								mit Überschuss geladen.
 							</template>
 						</openwb-base-heading>
+					</div>
 						<openwb-base-card
 							v-for="(
 								plan, planKey
@@ -1848,6 +1860,7 @@
 								</openwb-base-button-group-input>
 							</div>
 						</openwb-base-card>
+						<div v-show="this.normalMode">
 						<hr />
 						<openwb-base-heading>
 							Laden nach Zeitplan
@@ -1884,6 +1897,7 @@
 								Fahrzeug-App-Vorklimatisierungsvorgaben).
 							</template>
 						</openwb-base-heading>
+					</div>
 						<openwb-base-card
 							v-for="(
 								plan, planKey
@@ -2263,6 +2277,16 @@ export default {
 		FontAwesomeIcon,
 		FontAwesomeLayers,
 		OpenwbVehicleProxy,
+	},
+	props: {
+		IDinstallAssistantActive: {
+			type: Boolean,
+			default: false
+		},
+		normalMode: {
+			type: Boolean,
+			default: true
+		}
 	},
 	data() {
 		return {

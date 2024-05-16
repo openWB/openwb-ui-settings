@@ -239,11 +239,11 @@
 							Rechtliches
 						</router-link>
 						<router-link
-							to="/System/RFIDAssistant"
+							to="/System/IDAssistant"
 							class="dropdown-item"
 							active-class="active disabled"
 						>
-							RFID Einrichtungsassistent
+							ID Einrichtungsassistent
 						</router-link>
 					</div>
 				</li>

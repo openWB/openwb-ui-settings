@@ -135,6 +135,7 @@
 							"
 						>
 						</openwb-base-select-input>
+				
 					</span>
 					<hr />
 					<openwb-charge-point-proxy
@@ -156,6 +157,7 @@
 							$store.state.mqtt['openWB/general/extern'] === false
 						"
 					>
+					<div v-show="this.normalMode">
 						<hr />
 						<openwb-base-heading
 							>Hardware-Optionen</openwb-base-heading
@@ -290,7 +292,10 @@
 							</template>
 						</openwb-base-button-group-input>
 					</div>
+					</div>
+				
 				</openwb-base-card>
+				
 				<hr v-if="Object.keys(installedChargePoints).length > 0" />
 				<openwb-base-select-input
 					class="mb-2"
@@ -510,9 +515,23 @@
 										></span>
 									</template>
 								</openwb-base-array-input>
-								<hr />
+								<openwb-base-click-button v-show="this.IDinstallAssistantActive"
+										class="btn-block btn-success"
+										@buttonClicked="updateState(chargePointTemplateKey, transferIDTags(chargePointTemplate.valid_tags), 'valid_tags');"
+									>
+										<font-awesome-icon
+											fixed-width
+											:icon="['fas', 'caret-right']"
+										/>
+										ID-Tags übertragen
+									</openwb-base-click-button>
+								<div v-show="this.normalMode">
+									<hr />
+									<hr />
+								</div>
 							</div>
 						</div>
+						<div v-show="this.normalMode">
 						<openwb-base-heading>
 							Angaben zum konfigurierten Ladestrom der openWB
 						</openwb-base-heading>
@@ -904,9 +923,24 @@
 								</openwb-base-button-group-input>
 							</div>
 						</openwb-base-card>
+					</div>
 					</openwb-base-card>
 				</div>
 			</openwb-base-card>
+
+			<div v-show="this.IDinstallAssistantActive">
+			<openwb-base-textarea
+						title="Erkannte ID-Tags"
+						readonly
+						disabled
+						:model-value="idTagList.join('\n')"
+					>
+						<template #help>
+							Solange diese Seite geöffnet ist, werden alle
+							erfassten ID-Tags in dieser Liste aufgeführt.
+						</template>
+					</openwb-base-textarea>
+				</div>
 
 			<openwb-base-submit-buttons
 				formName="chargePointInstallationForm"
@@ -956,8 +990,20 @@ export default {
 		FontAwesomeLayers,
 		OpenwbChargePointProxy,
 	},
+	props: {
+		IDinstallAssistantActive: {
+			type: Boolean,
+			default: false
+		},
+		normalMode: {
+			type: Boolean,
+			default: true
+		}
+	},
 	data() {
 		return {
+			IdTagListArr: [],
+			tempIdTagList: {},
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
 				"openWB/optional/rfid/active",
@@ -966,6 +1012,9 @@ export default {
 				"openWB/chargepoint/template/+/autolock/+",
 				"openWB/system/configurable/chargepoints",
 				"openWB/system/configurable/chargepoints_internal",
+				"openWB/chargepoint/+/get/rfid",
+				"openWB/chargepoint/+/get/rfid_timestamp",
+				"openWB/chargepoint/+/set/rfid",
 			],
 			chargePointToAdd: undefined,
 			showChargePointModal: false,
@@ -977,6 +1026,9 @@ export default {
 		};
 	},
 	computed: {
+		idTagList() {
+			return Object.values(this.updateIdTagList());
+		},
 		installedChargePoints: {
 			get() {
 				// only show internal chargepoint(s) when configured as external chargepoint
@@ -1017,6 +1069,47 @@ export default {
 		},
 	},
 	methods: {
+		transferIDTags(value){
+			console.info("value: ", value);
+			for(let i = 0; i < value.length; i++){
+				if(!this.IdTagListArr.includes(value[i])){
+			this.IdTagListArr.push(value[i].toString());
+			}
+		}
+ 			const keys = Object.keys(this.tempIdTagList);
+			if(keys.length > 0){
+			for(let i = 0; i < keys.length; i++){
+				if(!this.IdTagListArr.includes(keys[i])){
+					this.IdTagListArr.push(keys[i]);
+					
+					}
+				}
+			}
+			return this.IdTagListArr;
+		},
+		getIdFromTopic(topic) {
+			return topic
+				.match(/(?:\/)([0-9]+)(?=\/)*/g)[0]
+				.replace(/[^0-9]+/g, "");
+		},
+		updateIdTagList() {
+			Object.entries(
+				// get all id-tag topics/values
+				this.getWildcardTopics(
+					"^openWB/chargepoint/[^+/]+/[gs]et/rfid$",
+					true,
+				),
+			).forEach((entry) => {
+				if (entry[1] !== null) {
+					this.tempIdTagList[entry[1]] = `${entry[1]} (${
+						entry[0].includes("/set/") ? "zugewiesen" : "erfasst"
+					} an ${this.getChargePointName(
+						this.getIdFromTopic(entry[0]),
+					)})`;
+				}
+			});
+			return this.tempIdTagList;
+		},
 		addChargePoint(event) {
 			// prevent further processing of the click event
 			event.stopPropagation();

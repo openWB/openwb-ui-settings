@@ -175,12 +175,12 @@ const routes = [
 		component: () => import("../views/DataManagement.vue"),
 	},
 	{
-		path: "/System/RFIDAssistant",
-		name: "RFIDAssistant",
+		path: "/System/IDAssistant",
+		name: "IDAssistant",
 		meta: {
-			heading: "System - RFIDAssistant",
+			heading: "System - ID-Assistant",
 		},
-		component: () => import("../components/RFID_Assistent/RFID_Assistent_Template.vue"),
+		component: () => import("../views/ID_Assistant.vue"),
 	},
 
 ];

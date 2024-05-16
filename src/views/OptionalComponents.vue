@@ -53,8 +53,11 @@
 					<openwb-base-alert subtype="info" class="mb-1">
 						Die ID-Tags, die an dem jeweiligen Ladepunkt gültig
 						sind, müssen in dem Ladepunkt-Profil hinterlegt werden.
-						Die ID-Tags müssen auch in den Einstellungen der
+						Die ID-Tags können auch in den Einstellungen der
 						Fahrzeuge diesen zugeordnet werden.<br />
+						Dadurch wird der Ladepunkt entsperrt und das diesem ID-Tag zugeordnete 
+						Fahrzeug startet den Ladevorgang. Diese Option macht vor allem Sinn, wenn in 
+						den Einstellungen der Fahrzeuge Sperren nach Abstecken aktiviert ist.
 						Es kann zuerst das Fahrzeug angesteckt und dann der
 						ID-Tag erfasst werden oder anders herum. Im letzten Fall
 						muss innerhalb von 5 Minuten ein Fahrzeug angesteckt
@@ -62,7 +65,7 @@
 						wird erst nach dem Anstecken zugeordnet.<br />
 						<span v-html="$store.state.text.rfidWiki" />
 					</openwb-base-alert>
-					<openwb-base-textarea
+					<openwb-base-textarea v-show="this.normalMode"
 						title="Erkannte ID-Tags"
 						readonly
 						disabled
@@ -75,6 +78,7 @@
 					</openwb-base-textarea>
 				</div>
 			</openwb-base-card>
+			<div v-show="this.normalMode">
 			<!-- <openwb-base-card title="LED-Ausgänge">
 				<openwb-base-button-group-input
 					title="LED-Ausgänge aktivieren"
@@ -1448,6 +1452,7 @@
 					</div>
 				</div>
 			</openwb-base-card> -->
+		</div>
 			<openwb-base-submit-buttons
 				formName="optionalComponentsForm"
 				@save="$emit('save')"
@@ -1466,6 +1471,12 @@ export default {
 	name: "OpenwbOptionalComponents",
 	mixins: [ComponentState],
 	components: { OpenwbDisplayThemeProxy },
+	props: {
+		normalMode: {
+			type: Boolean,
+			default: true
+		}
+	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
