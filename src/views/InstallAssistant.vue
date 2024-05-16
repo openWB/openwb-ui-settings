@@ -210,11 +210,11 @@ export default {
 	},
 	methods: {
 		nextPage() {
+			window.scrollTo(0, 0);
 			if(!this.installAssistantActive){
 				this.installAssistantActive = true;
 				this.normalMode = false;
 			}
-			window.scrollTo(0, 0);
 			this.currentPage += 1;
 			this.hidePrevious = false;
 			if(this.currentpage == 3 || this.currentPage == 4){
