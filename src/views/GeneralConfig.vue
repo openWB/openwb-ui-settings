@@ -578,12 +578,14 @@
 					/>
 				</div>
 			</openwb-base-card>
+			<div v-show="this.normalMode">
 			<openwb-base-submit-buttons
 				formName="generalConfigForm"
 				@save="$emit('save')"
 				@reset="$emit('reset')"
 				@defaults="$emit('defaults')"
 			/>
+		</div>
 		</form>
 	</div>
 </template>
