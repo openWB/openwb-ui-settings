@@ -69,7 +69,7 @@
 			<div v-if="currentPage ==9">
 						<h2>Die Grundkonfiguration ist jetzt abgeschlossen.</h2>
 						<p>Bitte überprüfe die Ergebnisse im Status und passe bei Unstimmigkeiten die Einstellungen an.</p>
-						<p>Weitere Optionen und Einstellungen sind auf den System und Konfigurationsseiten einsehbar.</p>
+						<p>Weitere Optionen und Einstellungen sind auf den System- und Konfigurationsseiten einsehbar.</p>
 					</div>
 			<div v-if="currentPage !== 0 && currentPage < 9" class="row justify-content-center mb-1">
 				<div class="page-help-text col-md-3 py-2" >
