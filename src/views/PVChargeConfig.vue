@@ -286,7 +286,7 @@
 							Einstellung genutzt wird, um den verfügbaren
 							Überschuss in die Fahrzeuge zu laden. Voraussetzung
 							ist die verbaute Umschaltmöglichkeit zwischen einer
-							und drei Phasen (s.g. 1p3p).
+							und mehreren Phasen (s.g. 1p3p).
 						</template>
 					</openwb-base-button-group-input>
 				</div>

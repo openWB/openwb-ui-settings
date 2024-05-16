@@ -146,7 +146,10 @@
 							das Intervall für die Umschaltung erneut. Ist die
 							Ladung im mehrphasigen Modus für 16 - x Minuten auf
 							der Minimalstromstärke, wird wieder auf einphasige
-							Ladung gewechselt.
+							Ladung gewechselt.<br />
+							Ist ausreichend Überschuss vorhanden, wird beim
+							Ladestart die Umschaltverzögerung nicht abgewartet,
+							sondern direkt mit mehrphasiger Ladung begonnen.
 						</template>
 					</openwb-base-range-input>
 					<hr />
