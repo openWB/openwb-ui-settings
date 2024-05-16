@@ -160,7 +160,7 @@
 						<openwb-base-heading
 							>Hardware-Optionen</openwb-base-heading
 						>
-						<openwb-base-button-group-input 
+						<openwb-base-button-group-input
 							title="automatische Phasenumschaltung vorhanden"
 							:buttons="[
 								{ buttonValue: false, text: 'Nein' },
