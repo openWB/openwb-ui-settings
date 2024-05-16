@@ -157,7 +157,7 @@
 						"
 					>
 						<hr />
-						<openwb-base-heading 
+						<openwb-base-heading
 							>Hardware-Optionen</openwb-base-heading
 						>
 						<openwb-base-button-group-input 

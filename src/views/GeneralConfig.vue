@@ -1,7 +1,7 @@
 <template>
 	<div class="generalConfig">
 		<form name="generalConfigForm">
-			<openwb-base-card title="Steuerungsmodus" >
+			<openwb-base-card title="Steuerungsmodus">
 				<openwb-base-alert subtype="info" v-show="this.normalMode">
 					<p>
 						Wird für den Steuerungsmodus "primary" gewählt,
@@ -159,7 +159,7 @@
 							</span>
 						</template>
 					</openwb-base-button-group-input>
-					<openwb-base-button-group-input 
+					<openwb-base-button-group-input
 						title="Netzschutz"
 						:buttons="[
 							{
