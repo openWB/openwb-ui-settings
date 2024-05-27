@@ -29,7 +29,7 @@
 				title="Sicherung / Wiederherstellung"
 				subtype="success"
 				:collapsible="true"
-				:collapsed="true"
+				:collapsed="!installAssistantActive"
 			>
 				<form name="backupForm">
 					<openwb-base-heading>Sicherung</openwb-base-heading>
@@ -68,9 +68,9 @@
 							</openwb-base-click-button>
 						</div>
 					</div>
+					<hr />
 				</form>
-				<hr />
-				<form name="restoreForm">
+				<form v-if="!installAssistantActive" name="restoreForm">
 					<openwb-base-heading>Wiederherstellung</openwb-base-heading>
 					<openwb-base-alert subtype="danger">
 						Für die Wiederherstellung wird eine aktive
@@ -150,8 +150,8 @@
 							</openwb-base-click-button>
 						</div>
 					</div>
+					<hr />
 				</form>
-				<hr />
 				<form name="cloudBackupForm">
 					<openwb-base-heading>
 						Automatische Sicherung in einen Cloud-Dienst
@@ -261,6 +261,7 @@
 				</form>
 			</openwb-base-card>
 			<openwb-base-card
+				v-if="!installAssistantActive"
 				title="Datenübernahme"
 				subtype="success"
 				:collapsible="true"
@@ -385,7 +386,7 @@
 					</div>
 				</form>
 			</openwb-base-card>
-			<form name="resetForm">
+			<form v-if="!installAssistantActive" name="resetForm">
 				<openwb-base-card
 					title="Zurücksetzen"
 					subtype="danger"
@@ -452,12 +453,19 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbBackupCloudProxy from "../components/backup_clouds/OpenwbBackupCloudProxy.vue";
 
 export default {
-	name: "OpenwbSystem",
+	name: "OpenwbDataManagementView",
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,
 		OpenwbBackupCloudProxy,
+	},
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
 	},
 	data() {
 		return {

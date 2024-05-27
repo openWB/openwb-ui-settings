@@ -2231,13 +2231,20 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbVehicleProxy from "../components/vehicles/OpenwbVehicleProxy.vue";
 
 export default {
-	name: "OpenwbVehicleConfig",
+	name: "OpenwbVehicleConfigView",
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,
 		FontAwesomeLayers,
 		OpenwbVehicleProxy,
+	},
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
 	},
 	data() {
 		return {

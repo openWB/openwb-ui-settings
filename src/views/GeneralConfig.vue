@@ -102,7 +102,7 @@
 					</openwb-base-alert>
 				</div>
 			</openwb-base-card>
-			<openwb-base-card title="Hardware">
+			<openwb-base-card v-if="!installAssistantActive" title="Hardware">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
 						Diese Einstellungen sind nicht verfügbar, solange sich
@@ -518,7 +518,10 @@
 					</div>
 				</div>
 			</openwb-base-card> -->
-			<openwb-base-card title="Darstellung">
+			<openwb-base-card
+				v-if="!installAssistantActive"
+				title="Darstellung"
+			>
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
 						Diese Einstellungen sind nicht verfügbar, solange sich
@@ -594,9 +597,16 @@ import OpenwbWebThemeProxy from "../components/web_themes/OpenwbWebThemeProxy.vu
 import OpenwbRippleControlReceiverProxy from "../components/ripple_control_receivers/OpenwbRippleControlReceiverProxy.vue";
 
 export default {
-	name: "OpenwbGeneralConfig",
+	name: "OpenwbGeneralConfigView",
 	mixins: [ComponentState],
 	components: { OpenwbWebThemeProxy, OpenwbRippleControlReceiverProxy },
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
+	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [

@@ -108,7 +108,10 @@ export default createStore({
 						object,
 					);
 
-			if (message.topic in state.mqtt || !(message.topic in state.examples)) {
+			if (
+				message.topic in state.mqtt ||
+				!(message.topic in state.examples)
+			) {
 				if (message.objectPath != undefined) {
 					setPath(
 						state.mqtt[message.topic],
@@ -146,7 +149,11 @@ export default createStore({
 			} else {
 				state.mqttSubscriptions[topic] = 1;
 			}
-			console.debug("subscription count: ", topic, state.mqttSubscriptions[topic]);
+			console.debug(
+				"subscription count: ",
+				topic,
+				state.mqttSubscriptions[topic],
+			);
 		},
 		removeSubscription(state, topic) {
 			// remove subscription from list or decrement count
@@ -196,12 +203,13 @@ export default createStore({
 				}
 			});
 		},
-		installWizardDone(state) {
+		installAssistantDone(state) {
 			return new Promise((resolve) => {
-
-				if (state.mqtt["openWB/system/installAssistantDone"] !== undefined) {
-					resolve(state.mqtt["openWB/system/installAssistantDone"],
-					);
+				if (
+					state.mqtt["openWB/system/installAssistantDone"] !==
+					undefined
+				) {
+					resolve(state.mqtt["openWB/system/installAssistantDone"]);
 				} else {
 					var timer, interval;
 					// add general timeout if topic not set
@@ -212,12 +220,14 @@ export default createStore({
 					// check until we received valid data
 					interval = setInterval(() => {
 						if (
-							state.mqtt["openWB/system/installAssistant"] !==
+							state.mqtt["openWB/system/installAssistantDone"] !==
 							undefined
 						) {
 							clearTimeout(timer);
 							clearInterval(interval);
-							resolve(state.mqtt["openWB/system/installAssistant"]);
+							resolve(
+								state.mqtt["openWB/system/installAssistantDone"],
+							);
 						}
 					}, 100);
 				}

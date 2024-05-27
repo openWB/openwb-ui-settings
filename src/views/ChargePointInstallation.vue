@@ -55,7 +55,7 @@
 				title="Ladepunkte"
 				subtype="primary"
 				:collapsible="true"
-				:collapsed="true"
+				:collapsed="!installAssistantActive"
 			>
 				<template #header>
 					<font-awesome-icon
@@ -469,30 +469,56 @@
 								)
 							"
 						>
-							<template #help>
-								Sperrt den Ladepunkt nach Abstecken eines
-								Fahrzeuges
-							</template>
-						</openwb-base-button-group-input>
-						<openwb-base-array-input
-							v-if="chargePointTemplate.disable_after_unplug"
-							title="Zugeordnete ID-Tags"
-							noElementsMessage="Keine ID-Tags zugeordnet."
-							:model-value="chargePointTemplate.valid_tags"
-							@update:model-value="
-								updateState(
-									chargePointTemplateKey,
-									$event,
-									'valid_tags',
-								)
-							"
-						>
-							<template #help>
-								Die hier eingetragenen ID-Tags dienen
-								ausschließlich zum Entsperren des Ladepunktes.
-							</template>
-						</openwb-base-array-input>
-						<hr />
+							<openwb-base-heading>
+								Zugangskontrolle
+							</openwb-base-heading>
+							<openwb-base-button-group-input
+								title="Freigabe durch ID-Tags"
+								:buttons="[
+									{ buttonValue: false, text: 'Nein' },
+									{ buttonValue: true, text: 'Ja' },
+								]"
+								:model-value="chargePointTemplate.rfid_enabling"
+								@update:model-value="
+									updateState(
+										chargePointTemplateKey,
+										$event,
+										'rfid_enabling',
+									)
+								"
+							/>
+							<div v-if="chargePointTemplate.rfid_enabling">
+								<openwb-base-array-input
+									title="Zugeordnete ID-Tags"
+									noElementsMessage="Keine ID-Tags zugeordnet."
+									:model-value="
+										chargePointTemplate.valid_tags
+									"
+									@update:model-value="
+										updateState(
+											chargePointTemplateKey,
+											$event,
+											'valid_tags',
+										)
+									"
+								>
+									<template #help>
+										Wenn hier Tags eingetragen werden,
+										können nur die eingetragenen Tags zur
+										Fahrzeug-Zuordnung genutzt werden. Sind
+										keine Tags eingetragen, wird nur die
+										Zuordnung zum Fahrzeug geprüft. In
+										diesem Fall können alle Fahrzeuge diesen
+										Ladepunkt nutzen.
+										<br />
+										<span
+											v-html="$store.state.text.rfidWiki"
+										></span>
+									</template>
+								</openwb-base-array-input>
+								<hr />
+							</div>
+						</div>
 						<openwb-base-heading>
 							Angaben zum konfigurierten Ladestrom der openWB
 						</openwb-base-heading>
@@ -928,13 +954,20 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbChargePointProxy from "../components/charge_points/OpenwbChargePointProxy.vue";
 
 export default {
-	name: "OpenwbChargePointInstallation",
+	name: "OpenwbChargePointInstallationView",
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,
 		FontAwesomeLayers,
 		OpenwbChargePointProxy,
+	},
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
 	},
 	data() {
 		return {

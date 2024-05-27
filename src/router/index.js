@@ -206,13 +206,17 @@ router.beforeEach(async (to) => {
 		const usageTermsAcknowledged =
 			await store.getters.usageTermsAcknowledged;
 		if (!usageTermsAcknowledged) {
+			console.info("Redirecting to LegalSettings");
 			return { name: "LegalSettings" };
 		}
 	}
-	if (to.name !== "InstallAssistant"){
-		const installAssistantDone = 
-			await store.getters.installAssistantDone;
+	if (to.name !== "InstallAssistant") {
+		const installAssistantDone = await store.getters.installAssistantDone;
 		if (!installAssistantDone) {
+			console.info(
+				"Redirecting to InstallAssistant",
+				installAssistantDone,
+			);
 			return { name: "InstallAssistant" };
 		}
 	}
