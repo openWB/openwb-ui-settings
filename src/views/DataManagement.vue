@@ -68,6 +68,7 @@
 							</openwb-base-click-button>
 						</div>
 					</div>
+					<hr />
 				</form>
 				<form v-if="showRestoreSection" name="restoreForm">
 					<hr />
@@ -150,6 +151,7 @@
 							</openwb-base-click-button>
 						</div>
 					</div>
+					<hr />
 				</form>
 				<form v-if="showBackupCloudSection" name="cloudBackupForm">
 					<hr />

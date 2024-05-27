@@ -218,10 +218,13 @@ router.beforeEach(async (to) => {
 			}
 		}
 	}
-	if (to.name !== "InstallAssistant"){
-		const installAssistantDone = 
-			await store.getters.installAssistantDone;
+	if (to.name !== "InstallAssistant") {
+		const installAssistantDone = await store.getters.installAssistantDone;
 		if (!installAssistantDone) {
+			console.info(
+				"Redirecting to InstallAssistant",
+				installAssistantDone,
+			);
 			return { name: "InstallAssistant" };
 		}
 	}
