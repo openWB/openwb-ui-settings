@@ -227,12 +227,12 @@
 								"
 							/>
 							<openwb-base-alert subtype="info">
-								Insofern Freigabe durch ID-Tags im Ladepunkt-Profil
-								aktiviert wurde, müssen die den Fahrzeugen zugeordnete 
-								ID-Tags auch in das entsprechende Ladepunkt-Profil
-								eingetragen werden, um zuzuordnen, an welchen
-								Ladepunkten die ID-Tags verwendet werden
-								dürfen.<br />
+								Insofern Freigabe durch ID-Tags im
+								Ladepunkt-Profil aktiviert wurde, müssen die den
+								Fahrzeugen zugeordnete ID-Tags auch in das
+								entsprechende Ladepunkt-Profil eingetragen
+								werden, um zuzuordnen, an welchen Ladepunkten
+								die ID-Tags verwendet werden dürfen.<br />
 								<span v-html="$store.state.text.rfidWiki" />
 							</openwb-base-alert>
 							<hr />
@@ -2256,13 +2256,20 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbVehicleProxy from "../components/vehicles/OpenwbVehicleProxy.vue";
 
 export default {
-	name: "OpenwbVehicleConfig",
+	name: "OpenwbVehicleConfigView",
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,
 		FontAwesomeLayers,
 		OpenwbVehicleProxy,
+	},
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
 	},
 	data() {
 		return {

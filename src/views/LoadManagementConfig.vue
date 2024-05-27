@@ -310,12 +310,19 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 import SortableList from "../components/OpenwbSortableList.vue";
 
 export default {
-	name: "OpenwbLoadManagementConfig",
+	name: "OpenwbLoadManagementConfigView",
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
 		SortableList,
 		FontAwesomeIcon,
+	},
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
 	},
 	data() {
 		return {
