@@ -51,10 +51,8 @@
 					"
 				>
 					<openwb-base-alert subtype="info" class="mb-1">
-						Die ID-Tags, die an dem jeweiligen Ladepunkt gültig
-						sind, müssen in dem Ladepunkt-Profil hinterlegt werden.
-						Die ID-Tags müssen auch in den Einstellungen der
-						Fahrzeuge diesen zugeordnet werden.<br />
+						Die ID-Tags müssen in den Einstellungen der Fahrzeuge
+						diesen zugeordnet werden.<br />
 						Es kann zuerst das Fahrzeug angesteckt und dann der
 						ID-Tag erfasst werden oder anders herum. Im letzten Fall
 						muss innerhalb von 5 Minuten ein Fahrzeug angesteckt
