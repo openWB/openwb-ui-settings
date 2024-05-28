@@ -174,6 +174,15 @@ const routes = [
 		},
 		component: () => import("../views/DataManagement.vue"),
 	},
+	{
+		path: "/System/IDAssistant",
+		name: "IDAssistant",
+		meta: {
+			heading: "System - ID-Assistant",
+		},
+		component: () => import("../views/ID_Assistant.vue"),
+	},
+
 ];
 /* examples for development only start here */
 if (import.meta.env.MODE !== "production") {

@@ -238,6 +238,13 @@
 						>
 							Rechtliches
 						</router-link>
+						<router-link
+							to="/System/IDAssistant"
+							class="dropdown-item"
+							active-class="active disabled"
+						>
+							ID Einrichtungsassistent
+						</router-link>
 					</div>
 				</li>
 				<!-- <li
