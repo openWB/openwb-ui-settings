@@ -172,7 +172,7 @@ Chart.register(
 );
 
 export default {
-	name: "OpenwbChart",
+	name: "OpenwbChartView",
 	components: { ChartjsLine, FontAwesomeIcon },
 	mixins: [ComponentState],
 	emits: ["sendCommand"],

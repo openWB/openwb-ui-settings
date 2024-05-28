@@ -54,7 +54,7 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbLogCard from "../components/debug_config/LogCard.vue";
 
 export default {
-	name: "OpenwbDebugging",
+	name: "OpenwbDebuggingView",
 	mixins: [ComponentState],
 	components: {
 		OpenwbLogCard,
