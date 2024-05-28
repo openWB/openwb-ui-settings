@@ -262,7 +262,7 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbElectricityTariffProxy from "../components/electricity_tariffs/OpenwbElectricityTariffProxy.vue";
 
 export default {
-	name: "OpenwbGeneralChargeConfig",
+	name: "OpenwbGeneralChargeConfigView",
 	mixins: [ComponentState],
 	components: {
 		OpenwbElectricityTariffProxy,

@@ -23,7 +23,7 @@
 	<!-- main content -->
 	<div class="hardwareInstallation">
 		<form name="hardwareInstallationForm">
-			<openwb-base-alert subtype="info">
+			<openwb-base-alert v-if="!installAssistantActive" subtype="info">
 				Wenn neue Komponenten - insbesondere Zähler - konfiguriert
 				wurden, ist auch das
 				<router-link to="/LoadManagementConfiguration">
@@ -356,12 +356,19 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbConfigProxy from "../components/devices/OpenwbConfigProxy.vue";
 
 export default {
-	name: "OpenwbHardwareInstallation",
+	name: "OpenwbHardwareInstallationView",
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,
 		OpenwbConfigProxy,
+	},
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
 	},
 	data() {
 		return {

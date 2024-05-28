@@ -333,7 +333,7 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 import SortableList from "../components/OpenwbSortableList.vue";
 
 export default {
-	name: "OpenwbTestingStore",
+	name: "OpenwbTestingStoreView",
 	mixins: [ComponentState],
 	components: {
 		SortableList,
