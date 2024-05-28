@@ -25,7 +25,7 @@ import { defineAsyncComponent } from "vue";
 import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
-	name: "InstallAssistant",
+	name: "InstallAssistantView",
 	mixins: [ComponentState],
 	data() {
 		return {

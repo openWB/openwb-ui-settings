@@ -568,7 +568,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasCarBattery, fasCarSide, fasBatteryHalf);
 
 export default {
-	name: "OpenwbPVChargeConfig",
+	name: "OpenwbPVChargeConfigView",
 	mixins: [ComponentState],
 	components: {
 		FontAwesomeIcon,

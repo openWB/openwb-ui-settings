@@ -226,7 +226,9 @@ export default createStore({
 							clearTimeout(timer);
 							clearInterval(interval);
 							resolve(
-								state.mqtt["openWB/system/installAssistantDone"],
+								state.mqtt[
+									"openWB/system/installAssistantDone"
+								],
 							);
 						}
 					}, 100);

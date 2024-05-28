@@ -52,7 +52,7 @@
 import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
-	name: "OpenwbTimeChargeConfig",
+	name: "OpenwbTimeChargeConfigView",
 	mixins: [ComponentState],
 	data() {
 		return {

@@ -28,7 +28,7 @@ import Blocker from "./components/OpenwbPageBlocker.vue";
 import mqtt from "mqtt";
 
 export default {
-	name: "settings-app",
+	name: "OpenwbSettingsApp",
 	components: {
 		NavBar,
 		PageFooter,
@@ -88,7 +88,9 @@ export default {
 			// collect data
 			let topics = {};
 			if (topicsToSave === undefined) {
-				console.debug("no topics defined, so save everything we have in store");
+				console.debug(
+					"no topics defined, so save everything we have in store",
+				);
 				topics = this.$store.state.mqtt;
 			} else {
 				if (Array.isArray(topicsToSave)) {
@@ -105,7 +107,8 @@ export default {
 				let setTopic = topic.replace("openWB/", "openWB/set/");
 				console.debug("saving data:", setTopic, payload);
 				this.doPublish(setTopic, payload);
-				// publishing without sleeping is inconsistent! (mqtt v4.3.7) This may change with newer versions.
+				// publishing without sleeping is inconsistent! (mqtt v4.3.7)
+				// This may change with newer versions.
 				await sleep(100);
 			}
 			console.debug("done saving data");
@@ -164,7 +167,8 @@ export default {
 					"Connection succeeded! ClientId: ",
 					this.client.options.clientId,
 				);
-				this.doSubscribe(["openWB/system/usage_terms_acknowledged"]); // required for route guard
+				// required for route guards
+				this.doSubscribe(["openWB/system/usage_terms_acknowledged"]);
 				this.doSubscribe(["openWB/system/installAssistantDone"]);
 			});
 			this.client.on("error", (error) => {
@@ -202,9 +206,12 @@ export default {
 			console.debug("doSubscribe", topics);
 			topics.forEach((topic) => {
 				this.$store.commit("addSubscription", topic);
-				if ( this.$store.getters.subscriptionCount(topic) == 1) {
+				if (this.$store.getters.subscriptionCount(topic) == 1) {
 					if (topic.includes("#") || topic.includes("+")) {
-						console.debug("skipping init of wildcard topic:", topic);
+						console.debug(
+							"skipping init of wildcard topic:",
+							topic,
+						);
 					} else {
 						this.$store.commit("addTopic", {
 							topic: topic,
@@ -226,7 +233,7 @@ export default {
 			console.debug("doUnsubscribe", topics);
 			topics.forEach((topic) => {
 				this.$store.commit("removeSubscription", topic);
-				if ( this.$store.getters.subscriptionCount(topic) == 0) {
+				if (this.$store.getters.subscriptionCount(topic) == 0) {
 					this.client.unsubscribe(topic, (error) => {
 						if (error) {
 							console.error("Unsubscribe error", error);
@@ -236,8 +243,14 @@ export default {
 						console.debug("expanding wildcard topic:", topic);
 						Object.keys(this.getWildcardTopics(topic)).forEach(
 							(wildcardTopic) => {
-								console.debug("removing wildcardTopic:", wildcardTopic);
-								this.$store.commit("removeTopic", wildcardTopic);
+								console.debug(
+									"removing wildcardTopic:",
+									wildcardTopic,
+								);
+								this.$store.commit(
+									"removeTopic",
+									wildcardTopic,
+								);
 							},
 						);
 					} else {
