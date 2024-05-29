@@ -41,7 +41,7 @@
 					</openwb-base-button-group-input>
 				</div>
 			</openwb-base-card>
-			<openwb-base-card title="Phasenumschaltung Zielladen mit PV-Überschuss">
+			<openwb-base-card title="Phasenumschaltung bei PV-Überschuss">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
 						Diese Einstellungen sind nicht verfügbar, solange sich
