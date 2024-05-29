@@ -126,12 +126,12 @@
 						unit="Min."
 						:model-value="
 							$store.state.mqtt[
-								'openWB/general/chargemode_config/pv_charging/phase_switch_delay'
+								'openWB/general/chargemode_config/phase_switch_delay'
 							]
 						"
 						@update:model-value="
 							updateState(
-								'openWB/general/chargemode_config/pv_charging/phase_switch_delay',
+								'openWB/general/chargemode_config/phase_switch_delay',
 								$event,
 							)
 						"
@@ -302,7 +302,7 @@ export default {
 		return {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
-				"openWB/general/chargemode_config/pv_charging/phase_switch_delay",
+				"openWB/general/chargemode_config/phase_switch_delay",
 				"openWB/general/chargemode_config/retry_failed_phase_switches",
 				"openWB/general/chargemode_config/unbalanced_load",
 				"openWB/general/chargemode_config/unbalanced_load_limit",
