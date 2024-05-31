@@ -1048,35 +1048,6 @@
 							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-button-group-input
-							title="Sperre nach Abstecken"
-							:buttons="[
-								{
-									buttonValue: false,
-									text: 'Nein',
-									class: 'btn-outline-danger',
-								},
-								{
-									buttonValue: true,
-									text: 'Ja',
-									class: 'btn-outline-success',
-								},
-							]"
-							:model-value="template.disable_after_unplug"
-							@update:model-value="
-								updateState(
-									templateKey,
-									$event,
-									'disable_after_unplug',
-								)
-							"
-						>
-							<template #help>
-								Wird ein Fahrzeug mit diesem Profil abgesteckt,
-								dann wird der betroffene Ladepunkt automatisch
-								deaktiviert.
-							</template>
-						</openwb-base-button-group-input>
-						<openwb-base-button-group-input
 							title="Standard nach Abstecken"
 							:buttons="[
 								{
