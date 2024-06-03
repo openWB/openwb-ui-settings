@@ -227,6 +227,7 @@
 								"
 							/>
 							<openwb-base-alert subtype="info">
+								Die hier eingetragenen ID-Tags dienen nur zur Fahrzeugzuordnung<br />
 								<span v-html="$store.state.text.rfidWiki" />
 							</openwb-base-alert>
 							<hr />
