@@ -1,14 +1,14 @@
 <template>
 	<InstallAssistantStepTemplate
-		title="4. Ladepunkt(e) einrichten"
+		title="4. Einrichten der Ladepunkte (openWB als secondary)"
 		@nextPage="nextPage"
 		@previousPage="previousPage"
 		@endAssistant="endAssistant"
 	>
 		<template v-slot:help>
 			<p>
-				Diese openWB wurde als "secondary" konfiguriert und wird von
-				einer anderen openWB ferngesteuert.
+				Diese hier vorzukonfigurierende openWB wurde als "secondary" eingestellt und 
+				wird von einer anderen openWB bzw. Standalone ferngesteuert.
 			</p>
 			<p>
 				Bei vorkonfigurierten openWBs ist ab Werk bereits ein (zwei bei
@@ -21,16 +21,15 @@
 				series 1/2 custom, Standard (+) oder Buchse) aus.
 			</p>
 			<p>
-				Wenn eine openWB Duo gewählt wurde, können zwei Ladepunkte mit
-				Ladepunkt-Nummer 1 und 2 konfiguriert werden. Bei der openWB Pro
-				sind keine Einstellungen notwendig.
+				Wenn eine openWB Duo gewählt wird, so sind zwei Ladepunkte mit 
+				Ladepunkt-Nummer 1 und 2 zu konfigurieren. Bei der openWB Pro und Satellit sind keine Einstellungen notwendig.
 			</p>
 			<p>
-				Für den ausgewählten Betrieb als secondary sind keine weiteren
-				Einstellungen notwendig.
+				Weitere Einstellungen sind bei der Vorkonfiguration einer secondary nicht notwendig. Der Assistent wird nach Drücken von Speichern beendet. 
+				Sollte diese openWB umkonfiguriert und als primary eingesetzt werden, dann muss der angelegte Ladepunkt "interne openWB" vorher entfernt werden.
 			</p>
 			<p class="font-weight-bold">
-				Änderungen werden nur bei klicken auf speichern wirksam
+				Änderungen werden nur bei Klicken auf Speichern wirksam!
 			</p>
 		</template>
 		<template v-slot:content>

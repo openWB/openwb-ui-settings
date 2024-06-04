@@ -1,40 +1,42 @@
 <template>
 	<InstallAssistantStepTemplate
-		title="5. Ladepunkte einrichten"
+		title="2. Einrichten der Ladepunkte (openWB als primary)"
 		@nextPage="nextPage"
 		@previousPage="previousPage"
 		@endAssistant="endAssistant"
 	>
 		<template v-slot:help>
 			<p>
-				Enthält die steuernde openWB Ladetechnik, wird bei Ladepunkte
-				unter verfügbare Ladepunkte "Interne openWB" ausgewählt.
-				Ansonsten wird "Externe openWB" und Bauart (der secondary
-				openWB) ausgewählt und die IP-Adresse der anderen openWB
-				(secondary openWB) und die Ladepunkt-Nummer eingetragen. Bei der
-				openWB Duo als secondary openWB können zwei Ladepunkte mit der
-				Nummer 1 und 2 hinzugefügt werden.
+				Enthält die steuernde openWB (primary) Ladetechnik, wird bei "Verfügbare Ladepunkte" Interne openWB ausgewählt.
+				Weitere LP werden im primary als Externe openWB (= vorkonfigurierte secondary-openWB) oder andere WB-Typen 
+				wie Pro, Satellit eingebunden.
 			</p>
 			<p>
-				Bei vorkonfigurierten openWBs ist ab Werk bereits ein (zwei bei
-				einer DUO) interner Ladepunkt eingetragen.
+				Bei  openWBs ab Werk kann hier bereits ein Ladepunkt eingetragen sein.
 			</p>
 			<p>
-				Unter Elektrischer Anschluss Phase 1 des Ladekabels muss die
-				Phase der Wallbox-Zuleitung korrekt ausgewählt werden, damit das
-				Lastmanagement im Betrieb korrekt arbeiten kann.
+				Nachfolgend werden die Eigenschaften des Ladepunktes wie IP-Adresse und elektrischer Anschluss definiert.
+				Die meisten openWB werden 3-phasig angeschlossen! Bei mehreren openWB's ist auf phasenrotierten Anschluss 
+				der openWB-Zuleitung zu achten! Abschließend wird die korrekte Zuordnung der Phase 1 des Ladekabels zur 
+				zugehörigen EVU-Zählerphase konfiguriert. Dies ist sehr wichtig, um optimales Lastmanagement sicherzustellen! 
+			</p>
+			<p>Trick zur Zuordnung: Verwende ein nur 1-phasig ladendes Auto (z.B. Hybrid) oder stelle bei openWB mit 1p3p-Phasenumschaltung 
+				temporär unter Sofortladen (s. Einstellungen -> Ladeeinstellungen) auf einphasig, um eine 1-phasige Ladung zu erzwingen.
+				Gehe unter Status und vergleiche die Leistungen bzw. Ströme der 3 Phasen am EVU-Zähler (rot) beim und nach dem Autoladen 
+				(Sofortladen mit 16A/ Stop). Diejenige EVU-Phase, die deutlich erhöhte Werte anzeigt, ist die auszuwählende EVU-Phase.
 			</p>
 			<p>
 				Bei mehreren openWBs ist es sinnvoll die Ladepunkte auf
 				unterschiedliche Phasen aufzuteilen.
 			</p>
 			<p>
-				Bitte lesen Sie dazu auch die Hinweistexte im rechten Fenster,
-				welche durch klicken auf das umrundete Fragezeichensymbol hinter
-				den Menüpunkten aufgerufen werden können.
+				Im grauen Menü Ladepunkt-Profile können neben dem nicht editierbaren Standard-Ladepunkt-Profil auch weitere 
+				Ladepunkt-Profile, die andere WB-Typen abbilden, erstellt werden. Dort sind Eintragungen bzgl. des 
+				Ladepunkt-Maximalstroms bei einer Phase bzw. mehreren Phasen vorzunehmen.
+				Die Profile werden abschließend im jeweiligen blauen Ladepunkt mittels Auswahlmenü zugeordnet.
 			</p>
 			<p class="font-weight-bold">
-				Änderungen werden nur bei klicken auf speichern wirksam
+				Änderungen werden nur bei Klicken auf Speichern wirksam!
 			</p>
 		</template>
 		<template v-slot:content>

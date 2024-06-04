@@ -1,6 +1,6 @@
 <template>
 	<InstallAssistantStepTemplate
-		title="1. Datensicherung"
+		title="1. Datensicherung - Eine Sicherung erstellen"
 		@nextPage="nextPage"
 		@previousPage="previousPage"
 		@endAssistant="endAssistant"
@@ -17,9 +17,7 @@
 				erstellen klicken.
 			</p>
 			<p>
-				Es wird empfohlen regelmäßig Sicherungen der Daten zu erstellen.
-				Der Vorgang kann auch automatisiert werden, indem unter
-				"Backup-Cloud" ein Dienst ausgewählt wird.
+				Es wird empfohlen, regelmäßig Sicherungen der Daten zu erstellen.
 			</p>
 		</template>
 		<template v-slot:content>

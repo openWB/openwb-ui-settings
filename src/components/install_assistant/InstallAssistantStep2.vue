@@ -1,14 +1,13 @@
 <template>
 	<InstallAssistantStepTemplate
-		title="2. Aktualisierung"
+		title="2. Aktualisierung des Systems"
 		@nextPage="nextPage"
 		@previousPage="previousPage"
 		@endAssistant="endAssistant"
 	>
 		<template v-slot:help>
 			<p>
-				Ein System Update durchführen um die Software auf den neuesten
-				Stand zu bringen.
+				Bitte ein System-Update durchführen, um die Software auf den neusten Stand zu bringen.
 			</p>
 			<p>
 				Das garantiert, dass die openWB mit den neuesten Features und
@@ -17,15 +16,9 @@
 			<p>
 				Auf Versions-Informationen / Aktualisierung gehen, Informationen
 				aktualisieren und falls ein Update verfügbar ist, wird der
-				Update button grün und kann bei Bedarf gedrückt werden.
+				Update button grün und kann gedrückt werden.
 			</p>
 			<p>Dieser Schritt kann auch übersprungen werden.</p>
-			<p>
-				Optional kann im Abschnitt "Entwicklungszweig" zwischen
-				"Release", "Beta" (Vorabveröffentlichungen) und "master"
-				(experimentelle Entwicklungen) gewechselt werden. Für den
-				normalen Betrieb wird "Release" empfohlen.
-			</p>
 		</template>
 		<template v-slot:content>
 			<SystemView

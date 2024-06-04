@@ -30,7 +30,7 @@ export default {
 	data() {
 		return {
 			currentPage: 0,
-			lastPage: 9,
+			lastPage: 10,
 			showEndAssistantModal: false,
 		};
 	},
