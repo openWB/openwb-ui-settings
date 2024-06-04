@@ -32,6 +32,7 @@
 						>.
 					</p>
 				</openwb-base-alert>
+			
 				<openwb-base-button-group-input
 					title="Steuerungsmodus"
 					:buttons="[
@@ -52,8 +53,9 @@
 					"
 				>
 				</openwb-base-button-group-input>
+				<div v-if="!installAssistantActive">
 				<openwb-base-button-group-input
-					v-if="$store.state.mqtt['openWB/general/extern'] === true"
+					v-if="$store.state.mqtt['openWB/general/extern'] === true" 
 					title="Steuerung über Modbus als secondary"
 					:buttons="[
 						{
@@ -93,7 +95,7 @@
 					v-if="
 						$store.state.mqtt['openWB/general/extern'] === true &&
 						$store.state.mqtt['openWB/general/modbus_control'] !==
-							true
+							true 
 					"
 				>
 					<openwb-base-alert subtype="info">
@@ -101,15 +103,17 @@
 						muss danach ein Neustart durchgeführt werden!
 					</openwb-base-alert>
 				</div>
+			</div>
 			</openwb-base-card>
-			<openwb-base-card v-if="!installAssistantActive" title="Hardware">
+			<openwb-base-card title="Hardware">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
 						Diese Einstellungen sind nicht verfügbar, solange sich
 						diese openWB im Steuerungsmodus "secondary" befindet.
 					</openwb-base-alert>
 				</div>
-				<div v-else>
+				<div v-if="!installAssistantActive">
+				<div v-if="$store.state.mqtt['openWB/general/extern'] === false">
 					<openwb-base-button-group-input
 						title="Geschwindigkeit Regelintervall"
 						:buttons="[
@@ -305,6 +309,7 @@
 						/>
 					</div>
 				</div>
+			</div>
 			</openwb-base-card>
 			<!-- <openwb-base-card title="Benachrichtigungen">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">

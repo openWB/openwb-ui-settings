@@ -205,7 +205,7 @@
 							v-if="
 								$store.state.mqtt[
 									'openWB/optional/rfid/active'
-								] === true
+								] === true && !installAssistantActive
 							"
 						>
 							<openwb-base-array-input
@@ -583,6 +583,7 @@
 							"
 						>
 						</openwb-base-range-input>
+						<div v-if="!installAssistantActive">
 						<openwb-base-number-input
 							title="Erlaubte Stromabweichung"
 							:step="0.1"
@@ -601,6 +602,7 @@
 								eingestellt werden.
 							</template>
 						</openwb-base-number-input>
+					</div>
 						<openwb-base-heading>
 							Angaben zur Batterie
 						</openwb-base-heading>
@@ -632,6 +634,7 @@
 								auf 90% der angegebenen Brutto-Kapazität.
 							</template>
 						</openwb-base-number-input>
+						<div v-if="!installAssistantActive">
 						<openwb-base-number-input
 							title="Wirkungsgrad der Ladeelektronik"
 							unit="%"
@@ -663,6 +666,7 @@
 								ein paar Prozent erhöhen<br />
 							</template>
 						</openwb-base-number-input>
+					</div>
 						<openwb-base-number-input
 							title="Durchschnittsverbrauch"
 							unit="kWh&nbsp;/&nbsp;100km"
@@ -808,6 +812,7 @@
 							"
 						>
 						</openwb-base-number-input>
+						<div v-if="!installAssistantActive">
 						<openwb-base-number-input
 							title="Mindestzeit zwischen Umschaltungen"
 							unit="s"
@@ -829,6 +834,7 @@
 								Phasenumschaltung angestoßen.
 							</template>
 						</openwb-base-number-input>
+					</div>
 					</openwb-base-card>
 				</div>
 			</openwb-base-card>
@@ -983,6 +989,7 @@
 								</ol>
 							</template>
 						</openwb-base-button-group-input>
+						<div v-if="!installAssistantActive">
 						<openwb-base-button-group-input
 							title="Priorität"
 							:buttons="[
@@ -1136,6 +1143,7 @@
 							</openwb-base-number-input>
 						</div>
 						<hr />
+					</div>
 						<openwb-base-heading>Sofortladen</openwb-base-heading>
 						<openwb-base-range-input
 							title="Soll-Ladestrom"
@@ -1820,6 +1828,7 @@
 								</openwb-base-button-group-input>
 							</div>
 						</openwb-base-card>
+						<div v-if="!installAssistantActive">
 						<hr />
 						<openwb-base-heading>
 							Laden nach Zeitplan
@@ -1856,6 +1865,7 @@
 								Fahrzeug-App-Vorklimatisierungsvorgaben).
 							</template>
 						</openwb-base-heading>
+					</div>
 						<openwb-base-card
 							v-for="(
 								plan, planKey

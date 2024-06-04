@@ -152,7 +152,7 @@
 					</div>
 					<hr />
 				</form>
-				<form name="cloudBackupForm">
+				<form v-if="!installAssistantActive" name="cloudBackupForm">
 					<openwb-base-heading>
 						Automatische Sicherung in einen Cloud-Dienst
 					</openwb-base-heading>
