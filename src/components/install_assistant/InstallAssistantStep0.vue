@@ -6,6 +6,7 @@
 		@endAssistant="endAssistant"
 		:hidePrevious="true"
 	>
+
 		<template v-slot:content>
 			<!-- modal dialogs -->
 			<openwb-base-modal-dialog
@@ -34,6 +35,7 @@
 					Allgemeine Einstellungen: Auswahl des Betriebsmodus primary
 					/ secondary
 				</li>
+				<li>Einrichten der Ladepunkte (openWB als secondary)</li>
 			</ol>
 			<p>
 				Wird diese openWB als secondary betrieben, dann werden nur noch
