@@ -249,6 +249,7 @@
 				title="Struktur"
 				:collapsible="true"
 				:collapsed="true"
+				
 			>
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">

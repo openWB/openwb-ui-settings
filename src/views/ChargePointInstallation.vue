@@ -462,7 +462,7 @@
 							v-if="
 								$store.state.mqtt[
 									'openWB/optional/rfid/active'
-								] === true
+								] === true && !installAssistantActive
 							"
 						>
 							<openwb-base-heading>
@@ -577,6 +577,7 @@
 							"
 						>
 						</openwb-base-range-input>
+						<div v-if="!installAssistantActive">
 						<hr />
 						<openwb-base-heading
 							>Automatische Sperre</openwb-base-heading
@@ -632,6 +633,7 @@
 								erst nach abgeschlossener Ladung gesperrt.
 							</template>
 						</openwb-base-button-group-input>
+					
 						<openwb-base-heading>
 							Zeitpläne für die automatische Sperre
 							<template #actions>
@@ -651,6 +653,7 @@
 								</openwb-base-avatar>
 							</template>
 						</openwb-base-heading>
+					</div>
 						<openwb-base-card
 							v-for="(
 								autolockPlan, autolockPlanKey

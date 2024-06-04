@@ -8,18 +8,11 @@
 		<template v-slot:help>
 			<p>
 				Wir empfehlen an dieser Stelle eine Sicherung der openWB zu
-				erzeugen, auf welche später zurückgegriffen werden kann,
-				insbesondere, wenn die openWB schon konfiguriert war und der
-				Assistent nun erneut ausgeführt wird.
+				erzeugen.
 			</p>
 			<p>
 				Dazu im Abschnitt "Sicherung / Wiederherstellung" auf Sicherung
 				erstellen klicken.
-			</p>
-			<p>
-				Es wird empfohlen regelmäßig Sicherungen der Daten zu erstellen.
-				Der Vorgang kann auch automatisiert werden, indem unter
-				"Backup-Cloud" ein Dienst ausgewählt wird.
 			</p>
 		</template>
 		<template v-slot:content>
