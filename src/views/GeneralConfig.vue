@@ -32,7 +32,6 @@
 						>.
 					</p>
 				</openwb-base-alert>
-
 				<openwb-base-button-group-input
 					title="Steuerungsmodus"
 					:buttons="[
@@ -402,6 +401,7 @@
 						/>
 					</div>
 				</div>
+			</div>
 			</openwb-base-card>
 			<!-- <openwb-base-card title="Benachrichtigungen">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
