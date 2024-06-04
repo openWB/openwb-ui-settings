@@ -1,11 +1,12 @@
 <template>
 	<InstallAssistantStepTemplate
-		title="Start"
+		title="0. Start"
 		@nextPage="nextPage"
 		@previousPage="previousPage"
 		@endAssistant="endAssistant"
 		:hidePrevious="true"
 	>
+
 		<template v-slot:content>
 			<h2>Vielen Dank, dass Du Dich für openWB entschieden hast.</h2>
 			<p>
@@ -14,14 +15,13 @@
 			</p>
 			<ol>
 				<li>
-					Automatische Sicherung einrichten und/oder Sicherung
-					erstellen (optional)
+					Datensicherung - Eine Sicherung erstellen
 				</li>
-				<li>Aktualisierung des Systems (optional)</li>
+				<li>Aktualisierung des Systems</li>
 				<li>
-					Auswahl des Betriebsmodus primary / secondary openWB -
-					Allgemeine Einstellungen
+					Allgemeine Einstellungen: Auswahl des Betriebsmodus primary / secondary
 				</li>
+				<li>Einrichten der Ladepunkte (openWB als secondary)</li>
 			</ol>
 			<p>
 				Wird diese openWB als secondary betrieben, dann werden nur noch
@@ -29,10 +29,13 @@
 				werden die folgenden zusätzlichen Schritte durchlaufen:
 			</p>
 			<ol>
-				<li>Einrichten der Geräte und Komponenten</li>
-				<li>Einrichten der Ladepunkte</li>
-				<li>Konfiguration Lastmanagement</li>
+				<li>Energiesystem - Geräte und Komponenten einrichten</li>
+				<li>Einrichten der Ladepunkte (openWB als primary)</li>
+				<li>Konfiguration des Lastmanagements</li>
 				<li>Einrichten der Fahrzeuge</li>
+				<li>
+					Datensicherung - Eine Sicherung erstellen
+				</li>
 			</ol>
 			<p>Danach ist die Grundkonfiguration abgeschlossen.</p>
 		</template>

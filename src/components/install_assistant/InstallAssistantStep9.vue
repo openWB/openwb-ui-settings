@@ -1,19 +1,35 @@
 <template>
 	<InstallAssistantStepTemplate
-		title="8. Abgeschlossen"
+		title="5. Datensicherung - Eine Sicherung erstellen"
 		@nextPage="nextPage"
 		@previousPage="previousPage"
 		@endAssistant="endAssistant"
-		:hideNext="true"
 	>
-		<template v-slot:content>
-			<h2>Die Grundkonfiguration abgeschlossen.</h2>
+		<template v-slot:help>
 			<p>
-				Die grundlegende Konfiguration der openWB ist abgeschlossen. Sie
-				werden mit Beendigung dieses Assistenten auf die Statusseite
-				weitergeleitet. Bitte überprüfe die dargestellten Informationen
-				und passe bei Unstimmigkeiten die Einstellungen an.
+				Wir empfehlen an dieser Stelle eine Sicherung der openWB zu
+				erzeugen, auf welche später zurückgegriffen werden kann,
+				insbesondere, wenn die openWB schon konfiguriert war und der
+				Assistent nun erneut ausgeführt wird.
 			</p>
+			<p>
+				Dazu im Abschnitt "Sicherung / Wiederherstellung" auf Sicherung
+				erstellen klicken.
+			</p>
+			<p>
+				Es wird empfohlen regelmäßig Sicherungen der Daten zu erstellen.
+				Der Vorgang kann auch automatisiert werden, indem unter
+				"Backup-Cloud" ein Dienst ausgewählt wird.
+			</p>
+		</template>
+		<template v-slot:content>
+			<DataManagement
+				:installAssistantActive="true"
+				@send-command="$emit('sendCommand', $event)"
+				@save="$emit('save')"
+				@reset="$emit('reset')"
+				@defaults="$emit('defaults')"
+			/>
 		</template>
 	</InstallAssistantStepTemplate>
 </template>
@@ -21,29 +37,32 @@
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
 import InstallAssistantStepTemplate from "./InstallAssistantStepTemplate.vue";
+import DataManagement from "../../views/DataManagement.vue";
 
 export default {
 	name: "InstallAssistantStep9",
 	mixins: [ComponentState],
-	emits: ["switchPage", "endAssistant"],
+	emits: [
+		"save",
+		"reset",
+		"defaults",
+		"sendCommand",
+		"switchPage",
+		"endAssistant",
+	],
 	components: {
 		InstallAssistantStepTemplate,
+		DataManagement,
 	},
 	data: () => ({
-		topicsToSubscribe: ["openWB/general/extern"],
+		mqttTopicsToSubscribe: [],
 	}),
 	methods: {
 		nextPage() {
-			return;
+			this.$emit("switchPage", 10);
 		},
 		previousPage() {
-			this.$emit(
-				"switchPage",
-				this.$store.state.mqtt["openWB/general/extern"] ? 4 : 8,
-			);
-		},
-		sendCommand(event) {
-			this.$emit("sendCommand", event);
+			this.$emit("switchPage", 8);
 		},
 		endAssistant() {
 			this.$emit("endAssistant");

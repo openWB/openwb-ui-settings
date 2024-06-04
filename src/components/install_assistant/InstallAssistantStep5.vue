@@ -1,6 +1,6 @@
 <template>
 	<InstallAssistantStepTemplate
-		title="4. Geräte und Komponenten einrichten"
+		title="1. Energiesystem - Geräte und Komponenten einrichten"
 		@nextPage="nextPage"
 		@previousPage="previousPage"
 		@endAssistant="endAssistant"
@@ -13,19 +13,22 @@
 				Komponenten eingerichtet werden.
 			</p>
 			<p>
-				Ab Werkseinstellung kann hier bereits ein virtueller Zähler
-				vorkonfiguriert sein, welcher gelöscht werden kann, sobald ein
-				anderer Zahler für die EVU-Daten konfiguriert wurde.
+				Sofern das System nicht zurückgesetzt wurde, ist im Auslieferungszustand für erste Ladetests 
+				nach der WB-Montage ein virtueller Zähler vorkonfiguriert. Dieser muss zuerst gelöscht werden, 
+				wenn das im Gebäude installierte Energiesystem bestehend aus EVU-Zähler, PV-Anlage und ggf. Speicher 
+				in openWB konfiguriert wird.
 			</p>
 			<p>
-				Bei verfügbare Geräte das entsprechenden Gerät auswählen und
-				hinzufügen. Danach auf das neue Gerät klicken und für jedes
-				verfügbare Gerät die erforderlichen Konfigurationsdaten
-				eintragen. Dann unter Verfügbare Komponenten falls vorhanden
-				Zähler, Wechselrichter und Speicher hinzufügen.
+				Jedes verfügbare Gerät wird durch eine eigene IP-Adresse definiert. Dieses Gerät ist über den Herstellernamen 
+				des Energiesystems im Auswahlmenü der verfügbaren Geräte auszuwählen. Unterhalb des Gerätes werden die zugehörigen 
+				Komponenten EVU-Zähler, WR und Speicher (Summe = Energiesystem) konfiguriert. Das openWB-System ist sehr flexibel 
+				und skalierbar. 
+				Wird z.B. zusätzlich zum 1. Energiesystem eine weitere PVA installiert, wird ein neues Gerät (mit eigener IP) und der 
+				Komponente Wechselrichter hinzugefügt.
+
 			</p>
 			<p class="font-weight-bold">
-				Änderungen werden nur bei klicken auf speichern wirksam
+				Änderungen werden nur bei Klicken auf Speichern wirksam!
 			</p>
 		</template>
 		<template v-slot:content>
