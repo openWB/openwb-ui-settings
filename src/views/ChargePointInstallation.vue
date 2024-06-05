@@ -488,7 +488,7 @@
 								Sperrt den Ladepunkt nach Abstecken eines Fahrzeuges
 							</template>
 						</openwb-base-button-group-input>
-							<openwb-base-array-input
+							<openwb-base-array-input v-if="chargePointTemplate.disable_after_unplug"
 									title="Zugeordnete ID-Tags"
 									noElementsMessage="Keine ID-Tags zugeordnet."
 									:model-value="
