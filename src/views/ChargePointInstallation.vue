@@ -503,8 +503,8 @@
 									"
 								>
 									<template #help>
-										Die hier eingetragenen ID-Tags dienen nur zum Entsperren des
-										Ladepunktes
+										Die hier eingetragenen ID-Tags dienen ausschließlich zum Entsperren des
+										Ladepunktes.
 									</template>
 								</openwb-base-array-input>
 								<hr />
