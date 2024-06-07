@@ -107,6 +107,7 @@
 											"
 										/>
 									</div>
+									<hr v-if="componentKey == 'all'" />
 								</div>
 							</openwb-base-card>
 						</div>
@@ -1024,6 +1025,29 @@ export default {
 							delete totals.counter[component].grid;
 						}
 					});
+					// check if "all" key is present and necessary
+					Object.keys(totals).forEach((key) => {
+						if (
+							Object.prototype.hasOwnProperty.call(
+								totals[key],
+								"all",
+							)
+						) {
+							// delete key "all" if we only have one component of type "bat" or "pv"
+							if (
+								Object.keys(totals[key]).length <= 2 &&
+								["bat", "pv"].includes(key)
+							) {
+								delete totals[key].all;
+							} else {
+								// move key "all" to the beginning
+								totals[key] = {
+									all: totals[key].all,
+									...totals[key],
+								};
+							}
+						}
+					});
 					return totals;
 				}
 			}
@@ -1057,7 +1081,6 @@ export default {
 		},
 		chartData() {
 			if (this.chartDataObject) {
-				// add all datasets available in the last entry
 				var baseObjectsToProcess = [
 					"pv",
 					"counter",
@@ -1077,6 +1100,28 @@ export default {
 								baseObject,
 							)
 						) {
+							if (
+								Object.prototype.hasOwnProperty.call(
+									lastElement[baseObject],
+									"all",
+								)
+							) {
+								// remove "all" key if we only have one component of type "bat" or "pv"
+								if (
+									["bat", "pv"].includes(baseObject) &&
+									Object.keys(lastElement[baseObject])
+										.length <= 2
+								) {
+									delete lastElement[baseObject].all;
+								} else {
+									// move "all" key to the beginning
+									lastElement[baseObject] = {
+										all: lastElement[baseObject].all,
+										...lastElement[baseObject],
+									};
+								}
+							}
+							// add all datasets available in the last entry
 							Object.entries(lastElement[baseObject]).forEach(
 								([key, value]) => {
 									Object.keys(value).forEach((entryKey) => {
@@ -1172,9 +1217,27 @@ export default {
 					return undefined;
 			}
 		},
-		getDatasetHidden(baseObject, objectKey) {
-			// ToDo
-			console.debug("getDatasetHidden", baseObject, objectKey);
+		hideDataset(baseObject, objectKey, elementKey) {
+			// if dataset "all" is present, hide component datasets
+			if (["bat", "pv", "cp"].includes(baseObject)) {
+				if (
+					Object.prototype.hasOwnProperty.call(
+						this.chartTotals[baseObject],
+						"all",
+					) &&
+					objectKey != "all"
+				) {
+					return true;
+				}
+			}
+			// if elementKey ends with "grid", "bat", "pv" or "cp", hide the dataset
+			if (
+				["grid", "bat", "pv", "cp"].includes(
+					elementKey.split("_").pop(),
+				)
+			) {
+				return true;
+			}
 			return false;
 		},
 		getTotalsLabel(
@@ -1462,6 +1525,19 @@ export default {
 			return;
 		},
 		addDataset(baseObject, objectKey, elementKey, datasetKey) {
+			// do not add dataset if objectKey is not present in totals[baseObject]
+			if (
+				Object.prototype.hasOwnProperty.call(
+					this.chartTotals,
+					baseObject,
+				) &&
+				!Object.prototype.hasOwnProperty.call(
+					this.chartTotals[baseObject],
+					objectKey,
+				)
+			) {
+				return;
+			}
 			var datasetTemplate = baseObject + "-" + elementKey;
 			if (this.datasetTemplates[datasetTemplate]) {
 				var newDataset = JSON.parse(
@@ -1481,15 +1557,18 @@ export default {
 					newDataset.label =
 						newDataset.label + newDataset.labelSuffix;
 				}
+				newDataset.hidden = this.hideDataset(
+					baseObject,
+					objectKey,
+					elementKey,
+				);
 				if (objectKey == "all") {
 					if (
 						!["grid", "pv", "bat", "cp"].includes(
 							elementKey.split("_").slice(-1)[0],
 						)
 					) {
-						// only display general totals on load
-						newDataset.hidden = false;
-						// do not stack general totals
+						// do not stack totals
 						delete newDataset.stack;
 					}
 				}
@@ -1540,18 +1619,13 @@ export default {
 			const datasetKey = baseObject + "." + objectKey + "." + elementKey;
 			if (elementKeysToAdd[baseObject].includes(elementKey)) {
 				var index = this.getDatasetIndex(datasetKey);
-				const hidden = this.getDatasetHidden(baseObject, objectKey);
-				if (index == undefined && !hidden) {
+				if (index == undefined) {
 					index = this.addDataset(
 						baseObject,
 						objectKey,
 						elementKey,
 						datasetKey,
 					);
-				}
-				if (index != undefined && hidden) {
-					// dataset is hidden
-					this.chartDatasets.datasets.splice(index, 1);
 				}
 			} else {
 				console.debug("skipping dataset:", datasetKey);
