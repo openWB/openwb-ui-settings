@@ -1,24 +1,27 @@
 <template>
 	<div class="electricity-tariff-rabot">
 		<openwb-base-alert subtype="info">
-			Ihren persönlichen Rabot-Token erhalten Sie über die
-			<a
-				href="https://www.rabot-charge.de"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				Rabot-Seite
-			</a>
-			. Behandeln Sie Ihren Token wie ein Passwort, da sich darüber auch
-			persönliche Daten aus Ihrem Rabot-Account abfragen lassen!
+			Ihre persönlichen Zugangsdaten (Client-ID und Client-Secret)
+			erhalten Sie direkt von Rabot. Behandeln Sie diese Daten wie ein
+			Passwort, da sich darüber auch persönliche Daten aus Ihrem
+			Rabot-Account abfragen lassen!
 		</openwb-base-alert>
 		<openwb-base-text-input
-			title="Token"
+			title="Client-ID"
+			subtype="user"
 			required
-			ref="tokenInput"
-			:model-value="electricityTariff.configuration.token"
+			:model-value="electricityTariff.configuration.client_id"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.token')
+				updateConfiguration($event, 'configuration.client_id')
+			"
+		/>
+		<openwb-base-text-input
+			title="Client-Secret"
+			subtype="password"
+			required
+			:model-value="electricityTariff.configuration.client_secret"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.client_secret')
 			"
 		/>
 	</div>
@@ -32,9 +35,7 @@ export default {
 		electricityTariff: { type: Object, required: true },
 	},
 	data() {
-		return {
-			RabotAPI: "https://test-api.rabot-charge.de/hems/v1/",
-		};
+		return {};
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {
