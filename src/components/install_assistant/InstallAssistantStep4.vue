@@ -8,7 +8,7 @@
 		<template v-slot:help>
 			<p>
 				Diese hier vorzukonfigurierende openWB wurde als "secondary" eingestellt und 
-				wird von einer anderen openWB bzw. Standalone ferngesteuert.
+				wird von einer anderen openWB oder standalone ferngesteuert.
 			</p>
 			<p>
 				Bei vorkonfigurierten openWBs ist ab Werk bereits ein (zwei bei
@@ -28,7 +28,7 @@
 				Weitere Einstellungen sind bei der Vorkonfiguration einer secondary nicht notwendig.
 			</p>
 			<p class="font-weight-bold">
-				Änderungen werden nur bei Klicken auf Speichern wirksam!
+				Änderungen werden nur bei klicken auf Speichern wirksam!
 			</p>
 		</template>
 		<template v-slot:content>

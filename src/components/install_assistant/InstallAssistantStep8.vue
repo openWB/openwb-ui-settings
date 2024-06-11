@@ -31,11 +31,11 @@
 				Im Anschluss werden die Voreinstellungen zu den verschiedenen Lademodi konfiguriert.
 			</p>
 			<p>
-				Nun wird das eigentliche Fahrzeug angelegt (bei nur einem Fzg, reicht das Standard-Fahrzeug aus) 
-				und mit den gewünschten Fahrzeug-Profil / Lade-Profil versehen.
+				Nun wird das eigentliche Fahrzeug angelegt und mit dem gewünschten Fahrzeug-Profil / Lade-Profil versehen.
+				Ist nur ein Fahrzeug vorhanden, reicht das Standard-Fahrzeug aus.
 			</p>
 			<p class="font-weight-bold">
-				Änderungen werden nur bei Klicken auf Speichern wirksam!
+				Änderungen werden nur bei klicken auf Speichern wirksam!
 			</p>
 		</template>
 		<template v-slot:content>
