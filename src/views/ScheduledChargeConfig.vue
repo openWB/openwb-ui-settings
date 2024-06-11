@@ -70,11 +70,12 @@
 					>
 						<template #help>
 							Hier kann eingestellt werden, ob Ladevorgänge im
-							Modus "Zielladen" bei Laden mit PV-Überschuss 
-							mit nur einer Phase oder dem möglichen Maximum in 
-							Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen 
-							durchgeführt werden. Im Modus "Automatik" entscheidet die Regelung, 
-							welche Einstellung genutzt wird, um das Ziel zu erreichen.
+							Modus "Zielladen" bei Laden mit PV-Überschuss mit
+							nur einer Phase oder dem möglichen Maximum in
+							Abhängigkeit der "Ladepunkt"- und
+							"Fahrzeug"-Einstellungen durchgeführt werden. Im
+							Modus "Automatik" entscheidet die Regelung, welche
+							Einstellung genutzt wird, um das Ziel zu erreichen.
 							Voraussetzung ist die verbaute Umschaltmöglichkeit
 							zwischen 1- und 3-phasig (s.g. 1p3p).
 						</template>
