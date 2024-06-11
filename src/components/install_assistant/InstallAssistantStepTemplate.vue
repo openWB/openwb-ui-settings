@@ -54,16 +54,6 @@
 							alt="openWB Logo"
 							class="w-100"
 						/>
-			
-			<p><br>
-				Bitte lesen Sie auch die Hinweistexte auf den einzelnen Konfigurationsseiten
-				im rechten Konfigurationsfenster, 
-				welche durch Klicken auf das kleine, umrundete Fragezeichensymbol erscheinen. 
-			</p>
-			<p>
-				Hier sind weiterführende Informationen zu den Eingabefeldern zu finden.
-			</p>
-		
 					</slot>
 				</div>
 				<div class="col py-2">
