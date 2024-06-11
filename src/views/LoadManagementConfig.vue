@@ -438,6 +438,21 @@ export default {
 				return labels;
 			},
 		},
+		getHcSourceIdOptions() {
+			let options = [
+				{
+					value: null,
+					text: "von openWB berechnen",
+				},
+			];
+			let groups = [
+				{
+					label: "Eingerichtete Zähler-Komponenten",
+					options: [...this.counterOptions]
+				},
+			];
+			return { options: options, groups: groups };
+		},
 	},
 	methods: {
 		getElementTreeNames(element) {
@@ -485,21 +500,6 @@ export default {
 				}
 			});
 			return myChargePoint;
-		},
-		getHcSourceIdOptions() {
-			let options = [
-				{
-					value: null,
-					text: "von openWB berechnen",
-				},
-			];
-			let groups = [
-				{
-					label: "Eingerichtete Zähler-Komponenten",
-					options: [...this.counterOptions);
-				}
-			]:
-			return { options: options, groups: groups };
 		},
 		isComponentType(componentType, verifier) {
 			return componentType.split("_").includes(verifier);
