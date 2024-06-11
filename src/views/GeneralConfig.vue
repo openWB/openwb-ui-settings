@@ -401,7 +401,6 @@
 						/>
 					</div>
 				</div>
-			</div>
 			</openwb-base-card>
 			<!-- <openwb-base-card title="Benachrichtigungen">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">

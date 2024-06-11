@@ -6,7 +6,6 @@
 		@endAssistant="endAssistant"
 		:hidePrevious="true"
 	>
-
 		<template v-slot:content>
 			<!-- modal dialogs -->
 			<openwb-base-modal-dialog
