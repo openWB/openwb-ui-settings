@@ -5,7 +5,8 @@
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
-			Die folgenden Topics sind für einen reibungslosen Betrieb unbedingt erforderlich:
+			Die folgenden Topics sind für einen reibungslosen Betrieb unbedingt
+			erforderlich:
 			<ul>
 				<li>
 					<openwb-base-copy-to-clipboard
@@ -47,7 +48,9 @@
 					Beispiel: <span class="text-info">123.45</span>
 				</li>
 			</ul>
-			Ströme je Phase sind für phasenbasiertes Lastmanagement unbedingt erforderlich, sonst erfolgt das Lastmanagement ausschließlich auf Basis der Gesamtleistung am EVU-Punkt:
+			Ströme je Phase sind für phasenbasiertes Lastmanagement unbedingt
+			erforderlich, sonst erfolgt das Lastmanagement ausschließlich auf
+			Basis der Gesamtleistung am EVU-Punkt:
 			<ul>
 				<li>
 					<openwb-base-copy-to-clipboard
@@ -63,7 +66,8 @@
 					Beispiel: <span class="text-info">[1.2,2.3,-2.1]</span>
 				</li>
 			</ul>
-			Die Netzfrequenz, Spannungen, Leistungen und Leistungsfaktoren jeder Phase werden ausschließlich zu Anzeigezwecken verwendet:
+			Die Netzfrequenz, Spannungen, Leistungen und Leistungsfaktoren jeder
+			Phase werden ausschließlich zu Anzeigezwecken verwendet:
 			<ul>
 				<li>
 					<openwb-base-copy-to-clipboard
@@ -77,7 +81,6 @@
 					(Float, Integer) und einem Punkt als Dezimaltrennzeichen<br />
 					Beispiel: <span class="text-info">50.12</span>
 				</li>
-				
 				<li>
 					<openwb-base-copy-to-clipboard
 						class="text-info"
