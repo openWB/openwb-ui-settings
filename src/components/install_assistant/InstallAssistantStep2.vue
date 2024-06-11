@@ -7,7 +7,8 @@
 	>
 		<template v-slot:help>
 			<p>
-				Bitte ein System-Update durchführen, um die Software auf den neusten Stand zu bringen.
+				Bitte ein System-Update durchführen, um die Software auf den
+				neusten Stand zu bringen.
 			</p>
 			<p>
 				Das garantiert, dass die openWB mit den neuesten Features und

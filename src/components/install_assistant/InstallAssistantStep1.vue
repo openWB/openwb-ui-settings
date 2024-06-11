@@ -17,11 +17,14 @@
 				erstellen klicken.
 			</p>
 			<p>
-				Es wird empfohlen, regelmäßig Sicherungen der Daten zu erstellen.
+				Es wird empfohlen, regelmäßig Sicherungen der Daten zu
+				erstellen.
 			</p>
-			<p>Bitte lesen Sie auch die Hinweistexte, welche durch Klicken
-				auf das Fragezeichensymbol erscheinen. Hier sind weiterführende
-				Informationen zu den Eingabefeldern zu finden.</p>
+			<p>
+				Bitte lesen Sie auch die Hinweistexte, welche durch Klicken auf
+				das Fragezeichensymbol erscheinen. Hier sind weiterführende
+				Informationen zu den Eingabefeldern zu finden.
+			</p>
 		</template>
 		<template v-slot:content>
 			<DataManagement

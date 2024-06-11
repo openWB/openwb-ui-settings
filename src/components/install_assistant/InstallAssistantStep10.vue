@@ -12,9 +12,9 @@
 				Die grundlegende Konfiguration der openWB ist abgeschlossen. Sie
 				werden mit Beendigung dieses Assistenten auf die Statusseite
 				weitergeleitet. Bitte überprüfe die dargestellten Informationen
-				und passe bei Unstimmigkeiten die Einstellungen an. 
-				Weitere detaillierte Einstellungsmöglichkeiten
-				befinden sich in den jeweiligen Konfigurationsseiten.
+				und passe bei Unstimmigkeiten die Einstellungen an. Weitere
+				detaillierte Einstellungsmöglichkeiten befinden sich in den
+				jeweiligen Konfigurationsseiten.
 			</p>
 		</template>
 	</InstallAssistantStepTemplate>

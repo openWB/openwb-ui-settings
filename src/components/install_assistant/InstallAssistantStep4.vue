@@ -7,8 +7,9 @@
 	>
 		<template v-slot:help>
 			<p>
-				Diese hier vorzukonfigurierende openWB wurde als "secondary" eingestellt und 
-				wird von einer anderen openWB oder standalone ferngesteuert.
+				Diese hier vorzukonfigurierende openWB wurde als "secondary"
+				eingestellt und wird von einer anderen openWB oder standalone
+				ferngesteuert.
 			</p>
 			<p>
 				Bei vorkonfigurierten openWBs ist ab Werk bereits ein (zwei bei
@@ -21,11 +22,13 @@
 				series 1/2 custom, Standard (+) oder Buchse) aus.
 			</p>
 			<p>
-				Wenn eine openWB Duo gewählt wird, so sind zwei Ladepunkte mit 
-				Ladepunkt-Nummer 1 und 2 zu konfigurieren. Bei der openWB Pro und Satellit sind keine Einstellungen notwendig.
+				Wenn eine openWB Duo gewählt wird, so sind zwei Ladepunkte mit
+				Ladepunkt-Nummer 1 und 2 zu konfigurieren. Bei der openWB Pro
+				und Satellit sind keine Einstellungen notwendig.
 			</p>
 			<p>
-				Weitere Einstellungen sind bei der Vorkonfiguration einer secondary nicht notwendig.
+				Weitere Einstellungen sind bei der Vorkonfiguration einer
+				secondary nicht notwendig.
 			</p>
 			<p class="font-weight-bold">
 				Änderungen werden nur bei klicken auf Speichern wirksam!
