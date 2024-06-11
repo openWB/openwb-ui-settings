@@ -41,12 +41,12 @@
 				fixed-width
 				:icon="['fas', 'check-circle']"
 			/>
-			Modulmeldung:<br />
+			Modulmeldung:<br /><span style="white-space: pre-wrap;">
 			{{
 				$store.state.mqtt[
 					"openWB/vehicle/" + vehicleIndex + "/get/fault_str"
 				]
-			}}
+			}}</span>
 		</openwb-base-alert>
 		<openwb-base-heading>Fahrzeugdaten</openwb-base-heading>
 		<openwb-base-number-input
