@@ -1,6 +1,6 @@
 <template>
 	<InstallAssistantStepTemplate
-		title="6. Abgeschlossen"
+		title="Abgeschlossen"
 		@nextPage="nextPage"
 		@previousPage="previousPage"
 		@endAssistant="endAssistant"
