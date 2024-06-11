@@ -462,32 +462,32 @@
 								Zugangskontrolle
 							</openwb-base-heading>
 							<openwb-base-button-group-input
-							title="Sperre nach Abstecken"
-							:buttons="[
-								{
-									buttonValue: false,
-									text: 'Nein',
-									class: 'btn-outline-danger',
-								},
-								{
-									buttonValue: true,
-									text: 'Ja',
-									class: 'btn-outline-success',
-								},
-							]"
-							:model-value="chargePointTemplate.disable_after_unplug"
-							@update:model-value="
-								updateState(
-									chargePointTemplateKey,
-									$event,
-									'disable_after_unplug',
-								)
-							"
-						>
-							<template #help>
-								Sperrt den Ladepunkt nach Abstecken eines Fahrzeuges
-							</template>
-						</openwb-base-button-group-input>
+								title="Sperre nach Abstecken"
+								:buttons="[
+									{
+										buttonValue: false,
+										text: 'Nein',
+										class: 'btn-outline-danger',
+									},
+									{
+										buttonValue: true,
+										text: 'Ja',
+										class: 'btn-outline-success',
+									},
+								]"
+								:model-value="chargePointTemplate.disable_after_unplug"
+								@update:model-value="
+									updateState(
+										chargePointTemplateKey,
+										$event,
+										'disable_after_unplug',
+									)
+								"
+							>
+								<template #help>
+									Sperrt den Ladepunkt nach Abstecken eines Fahrzeuges
+								</template>
+							</openwb-base-button-group-input>
 							<openwb-base-array-input v-if="chargePointTemplate.disable_after_unplug"
 									title="Zugeordnete ID-Tags"
 									noElementsMessage="Keine ID-Tags zugeordnet."
