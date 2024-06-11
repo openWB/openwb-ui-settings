@@ -30,7 +30,7 @@
 				Änderungen werden nur bei klicken auf Speichern wirksam!
 			</p>
 			<p class="font-weight-bold">
-						Änderungen werden nur bei Klicken auf Speichern wirksam!
+						Änderungen werden nur bei klicken auf Speichern wirksam!
 					</p>
 		</template>
 		<template v-slot:content>
