@@ -6,7 +6,6 @@
 		@endAssistant="endAssistant"
 		:hidePrevious="true"
 	>
-
 		<template v-slot:content>
 			<h2>Vielen Dank, dass Du Dich für openWB entschieden hast.</h2>
 			<p>
@@ -14,12 +13,11 @@
 				einzelnen Module:
 			</p>
 			<ol>
-				<li>
-					Datensicherung - Eine Sicherung erstellen
-				</li>
+				<li>Datensicherung - Eine Sicherung erstellen</li>
 				<li>Aktualisierung des Systems</li>
 				<li>
-					Allgemeine Einstellungen: Auswahl des Betriebsmodus primary / secondary
+					Allgemeine Einstellungen: Auswahl des Betriebsmodus primary
+					/ secondary
 				</li>
 				<li>Einrichten der Ladepunkte (openWB als secondary)</li>
 			</ol>
@@ -33,9 +31,7 @@
 				<li>Einrichten der Ladepunkte (openWB als primary)</li>
 				<li>Konfiguration des Lastmanagements</li>
 				<li>Einrichten der Fahrzeuge</li>
-				<li>
-					Datensicherung - Eine Sicherung erstellen
-				</li>
+				<li>Datensicherung - Eine Sicherung erstellen</li>
 			</ol>
 			<p>Danach ist die Grundkonfiguration abgeschlossen.</p>
 		</template>
