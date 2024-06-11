@@ -5,6 +5,7 @@
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
+			Die folgenden Topics sind für einen reibungslosen Betrieb unbedingt erforderlich:
 			<ul>
 				<li>
 					<openwb-base-copy-to-clipboard
