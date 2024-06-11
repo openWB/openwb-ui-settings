@@ -25,8 +25,7 @@
 				Ladepunkt-Nummer 1 und 2 zu konfigurieren. Bei der openWB Pro und Satellit sind keine Einstellungen notwendig.
 			</p>
 			<p>
-				Weitere Einstellungen sind bei der Vorkonfiguration einer secondary nicht notwendig. Der Assistent wird nach Drücken von Speichern beendet. 
-				Sollte diese openWB umkonfiguriert und als primary eingesetzt werden, dann muss der angelegte Ladepunkt "interne openWB" vorher entfernt werden.
+				Weitere Einstellungen sind bei der Vorkonfiguration einer secondary nicht notwendig.
 			</p>
 			<p class="font-weight-bold">
 				Änderungen werden nur bei Klicken auf Speichern wirksam!
