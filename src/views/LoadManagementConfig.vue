@@ -72,7 +72,8 @@
 					</openwb-base-button-group-input>
 					<openwb-base-select-input
 						title="Hausverbrauch"
-						:options="getHcSourceIdOptions()"
+						:options="getHcSourceIdOptions.options"
+						:groups="getHcSourceIdOptions.groups"
 						:model-value="
 							$store.state.mqtt[
 								'openWB/counter/config/home_consumption_source_id'
@@ -397,7 +398,12 @@ export default {
 					myOptions.push({ value: element.id, text: element.name });
 				}
 			}
-			return myOptions;
+			return myOptions.sort((a, b) => {
+				if (a.text == b.text) {
+					return 0;
+				}
+				return a.text > b.text ? 1 : -1;
+			});
 		},
 		inverterConfigs: {
 			get() {
@@ -481,14 +487,19 @@ export default {
 			return myChargePoint;
 		},
 		getHcSourceIdOptions() {
-			var options = [
+			let options = [
 				{
 					value: null,
 					text: "von openWB berechnen",
 				},
 			];
-			options.push(...this.counterOptions);
-			return options;
+			let groups = [
+				{
+					label: "Eingerichtete Zähler-Komponenten",
+					options: [...this.counterOptions);
+				}
+			]:
+			return { options: options, groups: groups };
 		},
 		isComponentType(componentType, verifier) {
 			return componentType.split("_").includes(verifier);
