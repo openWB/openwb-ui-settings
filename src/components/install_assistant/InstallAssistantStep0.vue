@@ -13,15 +13,13 @@
 				einzelnen Module:
 			</p>
 			<ol>
+				<li>Datensicherung - Eine Sicherung erstellen</li>
+				<li>Aktualisierung des Systems</li>
 				<li>
-					Automatische Sicherung einrichten und/oder Sicherung
-					erstellen (optional)
+					Allgemeine Einstellungen: Auswahl des Betriebsmodus primary
+					/ secondary
 				</li>
-				<li>Aktualisierung des Systems (optional)</li>
-				<li>
-					Auswahl des Betriebsmodus primary / secondary openWB -
-					Allgemeine Einstellungen
-				</li>
+				<li>Einrichten der Ladepunkte (openWB als secondary)</li>
 			</ol>
 			<p>
 				Wird diese openWB als secondary betrieben, dann werden nur noch
@@ -29,10 +27,11 @@
 				werden die folgenden zusätzlichen Schritte durchlaufen:
 			</p>
 			<ol>
-				<li>Einrichten der Geräte und Komponenten</li>
-				<li>Einrichten der Ladepunkte</li>
-				<li>Konfiguration Lastmanagement</li>
+				<li>Energiesystem - Geräte und Komponenten einrichten</li>
+				<li>Einrichten der Ladepunkte (openWB als primary)</li>
+				<li>Konfiguration des Lastmanagements</li>
 				<li>Einrichten der Fahrzeuge</li>
+				<li>Datensicherung - Eine Sicherung erstellen</li>
 			</ol>
 			<p>Danach ist die Grundkonfiguration abgeschlossen.</p>
 		</template>

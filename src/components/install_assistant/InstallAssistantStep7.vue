@@ -1,6 +1,6 @@
 <template>
 	<InstallAssistantStepTemplate
-		title="6. Lastmanagement einrichten"
+		title="3. Konfiguration des Lastmanagements"
 		@nextPage="nextPage"
 		@previousPage="previousPage"
 		@endAssistant="endAssistant"
@@ -8,34 +8,39 @@
 		<template v-slot:help>
 			<p>
 				Im Lastmanagement werden die maximale Leistung sowie die
-				maximalen Ströme für jede Phase des Zählermoduls sowie die
-				maximale Ausgangsleistung des Wechselrichters der PV Anlage
-				eingetragen, falls ein solcher konfiguriert wurde. Unter dem
-				Punkt Vorhandene Zählermodule auf die Komponente des EVU-Zählers
-				klicken und die maximale Leistung sowie Phasenströme des
-				Hausanschlusses eintragen.
+				maximalen Ströme für jede Phase des Zählermoduls sowie bei
+				Hybrid-Systemen (per DC-angebundener Speicher) die maximale
+				Ausgangsleistung des Wechselrichters der PV Anlage eingetragen,
+				falls eine solche vorhanden ist.
 			</p>
 			<p>
-				Ist ein Wechselrichter unter Geräte hinzugefügt worden, dann
-				unter dem Punkt Wechselrichter noch die maximale
-				Ausgangsleistung des Wechselrichters eintragen, wenn es sich um
-				ein Hybrid-System mit DC-Speicher handelt.
+				Der erste Zähler ist in der Regel der Zähler am EVU-Punkt
+				(Position des PV/Speicher-Smartmeters direkt hinter dem
+				VNB-Zähler). In openWB ist hierzu auf die unterhalb der
+				"Vorhandene Zählermodule" liegende (rote) EVU-Zähler-Komponente
+				zu klicken, in welche die maximale EVU-Leistung sowie die
+				Phasenströme eingetragen werden, für die der Hausanschluss
+				abgesichert ist (Elektriker fragen, typisch f. EFH: 24kW/3x35A,
+				43kW/3x63A).
 			</p>
 			<p>
-				Nach klicken auf Struktur ist außerdem die Struktur des
-				Lastmanagements zu überprüfen und ggf. anzupassen. Im Normalfall
-				befinden sich Speicher und Wechselrichter in einer Ebene
-				innerhalb des EVU-Zählers. Die Ladepunkte befinden sich auch in
-				der selben Ebene wie der Speicher und der Wechselrichter
-				innerhalb der Ebene des EVU-Zählers.
+				Ist ein Wechselrichter mit DC-angebundenem Speicher unter Geräte
+				hinzugefügt worden, dann ist unter der (grünen) WR-Komponente
+				noch die maximale Ausgangsleistung des WR einzutragen.
 			</p>
 			<p>
-				Zwischenzähler können beliebig kaskadiert sein. Spezialfälle
-				stellen Hybrid-Speicher, Solaredge mit mehreren Wechselrichtern
-				sowie bspw. Speicher von Victron mit integriertem Zähler dar.
+				Der EVU-Zähler (rot) schließt alle weiteren Komponenten wie WR
+				und Speicher unter sich ein. Bei AC-eingebundenen Speichern
+				befinden sich WR und Speicher in derselben Ebene, bei
+				DC-eingebundenen Speichern (Hybrid) der Speicher unterhalb des
+				WR. Die Ladepunkte (z.B. Externe openWB) befinden sich auf
+				derselben Ebene wie der WR und unterhalb des EVU-Zählers.
+				Anpassungen der Anordnungen sind über die Pfeil-Bereiche der
+				Komponenten durch einfaches Verschieben mit der Maus möglich.
 			</p>
+			<p></p>
 			<p class="font-weight-bold">
-				Änderungen werden nur bei klicken auf speichern wirksam
+				Änderungen werden nur bei klicken auf Speichern wirksam!
 			</p>
 		</template>
 		<template v-slot:content>

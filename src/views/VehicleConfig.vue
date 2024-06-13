@@ -205,7 +205,7 @@
 							v-if="
 								$store.state.mqtt[
 									'openWB/optional/rfid/active'
-								] === true
+								] === true && !installAssistantActive
 							"
 						>
 							<openwb-base-array-input
@@ -587,24 +587,31 @@
 							"
 						>
 						</openwb-base-range-input>
-						<openwb-base-number-input
-							title="Erlaubte Stromabweichung"
-							:step="0.1"
-							unit="A"
-							:model-value="template.nominal_difference"
-							@update:model-value="
-								updateState(key, $event, 'nominal_difference')
-							"
-						>
-							<template #help>
-								In manchen Lademodi, z.B. bei der automatischen
-								Phasenumschaltung, wird geprüft, ob das Fahrzeug
-								mit der vorgegebenen Stromstärke lädt. Manche
-								Fahrzeuge laden nicht exakt mit der vorgegebenen
-								Stromstärke. Die erlaubte Abweichung kann hier
-								eingestellt werden.
-							</template>
-						</openwb-base-number-input>
+						<div v-if="!installAssistantActive">
+							<openwb-base-number-input
+								title="Erlaubte Stromabweichung"
+								:step="0.1"
+								unit="A"
+								:model-value="template.nominal_difference"
+								@update:model-value="
+									updateState(
+										key,
+										$event,
+										'nominal_difference',
+									)
+								"
+							>
+								<template #help>
+									In manchen Lademodi, z.B. bei der
+									automatischen Phasenumschaltung, wird
+									geprüft, ob das Fahrzeug mit der
+									vorgegebenen Stromstärke lädt. Manche
+									Fahrzeuge laden nicht exakt mit der
+									vorgegebenen Stromstärke. Die erlaubte
+									Abweichung kann hier eingestellt werden.
+								</template>
+							</openwb-base-number-input>
+						</div>
 						<openwb-base-heading>
 							Angaben zur Batterie
 						</openwb-base-heading>
@@ -636,37 +643,40 @@
 								auf 90% der angegebenen Brutto-Kapazität.
 							</template>
 						</openwb-base-number-input>
-						<openwb-base-number-input
-							title="Wirkungsgrad der Ladeelektronik"
-							unit="%"
-							required
-							:model-value="template.efficiency"
-							@update:model-value="
-								updateState(key, $event, 'efficiency')
-							"
-						>
-							<template #help>
-								Durch Verluste in der Ladeelektronik (z. B.
-								Umwandlung Wechselspannung in Gleichspannung)
-								gelangt nicht die komplette Energie, welche
-								durch den Zähler in der Wallbox gemessen wird,
-								in den Akku des Fahrzeugs. Der anzugebende Wert
-								liegt bei gängigen Fahrzeugen im Bereich 90-95%.
-								Eine Ausnahme stellt der Zoe dar, dessen
-								Chameleon-Lader je nach Modellversion und
-								freigegebener Leistung der Wallbox teilweise nur
-								auf ca. 50% kommt.<br />
-								Liegen die Angaben der Wallbox und des Fahrzeugs
-								nach der Ladung mehrere Prozent auseinander,
-								dann kann mit dieser Einstellung eine
-								Feinabstimmung erfolgen:
-								<br />
-								SoC an der Wallbox zu hoch: Wirkungsgrad um ein
-								paar Prozent reduzieren<br />
-								SoC an der Wallbox zu gering: Wirkungsgrad um
-								ein paar Prozent erhöhen<br />
-							</template>
-						</openwb-base-number-input>
+						<div v-if="!installAssistantActive">
+							<openwb-base-number-input
+								title="Wirkungsgrad der Ladeelektronik"
+								unit="%"
+								required
+								:model-value="template.efficiency"
+								@update:model-value="
+									updateState(key, $event, 'efficiency')
+								"
+							>
+								<template #help>
+									Durch Verluste in der Ladeelektronik (z. B.
+									Umwandlung Wechselspannung in
+									Gleichspannung) gelangt nicht die komplette
+									Energie, welche durch den Zähler in der
+									Wallbox gemessen wird, in den Akku des
+									Fahrzeugs. Der anzugebende Wert liegt bei
+									gängigen Fahrzeugen im Bereich 90-95%. Eine
+									Ausnahme stellt der Zoe dar, dessen
+									Chameleon-Lader je nach Modellversion und
+									freigegebener Leistung der Wallbox teilweise
+									nur auf ca. 50% kommt.<br />
+									Liegen die Angaben der Wallbox und des
+									Fahrzeugs nach der Ladung mehrere Prozent
+									auseinander, dann kann mit dieser
+									Einstellung eine Feinabstimmung erfolgen:
+									<br />
+									SoC an der Wallbox zu hoch: Wirkungsgrad um
+									ein paar Prozent reduzieren<br />
+									SoC an der Wallbox zu gering: Wirkungsgrad
+									um ein paar Prozent erhöhen<br />
+								</template>
+							</openwb-base-number-input>
+						</div>
 						<openwb-base-number-input
 							title="Durchschnittsverbrauch"
 							unit="kWh&nbsp;/&nbsp;100km"
@@ -812,27 +822,32 @@
 							"
 						>
 						</openwb-base-number-input>
-						<openwb-base-number-input
-							title="Mindestzeit zwischen Umschaltungen"
-							unit="s"
-							:min="2"
-							:step="1"
-							:model-value="template.keep_charge_active_duration"
-							@update:model-value="
-								updateState(
-									key,
-									$event,
-									'keep_charge_active_duration',
-								)
-							"
-						>
-							<template #help>
-								Manche Fahrzeuge benötigen nach der Umschaltung
-								einige Zeit, bis sie mit der vorgegebenen
-								Phasenzahl laden. In dieser Zeit wird keine neue
-								Phasenumschaltung angestoßen.
-							</template>
-						</openwb-base-number-input>
+						<div v-if="!installAssistantActive">
+							<openwb-base-number-input
+								title="Mindestzeit zwischen Umschaltungen"
+								unit="s"
+								:min="2"
+								:step="1"
+								:model-value="
+									template.keep_charge_active_duration
+								"
+								@update:model-value="
+									updateState(
+										key,
+										$event,
+										'keep_charge_active_duration',
+									)
+								"
+							>
+								<template #help>
+									Manche Fahrzeuge benötigen nach der
+									Umschaltung einige Zeit, bis sie mit der
+									vorgegebenen Phasenzahl laden. In dieser
+									Zeit wird keine neue Phasenumschaltung
+									angestoßen.
+								</template>
+							</openwb-base-number-input>
+						</div>
 					</openwb-base-card>
 				</div>
 			</openwb-base-card>
@@ -987,188 +1002,201 @@
 								</ol>
 							</template>
 						</openwb-base-button-group-input>
-						<openwb-base-button-group-input
-							title="Priorität"
-							:buttons="[
-								{
-									buttonValue: false,
-									text: 'Nein',
-									class: 'btn-outline-danger',
-								},
-								{
-									buttonValue: true,
-									text: 'Ja',
-									class: 'btn-outline-success',
-								},
-							]"
-							:model-value="template.prio"
-							@update:model-value="
-								updateState(templateKey, $event, 'prio')
-							"
-						>
-							<template #help>
-								Die Ladefreigabe mit dem jeweils eingestellten
-								Mindeststrom erfolgt für alle Fahrzeuge, soweit
-								die verfügbare Leistung ausreicht. Fahrzeuge mit
-								Priorität werden bevorzugt mit mehr Leistung
-								geladen, falls verfügbar. Erst wenn alle
-								priorisierten Fahrzeuge die maximale
-								Ladeleistung bekommen und noch zusätzlicher
-								Überschuss vorhanden ist, wird auch für
-								Fahrzeuge ohne Priorität mehr Leistung
-								freigegeben.
-							</template>
-						</openwb-base-button-group-input>
-						<openwb-base-button-group-input
-							title="Zeitladen"
-							:buttons="[
-								{
-									buttonValue: false,
-									text: 'Nein',
-									class: 'btn-outline-danger',
-								},
-								{
-									buttonValue: true,
-									text: 'Ja',
-									class: 'btn-outline-success',
-								},
-							]"
-							:model-value="template.time_charging.active"
-							@update:model-value="
-								updateState(
-									templateKey,
-									$event,
-									'time_charging.active',
-								)
-							"
-						>
-							<template #help>
-								Der Lademodus Zeitladen kann parallel zu einem
-								der anderen Lademodi aktiviert werden. Die
-								Auswahl des Lademodus, der in der Regelung
-								genutzt wird, erfolgt anhand der Übersicht in
-								der Hilfe bei "Aktiver Lademodus". Wenn kein
-								Zeitplan aktiv ist oder das Limit des Zeitplans
-								erreicht wurde, wird der Lademodus verwendet,
-								der bei "Aktiver Lademodus" ausgewählt ist.
-							</template>
-						</openwb-base-button-group-input>
-						<openwb-base-button-group-input
-							title="Sperre nach Abstecken"
-							:buttons="[
-								{
-									buttonValue: false,
-									text: 'Nein',
-									class: 'btn-outline-danger',
-								},
-								{
-									buttonValue: true,
-									text: 'Ja',
-									class: 'btn-outline-success',
-								},
-							]"
-							:model-value="template.disable_after_unplug"
-							@update:model-value="
-								updateState(
-									templateKey,
-									$event,
-									'disable_after_unplug',
-								)
-							"
-						>
-							<template #help>
-								Wird ein Fahrzeug mit diesem Profil abgesteckt,
-								dann wird der betroffene Ladepunkt automatisch
-								deaktiviert.
-							</template>
-						</openwb-base-button-group-input>
-						<openwb-base-button-group-input
-							title="Standard nach Abstecken"
-							:buttons="[
-								{
-									buttonValue: false,
-									text: 'Nein',
-									class: 'btn-outline-danger',
-								},
-								{
-									buttonValue: true,
-									text: 'Ja',
-									class: 'btn-outline-success',
-								},
-							]"
-							:model-value="template.load_default"
-							@update:model-value="
-								updateState(templateKey, $event, 'load_default')
-							"
-						>
-							<template #help>
-								Falls diese Option aktiviert ist, wird der
-								betroffene Ladepunkt nach dem Abstecken auf das
-								Standard Fahrzeug zurückgesetzt.
-							</template>
-						</openwb-base-button-group-input>
-						<openwb-base-button-group-input
-							title="Strompreisbasiert Laden"
-							:buttons="[
-								{
-									buttonValue: false,
-									text: 'Nein',
-									class: 'btn-outline-danger',
-								},
-								{
-									buttonValue: true,
-									text: 'Ja',
-									class: 'btn-outline-success',
-								},
-							]"
-							:model-value="template.et.active"
-							@update:model-value="
-								updateState(templateKey, $event, 'et.active')
-							"
-						>
-						</openwb-base-button-group-input>
-						<div v-if="template.et.active == true">
-							<div
-								v-if="
-									!$store.state.mqtt[
-										'openWB/optional/et/provider'
-									] ||
-									!$store.state.mqtt[
-										'openWB/optional/et/provider'
-									].type
+						<div v-if="!installAssistantActive">
+							<openwb-base-button-group-input
+								title="Priorität"
+								:buttons="[
+									{
+										buttonValue: false,
+										text: 'Nein',
+										class: 'btn-outline-danger',
+									},
+									{
+										buttonValue: true,
+										text: 'Ja',
+										class: 'btn-outline-success',
+									},
+								]"
+								:model-value="template.prio"
+								@update:model-value="
+									updateState(templateKey, $event, 'prio')
 								"
 							>
-								<openwb-base-alert subtype="danger">
-									Bitte in den übergreifenden
-									Ladeeinstellungen einen Strompreis-Anbieter
-									konfigurieren.
-								</openwb-base-alert>
-							</div>
-							<openwb-base-number-input
-								title="Preisgrenze für Zeit- & Sofortladen"
-								min="-80"
-								max="80"
-								step="0.01"
-								:precision="2"
-								unit="ct/kWh"
-								:model-value="template.et.max_price * 100000"
+								<template #help>
+									Die Ladefreigabe mit dem jeweils
+									eingestellten Mindeststrom erfolgt für alle
+									Fahrzeuge, soweit die verfügbare Leistung
+									ausreicht. Fahrzeuge mit Priorität werden
+									bevorzugt mit mehr Leistung geladen, falls
+									verfügbar. Erst wenn alle priorisierten
+									Fahrzeuge die maximale Ladeleistung bekommen
+									und noch zusätzlicher Überschuss vorhanden
+									ist, wird auch für Fahrzeuge ohne Priorität
+									mehr Leistung freigegeben.
+								</template>
+							</openwb-base-button-group-input>
+							<openwb-base-button-group-input
+								title="Zeitladen"
+								:buttons="[
+									{
+										buttonValue: false,
+										text: 'Nein',
+										class: 'btn-outline-danger',
+									},
+									{
+										buttonValue: true,
+										text: 'Ja',
+										class: 'btn-outline-success',
+									},
+								]"
+								:model-value="template.time_charging.active"
 								@update:model-value="
 									updateState(
 										templateKey,
-										parseFloat(
-											($event / 100000).toFixed(7),
-										),
-										'et.max_price',
+										$event,
+										'time_charging.active',
 									)
 								"
 							>
 								<template #help>
-									Für Zielladen werden die günstigsten Stunden
-									ermittelt.
+									Der Lademodus Zeitladen kann parallel zu
+									einem der anderen Lademodi aktiviert werden.
+									Die Auswahl des Lademodus, der in der
+									Regelung genutzt wird, erfolgt anhand der
+									Übersicht in der Hilfe bei "Aktiver
+									Lademodus". Wenn kein Zeitplan aktiv ist
+									oder das Limit des Zeitplans erreicht wurde,
+									wird der Lademodus verwendet, der bei
+									"Aktiver Lademodus" ausgewählt ist.
 								</template>
-							</openwb-base-number-input>
+							</openwb-base-button-group-input>
+							<openwb-base-button-group-input
+								title="Sperre nach Abstecken"
+								:buttons="[
+									{
+										buttonValue: false,
+										text: 'Nein',
+										class: 'btn-outline-danger',
+									},
+									{
+										buttonValue: true,
+										text: 'Ja',
+										class: 'btn-outline-success',
+									},
+								]"
+								:model-value="template.disable_after_unplug"
+								@update:model-value="
+									updateState(
+										templateKey,
+										$event,
+										'disable_after_unplug',
+									)
+								"
+							>
+								<template #help>
+									Wird ein Fahrzeug mit diesem Profil
+									abgesteckt, dann wird der betroffene
+									Ladepunkt automatisch deaktiviert.
+								</template>
+							</openwb-base-button-group-input>
+							<openwb-base-button-group-input
+								title="Standard nach Abstecken"
+								:buttons="[
+									{
+										buttonValue: false,
+										text: 'Nein',
+										class: 'btn-outline-danger',
+									},
+									{
+										buttonValue: true,
+										text: 'Ja',
+										class: 'btn-outline-success',
+									},
+								]"
+								:model-value="template.load_default"
+								@update:model-value="
+									updateState(
+										templateKey,
+										$event,
+										'load_default',
+									)
+								"
+							>
+								<template #help>
+									Falls diese Option aktiviert ist, wird der
+									betroffene Ladepunkt nach dem Abstecken auf
+									das Standard Fahrzeug zurückgesetzt.
+								</template>
+							</openwb-base-button-group-input>
+							<openwb-base-button-group-input
+								title="Strompreisbasiert Laden"
+								:buttons="[
+									{
+										buttonValue: false,
+										text: 'Nein',
+										class: 'btn-outline-danger',
+									},
+									{
+										buttonValue: true,
+										text: 'Ja',
+										class: 'btn-outline-success',
+									},
+								]"
+								:model-value="template.et.active"
+								@update:model-value="
+									updateState(
+										templateKey,
+										$event,
+										'et.active',
+									)
+								"
+							>
+							</openwb-base-button-group-input>
+							<div v-if="template.et.active == true">
+								<div
+									v-if="
+										!$store.state.mqtt[
+											'openWB/optional/et/provider'
+										] ||
+										!$store.state.mqtt[
+											'openWB/optional/et/provider'
+										].type
+									"
+								>
+									<openwb-base-alert subtype="danger">
+										Bitte in den übergreifenden
+										Ladeeinstellungen einen
+										Strompreis-Anbieter konfigurieren.
+									</openwb-base-alert>
+								</div>
+								<openwb-base-number-input
+									title="Preisgrenze für Zeit- & Sofortladen"
+									min="-80"
+									max="80"
+									step="0.01"
+									:precision="2"
+									unit="ct/kWh"
+									:model-value="
+										template.et.max_price * 100000
+									"
+									@update:model-value="
+										updateState(
+											templateKey,
+											parseFloat(
+												($event / 100000).toFixed(7),
+											),
+											'et.max_price',
+										)
+									"
+								>
+									<template #help>
+										Für Zielladen werden die günstigsten
+										Stunden ermittelt.
+									</template>
+								</openwb-base-number-input>
+							</div>
+							<hr />
 						</div>
-						<hr />
 						<openwb-base-heading>Sofortladen</openwb-base-heading>
 						<openwb-base-range-input
 							title="Soll-Ladestrom"
@@ -1848,42 +1876,45 @@
 								</openwb-base-button-group-input>
 							</div>
 						</openwb-base-card>
-						<hr />
-						<openwb-base-heading>
-							Laden nach Zeitplan
-							<template #actions>
-								<openwb-base-avatar
-									class="bg-success clickable"
-									@click="
-										addChargeTemplateTimeChargingPlan(
-											templateKey,
-											$event,
-										)
-									"
-								>
-									<font-awesome-icon
-										fixed-width
-										:icon="['fas', 'plus']"
-									/>
-								</openwb-base-avatar>
-							</template>
-							<template #help>
-								Mit einem Zeitplan kann ein klar abgegrenzter
-								Zeitbereich zum Fahrzeugladen definiert werden.
-								Dies wird häufig genutzt, um einem Fahrzeug kurz
-								vor der Abfahrt Strom anzubieten, damit dessen
-								Vorklimatisierung nicht aus dem Fahrzeugakku,
-								sondern aus der openWB bezogen wird (Enteisung,
-								Vorwärmung, Abkühlung). Nicht von der
-								Vorklimatisierung benötigter Strom erhöht dabei
-								den Fahrzeug-SoC. Um das Stromnetz am Morgen
-								nicht unnötig zu strapazieren, sollte eine
-								moderate Stromvorgabe und ein beschränkter
-								Zeitbereich vorgegeben werden (z.B. max. 10A;
-								30min - in Übereinstimmung mit den
-								Fahrzeug-App-Vorklimatisierungsvorgaben).
-							</template>
-						</openwb-base-heading>
+						<div v-if="!installAssistantActive">
+							<hr />
+							<openwb-base-heading>
+								Laden nach Zeitplan
+								<template #actions>
+									<openwb-base-avatar
+										class="bg-success clickable"
+										@click="
+											addChargeTemplateTimeChargingPlan(
+												templateKey,
+												$event,
+											)
+										"
+									>
+										<font-awesome-icon
+											fixed-width
+											:icon="['fas', 'plus']"
+										/>
+									</openwb-base-avatar>
+								</template>
+								<template #help>
+									Mit einem Zeitplan kann ein klar
+									abgegrenzter Zeitbereich zum Fahrzeugladen
+									definiert werden. Dies wird häufig genutzt,
+									um einem Fahrzeug kurz vor der Abfahrt Strom
+									anzubieten, damit dessen Vorklimatisierung
+									nicht aus dem Fahrzeugakku, sondern aus der
+									openWB bezogen wird (Enteisung, Vorwärmung,
+									Abkühlung). Nicht von der Vorklimatisierung
+									benötigter Strom erhöht dabei den
+									Fahrzeug-SoC. Um das Stromnetz am Morgen
+									nicht unnötig zu strapazieren, sollte eine
+									moderate Stromvorgabe und ein beschränkter
+									Zeitbereich vorgegeben werden (z.B. max.
+									10A; 30min - in Übereinstimmung mit den
+									Fahrzeug-App-Vorklimatisierungsvorgaben).
+								</template>
+							</openwb-base-heading>
+						</div>
 						<openwb-base-card
 							v-for="(
 								plan, planKey

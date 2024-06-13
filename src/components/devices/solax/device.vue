@@ -24,9 +24,9 @@
 			"
 		>
 			<template #help>
-				Standardmäßig ist der Port 502. Dieser sollte nur geändert werden,
-				wenn der Solax Wechselrichter auf einen anderen Port konfiguriert
-				wurde.
+				Standardmäßig ist der Port 502. Dieser sollte nur geändert
+				werden, wenn der Solax Wechselrichter auf einen anderen Port
+				konfiguriert wurde.
 			</template>
 		</openwb-base-number-input>
 		<openwb-base-number-input
