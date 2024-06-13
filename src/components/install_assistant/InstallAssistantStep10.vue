@@ -25,24 +25,21 @@ import ComponentState from "../mixins/ComponentState.vue";
 import InstallAssistantStepTemplate from "./InstallAssistantStepTemplate.vue";
 
 export default {
-	name: "InstallAssistantStep9",
+	name: "InstallAssistantStep10",
 	mixins: [ComponentState],
 	emits: ["switchPage", "endAssistant"],
 	components: {
 		InstallAssistantStepTemplate,
 	},
 	data: () => ({
-		topicsToSubscribe: ["openWB/general/extern"],
+		mqttTopicsToSubscribe: [],
 	}),
 	methods: {
 		nextPage() {
 			return;
 		},
 		previousPage() {
-			this.$emit(
-				"switchPage",
-				this.$store.state.mqtt["openWB/general/extern"] ? 4 : 9,
-			);
+			this.$emit("switchPage", 9);
 		},
 		sendCommand(event) {
 			this.$emit("sendCommand", event);

@@ -1,6 +1,6 @@
 <template>
 	<InstallAssistantStepTemplate
-		title="5. Datensicherung - Eine Sicherung erstellen"
+		:title="`${stepNumber}. Datensicherung - Eine Sicherung erstellen`"
 		@nextPage="nextPage"
 		@previousPage="previousPage"
 		@endAssistant="endAssistant"
@@ -48,14 +48,22 @@ export default {
 		DataManagement,
 	},
 	data: () => ({
-		mqttTopicsToSubscribe: [],
+		mqttTopicsToSubscribe: ["openWB/general/extern"],
 	}),
+	computed: {
+		stepNumber() {
+			return this.$store.state.mqtt["openWB/general/extern"] ? 5 : 8;
+		},
+	},
 	methods: {
 		nextPage() {
 			this.$emit("switchPage", 10);
 		},
 		previousPage() {
-			this.$emit("switchPage", 8);
+			this.$emit(
+				"switchPage",
+				this.$store.state.mqtt["openWB/general/extern"] ? 4 : 8,
+			);
 		},
 		endAssistant() {
 			this.$emit("endAssistant");

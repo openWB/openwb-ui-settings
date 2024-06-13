@@ -1,6 +1,6 @@
 <template>
 	<InstallAssistantStepTemplate
-		title="4. Einrichten der Fahrzeuge"
+		title="7. Einrichten der Fahrzeuge"
 		@nextPage="nextPage"
 		@previousPage="previousPage"
 		@endAssistant="endAssistant"

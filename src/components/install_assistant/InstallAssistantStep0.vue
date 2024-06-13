@@ -19,14 +19,13 @@
 					Allgemeine Einstellungen: Auswahl des Betriebsmodus primary
 					/ secondary
 				</li>
-				<li>Einrichten der Ladepunkte (openWB als secondary)</li>
 			</ol>
 			<p>
 				Wird diese openWB als secondary betrieben, dann werden nur noch
 				die lokalen Ladepunkte eingerichtet. Im Betriebsmodus primary
 				werden die folgenden zusätzlichen Schritte durchlaufen:
 			</p>
-			<ol>
+			<ol start="4">
 				<li>Energiesystem - Geräte und Komponenten einrichten</li>
 				<li>Einrichten der Ladepunkte (openWB als primary)</li>
 				<li>Konfiguration des Lastmanagements</li>
@@ -50,7 +49,7 @@ export default {
 		InstallAssistantStepTemplate,
 	},
 	data: () => ({
-		topicsToSubscribe: [],
+		mqttTopicsToSubscribe: [],
 	}),
 	methods: {
 		nextPage() {
