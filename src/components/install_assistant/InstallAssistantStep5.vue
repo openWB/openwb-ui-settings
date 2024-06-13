@@ -27,9 +27,7 @@
 				auszuwählen. Unterhalb des Gerätes werden die zugehörigen
 				Komponenten EVU-Zähler, WR und Speicher (Summe = Energiesystem)
 				konfiguriert. Das openWB-System ist sehr flexibel und
-				skalierbar. Wird z.B. zusätzlich zum 1. Energiesystem eine
-				weitere PVA installiert, wird ein neues Gerät (mit eigener IP)
-				und der Komponente Wechselrichter hinzugefügt.
+				skalierbar.
 			</p>
 			<p class="font-weight-bold">
 				Änderungen werden nur bei klicken auf Speichern wirksam!

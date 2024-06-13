@@ -27,7 +27,7 @@
 				ist sehr wichtig, um optimales Lastmanagement sicherzustellen!
 			</p>
 			<p>
-				Trick zur Zuordnung: Verwende ein nur 1-phasig ladendes Auto
+				Tipp zur Zuordnung: Verwende ein nur 1-phasig ladendes Auto
 				(z.B. Hybrid) oder stelle bei openWB mit 1p3p-Phasenumschaltung
 				temporär unter Sofortladen (s. Einstellungen ->
 				Ladeeinstellungen) auf einphasig, um eine 1-phasige Ladung zu
