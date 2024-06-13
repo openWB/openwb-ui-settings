@@ -40,7 +40,7 @@
 				Der PIN muss aus 4 bis 10 Zahlen bestehen.
 			</template>
 		</openwb-base-text-input>
-		<openwb-base-heading>Ansicht "Übersicht"</openwb-base-heading>
+		<openwb-base-heading>Ansichten</openwb-base-heading>
 		<openwb-base-button-group-input
 			title="Übersicht anzeigen"
 			:model-value="displayTheme.configuration.enable_dashboard_view"
@@ -64,7 +64,76 @@
 			]"
 		/>
 		<openwb-base-button-group-input
-			v-if="displayTheme.configuration.enable_dashboard_view"
+			title="Energiefluss anzeigen"
+			:model-value="displayTheme.configuration.enable_energy_flow_view"
+			@update:model-value="
+				updateConfiguration(
+					$event,
+					'configuration.enable_energy_flow_view',
+				)
+			"
+			:buttons="[
+				{
+					buttonValue: false,
+					text: 'Aus',
+					class: 'btn-outline-danger',
+				},
+				{
+					buttonValue: true,
+					text: 'An',
+					class: 'btn-outline-success',
+				},
+			]"
+		/>
+		<openwb-base-button-group-input
+			title="Ladepunkte anzeigen"
+			:model-value="displayTheme.configuration.enable_charge_points_view"
+			@update:model-value="
+				updateConfiguration(
+					$event,
+					'configuration.enable_charge_points_view',
+				)
+			"
+			:buttons="[
+				{
+					buttonValue: false,
+					text: 'Aus',
+					class: 'btn-outline-danger',
+				},
+				{
+					buttonValue: true,
+					text: 'An',
+					class: 'btn-outline-success',
+				},
+			]"
+		/>
+		<openwb-base-button-group-input
+			title="Status anzeigen"
+			:model-value="displayTheme.configuration.enable_status_view"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.enable_status_view')
+			"
+			:buttons="[
+				{
+					buttonValue: false,
+					text: 'Aus',
+					class: 'btn-outline-danger',
+				},
+				{
+					buttonValue: true,
+					text: 'An',
+					class: 'btn-outline-success',
+				},
+			]"
+		/>
+		<openwb-base-heading>
+			Datenauswahl
+			<template #help>
+				Hier kann festgelegt werden, welche Daten in den Ansichten
+				"Übersicht" und "Energiefluss" angezeigt werden.
+			</template>
+		</openwb-base-heading>
+		<openwb-base-button-group-input
 			title="EVU anzeigen"
 			:model-value="displayTheme.configuration.enable_dashboard_card_grid"
 			@update:model-value="
@@ -87,7 +156,6 @@
 			]"
 		/>
 		<openwb-base-button-group-input
-			v-if="displayTheme.configuration.enable_dashboard_view"
 			title="Hausverbrauch anzeigen"
 			:model-value="
 				displayTheme.configuration
@@ -113,7 +181,30 @@
 			]"
 		/>
 		<openwb-base-button-group-input
-			v-if="displayTheme.configuration.enable_dashboard_view"
+			title="PV anzeigen"
+			:model-value="
+				displayTheme.configuration.enable_dashboard_card_inverter_sum
+			"
+			@update:model-value="
+				updateConfiguration(
+					$event,
+					'configuration.enable_dashboard_card_inverter_sum',
+				)
+			"
+			:buttons="[
+				{
+					buttonValue: false,
+					text: 'Aus',
+					class: 'btn-outline-danger',
+				},
+				{
+					buttonValue: true,
+					text: 'An',
+					class: 'btn-outline-success',
+				},
+			]"
+		/>
+		<openwb-base-button-group-input
 			title="Batteriespeicher anzeigen"
 			:model-value="
 				displayTheme.configuration.enable_dashboard_card_battery_sum
@@ -138,7 +229,6 @@
 			]"
 		/>
 		<openwb-base-button-group-input
-			v-if="displayTheme.configuration.enable_dashboard_view"
 			title="Ladepunkte anzeigen"
 			:model-value="
 				displayTheme.configuration
@@ -164,59 +254,15 @@
 			]"
 		/>
 		<openwb-base-button-group-input
-			v-if="displayTheme.configuration.enable_dashboard_view"
-			title="PV anzeigen"
+			title="Fahrzeuge anzeigen"
 			:model-value="
-				displayTheme.configuration.enable_dashboard_card_inverter_sum
+				displayTheme.configuration.enable_dashboard_card_vehicles
 			"
 			@update:model-value="
 				updateConfiguration(
 					$event,
-					'configuration.enable_dashboard_card_inverter_sum',
+					'configuration.enable_dashboard_card_vehicles',
 				)
-			"
-			:buttons="[
-				{
-					buttonValue: false,
-					text: 'Aus',
-					class: 'btn-outline-danger',
-				},
-				{
-					buttonValue: true,
-					text: 'An',
-					class: 'btn-outline-success',
-				},
-			]"
-		/>
-		<openwb-base-heading>Ansicht "Ladepunkte"</openwb-base-heading>
-		<openwb-base-button-group-input
-			title="Ladepunkte anzeigen"
-			:model-value="displayTheme.configuration.enable_charge_points_view"
-			@update:model-value="
-				updateConfiguration(
-					$event,
-					'configuration.enable_charge_points_view',
-				)
-			"
-			:buttons="[
-				{
-					buttonValue: false,
-					text: 'Aus',
-					class: 'btn-outline-danger',
-				},
-				{
-					buttonValue: true,
-					text: 'An',
-					class: 'btn-outline-success',
-				},
-			]"
-		/>
-		<openwb-base-heading>Ansicht "Status"</openwb-base-heading>
-		<openwb-base-button-group-input
-			title="Status anzeigen"
-			:model-value="displayTheme.configuration.enable_status_view"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.enable_status_view')
 			"
 			:buttons="[
 				{
