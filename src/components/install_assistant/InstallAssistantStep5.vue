@@ -1,6 +1,6 @@
 <template>
 	<InstallAssistantStepTemplate
-		title="1. Energiesystem - Geräte und Komponenten einrichten"
+		title="4. Energiesystem - Geräte und Komponenten einrichten"
 		@nextPage="nextPage"
 		@previousPage="previousPage"
 		@endAssistant="endAssistant"

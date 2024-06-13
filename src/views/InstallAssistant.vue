@@ -14,6 +14,10 @@
 		</openwb-base-modal-dialog>
 		<component
 			:is="myStepComponent"
+			@send-command="$emit('sendCommand', $event)"
+			@save="$emit('save')"
+			@reset="$emit('reset')"
+			@defaults="$emit('defaults')"
 			@switch-page="switchPage"
 			@end-assistant="endAssistantModal"
 		/>
@@ -27,6 +31,7 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 export default {
 	name: "InstallAssistantView",
 	mixins: [ComponentState],
+	emits: ["sendCommand", "save", "reset", "defaults"],
 	data() {
 		return {
 			currentPage: 0,
