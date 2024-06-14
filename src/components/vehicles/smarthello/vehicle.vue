@@ -19,7 +19,6 @@
 				updateConfiguration($event, 'configuration.password')
 			"
 		>
-			<template #help> Kennwort für Smart Hello. </template>
 		</openwb-base-text-input>
 		<openwb-base-text-input
 			title="VIN"
