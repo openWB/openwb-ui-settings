@@ -9,7 +9,6 @@
 				updateConfiguration($event, 'configuration.user_id')
 			"
 		>
-			<template #help> Benutzername für Smart Hello. </template>
 		</openwb-base-text-input>
 		<openwb-base-text-input
 			title="Kennwort"
