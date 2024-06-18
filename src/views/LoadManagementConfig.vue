@@ -448,7 +448,7 @@ export default {
 			let groups = [
 				{
 					label: "Eingerichtete Zähler-Komponenten",
-					options: [...this.counterOptions]
+					options: [...this.counterOptions],
 				},
 			];
 			return { options: options, groups: groups };
