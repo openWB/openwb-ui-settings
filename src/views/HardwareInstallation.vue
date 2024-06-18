@@ -423,7 +423,7 @@ export default {
 			if(this.manufactureList_arr == 0){
 				this.manufactureList_arr.push({ text: 'openWB', value: 'openWB', group: 'openWB' });
 				this.manufactureList_arr.push({ text: 'generisch', value: 'generic', group: "generic" });
-				this.manufactureList_arr.push({ text: 'Anderer Hersteller', value: 'other', group: "other" });
+				this.manufactureList_arr.push({ text: 'Systemhersteller', value: 'other', group: "other" });
 			}
 			return this.manufactureList_arr;
 			}
