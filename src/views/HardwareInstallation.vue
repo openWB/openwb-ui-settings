@@ -257,12 +257,29 @@
 					<hr v-if="Object.keys(installedDevices).length > 0" />
 					<openwb-base-select-input
 						class="mb-2"
+						title="Hersteller"
+						notSelected="Bitte auswählen"
+						:options="getManufactureList()"
+						:model-value="selectManufacturer"
+						@update:model-value="selectManufacturer = $event"
+						
+					>
+					<template #append>
+							<span class="col-1">
+								
+							</span>
+							</template>
+					</openwb-base-select-input>
+					
+					<openwb-base-select-input
+						class="mb-2"
 						title="Verfügbare Geräte"
 						notSelected="Bitte auswählen"
 						:options="getDeviceList()"
 						:model-value="deviceToAdd"
 						@update:model-value="deviceToAdd = $event"
 					>
+					
 						<template #append>
 							<span class="col-1">
 								<openwb-base-click-button
@@ -373,6 +390,7 @@ export default {
 				"openWB/system/configurable/devices_components",
 			],
 			deviceToAdd: undefined,
+			selectManufacturer: undefined,
 			showDeviceRemoveModal: false,
 			modalDevice: undefined,
 			modalDeviceName: "",
@@ -380,6 +398,10 @@ export default {
 			showComponentRemoveModal: false,
 			modalComponent: undefined,
 			modalComponentName: "",
+			other_arr: [],
+			openWB_arr: [],
+			generic_arr: [],
+			manufactureList_arr: [],
 		};
 	},
 	computed: {
@@ -397,6 +419,52 @@ export default {
 		},
 	},
 	methods: {
+		getManufactureList(){
+			if(this.manufactureList_arr == 0){
+				this.manufactureList_arr.push({ text: 'openWB', value: 'openWB', group: 'openWB' });
+				this.manufactureList_arr.push({ text: 'generisch', value: 'generic', group: "generic" });
+				this.manufactureList_arr.push({ text: 'Anderer Hersteller', value: 'other', group: "other" });
+			}
+			return this.manufactureList_arr;
+		},
+		getDeviceList() {
+			if(this.$store.state.mqtt[
+				"openWB/system/configurable/devices_components"
+			]){
+				for (const element of Object.values(this.$store.state.mqtt[
+				"openWB/system/configurable/devices_components"
+			])) {
+				if (element.group.includes("openWB")) {
+					this.openWB_arr.push({ value: element.value, group: element.group, text: element.text });
+					console.info("HIER ALSO:");
+				}
+			}
+				for (const element of Object.values(this.$store.state.mqtt[
+				"openWB/system/configurable/devices_components"
+			])) {if (element.group.includes("generic")) {
+					this.generic_arr.push({ value: element.value, group: element.group, text: element.text });
+					}
+				}
+				for (const element of Object.values(this.$store.state.mqtt[
+				"openWB/system/configurable/devices_components"
+			])) {
+				if (element.group.includes("other")) {
+					this.other_arr.push({ value: element.value, group: element.group, text: element.text });
+				}
+			}
+			if(this.selectManufacturer == "openWB"){
+				console.info("HIER");
+				return this.openWB_arr;
+				
+			}
+			if(this.selectManufacturer == "generic"){
+				return this.generic_arr;
+			}
+			if(this.selectManufacturer == "other"){
+				return this.other_arr;
+			}
+		}
+	},	
 		getComponentTypeClass(type) {
 			if (type.match(/^(.+_)?counter(_.+)?$/)) {
 				return "danger";
@@ -432,12 +500,25 @@ export default {
 			);
 		},
 		addDevice() {
-			this.$emit("sendCommand", {
-				command: "addDevice",
-				data: {
-					type: this.deviceToAdd,
-				},
-			});
+			let deviceToAddPath;
+			if(this.$store.state.mqtt[
+				"openWB/system/configurable/devices_components"
+			])
+			{
+				for (const element of Object.values(this.$store.state.mqtt[
+					"openWB/system/configurable/devices_components"
+				])) {
+					if (this.deviceToAdd.includes(element.value)) {
+						deviceToAddPath = element.group.concat(".", element.value);
+					}
+				}
+				this.$emit("sendCommand", {
+					command: "addDevice",
+					data: {
+						type: deviceToAddPath,
+					},
+				});
+			}
 		},
 		removeDeviceModal(index, name, event) {
 			// prevent further processing of the click event
@@ -458,20 +539,28 @@ export default {
 				});
 			}
 		},
-		getDeviceList() {
-			return this.$store.state.mqtt[
-				"openWB/system/configurable/devices_components"
-			];
-		},
 		addComponent(deviceId, deviceType, componentType) {
+			let deviceTypePath;
+			if(this.$store.state.mqtt[
+				"openWB/system/configurable/devices_components"
+			])
+			{
+				for (const element of Object.values(this.$store.state.mqtt[
+					"openWB/system/configurable/devices_components"
+				])) {
+					if (deviceType.includes(element.value)) {
+						deviceTypePath = element.group.concat(".", element.value);
+					}
+				}
 			this.$emit("sendCommand", {
 				command: "addComponent",
 				data: {
 					deviceId: deviceId,
-					deviceType: deviceType,
+					deviceType: deviceTypePath,
 					type: componentType,
 				},
 			});
+		}
 		},
 		removeComponentModal(
 			deviceId,
