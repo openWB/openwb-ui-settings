@@ -71,38 +71,6 @@
 				über PIN möglich!
 			</template>
 		</openwb-base-checkbox-input>
-		<openwb-base-text-input
-			title="Log-Filter"
-			:model-value="vehicle.configuration.logFilter"
-                        :emptyValue="''"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.logFilter')
-			"
-		>
-			<template #help>
-				<div>
-					<b>SOC-Log Filtereinstellung</b><br>
-					In Einstellungen-System-Fehlersuche: Debug-Level=Info<br>
-					Mögliche Log-Filter:<br>
-					<ul>
-						<li>f: fetch_soc</li>
-						<li>i: initialization</li>
-						<li>m: websocket message</li>
-						<li>M: websocket message details</li>
-						<li>q: mqtt logging</li>
-						<li>Q: mqtt logging details</li>
-						<li>r: smart eq rest api</li>
-						<li>s: state changes</li>
-						<li>t: token refresh</li>
-						<li>T: token refresh details</li>
-						<li>u: authentication</li>
-						<li>U: authentication details</li>
-						<li>w: webSocket interface</li>
-						<li>W: webSocket interface details</li>
-					</ul>
-				</div>
-			</template>
-		</openwb-base-text-input>
 	</div>
 </template>
 
