@@ -259,7 +259,7 @@
 						class="mb-2"
 						title="Hersteller"
 						notSelected="Bitte auswählen"
-						:options="getManufactureList"
+						:options="getManufactureList()"
 						:model-value="selectManufacturer"
 						@update:model-value="selectManufacturer = $event"
 					>
@@ -272,7 +272,7 @@
 						class="mb-2"
 						title="Verfügbare Geräte"
 						notSelected="Bitte auswählen"
-						:options="getDeviceList"
+						:options="getDeviceList()"
 						:model-value="deviceToAdd"
 						@update:model-value="deviceToAdd = $event"
 					>
@@ -414,93 +414,86 @@ export default {
 				);
 			},
 		},
-		getManufactureList: {
-			get() {
-				if (this.manufactureList_arr == 0) {
-					this.manufactureList_arr.push({
-						text: "openWB",
-						value: "openWB",
-						group: "openWB",
-					});
-					this.manufactureList_arr.push({
-						text: "generisch",
-						value: "generic",
-						group: "generic",
-					});
-					this.manufactureList_arr.push({
-						text: "Systemhersteller",
-						value: "other",
-						group: "other",
-					});
-				}
-				return this.manufactureList_arr;
-			},
-		},
-		getDeviceList: {
-			get() {
-				if (
-					this.$store.state.mqtt[
-						"openWB/system/configurable/devices_components"
-					]
-				) {
-					for (const element of Object.values(
-						this.$store.state.mqtt[
-							"openWB/system/configurable/devices_components"
-						],
-					)) {
-						if (element.group.includes("openWB") && !this.run_end) {
-							this.openWB_arr.push({
-								value: element.value,
-								group: element.group,
-								text: element.text,
-							});
-						}
-					}
-					for (const element of Object.values(
-						this.$store.state.mqtt[
-							"openWB/system/configurable/devices_components"
-						],
-					)) {
-						if (
-							element.group.includes("generic") &&
-							!this.run_end
-						) {
-							this.generic_arr.push({
-								value: element.value,
-								group: element.group,
-								text: element.text,
-							});
-						}
-					}
-					for (const element of Object.values(
-						this.$store.state.mqtt[
-							"openWB/system/configurable/devices_components"
-						],
-					)) {
-						if (element.group.includes("other") && !this.run_end) {
-							this.other_arr.push({
-								value: element.value,
-								group: element.group,
-								text: element.text,
-							});
-						}
-					}
-					this.run_end = true;
-					if (this.selectManufacturer == "openWB") {
-						return this.openWB_arr;
-					}
-					if (this.selectManufacturer == "generic") {
-						return this.generic_arr;
-					}
-					if (this.selectManufacturer == "other") {
-						return this.other_arr;
-					}
-				}
-				return [];
-			},
-		},
 	},
 	methods: {
+		getManufactureList() {
+			if (this.manufactureList_arr == 0) {
+				this.manufactureList_arr.push({
+					text: "openWB",
+					value: "openWB",
+					group: "openWB",
+				});
+				this.manufactureList_arr.push({
+					text: "generisch",
+					value: "generic",
+					group: "generic",
+				});
+				this.manufactureList_arr.push({
+					text: "Systemhersteller",
+					value: "other",
+					group: "other",
+				});
+			}
+			return this.manufactureList_arr;
+		},
+		getDeviceList() {
+			if (
+				this.$store.state.mqtt[
+					"openWB/system/configurable/devices_components"
+				]
+			) {
+				for (const element of Object.values(
+					this.$store.state.mqtt[
+						"openWB/system/configurable/devices_components"
+					],
+				)) {
+					if (element.group.includes("openWB") && !this.run_end) {
+						this.openWB_arr.push({
+							value: element.value,
+							group: element.group,
+							text: element.text,
+						});
+					}
+				}
+				for (const element of Object.values(
+					this.$store.state.mqtt[
+						"openWB/system/configurable/devices_components"
+					],
+				)) {
+					if (element.group.includes("generic") && !this.run_end) {
+						this.generic_arr.push({
+							value: element.value,
+							group: element.group,
+							text: element.text,
+						});
+					}
+				}
+				for (const element of Object.values(
+					this.$store.state.mqtt[
+						"openWB/system/configurable/devices_components"
+					],
+				)) {
+					if (element.group.includes("other") && !this.run_end) {
+						this.other_arr.push({
+							value: element.value,
+							group: element.group,
+							text: element.text,
+						});
+					}
+				}
+				this.run_end = true;
+				if (this.selectManufacturer == "openWB") {
+					return this.openWB_arr;
+				}
+				if (this.selectManufacturer == "generic") {
+					return this.generic_arr;
+				}
+				if (this.selectManufacturer == "other") {
+					return this.other_arr;
+				}
+			}
+			return [];
+		},
 		getComponentTypeClass(type) {
 			if (type.match(/^(.+_)?counter(_.+)?$/)) {
 				return "danger";
