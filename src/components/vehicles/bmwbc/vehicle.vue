@@ -57,7 +57,8 @@
 		>
 			<template #help>
 				Berechnet den Ladestand (SoC) während der Ladung. <br />
-				Die Berechnung erfolgt über die Ladeleistung und die Ladedauer. <br />
+				Die Berechnung erfolgt über die Ladeleistung und die Ladedauer.
+				<br />
 			</template>
 		</openwb-base-button-group-input>
 	</div>

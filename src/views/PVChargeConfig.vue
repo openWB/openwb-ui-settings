@@ -338,12 +338,9 @@
 					<openwb-base-button-group-input
 						title="Laden mit Überschuss"
 						:buttons="[
-							{ buttonValue: 'ev_mode', text: 'Fahrzeuge' },
-							{ buttonValue: 'bat_mode', text: 'Speicher' },
-							{
-								buttonValue: 'min_soc_bat_mode',
-								text: 'Mindest-SoC des Speichers',
-							},
+							{ buttonValue: 'ev_mode' },
+							{ buttonValue: 'bat_mode' },
+							{ buttonValue: 'min_soc_bat_mode' },
 						]"
 						v-model="batMode"
 						:model-value="
@@ -358,36 +355,104 @@
 							)
 						"
 					>
+						<template #label-ev_mode>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'car-side']"
+							/>
+							Fahrzeuge
+						</template>
+						<template #label-bat_mode>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'fa-car-battery']"
+							/>
+							Speicher
+						</template>
+						<template #label-min_soc_bat_mode>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'fa-battery-half']"
+							/>
+							Mindest-SoC des Speichers
+						</template>
 						<template #help>
-							Sofern ein Hausstromspeicher (im Folgenden
-							"Speicher" genannt) im Energiesystem verbaut ist,
-							kann dieser beim Fahrzeugladen mit berücksichtigt
-							werden. Dies erfolgt passiv über die
-							Berücksichtigung der Speicherleistungswerte und des
-							Speicher-SoC. Eine aktive Speichersteuerung durch
-							openWB ist aktuell mangels Speicherschnittstelle
-							nicht möglich.<br /><br />
-							Bei Auswahl "Fahrzeuge" wird der gesamte Überschuss
-							in das EV geladen. Ist die maximale Ladeleistung der
-							Fahrzeuge erreicht und es wird eingespeist, wird
-							dieser Überschuss in den Speicher geladen.<br /><br />
-							Bei Auswahl "Speicher" wird der gesamte Überschuss
-							in den Speicher geladen. Ist die maximale
-							Ladeleistung des Speichers erreicht und es wird
-							eingespeist, wird dieser Überschuss unter Beachtung
-							der Einschaltschwelle in die Fahrzeuge geladen.<br /><br />
-							Bei Auswahl "Mindest-SoC des Speichers" wird der
-							Überschuss bis zum Mindest-SoC in den Speicher
-							geladen. Ist die maximale Ladeleistung des Speichers
-							erreicht und es wird eingespeist, wird dieser
-							Überschuss in die Fahrzeuge geladen. Wird der
-							Mindest-SoC überschritten, wird der Überschuss ins
-							Fahrzeug geladen.
+							<p>
+								Sofern ein Hausstromspeicher (im Folgenden
+								"Speicher" genannt) im Energiesystem verbaut
+								ist, kann dieser beim Fahrzeugladen mit
+								berücksichtigt werden. Dies erfolgt passiv über
+								die Berücksichtigung der Speicherleistungswerte
+								und des Speicher-SoC. Eine aktive
+								Speichersteuerung durch openWB ist aktuell
+								mangels Speicherschnittstelle nicht möglich.
+							</p>
+							<p>
+								Bei Auswahl "
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'car-side']"
+								/>
+								Fahrzeuge" wird der gesamte Überschuss in das EV
+								geladen. Ist die maximale Ladeleistung der
+								Fahrzeuge erreicht und es wird eingespeist, wird
+								dieser Überschuss in den Speicher geladen.
+							</p>
+							<p>
+								Bei Auswahl "
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'fa-car-battery']"
+								/>
+								Speicher" wird der gesamte Überschuss in den
+								Speicher geladen. Ist die maximale Ladeleistung
+								des Speichers erreicht und es wird eingespeist,
+								wird dieser Überschuss unter Beachtung der
+								Einschaltschwelle in die Fahrzeuge geladen.
+							</p>
+							<p>
+								Bei Auswahl "
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'fa-battery-half']"
+								/>
+								Mindest-SoC des Speichers" wird der Überschuss
+								bis zum Mindest-SoC in den Speicher geladen. Ist
+								die maximale Ladeleistung des Speichers erreicht
+								und es wird eingespeist, wird dieser Überschuss
+								in die Fahrzeuge geladen. Wird der Mindest-SoC
+								überschritten, wird der Überschuss ins Fahrzeug
+								geladen.
+							</p>
 						</template>
 					</openwb-base-button-group-input>
 					<div v-if="batMode === 'min_soc_bat_mode'">
+						<openwb-base-range-input
+							title="Mindest-SoC des Speichers"
+							:min="0"
+							:max="100"
+							:step="1"
+							unit="%"
+							:required
+							:model-value="
+								$store.state.mqtt[
+									'openWB/general/chargemode_config/pv_charging/min_bat_soc'
+								]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/general/chargemode_config/pv_charging/min_bat_soc',
+									$event,
+								)
+							"
+						>
+						</openwb-base-range-input>
+						<openwb-base-heading
+							>Speicher-SoC unterhalb
+							Mindest-SoC</openwb-base-heading
+						>
 						<openwb-base-button-group-input
-							title="Ladeleistung für Speicher unterhalb des Mindest-SoC des Speichers"
+							title="Ladeleistung für Speicher reservieren"
 							:buttons="[
 								{
 									buttonValue: false,
@@ -430,6 +495,7 @@
 									'openWB/general/chargemode_config/pv_charging/bat_power_reserve_active'
 								]
 							"
+							title="Reserve Ladeleistung"
 							:min="0.1"
 							:step="0.1"
 							unit="kW"
@@ -447,28 +513,12 @@
 							"
 						>
 						</openwb-base-number-input>
-						<openwb-base-range-input
-							title="Mindest-SoC des Speichers"
-							:min="0"
-							:max="100"
-							:step="1"
-							unit="%"
-							:required
-							:model-value="
-								$store.state.mqtt[
-									'openWB/general/chargemode_config/pv_charging/min_bat_soc'
-								]
-							"
-							@update:model-value="
-								updateState(
-									'openWB/general/chargemode_config/pv_charging/min_bat_soc',
-									$event,
-								)
-							"
+						<openwb-base-heading
+							>Speicher-SoC oberhalb
+							Mindest-SoC</openwb-base-heading
 						>
-						</openwb-base-range-input>
 						<openwb-base-button-group-input
-							title="Entladeleistung des Speichers oberhalb des Mindest-SoC des Speichers"
+							title="Entladung des Speichers erlauben"
 							:buttons="[
 								{
 									buttonValue: false,
@@ -509,6 +559,7 @@
 									'openWB/general/chargemode_config/pv_charging/bat_power_discharge_active'
 								]
 							"
+							title="Erlaubte Entladeleistung"
 							:min="0.1"
 							:step="0.1"
 							unit="kW"
@@ -542,9 +593,22 @@
 <script>
 import ComponentState from "../components/mixins/ComponentState.vue";
 
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+	faCarBattery as fasCarBattery,
+	faCarSide as fasCarSide,
+	faBatteryHalf as fasBatteryHalf,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(fasCarBattery, fasCarSide, fasBatteryHalf);
+
 export default {
 	name: "OpenwbPVChargeConfig",
 	mixins: [ComponentState],
+	components: {
+		FontAwesomeIcon,
+	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [

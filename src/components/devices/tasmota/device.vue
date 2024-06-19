@@ -1,21 +1,29 @@
 <template>
-	<div class="device-openwb-evukit-counter">
+	<div class="device-tasmota">
 		<openwb-base-heading>
-			Einstellungen für openWB EVU-Kit Zähler
+			Einstellungen für Tasmota
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
+		<openwb-base-text-input
+			title="IP oder Hostname"
+			subtype="host"
+			required
+			:model-value="configuration.ip_address"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.ip_address')
+			"
+		/>
 		<openwb-base-select-input
-			title="Zählermodell"
+			title="Phase"
 			notSelected="Bitte auswählen"
 			:options="[
-				{ value: 3, text: 'B23' },
-				{ value: 1, text: 'Lovato' },
-				{ value: 0, text: 'MPM3PM' },
-				{ value: 2, text: 'SDM630/SDM72D-M' },
+				{ value: 1, text: '1' },
+				{ value: 2, text: '2' },
+				{ value: 3, text: '3' },
 			]"
-			:model-value="configuration.version"
+			:model-value="configuration.phase"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.version')
+				updateConfiguration($event, 'configuration.phase')
 			"
 		/>
 	</div>
@@ -23,12 +31,11 @@
 
 <script>
 export default {
-	name: "DeviceOpenwbEvukitCounter",
+	name: "DeviceTasmota",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
 		deviceId: { default: undefined },
-		componentId: { required: true },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {

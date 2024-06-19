@@ -3,31 +3,34 @@
 		<form name="generalConfigForm">
 			<openwb-base-card title="Steuerungsmodus">
 				<openwb-base-alert subtype="info">
-					Wird für den Steuerungsmodus "primary" gewählt, übernimmt
-					diese openWB die alleinige Regelung und steuert ggf.
-					vorhandene weitere openWB (z.B. externe openWB im
-					Steuermodus secondary, openWB Pro, Satellit u.a.) fern. Sie
-					werden in den Ladepunkt-Einstellungen der primary-openWB
-					hinzugefügt.
-					<br /><br />
-					Wird für den Steuerungsmodus "secondary" gewählt, übernimmt
-					diese openWB keine Regelung und muss von einer anderen
-					primary openWB ferngesteuert werden. Wichtig ist, dass in
-					der secondary-openWB eine "interne openWB" mit der korrekten
-					Bauart (= openWB-Hardwarevariante z.B. "Custom, Standard,
-					Standard+, Duo, Buchse") konfiguriert ist. Bei einer Duo
-					sind zwei "interne openWB" zu konfigurieren. Im
-					"secondary"-Modus bleiben alle ausgeblendeten Einstellungen
-					unbeachtet.<br />
-					Eine bebilderte Anleitung zur Konfiguration der Ladepunkte
-					findest Du auf der
-					<a
-						href="https://openwb.de/main/?page_id=1025"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						Homepage </a
-					>.
+					<p>
+						Wird für den Steuerungsmodus "primary" gewählt,
+						übernimmt diese openWB die alleinige Regelung und
+						steuert ggf. vorhandene weitere openWB (z.B. externe
+						openWB im Steuermodus secondary, openWB Pro, Satellit
+						u.a.) fern. Sie werden in den Ladepunkt-Einstellungen
+						der primary-openWB hinzugefügt.
+					</p>
+					<p>
+						Wird für den Steuerungsmodus "secondary" gewählt,
+						übernimmt diese openWB keine Regelung und muss von einer
+						anderen primary openWB ferngesteuert werden. Wichtig
+						ist, dass in der secondary-openWB eine "interne openWB"
+						mit der korrekten Bauart (= openWB-Hardwarevariante z.B.
+						"Custom, Standard, Standard+, Duo, Buchse") konfiguriert
+						ist. Bei einer Duo sind zwei "interne openWB" zu
+						konfigurieren. Im "secondary"-Modus bleiben alle
+						ausgeblendeten Einstellungen unbeachtet.<br />
+						Eine bebilderte Anleitung zur Konfiguration der
+						Ladepunkte findest Du auf der
+						<a
+							href="https://openwb.de/main/?page_id=1025"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							Homepage </a
+						>.
+					</p>
 				</openwb-base-alert>
 				<openwb-base-button-group-input
 					title="Steuerungsmodus"

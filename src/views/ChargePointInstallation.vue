@@ -483,33 +483,37 @@
 									)
 								"
 							/>
-							<openwb-base-array-input
-								title="Zugeordnete ID-Tags"
-								noElementsMessage="Keine ID-Tags zugeordnet."
-								:model-value="chargePointTemplate.valid_tags"
-								@update:model-value="
-									updateState(
-										chargePointTemplateKey,
-										$event,
-										'valid_tags',
-									)
-								"
-							>
-								<template #help>
-									Wenn hier Tags eingetragen werden, können
-									nur die eingetragenen Tags zur
-									Fahrzeug-Zuordnung genutzt werden. Sind
-									keine Tags eingetragen, wird nur die
-									Zuordnung zum Fahrzeug geprüft. In diesem
-									Fall können alle Fahrzeuge diesen Ladepunkt
-									nutzen.
-									<br />
-									<span
-										v-html="$store.state.text.rfidWiki"
-									></span>
-								</template>
-							</openwb-base-array-input>
-							<hr />
+							<div v-if="chargePointTemplate.rfid_enabling">
+								<openwb-base-array-input
+									title="Zugeordnete ID-Tags"
+									noElementsMessage="Keine ID-Tags zugeordnet."
+									:model-value="
+										chargePointTemplate.valid_tags
+									"
+									@update:model-value="
+										updateState(
+											chargePointTemplateKey,
+											$event,
+											'valid_tags',
+										)
+									"
+								>
+									<template #help>
+										Wenn hier Tags eingetragen werden,
+										können nur die eingetragenen Tags zur
+										Fahrzeug-Zuordnung genutzt werden. Sind
+										keine Tags eingetragen, wird nur die
+										Zuordnung zum Fahrzeug geprüft. In
+										diesem Fall können alle Fahrzeuge diesen
+										Ladepunkt nutzen.
+										<br />
+										<span
+											v-html="$store.state.text.rfidWiki"
+										></span>
+									</template>
+								</openwb-base-array-input>
+								<hr />
+							</div>
 						</div>
 						<openwb-base-heading>
 							Angaben zum konfigurierten Ladestrom der openWB
