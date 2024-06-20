@@ -255,11 +255,12 @@
 						</openwb-base-alert>
 					</openwb-base-card>
 					<hr v-if="Object.keys(installedDevices).length > 0" />
-					<openwb-base-select-input
+					<openwb-base-select-input v-if="hasData"
 						class="mb-2"
 						title="Verfügbare Geräte"
 						notSelected="Bitte auswählen"
-						:options="getDeviceList()"
+						:options="getDeviceList.options"
+						:groups="getDeviceList.groups"
 						:model-value="deviceToAdd"
 						@update:model-value="deviceToAdd = $event"
 					>
@@ -380,21 +381,114 @@ export default {
 			showComponentRemoveModal: false,
 			modalComponent: undefined,
 			modalComponentName: "",
+			openWB_arr: [],
+			generic_arr: [],
+			other_arr: [],
+			run_load: false,
+			hasData: false,
 		};
 	},
 	computed: {
-		installedDevices: {
+		isLoading() {
+			console.info("un_load: " , this.run_load);
+				while(!this.run_load){
+					return this.$store.state.mqtt[
+						"openWB/system/configurable/devices_components"
+					];
+				}
+			},
+		getDeviceListOpenWB()
+		{ 
+			if(this.hasData){
+				for (const element of Object.values(
+					this.isLoading
+				)) {
+					if (element.group.includes("openWB")) {
+						this.openWB_arr.push({
+							value: element.value,
+							text: element.text,
+						});
+					}
+				}
+				
+				return this.openWB_arr;
+			}
+		},
+		getDeviceListGeneric()
+		{
+			if(this.hasData){
+				for (const element of Object.values(
+					this.isLoading
+				)) {
+					if (element.group.includes("generic")) {
+						this.generic_arr.push({
+							value: element.value,
+							text: element.text,
+						});
+					}
+				}
+				return this.generic_arr;
+			}
+		},
+		getDeviceListOther()
+		{
+			if(this.hasData){
+				for (const element of Object.values(
+					this.isLoading
+				)) {
+					if (element.group.includes("other")) {
+						this.other_arr.push({
+							value: element.value,
+							text: element.text,
+						});
+					}
+				}
+				return this.other_arr;
+			}
+			
+		},
+		getDeviceList() {
+			if(this.hasData){
+			let options = [
+
+			]
+			let groups = [
+				{
+					label: "openWB",
+					options: [...this.getDeviceListOpenWB]
+				},
+				{
+					label: "generisch",
+					options: [...this.getDeviceListGeneric]
+				},
+				{
+					label: "Systemhersteller",
+					options: [...this.getDeviceListOther]
+				},
+			];
+			//console.info("options: ", options);
+			//console.info("group: ", groups);
+			return {options:options, groups: groups};
+			}
+		},
+	installedDevices: {
 			get() {
 				return this.getWildcardTopics("openWB/system/device/+/config");
 			},
 		},
-		installedComponents: {
+	installedComponents: {
 			get() {
 				return this.getWildcardTopics(
 					"openWB/system/device/+/component/+/config",
 				);
 			},
 		},
+	},
+	watch: {
+		isLoading(){
+			console.info("Store data finally loaded");
+			this.hasData = true;
+		}
 	},
 	methods: {
 		getComponentTypeClass(type) {
@@ -457,11 +551,6 @@ export default {
 					data: { id: this.modalDevice },
 				});
 			}
-		},
-		getDeviceList() {
-			return this.$store.state.mqtt[
-				"openWB/system/configurable/devices_components"
-			];
 		},
 		addComponent(deviceId, deviceType, componentType) {
 			this.$emit("sendCommand", {
