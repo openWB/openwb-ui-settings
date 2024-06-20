@@ -454,12 +454,6 @@ export default {
 							text: element.text,
 						});
 					}
-				}
-				for (const element of Object.values(
-					this.$store.state.mqtt[
-						"openWB/system/configurable/devices_components"
-					],
-				)) {
 					if (element.group.includes("generic") && !this.run_end) {
 						this.generic_arr.push({
 							value: element.value,
@@ -467,12 +461,6 @@ export default {
 							text: element.text,
 						});
 					}
-				}
-				for (const element of Object.values(
-					this.$store.state.mqtt[
-						"openWB/system/configurable/devices_components"
-					],
-				)) {
 					if (element.group.includes("other") && !this.run_end) {
 						this.other_arr.push({
 							value: element.value,
@@ -481,6 +469,7 @@ export default {
 						});
 					}
 				}
+
 				this.run_end = true;
 				if (this.selectManufacturer == "openWB") {
 					return this.openWB_arr;
