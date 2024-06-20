@@ -390,7 +390,6 @@ export default {
 	},
 	computed: {
 		isLoading() {
-			console.info("un_load: " , this.run_load);
 				while(!this.run_load){
 					return this.$store.state.mqtt[
 						"openWB/system/configurable/devices_components"
