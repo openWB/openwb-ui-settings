@@ -10,7 +10,7 @@
 				</div>
 				<div v-else>
 					<openwb-base-button-group-input
-						title="Anzahl Phasen"
+						title="Anzahl Phasen Zielladen"
 						:buttons="[
 							{ buttonValue: 1, text: '1' },
 							{ buttonValue: 3, text: 'Maximum' },
@@ -39,18 +39,9 @@
 							zwischen 1- und 3-phasig (s.g. 1p3p).
 						</template>
 					</openwb-base-button-group-input>
-				</div>
-			</openwb-base-card>
-			<openwb-base-card title="Phasenumschaltung bei PV-Überschuss">
-				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-					<openwb-base-alert subtype="info">
-						Diese Einstellungen sind nicht verfügbar, solange sich
-						diese openWB im Steuerungsmodus "secondary" befindet.
-					</openwb-base-alert>
-				</div>
-				<div v-else>
+					<hr />
 					<openwb-base-button-group-input
-						title="Anzahl Phasen"
+						title="Anzahl Phasen bei PV-Überschuss"
 						:buttons="[
 							{ buttonValue: 1, text: '1' },
 							{ buttonValue: 3, text: 'Maximum' },
