@@ -381,7 +381,6 @@ export default {
 			showComponentRemoveModal: false,
 			modalComponent: undefined,
 			modalComponentName: "",
-
 			hasData: false,
 		};
 	},
