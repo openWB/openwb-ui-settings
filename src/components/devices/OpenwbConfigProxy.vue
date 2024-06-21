@@ -29,8 +29,7 @@ export default {
 			deviceTypeMod: undefined,
 		};
 	},
-	computed: {},
-	methods: {
+	computed: {
 		myComponent() {
 			if (!this.deviceType.includes(".")) {
 				console.debug(
@@ -52,26 +51,33 @@ export default {
 				}
 			}
 			if (this.deviceType.includes(".")) {
-				this.deviceTypeMod = this.deviceType.split(".")[1];
 				console.debug(
-					`loading component: ${this.deviceTypeMod} / ${this.componentType}`,
+					`loading component: ${this.alterPath(this.deviceTypeMod)} / ${this.componentType}`,
 				);
 				if (this.componentType !== undefined) {
 					return defineAsyncComponent({
 						loader: () =>
 							import(
-								`./${this.deviceTypeMod}/${this.componentType}.vue`
+								`./${this.alterPath(this.deviceTypeMod)}/${this.componentType}.vue`
 							),
 						errorComponent: OpenwbDeviceConfigFallback,
 					});
 				} else {
 					return defineAsyncComponent({
 						loader: () =>
-							import(`./${this.deviceTypeMod}/device.vue`),
+							import(
+								`./${this.alterPath(this.deviceTypeMod)}/device.vue`
+							),
 						errorComponent: OpenwbDeviceConfigFallback,
 					});
 				}
 			}
+			return [];
+		},
+	},
+	methods: {
+		alterPath() {
+			return (this.deviceTypeMod = this.deviceType.split(".")[1]);
 		},
 		updateConfiguration(event) {
 			this.$emit("update:configuration", event);
