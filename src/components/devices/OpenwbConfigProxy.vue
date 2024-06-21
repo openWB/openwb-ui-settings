@@ -24,56 +24,55 @@ export default {
 		componentType: { type: String, default: undefined },
 		configuration: { type: Object, required: true },
 	},
-	data(){
+	data() {
 		return {
 			deviceTypeMod: undefined,
-		}
+		};
 	},
-	computed: {
+	computed: {},
+	methods: {
 		myComponent() {
-			if(!this.deviceType.includes(".")){
-			console.debug(
-				`loading component: ${this.deviceType} / ${this.componentType}`,
-			);
-			if (this.componentType !== undefined) {
-				return defineAsyncComponent({
-					loader: () =>
-						import(
-							`./${this.deviceType}/${this.componentType}.vue`
-						),
-					errorComponent: OpenwbDeviceConfigFallback,
-				});
-			} else {
-				return defineAsyncComponent({
-					loader: () => import(`./${this.deviceType}/device.vue`),
-					errorComponent: OpenwbDeviceConfigFallback,
-				});
+			if (!this.deviceType.includes(".")) {
+				console.debug(
+					`loading component: ${this.deviceType} / ${this.componentType}`,
+				);
+				if (this.componentType !== undefined) {
+					return defineAsyncComponent({
+						loader: () =>
+							import(
+								`./${this.deviceType}/${this.componentType}.vue`
+							),
+						errorComponent: OpenwbDeviceConfigFallback,
+					});
+				} else {
+					return defineAsyncComponent({
+						loader: () => import(`./${this.deviceType}/device.vue`),
+						errorComponent: OpenwbDeviceConfigFallback,
+					});
+				}
 			}
-			}
-			if(this.deviceType.includes(".")){
+			if (this.deviceType.includes(".")) {
 				this.deviceTypeMod = this.deviceType.split(".")[1];
 				console.debug(
-				`loading component: ${this.deviceTypeMod} / ${this.componentType}`,
-			);
+					`loading component: ${this.deviceTypeMod} / ${this.componentType}`,
+				);
 				if (this.componentType !== undefined) {
-				return defineAsyncComponent({
-					loader: () =>
-						import(
-							`./${this.deviceTypeMod}/${this.componentType}.vue`
-						),
-					errorComponent: OpenwbDeviceConfigFallback,
-				});
-			} else {
-				return defineAsyncComponent({
-					loader: () => import(`./${this.deviceTypeMod}/device.vue`),
-					errorComponent: OpenwbDeviceConfigFallback,
-				});
-			}
-				
+					return defineAsyncComponent({
+						loader: () =>
+							import(
+								`./${this.deviceTypeMod}/${this.componentType}.vue`
+							),
+						errorComponent: OpenwbDeviceConfigFallback,
+					});
+				} else {
+					return defineAsyncComponent({
+						loader: () =>
+							import(`./${this.deviceTypeMod}/device.vue`),
+						errorComponent: OpenwbDeviceConfigFallback,
+					});
+				}
 			}
 		},
-	},
-	methods: {
 		updateConfiguration(event) {
 			this.$emit("update:configuration", event);
 		},

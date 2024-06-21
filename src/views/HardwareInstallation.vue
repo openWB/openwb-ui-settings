@@ -255,11 +255,11 @@
 						</openwb-base-alert>
 					</openwb-base-card>
 					<hr v-if="Object.keys(installedDevices).length > 0" />
-					<openwb-base-select-input v-if="hasData"
+					<openwb-base-select-input
+						v-if="hasData"
 						class="mb-2"
 						title="Verfügbare Geräte"
 						notSelected="Bitte auswählen"
-						:options="getDeviceList.options"
 						:groups="getDeviceList.groups"
 						:model-value="deviceToAdd"
 						@update:model-value="deviceToAdd = $event"
@@ -381,101 +381,75 @@ export default {
 			showComponentRemoveModal: false,
 			modalComponent: undefined,
 			modalComponentName: "",
-			openWB_arr: [],
-			generic_arr: [],
-			other_arr: [],
-			run_load: false,
+
 			hasData: false,
 		};
 	},
 	computed: {
 		isLoading() {
-				while(!this.run_load){
-					return this.$store.state.mqtt[
-						"openWB/system/configurable/devices_components"
-					];
-				}
-			},
-		getDeviceListOpenWB()
-		{ 
-			if(this.hasData){
-				for (const element of Object.values(
-					this.isLoading
-				)) {
-					if (element.group.includes("openWB")) {
-						this.openWB_arr.push({
-							value: element.value,
-							text: element.text,
-						});
-					}
-				}
-				
-				return this.openWB_arr;
-			}
+			return this.$store.state.mqtt[
+				"openWB/system/configurable/devices_components"
+			];
 		},
-		getDeviceListGeneric()
-		{
-			if(this.hasData){
-				for (const element of Object.values(
-					this.isLoading
-				)) {
-					if (element.group.includes("generic")) {
-						this.generic_arr.push({
-							value: element.value,
-							text: element.text,
-						});
-					}
+		getDeviceListOpenWB() {
+			var openWB_arr = [];
+			for (const element of Object.values(this.isLoading)) {
+				if (element.group.includes("openWB")) {
+					openWB_arr.push({
+						value: element.value,
+						text: element.text,
+					});
 				}
-				return this.generic_arr;
 			}
+			return openWB_arr;
 		},
-		getDeviceListOther()
-		{
-			if(this.hasData){
-				for (const element of Object.values(
-					this.isLoading
-				)) {
-					if (element.group.includes("other")) {
-						this.other_arr.push({
-							value: element.value,
-							text: element.text,
-						});
-					}
+		getDeviceListGeneric() {
+			var generic_arr = [];
+			for (const element of Object.values(this.isLoading)) {
+				if (element.group.includes("generic")) {
+					generic_arr.push({
+						value: element.value,
+						text: element.text,
+					});
 				}
-				return this.other_arr;
 			}
-			
+			return generic_arr;
+		},
+		getDeviceListOther() {
+			var other_arr = [];
+			for (const element of Object.values(this.isLoading)) {
+				if (element.group.includes("other")) {
+					other_arr.push({
+						value: element.value,
+						text: element.text,
+					});
+				}
+			}
+			return other_arr;
 		},
 		getDeviceList() {
-			if(this.hasData){
-			let options = [
-
-			]
 			let groups = [
 				{
 					label: "openWB",
-					options: [...this.getDeviceListOpenWB]
+					options: [...this.getDeviceListOpenWB],
 				},
 				{
 					label: "generisch",
-					options: [...this.getDeviceListGeneric]
+					options: [...this.getDeviceListGeneric],
 				},
 				{
 					label: "Systemhersteller",
-					options: [...this.getDeviceListOther]
+					options: [...this.getDeviceListOther],
 				},
 			];
-			//console.info("options: ", options);
-			//console.info("group: ", groups);
-			return {options:options, groups: groups};
-			}
+			return { groups: groups };
 		},
-	installedDevices: {
+		installedDevices: {
 			get() {
 				return this.getWildcardTopics("openWB/system/device/+/config");
 			},
 		},
-	installedComponents: {
+		installedComponents: {
 			get() {
 				return this.getWildcardTopics(
 					"openWB/system/device/+/component/+/config",
@@ -484,10 +458,10 @@ export default {
 		},
 	},
 	watch: {
-		isLoading(){
+		isLoading() {
 			console.info("Store data finally loaded");
-			this.hasData = true;
-		}
+			return (this.hasData = true);
+		},
 	},
 	methods: {
 		getComponentTypeClass(type) {
