@@ -22,7 +22,7 @@
 			"
 		>
 			<template #help>
-				Die Standard Modbus ID von M-Tec ist 247
+				Die Standard-Modbus-ID von M-Tec ist 247
 			</template>
 		</openwb-base-number-input>
 	</div>
