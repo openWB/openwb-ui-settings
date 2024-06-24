@@ -258,9 +258,22 @@
 					<openwb-base-select-input
 						v-if="hasData"
 						class="mb-2"
-						title="Verfügbare Geräte"
+						title="Hersteller"
 						notSelected="Bitte auswählen"
 						:groups="getDeviceList.groups"
+						:model-value="selectManufacturer"
+						@update:model-value="selectManufacturer = $event"
+					>
+						<template #append>
+							<span class="col-1"> </span>
+						</template>
+					</openwb-base-select-input>
+					<openwb-base-select-input
+						v-if="selectManufacturer"
+						class="mb-2"
+						title="Verfügbare Geräte"
+						notSelected="Bitte auswählen"
+						:options="getManufacturerList"
 						:model-value="deviceToAdd"
 						@update:model-value="deviceToAdd = $event"
 					>
@@ -382,6 +395,7 @@ export default {
 			modalComponent: undefined,
 			modalComponentName: "",
 			hasData: false,
+			selectManufacturer: undefined,
 		};
 	},
 	computed: {
@@ -417,21 +431,53 @@ export default {
 		getDeviceListOther() {
 			var other_arr = [];
 			for (const element of Object.values(this.isLoading)) {
-				if (element.group.includes("other")) {
+				if (
+					element.group.includes("other") &&
+					!element.value.includes(".")
+				) {
 					other_arr.push({
 						value: element.value,
 						text: element.text,
 					});
 				}
+				if (element.value.includes(".")) {
+					other_arr.push({
+						value: element.value,
+						text: element.value.split(".")[0],
+					});
+				}
 			}
-			return other_arr;
+			return this.removeDuplicates(other_arr);
+		},
+		getManufacturerList() {
+			var manufacturer_arr = [];
+			for (const element of Object.values(this.isLoading)) {
+				manufacturer_arr.push({
+					value: element.value,
+					text: element.text,
+				});
+			}
+			if (this.selectManufacturer.includes(".")) {
+				if (this.selectManufacturer != "" && this.selectManufacturer) {
+					manufacturer_arr = manufacturer_arr.filter((item) => {
+						return item.value.includes(
+							this.selectManufacturer.split(".")[0],
+						);
+					});
+				}
+			}
+			if (!this.selectManufacturer.includes(".")) {
+				if (this.selectManufacturer != "" && this.selectManufacturer) {
+					manufacturer_arr = manufacturer_arr.filter((item) => {
+						return item.value.includes(this.selectManufacturer);
+					});
+				}
+			}
+			this.reset();
+			return manufacturer_arr;
 		},
 		getDeviceList() {
 			let groups = [
-				{
-					label: "openWB",
-					options: [...this.getDeviceListOpenWB],
-				},
 				{
 					label: "generisch",
 					options: [...this.getDeviceListGeneric],
@@ -463,6 +509,21 @@ export default {
 		},
 	},
 	methods: {
+		reset() {
+			//reset this.deviceToAdd to undefined to prevent error from not updating model-value if manufacturer changed
+			this.deviceToAdd = undefined;
+			return;
+		},
+		removeDuplicates(data) {
+			let res = data.filter(
+				(obj, index, self) =>
+					index ===
+					self.findIndex(
+						(t) => t.id === obj.id && t.text === obj.text,
+					),
+			);
+			return res;
+		},
 		getComponentTypeClass(type) {
 			if (type.match(/^(.+_)?counter(_.+)?$/)) {
 				return "danger";
