@@ -227,6 +227,8 @@
 								"
 							/>
 							<openwb-base-alert subtype="info">
+								Die hier eingetragenen ID-Tags dienen
+								ausschließlich der Fahrzeugzuordnung.<br />
 								<span v-html="$store.state.text.rfidWiki" />
 							</openwb-base-alert>
 							<hr />
@@ -1045,35 +1047,6 @@
 								Zeitplan aktiv ist oder das Limit des Zeitplans
 								erreicht wurde, wird der Lademodus verwendet,
 								der bei "Aktiver Lademodus" ausgewählt ist.
-							</template>
-						</openwb-base-button-group-input>
-						<openwb-base-button-group-input
-							title="Sperre nach Abstecken"
-							:buttons="[
-								{
-									buttonValue: false,
-									text: 'Nein',
-									class: 'btn-outline-danger',
-								},
-								{
-									buttonValue: true,
-									text: 'Ja',
-									class: 'btn-outline-success',
-								},
-							]"
-							:model-value="template.disable_after_unplug"
-							@update:model-value="
-								updateState(
-									templateKey,
-									$event,
-									'disable_after_unplug',
-								)
-							"
-						>
-							<template #help>
-								Wird ein Fahrzeug mit diesem Profil abgesteckt,
-								dann wird der betroffene Ladepunkt automatisch
-								deaktiviert.
 							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-button-group-input
