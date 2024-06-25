@@ -9,7 +9,7 @@
 			notSelected="Bitte auswählen"
 			:options="[
 				{ value: 2, text: 'Gen 2' },
-				{ value: 3, text: 'Gen 3' }
+				{ value: 3, text: 'Gen 3' },
 			]"
 			:model-value="configuration.generation"
 			@update:model-value="

@@ -2,8 +2,8 @@
 	<div class="electricity-tariff-energycharts">
 		<openwb-base-alert subtype="info">
 			Börsenstrompreise von Energy Charts (energy-charts.info)<br />
-			Die Rohdaten werden von Wissenschaftlern des Fraunhofer-Instituts für
-			Solare Energiesysteme ISE aus zahlreichen Quellen stündlich oder
+			Die Rohdaten werden von Wissenschaftlern des Fraunhofer-Instituts
+			für Solare Energiesysteme ISE aus zahlreichen Quellen stündlich oder
 			täglich abgerufen und für die Darstellung aufbereitet.
 		</openwb-base-alert>
 		<openwb-base-select-input

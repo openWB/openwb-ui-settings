@@ -94,7 +94,10 @@ export default {
 			var logContents = "";
 
 			for (let i = 4; i >= 1; i--) {
-				const result = await this.getFilePromise(fileName + "." + i, true);
+				const result = await this.getFilePromise(
+					fileName + "." + i,
+					true,
+				);
 				logContents += result;
 			}
 
