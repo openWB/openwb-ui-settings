@@ -118,6 +118,37 @@
 							zurückgesetzt.
 						</template>
 					</openwb-base-button-group-input>
+					<openwb-base-range-input
+						title="Verzögerung automat. Phasenumschaltung"
+						:min="1"
+						:max="15"
+						:step="1"
+						unit="Min."
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/chargemode_config/phase_switch_delay'
+							]
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/chargemode_config/phase_switch_delay',
+								$event,
+							)
+						"
+					>
+						<template #help>
+							Um zu viele Umschaltungen zu vermeiden, wird Anhand
+							dieses Wertes definiert, wann die Umschaltung
+							erfolgen soll. Ist für durchgehend x Minuten die
+							Maximalstromstärke erreicht, wird auf mehrphasige
+							Ladung umgestellt. Ist die Ladung nur für ein
+							Intervall unterhalb der Maximalstromstärke, beginnt
+							das Intervall für die Umschaltung erneut. Ist die
+							Ladung im mehrphasigen Modus für 16 - x Minuten auf
+							der Minimalstromstärke, wird wieder auf einphasige
+							Ladung gewechselt.
+						</template>
+					</openwb-base-range-input>
 					<hr />
 					<openwb-base-heading>
 						Berechnung der Ladekosten
@@ -271,6 +302,7 @@ export default {
 		return {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
+				"openWB/general/chargemode_config/phase_switch_delay",
 				"openWB/general/chargemode_config/retry_failed_phase_switches",
 				"openWB/general/chargemode_config/unbalanced_load",
 				"openWB/general/chargemode_config/unbalanced_load_limit",
