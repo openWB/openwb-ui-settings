@@ -342,7 +342,6 @@ export default {
 			const officialBranches = [
 				releaseBranch,
 				betaBranch,
-				developmentBranch,
 			];
 
 			const compareBranches = (a, b) => {
@@ -362,6 +361,7 @@ export default {
 				this.$store.state.mqtt["openWB/system/available_branches"];
 			var groups = [
 				{ label: "Allgemein", options: [] },
+				{ label: "Alpha-Zweig", options: [] },
 				{ label: "Experimentell", options: [] },
 			];
 			if (source !== undefined) {
@@ -369,8 +369,11 @@ export default {
 				for (const [key, value] of Object.entries(source)) {
 					if (officialBranches.includes(key)) {
 						targetGroup = 0;
-					} else {
+					} else if (key == developmentBranch) {
 						targetGroup = 1;
+					}
+					else {
+						targetGroup = 2;
 					}
 					groups[targetGroup].options.push({
 						value: key,
