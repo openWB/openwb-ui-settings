@@ -260,6 +260,7 @@
 						class="mb-2"
 						title="Hersteller"
 						notSelected="Bitte auswählen"
+						:options="getDeviceList.options"
 						:groups="getDeviceList.groups"
 						:model-value="selectManufacturer"
 						@update:model-value="selectManufacturer = $event"
@@ -433,14 +434,18 @@ export default {
 			for (const element of Object.values(this.isLoading)) {
 				if (
 					element.group.includes("other") &&
-					!element.value.includes(".")
+					!element.value.includes(".") &&
+					!element.value.includes("openWB")
 				) {
 					other_arr.push({
 						value: element.value,
 						text: element.text,
 					});
 				}
-				if (element.value.includes(".")) {
+				if (
+					element.value.includes(".") &&
+					!element.value.includes("openWB")
+				) {
 					other_arr.push({
 						value: element.value,
 						text: element.value.split(".")[0],
@@ -477,6 +482,12 @@ export default {
 			return manufacturer_arr;
 		},
 		getDeviceList() {
+			let options = [
+				{
+					value: "openWB",
+					text: "openWB",
+				},
+			];
 			let groups = [
 				{
 					label: "generisch",
@@ -487,7 +498,7 @@ export default {
 					options: [...this.getDeviceListOther],
 				},
 			];
-			return { groups: groups };
+			return { options: options, groups: groups };
 		},
 		installedDevices: {
 			get() {
@@ -511,13 +522,11 @@ export default {
 	methods: {
 		reset(length) {
 			//reset this.deviceToAdd to undefined to prevent error from not updating model-value if manufacturer changed
-			if(length <= 1){
+			if (length <= 1) {
 				this.deviceToAdd = this.selectManufacturer;
-			}
-			else{
+			} else {
 				this.deviceToAdd = undefined;
 			}
-			
 			return;
 		},
 		removeDuplicates(data) {
