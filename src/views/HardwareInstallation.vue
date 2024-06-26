@@ -473,7 +473,7 @@ export default {
 					});
 				}
 			}
-			this.reset();
+			this.reset(manufacturer_arr.length);
 			return manufacturer_arr;
 		},
 		getDeviceList() {
@@ -509,9 +509,15 @@ export default {
 		},
 	},
 	methods: {
-		reset() {
+		reset(length) {
 			//reset this.deviceToAdd to undefined to prevent error from not updating model-value if manufacturer changed
-			this.deviceToAdd = undefined;
+			if(length <= 1){
+				this.deviceToAdd = this.selectManufacturer;
+			}
+			else{
+				this.deviceToAdd = undefined;
+			}
+			
 			return;
 		},
 		removeDuplicates(data) {
