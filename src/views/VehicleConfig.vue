@@ -1677,7 +1677,7 @@
 								</template>
 							</openwb-base-button-group-input>
 							<openwb-base-range-input
-								title="Ziel-SoC"
+								title="Fahrzeug-SoC zum Zielzeitpunkt"
 								v-if="plan.limit.selected == 'soc'"
 								:min="5"
 								:max="100"
@@ -1694,11 +1694,11 @@
 							>
 								<template #help>
 									SoC, der zum angegebenen Zeitpunkt erreicht
-									werden soll.
+									werden soll (Ziel-SoC).
 								</template>
 							</openwb-base-range-input>
 							<openwb-base-range-input
-								title="SoC-Limit"
+								title="Fahrzeug-SoC mit Überschuss"
 								v-if="plan.limit.selected == 'soc'"
 								:min="5"
 								:max="100"
@@ -1716,7 +1716,8 @@
 								<template #help>
 									Nach Erreichen des Ziel-SoCs wird mit
 									Überschuss weiter geladen, bis das SoC-Limit
-									erreicht wird.
+									erreicht wird. Sobald das SoC-Limit erreicht wurde,
+									findet keine Ladung mehr mit Überschuss statt!
 								</template>
 							</openwb-base-range-input>
 							<openwb-base-number-input
