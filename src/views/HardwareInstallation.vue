@@ -405,18 +405,6 @@ export default {
 				"openWB/system/configurable/devices_components"
 			];
 		},
-		getDeviceListOpenWB() {
-			var openWB_arr = [];
-			for (const element of Object.values(this.isLoading)) {
-				if (element.group.includes("openWB")) {
-					openWB_arr.push({
-						value: element.value,
-						text: element.text,
-					});
-				}
-			}
-			return openWB_arr;
-		},
 		getDeviceListGeneric() {
 			var generic_arr = [];
 			for (const element of Object.values(this.isLoading)) {
@@ -459,7 +447,7 @@ export default {
 			for (const element of Object.values(this.isLoading)) {
 				manufacturer_arr.push({
 					value: element.value,
-					text: element.text,
+					text: element.device,
 				});
 			}
 			if (this.selectManufacturer.includes(".")) {
