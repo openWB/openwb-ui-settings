@@ -2,75 +2,84 @@
 	<div class="optionalComponents">
 		<form name="optionalComponentsForm">
 			<openwb-base-card title="Identifikation von Fahrzeugen">
-				<openwb-base-button-group-input
-					title="Identifikation aktivieren"
-					:model-value="
-						$store.state.mqtt['openWB/optional/rfid/active']
-					"
-					@update:model-value="
-						updateState('openWB/optional/rfid/active', $event)
-					"
-					:buttons="[
-						{
-							buttonValue: false,
-							text: 'Aus',
-							class: 'btn-outline-danger',
-						},
-						{
-							buttonValue: true,
-							text: 'An',
-							class: 'btn-outline-success',
-						},
-					]"
-				>
-					<template #help>
-						Die Identifikation von Fahrzeugen kann auf mehreren
-						Wegen erfolgen:
-						<ul>
-							<li>
-								Über einen in der openWB verbauten RFID-Reader
-								(optional, z.B. anhand des Lieferscheins
-								prüfen).
-							</li>
-							<li>
-								Durch die automatische Erkennung an einer openWB
-								Pro (muss in den Einstellungen aktiviert
-								werden).
-							</li>
-							<li>
-								Durch manuelle Eingabe einer ID am Display einer
-								openWB.
-							</li>
-						</ul>
-					</template>
-				</openwb-base-button-group-input>
-				<div
-					v-if="
-						$store.state.mqtt['openWB/optional/rfid/active'] ===
-						true
-					"
-				>
-					<openwb-base-alert subtype="info" class="mb-1">
-						Die ID-Tags müssen in den Einstellungen der Fahrzeuge
-						diesen zugeordnet werden.<br />
-						Es kann zuerst das Fahrzeug angesteckt und dann der
-						ID-Tag erfasst werden oder anders herum. Im letzten Fall
-						muss innerhalb von 5 Minuten ein Fahrzeug angesteckt
-						werden, sonst wird der ID-Tag verworfen. Das Fahrzeug
-						wird erst nach dem Anstecken zugeordnet.<br />
-						<span v-html="$store.state.text.rfidWiki" />
+				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+					<openwb-base-alert subtype="info">
+						Weitere Einstellungen sind nicht verfügbar, solange sich
+						diese openWB im Steuerungsmodus "secondary" befindet.
 					</openwb-base-alert>
-					<openwb-base-textarea
-						title="Erkannte ID-Tags"
-						readonly
-						disabled
-						:model-value="idTagList.join('\n')"
+				</div>
+				<div v-else>
+					<openwb-base-button-group-input
+						title="Identifikation aktivieren"
+						:model-value="
+							$store.state.mqtt['openWB/optional/rfid/active']
+						"
+						@update:model-value="
+							updateState('openWB/optional/rfid/active', $event)
+						"
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Aus',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'An',
+								class: 'btn-outline-success',
+							},
+						]"
 					>
 						<template #help>
-							Solange diese Seite geöffnet ist, werden alle
-							erfassten ID-Tags in dieser Liste aufgeführt.
+							Die Identifikation von Fahrzeugen kann auf mehreren
+							Wegen erfolgen:
+							<ul>
+								<li>
+									Über einen in der openWB verbauten
+									RFID-Reader (optional, z.B. anhand des
+									Lieferscheins prüfen).
+								</li>
+								<li>
+									Durch die automatische Erkennung an einer
+									openWB Pro (muss in den Einstellungen
+									aktiviert werden).
+								</li>
+								<li>
+									Durch manuelle Eingabe einer ID am Display
+									einer openWB.
+								</li>
+							</ul>
 						</template>
-					</openwb-base-textarea>
+					</openwb-base-button-group-input>
+					<div
+						v-if="
+							$store.state.mqtt['openWB/optional/rfid/active'] ===
+							true
+						"
+					>
+						<openwb-base-alert subtype="info" class="mb-1">
+							Die ID-Tags müssen in den Einstellungen der
+							Fahrzeuge diesen zugeordnet werden.<br />
+							Es kann zuerst das Fahrzeug angesteckt und dann der
+							ID-Tag erfasst werden oder anders herum. Im letzten
+							Fall muss innerhalb von 5 Minuten ein Fahrzeug
+							angesteckt werden, sonst wird der ID-Tag verworfen.
+							Das Fahrzeug wird erst nach dem Anstecken
+							zugeordnet.<br />
+							<span v-html="$store.state.text.rfidWiki" />
+						</openwb-base-alert>
+						<openwb-base-textarea
+							title="Erkannte ID-Tags"
+							readonly
+							disabled
+							:model-value="idTagList.join('\n')"
+						>
+							<template #help>
+								Solange diese Seite geöffnet ist, werden alle
+								erfassten ID-Tags in dieser Liste aufgeführt.
+							</template>
+						</openwb-base-textarea>
+					</div>
 				</div>
 			</openwb-base-card>
 			<!-- <openwb-base-card title="LED-Ausgänge">
@@ -1067,8 +1076,10 @@
 							Nach einer Änderung ist ein Neustart
 							erforderlich!<br />
 							Diese Einstellung erfordert ein Raspberry Pi
-							Display. Anzeigen, welche über HDMI angeschlossen
-							sind, werden nicht unterstützt.
+							Display. Für eine openWB series2 mit integriertem
+							Display muss 0° ausgewählt werden, für eine
+							Standalone mit Display 180°. Anzeigen, welche über
+							HDMI angeschlossen sind, werden nicht unterstützt.
 						</template>
 					</openwb-base-button-group-input>
 					<hr />
