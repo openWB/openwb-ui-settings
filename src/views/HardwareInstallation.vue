@@ -256,10 +256,25 @@
 					</openwb-base-card>
 					<hr v-if="Object.keys(installedDevices).length > 0" />
 					<openwb-base-select-input
+						v-if="hasData"
+						class="mb-2"
+						title="Hersteller"
+						notSelected="Bitte auswählen"
+						:options="getDeviceList.options"
+						:groups="getDeviceList.groups"
+						:model-value="selectManufacturer"
+						@update:model-value="selectManufacturer = $event"
+					>
+						<template #append>
+							<span class="col-1"> </span>
+						</template>
+					</openwb-base-select-input>
+					<openwb-base-select-input
+						v-if="selectManufacturer"
 						class="mb-2"
 						title="Verfügbare Geräte"
 						notSelected="Bitte auswählen"
-						:options="getDeviceList()"
+						:options="getManufacturerList"
 						:model-value="deviceToAdd"
 						@update:model-value="deviceToAdd = $event"
 					>
@@ -380,9 +395,99 @@ export default {
 			showComponentRemoveModal: false,
 			modalComponent: undefined,
 			modalComponentName: "",
+			hasData: false,
+			selectManufacturer: undefined,
 		};
 	},
 	computed: {
+		isLoading() {
+			return this.$store.state.mqtt[
+				"openWB/system/configurable/devices_components"
+			];
+		},
+		getDeviceListGeneric() {
+			var generic_arr = [];
+			for (const element of Object.values(this.isLoading)) {
+				if (element.group.includes("generic")) {
+					generic_arr.push({
+						value: element.value,
+						text: element.text,
+					});
+				}
+			}
+			return generic_arr;
+		},
+		getDeviceListOther() {
+			var other_arr = [];
+			for (const element of Object.values(this.isLoading)) {
+				if (
+					element.group.includes("other") &&
+					!element.value.includes(".") &&
+					!element.value.includes("openWB")
+				) {
+					other_arr.push({
+						value: element.value,
+						text: element.text,
+					});
+				}
+				if (
+					element.value.includes(".") &&
+					!element.value.includes("openWB")
+				) {
+					other_arr.push({
+						value: element.value,
+						text: element.value.split(".")[0],
+					});
+				}
+			}
+			return this.removeDuplicates(other_arr);
+		},
+		getManufacturerList() {
+			var manufacturer_arr = [];
+			for (const element of Object.values(this.isLoading)) {
+				manufacturer_arr.push({
+					value: element.value,
+					text: element.device,
+				});
+			}
+			if (this.selectManufacturer.includes(".")) {
+				if (this.selectManufacturer != "" && this.selectManufacturer) {
+					manufacturer_arr = manufacturer_arr.filter((item) => {
+						return item.value.includes(
+							this.selectManufacturer.split(".")[0],
+						);
+					});
+				}
+			}
+			if (!this.selectManufacturer.includes(".")) {
+				if (this.selectManufacturer != "" && this.selectManufacturer) {
+					manufacturer_arr = manufacturer_arr.filter((item) => {
+						return item.value.includes(this.selectManufacturer);
+					});
+				}
+			}
+			this.reset(manufacturer_arr.length);
+			return manufacturer_arr;
+		},
+		getDeviceList() {
+			let options = [
+				{
+					value: "openWB",
+					text: "openWB",
+				},
+			];
+			let groups = [
+				{
+					label: "generisch",
+					options: [...this.getDeviceListGeneric],
+				},
+				{
+					label: "Systemhersteller",
+					options: [...this.getDeviceListOther],
+				},
+			];
+			return { options: options, groups: groups };
+		},
 		installedDevices: {
 			get() {
 				return this.getWildcardTopics("openWB/system/device/+/config");
@@ -396,7 +501,32 @@ export default {
 			},
 		},
 	},
+	watch: {
+		isLoading() {
+			console.info("Store data finally loaded");
+			return (this.hasData = true);
+		},
+	},
 	methods: {
+		reset(length) {
+			//reset this.deviceToAdd to undefined to prevent error from not updating model-value if manufacturer changed
+			if (length <= 1) {
+				this.deviceToAdd = this.selectManufacturer;
+			} else {
+				this.deviceToAdd = undefined;
+			}
+			return;
+		},
+		removeDuplicates(data) {
+			let res = data.filter(
+				(obj, index, self) =>
+					index ===
+					self.findIndex(
+						(t) => t.id === obj.id && t.text === obj.text,
+					),
+			);
+			return res;
+		},
 		getComponentTypeClass(type) {
 			if (type.match(/^(.+_)?counter(_.+)?$/)) {
 				return "danger";
@@ -457,11 +587,6 @@ export default {
 					data: { id: this.modalDevice },
 				});
 			}
-		},
-		getDeviceList() {
-			return this.$store.state.mqtt[
-				"openWB/system/configurable/devices_components"
-			];
 		},
 		addComponent(deviceId, deviceType, componentType) {
 			this.$emit("sendCommand", {
