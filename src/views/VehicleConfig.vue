@@ -235,7 +235,7 @@
 						</div>
 						<openwb-base-select-input
 							class="mb-2"
-							title="SoC-Modul"
+							title="SoC-Modul des Fahrzeugs"
 							:options="socModuleList"
 							:model-value="
 								$store.state.mqtt[
@@ -1164,7 +1164,7 @@
 								},
 								{
 									buttonValue: 'soc',
-									text: 'SoC',
+									text: 'Fahrzeug-SoC',
 								},
 								{
 									buttonValue: 'amount',
@@ -1192,7 +1192,7 @@
 							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-range-input
-							title="SoC-Limit"
+							title="SoC-Limit für das Fahrzeug"
 							:min="5"
 							:max="100"
 							:step="5"
@@ -1286,7 +1286,7 @@
 							</template>
 						</openwb-base-range-input>
 						<openwb-base-range-input
-							title="SoC-Limit"
+							title="SoC-Limit für das Fahrzeug"
 							:min="0"
 							:max="20"
 							:step="1"
@@ -1341,7 +1341,7 @@
 							</template>
 						</openwb-base-range-input>
 						<openwb-base-range-input
-							title="Mindest-SoC"
+							title="Mindest-SoC für das Fahrzeug"
 							:min="0"
 							:max="19"
 							:step="1"
@@ -1482,8 +1482,8 @@
 								Ist der berechnete Zeitpunkt des Ladestarts noch
 								nicht erreicht, wird mit Überschuss geladen.
 								Auch nach Erreichen des Ziel-SoCs wird mit
-								Überschuss geladen, solange bis das "SoC-Limit"
-								erreicht wird.<br />
+								Überschuss geladen, solange bis das "SoC-Limit
+								für das Fahrzeug" erreicht wird.<br />
 								Kann der Ziel-SoC bzw. die Energiemenge NICHT
 								erreicht werden, z.B. weil das Auto zu spät
 								angesteckt wurde oder das Lastmanagement
@@ -1656,7 +1656,10 @@
 							<openwb-base-button-group-input
 								title="Ziel"
 								:buttons="[
-									{ buttonValue: 'soc', text: 'SoC' },
+									{
+										buttonValue: 'soc',
+										text: 'Fahrzeug-SoC',
+									},
 									{
 										buttonValue: 'amount',
 										text: 'Energie',
@@ -2006,7 +2009,10 @@
 								title="Ziel"
 								:buttons="[
 									{ buttonValue: 'none', text: 'Aus' },
-									{ buttonValue: 'soc', text: 'SoC' },
+									{
+										buttonValue: 'soc',
+										text: 'Fahrzeug-SoC',
+									},
 									{
 										buttonValue: 'amount',
 										text: 'Energie',
@@ -2027,7 +2033,7 @@
 								</template>
 							</openwb-base-button-group-input>
 							<openwb-base-range-input
-								title="Ziel-SoC"
+								title="Ziel-SoC für das Fahrzeug"
 								v-if="plan.limit.selected == 'soc'"
 								:min="5"
 								:max="100"
