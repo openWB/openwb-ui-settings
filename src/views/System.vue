@@ -339,10 +339,7 @@ export default {
 			const releaseBranch = "Release";
 			const betaBranch = "Beta";
 			const developmentBranch = "master";
-			const officialBranches = [
-				releaseBranch,
-				betaBranch,
-			];
+			const officialBranches = [releaseBranch, betaBranch];
 
 			const compareBranches = (a, b) => {
 				if (a.value == b.value) return 0;
@@ -371,8 +368,7 @@ export default {
 						targetGroup = 0;
 					} else if (key == developmentBranch) {
 						targetGroup = 1;
-					}
-					else {
+					} else {
 						targetGroup = 2;
 					}
 					groups[targetGroup].options.push({

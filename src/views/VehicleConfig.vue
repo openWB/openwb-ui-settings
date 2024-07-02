@@ -1716,8 +1716,9 @@
 								<template #help>
 									Nach Erreichen des Ziel-SoCs wird mit
 									Überschuss weiter geladen, bis das SoC-Limit
-									erreicht wird. Sobald das SoC-Limit erreicht wurde,
-									findet keine Ladung mehr mit Überschuss statt!
+									erreicht wird. Sobald das SoC-Limit erreicht
+									wurde, findet keine Ladung mehr mit
+									Überschuss statt!
 								</template>
 							</openwb-base-range-input>
 							<openwb-base-number-input

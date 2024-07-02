@@ -46,15 +46,15 @@
 			"
 		>
 			<template #help>
-				Die Wahl der API-Version beeinflusst die Auslesung der Speicherleistung 
-				und der Import/ Export Werte des Zählers.
+				Die Wahl der API-Version beeinflusst die Auslesung der
+				Speicherleistung und der Import/ Export Werte des Zählers.
 			</template>
 		</openwb-base-select-input>
 		<openwb-base-select-input
 			title="Firmware"
 			notSelected="Bitte auswählen"
 			:options="[
-				{ value: 8, text: 'ARM kleiner 9.0' },
+				{ value: 8, text: 'ARM < 9.0' },
 				{ value: 9, text: 'ARM ab 9.0' },
 			]"
 			:model-value="configuration.firmware"
@@ -63,8 +63,8 @@
 			"
 		>
 			<template #help>
-				Die Auswahl der Firmware-Version beeinflusst die 
-				Auslesung der Wirkleistung und der Phasenströme des Zählers.
+				Die Auswahl der Firmware-Version beeinflusst die Auslesung der
+				Wirkleistung und der Phasenströme des Zählers.
 			</template>
 		</openwb-base-select-input>
 	</div>
