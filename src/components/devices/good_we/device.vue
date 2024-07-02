@@ -54,7 +54,7 @@
 			title="Firmware"
 			notSelected="Bitte auswählen"
 			:options="[
-				{ value: 8, text: 'ARM < 9.0' },
+				{ value: 8, text: 'ARM kleiner 9.0' },
 				{ value: 9, text: 'ARM ab 9.0' },
 			]"
 			:model-value="configuration.firmware"
