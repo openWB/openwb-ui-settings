@@ -14,7 +14,33 @@
 			</p>
 		</template>
 		<template v-slot:content>
-			<DataManagement
+			<div class="system">
+		<openwb-base-alert v-if="!installAssistantActive" subtype="danger">
+			<h2>Achtung!</h2>
+			<p>
+				Vor allen Aktionen auf den folgenden Seiten ist sicherzustellen, dass
+				kein Ladevorgang aktiv ist! Zur Sicherheit bitte zusätzlich alle
+				Fahrzeuge von der Ladestation / den Ladestationen abstecken!
+			</p>
+			<openwb-base-button-group-input
+				title="Ich habe die Warnung verstanden"
+				:buttons="[
+					{
+						buttonValue: false,
+						text: 'Nein',
+						class: 'btn-outline-danger',
+					},
+					{
+						buttonValue: true,
+						text: 'Ja',
+						class: 'btn-outline-success',
+					},
+				]"
+				v-model="this.warningAcknowledged"
+			/>
+		</openwb-base-alert>
+		</div>
+			<DataManagement v-if="warningAcknowledged"
 				:installAssistantActive="true"
 				:showBackupCloudSection="false"
 				@send-command="$emit('sendCommand', $event)"
@@ -48,6 +74,7 @@ export default {
 	},
 	data: () => ({
 		mqttTopicsToSubscribe: [],
+		warningAcknowledged: false,
 	}),
 	methods: {
 		nextPage() {
