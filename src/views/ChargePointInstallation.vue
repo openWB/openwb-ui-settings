@@ -452,52 +452,56 @@
 								Zugangskontrolle
 							</openwb-base-heading>
 							<openwb-base-button-group-input
-								title="Freigabe durch ID-Tags"
+								title="Sperre nach Abstecken"
 								:buttons="[
-									{ buttonValue: false, text: 'Nein' },
-									{ buttonValue: true, text: 'Ja' },
+									{
+										buttonValue: false,
+										text: 'Nein',
+										class: 'btn-outline-danger',
+									},
+									{
+										buttonValue: true,
+										text: 'Ja',
+										class: 'btn-outline-success',
+									},
 								]"
-								:model-value="chargePointTemplate.rfid_enabling"
+								:model-value="
+									chargePointTemplate.disable_after_unplug
+								"
 								@update:model-value="
 									updateState(
 										chargePointTemplateKey,
 										$event,
-										'rfid_enabling',
+										'disable_after_unplug',
 									)
 								"
-							/>
-							<div v-if="chargePointTemplate.rfid_enabling">
-								<openwb-base-array-input
-									title="Zugeordnete ID-Tags"
-									noElementsMessage="Keine ID-Tags zugeordnet."
-									:model-value="
-										chargePointTemplate.valid_tags
-									"
-									@update:model-value="
-										updateState(
-											chargePointTemplateKey,
-											$event,
-											'valid_tags',
-										)
-									"
-								>
-									<template #help>
-										Wenn hier Tags eingetragen werden,
-										können nur die eingetragenen Tags zur
-										Fahrzeug-Zuordnung genutzt werden. Sind
-										keine Tags eingetragen, wird nur die
-										Zuordnung zum Fahrzeug geprüft. In
-										diesem Fall können alle Fahrzeuge diesen
-										Ladepunkt nutzen.
-										<br />
-										<span
-											v-html="$store.state.text.rfidWiki"
-										></span>
-									</template>
-								</openwb-base-array-input>
-								<hr />
-							</div>
+							>
+								<template #help>
+									Sperrt den Ladepunkt nach Abstecken eines
+									Fahrzeuges
+								</template>
+							</openwb-base-button-group-input>
+							<openwb-base-array-input
+								v-if="chargePointTemplate.disable_after_unplug"
+								title="Zugeordnete ID-Tags"
+								noElementsMessage="Keine ID-Tags zugeordnet."
+								:model-value="chargePointTemplate.valid_tags"
+								@update:model-value="
+									updateState(
+										chargePointTemplateKey,
+										$event,
+										'valid_tags',
+									)
+								"
+							>
+								<template #help>
+									Die hier eingetragenen ID-Tags dienen
+									ausschließlich zum Entsperren des
+									Ladepunktes.
+								</template>
+							</openwb-base-array-input>
 						</div>
+						<hr />
 						<openwb-base-heading>
 							Angaben zum konfigurierten Ladestrom der openWB
 						</openwb-base-heading>

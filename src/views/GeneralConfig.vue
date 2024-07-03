@@ -223,103 +223,64 @@
 								</span>
 							</template>
 						</openwb-base-button-group-input>
-						<!-- <openwb-base-button-group-input
-						title="Taster-Eingänge"
-						:model-value="
-							$store.state.mqtt[
-								'openWB/general/external_buttons_hw'
-							]
-						"
-						@update:model-value="
-							updateState(
-								'openWB/general/external_buttons_hw',
-								$event
-							)
-						"
-						:buttons="[
-							{
-								buttonValue: false,
-								text: 'Aus',
-								class: 'btn-outline-danger',
-							},
-							{
-								buttonValue: true,
-								text: 'An',
-								class: 'btn-outline-success',
-							},
-						]"
-					>
-						<template #help>
-							Wenn diese Option aktiviert ist, können bis zu fünf
-							Taster an die openWB angeschlossen werden. Die
-							entsprechenden Kontakte sind auf der Add-On-Platine
-							beschriftet.<br />
-							Bei Installationen ohne die Zusatzplatine können
-							folgende GPIOs benutzt werden, die durch die Taster
-							auf Masse zu schalten sind:
-							<ul>
-								<li>Taster 1: Pin 32 / GPIO 12</li>
-								<li>Taster 2: Pin 36 / GPIO 16</li>
-								<li>Taster 3: Pin 31 / GPIO 6</li>
-								<li>Taster 4: Pin 33 / GPIO 13</li>
-								<li>Taster 5: Pin 40 / GPIO 21</li>
-							</ul>
-						</template>
-					</openwb-base-button-group-input> -->
-					<hr />
-					<openwb-base-heading class="mt-0">
-						Steuerbare Verbrauchseinrichtung
-					</openwb-base-heading>
-					<openwb-base-alert sub_type="info">
-						Aktuell unterstützt openWB die eingehende Steuerung als
-						"Steuerbare Verbrauchseinrichtung" nur über
-						potentialfreie Kontakte (Rundsteuerempfänger, RSE).
-						Ebenfalls können derzeit bei Auslösung des RSE nur alle
-						Ladevorgänge komplett beendet werden. Die Unterstützung
-						von "Dimmung" im Sinne von §14a EnWG wird umgesetzt,
-						sobald wir weitere Informationen von den Netzbetreibern
-						erhalten, wie die Ansteuerung technisch umgesetzt wird.
-					</openwb-base-alert>
-					<openwb-base-select-input
-						class="mb-2"
-						title="Anbindung RSE-Kontakt"
-						:options="rippleControlReceiverList"
-						:model-value="
-							$store.state.mqtt[
-								'openWB/general/ripple_control_receiver/module'
-							]
-								? $store.state.mqtt[
-										'openWB/general/ripple_control_receiver/module'
-									].type
-								: ''
-						"
-						@update:model-value="
-							updateSelectedRippleControlReceiverModule($event)
-						"
-					/>
-					<div
-						v-if="
-							$store.state.mqtt[
-								'openWB/general/ripple_control_receiver/module'
-							] &&
-							$store.state.mqtt[
-								'openWB/general/ripple_control_receiver/module'
-							].type
-						"
-					>
-						<openwb-ripple-control-receiver-proxy
-							:rippleControlReceiver="
+						<hr />
+						<openwb-base-heading class="mt-0">
+							Steuerbare Verbrauchseinrichtung
+						</openwb-base-heading>
+						<openwb-base-alert sub_type="info">
+							Aktuell unterstützt openWB die eingehende Steuerung
+							als "Steuerbare Verbrauchseinrichtung" nur über
+							potentialfreie Kontakte (Rundsteuerempfänger, RSE).
+							Ebenfalls können derzeit bei Auslösung des RSE nur
+							alle Ladevorgänge komplett beendet werden. Die
+							Unterstützung von "Dimmung" im Sinne von §14a EnWG
+							wird umgesetzt, sobald wir weitere Informationen von
+							den Netzbetreibern erhalten, wie die Ansteuerung
+							technisch umgesetzt wird.
+						</openwb-base-alert>
+						<openwb-base-select-input
+							class="mb-2"
+							title="Anbindung RSE-Kontakt"
+							:options="rippleControlReceiverList"
+							:model-value="
 								$store.state.mqtt[
 									'openWB/general/ripple_control_receiver/module'
 								]
+									? $store.state.mqtt[
+											'openWB/general/ripple_control_receiver/module'
+										].type
+									: ''
 							"
-							@update:configuration="
-								updateConfiguration(
-									'openWB/general/ripple_control_receiver/module',
+							@update:model-value="
+								updateSelectedRippleControlReceiverModule(
 									$event,
 								)
 							"
 						/>
+						<div
+							v-if="
+								$store.state.mqtt[
+									'openWB/general/ripple_control_receiver/module'
+								] &&
+								$store.state.mqtt[
+									'openWB/general/ripple_control_receiver/module'
+								].type
+							"
+						>
+							<openwb-ripple-control-receiver-proxy
+								:rippleControlReceiver="
+									$store.state.mqtt[
+										'openWB/general/ripple_control_receiver/module'
+									]
+								"
+								@update:configuration="
+									updateConfiguration(
+										'openWB/general/ripple_control_receiver/module',
+										$event,
+									)
+								"
+							/>
+						</div>
 					</div>
 				</div>
 			</openwb-base-card>
