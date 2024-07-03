@@ -9,11 +9,12 @@
 		<template v-slot:content>
 			<h2>Die Grundkonfiguration ist abgeschlossen.</h2>
 			<p>
-				Die grundlegende Konfiguration der openWB ist abgeschlossen. Sie
-				werden mit Beendigung dieses Assistenten auf die Statusseite
+				Die grundlegende Konfiguration der openWB ist abgeschlossen. Du
+				wirst mit Beendigung dieses Assistenten auf die Statusseite
 				weitergeleitet. Bitte überprüfe die dargestellten Informationen
-				und passe bei Unstimmigkeiten die Einstellungen an. Weitere
-				detaillierte Einstellungsmöglichkeiten befinden sich in den
+				und passe bei Unstimmigkeiten die Einstellungen an. Weitere Einstellungen sind für den Betrieb 
+				der openWB als secondary nicht notwendig.
+				Detaillierte Einstellungsmöglichkeiten befinden sich in den
 				jeweiligen Konfigurationsseiten.
 			</p>
 		</template>

@@ -10,10 +10,6 @@
 				Wir empfehlen an dieser Stelle eine Sicherung der openWB zu
 				erzeugen.
 			</p>
-			<p>
-				Dazu im Abschnitt "Sicherung / Wiederherstellung" auf Sicherung
-				erstellen klicken.
-			</p>
 		</template>
 		<template v-slot:content>
 			<DataManagement

@@ -30,6 +30,11 @@
 				Weitere Einstellungen sind bei der Vorkonfiguration einer
 				secondary nicht notwendig.
 			</p>
+			<p>
+				Bitte lesen Sie auch die Hinweistexte, welche durch Klicken auf
+				das Fragezeichensymbol erscheinen. Hier sind weiterführende
+				Informationen zu den Eingabefeldern zu finden.
+			</p>
 			<p class="font-weight-bold">
 				Änderungen werden nur bei klicken auf Speichern wirksam!
 			</p>

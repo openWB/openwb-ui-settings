@@ -36,7 +36,8 @@
 				WR. Die Ladepunkte (z.B. Externe openWB) befinden sich auf
 				derselben Ebene wie der WR und unterhalb des EVU-Zählers.
 				Anpassungen der Anordnungen sind über die Pfeil-Bereiche der
-				Komponenten durch einfaches Verschieben mit der Maus möglich.
+				Komponenten durch einfaches Verschieben mit der Maus oder am
+				Smartphone möglich.
 			</p>
 			<p></p>
 			<p class="font-weight-bold">
