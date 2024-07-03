@@ -12,10 +12,10 @@
 				Die grundlegende Konfiguration der openWB ist abgeschlossen. Du
 				wirst mit Beendigung dieses Assistenten auf die Statusseite
 				weitergeleitet. Bitte überprüfe die dargestellten Informationen
-				und passe bei Unstimmigkeiten die Einstellungen an. Weitere Einstellungen sind für den Betrieb 
-				der openWB als secondary nicht notwendig.
-				Detaillierte Einstellungsmöglichkeiten befinden sich in den
-				jeweiligen Konfigurationsseiten.
+				und passe bei Unstimmigkeiten die Einstellungen an. Weitere
+				Einstellungen sind für den Betrieb der openWB als secondary
+				nicht notwendig. Detaillierte Einstellungsmöglichkeiten befinden
+				sich in den jeweiligen Konfigurationsseiten.
 			</p>
 		</template>
 	</InstallAssistantStepTemplate>

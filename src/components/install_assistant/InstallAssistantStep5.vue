@@ -25,9 +25,9 @@
 				definiert. Dieses Gerät ist über den Herstellernamen des
 				Energiesystems im Auswahlmenü der verfügbaren Geräte
 				auszuwählen. Unterhalb des Gerätes werden die zugehörigen
-				Komponenten EVU-Zähler, WR und Speicher konfiguriert. 
-				Es können je nach Bedarf beliebig viele Geräte und Komponenten 
-				miteinander kombiniert werden.
+				Komponenten EVU-Zähler, WR und Speicher konfiguriert. Es können
+				je nach Bedarf beliebig viele Geräte und Komponenten miteinander
+				kombiniert werden.
 			</p>
 			<p>
 				Bitte lesen Sie auch die Hinweistexte, welche durch Klicken auf
