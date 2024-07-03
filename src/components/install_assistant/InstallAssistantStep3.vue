@@ -8,8 +8,8 @@
 		<template v-slot:help>
 			<p>
 				Hier wird abgefragt, ob ihr System mit mehreren openWBs oder nur
-				mit einer openWB betrieben wird. 
-				Eine openWB kann andere openWBs steuern.
+				mit einer openWB betrieben wird. Eine openWB kann andere openWBs
+				steuern.
 			</p>
 			<p>
 				Zuerst ist im Feld "Steuerungsmodus" festzulegen, ob die openWB

@@ -7,8 +7,8 @@
 	>
 		<template v-slot:help>
 			<p>
-				Vor dem eigentlichen Fahrzeug werden
-				zuerst die Fahrzeug- und Lade-Profile konfiguriert.
+				Vor dem eigentlichen Fahrzeug werden zuerst die Fahrzeug- und
+				Lade-Profile konfiguriert.
 			</p>
 			<p>
 				Bei nur einem Fahrzeug reicht das Standard-Fahrzeug-Profil aus.
@@ -28,8 +28,9 @@
 				Bei nur einem Fahrzeug reicht das Standard-Lade-Profil aus. Bei
 				mehreren Fahrzeugen können weitere Lade-Profile hinzugefügt
 				werden. Dies erlaubt die Nutzung unterschiedlicher Lademodi je
-				Fahrzeug (z.B. EV1 = Sofortladen, EV2 = PV-Laden). Im Anschluss werden die
-				Voreinstellungen zu den verschiedenen Lademodi konfiguriert.
+				Fahrzeug (z.B. EV1 = Sofortladen, EV2 = PV-Laden). Im Anschluss
+				werden die Voreinstellungen zu den verschiedenen Lademodi
+				konfiguriert.
 			</p>
 			<p>
 				Nun wird das eigentliche Fahrzeug angelegt und mit dem
