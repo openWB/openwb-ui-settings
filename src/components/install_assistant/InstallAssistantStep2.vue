@@ -19,7 +19,6 @@
 				aktualisieren und falls ein Update verfügbar ist, wird der
 				Update button grün und kann gedrückt werden.
 			</p>
-			<p>Dieser Schritt kann auch übersprungen werden.</p>
 		</template>
 		<template v-slot:content>
 			<SystemView

@@ -7,11 +7,8 @@
 	>
 		<template v-slot:help>
 			<p>
-				Dies ist neu im Vergleich zu sw1.9 und ermöglicht viele
-				nützliche Funktionen (fahrzeugbezogene Abrechnungen,
-				SoC-Auslesungen uvm.). Vor dem eigentlichen Fahrzeug werden
-				zuerst die Fahrzeug- und Lade-Profile konfiguriert. Zuerst
-				Fahrzeug-Profile und Lade-Profile konfigurieren.
+				Vor dem eigentlichen Fahrzeug werden
+				zuerst die Fahrzeug- und Lade-Profile konfiguriert.
 			</p>
 			<p>
 				Bei nur einem Fahrzeug reicht das Standard-Fahrzeug-Profil aus.
@@ -31,8 +28,7 @@
 				Bei nur einem Fahrzeug reicht das Standard-Lade-Profil aus. Bei
 				mehreren Fahrzeugen können weitere Lade-Profile hinzugefügt
 				werden. Dies erlaubt die Nutzung unterschiedlicher Lademodi je
-				Fahrzeug (z.B. EV1 = Sofortladen, EV2 PV-Laden), sofern sie an
-				unterschiedlichen Ladepunkten laden. Im Anschluss werden die
+				Fahrzeug (z.B. EV1 = Sofortladen, EV2 = PV-Laden). Im Anschluss werden die
 				Voreinstellungen zu den verschiedenen Lademodi konfiguriert.
 			</p>
 			<p>

@@ -9,8 +9,8 @@
 			<p>
 				Enthält die steuernde openWB (primary) Ladetechnik, wird bei
 				"Verfügbare Ladepunkte" Interne openWB ausgewählt. Weitere LP
-				werden im primary als Externe openWB (= vorkonfigurierte
-				secondary-openWB) oder andere WB-Typen wie Pro, Satellit
+				werden im primary als Externe openWB (als secondary konfigurierte 
+				openWB) oder andere WB-Typen wie Pro, Satellit
 				eingebunden.
 			</p>
 			<p>
@@ -37,14 +37,10 @@
 				deutlich erhöhte Werte anzeigt, ist die auszuwählende EVU-Phase.
 			</p>
 			<p>
-				Bei mehreren openWBs ist es sinnvoll die Ladepunkte auf
-				unterschiedliche Phasen aufzuteilen.
-			</p>
-			<p>
-				Im grauen Menü Ladepunkt-Profile können neben dem nicht
-				editierbaren Standard-Ladepunkt-Profil auch weitere
-				Ladepunkt-Profile, die andere WB-Typen abbilden, erstellt
-				werden. Dort sind Eintragungen bzgl. des Ladepunkt-Maximalstroms
+				Im grauen Menü Ladepunkt-Profile können neben dem 
+				Standard-Ladepunkt-Profil auch weitere Ladepunkt-Profile, die 
+				andere WB-Typen abbilden, erstellt werden. Dort sind Eintragungen 
+				bzgl. des Ladepunkt-Maximalstroms
 				bei einer Phase bzw. mehreren Phasen vorzunehmen. Die Profile
 				werden abschließend im jeweiligen blauen Ladepunkt mittels
 				Auswahlmenü zugeordnet.

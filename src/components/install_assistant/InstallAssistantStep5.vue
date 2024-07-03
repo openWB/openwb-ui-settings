@@ -25,9 +25,14 @@
 				definiert. Dieses Gerät ist über den Herstellernamen des
 				Energiesystems im Auswahlmenü der verfügbaren Geräte
 				auszuwählen. Unterhalb des Gerätes werden die zugehörigen
-				Komponenten EVU-Zähler, WR und Speicher (Summe = Energiesystem)
-				konfiguriert. Das openWB-System ist sehr flexibel und
-				skalierbar.
+				Komponenten EVU-Zähler, WR und Speicher konfiguriert. 
+				Es können je nach Bedarf beliebig viele Geräte und Komponenten 
+				miteinander kombiniert werden.
+			</p>
+			<p>
+				Bitte lesen Sie auch die Hinweistexte, welche durch Klicken auf
+				das Fragezeichensymbol erscheinen. Hier sind weiterführende
+				Informationen zu den Eingabefeldern zu finden.
 			</p>
 			<p class="font-weight-bold">
 				Änderungen werden nur bei klicken auf Speichern wirksam!
