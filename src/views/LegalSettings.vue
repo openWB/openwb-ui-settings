@@ -126,7 +126,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
-	name: "OpenwbDataProtection",
+	name: "OpenwbDataProtectionView",
 	components: {
 		FontAwesomeIcon,
 	},

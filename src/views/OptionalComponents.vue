@@ -1472,7 +1472,7 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbDisplayThemeProxy from "../components/display_themes/OpenwbDisplayThemeProxy.vue";
 
 export default {
-	name: "OpenwbOptionalComponents",
+	name: "OpenwbOptionalComponentsView",
 	mixins: [ComponentState],
 	components: { OpenwbDisplayThemeProxy },
 	data() {

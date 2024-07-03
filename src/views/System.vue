@@ -1,6 +1,6 @@
 <template>
 	<div class="system">
-		<openwb-base-alert subtype="danger">
+		<openwb-base-alert v-if="!installAssistantActive" subtype="danger">
 			<h2>Achtung!</h2>
 			<p>
 				Vor allen Aktionen auf dieser Seite ist sicherzustellen, dass
@@ -24,13 +24,13 @@
 				v-model="this.warningAcknowledged"
 			/>
 		</openwb-base-alert>
-		<div v-if="warningAcknowledged">
+		<div v-if="warningAcknowledged || installAssistantActive">
 			<form name="versionInfoForm">
 				<openwb-base-card
 					title="Versions-Informationen / Aktualisierung"
 					subtype="success"
 					:collapsible="true"
-					:collapsed="true"
+					:collapsed="!installAssistantActive"
 				>
 					<openwb-base-text-input
 						title="Entwicklungszweig"
@@ -127,7 +127,7 @@
 					</template>
 				</openwb-base-card>
 			</form>
-			<form name="powerForm">
+			<form v-if="!installAssistantActive" name="powerForm">
 				<openwb-base-card
 					title="Betrieb"
 					:collapsible="true"
@@ -177,7 +177,7 @@
 					</template>
 				</openwb-base-card>
 			</form>
-			<form name="releaseChangeForm">
+			<form v-if="!installAssistantActive" name="releaseChangeForm">
 				<openwb-base-card
 					title="Entwicklungszweig"
 					subtype="danger"
@@ -282,7 +282,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
-	name: "OpenwbSystem",
+	name: "OpenwbSystemView",
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
@@ -302,6 +302,13 @@ export default {
 			warningAcknowledged: false,
 			selectedTag: "*HEAD*",
 		};
+	},
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
 	},
 	computed: {
 		updateAvailable() {

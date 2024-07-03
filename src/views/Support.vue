@@ -182,7 +182,7 @@ library.add(fasCheck);
 import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
-	name: "OpenwbSupport",
+	name: "OpenwbSupportView",
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {

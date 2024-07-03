@@ -1,6 +1,6 @@
 <template>
 	<div class="system">
-		<openwb-base-alert subtype="danger">
+		<openwb-base-alert v-if="!installAssistantActive" subtype="danger">
 			<h2>Achtung!</h2>
 			<p>
 				Vor allen Aktionen auf dieser Seite ist sicherzustellen, dass
@@ -24,12 +24,12 @@
 				v-model="this.warningAcknowledged"
 			/>
 		</openwb-base-alert>
-		<div v-if="warningAcknowledged">
+		<div v-if="warningAcknowledged || installAssistantActive">
 			<openwb-base-card
 				title="Sicherung / Wiederherstellung"
 				subtype="success"
 				:collapsible="true"
-				:collapsed="true"
+				:collapsed="!installAssistantActive"
 			>
 				<form name="backupForm">
 					<openwb-base-heading>Sicherung</openwb-base-heading>
@@ -68,9 +68,9 @@
 							</openwb-base-click-button>
 						</div>
 					</div>
+					<hr />
 				</form>
-				<hr />
-				<form name="restoreForm">
+				<form v-if="!installAssistantActive" name="restoreForm">
 					<openwb-base-heading>Wiederherstellung</openwb-base-heading>
 					<openwb-base-alert subtype="danger">
 						Für die Wiederherstellung wird eine aktive
@@ -150,9 +150,9 @@
 							</openwb-base-click-button>
 						</div>
 					</div>
+					<hr />
 				</form>
-				<hr />
-				<form name="cloudBackupForm">
+				<form v-if="!installAssistantActive" name="cloudBackupForm">
 					<openwb-base-heading>
 						Automatische Sicherung in einen Cloud-Dienst
 					</openwb-base-heading>
@@ -261,6 +261,7 @@
 				</form>
 			</openwb-base-card>
 			<openwb-base-card
+				v-if="!installAssistantActive"
 				title="Datenübernahme"
 				subtype="success"
 				:collapsible="true"
@@ -385,7 +386,7 @@
 					</div>
 				</form>
 			</openwb-base-card>
-			<form name="resetForm">
+			<form v-if="!installAssistantActive" name="resetForm">
 				<openwb-base-card
 					title="Zurücksetzen"
 					subtype="danger"
@@ -452,12 +453,19 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbBackupCloudProxy from "../components/backup_clouds/OpenwbBackupCloudProxy.vue";
 
 export default {
-	name: "OpenwbSystem",
+	name: "OpenwbDataManagementView",
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,
 		OpenwbBackupCloudProxy,
+	},
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
 	},
 	data() {
 		return {

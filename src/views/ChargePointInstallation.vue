@@ -55,7 +55,7 @@
 				title="Ladepunkte"
 				subtype="primary"
 				:collapsible="true"
-				:collapsed="true"
+				:collapsed="!installAssistantActive"
 			>
 				<template #header>
 					<font-awesome-icon
@@ -441,57 +441,66 @@
 							</template>
 						</openwb-base-text-input>
 						<hr />
-						<openwb-base-heading>
-							Zugangskontrolle
-						</openwb-base-heading>
-						<openwb-base-button-group-input
-							title="Sperre nach Abstecken"
-							:buttons="[
-								{
-									buttonValue: false,
-									text: 'Nein',
-									class: 'btn-outline-danger',
-								},
-								{
-									buttonValue: true,
-									text: 'Ja',
-									class: 'btn-outline-success',
-								},
-							]"
-							:model-value="
-								chargePointTemplate.disable_after_unplug
-							"
-							@update:model-value="
-								updateState(
-									chargePointTemplateKey,
-									$event,
-									'disable_after_unplug',
-								)
+						<div
+							v-if="
+								$store.state.mqtt[
+									'openWB/optional/rfid/active'
+								] === true && !installAssistantActive
 							"
 						>
-							<template #help>
-								Sperrt den Ladepunkt nach Abstecken eines
-								Fahrzeuges
-							</template>
-						</openwb-base-button-group-input>
-						<openwb-base-array-input
-							v-if="chargePointTemplate.disable_after_unplug"
-							title="Zugeordnete ID-Tags"
-							noElementsMessage="Keine ID-Tags zugeordnet."
-							:model-value="chargePointTemplate.valid_tags"
-							@update:model-value="
-								updateState(
-									chargePointTemplateKey,
-									$event,
-									'valid_tags',
-								)
-							"
-						>
-							<template #help>
-								Die hier eingetragenen ID-Tags dienen
-								ausschließlich zum Entsperren des Ladepunktes.
-							</template>
-						</openwb-base-array-input>
+							<openwb-base-heading>
+								Zugangskontrolle
+							</openwb-base-heading>
+							<openwb-base-button-group-input
+								title="Sperre nach Abstecken"
+								:buttons="[
+									{
+										buttonValue: false,
+										text: 'Nein',
+										class: 'btn-outline-danger',
+									},
+									{
+										buttonValue: true,
+										text: 'Ja',
+										class: 'btn-outline-success',
+									},
+								]"
+								:model-value="
+									chargePointTemplate.disable_after_unplug
+								"
+								@update:model-value="
+									updateState(
+										chargePointTemplateKey,
+										$event,
+										'disable_after_unplug',
+									)
+								"
+							>
+								<template #help>
+									Sperrt den Ladepunkt nach Abstecken eines
+									Fahrzeuges
+								</template>
+							</openwb-base-button-group-input>
+							<openwb-base-array-input
+								v-if="chargePointTemplate.disable_after_unplug"
+								title="Zugeordnete ID-Tags"
+								noElementsMessage="Keine ID-Tags zugeordnet."
+								:model-value="chargePointTemplate.valid_tags"
+								@update:model-value="
+									updateState(
+										chargePointTemplateKey,
+										$event,
+										'valid_tags',
+									)
+								"
+							>
+								<template #help>
+									Die hier eingetragenen ID-Tags dienen
+									ausschließlich zum Entsperren des
+									Ladepunktes.
+								</template>
+							</openwb-base-array-input>
+						</div>
 						<hr />
 						<openwb-base-heading>
 							Angaben zum konfigurierten Ladestrom der openWB
@@ -555,80 +564,86 @@
 							"
 						>
 						</openwb-base-range-input>
-						<hr />
-						<openwb-base-heading
-							>Automatische Sperre</openwb-base-heading
-						>
-						<openwb-base-button-group-input
-							title="Automatische Sperre aktiv"
-							:buttons="[
-								{ buttonValue: false, text: 'Nein' },
-								{ buttonValue: true, text: 'Ja' },
-							]"
-							:model-value="chargePointTemplate.autolock.active"
-							@update:model-value="
-								updateState(
-									chargePointTemplateKey,
-									$event,
-									'autolock.active',
-								)
-							"
-						>
-							<template #help>
-								Wird die automatische Sperre aktiviert, können
-								Fahrzeugladungen mittels Zeitplan auf gewünschte
-								Zeitbereiche eingeschränkt werden. Dies kann
-								z.B. bei Zugänglichkeiten zu Ladepunkten in
-								öffentlichen oder halb-öffentlichen Bereichen
-								sinnvoll sein.
-							</template>
-						</openwb-base-button-group-input>
-						<openwb-base-button-group-input
-							title="Erst nach Ladeende sperren"
-							:buttons="[
-								{ buttonValue: false, text: 'Nein' },
-								{ buttonValue: true, text: 'Ja' },
-							]"
-							:model-value="
-								chargePointTemplate.autolock
-									.wait_for_charging_end
-							"
-							@update:model-value="
-								updateState(
-									chargePointTemplateKey,
-									$event,
-									'autolock.wait_for_charging_end',
-								)
-							"
-						>
-							<template #help>
-								Wenn ein Zeitplan die automatische Sperre
-								aktiviert, werden alle Ladepunkte direkt
-								gesperrt und laufende Ladevorgänge beendet. Wird
-								hier "Ja" ausgewählt, dann werden laufende
-								Ladevorgänge NICHT beendet und diese Ladepunkte
-								erst nach abgeschlossener Ladung gesperrt.
-							</template>
-						</openwb-base-button-group-input>
-						<openwb-base-heading>
-							Zeitpläne für die automatische Sperre
-							<template #actions>
-								<openwb-base-avatar
-									class="bg-success clickable"
-									@click="
-										addChargePointTemplateAutolockPlan(
-											chargePointTemplateKey,
-											$event,
-										)
-									"
-								>
-									<font-awesome-icon
-										fixed-width
-										:icon="['fas', 'plus']"
-									/>
-								</openwb-base-avatar>
-							</template>
-						</openwb-base-heading>
+						<div v-if="!installAssistantActive">
+							<hr />
+							<openwb-base-heading
+								>Automatische Sperre</openwb-base-heading
+							>
+							<openwb-base-button-group-input
+								title="Automatische Sperre aktiv"
+								:buttons="[
+									{ buttonValue: false, text: 'Nein' },
+									{ buttonValue: true, text: 'Ja' },
+								]"
+								:model-value="
+									chargePointTemplate.autolock.active
+								"
+								@update:model-value="
+									updateState(
+										chargePointTemplateKey,
+										$event,
+										'autolock.active',
+									)
+								"
+							>
+								<template #help>
+									Wird die automatische Sperre aktiviert,
+									können Fahrzeugladungen mittels Zeitplan auf
+									gewünschte Zeitbereiche eingeschränkt
+									werden. Dies kann z.B. bei Zugänglichkeiten
+									zu Ladepunkten in öffentlichen oder
+									halb-öffentlichen Bereichen sinnvoll sein.
+								</template>
+							</openwb-base-button-group-input>
+							<openwb-base-button-group-input
+								title="Erst nach Ladeende sperren"
+								:buttons="[
+									{ buttonValue: false, text: 'Nein' },
+									{ buttonValue: true, text: 'Ja' },
+								]"
+								:model-value="
+									chargePointTemplate.autolock
+										.wait_for_charging_end
+								"
+								@update:model-value="
+									updateState(
+										chargePointTemplateKey,
+										$event,
+										'autolock.wait_for_charging_end',
+									)
+								"
+							>
+								<template #help>
+									Wenn ein Zeitplan die automatische Sperre
+									aktiviert, werden alle Ladepunkte direkt
+									gesperrt und laufende Ladevorgänge beendet.
+									Wird hier "Ja" ausgewählt, dann werden
+									laufende Ladevorgänge NICHT beendet und
+									diese Ladepunkte erst nach abgeschlossener
+									Ladung gesperrt.
+								</template>
+							</openwb-base-button-group-input>
+
+							<openwb-base-heading>
+								Zeitpläne für die automatische Sperre
+								<template #actions>
+									<openwb-base-avatar
+										class="bg-success clickable"
+										@click="
+											addChargePointTemplateAutolockPlan(
+												chargePointTemplateKey,
+												$event,
+											)
+										"
+									>
+										<font-awesome-icon
+											fixed-width
+											:icon="['fas', 'plus']"
+										/>
+									</openwb-base-avatar>
+								</template>
+							</openwb-base-heading>
+						</div>
 						<openwb-base-card
 							v-for="(
 								autolockPlan, autolockPlanKey
@@ -928,13 +943,20 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbChargePointProxy from "../components/charge_points/OpenwbChargePointProxy.vue";
 
 export default {
-	name: "OpenwbChargePointInstallation",
+	name: "OpenwbChargePointInstallationView",
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,
 		FontAwesomeLayers,
 		OpenwbChargePointProxy,
+	},
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
 	},
 	data() {
 		return {

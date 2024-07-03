@@ -174,6 +174,14 @@ const routes = [
 		},
 		component: () => import("../views/DataManagement.vue"),
 	},
+	{
+		path: "/System/InstallAssistant",
+		name: "InstallAssistant",
+		meta: {
+			heading: "System - Einrichtungsassistent",
+		},
+		component: () => import("../views/InstallAssistant.vue"),
+	},
 ];
 /* examples for development only start here */
 if (import.meta.env.MODE !== "production") {
@@ -198,7 +206,18 @@ router.beforeEach(async (to) => {
 		const usageTermsAcknowledged =
 			await store.getters.usageTermsAcknowledged;
 		if (!usageTermsAcknowledged) {
+			console.info("Redirecting to LegalSettings");
 			return { name: "LegalSettings" };
+		}
+	}
+	if (to.name !== "InstallAssistant") {
+		const installAssistantDone = await store.getters.installAssistantDone;
+		if (!installAssistantDone) {
+			console.info(
+				"Redirecting to InstallAssistant",
+				installAssistantDone,
+			);
+			return { name: "InstallAssistant" };
 		}
 	}
 });

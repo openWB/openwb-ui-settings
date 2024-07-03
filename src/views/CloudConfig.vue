@@ -413,7 +413,7 @@ library.add(fasUserGear);
 import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
-	name: "OpenwbCloudConfig",
+	name: "OpenwbCloudConfigView",
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
