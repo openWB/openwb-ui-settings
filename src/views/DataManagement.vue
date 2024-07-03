@@ -1,6 +1,6 @@
 <template>
 	<div class="system">
-		<openwb-base-alert subtype="danger">
+		<openwb-base-alert v-if="!installAssistantActive" subtype="danger">
 			<h2>Achtung!</h2>
 			<p>
 				Vor allen Aktionen auf dieser Seite ist sicherzustellen, dass
@@ -24,7 +24,7 @@
 				v-model="this.warningAcknowledged"
 			/>
 		</openwb-base-alert>
-		<div v-if="warningAcknowledged">
+		<div v-if="warningAcknowledged || installAssistantActive">
 			<openwb-base-card
 				title="Sicherung / Wiederherstellung"
 				subtype="success"
