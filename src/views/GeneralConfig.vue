@@ -391,41 +391,14 @@
 								$store.state.mqtt[
 									'openWB/general/ripple_control_receiver/module'
 								]
-									? $store.state.mqtt[
-											'openWB/general/ripple_control_receiver/module'
-										].type
-									: ''
 							"
-							@update:model-value="
-								updateSelectedRippleControlReceiverModule(
+							@update:configuration="
+								updateConfiguration(
+									'openWB/general/ripple_control_receiver/module',
 									$event,
 								)
 							"
 						/>
-						<div
-							v-if="
-								$store.state.mqtt[
-									'openWB/general/ripple_control_receiver/module'
-								] &&
-								$store.state.mqtt[
-									'openWB/general/ripple_control_receiver/module'
-								].type
-							"
-						>
-							<openwb-ripple-control-receiver-proxy
-								:rippleControlReceiver="
-									$store.state.mqtt[
-										'openWB/general/ripple_control_receiver/module'
-									]
-								"
-								@update:configuration="
-									updateConfiguration(
-										'openWB/general/ripple_control_receiver/module',
-										$event,
-									)
-								"
-							/>
-						</div>
 					</div>
 				</div>
 			</openwb-base-card>
