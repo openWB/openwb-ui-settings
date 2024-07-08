@@ -45,28 +45,7 @@
 				updateConfiguration($event, 'configuration.device_type')
 			"
 		/>
-		<openwb-base-select-input
-			title="Faktor"
-			v-if="configuration.device_type == 'three_phase'"
-			notSelected="Bitte auswählen"
-			:options="[
-				{ value: 1, text: 'Keine Anpassung' },
-				{ value: 10, text: 'Multiplikation mit 10' },
-			]"
-			:model-value="configuration.factor"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.factor')
-			"
-		>
-			<template #help>
-				Die Speicher- und PV-Leistung unterscheidet sich je nach Deye/Jinko Wechselrichter 
-				um den Faktor 10.
-				Welche Wechselrichter betroffen sind, ist nicht abschließend geklärt. 
-				(Hochvolt/ Niedervolt Modelle?)
-				Bei der Nutzung eines dreiphasigen Deye würden wir uns über eine kurze 
-				Rückmeldung (Modell/ Faktor) an den Support freuen.
-			</template>
-		</openwb-base-select-input>
+		
 	</div>
 </template>
 
