@@ -83,7 +83,12 @@
 							required
 							subtype="email"
 							v-model="sendDebugData.email"
-						/>
+						>
+							<template #help>
+								Deine E-Mail-Adresse, an die der Support Dir
+								antwortet.
+							</template>
+						</openwb-base-text-input>
 						<openwb-base-text-input
 							title="openWB Seriennummer"
 							required
@@ -177,7 +182,7 @@ library.add(fasCheck);
 import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
-	name: "OpenwbSupport",
+	name: "OpenwbSupportView",
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {

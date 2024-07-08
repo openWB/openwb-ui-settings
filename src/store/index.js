@@ -1,7 +1,8 @@
 import { createStore } from "vuex";
 
 let states = {
-	mqtt: {},
+	mqtt: {}, // will be filled with mqtt data
+	mqttSubscriptions: {}, // will be filled with mqtt subscriptions count
 	local: {
 		reloadRequired: false,
 		savingData: false,
@@ -83,7 +84,12 @@ export default createStore({
 			state.local[message.name] = message.value;
 		},
 		addTopic(state, message) {
-			state.mqtt[message.topic] = message.payload;
+			// prevent overwriting data with multiple subscriptions
+			if (!Object.keys(state.mqtt).includes(message.topic)) {
+				state.mqtt[message.topic] = message.payload;
+			} else {
+				console.warn("topic already exists: ", message.topic);
+			}
 		},
 		removeTopic(state, topic) {
 			delete state.mqtt[topic];
@@ -102,7 +108,10 @@ export default createStore({
 						object,
 					);
 
-			if (message.topic in state.mqtt) {
+			if (
+				message.topic in state.mqtt ||
+				!(message.topic in state.examples)
+			) {
 				if (message.objectPath != undefined) {
 					setPath(
 						state.mqtt[message.topic],
@@ -130,6 +139,28 @@ export default createStore({
 						message.topic,
 						" giving up",
 					);
+				}
+			}
+		},
+		addSubscription(state, topic) {
+			// add subscription to list or increment count
+			if (topic in state.mqttSubscriptions) {
+				state.mqttSubscriptions[topic] += 1;
+			} else {
+				state.mqttSubscriptions[topic] = 1;
+			}
+			console.debug(
+				"subscription count: ",
+				topic,
+				state.mqttSubscriptions[topic],
+			);
+		},
+		removeSubscription(state, topic) {
+			// remove subscription from list or decrement count
+			if (topic in state.mqttSubscriptions) {
+				state.mqttSubscriptions[topic] -= 1;
+				if (state.mqttSubscriptions[topic] <= 0) {
+					delete state.mqttSubscriptions[topic];
 				}
 			}
 		},
@@ -171,6 +202,41 @@ export default createStore({
 					}, 100);
 				}
 			});
+		},
+		installAssistantDone(state) {
+			return new Promise((resolve) => {
+				if (
+					state.mqtt["openWB/system/installAssistantDone"] !==
+					undefined
+				) {
+					resolve(state.mqtt["openWB/system/installAssistantDone"]);
+				} else {
+					var timer, interval;
+					// add general timeout if topic not set
+					timer = setTimeout(() => {
+						clearInterval(interval);
+						resolve(false);
+					}, 5000);
+					// check until we received valid data
+					interval = setInterval(() => {
+						if (
+							state.mqtt["openWB/system/installAssistantDone"] !==
+							undefined
+						) {
+							clearTimeout(timer);
+							clearInterval(interval);
+							resolve(
+								state.mqtt[
+									"openWB/system/installAssistantDone"
+								],
+							);
+						}
+					}, 100);
+				}
+			});
+		},
+		subscriptionCount: (state) => (topic) => {
+			return state.mqttSubscriptions[topic] || 0;
 		},
 	},
 });

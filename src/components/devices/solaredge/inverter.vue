@@ -5,7 +5,7 @@
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-number-input
-			title="Modbus ID"
+			title="SolarEdge-Geräte-ID"
 			required
 			:model-value="configuration.modbus_id"
 			min="1"
