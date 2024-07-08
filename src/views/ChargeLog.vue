@@ -156,7 +156,7 @@ import Vue3TableLite from "vue3-table-lite";
 import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
-	name: "OpenwbChargeLog",
+	name: "OpenwbChargeLogView",
 	components: {
 		Vue3TableLite,
 		FontAwesomeIcon,

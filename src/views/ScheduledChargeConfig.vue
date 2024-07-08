@@ -87,7 +87,7 @@
 import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
-	name: "OpenwbScheduledChargeConfig",
+	name: "OpenwbScheduledChargeConfigView",
 	mixins: [ComponentState],
 	data() {
 		return {

@@ -32,6 +32,7 @@
 						>.
 					</p>
 				</openwb-base-alert>
+
 				<openwb-base-button-group-input
 					title="Steuerungsmodus"
 					:buttons="[
@@ -52,54 +53,61 @@
 					"
 				>
 				</openwb-base-button-group-input>
-				<openwb-base-button-group-input
-					v-if="$store.state.mqtt['openWB/general/extern'] === true"
-					title="Steuerung über Modbus als secondary"
-					:buttons="[
-						{
-							buttonValue: false,
-							text: 'Aus',
-							class: 'btn-outline-danger',
-						},
-						{
-							buttonValue: true,
-							text: 'An',
-							class: 'btn-outline-success',
-						},
-					]"
-					:model-value="
-						$store.state.mqtt['openWB/general/modbus_control']
-					"
-					@update:model-value="
-						updateState('openWB/general/modbus_control', $event)
-					"
-				>
-					<template #help>
-						Im secondary-Modus kann die openWB über die
-						Modbus-Schnittstelle gesteuert werden. Die Register sind
-						<a
-							href="https://openwb.de/main/wp-content/uploads/2023/10/ModbusTCP-openWB-series2-Pro-1.pdf"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							hier
-						</a>
-						dokumentiert. Bei aktivierter Modbus-Schnittstelle darf
-						die openWB nicht von einer primary-openWB gesteuert
-						werden.
-					</template>
-				</openwb-base-button-group-input>
-				<div
-					v-if="
-						$store.state.mqtt['openWB/general/extern'] === true &&
-						$store.state.mqtt['openWB/general/modbus_control'] !==
-							true
-					"
-				>
-					<openwb-base-alert subtype="info">
-						Wenn die Steuerung über Modbus auf "Aus" geändert wird,
-						muss danach ein Neustart durchgeführt werden!
-					</openwb-base-alert>
+				<div v-if="!installAssistantActive">
+					<openwb-base-button-group-input
+						v-if="
+							$store.state.mqtt['openWB/general/extern'] === true
+						"
+						title="Steuerung über Modbus als secondary"
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Aus',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'An',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt['openWB/general/modbus_control']
+						"
+						@update:model-value="
+							updateState('openWB/general/modbus_control', $event)
+						"
+					>
+						<template #help>
+							Im secondary-Modus kann die openWB über die
+							Modbus-Schnittstelle gesteuert werden. Die Register
+							sind
+							<a
+								href="https://openwb.de/main/wp-content/uploads/2023/10/ModbusTCP-openWB-series2-Pro-1.pdf"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								hier
+							</a>
+							dokumentiert. Bei aktivierter Modbus-Schnittstelle
+							darf die openWB nicht von einer primary-openWB
+							gesteuert werden.
+						</template>
+					</openwb-base-button-group-input>
+					<div
+						v-if="
+							$store.state.mqtt['openWB/general/extern'] ===
+								true &&
+							$store.state.mqtt[
+								'openWB/general/modbus_control'
+							] !== true
+						"
+					>
+						<openwb-base-alert subtype="info">
+							Wenn die Steuerung über Modbus auf "Aus" geändert
+							wird, muss danach ein Neustart durchgeführt werden!
+						</openwb-base-alert>
+					</div>
 				</div>
 			</openwb-base-card>
 			<openwb-base-card title="Hardware">
@@ -109,201 +117,174 @@
 						diese openWB im Steuerungsmodus "secondary" befindet.
 					</openwb-base-alert>
 				</div>
-				<div v-else>
-					<openwb-base-button-group-input
-						title="Geschwindigkeit Regelintervall"
-						:buttons="[
-							{
-								buttonValue: 10,
-								text: 'Normal',
-								class: 'btn-outline-success',
-							},
-							{
-								buttonValue: 20,
-								text: 'Langsam',
-								class: 'btn-outline-warning',
-							},
-							{
-								buttonValue: 60,
-								text: 'Sehr Langsam',
-								class: 'btn-outline-danger',
-							},
-						]"
-						:model-value="
-							$store.state.mqtt['openWB/general/control_interval']
-						"
-						@update:model-value="
-							updateState(
-								'openWB/general/control_interval',
-								$event,
-							)
+				<div v-if="!installAssistantActive">
+					<div
+						v-if="
+							$store.state.mqtt['openWB/general/extern'] === false
 						"
 					>
-						<template #help>
-							Sollten Probleme oder Fehlermeldungen auftauchen,
-							stelle bitte zunächst das Regelintervall auf
-							"Normal". Werden Module genutzt, welche z.B. eine
-							Online-API zur Abfrage nutzen (höhere Latenzzeiten)
-							oder möchte man weniger Regeleingriffe, so kann man
-							das Regelintervall auf "Langsam" (20 Sekunden)
-							herabsetzen. Die Einstellung „Sehr Langsam“ führt zu
-							einer Regelzeit von 60 Sekunden.<br />
-							<span class="text-danger">
-								Nicht nur die Regelung der PV geführten Ladung,
-								sondern auch die Ladestromänderung,
-								beispielsweise “Stop“ etc., werden dann nur noch
-								in diesem Intervall ausgeführt. Die Regelung
-								wird insgesamt träger. Solange es keinen
-								triftigen Grund gibt, sollte "Normal" gewählt
-								werden.
-							</span>
-						</template>
-					</openwb-base-button-group-input>
-					<openwb-base-button-group-input
-						title="Netzschutz"
-						:buttons="[
-							{
-								buttonValue: false,
-								text: 'Aus',
-								class: 'btn-outline-danger',
-							},
-							{
-								buttonValue: true,
-								text: 'An',
-								class: 'btn-outline-success',
-							},
-						]"
-						:model-value="
-							$store.state.mqtt[
-								'openWB/general/grid_protection_configured'
-							]
-						"
-						@update:model-value="
-							updateState(
-								'openWB/general/grid_protection_configured',
-								$event,
-							)
-						"
-					>
-						<template #help>
-							Diese Option ist standardmäßig aktiviert und sollte
-							so belassen werden. Bei Unterschreitung einer
-							kritischen Frequenz des Stromnetzes wird die Ladung
-							nach einer zufälligen Zeit zwischen 1 und 90
-							Sekunden pausiert. Der Lademodus wechselt auf
-							"Stop". Sobald die Frequenz wieder in einem normalen
-							Bereich ist wird automatisch der zuletzt gewählte
-							Lademodus wieder aktiviert. Ebenso wird die Ladung
-							bei Überschreiten von 51,8 Hz unterbrochen. Dies ist
-							dann der Fall, wenn der Energieversorger
-							Wartungsarbeiten am (Teil-)Netz durchführt und auf
-							einen vorübergehenden Generator-Betrieb umschaltet.
-							Die Erhöhung der Frequenz wird durchgeführt, um die
-							PV Anlagen abzuschalten.<br />
-							<span class="text-danger">
-								Die Option ist nur aktiv, wenn der EVU-Zähler
-								die Frequenz übermittelt.
-							</span>
-						</template>
-					</openwb-base-button-group-input>
-					<!-- <openwb-base-button-group-input
-						title="Taster-Eingänge"
-						:model-value="
-							$store.state.mqtt[
-								'openWB/general/external_buttons_hw'
-							]
-						"
-						@update:model-value="
-							updateState(
-								'openWB/general/external_buttons_hw',
-								$event
-							)
-						"
-						:buttons="[
-							{
-								buttonValue: false,
-								text: 'Aus',
-								class: 'btn-outline-danger',
-							},
-							{
-								buttonValue: true,
-								text: 'An',
-								class: 'btn-outline-success',
-							},
-						]"
-					>
-						<template #help>
-							Wenn diese Option aktiviert ist, können bis zu fünf
-							Taster an die openWB angeschlossen werden. Die
-							entsprechenden Kontakte sind auf der Add-On-Platine
-							beschriftet.<br />
-							Bei Installationen ohne die Zusatzplatine können
-							folgende GPIOs benutzt werden, die durch die Taster
-							auf Masse zu schalten sind:
-							<ul>
-								<li>Taster 1: Pin 32 / GPIO 12</li>
-								<li>Taster 2: Pin 36 / GPIO 16</li>
-								<li>Taster 3: Pin 31 / GPIO 6</li>
-								<li>Taster 4: Pin 33 / GPIO 13</li>
-								<li>Taster 5: Pin 40 / GPIO 21</li>
-							</ul>
-						</template>
-					</openwb-base-button-group-input> -->
+						<openwb-base-button-group-input
+							title="Geschwindigkeit Regelintervall"
+							:buttons="[
+								{
+									buttonValue: 10,
+									text: 'Normal',
+									class: 'btn-outline-success',
+								},
+								{
+									buttonValue: 20,
+									text: 'Langsam',
+									class: 'btn-outline-warning',
+								},
+								{
+									buttonValue: 60,
+									text: 'Sehr Langsam',
+									class: 'btn-outline-danger',
+								},
+							]"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/general/control_interval'
+								]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/general/control_interval',
+									$event,
+								)
+							"
+						>
+							<template #help>
+								Sollten Probleme oder Fehlermeldungen
+								auftauchen, stelle bitte zunächst das
+								Regelintervall auf "Normal". Werden Module
+								genutzt, welche z.B. eine Online-API zur Abfrage
+								nutzen (höhere Latenzzeiten) oder möchte man
+								weniger Regeleingriffe, so kann man das
+								Regelintervall auf "Langsam" (20 Sekunden)
+								herabsetzen. Die Einstellung „Sehr Langsam“
+								führt zu einer Regelzeit von 60 Sekunden.<br />
+								<span class="text-danger">
+									Nicht nur die Regelung der PV geführten
+									Ladung, sondern auch die Ladestromänderung,
+									beispielsweise “Stop“ etc., werden dann nur
+									noch in diesem Intervall ausgeführt. Die
+									Regelung wird insgesamt träger. Solange es
+									keinen triftigen Grund gibt, sollte "Normal"
+									gewählt werden.
+								</span>
+							</template>
+						</openwb-base-button-group-input>
+						<openwb-base-button-group-input
+							title="Netzschutz"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Aus',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'An',
+									class: 'btn-outline-success',
+								},
+							]"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/general/grid_protection_configured'
+								]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/general/grid_protection_configured',
+									$event,
+								)
+							"
+						>
+							<template #help>
+								Diese Option ist standardmäßig aktiviert und
+								sollte so belassen werden. Bei Unterschreitung
+								einer kritischen Frequenz des Stromnetzes wird
+								die Ladung nach einer zufälligen Zeit zwischen 1
+								und 90 Sekunden pausiert. Der Lademodus wechselt
+								auf "Stop". Sobald die Frequenz wieder in einem
+								normalen Bereich ist wird automatisch der
+								zuletzt gewählte Lademodus wieder aktiviert.
+								Ebenso wird die Ladung bei Überschreiten von
+								51,8 Hz unterbrochen. Dies ist dann der Fall,
+								wenn der Energieversorger Wartungsarbeiten am
+								(Teil-)Netz durchführt und auf einen
+								vorübergehenden Generator-Betrieb umschaltet.
+								Die Erhöhung der Frequenz wird durchgeführt, um
+								die PV Anlagen abzuschalten.<br />
+								<span class="text-danger">
+									Die Option ist nur aktiv, wenn der
+									EVU-Zähler die Frequenz übermittelt.
+								</span>
+							</template>
+						</openwb-base-button-group-input>
+					</div>
+
+					<hr />
 				</div>
-				<hr />
-				<openwb-base-heading class="mt-0">
-					Steuerbare Verbrauchseinrichtung
-				</openwb-base-heading>
-				<openwb-base-alert sub_type="info">
-					Aktuell unterstützt openWB die eingehende Steuerung als
-					"Steuerbare Verbrauchseinrichtung" nur über potentialfreie
-					Kontakte (Rundsteuerempfänger, RSE). Ebenfalls können
-					derzeit bei Auslösung des RSE nur alle Ladevorgänge komplett
-					beendet werden. Die Unterstützung von "Dimmung" im Sinne von
-					§14a EnWG wird umgesetzt, sobald wir weitere Informationen
-					von den Netzbetreibern erhalten, wie die Ansteuerung
-					technisch umgesetzt wird.
-				</openwb-base-alert>
-				<openwb-base-select-input
-					class="mb-2"
-					title="Anbindung RSE-Kontakt"
-					:options="rippleControlReceiverList"
-					:model-value="
-						$store.state.mqtt[
-							'openWB/general/ripple_control_receiver/module'
-						]
-							? $store.state.mqtt[
-									'openWB/general/ripple_control_receiver/module'
-								].type
-							: ''
-					"
-					@update:model-value="
-						updateSelectedRippleControlReceiverModule($event)
-					"
-				/>
+
 				<div
-					v-if="
-						$store.state.mqtt[
-							'openWB/general/ripple_control_receiver/module'
-						] &&
-						$store.state.mqtt[
-							'openWB/general/ripple_control_receiver/module'
-						].type
-					"
+					v-if="$store.state.mqtt['openWB/general/extern'] === false"
 				>
-					<openwb-ripple-control-receiver-proxy
-						:rippleControlReceiver="
+					<openwb-base-heading class="mt-0">
+						Steuerbare Verbrauchseinrichtung
+					</openwb-base-heading>
+					<openwb-base-alert sub_type="info">
+						Aktuell unterstützt openWB die eingehende Steuerung als
+						"Steuerbare Verbrauchseinrichtung" nur über
+						potentialfreie Kontakte (Rundsteuerempfänger, RSE).
+						Ebenfalls können derzeit bei Auslösung des RSE nur alle
+						Ladevorgänge komplett beendet werden. Die Unterstützung
+						von "Dimmung" im Sinne von §14a EnWG wird umgesetzt,
+						sobald wir weitere Informationen von den Netzbetreibern
+						erhalten, wie die Ansteuerung technisch umgesetzt wird.
+					</openwb-base-alert>
+					<openwb-base-select-input
+						class="mb-2"
+						title="Anbindung RSE-Kontakt"
+						:options="rippleControlReceiverList"
+						:model-value="
 							$store.state.mqtt[
 								'openWB/general/ripple_control_receiver/module'
 							]
+								? $store.state.mqtt[
+										'openWB/general/ripple_control_receiver/module'
+									].type
+								: ''
 						"
-						@update:configuration="
-							updateConfiguration(
-								'openWB/general/ripple_control_receiver/module',
-								$event,
-							)
+						@update:model-value="
+							updateSelectedRippleControlReceiverModule($event)
 						"
 					/>
+					<div
+						v-if="
+							$store.state.mqtt[
+								'openWB/general/ripple_control_receiver/module'
+							] &&
+							$store.state.mqtt[
+								'openWB/general/ripple_control_receiver/module'
+							].type
+						"
+					>
+						<openwb-ripple-control-receiver-proxy
+							:rippleControlReceiver="
+								$store.state.mqtt[
+									'openWB/general/ripple_control_receiver/module'
+								]
+							"
+							@update:configuration="
+								updateConfiguration(
+									'openWB/general/ripple_control_receiver/module',
+									$event,
+								)
+							"
+						/>
+					</div>
 				</div>
 			</openwb-base-card>
 			<!-- <openwb-base-card title="Benachrichtigungen">
@@ -518,7 +499,10 @@
 					</div>
 				</div>
 			</openwb-base-card> -->
-			<openwb-base-card title="Darstellung">
+			<openwb-base-card
+				v-if="!installAssistantActive"
+				title="Darstellung"
+			>
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
 						Diese Einstellungen sind nicht verfügbar, solange sich
@@ -594,9 +578,16 @@ import OpenwbWebThemeProxy from "../components/web_themes/OpenwbWebThemeProxy.vu
 import OpenwbRippleControlReceiverProxy from "../components/ripple_control_receivers/OpenwbRippleControlReceiverProxy.vue";
 
 export default {
-	name: "OpenwbGeneralConfig",
+	name: "OpenwbGeneralConfigView",
 	mixins: [ComponentState],
 	components: { OpenwbWebThemeProxy, OpenwbRippleControlReceiverProxy },
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
+	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [

@@ -146,7 +146,10 @@
 							das Intervall für die Umschaltung erneut. Ist die
 							Ladung im mehrphasigen Modus für 16 - x Minuten auf
 							der Minimalstromstärke, wird wieder auf einphasige
-							Ladung gewechselt.
+							Ladung gewechselt.<br />
+							Ist ausreichend Überschuss vorhanden, wird beim
+							Ladestart die Umschaltverzögerung nicht abgewartet,
+							sondern direkt mit mehrphasiger Ladung begonnen.
 						</template>
 					</openwb-base-range-input>
 					<hr />
@@ -301,7 +304,7 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbElectricityTariffProxy from "../components/electricity_tariffs/OpenwbElectricityTariffProxy.vue";
 
 export default {
-	name: "OpenwbGeneralChargeConfig",
+	name: "OpenwbGeneralChargeConfigView",
 	mixins: [ComponentState],
 	components: {
 		OpenwbElectricityTariffProxy,
