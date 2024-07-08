@@ -61,7 +61,7 @@
 			<template #help>
 				Die Speicher- und PV-Leistung unterscheidet sich je nach Deye/Jinko Wechselrichter 
 				um den Faktor 10.
-				Welche Wechselrichter betroffen sind ist nicht abschließend geklärt. 
+				Welche Wechselrichter betroffen sind, ist nicht abschließend geklärt. 
 				(Hochvolt/ Niedervolt Modelle?)
 				Bei der Nutzung eines dreiphasigen Deye würden wir uns über eine kurze 
 				Rückmeldung (Modell/ Faktor) an den Support freuen.
