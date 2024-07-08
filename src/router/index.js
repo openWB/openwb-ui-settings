@@ -212,7 +212,9 @@ router.beforeEach(async (to) => {
 	}
 	if (to.name !== "InstallAssistant") {
 		const installAssistantDone = await store.getters.installAssistantDone;
-		if (!installAssistantDone) {
+		const usageTermsAcknowledged =
+			await store.getters.usageTermsAcknowledged;
+		if (!installAssistantDone && usageTermsAcknowledged) {
 			console.info(
 				"Redirecting to InstallAssistant",
 				installAssistantDone,
