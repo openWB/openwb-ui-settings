@@ -454,7 +454,7 @@ export default {
 				if (this.selectManufacturer != "" && this.selectManufacturer) {
 					manufacturer_arr = manufacturer_arr.filter((item) => {
 						return item.value.includes(
-							this.selectManufacturer.split(".")[0]+".",
+							this.selectManufacturer.split(".")[0] + ".",
 						);
 					});
 				}
