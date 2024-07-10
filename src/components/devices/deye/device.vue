@@ -22,30 +22,7 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.port')
 			"
-		/>
-		<openwb-base-select-input
-			title="Bauform"
-			notSelected="Bitte auswählen"
-			:options="[
-				{
-					value: 'three_phase',
-					text: 'dreiphasiger Wechselrichter',
-				},
-				{
-					value: 'single_phase_string',
-					text: 'einphasiger String-Wechselrichter (ungetestet, Rückmeldung über Support erwünscht)',
-				},
-				{
-					value: 'single_phase_hybrid',
-					text: 'einphasiger Hybrid-Wechselrichter (ungetestet, Rückmeldung über Support erwünscht)',
-				},
-			]"
-			:model-value="configuration.device_type"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.device_type')
-			"
-		/>
-		
+		/>		
 	</div>
 </template>
 
