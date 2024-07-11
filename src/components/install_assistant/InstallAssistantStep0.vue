@@ -12,7 +12,9 @@
 				:show="showModalWarning"
 				title="Achtung!"
 				subtype="danger"
-				:buttons="[{ text: 'Ok', event: 'confirm', subtype: 'success' }]"
+				:buttons="[
+					{ text: 'Ok', event: 'confirm', subtype: 'success' },
+				]"
 				@modal-result="nextPage($event)"
 			>
 				Bevor der Assistent gestartet wird ist sicherzustellen, dass
