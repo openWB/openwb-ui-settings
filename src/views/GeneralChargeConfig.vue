@@ -215,6 +215,7 @@
 						title="Preis für PV-Strom"
 						:step="0.001"
 						:precision="3"
+						unit="ct/kWh"
 						:model-value="
 							$store.state.mqtt['openWB/general/prices/pv'] *
 							100000
