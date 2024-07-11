@@ -68,9 +68,9 @@
 							</openwb-base-click-button>
 						</div>
 					</div>
-					<hr />
 				</form>
-				<form v-if="!installAssistantActive" name="restoreForm">
+				<form v-if="showRestoreSection" name="restoreForm">
+					<hr />
 					<openwb-base-heading>Wiederherstellung</openwb-base-heading>
 					<openwb-base-alert subtype="danger">
 						Für die Wiederherstellung wird eine aktive
@@ -150,9 +150,9 @@
 							</openwb-base-click-button>
 						</div>
 					</div>
-					<hr />
 				</form>
-				<form v-if="!installAssistantActive" name="cloudBackupForm">
+				<form v-if="showBackupCloudSection" name="cloudBackupForm">
+					<hr />
 					<openwb-base-heading>
 						Automatische Sicherung in einen Cloud-Dienst
 					</openwb-base-heading>
@@ -181,7 +181,7 @@
 						:model-value="
 							$store.state.mqtt[
 								'openWB/system/backup_cloud/config'
-							].type
+							]?.type
 						"
 						@update:model-value="updateSelectedBackupCloud($event)"
 					/>
@@ -189,7 +189,7 @@
 						v-if="
 							$store.state.mqtt[
 								'openWB/system/backup_cloud/config'
-							].type
+							]?.type
 						"
 					>
 						<openwb-base-button-group-input
@@ -466,6 +466,11 @@ export default {
 			required: false,
 			default: false,
 		},
+		showBackupCloudSection: {
+			type: Boolean,
+			required: false,
+			default: true,
+		},
 	},
 	data() {
 		return {
@@ -480,6 +485,7 @@ export default {
 				"openWB/LegacySmartHome/config/get/Devices/+/device_name",
 			],
 			warningAcknowledged: false,
+			showRestoreSection: true && !this.installAssistantActive,
 			selectedRestoreFile: undefined,
 			restoreUploadDone: false,
 			selectedDataMigrationFile: undefined,

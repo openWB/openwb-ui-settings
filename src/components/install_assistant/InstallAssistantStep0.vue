@@ -1,12 +1,25 @@
 <template>
 	<InstallAssistantStepTemplate
 		title="Start"
-		@nextPage="nextPage"
+		@nextPage="requestNextPage"
 		@previousPage="previousPage"
 		@endAssistant="endAssistant"
 		:hidePrevious="true"
 	>
 		<template v-slot:content>
+			<!-- modal dialogs -->
+			<openwb-base-modal-dialog
+				:show="showModalWarning"
+				title="Achtung!"
+				subtype="danger"
+				:buttons="[{ text: 'Ok', event: 'confirm', subtype: 'success' }]"
+				@modal-result="nextPage($event)"
+			>
+				Bevor der Assistent gestartet wird ist sicherzustellen, dass
+				kein Ladevorgang aktiv ist! Zur Sicherheit bitte zusätzlich alle
+				Fahrzeuge von der Ladestation / den Ladestationen abstecken!
+			</openwb-base-modal-dialog>
+			<!-- main content -->
 			<h2>Vielen Dank, dass Du Dich für openWB entschieden hast.</h2>
 			<p>
 				Dieser Assistent führt Dich durch die Konfiguration der
@@ -50,10 +63,17 @@ export default {
 	},
 	data: () => ({
 		mqttTopicsToSubscribe: [],
+		showModalWarning: false,
 	}),
 	methods: {
-		nextPage() {
-			this.$emit("switchPage", 1);
+		requestNextPage() {
+			this.showModalWarning = true;
+		},
+		nextPage(event) {
+			this.showModalWarning = false;
+			if (event === "confirm") {
+				this.$emit("switchPage", 1);
+			}
 		},
 		previousPage() {
 			return;
