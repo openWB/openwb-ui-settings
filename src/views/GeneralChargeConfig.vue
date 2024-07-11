@@ -165,38 +165,30 @@
 							Feldern der vereinbarte Preis einzutragen.
 						</template>
 					</openwb-base-heading>
-					<div
-						v-if="
-							$store.state.mqtt['openWB/optional/et/provider'] &&
-							$store.state.mqtt['openWB/optional/et/provider']
-								.type
+					<openwb-base-number-input
+						title="Preis für Netzbezug"
+						:step="0.001"
+						:precision="3"
+						unit="ct/kWh"
+						:model-value="
+							$store.state.mqtt['openWB/general/prices/grid'] *
+							100000
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/prices/grid',
+								parseFloat(($event / 100000).toFixed(7)),
+							)
 						"
 					>
-						<openwb-base-alert subtype="info">
-							Für den Netzbezug wird der dynamische Strompreis des
-							Anbieters für variable Stromtarife verwendet
-							(stündliche Aktualisierung durch den Anbieter).
-						</openwb-base-alert>
-					</div>
-					<div v-else>
-						<openwb-base-number-input
-							title="Preis für Netzbezug"
-							:step="0.001"
-							:precision="3"
-							unit="ct/kWh"
-							:model-value="
-								$store.state.mqtt[
-									'openWB/general/prices/grid'
-								] * 100000
-							"
-							@update:model-value="
-								updateState(
-									'openWB/general/prices/grid',
-									parseFloat(($event / 100000).toFixed(7)),
-								)
-							"
-						/>
-					</div>
+						<template #help>
+							Ist ein Anbieter für variable Stromtarife
+							konfiguriert, wird statt des hier angegebenen
+							Netzpreises der dynamische Strompreis des Anbieters
+							verwendet (stündliche Aktualisierung durch den
+							Anbieter).
+						</template>
+					</openwb-base-number-input>
 					<openwb-base-number-input
 						title="Preis für Speicherentladung"
 						:step="0.001"
