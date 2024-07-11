@@ -20,7 +20,8 @@
 		<openwb-base-text-input
 			title="Unterordner (optional)"
 			:model-value="backupCloud.configuration.smb_path"
-			pattern='([^\\:"\|*?<>]+/)*'
+			pattern='(^\/$)|(^([a-z]+\/)+$)'
+			required
 			@update:model-value="
 				updateConfiguration($event, 'configuration.smb_path')
 			"
