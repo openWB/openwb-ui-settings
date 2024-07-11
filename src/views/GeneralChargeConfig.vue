@@ -215,7 +215,6 @@
 						title="Preis für PV-Strom"
 						:step="0.001"
 						:precision="3"
-						unit="ct/kWh"
 						:model-value="
 							$store.state.mqtt['openWB/general/prices/pv'] *
 							100000
@@ -286,6 +285,45 @@
 					</div>
 				</div>
 			</openwb-base-card>
+			<openwb-base-card title="OCPP Anbindung">
+				<openwb-base-text-input
+					title="URL"
+					subtype="user"
+					:model-value="$store.state.mqtt['openWB/optional/ocpp/url']"
+					@update:model-value="
+						updateState('openWB/optional/ocpp/url', $event)
+					"
+				/>
+				<div class="row justify-content-center">
+					<div class="col-md-5 d-flex py-3 justify-content-center">
+						<openwb-base-click-button
+							:class="
+								enableOcppConnectButton
+									? 'btn-success'
+									: 'btn-outline-success'
+							"
+							@buttonClicked="connectOcpp"
+						>
+							Mit OCPP verbinden
+						</openwb-base-click-button>
+						<div
+							class="col-md-7 d-flex py-0 justify-content-center"
+						>
+							<openwb-base-click-button
+								:class="
+									enableOcppDisconnectButton
+										? 'btn-success'
+										: 'btn-outline-success'
+								"
+								@buttonClicked="disconnectOcpp"
+							>
+								OCPP Verbindung trennen
+							</openwb-base-click-button>
+						</div>
+					</div>
+				</div>
+			</openwb-base-card>
+
 			<openwb-base-submit-buttons
 				formName="generalChargeConfigForm"
 				@save="$emit('save')"
@@ -306,6 +344,7 @@ export default {
 	components: {
 		OpenwbElectricityTariffProxy,
 	},
+	emits: ["sendCommand"],
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
@@ -319,7 +358,13 @@ export default {
 				"openWB/general/prices/pv",
 				"openWB/optional/et/provider",
 				"openWB/system/configurable/electricity_tariffs",
+				"openWB/optional/ocpp/url",
 			],
+			enableOcppConnectButton: false,
+			enableOcppDisconnectButton: false,
+			connectCloudData: {
+				url: "",
+			},
 		};
 	},
 	computed: {
@@ -330,6 +375,23 @@ export default {
 		},
 	},
 	methods: {
+		connectOcpp() {
+			this.connectCloudData.url =
+				this.$store.state.mqtt["openWB/optional/ocpp/url"];
+			this.$emit("sendCommand", {
+				command: "connectOcpp",
+				data: this.connectCloudData,
+			});
+			this.enableOcppConnectButton = true;
+			this.enableOcppDisconnectButton = false;
+		},
+		disconnectOcpp() {
+			this.$emit("sendCommand", {
+				command: "disconnectOcpp",
+			});
+			this.enableOcppConnectButton = false;
+			this.enableOcppDisconnectButton = true;
+		},
 		getElectricityTariffDefaultConfiguration(electricityTariffType) {
 			const electricityTariffDefaults = this.electricityTariffList.find(
 				(element) => element.value == electricityTariffType,
