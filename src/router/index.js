@@ -201,19 +201,21 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-	// get usage terms and install assistant status
+	// get usage terms status
 	const usageTermsAcknowledged = await store.getters.usageTermsAcknowledged;
-	const installAssistantDone = await store.getters.installAssistantDone;
-
 	if (!usageTermsAcknowledged) {
 		if (to.name !== "LegalSettings") {
 			// redirect to data protection page to force acceptance of usage terms
 			return { name: "LegalSettings" };
 		}
-	} else if (!installAssistantDone) {
-		if (to.name !== "InstallAssistant") {
-			// redirect to install assistant as a first setup guide
-			return { name: "InstallAssistant" };
+	} else {
+		// get install assistant status
+		const installAssistantDone = await store.getters.installAssistantDone;
+		if (!installAssistantDone) {
+			if (to.name !== "InstallAssistant") {
+				// redirect to install assistant as a first setup guide
+				return { name: "InstallAssistant" };
+			}
 		}
 	}
 });
