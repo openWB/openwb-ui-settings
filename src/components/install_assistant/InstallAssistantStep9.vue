@@ -10,6 +10,16 @@
 				Wir empfehlen an dieser Stelle eine Sicherung der openWB zu
 				erzeugen.
 			</p>
+			<p>
+				Dieser Vorgang sollte regelmäßig durchgeführt werden, um
+				gegebenenfalls auf eine ältere Konfiguration zurückgreifen zu
+				können.
+			</p>
+			<p>
+				Die Sicherung kann automatisiert durch die openWB auf einem
+				Cloud-Dienst gespeichert werden. Dazu bitte im unteren Bereich
+				"Backup-Cloud" die entsprechenden Einstellungen vornehmen.
+			</p>
 		</template>
 		<template v-slot:content>
 			<DataManagement
