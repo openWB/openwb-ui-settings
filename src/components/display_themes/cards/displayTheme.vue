@@ -108,6 +108,29 @@
 			]"
 		/>
 		<openwb-base-button-group-input
+			v-if="displayTheme.configuration.enable_charge_points_view == true"
+			title="Einfache Ansicht der Ladepunkte"
+			:model-value="displayTheme.configuration.simple_charge_point_view"
+			@update:model-value="
+				updateConfiguration(
+					$event,
+					'configuration.simple_charge_point_view',
+				)
+			"
+			:buttons="[
+				{
+					buttonValue: false,
+					text: 'Aus',
+					class: 'btn-outline-danger',
+				},
+				{
+					buttonValue: true,
+					text: 'An',
+					class: 'btn-outline-success',
+				},
+			]"
+		/>
+		<openwb-base-button-group-input
 			title="Status anzeigen"
 			:model-value="displayTheme.configuration.enable_status_view"
 			@update:model-value="
