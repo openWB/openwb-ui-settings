@@ -1,14 +1,8 @@
 <template>
 	<div class="optionalComponents">
 		<form name="optionalComponentsForm">
-			<openwb-base-card title="Identifikation von Fahrzeugen">
-				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-					<openwb-base-alert subtype="info">
-						Weitere Einstellungen sind nicht verfügbar, solange sich
-						diese openWB im Steuerungsmodus "secondary" befindet.
-					</openwb-base-alert>
-				</div>
-				<div v-else>
+			<div v-if="!installAssistantActive">
+				<openwb-base-card title="Identifikation von Fahrzeugen">
 					<openwb-base-button-group-input
 						title="Identifikation aktivieren"
 						:model-value="
@@ -58,8 +52,10 @@
 						"
 					>
 						<openwb-base-alert subtype="info" class="mb-1">
-							Die ID-Tags müssen in den Einstellungen der
-							Fahrzeuge diesen zugeordnet werden.<br />
+							Die ID-Tags, die an dem jeweiligen Ladepunkt gültig
+							sind, müssen in dem Ladepunkt-Profil hinterlegt
+							werden. Die ID-Tags müssen auch in den Einstellungen
+							der Fahrzeuge diesen zugeordnet werden.<br />
 							Es kann zuerst das Fahrzeug angesteckt und dann der
 							ID-Tag erfasst werden oder anders herum. Im letzten
 							Fall muss innerhalb von 5 Minuten ein Fahrzeug
@@ -80,8 +76,8 @@
 							</template>
 						</openwb-base-textarea>
 					</div>
-				</div>
-			</openwb-base-card>
+				</openwb-base-card>
+			</div>
 			<!-- <openwb-base-card title="LED-Ausgänge">
 				<openwb-base-button-group-input
 					title="LED-Ausgänge aktivieren"
@@ -1076,10 +1072,8 @@
 							Nach einer Änderung ist ein Neustart
 							erforderlich!<br />
 							Diese Einstellung erfordert ein Raspberry Pi
-							Display. Für eine openWB series2 mit integriertem
-							Display muss 0° ausgewählt werden, für eine
-							Standalone mit Display 180°. Anzeigen, welche über
-							HDMI angeschlossen sind, werden nicht unterstützt.
+							Display. Anzeigen, welche über HDMI angeschlossen
+							sind, werden nicht unterstützt.
 						</template>
 					</openwb-base-button-group-input>
 					<hr />
@@ -1199,7 +1193,12 @@
 						</template>
 					</openwb-base-button-group-input> -->
 				</div>
-				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+				<div
+					v-if="
+						$store.state.mqtt['openWB/general/extern'] === true &&
+						!installAssistantActive
+					"
+				>
 					<!-- <hr />
 					<openwb-base-select-input
 						title="Art der Anzeige"
@@ -1302,44 +1301,47 @@
 						</openwb-base-text-input>
 					</div> -->
 					<hr />
-					<openwb-base-button-group-input
-						title="Ladepunkte auf externen openWB"
-						:model-value="
-							$store.state.mqtt[
-								'openWB/optional/int_display/only_local_charge_points'
-							]
-						"
-						@update:model-value="
-							updateState(
-								'openWB/optional/int_display/only_local_charge_points',
-								$event,
-							)
-						"
-						:buttons="[
-							{
-								buttonValue: false,
-								text: 'Alle',
-								class: 'btn-outline-danger',
-							},
-							{
-								buttonValue: true,
-								text: 'Nur Lokale',
-								class: 'btn-outline-success',
-							},
-						]"
-					>
-						<template #help>
-							Hiermit kann festgelegt werden, ob an angebundenen
-							externen openWB alle oder nur die jeweils lokalen
-							Ladepunkte angezeigt werden sollen.
-						</template>
-					</openwb-base-button-group-input>
-					<hr />
+					<div v-if="!installAssistantActive">
+						<openwb-base-button-group-input
+							title="Ladepunkte auf externen openWB"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/optional/int_display/only_local_charge_points'
+								]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/optional/int_display/only_local_charge_points',
+									$event,
+								)
+							"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Alle',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'Nur Lokale',
+									class: 'btn-outline-success',
+								},
+							]"
+						>
+							<template #help>
+								Hiermit kann festgelegt werden, ob an
+								angebundenen externen openWB alle oder nur die
+								jeweils lokalen Ladepunkte angezeigt werden
+								sollen.
+							</template>
+						</openwb-base-button-group-input>
+						<hr />
+					</div>
 					<div
 						v-if="
 							$store.state.mqtt[
 								'openWB/optional/int_display/theme'
-							] !== undefined
+							] !== undefined && !installAssistantActive
 						"
 					>
 						<openwb-base-select-input
@@ -1475,6 +1477,13 @@ export default {
 	name: "OpenwbOptionalComponentsView",
 	mixins: [ComponentState],
 	components: { OpenwbDisplayThemeProxy },
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
+	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [

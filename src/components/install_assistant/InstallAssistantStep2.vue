@@ -19,9 +19,21 @@
 				aktualisieren und falls ein Update verfügbar ist, wird der
 				Update button grün und kann gedrückt werden.
 			</p>
+			<p>
+				Bei openWB Systemen mit integriertem Display muss nach
+				Zurücksetzen auf Werkseinstellungen oder nach Ausführen eines
+				Updates das Display wieder eingeschalten werden.
+			</p>
 		</template>
 		<template v-slot:content>
 			<SystemView
+				:installAssistantActive="true"
+				@send-command="$emit('sendCommand', $event)"
+				@save="$emit('save')"
+				@reset="$emit('reset')"
+				@defaults="$emit('defaults')"
+			/>
+			<OptionalComponents
 				:installAssistantActive="true"
 				@send-command="$emit('sendCommand', $event)"
 				@save="$emit('save')"
@@ -36,6 +48,7 @@
 import ComponentState from "../mixins/ComponentState.vue";
 import InstallAssistantStepTemplate from "./InstallAssistantStepTemplate.vue";
 import SystemView from "../../views/System.vue";
+import OptionalComponents from "../../views/OptionalComponents.vue";
 
 export default {
 	name: "InstallAssistantStep2",
@@ -51,6 +64,7 @@ export default {
 	components: {
 		InstallAssistantStepTemplate,
 		SystemView,
+		OptionalComponents,
 	},
 	data: () => ({
 		mqttTopicsToSubscribe: [],
