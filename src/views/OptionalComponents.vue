@@ -1,80 +1,83 @@
 <template>
 	<div class="optionalComponents">
 		<form name="optionalComponentsForm">
-			<openwb-base-card title="Identifikation von Fahrzeugen">
-				<openwb-base-button-group-input
-					title="Identifikation aktivieren"
-					:model-value="
-						$store.state.mqtt['openWB/optional/rfid/active']
-					"
-					@update:model-value="
-						updateState('openWB/optional/rfid/active', $event)
-					"
-					:buttons="[
-						{
-							buttonValue: false,
-							text: 'Aus',
-							class: 'btn-outline-danger',
-						},
-						{
-							buttonValue: true,
-							text: 'An',
-							class: 'btn-outline-success',
-						},
-					]"
-				>
-					<template #help>
-						Die Identifikation von Fahrzeugen kann auf mehreren
-						Wegen erfolgen:
-						<ul>
-							<li>
-								Über einen in der openWB verbauten RFID-Reader
-								(optional, z.B. anhand des Lieferscheins
-								prüfen).
-							</li>
-							<li>
-								Durch die automatische Erkennung an einer openWB
-								Pro (muss in den Einstellungen aktiviert
-								werden).
-							</li>
-							<li>
-								Durch manuelle Eingabe einer ID am Display einer
-								openWB.
-							</li>
-						</ul>
-					</template>
-				</openwb-base-button-group-input>
-				<div
-					v-if="
-						$store.state.mqtt['openWB/optional/rfid/active'] ===
-						true
-					"
-				>
-					<openwb-base-alert subtype="info" class="mb-1">
-						Die ID-Tags, die an dem jeweiligen Ladepunkt gültig
-						sind, müssen in dem Ladepunkt-Profil hinterlegt werden.
-						Die ID-Tags müssen auch in den Einstellungen der
-						Fahrzeuge diesen zugeordnet werden.<br />
-						Es kann zuerst das Fahrzeug angesteckt und dann der
-						ID-Tag erfasst werden oder anders herum. Im letzten Fall
-						muss innerhalb von 5 Minuten ein Fahrzeug angesteckt
-						werden, sonst wird der ID-Tag verworfen. Das Fahrzeug
-						wird erst nach dem Anstecken zugeordnet.<br />
-						<span v-html="$store.state.text.rfidWiki" />
-					</openwb-base-alert>
-					<openwb-base-textarea
-						title="Erkannte ID-Tags"
-						readonly
-						disabled
-						:model-value="idTagList.join('\n')"
+			<div v-if="!installAssistantActive">
+				<openwb-base-card title="Identifikation von Fahrzeugen">
+					<openwb-base-button-group-input
+						title="Identifikation aktivieren"
+						:model-value="
+							$store.state.mqtt['openWB/optional/rfid/active']
+						"
+						@update:model-value="
+							updateState('openWB/optional/rfid/active', $event)
+						"
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Aus',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'An',
+								class: 'btn-outline-success',
+							},
+						]"
 					>
 						<template #help>
-							Solange diese Seite geöffnet ist, werden alle
-							erfassten ID-Tags in dieser Liste aufgeführt.
+							Die Identifikation von Fahrzeugen kann auf mehreren
+							Wegen erfolgen:
+							<ul>
+								<li>
+									Über einen in der openWB verbauten
+									RFID-Reader (optional, z.B. anhand des
+									Lieferscheins prüfen).
+								</li>
+								<li>
+									Durch die automatische Erkennung an einer
+									openWB Pro (muss in den Einstellungen
+									aktiviert werden).
+								</li>
+								<li>
+									Durch manuelle Eingabe einer ID am Display
+									einer openWB.
+								</li>
+							</ul>
 						</template>
-					</openwb-base-textarea>
-				</div>
-			</openwb-base-card>
+					</openwb-base-button-group-input>
+					<div
+						v-if="
+							$store.state.mqtt['openWB/optional/rfid/active'] ===
+							true
+						"
+					>
+						<openwb-base-alert subtype="info" class="mb-1">
+							Die ID-Tags, die an dem jeweiligen Ladepunkt gültig
+							sind, müssen in dem Ladepunkt-Profil hinterlegt
+							werden. Die ID-Tags müssen auch in den Einstellungen
+							der Fahrzeuge diesen zugeordnet werden.<br />
+							Es kann zuerst das Fahrzeug angesteckt und dann der
+							ID-Tag erfasst werden oder anders herum. Im letzten
+							Fall muss innerhalb von 5 Minuten ein Fahrzeug
+							angesteckt werden, sonst wird der ID-Tag verworfen.
+							Das Fahrzeug wird erst nach dem Anstecken
+							zugeordnet.<br />
+							<span v-html="$store.state.text.rfidWiki" />
+						</openwb-base-alert>
+						<openwb-base-textarea
+							title="Erkannte ID-Tags"
+							readonly
+							disabled
+							:model-value="idTagList.join('\n')"
+						>
+							<template #help>
+								Solange diese Seite geöffnet ist, werden alle
+								erfassten ID-Tags in dieser Liste aufgeführt.
+							</template>
+						</openwb-base-textarea>
+					</div>
+				</openwb-base-card>
+			</div>
 			<!-- <openwb-base-card title="LED-Ausgänge">
 				<openwb-base-button-group-input
 					title="LED-Ausgänge aktivieren"
@@ -1190,7 +1193,12 @@
 						</template>
 					</openwb-base-button-group-input> -->
 				</div>
-				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+				<div
+					v-if="
+						$store.state.mqtt['openWB/general/extern'] === true &&
+						!installAssistantActive
+					"
+				>
 					<!-- <hr />
 					<openwb-base-select-input
 						title="Art der Anzeige"
@@ -1293,44 +1301,47 @@
 						</openwb-base-text-input>
 					</div> -->
 					<hr />
-					<openwb-base-button-group-input
-						title="Ladepunkte auf externen openWB"
-						:model-value="
-							$store.state.mqtt[
-								'openWB/optional/int_display/only_local_charge_points'
-							]
-						"
-						@update:model-value="
-							updateState(
-								'openWB/optional/int_display/only_local_charge_points',
-								$event,
-							)
-						"
-						:buttons="[
-							{
-								buttonValue: false,
-								text: 'Alle',
-								class: 'btn-outline-danger',
-							},
-							{
-								buttonValue: true,
-								text: 'Nur Lokale',
-								class: 'btn-outline-success',
-							},
-						]"
-					>
-						<template #help>
-							Hiermit kann festgelegt werden, ob an angebundenen
-							externen openWB alle oder nur die jeweils lokalen
-							Ladepunkte angezeigt werden sollen.
-						</template>
-					</openwb-base-button-group-input>
-					<hr />
+					<div v-if="!installAssistantActive">
+						<openwb-base-button-group-input
+							title="Ladepunkte auf externen openWB"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/optional/int_display/only_local_charge_points'
+								]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/optional/int_display/only_local_charge_points',
+									$event,
+								)
+							"
+							:buttons="[
+								{
+									buttonValue: false,
+									text: 'Alle',
+									class: 'btn-outline-danger',
+								},
+								{
+									buttonValue: true,
+									text: 'Nur Lokale',
+									class: 'btn-outline-success',
+								},
+							]"
+						>
+							<template #help>
+								Hiermit kann festgelegt werden, ob an
+								angebundenen externen openWB alle oder nur die
+								jeweils lokalen Ladepunkte angezeigt werden
+								sollen.
+							</template>
+						</openwb-base-button-group-input>
+						<hr />
+					</div>
 					<div
 						v-if="
 							$store.state.mqtt[
 								'openWB/optional/int_display/theme'
-							] !== undefined
+							] !== undefined && !installAssistantActive
 						"
 					>
 						<openwb-base-select-input
@@ -1466,6 +1477,13 @@ export default {
 	name: "OpenwbOptionalComponentsView",
 	mixins: [ComponentState],
 	components: { OpenwbDisplayThemeProxy },
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
+	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
