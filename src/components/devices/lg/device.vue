@@ -21,7 +21,17 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.password')
 			"
-		/>
+		>
+			<template #help>
+				Passwort, um sich in den LG ESS V1.0 einzuloggen. Das Passwort
+				ist standardmäßig die Registrierungsnummer, die sich auf einem
+				Aufkleber auf dem PCS (dem Hybridwechselrichter und
+				Batteriemanagementsystem) befindet. Alter- nativ findet man die
+				Registrierungsnummer in der App unter dem Menüpunkt
+				"Systeminformationen". Mit der Registrierungsnummer kann man
+				sich dann in der Rolle "installer" einloggen.
+			</template>
+		</openwb-base-text-input>
 	</div>
 </template>
 
