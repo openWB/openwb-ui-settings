@@ -1,5 +1,5 @@
 <template>
-	<div class="device-batterx">
+	<div class="device-deye">
 		<openwb-base-heading>
 			Einstellungen für Deye
 			<span class="small">(Modul: {{ $options.name }})</span>

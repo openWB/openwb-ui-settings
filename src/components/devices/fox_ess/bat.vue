@@ -1,7 +1,7 @@
 <template>
-	<div class="device-deye-inverter">
+	<div class="device-fox_ess-bat">
 		<openwb-base-heading>
-			Einstellungen für Deye Wechselrichter
+			Einstellungen für FoxEss Batteriespeicher
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-number-input
@@ -19,7 +19,7 @@
 
 <script>
 export default {
-	name: "DeviceDeyeInverter",
+	name: "DeviceFoxEssBat",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

@@ -1,7 +1,7 @@
 <template>
-	<div class="device-deye-inverter">
+	<div class="device-fox_ess-counter">
 		<openwb-base-heading>
-			Einstellungen für Deye Wechselrichter
+			Einstellungen für FoxEss Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-number-input
@@ -19,7 +19,7 @@
 
 <script>
 export default {
-	name: "DeviceDeyeInverter",
+	name: "DeviceFoxEssCounter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
