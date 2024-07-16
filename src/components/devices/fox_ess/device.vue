@@ -22,7 +22,7 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.port')
 			"
-		/>		
+		/>
 	</div>
 </template>
 
