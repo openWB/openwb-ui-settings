@@ -109,6 +109,75 @@
 						</openwb-base-alert>
 					</div>
 				</div>
+				<div v-if="!installAssistantActive">
+					<openwb-base-button-group-input
+						title="HTTP-API"
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Aus',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'An',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt['openWB/general/http_api']
+						"
+						@update:model-value="
+							updateState('openWB/general/http_api', $event)
+						"
+					>
+						<template #help>
+							Mit der HTTP-API kann man den Wert eines MQTT-Topics
+							per HTTP GET oder POST abfragen. Ein Zugriff ist nur
+							lesend möglich, nicht schreibend.<br />
+							GET-Request:
+							<a
+								:href="`http://${getIpAddress()}:8080/?topic=openWB/system/time`"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								http://{{
+									getIpAddress()
+								}}:8080/?topic=openWB/system/time </a
+							><br />
+							Verschlüsselter GET-Request:
+							<a
+								:href="`https://${getIpAddress()}:8443/?topic=openWB/system/time`"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								https://{{
+									getIpAddress()
+								}}:8443/?topic=openWB/system/time
+							</a>
+							<br />
+							POST-Request mit curl:
+							<openwb-base-copy-to-clipboard
+								class="text-info"
+								tooltip="Topic kopieren"
+								>curl -X POST --data "topic=openWB/system/time"
+								http://{{
+									getIpAddress()
+								}}:8080/</openwb-base-copy-to-clipboard
+							>
+							Verschlüsselter POST-Request über curl mit privatem
+							SSL-Zertifikat:
+							<openwb-base-copy-to-clipboard
+								class="text-info"
+								tooltip="Topic kopieren"
+								>curl -k -X POST --data
+								"topic=openWB/system/time" https://{{
+									getIpAddress()
+								}}:8080/</openwb-base-copy-to-clipboard
+							><br />
+						</template>
+					</openwb-base-button-group-input>
+				</div>
 			</openwb-base-card>
 			<openwb-base-card title="Hardware">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
@@ -594,6 +663,7 @@ export default {
 				"openWB/general/extern",
 				"openWB/general/control_interval",
 				"openWB/general/grid_protection_configured",
+				"openWB/general/http_api",
 				"openWB/general/external_buttons_hw",
 				"openWB/general/modbus_control",
 				"openWB/general/notifications/selected",
@@ -608,6 +678,7 @@ export default {
 				"openWB/general/web_theme",
 				"openWB/system/configurable/ripple_control_receivers",
 				"openWB/system/configurable/web_themes",
+				"openWB/system/ip_address",
 			],
 		};
 	},
@@ -642,6 +713,9 @@ export default {
 		},
 	},
 	methods: {
+		getIpAddress() {
+			return this.$store.state.mqtt["openWB/system/ip_address"];
+		},
 		getWebThemeDefaults(webThemeType) {
 			const webThemeDefaults = this.webThemeList.find(
 				(element) => element.value == webThemeType,
