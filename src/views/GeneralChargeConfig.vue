@@ -307,20 +307,6 @@
 						>
 							Mit OCPP verbinden
 						</openwb-base-click-button>
-						<div
-							class="col-md-7 d-flex py-0 justify-content-center"
-						>
-							<openwb-base-click-button
-								:class="
-									enableOcppDisconnectButton
-										? 'btn-success'
-										: 'btn-outline-success'
-								"
-								@buttonClicked="disconnectOcpp"
-							>
-								OCPP Verbindung trennen
-							</openwb-base-click-button>
-						</div>
 					</div>
 				</div>
 			</openwb-base-card>
@@ -385,13 +371,6 @@ export default {
 			});
 			this.enableOcppConnectButton = true;
 			this.enableOcppDisconnectButton = false;
-		},
-		disconnectOcpp() {
-			this.$emit("sendCommand", {
-				command: "disconnectOcpp",
-			});
-			this.enableOcppConnectButton = false;
-			this.enableOcppDisconnectButton = true;
 		},
 		getElectricityTariffDefaultConfiguration(electricityTariffType) {
 			const electricityTariffDefaults = this.electricityTariffList.find(
