@@ -260,8 +260,8 @@
 						class="mb-2"
 						title="Hersteller"
 						notSelected="Bitte auswählen"
-						:options="getDeviceList.options"
-						:groups="getDeviceList.groups"
+						:options="deviceList.options"
+						:groups="deviceList.groups"
 						:model-value="selectManufacturer"
 						@update:model-value="selectManufacturer = $event"
 					>
@@ -274,7 +274,7 @@
 						class="mb-2"
 						title="Verfügbare Geräte"
 						notSelected="Bitte auswählen"
-						:options="getManufacturerList"
+						:options="manufacturerList"
 						:model-value="deviceToAdd"
 						@update:model-value="deviceToAdd = $event"
 					>
@@ -400,15 +400,19 @@ export default {
 		};
 	},
 	computed: {
-		isLoading() {
+		dataStoreLoaded() {
 			return this.$store.state.mqtt[
 				"openWB/system/configurable/devices_components"
 			];
 		},
-		getDeviceListGeneric() {
+		deviceListGeneric() {
 			var generic_arr = [];
-			for (const element of Object.values(this.isLoading)) {
-				if (element.group.includes("generic")) {
+			for (const element of Object.values(
+				this.$store.state.mqtt[
+					"openWB/system/configurable/devices_components"
+				],
+			)) {
+				if (element.group == "generic") {
 					generic_arr.push({
 						value: element.value,
 						text: element.text,
@@ -417,11 +421,15 @@ export default {
 			}
 			return generic_arr;
 		},
-		getDeviceListOther() {
+		deviceListOther() {
 			var other_arr = [];
-			for (const element of Object.values(this.isLoading)) {
+			for (const element of Object.values(
+				this.$store.state.mqtt[
+					"openWB/system/configurable/devices_components"
+				],
+			)) {
 				if (
-					element.group.includes("other") &&
+					element.group == "other" &&
 					!element.value.includes(".") &&
 					!element.value.includes("openWB")
 				) {
@@ -442,9 +450,13 @@ export default {
 			}
 			return this.removeDuplicates(other_arr);
 		},
-		getManufacturerList() {
+		manufacturerList() {
 			var manufacturer_arr = [];
-			for (const element of Object.values(this.isLoading)) {
+			for (const element of Object.values(
+				this.$store.state.mqtt[
+					"openWB/system/configurable/devices_components"
+				],
+			)) {
 				manufacturer_arr.push({
 					value: element.value,
 					text: element.device,
@@ -469,7 +481,7 @@ export default {
 			this.reset(manufacturer_arr.length);
 			return manufacturer_arr;
 		},
-		getDeviceList() {
+		deviceList() {
 			let options = [
 				{
 					value: "openWB",
@@ -479,11 +491,11 @@ export default {
 			let groups = [
 				{
 					label: "generisch",
-					options: [...this.getDeviceListGeneric],
+					options: [...this.deviceListGeneric],
 				},
 				{
 					label: "Systemhersteller",
-					options: [...this.getDeviceListOther],
+					options: [...this.deviceListOther],
 				},
 			];
 			return { options: options, groups: groups };
@@ -502,14 +514,13 @@ export default {
 		},
 	},
 	watch: {
-		isLoading() {
+		dataStoreLoaded() {
 			console.info("Store data finally loaded");
 			return (this.hasData = true);
 		},
 	},
 	methods: {
 		reset(length) {
-			//reset this.deviceToAdd to undefined to prevent error from not updating model-value if manufacturer changed
 			if (length <= 1) {
 				this.deviceToAdd = this.selectManufacturer;
 			} else {
