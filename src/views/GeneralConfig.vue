@@ -128,71 +128,100 @@
 							$store.state.mqtt['openWB/general/http_api']
 						"
 						@update:model-value="
-							sendSystemCommand('httpApi', {'active': $event})
+							sendSystemCommand('httpApi', { active: $event })
 						"
 					>
 						<template #help>
 							<p>
 								Mit der HTTP-API kann man den Wert eines
-								MQTT-Topics per HTTPs (Port 8443) oder optional
-								auch HTTP (Port 8090) abfragen. Ein Zugriff ist
-								nur lesend möglich, nicht schreibend. Es wird
-								empfohlen, nur HTTPs zu aktivieren.
+								MQTT-Topics per HTTPs (Port 8443) abfragen oder
+								neu setzen. Topics können über GET oder POST
+								abgefragt, neue Werte nur mit POST gesetzt
+								werden.
 							</p>
 							<p>
-								Beispiel: Abfrage des aktuellen
+								Beispiel 1: Abfrage des aktuellen
 								Systemzeitstempels
 							</p>
 							<ul>
 								<li>
-									Verschlüsselter GET-Request:
-									<a
-										:href="`https://${getIpAddress()}:8443/?topic=openWB/system/time`"
-										target="_blank"
-										rel="noopener noreferrer"
+									GET-Request:<br />
+									<openwb-base-copy-to-clipboard
+										class="text-info"
+										tooltip="URL kopieren"
 									>
 										https://{{
 											getIpAddress()
-										}}:8443/?topic=openWB/system/time
-									</a>
+										}}:8443/v1/?topic=openWB/system/time
+									</openwb-base-copy-to-clipboard>
 								</li>
 								<li>
-									GET-Request (falls unverschlüsseltes HTTP
-									aktiviert wurde):
-									<a
-										:href="`http://${getIpAddress()}:8080/?topic=openWB/system/time`"
-										target="_blank"
-										rel="noopener noreferrer"
+									POST-Request über 'curl' mit privatem
+									SSL-Zertifikat und Verarbeitung durch
+									'jq':<br />
+									<openwb-base-copy-to-clipboard
+										class="text-info"
+										tooltip="Befehl kopieren"
 									>
-										http://{{
-											getIpAddress()
-										}}:8080/?topic=openWB/system/time
-									</a>
+										curl -k -s -X POST --data
+										'{"topic":"openWB/system/time"}'
+										https://{{ getIpAddress() }}:8443/v1/ |
+										jq .
+									</openwb-base-copy-to-clipboard>
 								</li>
 							</ul>
 							<p>
 								Die zurückgegebenen Daten sind im JSON-Format.
 								Der Inhalt ist nach folgendem Schema aufgebaut:
 							</p>
-							<pre>
-{
-	"topic": "openWB/system/time",
-	"value": 1721287000.646975,
-	"status": "success"
-}
-							</pre>
+							<pre class="border border-info w-100 p-1">{{
+								JSON.stringify(
+									{
+										status: "success",
+										topic: "openWB/system/time",
+										message: 1721287000.646975,
+									},
+									null,
+									4,
+								)
+							}}</pre>
 							<p>
-								Im Fehlerfall wird der Status auf "error"
+								Im Fehlerfall wird der Status auf "failed"
 								gesetzt und eine Fehlermeldung zurückgegeben.
 							</p>
-							<pre>
-{
-	"topic": "openWB/unbekanntes/topic",
-	"value": null,
-	"status": "error",
-	"error": "Topic not found"
-}
-							</pre>
+							<p>Beispiel 2: integriertes Display abschalten</p>
+							<ul>
+								<li>
+									POST-Request über 'curl' mit privatem
+									SSL-Zertifikat und Verarbeitung durch
+									'jq':<br />
+									<openwb-base-copy-to-clipboard
+										class="text-info"
+										tooltip="Befehl kopieren"
+									>
+										curl -k -s -X POST --data '{"topic":
+										"openWB/set/optional/int_display/active",
+										"message": false}' https://{{
+											getIpAddress()
+										}}:8443/v1/ | jq .
+									</openwb-base-copy-to-clipboard>
+								</li>
+							</ul>
+							<p>
+								Die zurückgegebenen Daten sind im JSON-Format.
+								Der Inhalt ist nach folgendem Schema aufgebaut:
+							</p>
+							<pre class="border border-info w-100 p-1">{{
+								JSON.stringify(
+									{
+										status: "success",
+										topic: "openWB/set/optional/int_display/active",
+										message: false,
+									},
+									null,
+									4,
+								)
+							}}</pre>
 						</template>
 					</openwb-base-button-group-input>
 				</div>
