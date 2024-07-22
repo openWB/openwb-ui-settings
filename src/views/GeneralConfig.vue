@@ -128,53 +128,71 @@
 							$store.state.mqtt['openWB/general/http_api']
 						"
 						@update:model-value="
-							updateState('openWB/general/http_api', $event)
+							sendSystemCommand('httpApi', {'active': $event})
 						"
 					>
 						<template #help>
-							Mit der HTTP-API kann man den Wert eines MQTT-Topics
-							per HTTP GET oder POST abfragen. Ein Zugriff ist nur
-							lesend möglich, nicht schreibend.<br />
-							GET-Request:
-							<a
-								:href="`http://${getIpAddress()}:8080/?topic=openWB/system/time`"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								http://{{
-									getIpAddress()
-								}}:8080/?topic=openWB/system/time </a
-							><br />
-							Verschlüsselter GET-Request:
-							<a
-								:href="`https://${getIpAddress()}:8443/?topic=openWB/system/time`"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								https://{{
-									getIpAddress()
-								}}:8443/?topic=openWB/system/time
-							</a>
-							<br />
-							POST-Request mit curl:
-							<openwb-base-copy-to-clipboard
-								class="text-info"
-								tooltip="Topic kopieren"
-								>curl -X POST --data "topic=openWB/system/time"
-								http://{{
-									getIpAddress()
-								}}:8080/</openwb-base-copy-to-clipboard
-							>
-							Verschlüsselter POST-Request über curl mit privatem
-							SSL-Zertifikat:
-							<openwb-base-copy-to-clipboard
-								class="text-info"
-								tooltip="Topic kopieren"
-								>curl -k -X POST --data
-								"topic=openWB/system/time" https://{{
-									getIpAddress()
-								}}:8080/</openwb-base-copy-to-clipboard
-							><br />
+							<p>
+								Mit der HTTP-API kann man den Wert eines
+								MQTT-Topics per HTTPs (Port 8443) oder optional
+								auch HTTP (Port 8090) abfragen. Ein Zugriff ist
+								nur lesend möglich, nicht schreibend. Es wird
+								empfohlen, nur HTTPs zu aktivieren.
+							</p>
+							<p>
+								Beispiel: Abfrage des aktuellen
+								Systemzeitstempels
+							</p>
+							<ul>
+								<li>
+									Verschlüsselter GET-Request:
+									<a
+										:href="`https://${getIpAddress()}:8443/?topic=openWB/system/time`"
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										https://{{
+											getIpAddress()
+										}}:8443/?topic=openWB/system/time
+									</a>
+								</li>
+								<li>
+									GET-Request (falls unverschlüsseltes HTTP
+									aktiviert wurde):
+									<a
+										:href="`http://${getIpAddress()}:8080/?topic=openWB/system/time`"
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										http://{{
+											getIpAddress()
+										}}:8080/?topic=openWB/system/time
+									</a>
+								</li>
+							</ul>
+							<p>
+								Die zurückgegebenen Daten sind im JSON-Format.
+								Der Inhalt ist nach folgendem Schema aufgebaut:
+							</p>
+							<pre>
+{
+	"topic": "openWB/system/time",
+	"value": 1721287000.646975,
+	"status": "success"
+}
+							</pre>
+							<p>
+								Im Fehlerfall wird der Status auf "error"
+								gesetzt und eine Fehlermeldung zurückgegeben.
+							</p>
+							<pre>
+{
+	"topic": "openWB/unbekanntes/topic",
+	"value": null,
+	"status": "error",
+	"error": "Topic not found"
+}
+							</pre>
 						</template>
 					</openwb-base-button-group-input>
 				</div>
@@ -777,6 +795,12 @@ export default {
 				"openWB/general/ripple_control_receiver/module",
 				this.getRippleControlReceiverDefaultConfiguration($event),
 			);
+		},
+		sendSystemCommand(command, data = {}) {
+			this.$emit("sendCommand", {
+				command: command,
+				data: data,
+			});
 		},
 	},
 };
