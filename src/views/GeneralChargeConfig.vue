@@ -286,29 +286,33 @@
 					</div>
 				</div>
 			</openwb-base-card>
-			<openwb-base-card title="OCPP Anbindung">
-				<openwb-base-text-input
-					title="URL"
-					subtype="user"
-					:model-value="$store.state.mqtt['openWB/optional/ocpp/url']"
+			<openwb-base-card title="OCPP Anbindung" >
+				<openwb-base-button-group-input
+				title="OCPP aktivieren"
+				:buttons="[
+					{
+						buttonValue: false,
+						text: 'Nein',
+						class: 'btn-outline-danger',
+					},
+					{
+						buttonValue: true,
+						text: 'Ja',
+						class: 'btn-outline-success',
+					},
+				]"
+				v-model="this.ocppActive"
+			/>
+				<openwb-base-text-input v-if="this.ocppActive"
+					title="OCPP URL"
+					:model-value="
+						$store.state.mqtt['openWB/optional/ocpp/url']
+					"
 					@update:model-value="
 						updateState('openWB/optional/ocpp/url', $event)
 					"
 				/>
-				<div class="row justify-content-center">
-					<div class="col-md-5 d-flex py-3 justify-content-center">
-						<openwb-base-click-button
-							:class="
-								enableOcppConnectButton
-									? 'btn-success'
-									: 'btn-outline-success'
-							"
-							@buttonClicked="connectOcpp"
-						>
-							Mit OCPP verbinden
-						</openwb-base-click-button>
-					</div>
-				</div>
+	
 			</openwb-base-card>
 
 			<openwb-base-submit-buttons
@@ -347,11 +351,7 @@ export default {
 				"openWB/system/configurable/electricity_tariffs",
 				"openWB/optional/ocpp/url",
 			],
-			enableOcppConnectButton: false,
-			enableOcppDisconnectButton: false,
-			connectCloudData: {
-				url: "",
-			},
+			ocppActive: false,
 		};
 	},
 	computed: {
@@ -362,16 +362,6 @@ export default {
 		},
 	},
 	methods: {
-		connectOcpp() {
-			this.connectCloudData.url =
-				this.$store.state.mqtt["openWB/optional/ocpp/url"];
-			this.$emit("sendCommand", {
-				command: "connectOcpp",
-				data: this.connectCloudData,
-			});
-			this.enableOcppConnectButton = true;
-			this.enableOcppDisconnectButton = false;
-		},
 		getElectricityTariffDefaultConfiguration(electricityTariffType) {
 			const electricityTariffDefaults = this.electricityTariffList.find(
 				(element) => element.value == electricityTariffType,
