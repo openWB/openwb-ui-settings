@@ -128,7 +128,7 @@
 							$store.state.mqtt['openWB/general/http_api']
 						"
 						@update:model-value="
-							sendSystemCommand('httpApi', { active: $event })
+							updateState('openWB/general/http_api', $event)
 						"
 					>
 						<template #help>
@@ -824,12 +824,6 @@ export default {
 				"openWB/general/ripple_control_receiver/module",
 				this.getRippleControlReceiverDefaultConfiguration($event),
 			);
-		},
-		sendSystemCommand(command, data = {}) {
-			this.$emit("sendCommand", {
-				command: command,
-				data: data,
-			});
 		},
 	},
 };
