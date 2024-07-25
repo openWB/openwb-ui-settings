@@ -17,7 +17,10 @@
 		</span>
 	</div>
 	<div class="">
-		<span v-if="showHelp" class="form-row alert alert-info small">
+		<span
+			v-if="showHelp"
+			class="form-text alert alert-info small flex-fill"
+		>
 			<slot name="help"></slot>
 		</span>
 	</div>

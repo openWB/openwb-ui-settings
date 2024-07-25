@@ -1,19 +1,11 @@
 <template>
-	<div class="form-row mb-1">
-		<label v-on:click="toggleHelp" class="col-md-4 col-form-label">
-			{{ title }}
-			<font-awesome-icon
-				v-if="$slots.help"
-				:icon="
-					showHelp
-						? ['fas', 'question-circle']
-						: ['far', 'question-circle']
-				"
-				:class="showHelp ? 'text-info' : ''"
-			/>
-		</label>
-		<div class="col-md-8">
-			<div class="form-row">
+	<openwb-base-setting-element>
+		<template #title>{{ title }}</template>
+		<template #help>
+			<slot name="help"></slot>
+		</template>
+		<template #default>
+			<div class="w-100">
 				<div class="input-group">
 					<div class="input-group-prepend">
 						<div class="input-group-text">
@@ -53,7 +45,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="form-row tagList mt-1">
+			<div class="tagList mt-1 w-100">
 				<span v-if="value.length == 0" class="noTag">
 					<font-awesome-icon :icon="['fas', 'info-circle']" />
 					{{ noElementsMessage }}
@@ -74,11 +66,8 @@
 					/>
 				</span>
 			</div>
-			<span v-if="showHelp" class="form-row alert alert-info my-1 small">
-				<slot name="help"></slot>
-			</span>
-		</div>
-	</div>
+		</template>
+	</openwb-base-setting-element>
 </template>
 
 <script>
@@ -92,6 +81,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faQuestionCircle as farQuestionCircle } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
 
 library.add(
 	fasQuestionCircle,
@@ -105,26 +95,25 @@ library.add(
 export default {
 	name: "OpenwbArrayInput",
 	inheritAttrs: false,
+	components: {
+		FontAwesomeIcon,
+		OpenwbBaseSettingElement,
+	},
 	props: {
 		title: String,
 		modelValue: {
 			type: Array,
-			default: () => {
-				return [];
-			},
+			default: () => [],
 		},
 		noElementsMessage: {
 			type: String,
-			default: () => {
-				return "Keine Elemente zugeordnet.";
-			},
+			default: "Keine Elemente zugeordnet.",
 		},
 	},
 	emits: ["update:modelValue"],
 	data() {
 		return {
 			newTag: "",
-			showHelp: false,
 		};
 	},
 	computed: {
@@ -136,37 +125,24 @@ export default {
 				this.$emit("update:modelValue", newValue);
 			},
 		},
-		newTagValid: {
-			get() {
-				return (
-					this.newTag.length > 0 &&
-					this.value.indexOf(this.newTag) == -1
-				);
-			},
+		newTagValid() {
+			return this.newTag.length > 0 && !this.value.includes(this.newTag);
 		},
 	},
 	methods: {
-		toggleHelp() {
-			this.showHelp = !this.showHelp && this.$slots.help !== undefined;
-		},
 		addTag() {
 			if (this.newTagValid) {
-				let tempValue = this.value;
-				tempValue.push(this.newTag);
-				tempValue.sort();
+				const tempValue = [...this.value, this.newTag].sort();
 				this.value = tempValue;
 				this.newTag = "";
 			}
 			this.$refs.tagInput.focus();
 		},
 		removeTag(index) {
-			let tempValue = this.value;
+			const tempValue = [...this.value];
 			tempValue.splice(index, 1);
 			this.value = tempValue;
 		},
-	},
-	components: {
-		FontAwesomeIcon,
 	},
 };
 </script>
@@ -194,6 +170,8 @@ input:invalid {
 	border: 1px solid #ced4da;
 	border-radius: 0.25rem;
 	padding: 5px 5px 0 5px;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 .tag,
