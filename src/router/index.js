@@ -201,23 +201,21 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-	if (to.name !== "LegalSettings") {
-		// redirect to data protection page to force acceptance of usage terms
-		const usageTermsAcknowledged =
-			await store.getters.usageTermsAcknowledged;
-		if (!usageTermsAcknowledged) {
-			console.info("Redirecting to LegalSettings");
+	// get usage terms status
+	const usageTermsAcknowledged = await store.getters.usageTermsAcknowledged;
+	if (!usageTermsAcknowledged) {
+		if (to.name !== "LegalSettings") {
+			// redirect to data protection page to force acceptance of usage terms
 			return { name: "LegalSettings" };
 		}
-	}
-	if (to.name !== "InstallAssistant") {
+	} else {
+		// get install assistant status
 		const installAssistantDone = await store.getters.installAssistantDone;
 		if (!installAssistantDone) {
-			console.info(
-				"Redirecting to InstallAssistant",
-				installAssistantDone,
-			);
-			return { name: "InstallAssistant" };
+			if (to.name !== "InstallAssistant") {
+				// redirect to install assistant as a first setup guide
+				return { name: "InstallAssistant" };
+			}
 		}
 	}
 });

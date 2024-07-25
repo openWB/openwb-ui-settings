@@ -1,6 +1,6 @@
 <template>
 	<InstallAssistantStepTemplate
-		title="2. Aktualisierung des Systems"
+		title="2. Aktualisierung des openWB-Systems"
 		@nextPage="nextPage"
 		@previousPage="previousPage"
 		@endAssistant="endAssistant"
@@ -8,20 +8,34 @@
 		<template v-slot:help>
 			<p>
 				Bitte ein System-Update durchführen, um die Software auf den
-				neusten Stand zu bringen.
+				neuesten Stand der Features und Funktionen zu bringen.
 			</p>
 			<p>
-				Das garantiert, dass die openWB mit den neuesten Features und
-				Funktionen ausgestattet ist.
+				Hierzu Versions-Informationen / Aktualisierung auswählen,
+				Informationen aktualisieren klicken und falls ein Update
+				verfügbar ist, wird der Update button grün (zum Update bereit).
 			</p>
 			<p>
-				Auf Versions-Informationen / Aktualisierung gehen, Informationen
-				aktualisieren und falls ein Update verfügbar ist, wird der
-				Update button grün und kann gedrückt werden.
+				Bei openWB Systemen mit integriertem Display muss nach
+				Zurücksetzen auf Werkseinstellungen oder nach Ausführen eines
+				Updates das Display wieder eingeschalten werden.
+			</p>
+			<p>
+				Ein Klick auf "Änderungen" zeigt die Modifikationen. Ein Klick
+				auf "Update" startet die Aktualisierung, welche auch einen
+				automatischen Reboot initiiert (bitte ca. 5 min warten). Danach
+				muss der Assistent neu gestartet werden.
 			</p>
 		</template>
 		<template v-slot:content>
 			<SystemView
+				:installAssistantActive="true"
+				@send-command="$emit('sendCommand', $event)"
+				@save="$emit('save')"
+				@reset="$emit('reset')"
+				@defaults="$emit('defaults')"
+			/>
+			<OptionalComponents
 				:installAssistantActive="true"
 				@send-command="$emit('sendCommand', $event)"
 				@save="$emit('save')"
@@ -37,6 +51,8 @@ import ComponentState from "../mixins/ComponentState.vue";
 import InstallAssistantStepTemplate from "./InstallAssistantStepTemplate.vue";
 import SystemView from "../../views/System.vue";
 
+import OptionalComponents from "../../views/OptionalComponents.vue";
+
 export default {
 	name: "InstallAssistantStep2",
 	mixins: [ComponentState],
@@ -51,6 +67,7 @@ export default {
 	components: {
 		InstallAssistantStepTemplate,
 		SystemView,
+		OptionalComponents,
 	},
 	data: () => ({
 		mqttTopicsToSubscribe: [],
