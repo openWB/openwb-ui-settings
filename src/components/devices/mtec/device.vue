@@ -1,17 +1,26 @@
 <template>
-	<div class="device-solaredge-bat">
+	<div class="device-mtec">
 		<openwb-base-heading>
-			Einstellungen für SolarEdge Batteriespeicher
+			Einstellungen für M-Tec
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-number-input
-			title="SolarEdge-Geräte-ID"
+		<openwb-base-text-input
+			title="IP oder Hostname"
+			subtype="host"
 			required
-			:model-value="configuration.modbus_id"
-			min="1"
-			max="255"
+			:model-value="configuration.ip_address"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.modbus_id')
+				updateConfiguration($event, 'configuration.ip_address')
+			"
+		/>
+		<openwb-base-number-input
+			title="Port"
+			required
+			:min="1"
+			:max="65535"
+			:model-value="configuration.port"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.port')
 			"
 		/>
 	</div>
@@ -19,12 +28,11 @@
 
 <script>
 export default {
-	name: "DeviceSolarEdgeBat",
+	name: "DeviceMTec",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
 		deviceId: { default: undefined },
-		componentId: { required: true },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {

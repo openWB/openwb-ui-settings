@@ -2,7 +2,14 @@
 	<div class="optionalComponents">
 		<form name="optionalComponentsForm">
 			<div v-if="!installAssistantActive">
-				<openwb-base-card title="Identifikation von Fahrzeugen">
+			<openwb-base-card title="Identifikation von Fahrzeugen">
+				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+					<openwb-base-alert subtype="info">
+						Weitere Einstellungen sind nicht verfügbar, solange sich
+						diese openWB im Steuerungsmodus "secondary" befindet.
+					</openwb-base-alert>
+				</div>
+				<div v-else>
 					<openwb-base-button-group-input
 						title="Identifikation aktivieren"
 						:model-value="
@@ -52,10 +59,8 @@
 						"
 					>
 						<openwb-base-alert subtype="info" class="mb-1">
-							Die ID-Tags, die an dem jeweiligen Ladepunkt gültig
-							sind, müssen in dem Ladepunkt-Profil hinterlegt
-							werden. Die ID-Tags müssen auch in den Einstellungen
-							der Fahrzeuge diesen zugeordnet werden.<br />
+							Die ID-Tags müssen in den Einstellungen der
+							Fahrzeuge diesen zugeordnet werden.<br />
 							Es kann zuerst das Fahrzeug angesteckt und dann der
 							ID-Tag erfasst werden oder anders herum. Im letzten
 							Fall muss innerhalb von 5 Minuten ein Fahrzeug
@@ -1072,8 +1077,10 @@
 							Nach einer Änderung ist ein Neustart
 							erforderlich!<br />
 							Diese Einstellung erfordert ein Raspberry Pi
-							Display. Anzeigen, welche über HDMI angeschlossen
-							sind, werden nicht unterstützt.
+							Display. Für eine openWB series2 mit integriertem
+							Display muss 0° ausgewählt werden, für eine
+							Standalone mit Display 180°. Anzeigen, welche über
+							HDMI angeschlossen sind, werden nicht unterstützt.
 						</template>
 					</openwb-base-button-group-input>
 					<hr />

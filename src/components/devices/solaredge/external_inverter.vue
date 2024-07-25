@@ -12,7 +12,7 @@
 			konfiguriert sein.
 		</openwb-base-alert>
 		<openwb-base-number-input
-			title="Modbus ID"
+			title="SolarEdge-Geräte-ID"
 			required
 			:model-value="configuration.modbus_id"
 			min="1"
@@ -22,7 +22,7 @@
 			"
 		/>
 		<openwb-base-number-input
-			title="Meter ID"
+			title="SolarEdge-Meter-ID"
 			:model-value="configuration.meter_id"
 			min="1"
 			max="255"

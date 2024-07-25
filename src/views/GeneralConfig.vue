@@ -109,6 +109,122 @@
 						</openwb-base-alert>
 					</div>
 				</div>
+				<div v-if="!installAssistantActive">
+					<openwb-base-button-group-input
+						title="HTTP-API"
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Aus',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'An',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt['openWB/general/http_api']
+						"
+						@update:model-value="
+							updateState('openWB/general/http_api', $event)
+						"
+					>
+						<template #help>
+							<p>
+								Mit der HTTP-API kann man den Wert eines
+								MQTT-Topics per HTTPs (Port 8443) abfragen oder
+								neu setzen. Topics können über GET oder POST
+								abgefragt, neue Werte nur mit POST gesetzt
+								werden.
+							</p>
+							<p>
+								Beispiel 1: Abfrage des aktuellen
+								Systemzeitstempels
+							</p>
+							<ul>
+								<li>
+									GET-Request:<br />
+									<openwb-base-copy-to-clipboard
+										class="text-info"
+										tooltip="URL kopieren"
+									>
+										https://{{
+											getIpAddress()
+										}}:8443/v1/?topic=openWB/system/time
+									</openwb-base-copy-to-clipboard>
+								</li>
+								<li>
+									POST-Request über 'curl' mit privatem
+									SSL-Zertifikat und Verarbeitung durch
+									'jq':<br />
+									<openwb-base-copy-to-clipboard
+										class="text-info"
+										tooltip="Befehl kopieren"
+									>
+										curl -k -s -X POST --data
+										'{"topic":"openWB/system/time"}'
+										https://{{ getIpAddress() }}:8443/v1/ |
+										jq .
+									</openwb-base-copy-to-clipboard>
+								</li>
+							</ul>
+							<p>
+								Die zurückgegebenen Daten sind im JSON-Format.
+								Der Inhalt ist nach folgendem Schema aufgebaut:
+							</p>
+							<pre class="border border-info w-100 p-1">{{
+								JSON.stringify(
+									{
+										status: "success",
+										topic: "openWB/system/time",
+										message: 1721287000.646975,
+									},
+									null,
+									4,
+								)
+							}}</pre>
+							<p>
+								Im Fehlerfall wird der Status auf "failed"
+								gesetzt und eine Fehlermeldung zurückgegeben.
+							</p>
+							<p>Beispiel 2: integriertes Display abschalten</p>
+							<ul>
+								<li>
+									POST-Request über 'curl' mit privatem
+									SSL-Zertifikat und Verarbeitung durch
+									'jq':<br />
+									<openwb-base-copy-to-clipboard
+										class="text-info"
+										tooltip="Befehl kopieren"
+									>
+										curl -k -s -X POST --data '{"topic":
+										"openWB/set/optional/int_display/active",
+										"message": false}' https://{{
+											getIpAddress()
+										}}:8443/v1/ | jq .
+									</openwb-base-copy-to-clipboard>
+								</li>
+							</ul>
+							<p>
+								Die zurückgegebenen Daten sind im JSON-Format.
+								Der Inhalt ist nach folgendem Schema aufgebaut:
+							</p>
+							<pre class="border border-info w-100 p-1">{{
+								JSON.stringify(
+									{
+										status: "success",
+										topic: "openWB/set/optional/int_display/active",
+										message: false,
+									},
+									null,
+									4,
+								)
+							}}</pre>
+						</template>
+					</openwb-base-button-group-input>
+				</div>
 			</openwb-base-card>
 			<openwb-base-card title="Hardware">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
@@ -223,52 +339,11 @@
 								</span>
 							</template>
 						</openwb-base-button-group-input>
-						<!-- <openwb-base-button-group-input
-						title="Taster-Eingänge"
-						:model-value="
-							$store.state.mqtt[
-								'openWB/general/external_buttons_hw'
-							]
-						"
-						@update:model-value="
-							updateState(
-								'openWB/general/external_buttons_hw',
-								$event
-							)
-						"
-						:buttons="[
-							{
-								buttonValue: false,
-								text: 'Aus',
-								class: 'btn-outline-danger',
-							},
-							{
-								buttonValue: true,
-								text: 'An',
-								class: 'btn-outline-success',
-							},
-						]"
-					>
-						<template #help>
-							Wenn diese Option aktiviert ist, können bis zu fünf
-							Taster an die openWB angeschlossen werden. Die
-							entsprechenden Kontakte sind auf der Add-On-Platine
-							beschriftet.<br />
-							Bei Installationen ohne die Zusatzplatine können
-							folgende GPIOs benutzt werden, die durch die Taster
-							auf Masse zu schalten sind:
-							<ul>
-								<li>Taster 1: Pin 32 / GPIO 12</li>
-								<li>Taster 2: Pin 36 / GPIO 16</li>
-								<li>Taster 3: Pin 31 / GPIO 6</li>
-								<li>Taster 4: Pin 33 / GPIO 13</li>
-								<li>Taster 5: Pin 40 / GPIO 21</li>
-							</ul>
-						</template>
-					</openwb-base-button-group-input> -->
 					</div>
+
 					<hr />
 				</div>
+
 				<div
 					v-if="$store.state.mqtt['openWB/general/extern'] === false"
 				>
@@ -635,6 +710,7 @@ export default {
 				"openWB/general/extern",
 				"openWB/general/control_interval",
 				"openWB/general/grid_protection_configured",
+				"openWB/general/http_api",
 				"openWB/general/external_buttons_hw",
 				"openWB/general/modbus_control",
 				"openWB/general/notifications/selected",
@@ -649,6 +725,7 @@ export default {
 				"openWB/general/web_theme",
 				"openWB/system/configurable/ripple_control_receivers",
 				"openWB/system/configurable/web_themes",
+				"openWB/system/ip_address",
 			],
 		};
 	},
@@ -683,6 +760,9 @@ export default {
 		},
 	},
 	methods: {
+		getIpAddress() {
+			return this.$store.state.mqtt["openWB/system/ip_address"];
+		},
 		getWebThemeDefaults(webThemeType) {
 			const webThemeDefaults = this.webThemeList.find(
 				(element) => element.value == webThemeType,

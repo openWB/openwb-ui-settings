@@ -227,19 +227,15 @@
 								"
 							/>
 							<openwb-base-alert subtype="info">
-								Insofern Freigabe durch ID-Tags im
-								Ladepunkt-Profil aktiviert wurde, müssen die den
-								Fahrzeugen zugeordnete ID-Tags auch in das
-								entsprechende Ladepunkt-Profil eingetragen
-								werden, um zuzuordnen, an welchen Ladepunkten
-								die ID-Tags verwendet werden dürfen.<br />
+								Die hier eingetragenen ID-Tags dienen
+								ausschließlich der Fahrzeugzuordnung.<br />
 								<span v-html="$store.state.text.rfidWiki" />
 							</openwb-base-alert>
 							<hr />
 						</div>
 						<openwb-base-select-input
 							class="mb-2"
-							title="SoC-Modul"
+							title="SoC-Modul des Fahrzeugs"
 							:options="socModuleList"
 							:model-value="
 								$store.state.mqtt[
@@ -1071,35 +1067,6 @@
 								</template>
 							</openwb-base-button-group-input>
 							<openwb-base-button-group-input
-								title="Sperre nach Abstecken"
-								:buttons="[
-									{
-										buttonValue: false,
-										text: 'Nein',
-										class: 'btn-outline-danger',
-									},
-									{
-										buttonValue: true,
-										text: 'Ja',
-										class: 'btn-outline-success',
-									},
-								]"
-								:model-value="template.disable_after_unplug"
-								@update:model-value="
-									updateState(
-										templateKey,
-										$event,
-										'disable_after_unplug',
-									)
-								"
-							>
-								<template #help>
-									Wird ein Fahrzeug mit diesem Profil
-									abgesteckt, dann wird der betroffene
-									Ladepunkt automatisch deaktiviert.
-								</template>
-							</openwb-base-button-group-input>
-							<openwb-base-button-group-input
 								title="Standard nach Abstecken"
 								:buttons="[
 									{
@@ -1225,7 +1192,7 @@
 								},
 								{
 									buttonValue: 'soc',
-									text: 'SoC',
+									text: 'Fahrzeug-SoC',
 								},
 								{
 									buttonValue: 'amount',
@@ -1253,7 +1220,7 @@
 							</template>
 						</openwb-base-button-group-input>
 						<openwb-base-range-input
-							title="SoC-Limit"
+							title="SoC-Limit für das Fahrzeug"
 							:min="5"
 							:max="100"
 							:step="5"
@@ -1347,7 +1314,7 @@
 							</template>
 						</openwb-base-range-input>
 						<openwb-base-range-input
-							title="SoC-Limit"
+							title="SoC-Limit für das Fahrzeug"
 							:min="0"
 							:max="20"
 							:step="1"
@@ -1402,7 +1369,7 @@
 							</template>
 						</openwb-base-range-input>
 						<openwb-base-range-input
-							title="Mindest-SoC"
+							title="Mindest-SoC für das Fahrzeug"
 							:min="0"
 							:max="19"
 							:step="1"
@@ -1543,8 +1510,8 @@
 								Ist der berechnete Zeitpunkt des Ladestarts noch
 								nicht erreicht, wird mit Überschuss geladen.
 								Auch nach Erreichen des Ziel-SoCs wird mit
-								Überschuss geladen, solange bis das "SoC-Limit"
-								erreicht wird.<br />
+								Überschuss geladen, solange bis das "SoC-Limit
+								für das Fahrzeug" erreicht wird.<br />
 								Kann der Ziel-SoC bzw. die Energiemenge NICHT
 								erreicht werden, z.B. weil das Auto zu spät
 								angesteckt wurde oder das Lastmanagement
@@ -1717,7 +1684,10 @@
 							<openwb-base-button-group-input
 								title="Ziel"
 								:buttons="[
-									{ buttonValue: 'soc', text: 'SoC' },
+									{
+										buttonValue: 'soc',
+										text: 'Fahrzeug-SoC',
+									},
 									{
 										buttonValue: 'amount',
 										text: 'Energie',
@@ -1738,7 +1708,7 @@
 								</template>
 							</openwb-base-button-group-input>
 							<openwb-base-range-input
-								title="Ziel-SoC"
+								title="Fahrzeug-SoC zum Zielzeitpunkt"
 								v-if="plan.limit.selected == 'soc'"
 								:min="5"
 								:max="100"
@@ -1755,11 +1725,11 @@
 							>
 								<template #help>
 									SoC, der zum angegebenen Zeitpunkt erreicht
-									werden soll.
+									werden soll (Ziel-SoC).
 								</template>
 							</openwb-base-range-input>
 							<openwb-base-range-input
-								title="SoC-Limit"
+								title="Fahrzeug-SoC mit Überschuss"
 								v-if="plan.limit.selected == 'soc'"
 								:min="5"
 								:max="100"
@@ -1777,7 +1747,9 @@
 								<template #help>
 									Nach Erreichen des Ziel-SoCs wird mit
 									Überschuss weiter geladen, bis das SoC-Limit
-									erreicht wird.
+									erreicht wird. Sobald das SoC-Limit erreicht
+									wurde, findet keine Ladung mehr mit
+									Überschuss statt!
 								</template>
 							</openwb-base-range-input>
 							<openwb-base-number-input
@@ -2068,7 +2040,10 @@
 								title="Ziel"
 								:buttons="[
 									{ buttonValue: 'none', text: 'Aus' },
-									{ buttonValue: 'soc', text: 'SoC' },
+									{
+										buttonValue: 'soc',
+										text: 'Fahrzeug-SoC',
+									},
 									{
 										buttonValue: 'amount',
 										text: 'Energie',
@@ -2089,7 +2064,7 @@
 								</template>
 							</openwb-base-button-group-input>
 							<openwb-base-range-input
-								title="Ziel-SoC"
+								title="Ziel-SoC für das Fahrzeug"
 								v-if="plan.limit.selected == 'soc'"
 								:min="5"
 								:max="100"

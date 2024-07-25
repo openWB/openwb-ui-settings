@@ -50,6 +50,7 @@
 import ComponentState from "../mixins/ComponentState.vue";
 import InstallAssistantStepTemplate from "./InstallAssistantStepTemplate.vue";
 import SystemView from "../../views/System.vue";
+
 import OptionalComponents from "../../views/OptionalComponents.vue";
 
 export default {

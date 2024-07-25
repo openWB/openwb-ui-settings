@@ -1,16 +1,18 @@
 <template>
-	<div class="device-solaredge-counter">
+	<div class="device-mtec-counter">
 		<openwb-base-heading>
-			Einstellungen für SolarEdge Zähler
+			Einstellungen für M-Tec Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
-			Hierfür muss ein EVU-Zähler am SolarEdge Wechselrichter per Modbus
-			angebunden sein. Der Zähler muss an erster Position im
-			Wechselrichter konfiguriert sein.
+			<span class="text-danger">
+				M-Tec Zähler geben keine Ströme aus, sodass nur ein
+				Lastmanagement anhand der Gesamtleistung, aber nicht
+				phasenbasiert möglich ist.
+			</span>
 		</openwb-base-alert>
 		<openwb-base-number-input
-			title="SolarEdge-Geräte-ID"
+			title="Modbus ID"
 			required
 			:model-value="configuration.modbus_id"
 			min="1"
@@ -18,22 +20,17 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.modbus_id')
 			"
-		/>
-		<openwb-base-number-input
-			title="SolarEdge-Meter-ID"
-			:model-value="configuration.meter_id"
-			min="1"
-			max="255"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.meter_id')
-			"
-		/>
+		>
+			<template #help>
+				Die Standard-Modbus-ID von M-Tec ist 247
+			</template>
+		</openwb-base-number-input>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceSolarEdgeCounter",
+	name: "DeviceMTecCounter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

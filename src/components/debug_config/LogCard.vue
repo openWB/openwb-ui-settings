@@ -88,18 +88,24 @@ export default {
 					}
 				});
 		},
-		loadLog(fileName) {
+		async loadLog(fileName) {
 			this.logData = "wird aktualisiert...";
 			this.loading = true;
 			var logContents = "";
-			this.getFilePromise(fileName + ".1", true).then((result) => {
-				logContents = result;
-				this.getFilePromise(fileName).then((result) => {
-					logContents += result;
-					this.logData = logContents;
-					this.loading = false;
-				});
-			});
+
+			for (let i = 4; i >= 1; i--) {
+				const result = await this.getFilePromise(
+					fileName + "." + i,
+					true,
+				);
+				logContents += result;
+			}
+
+			const finalResult = await this.getFilePromise(fileName);
+			logContents += finalResult;
+
+			this.logData = logContents;
+			this.loading = false;
 		},
 	},
 };

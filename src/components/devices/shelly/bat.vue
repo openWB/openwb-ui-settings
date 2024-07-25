@@ -1,25 +1,18 @@
 <template>
-	<div class="device-solaredge-bat">
+	<div class="device-shelly-bat">
 		<openwb-base-heading>
-			Einstellungen für SolarEdge Batteriespeicher
+			Einstellungen für Shelly Speicher
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-number-input
-			title="SolarEdge-Geräte-ID"
-			required
-			:model-value="configuration.modbus_id"
-			min="1"
-			max="255"
-			@update:model-value="
-				updateConfiguration($event, 'configuration.modbus_id')
-			"
-		/>
+		<openwb-base-alert subtype="info">
+			Diese Komponente benötigt keine Einstellungen.
+		</openwb-base-alert>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceSolarEdgeBat",
+	name: "DeviceShellyBat",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
