@@ -1,22 +1,13 @@
 <template>
-  <div class="form-row mb-1">
-    <label
-      class="col-md-4 col-form-label"
-      @click="toggleHelp"
-    >
-      {{ title }}
-      <font-awesome-icon
-        v-if="$slots.help"
-        :icon="
-          showHelp
-            ? ['fas', 'question-circle']
-            : ['far', 'question-circle']
-        "
-        :class="showHelp ? 'text-info' : ''"
-      />
-    </label>
-    <div class="col-md-8">
-      <div class="form-row vaRow mb-1">
+  <openwb-base-setting-element>
+    <template #title>{{ title }}</template>
+    <template #help>
+      <slot name="help"></slot>
+    </template>
+    <template #default>
+      <div class="w-100">
+        <div class="vaRow mb-1 w-100">
+
         <label
           v-if="label"
           class="col-2 col-form-label valueLabel"
@@ -57,8 +48,8 @@
           <slot name="help" />
         </div>
       </div>
-    </div>
-  </div>
+    </template
+  </openwb-base-setting-element>
 </template>
 
 <script>

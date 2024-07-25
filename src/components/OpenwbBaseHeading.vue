@@ -28,7 +28,7 @@
   <div class="">
     <span
       v-if="showHelp"
-      class="form-row alert alert-info small"
+      class="form-row alert alert-info small flex-fill"
     >
       <slot name="help" />
     </span>
