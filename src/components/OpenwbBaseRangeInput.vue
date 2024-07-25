@@ -1,55 +1,52 @@
 <template>
-	<div class="form-row mb-1">
-		<label v-on:click="toggleHelp" class="col-md-4 col-form-label">
-			{{ title }}
-			<font-awesome-icon
-				v-if="$slots.help"
-				:icon="
-					showHelp
-						? ['fas', 'question-circle']
-						: ['far', 'question-circle']
-				"
-				:class="showHelp ? 'text-info' : ''"
-			/>
-		</label>
-		<div class="col-md-8">
-			<div class="form-row vaRow mb-1">
-				<label v-if="label" class="col-2 col-form-label valueLabel">
-					{{ label }}
-				</label>
-				<button
-					class="col-1 btn btn-block btn-info"
-					type="button"
-					@click="decrement"
-				>
-					<font-awesome-icon :icon="['fas', 'step-backward']" />
-				</button>
-				<div class="col">
-					<input
-						type="range"
-						class="form-control-range rangeInput"
-						:min="min"
-						:max="max"
-						:step="step"
-						v-model.number="sliderValue"
-						v-bind="$attrs"
-					/>
+	<openwb-base-setting-element>
+		<template #title>{{ title }}</template>
+		<template #help>
+			<slot name="help"></slot>
+		</template>
+		<template #default>
+			<div class="w-100">
+				<div class="vaRow mb-1 w-100">
+					<label v-if="label" class="col-2 col-form-label valueLabel">
+						{{ label }}
+					</label>
+					<button
+						class="col-1 btn btn-block btn-info"
+						type="button"
+						@click="decrement"
+					>
+						<font-awesome-icon :icon="['fas', 'step-backward']" />
+					</button>
+					<div class="col">
+						<input
+							type="range"
+							class="form-control-range rangeInput"
+							:min="min"
+							:max="max"
+							:step="step"
+							v-model.number="sliderValue"
+							v-bind="$attrs"
+						/>
+					</div>
+					<button
+						class="col-1 btn btn-block btn-info"
+						type="button"
+						@click="increment"
+					>
+						<font-awesome-icon :icon="['fas', 'step-forward']" />
+					</button>
 				</div>
-				<button
-					class="col-1 btn btn-block btn-info"
-					type="button"
-					@click="increment"
+				<div
+					v-if="showHelp"
+					class="form-row alert alert-info my-1 small"
 				>
-					<font-awesome-icon :icon="['fas', 'step-forward']" />
-				</button>
-			</div>
-			<div v-if="showHelp" class="form-row alert alert-info my-1 small">
-				<div class="col">
-					<slot name="help"></slot>
+					<div class="col">
+						<slot name="help"></slot>
+					</div>
 				</div>
 			</div>
-		</div>
-	</div>
+		</template>
+	</openwb-base-setting-element>
 </template>
 
 <script>

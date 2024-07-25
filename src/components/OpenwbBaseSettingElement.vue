@@ -1,6 +1,10 @@
 <template>
 	<div class="form-row mb-1 align-items-baseline">
-		<label v-on:click="toggleHelp" class="col-md-4 col-form-label">
+		<label
+			v-if="$slots.title"
+			v-on:click="toggleHelp"
+			class="col-md-4 col-form-label"
+		>
 			<slot name="title">*Title*</slot>
 			<font-awesome-icon
 				v-if="$slots.help"
@@ -18,7 +22,10 @@
 				<slot>*Element missing*</slot>
 			</div>
 			<div class="form-row">
-				<span v-if="showHelp" class="form-text alert alert-info my-1 small flex-fill">
+				<span
+					v-if="showHelp"
+					class="form-text alert alert-info my-1 small flex-fill"
+				>
 					<slot name="help">*Help Text*</slot>
 				</span>
 			</div>
