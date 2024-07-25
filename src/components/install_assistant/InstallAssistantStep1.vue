@@ -1,6 +1,6 @@
 <template>
 	<InstallAssistantStepTemplate
-		title="1. Datensicherung - Eine Sicherung erstellen"
+		title="1. Datensicherung der bestehenden Konfiguration"
 		@nextPage="nextPage"
 		@previousPage="previousPage"
 		@endAssistant="endAssistant"
@@ -8,9 +8,17 @@
 		<template v-slot:help>
 			<p>
 				Wir empfehlen an dieser Stelle eine Sicherung der openWB zu
-				erzeugen, auf welche später zurückgegriffen werden kann,
+				erstellen, auf welche später zurückgegriffen werden kann,
 				insbesondere, wenn die openWB schon konfiguriert war und der
 				Assistent nun erneut ausgeführt wird.
+			</p>
+			<p>
+				Nachdem die Sicherung abgeschlossen ist, kann die erstellte
+				Datei über den Link in der Benachrichtigung oder
+				<a href="/openWB/data/backup/" target="_blank">hier</a>
+				heruntergeladen werden.Beim Herunterladen bitte darauf achten,
+				dass die Datei mit der Endung .tar.gz gespeichert wird. Ggf. ist
+				das automatische Entpacken des Browsers zu deaktivieren.
 			</p>
 			<p>
 				Es wird empfohlen, regelmäßig Sicherungen der Daten zu
@@ -25,10 +33,10 @@
 				>
 					<h2>Achtung!</h2>
 					<p>
-						Vor allen Aktionen auf den folgenden Seiten ist
-						sicherzustellen, dass kein Ladevorgang aktiv ist! Zur
-						Sicherheit bitte zusätzlich alle Fahrzeuge von der
-						Ladestation / den Ladestationen abstecken!
+						Bevor der Assistent gestartet wird, ist sicherzustellen,
+						dass kein Ladevorgang aktiv ist! Zur Sicherheit bitte
+						zusätzlich alle Fahrzeuge von der Ladestation / den
+						Ladestationen abstecken!
 					</p>
 					<openwb-base-button-group-input
 						title="Ich habe die Warnung verstanden"
