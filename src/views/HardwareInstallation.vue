@@ -400,7 +400,7 @@ export default {
 		};
 	},
 	computed: {
-		dataStoreLoaded() {
+		dataStoreLoad() {
 			return this.$store.state.mqtt[
 				"openWB/system/configurable/devices_components"
 			];
@@ -412,9 +412,9 @@ export default {
 					"openWB/system/configurable/devices_components"
 				],
 			)) {
-				if (element.group == "generic") {
+				if (element.group === "generic") {
 					generic_arr.push({
-						value: element.value,
+						value: element.value[1],
 						text: element.text,
 					});
 				}
@@ -429,22 +429,11 @@ export default {
 				],
 			)) {
 				if (
-					element.group == "other" &&
-					!element.value.includes(".") &&
-					!element.value.includes("openWB")
+					element.group === "other"
 				) {
 					other_arr.push({
-						value: element.value,
-						text: element.text,
-					});
-				}
-				if (
-					element.value.includes(".") &&
-					!element.value.includes("openWB")
-				) {
-					other_arr.push({
-						value: element.value,
-						text: element.value.split(".")[0],
+						value: element.value[0],
+						text: element.vendor[0].value,
 					});
 				}
 			}
@@ -458,27 +447,30 @@ export default {
 				],
 			)) {
 				manufacturer_arr.push({
-					value: element.value,
-					text: element.device,
+					value: element.value[0]+"."+element.value[1],
+					text: element.text,
+					vendor: element.vendor,
 				});
 			}
-			if (this.selectManufacturer.includes(".")) {
-				if (this.selectManufacturer != "" && this.selectManufacturer) {
-					manufacturer_arr = manufacturer_arr.filter((item) => {
-						return item.value.includes(
-							this.selectManufacturer.split(".")[0] + ".",
-						);
-					});
-				}
-			}
-			if (!this.selectManufacturer.includes(".")) {
 				if (this.selectManufacturer != "" && this.selectManufacturer) {
 					manufacturer_arr = manufacturer_arr.filter((item) => {
 						return item.value.includes(this.selectManufacturer);
 					});
 				}
-			}
-			this.reset(manufacturer_arr.length);
+				let index = 0;
+				for (let i = 0; i < manufacturer_arr.length; i++) {
+					if(manufacturer_arr[i].value.split(".")[0].indexOf(this.selectManufacturer) === 0){
+						index = i;
+						break;
+					}
+				}
+				let onlyManufacturer = (manufacturer_arr[index].value.split(".")[0]+".");
+				if (this.selectManufacturer === manufacturer_arr[index].value.split(".")[0]){
+					manufacturer_arr = manufacturer_arr.filter((item) => {
+						return item.value.includes(onlyManufacturer);
+					});
+				}
+			this.reset();
 			return manufacturer_arr;
 		},
 		deviceList() {
@@ -514,18 +506,14 @@ export default {
 		},
 	},
 	watch: {
-		dataStoreLoaded() {
+		dataStoreLoad() {
 			console.info("Store data finally loaded");
 			return (this.hasData = true);
 		},
 	},
 	methods: {
-		reset(length) {
-			if (length <= 1) {
-				this.deviceToAdd = this.selectManufacturer;
-			} else {
-				this.deviceToAdd = undefined;
-			}
+		reset() {
+			this.deviceToAdd = undefined;
 			return;
 		},
 		removeDuplicates(data) {
@@ -604,7 +592,7 @@ export default {
 				command: "addComponent",
 				data: {
 					deviceId: deviceId,
-					deviceType: deviceType,
+					deviceType: deviceType[0]+"."+deviceType[1],
 					type: componentType,
 				},
 			});
@@ -645,13 +633,13 @@ export default {
 			}
 		},
 		getComponentList(deviceType) {
-			if (deviceType === undefined) {
+			if (deviceType[1] === undefined) {
 				return [];
 			}
-			console.debug("finding components for '" + deviceType + "'");
+			console.debug("finding components for '" +deviceType[1] + "'");
 			let myDevice = this.$store.state.mqtt[
 				"openWB/system/configurable/devices_components"
-			].find((device) => device.value === deviceType);
+			].find((device) => device.value[1] === deviceType[1]);
 			return myDevice.component;
 		},
 		updateConfiguration(key, event) {
