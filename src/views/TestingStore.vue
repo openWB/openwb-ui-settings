@@ -2,28 +2,25 @@
 	<div class="testingStore">
 		<form name="testingStoreForm">
 			<openwb-base-card title="Elemente mit BaseSettingElement">
-				<OpenwbBaseHeading>
-					Basiselement
-				</OpenwbBaseHeading>
+				<OpenwbBaseHeading> Basiselement </OpenwbBaseHeading>
 				<OpenwbBaseSettingElement>
 					<template #help>
-						Basis-Element für alle weiteren Elemente.
-						Das ist ein <a href="test">Link</a>.
+						Basis-Element für alle weiteren Elemente. Das ist ein
+						<a href="test">Link</a>.
 					</template>
 				</OpenwbBaseSettingElement>
-				<OpenwbBaseHeading>
-					Abgeleitete Elemente
-				</OpenwbBaseHeading>
-				<openwb-base-button-input2
+				<OpenwbBaseHeading> Abgeleitete Elemente </OpenwbBaseHeading>
+				<openwb-base-button-input
 					title="Button Input"
 					buttonText="Klick mich"
 					subtype="info"
 				>
 					<template #help>
 						Einfacher Click-Button für Aktionen.
+						<a href="test">Link</a>.
 					</template>
-				</openwb-base-button-input2>
-				<openwb-base-button-group-input2
+				</openwb-base-button-input>
+				<openwb-base-button-group-input
 					title="Button Group Input"
 					:buttons="[
 						{ buttonValue: 1, text: 'Eins' },
@@ -33,10 +30,11 @@
 					@update:model-value="updateState('buttonGroup1', $event)"
 				>
 					<template #help>
-						Button-Group Element zur Auswahl weniger Optionen.
-						Bei vielen Optionen besser ein Dropdown verwenden.
+						Button-Group Element zur Auswahl weniger Optionen. Bei
+						vielen Optionen besser ein Dropdown verwenden.
+						<a href="test">Link</a>.
 					</template>
-				</openwb-base-button-group-input2>
+				</openwb-base-button-group-input>
 			</openwb-base-card>
 			<openwb-base-card title="Einfache Eingabefelder">
 				<openwb-base-text-input
@@ -320,6 +318,7 @@
 					Das ist eine Überschrift
 					<template #help>
 						Es sind auch Hilfetexte im #help Slot möglich.
+						<a href="test">Link</a>.
 					</template>
 				</openwb-base-heading>
 				<openwb-base-alert>
