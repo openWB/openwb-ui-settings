@@ -431,7 +431,7 @@ export default {
 				if (element.group === "other") {
 					other_arr.push({
 						value: element.value[0],
-						text: element.vendor[0].value,
+						text: element.vendor[0].vendor,
 					});
 				}
 			}
