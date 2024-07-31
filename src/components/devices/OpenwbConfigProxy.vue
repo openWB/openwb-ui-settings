@@ -19,7 +19,7 @@ export default {
 	emits: ["update:configuration"],
 	props: {
 		deviceId: { required: true },
-		deviceType: { type: String, required: true },
+		deviceType: { type: Array, required: true },
 		componentId: { default: undefined },
 		componentType: { type: String, default: undefined },
 		configuration: { type: Object, required: true },
@@ -27,19 +27,19 @@ export default {
 	computed: {
 		myComponent() {
 			console.debug(
-				`loading component: ${this.deviceType} / ${this.componentType}`,
+				`loading component: ${this.deviceType[1]} / ${this.componentType}`,
 			);
 			if (this.componentType !== undefined) {
 				return defineAsyncComponent({
 					loader: () =>
 						import(
-							`./${this.deviceType}/${this.componentType}.vue`
+							`./${this.deviceType[1]}/${this.componentType}.vue`
 						),
 					errorComponent: OpenwbDeviceConfigFallback,
 				});
 			} else {
 				return defineAsyncComponent({
-					loader: () => import(`./${this.deviceType}/device.vue`),
+					loader: () => import(`./${this.deviceType[1]}/device.vue`),
 					errorComponent: OpenwbDeviceConfigFallback,
 				});
 			}
