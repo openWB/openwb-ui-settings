@@ -30,6 +30,23 @@
 				updateConfiguration($event, 'configuration.meter_id')
 			"
 		/>
+		<openwb-base-select-input
+			title="Leistung invertieren"
+			notSelected="Bitte auswählen"
+			:options="[
+				{ value: 1, text: 'nein' },
+				{ value: -1, text: 'ja' },
+			]"
+			:model-value="configuration.factor"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.factor')
+			"
+		>
+			<template #help>
+				Einige externe SolarEdge Wechselrichter liefern die Leistung mit falschem Vorzeichen. 
+				In diesem Fall ist die leistung zu invertieren.
+			</template>
+		</openwb-base-select-input>
 	</div>
 </template>
 
