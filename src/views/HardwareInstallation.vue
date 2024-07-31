@@ -23,7 +23,7 @@
 	<!-- main content -->
 	<div class="hardwareInstallation">
 		<form name="hardwareInstallationForm">
-			<openwb-base-alert v-if="!installAssistantActive" subtype="info">
+			<openwb-base-alert subtype="info">
 				Wenn neue Komponenten - insbesondere Zähler - konfiguriert
 				wurden, ist auch das
 				<router-link to="/LoadManagementConfiguration">
@@ -256,10 +256,25 @@
 					</openwb-base-card>
 					<hr v-if="Object.keys(installedDevices).length > 0" />
 					<openwb-base-select-input
+						v-if="hasData"
+						class="mb-2"
+						title="Hersteller"
+						notSelected="Bitte auswählen"
+						:options="deviceList.options"
+						:groups="deviceList.groups"
+						:model-value="selectManufacturer"
+						@update:model-value="selectManufacturer = $event"
+					>
+						<template #append>
+							<span class="col-1"> </span>
+						</template>
+					</openwb-base-select-input>
+					<openwb-base-select-input
+						v-if="selectManufacturer"
 						class="mb-2"
 						title="Verfügbare Geräte"
 						notSelected="Bitte auswählen"
-						:options="getDeviceList()"
+						:options="manufacturerList"
 						:model-value="deviceToAdd"
 						@update:model-value="deviceToAdd = $event"
 					>
@@ -356,19 +371,12 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbConfigProxy from "../components/devices/OpenwbConfigProxy.vue";
 
 export default {
-	name: "OpenwbHardwareInstallationView",
+	name: "OpenwbHardwareInstallation",
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,
 		OpenwbConfigProxy,
-	},
-	props: {
-		installAssistantActive: {
-			type: Boolean,
-			required: false,
-			default: false,
-		},
 	},
 	data() {
 		return {
@@ -387,9 +395,109 @@ export default {
 			showComponentRemoveModal: false,
 			modalComponent: undefined,
 			modalComponentName: "",
+			hasData: false,
+			selectManufacturer: undefined,
 		};
 	},
 	computed: {
+		dataStoreLoad() {
+			return this.$store.state.mqtt[
+				"openWB/system/configurable/devices_components"
+			];
+		},
+		deviceListGeneric() {
+			var generic_arr = [];
+			for (const element of Object.values(
+				this.$store.state.mqtt[
+					"openWB/system/configurable/devices_components"
+				],
+			)) {
+				if (element.group === "generic") {
+					generic_arr.push({
+						value: element.value[1],
+						text: element.text,
+					});
+				}
+			}
+			return generic_arr;
+		},
+		deviceListOther() {
+			var other_arr = [];
+			for (const element of Object.values(
+				this.$store.state.mqtt[
+					"openWB/system/configurable/devices_components"
+				],
+			)) {
+				if (element.group === "other") {
+					other_arr.push({
+						value: element.value[0],
+						text: element.vendor[0].vendor,
+					});
+				}
+			}
+			return this.removeDuplicates(other_arr);
+		},
+		manufacturerList() {
+			var manufacturer_arr = [];
+			for (const element of Object.values(
+				this.$store.state.mqtt[
+					"openWB/system/configurable/devices_components"
+				],
+			)) {
+				manufacturer_arr.push({
+					value: element.value[0] + "." + element.value[1],
+					text: element.text,
+					vendor: element.vendor,
+				});
+			}
+			if (this.selectManufacturer != "" && this.selectManufacturer) {
+				manufacturer_arr = manufacturer_arr.filter((item) => {
+					return item.value.includes(this.selectManufacturer);
+				});
+			}
+			let index = 0;
+			for (let i = 0; i < manufacturer_arr.length; i++) {
+				if (
+					manufacturer_arr[i].value
+						.split(".")[0]
+						.indexOf(this.selectManufacturer) === 0
+				) {
+					index = i;
+					break;
+				}
+			}
+			let onlyManufacturer =
+				manufacturer_arr[index].value.split(".")[0] + ".";
+			if (
+				this.selectManufacturer ===
+				manufacturer_arr[index].value.split(".")[0]
+			) {
+				manufacturer_arr = manufacturer_arr.filter((item) => {
+					return item.value.includes(onlyManufacturer);
+				});
+			}
+			this.reset();
+			return manufacturer_arr;
+		},
+		deviceList() {
+			let options = [
+				{
+					value: "openWB",
+					text: "openWB",
+				},
+			];
+			let groups = [
+				{
+					label: "generisch",
+					options: [...this.deviceListGeneric],
+				},
+				{
+					label: "Systemhersteller",
+					options: [...this.deviceListOther],
+				},
+			];
+			return { options: options, groups: groups };
+		},
 		installedDevices: {
 			get() {
 				return this.getWildcardTopics("openWB/system/device/+/config");
@@ -403,7 +511,27 @@ export default {
 			},
 		},
 	},
+	watch: {
+		dataStoreLoad() {
+			console.info("Store data finally loaded");
+			return (this.hasData = true);
+		},
+	},
 	methods: {
+		reset() {
+			this.deviceToAdd = undefined;
+			return;
+		},
+		removeDuplicates(data) {
+			let res = data.filter(
+				(obj, index, self) =>
+					index ===
+					self.findIndex(
+						(t) => t.id === obj.id && t.text === obj.text,
+					),
+			);
+			return res;
+		},
 		getComponentTypeClass(type) {
 			if (type.match(/^(.+_)?counter(_.+)?$/)) {
 				return "danger";
@@ -465,17 +593,12 @@ export default {
 				});
 			}
 		},
-		getDeviceList() {
-			return this.$store.state.mqtt[
-				"openWB/system/configurable/devices_components"
-			];
-		},
 		addComponent(deviceId, deviceType, componentType) {
 			this.$emit("sendCommand", {
 				command: "addComponent",
 				data: {
 					deviceId: deviceId,
-					deviceType: deviceType,
+					deviceType: deviceType[0] + "." + deviceType[1],
 					type: componentType,
 				},
 			});
@@ -516,13 +639,13 @@ export default {
 			}
 		},
 		getComponentList(deviceType) {
-			if (deviceType === undefined) {
+			if (deviceType[1] === undefined) {
 				return [];
 			}
-			console.debug("finding components for '" + deviceType + "'");
+			console.debug("finding components for '" + deviceType[1] + "'");
 			let myDevice = this.$store.state.mqtt[
 				"openWB/system/configurable/devices_components"
-			].find((device) => device.value === deviceType);
+			].find((device) => device.value[1] === deviceType[1]);
 			return myDevice.component;
 		},
 		updateConfiguration(key, event) {
