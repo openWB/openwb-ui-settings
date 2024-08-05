@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faQuestionCircle as fasQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import { faQuestionCircle as farQuestionCircle } from "@fortawesome/free-regular-svg-icons";
@@ -51,6 +53,9 @@ export default {
 		toggleHelp() {
 			this.showHelp = !this.showHelp && this.$slots.help !== undefined;
 		},
+	},
+	components: {
+		OpenwbBaseSettingElement,
 	},
 };
 </script>

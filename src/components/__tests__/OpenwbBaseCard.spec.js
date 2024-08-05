@@ -1,11 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import OpenwbBaseCard from "../OpenwbBaseCard.vue";
 
 describe("Card.vue", () => {
 	it("adds class props.subtype when passed", () => {
 		const subtype = "info";
-		const wrapper = shallowMount(OpenwbBaseCard, {
+		const wrapper = mount(OpenwbBaseCard, {
 			props: { subtype },
 		});
 		const card = wrapper.find("div.card");
@@ -15,7 +15,7 @@ describe("Card.vue", () => {
 	});
 	it("render title when no header slot is passed", () => {
 		const title = "My Title";
-		const wrapper = shallowMount(OpenwbBaseCard, {
+		const wrapper = mount(OpenwbBaseCard, {
 			props: {
 				title,
 			},
@@ -25,7 +25,7 @@ describe("Card.vue", () => {
 	});
 	it("render header slot when passed", () => {
 		const slotContent = "<span>My Title Slot</span>";
-		const wrapper = shallowMount(OpenwbBaseCard, {
+		const wrapper = mount(OpenwbBaseCard, {
 			slots: {
 				header: slotContent,
 			},
@@ -35,7 +35,7 @@ describe("Card.vue", () => {
 	});
 	it("render default slot when passed", () => {
 		const slotContent = "<span>Default slot content.</span>";
-		const wrapper = shallowMount(OpenwbBaseCard, {
+		const wrapper = mount(OpenwbBaseCard, {
 			slots: {
 				default: slotContent,
 			},
@@ -45,7 +45,7 @@ describe("Card.vue", () => {
 	});
 	it("render marker when collapsible", () => {
 		const collapsible = true;
-		const wrapper = shallowMount(OpenwbBaseCard, {
+		const wrapper = mount(OpenwbBaseCard, {
 			props: {
 				collapsible,
 			},
@@ -56,7 +56,7 @@ describe("Card.vue", () => {
 	it("do not render card body when collapsed", async () => {
 		const collapsible = true;
 		const collapsed = true;
-		const wrapper = shallowMount(OpenwbBaseCard, {
+		const wrapper = mount(OpenwbBaseCard, {
 			props: {
 				collapsible,
 				collapsed,
@@ -71,7 +71,7 @@ describe("Card.vue", () => {
 	});
 	it("render actions slot when passed", () => {
 		const slotContent = "<span>Actions slot content.</span>";
-		const wrapper = shallowMount(OpenwbBaseCard, {
+		const wrapper = mount(OpenwbBaseCard, {
 			slots: {
 				actions: slotContent,
 			},
@@ -81,7 +81,7 @@ describe("Card.vue", () => {
 	});
 	it("render footer slot when passed", () => {
 		const slotContent = "<span>Footer slot content.</span>";
-		const wrapper = shallowMount(OpenwbBaseCard, {
+		const wrapper = mount(OpenwbBaseCard, {
 			slots: {
 				footer: slotContent,
 			},
