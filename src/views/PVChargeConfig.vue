@@ -305,7 +305,6 @@
         </div>
         <div v-else>
           <openwb-base-button-group-input
-            v-model="batMode"
             title="Laden mit Überschuss"
             :buttons="[
               { buttonValue: 'ev_mode' },
@@ -395,14 +394,20 @@
               </p>
             </template>
           </openwb-base-button-group-input>
-          <div v-if="batMode === 'min_soc_bat_mode'">
+          <div
+            v-if="
+              $store.state.mqtt[
+                'openWB/general/chargemode_config/pv_charging/bat_mode'
+              ] === 'min_soc_bat_mode'
+            "
+          >
             <openwb-base-range-input
               title="Mindest-SoC des Speichers"
               :min="0"
               :max="100"
               :step="1"
               unit="%"
-              :required
+              required
               :model-value="
                 $store.state.mqtt[
                   'openWB/general/chargemode_config/pv_charging/min_bat_soc'
@@ -420,7 +425,6 @@
               Mindest-SoC
             </openwb-base-heading>
             <openwb-base-button-group-input
-              v-model="batPowerReserveActive"
               title="Ladeleistung für Speicher reservieren"
               :buttons="[
                 {
@@ -485,7 +489,6 @@
               Mindest-SoC
             </openwb-base-heading>
             <openwb-base-button-group-input
-              v-model="batPowerReserveActive"
               title="Entladung des Speichers erlauben"
               :buttons="[
                 {
