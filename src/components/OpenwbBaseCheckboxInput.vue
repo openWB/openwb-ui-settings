@@ -18,6 +18,8 @@
 </template>
 
 <script>
+import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faQuestionCircle as fasQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 import { faQuestionCircle as farQuestionCircle } from "@fortawesome/free-regular-svg-icons";
@@ -27,6 +29,9 @@ library.add(fasQuestionCircle, farQuestionCircle);
 export default {
   name: "OpenwbCheckboxInput",
   inheritAttrs: false,
+  components: {
+    OpenwbBaseSettingElement,
+  },
   props: {
     title: { type: String, required: false, default: "" },
     modelValue: { type: Boolean },

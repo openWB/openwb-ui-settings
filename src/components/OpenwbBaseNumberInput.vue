@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faQuestionCircle as fasQuestionCircle,
@@ -48,6 +50,7 @@ export default {
   name: "OpenwbNumberInput",
   components: {
     FontAwesomeIcon,
+    OpenwbBaseSettingElement,
   },
   inheritAttrs: false,
   props: {

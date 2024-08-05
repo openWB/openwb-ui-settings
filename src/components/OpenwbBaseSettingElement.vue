@@ -5,7 +5,7 @@
 			v-on:click="toggleHelp"
 			class="col-md-4 col-form-label"
 		>
-			<slot name="title">*Title*</slot>
+			<slot name="title"></slot>
 			<font-awesome-icon
 				v-if="$slots.help"
 				:icon="
@@ -42,7 +42,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasQuestionCircle, farQuestionCircle);
 
 export default {
-	name: "OpenwbSettingElement",
+	name: "OpenwbBaseSettingElement",
 	data() {
 		return {
 			showHelp: false,
