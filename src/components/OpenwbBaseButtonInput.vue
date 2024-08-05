@@ -1,6 +1,10 @@
 <template>
 	<openwb-base-setting-element>
-		<template #title>{{ title }}</template>
+		<template #title>
+			<slot name="title">
+				{{ title }}
+			</slot>
+		</template>
 		<template #help>
 			<slot name="help"></slot>
 		</template>
@@ -19,7 +23,7 @@
 
 <script>
 export default {
-	name: "OpenwbButtonInput2",
+	name: "OpenwbButtonInput",
 	inheritAttrs: false,
 	props: {
 		title: String,
