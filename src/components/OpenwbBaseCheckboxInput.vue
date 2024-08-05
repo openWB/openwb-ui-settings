@@ -1,6 +1,10 @@
 <template>
 	<openwb-base-setting-element>
-		<template #title>{{ title }}</template>
+		<template #title>
+			<slot name="title">
+				{{ title }}
+			</slot>
+		</template>
 		<template #help>
 			<slot name="help"></slot>
 		</template>
