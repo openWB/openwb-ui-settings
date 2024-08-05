@@ -181,19 +181,18 @@
               Feldern der vereinbarte Preis einzutragen.
             </template>
           </openwb-base-heading>
-          <div
+          <openwb-base-alert
             v-if="
               $store.state.mqtt['openWB/optional/et/provider'] &&
-                $store.state.mqtt['openWB/optional/et/provider']
-                  .type
+              $store.state.mqtt['openWB/optional/et/provider']
+                .type
             "
+            subtype="info"
           >
-            <openwb-base-alert subtype="info">
-              Für den Netzbezug wird der dynamische Strompreis des
-              Anbieters für variable Stromtarife verwendet
-              (stündliche Aktualisierung durch den Anbieter).
-            </openwb-base-alert>
-          </div>
+            Für den Netzbezug wird der dynamische Strompreis des
+            Anbieters für variable Stromtarife verwendet
+            (stündliche Aktualisierung durch den Anbieter).
+          </openwb-base-alert>
           <div v-else>
             <openwb-base-number-input
               title="Preis für Netzbezug"
