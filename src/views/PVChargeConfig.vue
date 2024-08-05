@@ -306,7 +306,6 @@
 							{ buttonValue: 'bat_mode' },
 							{ buttonValue: 'min_soc_bat_mode' },
 						]"
-						v-model="batMode"
 						:model-value="
 							$store.state.mqtt[
 								'openWB/general/chargemode_config/pv_charging/bat_mode'
@@ -390,14 +389,20 @@
 							</p>
 						</template>
 					</openwb-base-button-group-input>
-					<div v-if="batMode === 'min_soc_bat_mode'">
+					<div
+						v-if="
+							$store.state.mqtt[
+								'openWB/general/chargemode_config/pv_charging/bat_mode'
+							] === 'min_soc_bat_mode'
+						"
+					>
 						<openwb-base-range-input
 							title="Mindest-SoC des Speichers"
 							:min="0"
 							:max="100"
 							:step="1"
 							unit="%"
-							:required
+							required
 							:model-value="
 								$store.state.mqtt[
 									'openWB/general/chargemode_config/pv_charging/min_bat_soc'
@@ -429,7 +434,6 @@
 									class: 'btn-outline-success',
 								},
 							]"
-							v-model="batPowerReserveActive"
 							:model-value="
 								$store.state.mqtt[
 									'openWB/general/chargemode_config/pv_charging/bat_power_reserve_active'
@@ -463,7 +467,7 @@
 							:min="0.1"
 							:step="0.1"
 							unit="kW"
-							:required
+							required
 							:model-value="
 								$store.state.mqtt[
 									'openWB/general/chargemode_config/pv_charging/bat_power_reserve'
@@ -495,7 +499,6 @@
 									class: 'btn-outline-success',
 								},
 							]"
-							v-model="batPowerReserveActive"
 							:model-value="
 								$store.state.mqtt[
 									'openWB/general/chargemode_config/pv_charging/bat_power_discharge_active'
@@ -527,7 +530,7 @@
 							:min="0.1"
 							:step="0.1"
 							unit="kW"
-							:required
+							required
 							:model-value="
 								$store.state.mqtt[
 									'openWB/general/chargemode_config/pv_charging/bat_power_discharge'
