@@ -14,7 +14,7 @@
 			</button>
 		</div>
 		<div class="toast-body">
-			<slot />
+			<slot></slot>
 		</div>
 	</div>
 </template>

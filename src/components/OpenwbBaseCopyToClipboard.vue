@@ -1,6 +1,6 @@
 <template>
 	<span ref="slot-wrapper" :title="tooltip" class="copy-me" @click="click">
-		<slot />
+		<slot></slot>
 		<font-awesome-icon
 			fixed-width
 			:icon="isCopied ? ['fas', 'clipboard-check'] : ['fas', 'clipboard']"
