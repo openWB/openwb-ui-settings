@@ -1,11 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import OpenwbBaseHeading from "../OpenwbBaseHeading.vue";
 
 describe("OpenwbBaseHeading.vue", () => {
 	it("render default slot when passed", () => {
 		const slotContent = "<span>Default slot content.</span>";
-		const wrapper = shallowMount(OpenwbBaseHeading, {
+		const wrapper = mount(OpenwbBaseHeading, {
 			slots: {
 				default: slotContent,
 			},
@@ -15,7 +15,7 @@ describe("OpenwbBaseHeading.vue", () => {
 	});
 	it("render actions slot when passed", () => {
 		const slotContent = "<span>Actions slot content.</span>";
-		const wrapper = shallowMount(OpenwbBaseHeading, {
+		const wrapper = mount(OpenwbBaseHeading, {
 			slots: {
 				actions: slotContent,
 			},

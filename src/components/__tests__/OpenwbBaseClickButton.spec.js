@@ -1,12 +1,12 @@
 import { describe, it, expect } from "vitest";
-import { shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import OpenwbBaseClickButton from "../OpenwbBaseClickButton.vue";
 
 describe("OpenwbBaseClickButton.vue", () => {
 	// check title prop
 	it("render title", () => {
 		const title = "T";
-		const wrapper = shallowMount(OpenwbBaseClickButton, {
+		const wrapper = mount(OpenwbBaseClickButton, {
 			props: { title },
 		});
 		const renderedButton = wrapper.find("button");
@@ -16,7 +16,7 @@ describe("OpenwbBaseClickButton.vue", () => {
 	it("render default slot", () => {
 		const title = "T";
 		const slotContent = "<span>T</span>";
-		const wrapper = shallowMount(OpenwbBaseClickButton, {
+		const wrapper = mount(OpenwbBaseClickButton, {
 			props: { title },
 			slots: {
 				default: slotContent,
@@ -28,7 +28,7 @@ describe("OpenwbBaseClickButton.vue", () => {
 	// check user input
 	it("emit on click", async () => {
 		const title = "T";
-		const wrapper = shallowMount(OpenwbBaseClickButton, {
+		const wrapper = mount(OpenwbBaseClickButton, {
 			props: { title },
 		});
 		const renderedButton = wrapper.find("button");
