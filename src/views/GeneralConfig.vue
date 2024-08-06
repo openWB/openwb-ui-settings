@@ -101,7 +101,7 @@
                 ] !== true
             "
           >
-            <openwb-base-alert subtype="info">
+            <openwb-base-alert subtype="info" class="mb-2">
               Wenn die Steuerung über Modbus auf "Aus" geändert
               wird, muss danach ein Neustart durchgeführt werden!
             </openwb-base-alert>

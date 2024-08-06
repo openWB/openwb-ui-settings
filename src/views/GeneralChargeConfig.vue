@@ -190,8 +190,7 @@
             subtype="info"
           >
             Für den Netzbezug wird der dynamische Strompreis des
-            Anbieters für variable Stromtarife verwendet
-            (stündliche Aktualisierung durch den Anbieter).
+            Anbieters für variable Stromtarife verwendet.
           </openwb-base-alert>
           <div v-else>
             <openwb-base-number-input

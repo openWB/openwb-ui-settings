@@ -237,7 +237,6 @@
                   installedDevice.type,
                 ).length
               "
-              class="mb-2"
               title="Verfügbare Komponenten"
               not-selected="Bitte auswählen"
               :options="
@@ -247,43 +246,11 @@
                 )
               "
               :model-value="componentToAdd[installedDevice.id]"
+              :addButton="true"
               @update:model-value="
                 componentToAdd[installedDevice.id] = $event
               "
             >
-              <template #append>
-                <span class="col-1">
-                  <openwb-base-click-button
-                    :class="
-                      componentToAdd[
-                        installedDevice.id
-                      ] === undefined
-                        ? 'btn-outline-success'
-                        : 'btn-success clickable'
-                    "
-                    :disabled="
-                      componentToAdd[
-                        installedDevice.id
-                      ] === undefined
-                    "
-                    @button-clicked="
-                      addComponent(
-                        installedDevice.id,
-                        installedDevice.vendor,
-                        installedDevice.type,
-                        componentToAdd[
-                          installedDevice.id
-                        ],
-                      )
-                    "
-                  >
-                    <font-awesome-icon
-                      fixed-width
-                      :icon="['fas', 'plus']"
-                    />
-                  </openwb-base-click-button>
-                </span>
-              </template>
               <template #help>
                 Bitte eine Komponente auswählen, die hinzugefügt
                 werden soll. Für jeden Datensatz, z.B.

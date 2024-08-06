@@ -39,7 +39,6 @@
               zwischen 1- und 3-phasig (s.g. 1p3p).
             </template>
           </openwb-base-button-group-input>
-          <hr>
           <openwb-base-button-group-input
             title="Anzahl Phasen bei PV-Überschuss"
             :buttons="[
