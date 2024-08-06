@@ -256,31 +256,14 @@
 					</openwb-base-card>
 					<hr v-if="Object.keys(installedDevices).length > 0" />
 					<openwb-base-select-input
-						class="mb-2"
 						title="Verfügbare Geräte"
 						notSelected="Bitte auswählen"
 						:options="getDeviceList()"
 						:model-value="deviceToAdd"
+						:addButton="true"
 						@update:model-value="deviceToAdd = $event"
+						@input:add="addDevice"
 					>
-						<template #append>
-							<span class="col-1">
-								<openwb-base-click-button
-									:class="
-										deviceToAdd === undefined
-											? 'btn-outline-success'
-											: 'btn-success clickable'
-									"
-									:disabled="deviceToAdd === undefined"
-									@buttonClicked="addDevice"
-								>
-									<font-awesome-icon
-										fixed-width
-										:icon="['fas', 'plus']"
-									/>
-								</openwb-base-click-button>
-							</span>
-						</template>
 						<template #help>
 							<p>
 								Die openWB-Regelung ist auf Werte von
