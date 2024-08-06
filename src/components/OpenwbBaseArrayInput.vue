@@ -3,7 +3,7 @@
     <template #title>
       <slot name="title">{{ title }}</slot>
     </template>
-    <template #help>
+    <template #help v-if="$slots.help">
       <slot name="help"></slot>
     </template>
     <template #default>
@@ -76,25 +76,21 @@
 </template>
 
 <script>
+import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-  faQuestionCircle as fasQuestionCircle,
   faTag as fasTag,
   faTimesCircle as fasTimesCircle,
   faPlus as fasPlus,
-  faInfoCircle as fasInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import { faQuestionCircle as farQuestionCircle } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
 
 library.add(
-  fasQuestionCircle,
-  farQuestionCircle,
   fasTag,
   fasTimesCircle,
   fasPlus,
-  fasInfoCircle,
 );
 
 export default {

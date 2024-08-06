@@ -5,7 +5,7 @@
         {{ title }}
       </slot>
     </template>
-    <template #help>
+    <template #help v-if="$slots.help">
       <slot name="help"></slot>
     </template>
     <template #default>

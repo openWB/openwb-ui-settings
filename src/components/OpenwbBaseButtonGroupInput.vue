@@ -5,7 +5,7 @@
         {{ title }}
       </slot>
     </template>
-    <template #help>
+    <template #help v-if="$slots.help">
       <slot name="help"></slot>
     </template>
     <template #default>
@@ -46,14 +46,10 @@
 import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faQuestionCircle as fasQuestionCircle,
-  faCheck as fasCheck,
-} from "@fortawesome/free-solid-svg-icons";
-import { faQuestionCircle as farQuestionCircle } from "@fortawesome/free-regular-svg-icons";
+import { faCheck as fasCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasQuestionCircle, farQuestionCircle, fasCheck);
+library.add(fasCheck);
 
 export default {
   name: "OpenwbButtonGroupInput",
@@ -68,11 +64,6 @@ export default {
     buttons: { type: Array, required: true },
   },
   emits: ["update:modelValue"],
-  data() {
-    return {
-      showHelp: false,
-    };
-  },
   computed: {
     value: {
       get() {
@@ -81,11 +72,6 @@ export default {
       set(newValue) {
         this.$emit("update:modelValue", newValue);
       },
-    },
-  },
-  methods: {
-    toggleHelp() {
-      this.showHelp = !this.showHelp && this.$slots.help !== undefined;
     },
   },
 };
