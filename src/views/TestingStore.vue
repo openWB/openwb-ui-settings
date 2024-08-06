@@ -244,7 +244,9 @@
 					@update:model-value="updateState('select2', $event)"
 					@input:add="console.log('add button pressed')"
 				>
-					<template #help>Select mit Gruppen und Add-Button.</template>
+					<template #help
+						>Select mit Gruppen und Add-Button.</template
+					>
 				</openwb-base-select-input>
 				<hr />
 				<openwb-base-button-group-input
