@@ -1,55 +1,32 @@
 <template>
-  <div class="form-row mb-1">
-    <label
-      class="col-md-4 col-form-label"
-      @click="toggleHelp"
-    >
-      {{ title }}
-      <font-awesome-icon
-        v-if="$slots.help"
-        :icon="
-          showHelp
-            ? ['fas', 'question-circle']
-            : ['far', 'question-circle']
-        "
-        :class="showHelp ? 'text-info' : ''"
-      />
-    </label>
-    <div class="col-md-8">
-      <div class="form-row">
-        <openwb-nested-list
-          v-if="value !== undefined"
-          v-model="value"
-          :labels="labels"
-        />
-        <div v-else>
-          Warte auf Daten...
-        </div>
-      </div>
-      <span
-        v-if="showHelp"
-        class="form-row alert alert-info my-1 small"
-      >
-        <slot name="help" />
-      </span>
+  <openwb-base-setting-element>
+    <template #title>
+      <slot name="title">
+        {{ title }}
+      </slot>
+    </template>
+    <template #help v-if="$slots.help">
+      <slot name="help"></slot>
+    </template>
+    <openwb-nested-list
+      v-if="value !== undefined"
+      v-model="value"
+      :labels="labels"
+    />
+    <div v-else>
+      Warte auf Daten...
     </div>
-  </div>
+  </openwb-base-setting-element>
 </template>
 
 <script>
+import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
 import OpenwbNestedList from "./OpenwbNestedList.vue";
-
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faQuestionCircle as fasQuestionCircle } from "@fortawesome/free-solid-svg-icons";
-import { faQuestionCircle as farQuestionCircle } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-
-library.add(fasQuestionCircle, farQuestionCircle);
 
 export default {
   name: "OpenwbSortableList",
   components: {
-    FontAwesomeIcon,
+    OpenwbBaseSettingElement,
     OpenwbNestedList,
   },
   props: {
@@ -59,11 +36,6 @@ export default {
     labels: { type: Object, default: undefined },
   },
   emits: ["update:modelValue"],
-  data() {
-    return {
-      showHelp: false,
-    };
-  },
   computed: {
     value: {
       get() {
@@ -73,11 +45,6 @@ export default {
         console.debug("update in sortableList", newValue);
         this.$emit("update:modelValue", newValue);
       },
-    },
-  },
-  methods: {
-    toggleHelp() {
-      this.showHelp = !this.showHelp && this.$slots.help !== undefined;
     },
   },
 };
