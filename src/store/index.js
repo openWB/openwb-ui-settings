@@ -33,7 +33,7 @@ if (import.meta.env.MODE !== "production") {
     range1: 6,
     range2: 10,
     select1: 1,
-    select2: "three",
+    select2: undefined,
     buttonGroup1: 1,
     checkbox1: true,
     json1: { text: "Text", number: 123 },

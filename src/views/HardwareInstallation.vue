@@ -313,6 +313,10 @@
             not-selected="Bitte auswählen"
             :disabled="selectedVendor === undefined"
             :options="deviceList"
+            :model-value="deviceToAdd"
+            :addButton="true"
+            @update:model-value="deviceToAdd = $event"
+            @input:add="addDevice"
           >
             <template #append>
               <span class="col-1">
