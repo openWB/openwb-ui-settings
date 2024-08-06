@@ -80,10 +80,11 @@ import {
 	faTag as fasTag,
 	faTimesCircle as fasTimesCircle,
 	faPlus as fasPlus,
+	faInfoCircle as fasInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasTag, fasTimesCircle, fasPlus);
+library.add(fasTag, fasTimesCircle, fasPlus, fasInfoCircle);
 
 export default {
 	name: "OpenwbArrayInput",
