@@ -9,7 +9,7 @@
       <slot name="help"></slot>
     </template>
     <template #default>
-      <div class="form-row w-100">
+      <div class="w-100">
         <div class="input-group">
           <div class="input-group-prepend">
             <div class="input-group-text">

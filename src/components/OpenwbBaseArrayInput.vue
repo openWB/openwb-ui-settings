@@ -83,6 +83,7 @@ import {
   faTag as fasTag,
   faTimesCircle as fasTimesCircle,
   faPlus as fasPlus,
+  faInfoCircle as fasInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
@@ -91,6 +92,7 @@ library.add(
   fasTag,
   fasTimesCircle,
   fasPlus,
+  fasInfoCircle,
 );
 
 export default {
