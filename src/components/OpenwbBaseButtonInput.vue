@@ -5,7 +5,7 @@
 				{{ title }}
 			</slot>
 		</template>
-		<template #help>
+		<template #help v-if="$slots.help">
 			<slot name="help"></slot>
 		</template>
 		<template #default>
@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+
 export default {
 	name: "OpenwbButtonInput",
 	inheritAttrs: false,
@@ -53,6 +55,9 @@ export default {
 		handleClick(event) {
 			this.$emit("buttonClicked", event);
 		},
+	},
+	components: {
+		OpenwbBaseSettingElement,
 	},
 };
 </script>

@@ -5,7 +5,7 @@
 				{{ title }}
 			</slot>
 		</template>
-		<template #help>
+		<template #help v-if="$slots.help">
 			<slot name="help"></slot>
 		</template>
 		<template #default>
@@ -196,9 +196,10 @@
 </template>
 
 <script>
+import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-	faQuestionCircle as fasQuestionCircle,
 	faKeyboard as fasKeyboard,
 	faEnvelope as fasEnvelope,
 	faNetworkWired as fasNetworkWired,
@@ -211,15 +212,12 @@ import {
 	faCalendarDay as fasCalendarDay,
 } from "@fortawesome/free-solid-svg-icons";
 import {
-	faQuestionCircle as farQuestionCircle,
 	faEye as farEye,
 	faEyeSlash as farEyeSlash,
 } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(
-	fasQuestionCircle,
-	farQuestionCircle,
 	fasKeyboard,
 	fasEnvelope,
 	fasNetworkWired,
@@ -268,7 +266,6 @@ export default {
 	emits: ["update:modelValue"],
 	data() {
 		return {
-			showHelp: false,
 			showPassword: false,
 			inputInvalid: false,
 			tempValue: this.modelValue,
@@ -336,9 +333,6 @@ export default {
 		},
 	},
 	methods: {
-		toggleHelp() {
-			this.showHelp = !this.showHelp && this.$slots.help !== undefined;
-		},
 		togglePassword() {
 			this.showPassword = !this.showPassword;
 		},
@@ -379,6 +373,7 @@ export default {
 		},
 	},
 	components: {
+		OpenwbBaseSettingElement,
 		FontAwesomeIcon,
 	},
 };

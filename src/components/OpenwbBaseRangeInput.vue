@@ -5,7 +5,7 @@
 				{{ title }}
 			</slot>
 		</template>
-		<template #help>
+		<template #help v-if="$slots.help">
 			<slot name="help"></slot>
 		</template>
 		<template #default>
@@ -40,14 +40,6 @@
 						<font-awesome-icon :icon="['fas', 'step-forward']" />
 					</button>
 				</div>
-				<div
-					v-if="showHelp"
-					class="form-row alert alert-info my-1 small"
-				>
-					<div class="col">
-						<slot name="help"></slot>
-					</div>
-				</div>
 			</div>
 		</template>
 	</openwb-base-setting-element>
@@ -58,19 +50,12 @@ import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-	faQuestionCircle as fasQuestionCircle,
 	faStepForward as fasStepForward,
 	faStepBackward as fasStepBackward,
 } from "@fortawesome/free-solid-svg-icons";
-import { faQuestionCircle as farQuestionCircle } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(
-	fasQuestionCircle,
-	farQuestionCircle,
-	fasStepForward,
-	fasStepBackward,
-);
+library.add(fasStepForward, fasStepBackward);
 
 export default {
 	name: "OpenwbRangeInput",
@@ -85,11 +70,6 @@ export default {
 		labels: { type: Array },
 	},
 	emits: ["update:modelValue"],
-	data() {
-		return {
-			showHelp: false,
-		};
-	},
 	computed: {
 		label() {
 			var currentLabel;
@@ -161,9 +141,6 @@ export default {
 		},
 	},
 	methods: {
-		toggleHelp() {
-			this.showHelp = !this.showHelp && this.$slots.help !== undefined;
-		},
 		increment() {
 			var newSliderValue = Math.min(
 				this.sliderValue + this.step,

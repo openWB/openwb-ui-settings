@@ -5,7 +5,7 @@
 				{{ title }}
 			</slot>
 		</template>
-		<template #help>
+		<template #help v-if="$slots.help">
 			<slot name="help"></slot>
 		</template>
 		<template #default>
@@ -24,12 +24,6 @@
 <script>
 import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
 
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faQuestionCircle as fasQuestionCircle } from "@fortawesome/free-solid-svg-icons";
-import { faQuestionCircle as farQuestionCircle } from "@fortawesome/free-regular-svg-icons";
-
-library.add(fasQuestionCircle, farQuestionCircle);
-
 export default {
 	name: "OpenwbCheckboxInput",
 	inheritAttrs: false,
@@ -38,11 +32,6 @@ export default {
 		modelValue: { type: Boolean },
 	},
 	emits: ["update:modelValue"],
-	data() {
-		return {
-			showHelp: false,
-		};
-	},
 	computed: {
 		value: {
 			get() {
@@ -51,11 +40,6 @@ export default {
 			set(newValue) {
 				this.$emit("update:modelValue", newValue);
 			},
-		},
-	},
-	methods: {
-		toggleHelp() {
-			this.showHelp = !this.showHelp && this.$slots.help !== undefined;
 		},
 	},
 	components: {

@@ -5,7 +5,7 @@
 				{{ title }}
 			</slot>
 		</template>
-		<template #help>
+		<template #help v-if="$slots.help">
 			<slot name="help"></slot>
 		</template>
 		<template #default>
@@ -52,12 +52,16 @@
 </template>
 
 <script>
+import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faQuestionCircle as fasQuestionCircle } from "@fortawesome/free-solid-svg-icons";
-import { faQuestionCircle as farQuestionCircle } from "@fortawesome/free-regular-svg-icons";
+import {
+	faKeyboard as fasKeyboard,
+	faCode as fasCode,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasQuestionCircle, farQuestionCircle);
+library.add(fasKeyboard, fasCode);
 
 export default {
 	name: "OpenwbTextareaInput",
@@ -75,7 +79,6 @@ export default {
 	emits: ["update:modelValue"],
 	data() {
 		return {
-			showHelp: false,
 			inputInvalid: false,
 			tempValue: this.modelValue,
 		};
@@ -124,12 +127,8 @@ export default {
 			},
 		},
 	},
-	methods: {
-		toggleHelp() {
-			this.showHelp = !this.showHelp && this.$slots.help !== undefined;
-		},
-	},
 	components: {
+		OpenwbBaseSettingElement,
 		FontAwesomeIcon,
 	},
 };
