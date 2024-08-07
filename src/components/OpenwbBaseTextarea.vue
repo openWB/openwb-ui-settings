@@ -1,19 +1,15 @@
 <template>
-	<div class="form-row mb-1">
-		<label v-on:click="toggleHelp" class="col-md-4 col-form-label">
-			{{ title }}
-			<font-awesome-icon
-				v-if="$slots.help"
-				:icon="
-					showHelp
-						? ['fas', 'question-circle']
-						: ['far', 'question-circle']
-				"
-				:class="showHelp ? 'text-info' : ''"
-			/>
-		</label>
-		<div class="col-md-8">
-			<div class="form-row">
+	<openwb-base-setting-element>
+		<template #title>
+			<slot name="title">
+				{{ title }}
+			</slot>
+		</template>
+		<template #help v-if="$slots.help">
+			<slot name="help"></slot>
+		</template>
+		<template #default>
+			<div class="w-100">
 				<div class="input-group">
 					<div class="input-group-prepend">
 						<div class="input-group-text">
@@ -51,20 +47,21 @@
 					</div>
 				</div>
 			</div>
-			<span v-if="showHelp" class="form-row alert alert-info my-1 small">
-				<slot name="help"></slot>
-			</span>
-		</div>
-	</div>
+		</template>
+	</openwb-base-setting-element>
 </template>
 
 <script>
+import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faQuestionCircle as fasQuestionCircle } from "@fortawesome/free-solid-svg-icons";
-import { faQuestionCircle as farQuestionCircle } from "@fortawesome/free-regular-svg-icons";
+import {
+	faKeyboard as fasKeyboard,
+	faCode as fasCode,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasQuestionCircle, farQuestionCircle);
+library.add(fasKeyboard, fasCode);
 
 export default {
 	name: "OpenwbTextareaInput",
@@ -82,7 +79,6 @@ export default {
 	emits: ["update:modelValue"],
 	data() {
 		return {
-			showHelp: false,
 			inputInvalid: false,
 			tempValue: this.modelValue,
 		};
@@ -131,12 +127,8 @@ export default {
 			},
 		},
 	},
-	methods: {
-		toggleHelp() {
-			this.showHelp = !this.showHelp && this.$slots.help !== undefined;
-		},
-	},
 	components: {
+		OpenwbBaseSettingElement,
 		FontAwesomeIcon,
 	},
 };

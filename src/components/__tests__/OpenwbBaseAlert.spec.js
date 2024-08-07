@@ -1,11 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import OpenwbBaseAlert from "../OpenwbBaseAlert.vue";
 
 describe("OpenwbBaseAlert.vue", () => {
 	it("adds class props.subtype when passed", () => {
 		const subtype = "info";
-		const wrapper = shallowMount(OpenwbBaseAlert, {
+		const wrapper = mount(OpenwbBaseAlert, {
 			props: { subtype },
 		});
 		const mainDiv = wrapper.find("div.alert");
@@ -13,7 +13,7 @@ describe("OpenwbBaseAlert.vue", () => {
 	});
 	it("render slot when passed", () => {
 		const slotContent = "<span>Default slot message</span>";
-		const wrapper = shallowMount(OpenwbBaseAlert, {
+		const wrapper = mount(OpenwbBaseAlert, {
 			slots: {
 				default: slotContent,
 			},

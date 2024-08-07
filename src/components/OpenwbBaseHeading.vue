@@ -1,7 +1,7 @@
 <template>
 	<div class="card-text card-text-heading" v-bind="$attrs">
 		<div class="heading-text" v-on:click="toggleHelp">
-			<slot />
+			<slot></slot>
 			<font-awesome-icon
 				v-if="$slots.help"
 				:icon="
@@ -13,11 +13,14 @@
 			/>
 		</div>
 		<span v-if="$slots.actions" class="actions">
-			<slot name="actions" />
+			<slot name="actions"></slot>
 		</span>
 	</div>
 	<div class="">
-		<span v-if="showHelp" class="form-row alert alert-info small">
+		<span
+			v-if="showHelp"
+			class="form-text alert alert-info small flex-fill"
+		>
 			<slot name="help"></slot>
 		</span>
 	</div>
