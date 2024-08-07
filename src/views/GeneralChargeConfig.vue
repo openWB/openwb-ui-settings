@@ -289,6 +289,35 @@
 					</div>
 				</div>
 			</openwb-base-card>
+			<openwb-base-card title="OCPP Anbindung" >
+				<openwb-base-button-group-input
+				title="OCPP aktivieren"
+				:buttons="[
+					{
+						buttonValue: false,
+						text: 'Nein',
+						class: 'btn-outline-danger',
+					},
+					{
+						buttonValue: true,
+						text: 'Ja',
+						class: 'btn-outline-success',
+					},
+				]"
+				v-model="this.ocppActive"
+			/>
+				<openwb-base-text-input v-if="this.ocppActive"
+					title="OCPP URL"
+					:model-value="
+						$store.state.mqtt['openWB/optional/ocpp/url']
+					"
+					@update:model-value="
+						updateState('openWB/optional/ocpp/url', $event)
+					"
+				/>
+	
+			</openwb-base-card>
+
 			<openwb-base-submit-buttons
 				formName="generalChargeConfigForm"
 				@save="$emit('save')"
@@ -309,6 +338,7 @@ export default {
 	components: {
 		OpenwbElectricityTariffProxy,
 	},
+	emits: ["sendCommand"],
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
@@ -322,7 +352,9 @@ export default {
 				"openWB/general/prices/pv",
 				"openWB/optional/et/provider",
 				"openWB/system/configurable/electricity_tariffs",
+				"openWB/optional/ocpp/url",
 			],
+			ocppActive: false,
 		};
 	},
 	computed: {
