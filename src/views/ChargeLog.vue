@@ -351,6 +351,9 @@ export default {
 		};
 	},
 	computed: {
+		mqttClientId() {
+			return this.$root.mqttClientId;
+		},
 		downloadUrl() {
 			const port =
 				parseInt(location.port) ||
@@ -651,6 +654,12 @@ export default {
 					return value;
 			}
 		},
+	},
+	beforeMount() {
+		// we need access to the mqttClientId which is not yet available in the data section
+		this.mqttTopicsToSubscribe.push(
+			"openWB/log/" + this.mqttClientId + "/data",
+		);
 	},
 	mounted() {
 		const today = new Date();

@@ -29,9 +29,6 @@ export default {
 				"stop",
 			];
 		},
-		mqttClientId() {
-			return this.$root.mqttClientId;
-		},
 	},
 	methods: {
 		updateState(topic, value, objectPath = undefined) {
@@ -169,14 +166,6 @@ export default {
 		},
 	},
 	mounted() {
-		// ToDo: Check Topic! This topic contains requested charge log data!
-		if (
-			!(`openWB/log/${this.mqttClientId}/data` in this.$store.state.mqtt)
-		) {
-			this.mqttTopicsToSubscribe.push(
-				"openWB/log/" + this.mqttClientId + "/data",
-			);
-		}
 		if (this.mqttTopicsToSubscribe.length > 0) {
 			this.$root.doSubscribe(this.mqttTopicsToSubscribe);
 		}
