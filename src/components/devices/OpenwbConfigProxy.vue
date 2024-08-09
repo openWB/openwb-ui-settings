@@ -20,6 +20,7 @@ export default {
 	props: {
 		deviceId: { required: true },
 		deviceType: { type: String, required: true },
+		deviceVendor: { type: String, required: true },
 		componentId: { default: undefined },
 		componentType: { type: String, default: undefined },
 		configuration: { type: Object, required: true },
@@ -33,13 +34,13 @@ export default {
 				return defineAsyncComponent({
 					loader: () =>
 						import(
-							`./${this.deviceType}/${this.componentType}.vue`
+							`./${this.deviceVendor}/${this.deviceType}/${this.componentType}.vue`
 						),
 					errorComponent: OpenwbDeviceConfigFallback,
 				});
 			} else {
 				return defineAsyncComponent({
-					loader: () => import(`./${this.deviceType}/device.vue`),
+					loader: () => import(`./${this.deviceVendor}/${this.deviceType}/device.vue`),
 					errorComponent: OpenwbDeviceConfigFallback,
 				});
 			}
