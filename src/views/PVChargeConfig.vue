@@ -20,31 +20,18 @@
 						v-model="controlMode"
 					>
 						<template #help>
+							Die Ladeleistung kann nicht mit absoluter
+							Genauigkeit eingestellt werden, sodass am EVU-Punkt
+							nicht auf exakt 0W geregelt werden kann. Der
+							Regelmodus legt fest, ob diese Differenz am
+							EVU-Punkt (ca. 200-300W) zu geringem Netzbezug oder
+							geringer Netzeinspeisung führen soll.<br />
+							Bei Speichervorrang erzeugt die Regelung bei Bedarf
+							unabhängig vom eingestellten Regelmodus Einspeisung,
+							damit der Speicher seine Ladeleistung erhöht.<br />
 							Achtung: bei unlogischen Einstellungen kann die
 							Regelung gestört werden! Im Zweifel bitte unsere
-							vordefinierten Modi verwenden.<br />
-							Die Nachführung der PV-Ladung erfolgt in
-							Regelschritten, z.B. 230 Watt. Der Regelmodus
-							entscheidet darüber, was mit der Differenz zwischen
-							zwei Regelschritten passieren soll. Die Differenz,
-							z.B. 100 Watt, kann mit Netzbezug zum nächsten
-							Regelschritt, z.B. 130 Watt, aufgefüllt werden
-							(Regelmodus "Bezug" = E-Auto lädt etwas schneller,
-							es gibt etwas mehr Netzbezug) oder die Differenz
-							kann ins Netz eingespeist werden (Regelmodus
-							"Einspeisung" = E-Auto lädt etwas langsamer, es gibt
-							weniger Netzbezug).<br />Der Regelbereich wird auf
-							den gesamten Überschuss angewendet, bevor die
-							PV-Regelung durchgeführt wird. D.h. der Regelbereich
-							wird auf alle Einstellungen für das PV-Laden
-							angewendet und nur einmal unabhängig von der Anzahl
-							der angesteckten Fahrzeuge. Liegt der Überschuss im
-							vorgegebenen Regelbereich, wird nicht nachgeregelt.
-							Liegt der Überschuss außerhalb des Regelbereichs,
-							wird in die Mitte des Regelbereichs nachgeregelt.<br />Bei
-							Speichervorrang erzeugt die Regelung bei Bedarf
-							unabhängig vom eingestellten Regelmodus Einspeisung,
-							damit der Speicher seine Ladeleistung erhöht.
+							vordefinierten Modi verwenden.
 						</template>
 					</openwb-base-button-group-input>
 					<openwb-base-number-input
