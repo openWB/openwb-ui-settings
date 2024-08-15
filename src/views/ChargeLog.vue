@@ -100,7 +100,7 @@
 				<vue3-table-lite
 					class="charge-log-table"
 					:is-static-mode="true"
-					:columns="table.columns"
+					:columns="chargeLogColumns"
 					:rows="chargeLogDataset"
 					:total="totalRecordCount"
 					:sortable="table.sortable"
@@ -193,6 +193,18 @@ export default {
 						prio: undefined,
 					},
 				},
+			},
+			fieldVisibility: {
+				time_begin: false,
+				time_end: true,
+				vehicle_name: true,
+				time_time_charged: true,
+				data_imported_since_mode_switch: true,
+				data_costs: true,
+				vehicle_chargemode: true,
+				chargepoint_name: true,
+				vehicle_prio: true,
+				vehicle_rfid: true,
 			},
 			downloadFile: null,
 			table: {
@@ -405,6 +417,15 @@ export default {
 				return [];
 			}
 		},
+		chargeLogColumns() {
+			return this.table.columns.map((column) => {
+				return {
+					...column,
+					headerClasses: this.addClasses(column.field),
+					columnClasses: this.addClasses(column.field),
+				};
+			});
+		},
 		chargeLogDataset: {
 			get() {
 				if (
@@ -615,6 +636,13 @@ export default {
 			this.$refs.downloadChargeLogLink.dispatchEvent(
 				new MouseEvent("click"),
 			);
+		},
+		addClasses(fieldName) {
+			console.log("fieldVisibility", this.fieldVisibility);
+			if (this.fieldVisibility == undefined) {
+				return [];
+			}
+			return this.fieldVisibility[fieldName] ? [] : ["d-none"];
 		},
 		alignEnd(content) {
 			return '<div class="td-end">' + content + "</div>";
