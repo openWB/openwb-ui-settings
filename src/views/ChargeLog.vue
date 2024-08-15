@@ -228,16 +228,189 @@ export default {
 						},
 					},
 					{
-						label: "Fahrzeug",
-						field: "vehicle_name",
-						sortable: true,
-					},
-					{
 						label: "Dauer",
 						field: "time_time_charged",
 						sortable: true,
 						display: (row) => {
 							return this.alignEnd(row.time_time_charged);
+						},
+					},
+					{
+						label: "Kosten",
+						field: "data_costs",
+						sortable: true,
+						display: (row) => {
+							return this.alignEnd(
+								this.formatNumber(row.data_costs, 2) +
+									"&nbsp;€",
+							);
+						},
+					},
+					{
+						label: "Energieaufteilung",
+						field: "data_power_source",
+						sortable: false,
+						display: (row) => {
+							if (row.data_power_source == undefined) {
+								return "";
+							}
+							return this.alignCenter(
+								'<div class="progress"' +
+									'title="Netz: ' +
+									this.formatNumber(
+										row.data_power_source.grid,
+										0,
+										0,
+										100,
+									) +
+									"%, Ladepunkte: " +
+									this.formatNumber(
+										row.data_power_source.cp,
+										0,
+										0,
+										100,
+									) +
+									"%, Speicher: " +
+									this.formatNumber(
+										row.data_power_source.bat,
+										0,
+										0,
+										100,
+									) +
+									"%, PV: " +
+									this.formatNumber(
+										row.data_power_source.pv,
+										0,
+										0,
+										100,
+									) +
+									'%">' +
+									'<div class="progress-bar bg-danger" role="progressbar" style="width: ' +
+									row.data_power_source.grid * 100 +
+									'%" aria-valuenow="' +
+									row.data_power_source.grid * 100 +
+									'" aria-valuemin="0" aria-valuemax="100">' +
+									"</div>" +
+									'<div class="progress-bar bg-primary" role="progressbar" style="width: ' +
+									row.data_power_source.cp * 100 +
+									'%" aria-valuenow="' +
+									row.data_power_source.cp * 100 +
+									'" aria-valuemin="0" aria-valuemax="100">' +
+									"</div>" +
+									'<div class="progress-bar bg-warning" role="progressbar" style="width: ' +
+									row.data_power_source.bat * 100 +
+									'%" aria-valuenow="' +
+									row.data_power_source.bat * 100 +
+									'" aria-valuemin="0" aria-valuemax="100">' +
+									"</div>" +
+									'<div class="progress-bar bg-success" role="progressbar" style="width: ' +
+									row.data_power_source.pv * 100 +
+									'%" aria-valuenow="' +
+									row.data_power_source.pv * 100 +
+									'" aria-valuemin="0" aria-valuemax="100">' +
+									"</div>" +
+									"</div>",
+							);
+						},
+					},
+					{
+						label: "Fahrzeug",
+						field: "vehicle_name",
+						sortable: true,
+					},
+					{
+						label: "Lademodus",
+						field: "vehicle_chargemode",
+						sortable: true,
+						display: (row) => {
+							return (
+								'<div class="td-center tag ' +
+								this.getChargeModeClass(
+									row.vehicle_chargemode,
+								) +
+								'">' +
+								row.vehicle_chargemode +
+								"</div>"
+							);
+						},
+					},
+					{
+						label: "Priorität",
+						field: "vehicle_prio",
+						display: (row) => {
+							return this.translateBool(row.vehicle_prio);
+						},
+					},
+					{
+						label: "ID-Tag",
+						field: "vehicle_rfid",
+						sortable: true,
+						display: (row) => {
+							return this.dashIfNotSet(row.vehicle_rfid);
+						},
+					},
+					{
+						label: "SoC Beginn",
+						field: "vehicle_soc_at_start",
+						sortable: true,
+						display: (row) => {
+							return (
+								this.dashIfNotSet(
+									this.formatNumber(
+										row.vehicle_soc_at_start,
+										0,
+									),
+								) +
+								"&nbsp;% / " +
+								this.dashIfNotSet(
+									this.formatNumber(
+										row.vehicle_range_at_start,
+										0,
+									),
+								) +
+								"&nbsp;km"
+							);
+						},
+					},
+					{
+						label: "SoC Ende",
+						field: "vehicle_soc_at_end",
+						sortable: true,
+						display: (row) => {
+							return (
+								this.dashIfNotSet(
+									this.formatNumber(
+										row.vehicle_soc_at_end,
+										0,
+									),
+								) +
+								"&nbsp;% / " +
+								this.dashIfNotSet(
+									this.formatNumber(
+										row.vehicle_range_at_end,
+										0,
+									),
+								) +
+								"&nbsp;km"
+							);
+						},
+					},
+					{
+						label: "Ladepunkt",
+						field: "chargepoint_name",
+						sortable: true,
+						display: (row) => {
+							return this.dashIfNotSet(row.chargepoint_name);
+						},
+					},
+					{
+						label: "Seriennummer",
+						field: "chargepoint_serial_number",
+						sortable: true,
+						display: (row) => {
+							return this.dashIfNotSet(
+								row.chargepoint_serial_number,
+							);
 						},
 					},
 					{
@@ -260,53 +433,50 @@ export default {
 						},
 					},
 					{
-						label: "Kosten",
-						field: "data_costs",
+						label: "Leistung",
+						field: "data_power",
 						sortable: true,
 						display: (row) => {
 							return this.alignEnd(
-								this.formatNumber(row.data_costs, 2) +
-									"&nbsp;€",
+								this.dashIfNotSet(
+									this.formatNumber(
+										row.data_power / 1000,
+										3,
+										3,
+									),
+								) + "&nbsp;kW",
 							);
 						},
 					},
 					{
-						label: "Lademodus",
-						field: "vehicle_chargemode",
+						label: "Zähler Beginn",
+						field: "chargepoint_imported_at_start",
 						sortable: true,
 						display: (row) => {
-							return (
-								'<div class="td-center tag ' +
-								this.getChargeModeClass(
-									row.vehicle_chargemode,
-								) +
-								'">' +
-								row.vehicle_chargemode +
-								"</div>"
+							return this.alignEnd(
+								this.dashIfNotSet(
+									this.formatNumber(
+										row.chargepoint_imported_at_start /
+											1000,
+										2,
+									),
+								) + "&nbsp;kWh",
 							);
 						},
 					},
 					{
-						label: "Ladepunkt",
-						field: "chargepoint_name",
+						label: "Zähler Ende",
+						field: "chargepoint_imported_at_end",
 						sortable: true,
 						display: (row) => {
-							return this.dashIfNotSet(row.chargepoint_name);
-						},
-					},
-					{
-						label: "Priorität",
-						field: "vehicle_prio",
-						display: (row) => {
-							return this.translateBool(row.vehicle_prio);
-						},
-					},
-					{
-						label: "ID-Tag",
-						field: "vehicle_rfid",
-						sortable: true,
-						display: (row) => {
-							return this.dashIfNotSet(row.vehicle_rfid);
+							return this.alignEnd(
+								this.dashIfNotSet(
+									this.formatNumber(
+										row.chargepoint_imported_at_end / 1000,
+										2,
+									),
+								) + "&nbsp;kWh",
+							);
 						},
 					},
 				],
@@ -436,6 +606,12 @@ export default {
 						return {
 							chargepoint_id: entry["chargepoint"]["id"],
 							chargepoint_name: entry["chargepoint"]["name"],
+							chargepoint_imported_at_start:
+								entry["chargepoint"]["imported_at_start"],
+							chargepoint_imported_at_end:
+								entry["chargepoint"]["imported_at_end"],
+							chargepoint_serial_number:
+								entry["chargepoint"]["serial_number"],
 							vehicle_id: entry["vehicle"]["id"],
 							vehicle_name: entry["vehicle"]["name"],
 							vehicle_chargemode: this.translateChargeMode(
@@ -443,6 +619,13 @@ export default {
 							),
 							vehicle_rfid: entry["vehicle"]["rfid"],
 							vehicle_prio: entry["vehicle"]["prio"],
+							vehicle_soc_at_start:
+								entry["vehicle"]["soc_at_start"],
+							vehicle_soc_at_end: entry["vehicle"]["soc_at_end"],
+							vehicle_range_at_start:
+								entry["vehicle"]["range_at_start"],
+							vehicle_range_at_end:
+								entry["vehicle"]["range_at_end"],
 							timestamp_begin: timestamp_begin / 1000,
 							time_begin: isNaN(timestamp_begin)
 								? null
@@ -457,6 +640,18 @@ export default {
 									),
 							time_time_charged: entry["time"]["time_charged"],
 							data_power: entry["data"]["power"],
+							data_power_source: entry["data"]["power_source"]
+								? {
+										pv: entry["data"]["power_source"]["pv"],
+										grid: entry["data"]["power_source"][
+											"grid"
+										],
+										bat: entry["data"]["power_source"][
+											"bat"
+										],
+										cp: entry["data"]["power_source"]["cp"],
+									}
+								: undefined,
 							data_range_charged: entry["data"]["range_charged"],
 							data_costs: entry["data"]["costs"],
 							data_imported_since_plugged:
@@ -798,5 +993,13 @@ export default {
 :deep(.tag) {
 	border-radius: 10px;
 	padding: 2px 5px;
+}
+
+:deep(.progress) {
+	height: 2rem;
+}
+
+:deep(.progress-bar.bg-warning) {
+	color: #000;
 }
 </style>
