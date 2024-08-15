@@ -214,11 +214,17 @@ export default {
 						label: "Beginn",
 						field: "time_begin",
 						sortable: true,
+						display: (row) => {
+							return this.dashIfNotSet(row.time_begin);
+						},
 					},
 					{
 						label: "Ende",
 						field: "time_end",
 						sortable: true,
+						display: (row) => {
+							return this.dashIfNotSet(row.time_end);
+						},
 					},
 					{
 						label: "Fahrzeug",
@@ -283,6 +289,9 @@ export default {
 						label: "Ladepunkt",
 						field: "chargepoint_name",
 						sortable: true,
+						display: (row) => {
+							return this.dashIfNotSet(row.chargepoint_name);
+						},
 					},
 					{
 						label: "Priorität",
@@ -295,6 +304,9 @@ export default {
 						label: "ID-Tag",
 						field: "vehicle_rfid",
 						sortable: true,
+						display: (row) => {
+							return this.dashIfNotSet(row.vehicle_rfid);
+						},
 					},
 				],
 				sortable: {
@@ -395,6 +407,13 @@ export default {
 		},
 		chargeLogDataset: {
 			get() {
+				if (
+					this.$store.state.mqtt[
+						"openWB/log/" + this.mqttClientId + "/data"
+					] == undefined
+				) {
+					return [];
+				}
 				try {
 					return this.$store.state.mqtt[
 						"openWB/log/" + this.mqttClientId + "/data"
@@ -415,13 +434,17 @@ export default {
 							vehicle_rfid: entry["vehicle"]["rfid"],
 							vehicle_prio: entry["vehicle"]["prio"],
 							timestamp_begin: timestamp_begin / 1000,
-							time_begin: this.dateTimeFormat.format(
-								new Date(timestamp_begin),
-							),
+							time_begin: isNaN(timestamp_begin)
+								? null
+								: this.dateTimeFormat.format(
+										new Date(timestamp_begin),
+									),
 							timestamp_end: timestamp_end / 1000,
-							time_end: this.dateTimeFormat.format(
-								new Date(timestamp_end),
-							),
+							time_end: isNaN(timestamp_end)
+								? null
+								: this.dateTimeFormat.format(
+										new Date(timestamp_end),
+									),
 							time_time_charged: entry["time"]["time_charged"],
 							data_power: entry["data"]["power"],
 							data_range_charged: entry["data"]["range_charged"],
@@ -433,6 +456,7 @@ export default {
 						};
 					});
 				} catch (error) {
+					console.error(error);
 					return [];
 				}
 			},
@@ -615,6 +639,12 @@ export default {
 				);
 			}
 			return text;
+		},
+		dashIfNotSet(value) {
+			if (value == undefined || value == "" || value == null) {
+				return "-";
+			}
+			return value;
 		},
 		getChargeModeClass(value) {
 			switch (value) {
