@@ -699,10 +699,20 @@ export default {
 						"Zählerstand Ende",
 					],
 					...this.chargeLogDataset.map((row) => [
-						'"' + row.time_begin + '"',
-						'"' + row.time_end + '"',
-						row.timestamp_begin,
-						row.timestamp_end,
+						row.time_begin == undefined
+							? ""
+							: '"' + row.time_begin + '"',
+						row.time_end == undefined
+							? ""
+							: '"' + row.time_end + '"',
+						row.timestamp_begin == undefined ||
+						isNaN(row.timestamp_begin)
+							? ""
+							: row.timestamp_begin,
+						row.timestamp_end == undefined ||
+						isNaN(row.timestamp_end)
+							? ""
+							: row.timestamp_end,
 						'"' + row.time_time_charged + '"',
 						this.formatNumber(row.data_costs, 2),
 						row.data_power_source == undefined
@@ -721,14 +731,18 @@ export default {
 						row.vehicle_id,
 						'"' + row.vehicle_chargemode + '"',
 						'"' + this.translateBool(row.vehicle_prio, false) + '"',
-						'"' + row.vehicle_rfid + '"',
+						row.vehicle_rfid == undefined
+							? ""
+							: '"' + row.vehicle_rfid + '"',
 						row.vehicle_soc_at_start,
 						row.vehicle_soc_at_end,
 						row.vehicle_range_at_start,
 						row.vehicle_range_at_end,
 						'"' + row.chargepoint_name + '"',
 						row.chargepoint_id,
-						'"' + row.chargepoint_serial_number + '"',
+						row.chargepoint_serial_number == undefined
+							? ""
+							: '"' + row.chargepoint_serial_number + '"',
 						this.formatNumber(
 							row.data_imported_since_mode_switch / 1000,
 							2,
