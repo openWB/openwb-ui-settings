@@ -661,8 +661,16 @@
 							"
 						/>
 					</div>
-					<hr />
-					<openwb-base-heading> Lade-Log </openwb-base-heading>
+				</div>
+			</openwb-base-card>
+			<openwb-base-card v-if="!installAssistantActive" title="Lade-Log">
+				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+					<openwb-base-alert subtype="info">
+						Diese Einstellungen sind nicht verfügbar, solange sich
+						diese openWB im Steuerungsmodus "secondary" befindet.
+					</openwb-base-alert>
+				</div>
+				<div v-else>
 					<openwb-base-button-group-input
 						title="Einheit für Entfernungen"
 						:model-value="
@@ -676,6 +684,535 @@
 							{ buttonValue: 'mi', text: 'Meilen' },
 						]"
 					/>
+					<openwb-base-heading>
+						Auswahl der Datenfelder
+					</openwb-base-heading>
+					<openwb-base-button-group-input
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/charge_log_data_config'
+							]?.time_begin
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/charge_log_data_config',
+								$event,
+								'time_begin',
+							)
+						"
+					>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'calendar']"
+						/>
+						Beginn
+					</openwb-base-button-group-input>
+					<openwb-base-button-group-input
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/charge_log_data_config'
+							]?.time_end
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/charge_log_data_config',
+								$event,
+								'time_end',
+							)
+						"
+					>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'calendar']"
+						/>
+						Ende
+					</openwb-base-button-group-input>
+					<openwb-base-button-group-input
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/charge_log_data_config'
+							]?.time_time_charged
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/charge_log_data_config',
+								$event,
+								'time_time_charged',
+							)
+						"
+					>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'clock']"
+						/>
+						Dauer
+					</openwb-base-button-group-input>
+					<openwb-base-button-group-input
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/charge_log_data_config'
+							]?.data_costs
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/charge_log_data_config',
+								$event,
+								'data_costs',
+							)
+						"
+					>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'coins']"
+						/>
+						Kosten
+					</openwb-base-button-group-input>
+					<openwb-base-button-group-input
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/charge_log_data_config'
+							]?.data_power_source
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/charge_log_data_config',
+								$event,
+								'data_power_source',
+							)
+						"
+					>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'pie-chart']"
+						/>
+						Energieaufteilung
+					</openwb-base-button-group-input>
+					<openwb-base-button-group-input
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/charge_log_data_config'
+							]?.vehicle_name
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/charge_log_data_config',
+								$event,
+								'vehicle_name',
+							)
+						"
+					>
+						<font-awesome-icon fixed-width :icon="['fas', 'car']" />
+						Name
+					</openwb-base-button-group-input>
+					<openwb-base-button-group-input
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/charge_log_data_config'
+							]?.vehicle_chargemode
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/charge_log_data_config',
+								$event,
+								'vehicle_chargemode',
+							)
+						"
+					>
+						<font-awesome-icon fixed-width :icon="['fas', 'car']" />
+						Lademodus
+					</openwb-base-button-group-input>
+					<openwb-base-button-group-input
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/charge_log_data_config'
+							]?.vehicle_prio
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/charge_log_data_config',
+								$event,
+								'vehicle_prio',
+							)
+						"
+					>
+						<font-awesome-icon fixed-width :icon="['fas', 'car']" />
+						Priorität
+					</openwb-base-button-group-input>
+					<openwb-base-button-group-input
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/charge_log_data_config'
+							]?.vehicle_rfid
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/charge_log_data_config',
+								$event,
+								'vehicle_rfid',
+							)
+						"
+					>
+						<font-awesome-icon fixed-width :icon="['fas', 'car']" />
+						ID-Tag
+					</openwb-base-button-group-input>
+					<openwb-base-button-group-input
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/charge_log_data_config'
+							]?.vehicle_soc_at_start
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/charge_log_data_config',
+								$event,
+								'vehicle_soc_at_start',
+							)
+						"
+					>
+						<font-awesome-icon fixed-width :icon="['fas', 'car']" />
+						SoC bei Ladebeginn
+					</openwb-base-button-group-input>
+					<openwb-base-button-group-input
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/charge_log_data_config'
+							]?.vehicle_soc_at_end
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/charge_log_data_config',
+								$event,
+								'vehicle_soc_at_end',
+							)
+						"
+					>
+						<font-awesome-icon fixed-width :icon="['fas', 'car']" />
+						SoC bei Ladende
+					</openwb-base-button-group-input>
+					<openwb-base-button-group-input
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/charge_log_data_config'
+							]?.chargepoint_name
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/charge_log_data_config',
+								$event,
+								'chargepoint_name',
+							)
+						"
+					>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'charging-station']"
+						/>
+						Name
+					</openwb-base-button-group-input>
+					<openwb-base-button-group-input
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/charge_log_data_config'
+							]?.chargepoint_serial_number
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/charge_log_data_config',
+								$event,
+								'chargepoint_serial_number',
+							)
+						"
+					>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'charging-station']"
+						/>
+						Seriennummer
+					</openwb-base-button-group-input>
+					<openwb-base-button-group-input
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/charge_log_data_config'
+							]?.data_imported_since_mode_switch
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/charge_log_data_config',
+								$event,
+								'data_imported_since_mode_switch',
+							)
+						"
+					>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'charging-station']"
+						/>
+						Geladene Energie
+					</openwb-base-button-group-input>
+					<openwb-base-button-group-input
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/charge_log_data_config'
+							]?.chargepoint_imported_at_start
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/charge_log_data_config',
+								$event,
+								'chargepoint_imported_at_start',
+							)
+						"
+					>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'charging-station']"
+						/>
+						Zählerstand bei Ladebeginn
+					</openwb-base-button-group-input>
+					<openwb-base-button-group-input
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/charge_log_data_config'
+							]?.chargepoint_imported_at_end
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/charge_log_data_config',
+								$event,
+								'chargepoint_imported_at_end',
+							)
+						"
+					>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'charging-station']"
+						/>
+						Zählerstand bei Ladeende
+					</openwb-base-button-group-input>
+					<openwb-base-button-group-input
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Nein',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'Ja',
+								class: 'btn-outline-success',
+							},
+						]"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/charge_log_data_config'
+							]?.data_power
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/charge_log_data_config',
+								$event,
+								'data_power',
+							)
+						"
+					>
+						<font-awesome-icon
+							fixed-width
+							:icon="['fas', 'charging-station']"
+						/>
+						Durchschnittliche Leistung
+					</openwb-base-button-group-input>
 				</div>
 			</openwb-base-card>
 			<openwb-base-submit-buttons
@@ -689,6 +1226,25 @@
 </template>
 
 <script>
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+	faCar as fasCar,
+	faChargingStation as fasChargingStation,
+	faClock as fasClock,
+	faCalendar as fasCalendar,
+	faCoins as fasCoins,
+	faPieChart as fasPieChart,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(
+	fasCar,
+	fasChargingStation,
+	fasClock,
+	fasCalendar,
+	fasCoins,
+	fasPieChart,
+);
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbWebThemeProxy from "../components/web_themes/OpenwbWebThemeProxy.vue";
 import OpenwbRippleControlReceiverProxy from "../components/ripple_control_receivers/OpenwbRippleControlReceiverProxy.vue";
@@ -696,7 +1252,11 @@ import OpenwbRippleControlReceiverProxy from "../components/ripple_control_recei
 export default {
 	name: "OpenwbGeneralConfigView",
 	mixins: [ComponentState],
-	components: { OpenwbWebThemeProxy, OpenwbRippleControlReceiverProxy },
+	components: {
+		OpenwbWebThemeProxy,
+		OpenwbRippleControlReceiverProxy,
+		FontAwesomeIcon,
+	},
 	props: {
 		installAssistantActive: {
 			type: Boolean,
@@ -707,18 +1267,19 @@ export default {
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
-				"openWB/general/extern",
+				"openWB/general/charge_log_data_config",
 				"openWB/general/control_interval",
+				"openWB/general/extern",
+				"openWB/general/external_buttons_hw",
 				"openWB/general/grid_protection_configured",
 				"openWB/general/http_api",
-				"openWB/general/external_buttons_hw",
 				"openWB/general/modbus_control",
-				"openWB/general/notifications/selected",
 				"openWB/general/notifications/configuration",
+				"openWB/general/notifications/plug",
+				"openWB/general/notifications/selected",
+				"openWB/general/notifications/smart_home",
 				"openWB/general/notifications/start_charging",
 				"openWB/general/notifications/stop_charging",
-				"openWB/general/notifications/plug",
-				"openWB/general/notifications/smart_home",
 				"openWB/general/price_kwh",
 				"openWB/general/range_unit",
 				"openWB/general/ripple_control_receiver/module",
