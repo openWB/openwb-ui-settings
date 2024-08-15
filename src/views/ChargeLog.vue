@@ -175,6 +175,7 @@ export default {
 			}),
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
+				"openWB/general/charge_log_data_config",
 				"openWB/chargepoint/+/config",
 				"openWB/vehicle/+/name",
 			],
@@ -193,18 +194,6 @@ export default {
 						prio: undefined,
 					},
 				},
-			},
-			fieldVisibility: {
-				time_begin: false,
-				time_end: true,
-				vehicle_name: true,
-				time_time_charged: true,
-				data_imported_since_mode_switch: true,
-				data_costs: true,
-				vehicle_chargemode: true,
-				chargepoint_name: true,
-				vehicle_prio: true,
-				vehicle_rfid: true,
 			},
 			downloadFile: null,
 			table: {
@@ -638,11 +627,24 @@ export default {
 			);
 		},
 		addClasses(fieldName) {
-			console.log("fieldVisibility", this.fieldVisibility);
-			if (this.fieldVisibility == undefined) {
-				return [];
+			if (
+				this.$store.state.mqtt[
+					"openWB/general/charge_log_data_config"
+				] !== undefined &&
+				Object.hasOwn(
+					this.$store.state.mqtt[
+						"openWB/general/charge_log_data_config"
+					],
+					fieldName,
+				)
+			) {
+				return this.$store.state.mqtt[
+					"openWB/general/charge_log_data_config"
+				][fieldName]
+					? []
+					: ["d-none"];
 			}
-			return this.fieldVisibility[fieldName] ? [] : ["d-none"];
+			return [];
 		},
 		alignEnd(content) {
 			return '<div class="td-end">' + content + "</div>";
