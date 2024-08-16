@@ -251,11 +251,11 @@
 							}}
 						</div>
 					</template>
-					<template #data_power="data">
+					<!-- <template #data_power="data">
 						<div class="td-end">
 							{{ formatW(data.value.data_power) }}
 						</div>
-					</template>
+					</template> -->
 					<template #chargepoint_imported_at_start="data">
 						<div class="td-end">
 							{{
@@ -472,11 +472,11 @@ export default {
 						field: "data_imported_since_mode_switch",
 						sortable: true,
 					},
-					{
-						label: "Leistung",
-						field: "data_power",
-						sortable: true,
-					},
+					// {
+					// 	label: "Leistung",
+					// 	field: "data_power",
+					// 	sortable: true,
+					// },
 					{
 						label: "Zähler Beginn",
 						field: "chargepoint_imported_at_start",
@@ -625,7 +625,7 @@ export default {
 										new Date(timestamp_end),
 									),
 							time_time_charged: entry["time"]["time_charged"],
-							data_power: entry["data"]["power"],
+							// data_power: entry["data"]["power"],
 							data_power_source: entry["data"]["power_source"]
 								? {
 										pv:
@@ -688,7 +688,7 @@ export default {
 						"Zähler Seriennummer",
 						"Energie",
 						"Reichweite",
-						"Leistung",
+						// "Leistung",
 						"Zählerstand Beginn",
 						"Zählerstand Ende",
 					],
@@ -742,7 +742,7 @@ export default {
 							2,
 						),
 						this.formatNumber(row.data_range_charged, 0),
-						this.formatNumber(row.data_power / 1000, 3),
+						// this.formatNumber(row.data_power / 1000, 3),
 						this.formatNumber(
 							row.chargepoint_imported_at_start / 1000,
 							2,

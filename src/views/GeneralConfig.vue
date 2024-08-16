@@ -1181,7 +1181,7 @@
 						/>
 						Zählerstand bei Ladeende
 					</openwb-base-button-group-input>
-					<openwb-base-button-group-input
+					<!-- <openwb-base-button-group-input
 						:buttons="[
 							{
 								buttonValue: false,
@@ -1212,7 +1212,7 @@
 							:icon="['fas', 'charging-station']"
 						/>
 						Durchschnittliche Leistung
-					</openwb-base-button-group-input>
+					</openwb-base-button-group-input> -->
 				</div>
 			</openwb-base-card>
 			<openwb-base-submit-buttons
