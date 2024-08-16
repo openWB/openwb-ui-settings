@@ -212,26 +212,32 @@
 						{{ dashIfNotSet(data.value.vehicle_rfid) }}
 					</template>
 					<template #vehicle_soc_at_start="data">
-						<div
-							class="td-end"
-							v-html="
-								formatSocRange(
-									data.value.vehicle_soc_at_start,
-									data.value.vehicle_range_at_start,
-								)
-							"
-						></div>
+						<div class="td-end">
+							<span class="no-wrap">
+								{{ formatSoc(data.value.vehicle_soc_at_start) }}
+							</span>
+							<span class="no-wrap">
+								({{
+									formatRange(
+										data.value.vehicle_range_at_start,
+									)
+								}})
+							</span>
+						</div>
 					</template>
 					<template #vehicle_soc_at_end="data">
-						<div
-							class="td-end"
-							v-html="
-								formatSocRange(
-									data.value.vehicle_soc_at_end,
-									data.value.vehicle_range_at_end,
-								)
-							"
-						></div>
+						<div class="td-end">
+							<span class="no-wrap">
+								{{ formatSoc(data.value.vehicle_soc_at_end) }}
+							</span>
+							<span class="no-wrap">
+								({{
+									formatRange(
+										data.value.vehicle_range_at_end,
+									)
+								}})
+							</span>
+						</div>
 					</template>
 					<template #chargepoint_name="data">
 						{{ dashIfNotSet(data.value.chargepoint_name) }}
@@ -241,14 +247,19 @@
 					</template>
 					<template #data_imported_since_mode_switch="data">
 						<div class="td-end">
-							{{
-								formatWh(
-									data.value.data_imported_since_mode_switch,
-								) +
-								" (" +
-								formatRange(data.value.data_range_charged) +
-								")"
-							}}
+							<span class="no-wrap">
+								{{
+									formatWh(
+										data.value
+											.data_imported_since_mode_switch,
+									)
+								}}
+							</span>
+							<span class="no-wrap">
+								({{
+									formatRange(data.value.data_range_charged)
+								}})
+							</span>
 						</div>
 					</template>
 					<!-- <template #data_power="data">
@@ -917,22 +928,12 @@ export default {
 			}
 		},
 		formatRange(value, unit = true) {
-			if (value == undefined) {
-				return "-";
-			}
-			let range = this.formatNumber(value, 0);
-			if (unit) {
-				range += "km";
-			}
-			return range;
+			let range = value ? this.formatNumber(value, 0) : "-";
+			return unit ? range + "km" : range;
 		},
-		formatSocRange(soc, range) {
-			return (
-				this.dashIfNotSet(this.formatNumber(soc, 0)) +
-				"% (" +
-				this.dashIfNotSet(this.formatRange(range, false)) +
-				"km)"
-			);
+		formatSoc(soc, unit = true) {
+			let value = this.dashIfNotSet(this.formatNumber(soc, 0));
+			return unit ? value + "%" : value;
 		},
 		formatCosts(value) {
 			return this.formatNumber(value, 2) + "€";
@@ -983,6 +984,10 @@ export default {
 <style scoped>
 .hide {
 	display: none;
+}
+
+.no-wrap {
+	white-space: nowrap;
 }
 
 .charge-log-table,
