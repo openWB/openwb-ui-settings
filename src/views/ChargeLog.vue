@@ -107,7 +107,172 @@
 					:messages="table.messages"
 					:page-options="table.pageOptions"
 					:limit="25"
-				/>
+					:is-slot-mode="true"
+				>
+					<template #time_begin="data">
+						{{ dashIfNotSet(data.value.time_begin) }}
+					</template>
+					<template #time_end="data">
+						{{ dashIfNotSet(data.value.time_end) }}
+					</template>
+					<template #time_time_charged="data">
+						<div class="td-end">
+							{{ data.value.time_time_charged }}
+						</div>
+					</template>
+					<template #data_costs="data">
+						<div class="td-end">
+							{{ formatCosts(data.value.data_costs) }}
+						</div>
+					</template>
+					<template #data_power_source="data">
+						<div
+							v-if="data.value.data_power_source"
+							class="progress td-center"
+							:title="
+								getProgressTitle(data.value.data_power_source)
+							"
+						>
+							<div
+								class="progress-bar bg-danger"
+								role="progressbar"
+								:style="{
+									width:
+										data.value.data_power_source.grid + '%',
+								}"
+								:aria-valuenow="
+									data.value.data_power_source.grid
+								"
+								aria-valuemin="0"
+								aria-valuemax="100"
+							></div>
+							<div
+								class="progress-bar bg-primary"
+								role="progressbar"
+								:style="{
+									width:
+										data.value.data_power_source.cp + '%',
+								}"
+								:aria-valuenow="data.value.data_power_source.cp"
+								aria-valuemin="0"
+								aria-valuemax="100"
+							></div>
+							<div
+								class="progress-bar bg-warning"
+								role="progressbar"
+								:style="{
+									width:
+										data.value.data_power_source.bat + '%',
+								}"
+								:aria-valuenow="
+									data.value.data_power_source.bat
+								"
+								aria-valuemin="0"
+								aria-valuemax="100"
+							></div>
+							<div
+								class="progress-bar bg-success"
+								role="progressbar"
+								:style="{
+									width:
+										data.value.data_power_source.pv + '%',
+								}"
+								:aria-valuenow="data.value.data_power_source.pv"
+								aria-valuemin="0"
+								aria-valuemax="100"
+							></div>
+						</div>
+						<div v-else class="td-center">-</div>
+					</template>
+					<template #vehicle_chargemode="data">
+						<div
+							class="td-center tag"
+							:class="
+								getChargeModeClass(
+									data.value.vehicle_chargemode,
+								)
+							"
+						>
+							{{ data.value.vehicle_chargemode }}
+						</div>
+					</template>
+					<template #vehicle_prio="data">
+						<div
+							class="td-center tag"
+							:class="
+								data.value.vehicle_prio
+									? 'bg-success'
+									: 'bg-danger'
+							"
+						>
+							{{ formatBool(data.value.vehicle_prio) }}
+						</div>
+					</template>
+					<template #vehicle_rfid="data">
+						{{ dashIfNotSet(data.value.vehicle_rfid) }}
+					</template>
+					<template #vehicle_soc_at_start="data">
+						<div
+							class="td-end"
+							v-html="
+								formatSocRange(
+									data.value.vehicle_soc_at_start,
+									data.value.vehicle_range_at_start,
+								)
+							"
+						></div>
+					</template>
+					<template #vehicle_soc_at_end="data">
+						<div
+							class="td-end"
+							v-html="
+								formatSocRange(
+									data.value.vehicle_soc_at_end,
+									data.value.vehicle_range_at_end,
+								)
+							"
+						></div>
+					</template>
+					<template #chargepoint_name="data">
+						{{ dashIfNotSet(data.value.chargepoint_name) }}
+					</template>
+					<template #chargepoint_serial_number="data">
+						{{ dashIfNotSet(data.value.chargepoint_serial_number) }}
+					</template>
+					<template #data_imported_since_mode_switch="data">
+						<div class="td-end">
+							{{
+								formatWh(
+									data.value.data_imported_since_mode_switch,
+								) +
+								" (" +
+								formatRange(data.value.data_range_charged) +
+								")"
+							}}
+						</div>
+					</template>
+					<template #data_power="data">
+						<div class="td-end">
+							{{ formatW(data.value.data_power) }}
+						</div>
+					</template>
+					<template #chargepoint_imported_at_start="data">
+						<div class="td-end">
+							{{
+								formatWh(
+									data.value.chargepoint_imported_at_start,
+								)
+							}}
+						</div>
+					</template>
+					<template #chargepoint_imported_at_end="data">
+						<div class="td-end">
+							{{
+								formatWh(data.value.chargepoint_imported_at_end)
+							}}
+						</div>
+					</template>
+				</vue3-table-lite>
 				<div v-if="totalRecordCount > 0">
 					<div class="row justify-content-center">
 						<openwb-base-click-button
@@ -135,7 +300,33 @@
 						:columns="totals.columns"
 						:rows="chargeLogTotals"
 						:total="1"
-					/>
+						:is-slot-mode="true"
+					>
+						<template #time_charged="data">
+							<div class="td-end">
+								{{ data.value.time_charged }}
+							</div>
+						</template>
+						<template #imported_since_mode_switch="data">
+							<div class="td-end">
+								{{
+									formatWh(
+										data.value.imported_since_mode_switch,
+									)
+								}}
+							</div>
+						</template>
+						<template #range_charged="data">
+							<div class="td-end">
+								{{ formatRange(data.value.range_charged) }}
+							</div>
+						</template>
+						<template #costs="data">
+							<div class="td-end">
+								{{ formatCosts(data.value.costs) }}
+							</div>
+						</template>
+					</vue3-table-lite>
 				</div>
 			</div>
 		</form>
@@ -215,103 +406,26 @@ export default {
 						label: "Beginn",
 						field: "time_begin",
 						sortable: true,
-						display: (row) => {
-							return this.dashIfNotSet(row.time_begin);
-						},
 					},
 					{
 						label: "Ende",
 						field: "time_end",
 						sortable: true,
-						display: (row) => {
-							return this.dashIfNotSet(row.time_end);
-						},
 					},
 					{
 						label: "Dauer",
 						field: "time_time_charged",
 						sortable: true,
-						display: (row) => {
-							return this.alignEnd(row.time_time_charged);
-						},
 					},
 					{
 						label: "Kosten",
 						field: "data_costs",
 						sortable: true,
-						display: (row) => {
-							return this.alignEnd(
-								this.formatNumber(row.data_costs, 2) +
-									"&nbsp;€",
-							);
-						},
 					},
 					{
 						label: "Energieaufteilung",
 						field: "data_power_source",
 						sortable: false,
-						display: (row) => {
-							if (row.data_power_source == undefined) {
-								return "";
-							}
-							return this.alignCenter(
-								'<div class="progress"' +
-									'title="Netz: ' +
-									this.formatNumber(
-										row.data_power_source.grid,
-										0,
-										0,
-										100,
-									) +
-									"%, Ladepunkte: " +
-									this.formatNumber(
-										row.data_power_source.cp,
-										0,
-										0,
-										100,
-									) +
-									"%, Speicher: " +
-									this.formatNumber(
-										row.data_power_source.bat,
-										0,
-										0,
-										100,
-									) +
-									"%, PV: " +
-									this.formatNumber(
-										row.data_power_source.pv,
-										0,
-										0,
-										100,
-									) +
-									'%">' +
-									'<div class="progress-bar bg-danger" role="progressbar" style="width: ' +
-									row.data_power_source.grid * 100 +
-									'%" aria-valuenow="' +
-									row.data_power_source.grid * 100 +
-									'" aria-valuemin="0" aria-valuemax="100">' +
-									"</div>" +
-									'<div class="progress-bar bg-primary" role="progressbar" style="width: ' +
-									row.data_power_source.cp * 100 +
-									'%" aria-valuenow="' +
-									row.data_power_source.cp * 100 +
-									'" aria-valuemin="0" aria-valuemax="100">' +
-									"</div>" +
-									'<div class="progress-bar bg-warning" role="progressbar" style="width: ' +
-									row.data_power_source.bat * 100 +
-									'%" aria-valuenow="' +
-									row.data_power_source.bat * 100 +
-									'" aria-valuemin="0" aria-valuemax="100">' +
-									"</div>" +
-									'<div class="progress-bar bg-success" role="progressbar" style="width: ' +
-									row.data_power_source.pv * 100 +
-									'%" aria-valuenow="' +
-									row.data_power_source.pv * 100 +
-									'" aria-valuemin="0" aria-valuemax="100">' +
-									"</div>" +
-									"</div>",
-							);
-						},
 					},
 					{
 						label: "Fahrzeug",
@@ -322,162 +436,56 @@ export default {
 						label: "Lademodus",
 						field: "vehicle_chargemode",
 						sortable: true,
-						display: (row) => {
-							return (
-								'<div class="td-center tag ' +
-								this.getChargeModeClass(
-									row.vehicle_chargemode,
-								) +
-								'">' +
-								row.vehicle_chargemode +
-								"</div>"
-							);
-						},
 					},
 					{
 						label: "Priorität",
 						field: "vehicle_prio",
-						display: (row) => {
-							return this.translateBool(row.vehicle_prio);
-						},
+						sortable: true,
 					},
 					{
 						label: "ID-Tag",
 						field: "vehicle_rfid",
 						sortable: true,
-						display: (row) => {
-							return this.dashIfNotSet(row.vehicle_rfid);
-						},
 					},
 					{
 						label: "SoC Beginn",
 						field: "vehicle_soc_at_start",
 						sortable: true,
-						display: (row) => {
-							return (
-								this.dashIfNotSet(
-									this.formatNumber(
-										row.vehicle_soc_at_start,
-										0,
-									),
-								) +
-								"&nbsp;% / " +
-								this.dashIfNotSet(
-									this.formatNumber(
-										row.vehicle_range_at_start,
-										0,
-									),
-								) +
-								"&nbsp;km"
-							);
-						},
 					},
 					{
 						label: "SoC Ende",
 						field: "vehicle_soc_at_end",
 						sortable: true,
-						display: (row) => {
-							return (
-								this.dashIfNotSet(
-									this.formatNumber(
-										row.vehicle_soc_at_end,
-										0,
-									),
-								) +
-								"&nbsp;% / " +
-								this.dashIfNotSet(
-									this.formatNumber(
-										row.vehicle_range_at_end,
-										0,
-									),
-								) +
-								"&nbsp;km"
-							);
-						},
 					},
 					{
 						label: "Ladepunkt",
 						field: "chargepoint_name",
 						sortable: true,
-						display: (row) => {
-							return this.dashIfNotSet(row.chargepoint_name);
-						},
 					},
 					{
 						label: "Seriennummer",
 						field: "chargepoint_serial_number",
 						sortable: true,
-						display: (row) => {
-							return this.dashIfNotSet(
-								row.chargepoint_serial_number,
-							);
-						},
 					},
 					{
 						label: "Energie",
 						field: "data_imported_since_mode_switch",
 						sortable: true,
-						display: (row) => {
-							return this.alignEnd(
-								this.formatNumber(
-									row.data_imported_since_mode_switch / 1000,
-									2,
-								) +
-									"&nbsp;kWh / " +
-									this.formatNumber(
-										row.data_range_charged,
-										0,
-									) +
-									"&nbsp;km",
-							);
-						},
 					},
 					{
 						label: "Leistung",
 						field: "data_power",
 						sortable: true,
-						display: (row) => {
-							return this.alignEnd(
-								this.dashIfNotSet(
-									this.formatNumber(
-										row.data_power / 1000,
-										3,
-										3,
-									),
-								) + "&nbsp;kW",
-							);
-						},
 					},
 					{
 						label: "Zähler Beginn",
 						field: "chargepoint_imported_at_start",
 						sortable: true,
-						display: (row) => {
-							return this.alignEnd(
-								this.dashIfNotSet(
-									this.formatNumber(
-										row.chargepoint_imported_at_start /
-											1000,
-										2,
-									),
-								) + "&nbsp;kWh",
-							);
-						},
 					},
 					{
 						label: "Zähler Ende",
 						field: "chargepoint_imported_at_end",
 						sortable: true,
-						display: (row) => {
-							return this.alignEnd(
-								this.dashIfNotSet(
-									this.formatNumber(
-										row.chargepoint_imported_at_end / 1000,
-										2,
-									),
-								) + "&nbsp;kWh",
-							);
-						},
 					},
 				],
 				sortable: {
@@ -491,43 +499,21 @@ export default {
 						label: "Dauer",
 						field: "time_charged",
 						sortable: false,
-						display: (row) => {
-							return this.alignEnd(row.time_charged);
-						},
 					},
 					{
 						label: "Energie",
 						field: "imported_since_mode_switch",
 						sortable: false,
-						display: (row) => {
-							return this.alignEnd(
-								this.formatNumber(
-									row.imported_since_mode_switch / 1000,
-									2,
-								) + "&nbsp;kWh",
-							);
-						},
 					},
 					{
 						label: "Reichweite",
 						field: "range_charged",
 						sortable: false,
-						display: (row) => {
-							return this.alignEnd(
-								this.formatNumber(row.range_charged, 0) +
-									"&nbsp;km",
-							);
-						},
 					},
 					{
 						label: "Kosten",
 						field: "costs",
 						sortable: false,
-						display: (row) => {
-							return this.alignEnd(
-								this.formatNumber(row.costs, 2) + "&nbsp;€",
-							);
-						},
 					},
 				],
 			},
@@ -642,14 +628,22 @@ export default {
 							data_power: entry["data"]["power"],
 							data_power_source: entry["data"]["power_source"]
 								? {
-										pv: entry["data"]["power_source"]["pv"],
-										grid: entry["data"]["power_source"][
-											"grid"
-										],
-										bat: entry["data"]["power_source"][
-											"bat"
-										],
-										cp: entry["data"]["power_source"]["cp"],
+										pv:
+											entry["data"]["power_source"][
+												"pv"
+											] * 100,
+										grid:
+											entry["data"]["power_source"][
+												"grid"
+											] * 100,
+										bat:
+											entry["data"]["power_source"][
+												"bat"
+											] * 100,
+										cp:
+											entry["data"]["power_source"][
+												"cp"
+											] * 100,
 									}
 								: undefined,
 							data_range_charged: entry["data"]["range_charged"],
@@ -691,7 +685,7 @@ export default {
 						"Reichweite Ende",
 						"Ladepunkt",
 						"Ladepunkt-ID",
-						"Seriennummer",
+						"Zähler Seriennummer",
 						"Energie",
 						"Reichweite",
 						"Leistung",
@@ -730,7 +724,7 @@ export default {
 						'"' + row.vehicle_name + '"',
 						row.vehicle_id,
 						'"' + row.vehicle_chargemode + '"',
-						'"' + this.translateBool(row.vehicle_prio, false) + '"',
+						'"' + this.formatBool(row.vehicle_prio) + '"',
 						row.vehicle_rfid == undefined
 							? ""
 							: '"' + row.vehicle_rfid + '"',
@@ -891,29 +885,57 @@ export default {
 			}
 			return [];
 		},
-		alignEnd(content) {
-			return '<div class="td-end">' + content + "</div>";
+		getProgressTitle(powerSource) {
+			return (
+				`Netz: ${this.formatNumber(powerSource.grid, 0, 0)}%, ` +
+				`Ladepunkte: ${this.formatNumber(powerSource.cp, 0, 0)}%, ` +
+				`Speicher: ${this.formatNumber(powerSource.bat, 0, 0)}%, ` +
+				`PV: ${this.formatNumber(powerSource.pv, 0, 0)}%`
+			);
 		},
-		alignCenter(content) {
-			return '<div class="td-center">' + content + "</div>";
+		formatBool(value) {
+			return value ? "Ja" : "Nein";
 		},
-		translateBool(value, withDiv = true) {
-			let text = "Nein";
-			let myClass = "bg-danger";
-			if (value) {
-				text = "Ja";
-				myClass = "bg-success";
+		formatW(value) {
+			if (value == undefined) {
+				return "-";
 			}
-			if (withDiv) {
-				return (
-					'<div class="td-center tag ' +
-					myClass +
-					'">' +
-					text +
-					"</div>"
-				);
+			if (Math.abs(value) > 999) {
+				return this.formatNumber(value / 1000, 2) + "kW";
+			} else {
+				return this.formatNumber(value, 0) + "W";
 			}
-			return text;
+		},
+		formatWh(value) {
+			if (value == undefined) {
+				return "-";
+			}
+			if (Math.abs(value) > 999) {
+				return this.formatNumber(value / 1000, 2) + "kWh";
+			} else {
+				return this.formatNumber(value, 0) + "Wh";
+			}
+		},
+		formatRange(value, unit = true) {
+			if (value == undefined) {
+				return "-";
+			}
+			let range = this.formatNumber(value, 0);
+			if (unit) {
+				range += "km";
+			}
+			return range;
+		},
+		formatSocRange(soc, range) {
+			return (
+				this.dashIfNotSet(this.formatNumber(soc, 0)) +
+				"% (" +
+				this.dashIfNotSet(this.formatRange(range, false)) +
+				"km)"
+			);
+		},
+		formatCosts(value) {
+			return this.formatNumber(value, 2) + "€";
 		},
 		dashIfNotSet(value) {
 			if (value == undefined || value == "" || value == null) {
@@ -938,25 +960,6 @@ export default {
 				default:
 					console.warn("unknown charge mode:", value);
 					return "bg-light";
-			}
-		},
-		translateHeading(value) {
-			switch (value) {
-				case "time_charged":
-					return "Dauer";
-				case "range_charged":
-					return "Reichweite";
-				case "imported_since_mode_switch":
-					return "Energie im Lademodus";
-				case "imported_since_plugged":
-					return "Energie seit Anstecken";
-				case "power":
-					return "Leistung";
-				case "costs":
-					return "Kosten";
-				default:
-					console.warn("unknown heading:", value);
-					return value;
 			}
 		},
 	},
