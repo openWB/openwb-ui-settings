@@ -675,33 +675,34 @@ export default {
 			get() {
 				const csvString = [
 					[
-						"Beginn",
-						"Ende",
-						"Zeitstempel Beginn",
-						"Zeitstempel Ende",
-						"Dauer",
-						"Kosten",
-						"Energieanteil Netz",
-						"Energieanteil Ladepunkte",
-						"Energieanteil Speicher",
-						"Energieanteil PV",
-						"Fahrzeug",
-						"Fahrzeug-ID",
-						"Lademodus",
-						"Priorität",
-						"ID-Tag",
-						"SoC Beginn",
-						"SoC Ende",
-						"Reichweite Beginn",
-						"Reichweite Ende",
-						"Ladepunkt",
-						"Ladepunkt-ID",
-						"Zähler Seriennummer",
-						"Energie",
-						"Reichweite",
-						// "Leistung",
-						"Zählerstand Beginn",
-						"Zählerstand Ende",
+						'"Beginn"',
+						'"Ende"',
+						'"Zeitstempel Beginn"',
+						'"Zeitstempel Ende"',
+						'"Dauer"',
+						'"Kosten"',
+						'"Energieanteil Netz"',
+						'"Energieanteil Ladepunkte"',
+						'"Energieanteil Speicher"',
+						'"Energieanteil PV"',
+						'"Fahrzeug"',
+						'"Fahrzeug-ID"',
+						'"Lademodus"',
+						'"Priorität"',
+						'"ID-Tag"',
+						'"SoC Beginn"',
+						'"SoC Ende"',
+						'"Reichweite Beginn"',
+						'"Reichweite Ende"',
+						'"Ladepunkt"',
+						'"Ladepunkt-ID"',
+						'"Zähler Seriennummer"',
+						'"Energie"',
+						'"Reichweite"',
+						// '"Leistung"',
+						'"Zählerstand Beginn"',
+						'"Zählerstand Ende"',
+						'"Energie seit Anstecken"',
 					],
 					...this.chargeLogDataset.map((row) => [
 						row.time_begin == undefined
@@ -719,7 +720,7 @@ export default {
 							? ""
 							: row.timestamp_end,
 						'"' + row.time_time_charged + '"',
-						this.formatNumber(row.data_costs, 2),
+						this.formatCosts(row.data_costs, false),
 						row.data_power_source == undefined
 							? ""
 							: this.formatNumber(row.data_power_source.grid, 2),
@@ -739,10 +740,18 @@ export default {
 						row.vehicle_rfid == undefined
 							? ""
 							: '"' + row.vehicle_rfid + '"',
-						row.vehicle_soc_at_start,
-						row.vehicle_soc_at_end,
-						row.vehicle_range_at_start,
-						row.vehicle_range_at_end,
+						row.vehicle_soc_at_start == undefined
+							? ""
+							: this.formatNumber(row.vehicle_soc_at_start, 0),
+						row.vehicle_soc_at_end == undefined
+							? ""
+							: this.formatNumber(row.vehicle_soc_at_end, 0),
+						row.vehicle_range_at_start == undefined
+							? ""
+							: this.formatNumber(row.vehicle_range_at_start, 0),
+						row.vehicle_range_at_end == undefined
+							? ""
+							: this.formatNumber(row.vehicle_range_at_end, 0),
 						'"' + row.chargepoint_name + '"',
 						row.chargepoint_id,
 						row.chargepoint_serial_number == undefined
@@ -762,11 +771,15 @@ export default {
 							row.chargepoint_imported_at_end / 1000,
 							2,
 						),
+						this.formatNumber(
+							row.data_imported_since_plugged / 1000,
+							2,
+						),
 					]),
 				]
 					.map((element) => element.join(";"))
 					.join("\n");
-				return csvString;
+				return csvString + "\n";
 			},
 		},
 		chargeLogRead: {
@@ -907,36 +920,25 @@ export default {
 		formatBool(value) {
 			return value ? "Ja" : "Nein";
 		},
-		formatW(value) {
-			if (value == undefined) {
-				return "-";
-			}
-			if (Math.abs(value) > 999) {
-				return this.formatNumber(value / 1000, 2) + "kW";
-			} else {
-				return this.formatNumber(value, 0) + "W";
-			}
+		formatW(value, unit = true) {
+			let energy = this.dashIfNotSet(this.formatNumber(value / 1000, 2));
+			return unit ? energy + "kW" : energy;
 		},
-		formatWh(value) {
-			if (value == undefined) {
-				return "-";
-			}
-			if (Math.abs(value) > 999) {
-				return this.formatNumber(value / 1000, 2) + "kWh";
-			} else {
-				return this.formatNumber(value, 0) + "Wh";
-			}
+		formatWh(value, unit = true) {
+			let energy = this.dashIfNotSet(this.formatNumber(value / 1000, 2));
+			return unit ? energy + "kWh" : energy;
 		},
 		formatRange(value, unit = true) {
-			let range = value ? this.formatNumber(value, 0) : "-";
+			let range = this.dashIfNotSet(this.formatNumber(value, 0));
 			return unit ? range + "km" : range;
 		},
 		formatSoc(soc, unit = true) {
 			let value = this.dashIfNotSet(this.formatNumber(soc, 0));
 			return unit ? value + "%" : value;
 		},
-		formatCosts(value) {
-			return this.formatNumber(value, 2) + "€";
+		formatCosts(value, unit = true) {
+			let costs = this.dashIfNotSet(this.formatNumber(value, 2));
+			return unit ? costs + "€" : costs;
 		},
 		dashIfNotSet(value) {
 			if (value == undefined || value == "" || value == null) {
