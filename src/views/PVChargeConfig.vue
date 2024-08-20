@@ -20,24 +20,18 @@
 						v-model="controlMode"
 					>
 						<template #help>
-							Der Regelbereich wird auf den gesamten Überschuss
-							angewendet, bevor die PV-Regelung durchgeführt wird.
-							D.h. der Regelbereich wird auf alle Einstellungen
-							für das PV-Laden angewendet und nur einmal
-							unabhängig von der Anzahl der angesteckten
-							Fahrzeuge. Liegt der Überschuss im vorgegebenen
-							Regelbereich, wird nicht nachgeregelt. Liegt der
-							Überschuss außerhalb des Regelbereichs, wird in die
-							Mitte des Regelbereichs nachgeregelt.<br />
-							"Einspeisung" definiert einen Bereich mit minimaler
-							Einspeisung (-230W, 0W), "Bezug" mit minimalem
-							Netzbezug (0W, 230W), "Ausgewogen" mit ausgewogenem
-							Netzbezug (-115W, 115W). Mit der Auswahl
-							"individuell" kann ein eigener Regelbereich
-							definiert werden.<br />
+							Die Ladeleistung kann nicht mit absoluter
+							Genauigkeit eingestellt werden, sodass am EVU-Punkt
+							nicht auf exakt 0W geregelt werden kann. Der
+							Regelmodus legt fest, ob diese Differenz am
+							EVU-Punkt (ca. 200-300W) zu geringem Netzbezug oder
+							geringer Netzeinspeisung führen soll.<br />
 							Bei Speichervorrang erzeugt die Regelung bei Bedarf
 							unabhängig vom eingestellten Regelmodus Einspeisung,
-							damit der Speicher seine Ladeleistung erhöht.
+							damit der Speicher seine Ladeleistung erhöht.<br />
+							Achtung: bei unlogischen Einstellungen kann die
+							Regelung gestört werden! Im Zweifel bitte unsere
+							vordefinierten Modi verwenden.
 						</template>
 					</openwb-base-button-group-input>
 					<openwb-base-number-input
@@ -286,45 +280,9 @@
 							Einstellung genutzt wird, um den verfügbaren
 							Überschuss in die Fahrzeuge zu laden. Voraussetzung
 							ist die verbaute Umschaltmöglichkeit zwischen einer
-							und drei Phasen (s.g. 1p3p).
+							und mehreren Phasen (s.g. 1p3p).
 						</template>
 					</openwb-base-button-group-input>
-					<openwb-base-range-input
-						v-if="
-							$store.state.mqtt[
-								'openWB/general/chargemode_config/pv_charging/phases_to_use'
-							] == 0
-						"
-						title="Verzögerung automat. Phasenumschaltung"
-						:min="1"
-						:max="15"
-						:step="1"
-						unit="Min."
-						:model-value="
-							$store.state.mqtt[
-								'openWB/general/chargemode_config/pv_charging/phase_switch_delay'
-							]
-						"
-						@update:model-value="
-							updateState(
-								'openWB/general/chargemode_config/pv_charging/phase_switch_delay',
-								$event,
-							)
-						"
-					>
-						<template #help>
-							Um zu viele Umschaltungen zu vermeiden, wird Anhand
-							dieses Wertes definiert, wann die Umschaltung
-							erfolgen soll. Ist für durchgehend x Minuten die
-							Maximalstromstärke erreicht, wird auf mehrphasige
-							Ladung umgestellt. Ist die Ladung nur für ein
-							Intervall unterhalb der Maximalstromstärke, beginnt
-							das Intervall für die Umschaltung erneut. Ist die
-							Ladung im mehrphasigen Modus für 16 - x Minuten auf
-							der Minimalstromstärke, wird wieder auf einphasige
-							Ladung gewechselt.
-						</template>
-					</openwb-base-range-input>
 				</div>
 			</openwb-base-card>
 			<openwb-base-card title="Speicher-Beachtung">
@@ -338,12 +296,9 @@
 					<openwb-base-button-group-input
 						title="Laden mit Überschuss"
 						:buttons="[
-							{ buttonValue: 'ev_mode', text: 'Fahrzeuge' },
-							{ buttonValue: 'bat_mode', text: 'Speicher' },
-							{
-								buttonValue: 'min_soc_bat_mode',
-								text: 'Mindest-SoC des Speichers',
-							},
+							{ buttonValue: 'ev_mode' },
+							{ buttonValue: 'bat_mode' },
+							{ buttonValue: 'min_soc_bat_mode' },
 						]"
 						v-model="batMode"
 						:model-value="
@@ -358,36 +313,104 @@
 							)
 						"
 					>
+						<template #label-ev_mode>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'car-side']"
+							/>
+							Fahrzeuge
+						</template>
+						<template #label-bat_mode>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'fa-car-battery']"
+							/>
+							Speicher
+						</template>
+						<template #label-min_soc_bat_mode>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'fa-battery-half']"
+							/>
+							Mindest-SoC des Speichers
+						</template>
 						<template #help>
-							Sofern ein Hausstromspeicher (im Folgenden
-							"Speicher" genannt) im Energiesystem verbaut ist,
-							kann dieser beim Fahrzeugladen mit berücksichtigt
-							werden. Dies erfolgt passiv über die
-							Berücksichtigung der Speicherleistungswerte und des
-							Speicher-SoC. Eine aktive Speichersteuerung durch
-							openWB ist aktuell mangels Speicherschnittstelle
-							nicht möglich.<br /><br />
-							Bei Auswahl "Fahrzeuge" wird der gesamte Überschuss
-							in das EV geladen. Ist die maximale Ladeleistung der
-							Fahrzeuge erreicht und es wird eingespeist, wird
-							dieser Überschuss in den Speicher geladen.<br /><br />
-							Bei Auswahl "Speicher" wird der gesamte Überschuss
-							in den Speicher geladen. Ist die maximale
-							Ladeleistung des Speichers erreicht und es wird
-							eingespeist, wird dieser Überschuss unter Beachtung
-							der Einschaltschwelle in die Fahrzeuge geladen.<br /><br />
-							Bei Auswahl "Mindest-SoC des Speichers" wird der
-							Überschuss bis zum Mindest-SoC in den Speicher
-							geladen. Ist die maximale Ladeleistung des Speichers
-							erreicht und es wird eingespeist, wird dieser
-							Überschuss in die Fahrzeuge geladen. Wird der
-							Mindest-SoC überschritten, wird der Überschuss ins
-							Fahrzeug geladen.
+							<p>
+								Sofern ein Hausstromspeicher (im Folgenden
+								"Speicher" genannt) im Energiesystem verbaut
+								ist, kann dieser beim Fahrzeugladen mit
+								berücksichtigt werden. Dies erfolgt passiv über
+								die Berücksichtigung der Speicherleistungswerte
+								und des Speicher-SoC. Eine aktive
+								Speichersteuerung durch openWB ist aktuell
+								mangels Speicherschnittstelle nicht möglich.
+							</p>
+							<p>
+								Bei Auswahl "
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'car-side']"
+								/>
+								Fahrzeuge" wird der gesamte Überschuss in das EV
+								geladen. Ist die maximale Ladeleistung der
+								Fahrzeuge erreicht und es wird eingespeist, wird
+								dieser Überschuss in den Speicher geladen.
+							</p>
+							<p>
+								Bei Auswahl "
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'fa-car-battery']"
+								/>
+								Speicher" wird der gesamte Überschuss in den
+								Speicher geladen. Ist die maximale Ladeleistung
+								des Speichers erreicht und es wird eingespeist,
+								wird dieser Überschuss unter Beachtung der
+								Einschaltschwelle in die Fahrzeuge geladen.
+							</p>
+							<p>
+								Bei Auswahl "
+								<font-awesome-icon
+									fixed-width
+									:icon="['fas', 'fa-battery-half']"
+								/>
+								Mindest-SoC des Speichers" wird der Überschuss
+								bis zum Mindest-SoC in den Speicher geladen. Ist
+								die maximale Ladeleistung des Speichers erreicht
+								und es wird eingespeist, wird dieser Überschuss
+								in die Fahrzeuge geladen. Wird der Mindest-SoC
+								überschritten, wird der Überschuss ins Fahrzeug
+								geladen.
+							</p>
 						</template>
 					</openwb-base-button-group-input>
 					<div v-if="batMode === 'min_soc_bat_mode'">
+						<openwb-base-range-input
+							title="Mindest-SoC des Speichers"
+							:min="0"
+							:max="100"
+							:step="1"
+							unit="%"
+							:required
+							:model-value="
+								$store.state.mqtt[
+									'openWB/general/chargemode_config/pv_charging/min_bat_soc'
+								]
+							"
+							@update:model-value="
+								updateState(
+									'openWB/general/chargemode_config/pv_charging/min_bat_soc',
+									$event,
+								)
+							"
+						>
+						</openwb-base-range-input>
+						<openwb-base-heading
+							>Speicher-SoC unterhalb
+							Mindest-SoC</openwb-base-heading
+						>
 						<openwb-base-button-group-input
-							title="Ladeleistung für Speicher unterhalb des Mindest-SoC des Speichers"
+							title="Ladeleistung für Speicher reservieren"
 							:buttons="[
 								{
 									buttonValue: false,
@@ -430,6 +453,7 @@
 									'openWB/general/chargemode_config/pv_charging/bat_power_reserve_active'
 								]
 							"
+							title="Reserve Ladeleistung"
 							:min="0.1"
 							:step="0.1"
 							unit="kW"
@@ -447,28 +471,12 @@
 							"
 						>
 						</openwb-base-number-input>
-						<openwb-base-range-input
-							title="Mindest-SoC des Speichers"
-							:min="0"
-							:max="100"
-							:step="1"
-							unit="%"
-							:required
-							:model-value="
-								$store.state.mqtt[
-									'openWB/general/chargemode_config/pv_charging/min_bat_soc'
-								]
-							"
-							@update:model-value="
-								updateState(
-									'openWB/general/chargemode_config/pv_charging/min_bat_soc',
-									$event,
-								)
-							"
+						<openwb-base-heading
+							>Speicher-SoC oberhalb
+							Mindest-SoC</openwb-base-heading
 						>
-						</openwb-base-range-input>
 						<openwb-base-button-group-input
-							title="Entladeleistung des Speichers oberhalb des Mindest-SoC des Speichers"
+							title="Entladung des Speichers erlauben"
 							:buttons="[
 								{
 									buttonValue: false,
@@ -509,6 +517,7 @@
 									'openWB/general/chargemode_config/pv_charging/bat_power_discharge_active'
 								]
 							"
+							title="Erlaubte Entladeleistung"
 							:min="0.1"
 							:step="0.1"
 							unit="kW"
@@ -542,9 +551,22 @@
 <script>
 import ComponentState from "../components/mixins/ComponentState.vue";
 
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+	faCarBattery as fasCarBattery,
+	faCarSide as fasCarSide,
+	faBatteryHalf as fasBatteryHalf,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(fasCarBattery, fasCarSide, fasBatteryHalf);
+
 export default {
-	name: "OpenwbPVChargeConfig",
+	name: "OpenwbPVChargeConfigView",
 	mixins: [ComponentState],
+	components: {
+		FontAwesomeIcon,
+	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
@@ -556,7 +578,6 @@ export default {
 				"openWB/general/chargemode_config/pv_charging/switch_off_threshold",
 				"openWB/general/chargemode_config/pv_charging/switch_off_delay",
 				"openWB/general/chargemode_config/pv_charging/phases_to_use",
-				"openWB/general/chargemode_config/pv_charging/phase_switch_delay",
 				"openWB/general/chargemode_config/pv_charging/bat_mode",
 				"openWB/general/chargemode_config/pv_charging/bat_power_reserve",
 				"openWB/general/chargemode_config/pv_charging/bat_power_reserve_active",

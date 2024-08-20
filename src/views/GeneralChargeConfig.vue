@@ -118,6 +118,40 @@
 							zurückgesetzt.
 						</template>
 					</openwb-base-button-group-input>
+					<openwb-base-range-input
+						title="Verzögerung automat. Phasenumschaltung"
+						:min="1"
+						:max="15"
+						:step="1"
+						unit="Min."
+						:model-value="
+							$store.state.mqtt[
+								'openWB/general/chargemode_config/phase_switch_delay'
+							]
+						"
+						@update:model-value="
+							updateState(
+								'openWB/general/chargemode_config/phase_switch_delay',
+								$event,
+							)
+						"
+					>
+						<template #help>
+							Um zu viele Umschaltungen zu vermeiden, wird Anhand
+							dieses Wertes definiert, wann die Umschaltung
+							erfolgen soll. Ist für durchgehend x Minuten die
+							Maximalstromstärke erreicht, wird auf mehrphasige
+							Ladung umgestellt. Ist die Ladung nur für ein
+							Intervall unterhalb der Maximalstromstärke, beginnt
+							das Intervall für die Umschaltung erneut. Ist die
+							Ladung im mehrphasigen Modus für 16 - x Minuten auf
+							der Minimalstromstärke, wird wieder auf einphasige
+							Ladung gewechselt.<br />
+							Ist ausreichend Überschuss vorhanden, wird beim
+							Ladestart die Umschaltverzögerung nicht abgewartet,
+							sondern direkt mit mehrphasiger Ladung begonnen.
+						</template>
+					</openwb-base-range-input>
 					<hr />
 					<openwb-base-heading>
 						Berechnung der Ladekosten
@@ -131,30 +165,38 @@
 							Feldern der vereinbarte Preis einzutragen.
 						</template>
 					</openwb-base-heading>
-					<openwb-base-number-input
-						title="Preis für Netzbezug"
-						:step="0.001"
-						:precision="3"
-						unit="ct/kWh"
-						:model-value="
-							$store.state.mqtt['openWB/general/prices/grid'] *
-							100000
-						"
-						@update:model-value="
-							updateState(
-								'openWB/general/prices/grid',
-								parseFloat(($event / 100000).toFixed(7)),
-							)
+					<div
+						v-if="
+							$store.state.mqtt['openWB/optional/et/provider'] &&
+							$store.state.mqtt['openWB/optional/et/provider']
+								.type
 						"
 					>
-						<template #help>
-							Ist ein Anbieter für variable Stromtarife
-							konfiguriert, wird statt des hier angegebenen
-							Netzpreises der dynamische Strompreis des Anbieters
-							verwendet (stündliche Aktualisierung durch den
-							Anbieter).
-						</template>
-					</openwb-base-number-input>
+						<openwb-base-alert subtype="info">
+							Für den Netzbezug wird der dynamische Strompreis des
+							Anbieters für variable Stromtarife verwendet
+							(stündliche Aktualisierung durch den Anbieter).
+						</openwb-base-alert>
+					</div>
+					<div v-else>
+						<openwb-base-number-input
+							title="Preis für Netzbezug"
+							:step="0.001"
+							:precision="3"
+							unit="ct/kWh"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/general/prices/grid'
+								] * 100000
+							"
+							@update:model-value="
+								updateState(
+									'openWB/general/prices/grid',
+									parseFloat(($event / 100000).toFixed(7)),
+								)
+							"
+						/>
+					</div>
 					<openwb-base-number-input
 						title="Preis für Speicherentladung"
 						:step="0.001"
@@ -262,7 +304,7 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbElectricityTariffProxy from "../components/electricity_tariffs/OpenwbElectricityTariffProxy.vue";
 
 export default {
-	name: "OpenwbGeneralChargeConfig",
+	name: "OpenwbGeneralChargeConfigView",
 	mixins: [ComponentState],
 	components: {
 		OpenwbElectricityTariffProxy,
@@ -271,6 +313,7 @@ export default {
 		return {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
+				"openWB/general/chargemode_config/phase_switch_delay",
 				"openWB/general/chargemode_config/retry_failed_phase_switches",
 				"openWB/general/chargemode_config/unbalanced_load",
 				"openWB/general/chargemode_config/unbalanced_load_limit",

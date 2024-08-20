@@ -76,7 +76,7 @@ import ElectricityTariffCard from "../components/status/ElectricityTariffCard.vu
 import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
-	name: "OpenwbStatus",
+	name: "OpenwbStatusView",
 	mixins: [ComponentState],
 	components: {
 		ChargePointSumCard,

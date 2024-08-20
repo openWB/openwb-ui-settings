@@ -1,6 +1,6 @@
 <template>
 	<div class="system">
-		<openwb-base-alert subtype="danger">
+		<openwb-base-alert v-if="!installAssistantActive" subtype="danger">
 			<h2>Achtung!</h2>
 			<p>
 				Vor allen Aktionen auf dieser Seite ist sicherzustellen, dass
@@ -24,12 +24,12 @@
 				v-model="this.warningAcknowledged"
 			/>
 		</openwb-base-alert>
-		<div v-if="warningAcknowledged">
+		<div v-if="warningAcknowledged || installAssistantActive">
 			<openwb-base-card
 				title="Sicherung / Wiederherstellung"
 				subtype="success"
 				:collapsible="true"
-				:collapsed="true"
+				:collapsed="!installAssistantActive"
 			>
 				<form name="backupForm">
 					<openwb-base-heading>Sicherung</openwb-base-heading>
@@ -43,7 +43,10 @@
 						erstellte Datei über den Link in der Benachrichtigung
 						oder
 						<a href="/openWB/data/backup/" target="_blank">hier</a>
-						heruntergeladen werden.
+						heruntergeladen werden. Beim Herunterladen bitte darauf
+						achten, dass die Datei mit der Endung .tar.gz
+						gespeichert wird. Ggf das automatische Entpacken des
+						Browsers deaktivieren.
 					</openwb-base-alert>
 					<div class="row justify-content-center">
 						<div
@@ -66,8 +69,8 @@
 						</div>
 					</div>
 				</form>
-				<hr />
-				<form name="restoreForm">
+				<form v-if="showRestoreSection" name="restoreForm">
+					<hr />
 					<openwb-base-heading>Wiederherstellung</openwb-base-heading>
 					<openwb-base-alert subtype="danger">
 						Für die Wiederherstellung wird eine aktive
@@ -148,8 +151,8 @@
 						</div>
 					</div>
 				</form>
-				<hr />
-				<form name="cloudBackupForm">
+				<form v-if="showBackupCloudSection" name="cloudBackupForm">
+					<hr />
 					<openwb-base-heading>
 						Automatische Sicherung in einen Cloud-Dienst
 					</openwb-base-heading>
@@ -178,7 +181,7 @@
 						:model-value="
 							$store.state.mqtt[
 								'openWB/system/backup_cloud/config'
-							].type
+							]?.type
 						"
 						@update:model-value="updateSelectedBackupCloud($event)"
 					/>
@@ -186,11 +189,11 @@
 						v-if="
 							$store.state.mqtt[
 								'openWB/system/backup_cloud/config'
-							].type
+							]?.type
 						"
 					>
 						<openwb-base-button-group-input
-							title="Option Sicherung vor System Update"
+							title="Sicherung vor System Update"
 							:buttons="[
 								{
 									buttonValue: false,
@@ -214,7 +217,14 @@
 									$event,
 								)
 							"
-						></openwb-base-button-group-input>
+						>
+							<template #help>
+								Ist diese Option aktiviert, dann wird vor jedem
+								System-Update automatisch eine Sicherung
+								erstellt und diese in die Backup-Cloud
+								hochgeladen.
+							</template>
+						</openwb-base-button-group-input>
 						<openwb-base-button-input
 							title="Manuelle Cloud-Sicherung"
 							buttonText="Sicherung erstellen und hochladen"
@@ -251,6 +261,7 @@
 				</form>
 			</openwb-base-card>
 			<openwb-base-card
+				v-if="!installAssistantActive"
 				title="Datenübernahme"
 				subtype="success"
 				:collapsible="true"
@@ -375,7 +386,7 @@
 					</div>
 				</form>
 			</openwb-base-card>
-			<form name="resetForm">
+			<form v-if="!installAssistantActive" name="resetForm">
 				<openwb-base-card
 					title="Zurücksetzen"
 					subtype="danger"
@@ -442,12 +453,24 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbBackupCloudProxy from "../components/backup_clouds/OpenwbBackupCloudProxy.vue";
 
 export default {
-	name: "OpenwbSystem",
+	name: "OpenwbDataManagementView",
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,
 		OpenwbBackupCloudProxy,
+	},
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
+		showBackupCloudSection: {
+			type: Boolean,
+			required: false,
+			default: true,
+		},
 	},
 	data() {
 		return {
@@ -462,6 +485,7 @@ export default {
 				"openWB/LegacySmartHome/config/get/Devices/+/device_name",
 			],
 			warningAcknowledged: false,
+			showRestoreSection: true && !this.installAssistantActive,
 			selectedRestoreFile: undefined,
 			restoreUploadDone: false,
 			selectedDataMigrationFile: undefined,
@@ -817,6 +841,10 @@ export default {
 		uploadFile(target, selectedFile, successMessage) {
 			return new Promise((resolve) => {
 				if (selectedFile !== undefined) {
+					this.$root.postClientMessage(
+						"Hochladen der Datei gestartet.",
+						"info",
+					);
 					let formData = new FormData();
 					formData.append("file", selectedFile);
 					formData.append("target", target);

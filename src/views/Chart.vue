@@ -107,6 +107,7 @@
 											"
 										/>
 									</div>
+									<hr v-if="componentKey == 'all'" />
 								</div>
 							</openwb-base-card>
 						</div>
@@ -172,7 +173,7 @@ Chart.register(
 );
 
 export default {
-	name: "OpenwbChart",
+	name: "OpenwbChartView",
 	components: { ChartjsLine, FontAwesomeIcon },
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
@@ -1024,6 +1025,29 @@ export default {
 							delete totals.counter[component].grid;
 						}
 					});
+					// check if "all" key is present and necessary
+					Object.keys(totals).forEach((key) => {
+						if (
+							Object.prototype.hasOwnProperty.call(
+								totals[key],
+								"all",
+							)
+						) {
+							// delete key "all" if we only have one component of type "bat" or "pv"
+							if (
+								Object.keys(totals[key]).length <= 2 &&
+								["bat", "pv"].includes(key)
+							) {
+								delete totals[key].all;
+							} else {
+								// move key "all" to the beginning
+								totals[key] = {
+									all: totals[key].all,
+									...totals[key],
+								};
+							}
+						}
+					});
 					return totals;
 				}
 			}
@@ -1057,7 +1081,6 @@ export default {
 		},
 		chartData() {
 			if (this.chartDataObject) {
-				// add all datasets available in the last entry
 				var baseObjectsToProcess = [
 					"pv",
 					"counter",
@@ -1077,6 +1100,28 @@ export default {
 								baseObject,
 							)
 						) {
+							if (
+								Object.prototype.hasOwnProperty.call(
+									lastElement[baseObject],
+									"all",
+								)
+							) {
+								// remove "all" key if we only have one component of type "bat" or "pv"
+								if (
+									["bat", "pv"].includes(baseObject) &&
+									Object.keys(lastElement[baseObject])
+										.length <= 2
+								) {
+									delete lastElement[baseObject].all;
+								} else {
+									// move "all" key to the beginning
+									lastElement[baseObject] = {
+										all: lastElement[baseObject].all,
+										...lastElement[baseObject],
+									};
+								}
+							}
+							// add all datasets available in the last entry
 							Object.entries(lastElement[baseObject]).forEach(
 								([key, value]) => {
 									Object.keys(value).forEach((entryKey) => {
@@ -1138,6 +1183,11 @@ export default {
 			this.chartDate = newDate;
 			this.chartRange = newRange;
 		},
+		/**
+		 * Returns the card subtype based on the given element key.
+		 * @param {string} elementKey - The key of the element.
+		 * @returns {string} - The card subtype.
+		 */
 		getCardSubtype(elementKey) {
 			switch (elementKey) {
 				case "bat":
@@ -1154,6 +1204,12 @@ export default {
 					return "secondary";
 			}
 		},
+		/**
+		 * Returns the icon for a given element key.
+		 * @param {string} elementKey - The key of the element.
+		 * @returns {Array<string>|undefined} - The icon as an array of strings representing the icon class.
+		 * If the element key is not recognized, undefined is returned.
+		 */
 		getCardIcon(elementKey) {
 			switch (elementKey) {
 				case "bat":
@@ -1172,11 +1228,45 @@ export default {
 					return undefined;
 			}
 		},
-		getDatasetHidden(baseObject, objectKey) {
-			// ToDo
-			console.debug("getDatasetHidden", baseObject, objectKey);
+		/**
+		 * Hides a dataset in the chart.
+		 *
+		 * @param {Object} baseObject - The base object containing the dataset.
+		 * @param {string} objectKey - The key of the dataset to hide.
+		 * @param {string} elementKey - The key of the element.
+		 * @returns {boolean} - True if the dataset should be hidden, false otherwise.
+		 */
+		hideDataset(baseObject, objectKey, elementKey) {
+			// if dataset "all" is present, hide component datasets
+			if (["bat", "pv", "cp"].includes(baseObject)) {
+				if (
+					Object.prototype.hasOwnProperty.call(
+						this.chartTotals[baseObject],
+						"all",
+					) &&
+					objectKey != "all"
+				) {
+					return true;
+				}
+			}
+			// if elementKey ends with "grid", "bat", "pv" or "cp", hide the dataset
+			if (
+				["grid", "bat", "pv", "cp"].includes(
+					elementKey.split("_").pop(),
+				)
+			) {
+				return true;
+			}
 			return false;
 		},
+		/**
+		 * Returns the label for the totals.
+		 *
+		 * @param {string} groupKey - The key of the group.
+		 * @param {string} componentKey - The key of the component.
+		 * @param {string} measurementKey - The key of the measurement.
+		 * @returns {string} The label for the totals.
+		 */
 		getTotalsLabel(
 			groupKey,
 			componentKey = undefined,
@@ -1452,6 +1542,12 @@ export default {
 				details.length ? " (" + details.join(", ") + ")" : ""
 			}`;
 		},
+		/**
+		 * Returns the index of the dataset with the specified dataset key.
+		 *
+		 * @param {string} datasetKey - The key of the dataset to find.
+		 * @returns {number|undefined} - The index of the dataset if found, otherwise undefined.
+		 */
 		getDatasetIndex(datasetKey) {
 			let index = this.chartDatasets.datasets.findIndex((dataset) => {
 				return dataset.jsonKey == datasetKey;
@@ -1461,7 +1557,29 @@ export default {
 			}
 			return;
 		},
+		/**
+		 * Adds a dataset to the chart.
+		 *
+		 * @param {string} baseObject - The base object for the dataset.
+		 * @param {string} objectKey - The object key for the dataset.
+		 * @param {string} elementKey - The element key for the dataset.
+		 * @param {string} datasetKey - The dataset key.
+		 * @returns {number|undefined} - The index of the added dataset or undefined if no dataset was added.
+		 */
 		addDataset(baseObject, objectKey, elementKey, datasetKey) {
+			// do not add dataset if objectKey is not present in totals[baseObject]
+			if (
+				Object.prototype.hasOwnProperty.call(
+					this.chartTotals,
+					baseObject,
+				) &&
+				!Object.prototype.hasOwnProperty.call(
+					this.chartTotals[baseObject],
+					objectKey,
+				)
+			) {
+				return;
+			}
 			var datasetTemplate = baseObject + "-" + elementKey;
 			if (this.datasetTemplates[datasetTemplate]) {
 				var newDataset = JSON.parse(
@@ -1481,15 +1599,18 @@ export default {
 					newDataset.label =
 						newDataset.label + newDataset.labelSuffix;
 				}
+				newDataset.hidden = this.hideDataset(
+					baseObject,
+					objectKey,
+					elementKey,
+				);
 				if (objectKey == "all") {
 					if (
 						!["grid", "pv", "bat", "cp"].includes(
 							elementKey.split("_").slice(-1)[0],
 						)
 					) {
-						// only display general totals on load
-						newDataset.hidden = false;
-						// do not stack general totals
+						// do not stack totals
 						delete newDataset.stack;
 					}
 				}
@@ -1504,6 +1625,13 @@ export default {
 			}
 			return;
 		},
+		/**
+		 * Initializes a dataset based on the provided parameters.
+		 *
+		 * @param {string} baseObject - The base object of the dataset.
+		 * @param {string} objectKey - The object key of the dataset.
+		 * @param {string} elementKey - The element key of the dataset.
+		 */
 		initDataset(baseObject, objectKey, elementKey) {
 			var elementKeysToAdd = [];
 			if (this.chartRange == "day") {
@@ -1540,8 +1668,7 @@ export default {
 			const datasetKey = baseObject + "." + objectKey + "." + elementKey;
 			if (elementKeysToAdd[baseObject].includes(elementKey)) {
 				var index = this.getDatasetIndex(datasetKey);
-				const hidden = this.getDatasetHidden(baseObject, objectKey);
-				if (index == undefined && !hidden) {
+				if (index == undefined) {
 					index = this.addDataset(
 						baseObject,
 						objectKey,
@@ -1549,14 +1676,14 @@ export default {
 						datasetKey,
 					);
 				}
-				if (index != undefined && hidden) {
-					// dataset is hidden
-					this.chartDatasets.datasets.splice(index, 1);
-				}
 			} else {
 				console.debug("skipping dataset:", datasetKey);
 			}
 		},
+		/**
+		 * Sets up the X scale for the chart.
+		 * Updates the chart options with the specified X scale properties.
+		 */
 		setupScaleX() {
 			this.chartOptions.scales.x.time.unit = this.chartScaleX.unit;
 			this.chartOptions.scales.x.time.tooltipFormat =
@@ -1565,6 +1692,10 @@ export default {
 			this.chartOptions.scales.x.ticks.maxTicksLimit =
 				this.chartScaleX.maxTicksLimit;
 		},
+		/**
+		 * Requests chart data based on the selected chart range.
+		 * If the chart form is invalid, a warning is logged and the function returns.
+		 */
 		requestChart() {
 			let myForm = document.forms["chartForm"];
 			if (!myForm.reportValidity()) {
@@ -1591,15 +1722,25 @@ export default {
 				});
 			}
 		},
+		/**
+		 * Clears the chart data by removing all topics that match the wildcard pattern.
+		 * Then, it commits the "removeTopic" mutation for each topic in the list.
+		 */
 		clearChartData() {
 			this.getWildcardIndexList(this.baseTopic + "+").forEach((topic) => {
 				this.$store.commit("removeTopic", `${this.baseTopic}${topic}`);
 			});
 		},
+		/**
+		 * Updates the chart by clearing the chart data and then requesting new chart data.
+		 */
 		updateChart() {
 			this.clearChartData();
 			this.requestChart();
 		},
+		/**
+		 * Initializes the chart by setting the current date and chart date based on the chart range and initial date.
+		 */
 		init() {
 			const today = new Date();
 			this.currentDate = String(today.getFullYear());

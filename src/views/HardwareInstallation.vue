@@ -23,7 +23,7 @@
 	<!-- main content -->
 	<div class="hardwareInstallation">
 		<form name="hardwareInstallationForm">
-			<openwb-base-alert subtype="info">
+			<openwb-base-alert v-if="!installAssistantActive" subtype="info">
 				Wenn neue Komponenten - insbesondere Zähler - konfiguriert
 				wurden, ist auch das
 				<router-link to="/LoadManagementConfiguration">
@@ -282,29 +282,38 @@
 							</span>
 						</template>
 						<template #help>
-							Die openWB-Regelung ist auf Werte von MESSPUNKTEN
-							(Zähler, Energy Meter usw.) angewiesen. Hierfür
-							werden "Geräte" und "Komponenten" verwendet.<br />
-							Ein "Gerät" wird hierbei durch seine IP-Adresse
-							spezifiziert (häufig durch manuelle Eingabe oder
-							manchmal automatisch ermittelt) und kann über
-							mehrere untergeordnete "Komponenten" verfügen, z.B.
-							einen Messpunkt für PV-Erzeugung, einen Messpunkt
-							für Netzeinspeisung/-bezug am EVU-Punkt usw.. Ein
-							"Gerät" bedingt somit immer mindestens eine
-							zugehörige "Komponente".<br /><br />
-							Bsp: Werden die Werte von verschiedenen Messpunkten
-							(z.B. PV und EVU) über die gleiche IP-Adresse
-							abgefragt, wird dafür ein "Gerät" mit zwei
-							"Komponenten" für PV- und EVU- Messpunkt
-							angelegt.<br />
-							Verfügt dagegen jeder Messpunkt über eine eigene
-							IP-Adresse, wird jeder Messpunkt als eigenes "Gerät"
-							mit nur einer "Komponente" angelegt.<br /><br />
-							Das "Gerät" wird in der dropdown-Liste ausgewählt
-							und mit "+" der Regelung hinzugefügt. Im Anschluss
-							erfolgt die Konfiguration des "Gerätes" innerhalb
-							des schwarzen "Geräte"-Reiters.
+							<p>
+								Die openWB-Regelung ist auf Werte von
+								Messpunkten (Zähler, Energy Meter usw.)
+								angewiesen. Hierfür werden "Geräte" und
+								"Komponenten" verwendet.<br />
+								Ein "Gerät" wird hierbei durch seine
+								Verbindungseinstellungen (z.B. IP-Adresse)
+								spezifiziert (häufig durch manuelle Eingabe oder
+								manchmal automatisch ermittelt) und kann über
+								mehrere untergeordnete "Komponenten" verfügen,
+								z.B. einen Messpunkt für PV-Erzeugung, einen
+								Messpunkt für Netzeinspeisung/-bezug am
+								EVU-Punkt usw.. Ein "Gerät" bedingt somit immer
+								mindestens eine zugehörige "Komponente".
+							</p>
+							<p>
+								Bsp: Werden die Werte von verschiedenen
+								Messpunkten (z.B. PV und EVU) über die gleiche
+								IP-Adresse abgefragt, wird dafür ein "Gerät" mit
+								zwei "Komponenten" für PV- und EVU- Messpunkt
+								angelegt.<br />
+								Verfügt dagegen jeder Messpunkt über eine eigene
+								IP-Adresse, wird jeder Messpunkt als eigenes
+								"Gerät" mit nur einer "Komponente" angelegt.
+							</p>
+							<p>
+								Das "Gerät" wird in der dropdown-Liste
+								ausgewählt und mit "+" der Regelung hinzugefügt.
+								Im Anschluss erfolgt die Konfiguration des
+								"Gerätes" innerhalb des schwarzen
+								"Geräte"-Reiters.
+							</p>
 						</template>
 					</openwb-base-select-input>
 				</div>
@@ -347,12 +356,19 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbConfigProxy from "../components/devices/OpenwbConfigProxy.vue";
 
 export default {
-	name: "OpenwbHardwareInstallation",
+	name: "OpenwbHardwareInstallationView",
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
 		FontAwesomeIcon,
 		OpenwbConfigProxy,
+	},
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
 	},
 	data() {
 		return {

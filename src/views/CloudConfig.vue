@@ -58,93 +58,80 @@
 						</a>
 						.
 					</openwb-base-alert>
-					<div
-						v-if="
-							$store.state.mqtt['openWB/general/extern'] === true
+					<openwb-base-text-input
+						title="Benutzername"
+						required
+						subtype="user"
+						pattern="[a-zA-Z]+"
+						v-model="newCloudData.username"
+						disabled
+					/>
+					<openwb-base-text-input
+						title="E-Mail"
+						required
+						subtype="email"
+						v-model="newCloudData.email"
+						disabled
+					/>
+					<openwb-base-button-group-input
+						disabled
+						title="Zugang für Partner"
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Aus',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'An',
+								class: 'btn-outline-success',
+							},
+						]"
+						v-model="newCloudData.partner"
+					>
+						<template #help>
+							Wenn diese openWB über einen Partner erworben wurde,
+							kann hier ein Support-Zugang für diesen freigegeben
+							werden.
+						</template>
+					</openwb-base-button-group-input>
+					<openwb-base-array-input
+						v-if="newCloudData.partner"
+						title="Gültige Partner-IDs"
+						noElementsMessage="Keine Partner-ID zugeordnet."
+						:model-value="
+							$store.state.mqtt[
+								'openWB/system/mqtt/valid_partner_ids'
+							]
+						"
+						@update:model-value="
+							updateState(
+								'openWB/system/mqtt/valid_partner_ids',
+								$event,
+							)
 						"
 					>
-						<openwb-base-alert subtype="info">
-							Diese openWB befindet sich im Steuerungsmodus
-							"secondary". Bitte richten Sie die openWB Cloud auf
-							der übergeordneten primary openWB ein.
-						</openwb-base-alert>
-					</div>
-					<div v-else>
-						<openwb-base-text-input
-							title="Benutzername"
-							required
-							subtype="user"
-							pattern="[a-zA-Z]+"
-							v-model="newCloudData.username"
-							disabled
-						/>
-						<openwb-base-text-input
-							title="E-Mail"
-							required
-							subtype="email"
-							v-model="newCloudData.email"
-							disabled
-						/>
-						<openwb-base-button-group-input
-							disabled
-							title="Zugang für Partner"
-							:buttons="[
-								{
-									buttonValue: false,
-									text: 'Aus',
-									class: 'btn-outline-danger',
-								},
-								{
-									buttonValue: true,
-									text: 'An',
-									class: 'btn-outline-success',
-								},
-							]"
-							v-model="newCloudData.partner"
-						>
-							<template #help>
-								Wenn diese openWB über einen Partner erworben
-								wurde, kann hier ein Support-Zugang für diesen
-								freigegeben werden.
-							</template>
-						</openwb-base-button-group-input>
-						<openwb-base-array-input
-							v-if="newCloudData.partner"
-							title="Gültige Partner-IDs"
-							noElementsMessage="Keine Partner-ID zugeordnet."
-							:model-value="
-								$store.state.mqtt[
-									'openWB/system/mqtt/valid_partner_ids'
-								]
-							"
-							@update:model-value="
-								updateState(
-									'openWB/system/mqtt/valid_partner_ids',
-									$event,
-								)
-							"
-						>
-							<template #input-prefix>
-								<font-awesome-icon
-									fixed-width
-									:icon="['fas', 'user-gear']"
-								/>
-							</template>
-							<template #element-prefix>
-								<font-awesome-icon
-									fixed-width
-									:icon="['fas', 'user-gear']"
-								/>
-							</template>
-							<template #help>
-								Die Partner-ID erhältst Du von Deinem
-								Installateur. Ist hier keine Partner-ID
-								eingetragen, dann kann auch niemand - trotz
-								aktiviertem Zugang für Partner - über das
-								Partner-Portal auf diese openWB zugreifen!
-							</template>
-						</openwb-base-array-input>
-					</div>
+						<template #input-prefix>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'user-gear']"
+							/>
+						</template>
+						<template #element-prefix>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'user-gear']"
+							/>
+						</template>
+						<template #help>
+							Die Partner-ID erhältst Du von Deinem Installateur.
+							Ist hier keine Partner-ID eingetragen, dann kann
+							auch niemand - trotz aktiviertem Zugang für Partner
+							- über das Partner-Portal auf diese openWB
+							zugreifen!
+						</template>
+					</openwb-base-array-input>
 					<template
 						#footer
 						v-if="
@@ -188,89 +175,76 @@
 			</form>
 			<form v-if="!cloudBridgeKey" name="cloudConfigConnectForm">
 				<openwb-base-card title="Vorhandenen Zugang einrichten">
-					<div
-						v-if="
-							$store.state.mqtt['openWB/general/extern'] === true
+					<openwb-base-text-input
+						title="Benutzername"
+						required
+						subtype="user"
+						v-model="connectCloudData.username"
+					/>
+					<openwb-base-text-input
+						title="Passwort"
+						required
+						subtype="password"
+						v-model="connectCloudData.password"
+					/>
+					<openwb-base-button-group-input
+						title="Zugang für Partner"
+						:buttons="[
+							{
+								buttonValue: false,
+								text: 'Aus',
+								class: 'btn-outline-danger',
+							},
+							{
+								buttonValue: true,
+								text: 'An',
+								class: 'btn-outline-success',
+							},
+						]"
+						v-model="connectCloudData.partner"
+					>
+						<template #help>
+							Wenn diese openWB über einen Partner erworben wurde,
+							kann hier ein Support-Zugang für diesen freigegeben
+							werden.
+						</template>
+					</openwb-base-button-group-input>
+					<openwb-base-array-input
+						v-if="connectCloudData.partner"
+						title="Gültige Partner-IDs"
+						noElementsMessage="Keine Partner-ID zugeordnet."
+						:model-value="
+							$store.state.mqtt[
+								'openWB/system/mqtt/valid_partner_ids'
+							]
+						"
+						@update:model-value="
+							updateState(
+								'openWB/system/mqtt/valid_partner_ids',
+								$event,
+							)
 						"
 					>
-						<openwb-base-alert subtype="info">
-							Diese openWB befindet sich im Steuerungsmodus
-							"secondary". Bitte richten Sie die openWB Cloud auf
-							der übergeordneten primary openWB ein.
-						</openwb-base-alert>
-					</div>
-					<div v-else>
-						<openwb-base-text-input
-							title="Benutzername"
-							required
-							subtype="user"
-							v-model="connectCloudData.username"
-						/>
-						<openwb-base-text-input
-							title="Passwort"
-							required
-							subtype="password"
-							v-model="connectCloudData.password"
-						/>
-						<openwb-base-button-group-input
-							title="Zugang für Partner"
-							:buttons="[
-								{
-									buttonValue: false,
-									text: 'Aus',
-									class: 'btn-outline-danger',
-								},
-								{
-									buttonValue: true,
-									text: 'An',
-									class: 'btn-outline-success',
-								},
-							]"
-							v-model="connectCloudData.partner"
-						>
-							<template #help>
-								Wenn diese openWB über einen Partner erworben
-								wurde, kann hier ein Support-Zugang für diesen
-								freigegeben werden.
-							</template>
-						</openwb-base-button-group-input>
-						<openwb-base-array-input
-							v-if="connectCloudData.partner"
-							title="Gültige Partner-IDs"
-							noElementsMessage="Keine Partner-ID zugeordnet."
-							:model-value="
-								$store.state.mqtt[
-									'openWB/system/mqtt/valid_partner_ids'
-								]
-							"
-							@update:model-value="
-								updateState(
-									'openWB/system/mqtt/valid_partner_ids',
-									$event,
-								)
-							"
-						>
-							<template #input-prefix>
-								<font-awesome-icon
-									fixed-width
-									:icon="['fas', 'user-gear']"
-								/>
-							</template>
-							<template #element-prefix>
-								<font-awesome-icon
-									fixed-width
-									:icon="['fas', 'user-gear']"
-								/>
-							</template>
-							<template #help>
-								Die Partner-ID erhältst Du von Deinem
-								Installateur. Ist hier keine Partner-ID
-								eingetragen, dann kann auch niemand - trotz
-								aktiviertem Zugang für Partner - über das
-								Partner-Portal auf diese openWB zugreifen!
-							</template>
-						</openwb-base-array-input>
-					</div>
+						<template #input-prefix>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'user-gear']"
+							/>
+						</template>
+						<template #element-prefix>
+							<font-awesome-icon
+								fixed-width
+								:icon="['fas', 'user-gear']"
+							/>
+						</template>
+						<template #help>
+							Die Partner-ID erhältst Du von Deinem Installateur.
+							Ist hier keine Partner-ID eingetragen, dann kann
+							auch niemand - trotz aktiviertem Zugang für Partner
+							- über das Partner-Portal auf diese openWB
+							zugreifen!
+						</template>
+					</openwb-base-array-input>
 					<template
 						#footer
 						v-if="
@@ -439,7 +413,7 @@ library.add(fasUserGear);
 import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
-	name: "OpenwbCloudConfig",
+	name: "OpenwbCloudConfigView",
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {

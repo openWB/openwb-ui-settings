@@ -40,40 +40,80 @@
 						"
 					>
 						<template #help>
-							Wenn angesteckte Fahrzeuge, die nicht laden, im
-							Lastmanagement berücksichtigt werden, wird für diese
-							der Fahrzeug-Mindeststrom bei vorliegender
-							Ladefreigabe reserviert. Dadurch können bei
-							Eingreifen des Lastmanagements andere Fahrzeuge
-							möglicherweise nur mit reduzierter Stromstärke laden
-							und der reservierte Strom wird nicht genutzt.<br />
-							Wenn die Fahrzeuge wieder Leistung beziehen, z.B. um
-							vorzuklimatisieren, nutzen sie den für sie
-							reservierten Strom.<br /><br />
-							Wenn angesteckte Fahrzeuge, die nicht laden, nicht
-							im Lastmanagement berücksichtigt werden, wird für
-							diese auch kein Strom bei vorliegender Ladefreigabe
-							reserviert. Andere Fahrzeuge können dadurch mit
-							höherer Stromstärke laden.<br />
-							Wenn die maximalen Lastmanagement-Grenzen fast
-							erreicht sind und die Fahrzeuge wieder Leistung
-							beziehen, z.B. um vorzuklimatisieren, kann es zu
-							einer kurzzeitigen Überschreitung der
-							Lastmanagement-Grenzen kommen, bis im nächsten
-							Zyklus die Stromstärken ALLER Ladepunkte an die neue
-							Situation angepasst wurden.<br />
-							Das kurzzeitige Überschreiten der Maximal-Werte
-							stellt für die Sicherungen in der Regel kein Problem
-							dar.
+							<p>
+								Wenn angesteckte Fahrzeuge, die nicht laden, im
+								Lastmanagement berücksichtigt werden, wird für
+								diese der Fahrzeug-Mindeststrom bei vorliegender
+								Ladefreigabe reserviert. Dadurch können bei
+								Eingreifen des Lastmanagements andere Fahrzeuge
+								möglicherweise nur mit reduzierter Stromstärke
+								laden und der reservierte Strom wird nicht
+								genutzt. Wenn die Fahrzeuge wieder Leistung
+								beziehen, z.B. um vorzuklimatisieren, nutzen sie
+								den für sie reservierten Strom.
+							</p>
+							<p>
+								Wenn angesteckte Fahrzeuge, die nicht laden,
+								nicht im Lastmanagement berücksichtigt werden,
+								wird für diese auch kein Strom bei vorliegender
+								Ladefreigabe reserviert. Andere Fahrzeuge können
+								dadurch mit höherer Stromstärke laden. Wenn die
+								maximalen Lastmanagement-Grenzen fast erreicht
+								sind und die Fahrzeuge wieder Leistung beziehen,
+								z.B. um vorzuklimatisieren, kann es zu einer
+								kurzzeitigen Überschreitung der
+								Lastmanagement-Grenzen kommen, bis im nächsten
+								Zyklus die Stromstärken aller Ladepunkte an die
+								neue Situation angepasst wurden. Das kurzzeitige
+								Überschreiten der Maximal-Werte stellt für die
+								Sicherungen in der Regel kein Problem dar.
+							</p>
 						</template>
 					</openwb-base-button-group-input>
+					<openwb-base-select-input
+						title="Hausverbrauch"
+						:options="getHcSourceIdOptions.options"
+						:groups="getHcSourceIdOptions.groups"
+						:model-value="
+							$store.state.mqtt[
+								'openWB/counter/config/home_consumption_source_id'
+							]
+						"
+						@update:model-value="
+							updateState(
+								'openWB/counter/config/home_consumption_source_id',
+								$event,
+							)
+						"
+					>
+						<template #help>
+							Meist ist der Zähler am EVU-Punkt installiert, dann
+							muss hier 'von openWB berechnen' ausgewählt werden.
+							Wenn der Zähler im Hausverbrauchszweig installiert
+							ist, die Struktur wie im
+							<a
+								href="https://github.com/openWB/core/wiki/Hausverbrauchs-Zähler"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								Wiki
+							</a>
+							beschrieben anordnen und hier den
+							Hausverbrauchszähler auswählen. Dann wird dieser
+							Wert abzüglich der Ladeleistung als Hausverbrauch
+							erfasst.
+						</template>
+					</openwb-base-select-input>
 					<openwb-base-heading>
 						Vorhandene Zählermodule
 					</openwb-base-heading>
 					<openwb-base-alert subtype="info">
 						Die maximale Leistung wird nur für den EVU-Zähler
 						berücksichtigt. Bei Zwischenzählern begrenzt das
-						Lastmanagement rein anhand der maximalen Phasenströme.
+						Lastmanagement rein anhand der maximalen
+						Phasenströme.<br />
+						Überlicherweise sind Hausanschlüsse mit 24kW und 3*35A
+						bzw. 43kW und 3*63A abgesichert.
 					</openwb-base-alert>
 					<openwb-base-card
 						v-for="counter in counterConfigs"
@@ -307,17 +347,25 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 import SortableList from "../components/OpenwbSortableList.vue";
 
 export default {
-	name: "OpenwbLoadManagementConfig",
+	name: "OpenwbLoadManagementConfigView",
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
 		SortableList,
 		FontAwesomeIcon,
 	},
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
+	},
 	data() {
 		return {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
+				"openWB/counter/config/home_consumption_source_id",
 				"openWB/counter/config/reserve_for_not_charging",
 				"openWB/counter/get/hierarchy",
 				"openWB/system/device/+/component/+/config",
@@ -329,6 +377,11 @@ export default {
 		};
 	},
 	computed: {
+		componentConfigurations() {
+			return this.getWildcardTopics(
+				"openWB/system/device/+/component/+/config",
+			);
+		},
 		counterConfigs: {
 			get() {
 				let installedComponentsConfigs = this.getWildcardTopics(
@@ -347,6 +400,20 @@ export default {
 						};
 					}, {});
 			},
+		},
+		counterOptions() {
+			var myOptions = [];
+			for (const element of Object.values(this.componentConfigurations)) {
+				if (this.isComponentType(element.type, "counter")) {
+					myOptions.push({ value: element.id, text: element.name });
+				}
+			}
+			return myOptions.sort((a, b) => {
+				if (a.text == b.text) {
+					return 0;
+				}
+				return a.text > b.text ? 1 : -1;
+			});
 		},
 		inverterConfigs: {
 			get() {
@@ -380,6 +447,21 @@ export default {
 				}
 				return labels;
 			},
+		},
+		getHcSourceIdOptions() {
+			let options = [
+				{
+					value: null,
+					text: "von openWB berechnen",
+				},
+			];
+			let groups = [
+				{
+					label: "Eingerichtete Zähler-Komponenten",
+					options: [...this.counterOptions],
+				},
+			];
+			return { options: options, groups: groups };
 		},
 	},
 	methods: {
@@ -428,6 +510,9 @@ export default {
 				}
 			});
 			return myChargePoint;
+		},
+		isComponentType(componentType, verifier) {
+			return componentType.split("_").includes(verifier);
 		},
 	},
 };

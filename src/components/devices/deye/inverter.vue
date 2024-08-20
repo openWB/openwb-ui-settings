@@ -1,5 +1,5 @@
 <template>
-	<div class="device-batterx-inverter">
+	<div class="device-deye-inverter">
 		<openwb-base-heading>
 			Einstellungen für Deye Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
