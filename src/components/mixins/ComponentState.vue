@@ -102,6 +102,9 @@ export default {
 			maxNumDigit = minNumDigits,
 			scale = 1,
 		) {
+			if (value == undefined || isNaN(value)) {
+				return undefined;
+			}
 			return (value * scale).toLocaleString(undefined, {
 				minimumFractionDigits: minNumDigits,
 				maximumFractionDigits: maxNumDigit,
