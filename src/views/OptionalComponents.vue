@@ -1,7 +1,7 @@
 <template>
 	<div class="optionalComponents">
 		<form name="optionalComponentsForm">
-			<openwb-base-card title="Identifikation von Fahrzeugen">
+			<openwb-base-card title="Identifikation">
 				<div v-if="$store.state.mqtt['openWB/general/extern'] === true">
 					<openwb-base-alert subtype="info">
 						Weitere Einstellungen sind nicht verfügbar, solange sich
@@ -31,8 +31,9 @@
 						]"
 					>
 						<template #help>
-							Die Identifikation von Fahrzeugen kann auf mehreren
-							Wegen erfolgen:
+							Die Identifikation kann zum Entsperren von
+							Ladepunkten und/oder zur Zuordnung von Fahrzeugen
+							genutzt werden und kann auf mehreren Wegen erfolgen:
 							<ul>
 								<li>
 									Über einen in der openWB verbauten
