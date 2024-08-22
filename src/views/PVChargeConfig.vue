@@ -164,7 +164,11 @@
 						<template #help>
 							Wird der Regelbereich in Richtung Netzbezug um diese
 							Leistung überschritten, so wird der Ladevorgang
-							beendet.<br />
+							beendet. Wenn ein Speicher im System vorhanden ist,
+							gilt die Abschaltschwelle auch für die
+							Speicherentladung. Die Abschaltschwelle übersteuert
+							den Mindest-SoC des Speichers (siehe
+							Speicher-Beachtung unten).<br />
 							Dieser Wert ist unabhängig von der Anzahl genutzter
 							Phasen.
 						</template>
