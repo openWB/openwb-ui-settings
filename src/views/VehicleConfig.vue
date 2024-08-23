@@ -389,6 +389,8 @@
 							<openwb-base-number-input
 								title="Während der Ladung"
 								unit="Min."
+								:min="1"
+								required
 								:model-value="
 									$store.state.mqtt[
 										'openWB/vehicle/' +
@@ -416,6 +418,8 @@
 							<openwb-base-number-input
 								title="Ohne laufende Ladung"
 								unit="Min."
+								:min="1"
+								required
 								:model-value="
 									$store.state.mqtt[
 										'openWB/vehicle/' +
@@ -592,6 +596,7 @@
 							unit="kWh"
 							:min="1"
 							:step="1"
+							required
 							:model-value="template.battery_capacity / 1000"
 							@update:model-value="
 								updateState(
@@ -619,6 +624,8 @@
 							<openwb-base-number-input
 								title="Wirkungsgrad der Ladeelektronik"
 								unit="%"
+								:min="1"
+								:max="100"
 								required
 								:model-value="template.efficiency"
 								@update:model-value="
@@ -652,8 +659,9 @@
 						<openwb-base-number-input
 							title="Durchschnittsverbrauch"
 							unit="kWh&nbsp;/&nbsp;100km"
-							:min="0"
+							:min="1"
 							:step="0.1"
+							required
 							:model-value="template.average_consump / 1000"
 							@update:model-value="
 								updateState(
@@ -888,6 +896,7 @@
 							unit="s"
 							:min="2"
 							:step="1"
+							required
 							:model-value="template.phase_switch_pause"
 							@update:model-value="
 								updateState(key, $event, 'phase_switch_pause')
@@ -900,6 +909,7 @@
 								unit="s"
 								:min="2"
 								:step="1"
+								required
 								:model-value="
 									template.keep_charge_active_duration
 								"

@@ -19,6 +19,7 @@
 				{ value: 'b23', text: 'B23' },
 			]"
 			:model-value="component.configuration.version"
+			required
 			@update:model-value="
 				updateConfiguration($event, 'configuration.version')
 			"

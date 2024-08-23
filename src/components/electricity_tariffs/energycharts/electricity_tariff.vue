@@ -24,6 +24,7 @@
 			:min="0"
 			:step="0.001"
 			:precision="3"
+			required
 			unit="ct/kWh"
 			:model-value="electricityTariff.configuration.surcharge"
 			@update:model-value="

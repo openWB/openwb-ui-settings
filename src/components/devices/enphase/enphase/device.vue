@@ -43,6 +43,7 @@
 			title="Benutzer"
 			subtype="user"
 			:model-value="device.configuration.user"
+			required
 			@update:model-value="
 				updateConfiguration($event, 'configuration.user')
 			"
@@ -52,6 +53,7 @@
 			title="Kennwort"
 			subtype="password"
 			:model-value="device.configuration.password"
+			required
 			@update:model-value="
 				updateConfiguration($event, 'configuration.password')
 			"
@@ -60,6 +62,7 @@
 			v-if="device.configuration.version > 1"
 			title="Envoy Seriennummer"
 			:model-value="device.configuration.serial"
+			required
 			@update:model-value="
 				updateConfiguration($event, 'configuration.serial')
 			"
@@ -69,6 +72,7 @@
 			title="Token"
 			subtype="password"
 			:model-value="device.configuration.token"
+			required
 			@update:model-value="
 				updateConfiguration($event, 'configuration.token')
 			"

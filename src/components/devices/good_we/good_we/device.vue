@@ -45,6 +45,7 @@
 				{ value: 'v_1_1', text: 'v1.0/ v1.1' },
 			]"
 			:model-value="device.configuration.version"
+			required
 			@update:model-value="
 				updateConfiguration($event, 'configuration.version')
 			"
@@ -62,6 +63,7 @@
 				{ value: 9, text: 'ARM ab 9.0' },
 			]"
 			:model-value="device.configuration.firmware"
+			required
 			@update:model-value="
 				updateConfiguration($event, 'configuration.firmware')
 			"

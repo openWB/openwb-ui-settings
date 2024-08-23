@@ -4,6 +4,7 @@
 		<openwb-base-select-input
 			title="Ausleseart"
 			notSelected="Bitte auswählen"
+			required
 			:options="[
 				{ value: 0, text: 'Alpha ESS-Kit' },
 				{ value: 1, text: 'Hi 5/10' },
@@ -49,6 +50,7 @@
 		<openwb-base-select-input
 			title="Firmware Version"
 			notSelected="Bitte auswählen"
+			required
 			:options="[
 				{ value: 0, text: 'EMS älter als 1.23V' },
 				{ value: 1, text: 'EMS 1.23V oder neuer' },

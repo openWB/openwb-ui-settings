@@ -1,5 +1,5 @@
 <template>
-	<div class="charge-point-commands-openwbpro">
+	<div class="charge-point-commands-openwb-pro">
 		<openwb-base-button-input
 			title="Ladepunkt aktualisieren"
 			buttonText="Update anfordern"

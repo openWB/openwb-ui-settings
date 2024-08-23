@@ -40,6 +40,7 @@
 						title="Minimum"
 						:step="0.005"
 						unit="kW"
+						required
 						:model-value="
 							Array.isArray(
 								$store.state.mqtt[
@@ -69,6 +70,7 @@
 						title="Maximum"
 						:step="0.005"
 						unit="kW"
+						required
 						:model-value="
 							Array.isArray(
 								$store.state.mqtt[
@@ -98,6 +100,7 @@
 						:min="0"
 						:step="0.05"
 						unit="kW"
+						required
 						:model-value="
 							$store.state.mqtt[
 								'openWB/general/chargemode_config/pv_charging/switch_on_threshold'
@@ -123,6 +126,7 @@
 						:min="0"
 						:step="1"
 						unit="s"
+						required
 						:model-value="
 							$store.state.mqtt[
 								'openWB/general/chargemode_config/pv_charging/switch_on_delay'
@@ -149,6 +153,7 @@
 						title="Abschaltschwelle"
 						:step="0.05"
 						unit="kW"
+						required
 						:model-value="
 							$store.state.mqtt[
 								'openWB/general/chargemode_config/pv_charging/switch_off_threshold'
@@ -178,6 +183,7 @@
 						:min="0"
 						:step="1"
 						unit="s"
+						required
 						:model-value="
 							$store.state.mqtt[
 								'openWB/general/chargemode_config/pv_charging/switch_off_delay'
@@ -205,6 +211,7 @@
 						:min="0"
 						:step="0.05"
 						unit="kW"
+						required
 						:model-value="
 							$store.state.mqtt[
 								'openWB/general/chargemode_config/pv_charging/feed_in_yield'
@@ -461,7 +468,7 @@
 							:min="0.1"
 							:step="0.1"
 							unit="kW"
-							:required
+							required
 							:model-value="
 								$store.state.mqtt[
 									'openWB/general/chargemode_config/pv_charging/bat_power_reserve'
@@ -525,7 +532,7 @@
 							:min="0.1"
 							:step="0.1"
 							unit="kW"
-							:required
+							required
 							:model-value="
 								$store.state.mqtt[
 									'openWB/general/chargemode_config/pv_charging/bat_power_discharge'

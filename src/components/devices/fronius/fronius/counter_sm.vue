@@ -6,6 +6,7 @@
 		<openwb-base-select-input
 			title="Kompatibilitätsmodus"
 			notSelected="Bitte auswählen"
+			required
 			:options="[
 				{ value: 0, text: 'Aus' },
 				{ value: 1, text: 'Variante 1' },

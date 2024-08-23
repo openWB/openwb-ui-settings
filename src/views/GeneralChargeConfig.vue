@@ -200,6 +200,7 @@
 							:step="0.001"
 							:precision="3"
 							unit="ct/kWh"
+							required
 							:model-value="
 								$store.state.mqtt[
 									'openWB/general/prices/grid'
@@ -218,6 +219,7 @@
 						:step="0.001"
 						:precision="3"
 						unit="ct/kWh"
+						required
 						:model-value="
 							$store.state.mqtt['openWB/general/prices/bat'] *
 							100000
@@ -235,6 +237,7 @@
 						:step="0.001"
 						:precision="3"
 						unit="ct/kWh"
+						required
 						:model-value="
 							$store.state.mqtt['openWB/general/prices/pv'] *
 							100000

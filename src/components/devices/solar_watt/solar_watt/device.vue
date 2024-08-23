@@ -20,6 +20,7 @@
 				{ value: 1, text: 'Energy Manager' },
 			]"
 			:model-value="device.configuration.energy_manager"
+			required
 			@update:model-value="
 				updateConfiguration($event, 'configuration.energy_manager')
 			"
