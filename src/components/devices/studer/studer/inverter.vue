@@ -10,6 +10,7 @@
 				{ buttonValue: 'VS', text: 'VarioString (VS-70/VS-120)' },
 			]"
 			:model-value="component.configuration.vc_type"
+			required
 			@update:model-value="
 				updateConfiguration($event, 'configuration.vc_type')
 			"

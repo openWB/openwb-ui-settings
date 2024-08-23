@@ -11,6 +11,7 @@
 				{ value: 3, text: 'Gen 3' },
 			]"
 			:model-value="component.configuration.generation"
+			required
 			@update:model-value="
 				updateConfiguration($event, 'configuration.generation')
 			"

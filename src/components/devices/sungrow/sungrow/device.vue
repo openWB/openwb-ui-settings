@@ -43,6 +43,7 @@
 				{ value: 2, text: 'SG (kein Hybrid) über WiNet-S Dongle' },
 			]"
 			:model-value="device.configuration.version"
+			required
 			@update:model-value="
 				updateConfiguration($event, 'configuration.version')
 			"

@@ -136,6 +136,7 @@
 							title="Maximale Leistung"
 							:min="1"
 							:step="1"
+							required
 							unit="kW"
 							:model-value="
 								$store.state.mqtt[
@@ -163,6 +164,7 @@
 							:min="16"
 							:step="1"
 							unit="A"
+							required
 							:model-value="
 								$store.state.mqtt[
 									'openWB/counter/' +
@@ -190,6 +192,7 @@
 							:min="16"
 							:step="1"
 							unit="A"
+							required
 							:model-value="
 								$store.state.mqtt[
 									'openWB/counter/' +
@@ -217,6 +220,7 @@
 							:min="16"
 							:step="1"
 							unit="A"
+							required
 							:model-value="
 								$store.state.mqtt[
 									'openWB/counter/' +
@@ -262,6 +266,7 @@
 							:min="0"
 							:step="0.1"
 							unit="kW"
+							required
 							:model-value="
 								$store.state.mqtt[
 									'openWB/pv/' +

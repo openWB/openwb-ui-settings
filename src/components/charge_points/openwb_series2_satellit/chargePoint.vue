@@ -1,5 +1,5 @@
 <template>
-	<div class="charge-point-satellite">
+	<div class="charge-point-openwb-satellite">
 		<openwb-base-text-input
 			title="IP oder Hostname"
 			subtype="host"

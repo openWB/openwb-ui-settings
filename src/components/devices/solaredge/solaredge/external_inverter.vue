@@ -25,6 +25,7 @@
 			:model-value="component.configuration.meter_id"
 			min="1"
 			max="255"
+			required
 			@update:model-value="
 				updateConfiguration($event, 'configuration.meter_id')
 			"

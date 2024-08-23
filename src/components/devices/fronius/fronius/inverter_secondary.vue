@@ -7,6 +7,7 @@
 			title="ID"
 			:model-value="component.configuration.id"
 			min="0"
+			required
 			@update:model-value="
 				updateConfiguration($event, 'configuration.id')
 			"

@@ -3,6 +3,7 @@
 		<openwb-base-text-input
 			title="Pfad zum NFS Share"
 			pattern="^([^/: ]+):(\/[^/: ]+)+$"
+			required
 			:model-value="backupCloud.configuration.nfs_share"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.nfs_share')

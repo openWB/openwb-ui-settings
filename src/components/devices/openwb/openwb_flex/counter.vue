@@ -19,6 +19,7 @@
 				{ value: 2, text: 'SDM630/SDM72D-M' },
 			]"
 			:model-value="component.configuration.version"
+			required
 			@update:model-value="
 				updateConfiguration($event, 'configuration.version')
 			"

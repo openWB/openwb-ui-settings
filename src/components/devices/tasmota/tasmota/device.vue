@@ -19,6 +19,7 @@
 				{ value: 3, text: '3' },
 			]"
 			:model-value="device.configuration.phase"
+			required
 			@update:model-value="
 				updateConfiguration($event, 'configuration.phase')
 			"
