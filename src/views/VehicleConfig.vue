@@ -156,6 +156,44 @@
 								werden.
 							</template>
 						</openwb-base-text-input>
+						<openwb-base-text-input
+							title="Fahrzeughersteller "
+							v-if="vehicleId !== 0"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/vehicle/' + vehicleId + '/info'
+								].manufacturer
+							"
+							@update:model-value="
+								updateState(
+									'openWB/vehicle/' + vehicleId + '/info',
+									$event,'manufacturer'
+								)
+							"
+						>
+							<template #help>
+								Optional: zusätzliche Information für den Systembericht.
+							</template>
+						</openwb-base-text-input>
+						<openwb-base-text-input
+							title="Fahrzeugmodell"
+							v-if="vehicleId !== 0"
+							:model-value="
+								$store.state.mqtt[
+									'openWB/vehicle/' + vehicleId + '/info'
+								].model
+							"
+							@update:model-value="
+								updateState(
+									'openWB/vehicle/' + vehicleId + '/info',
+									$event,'model'
+								)
+							"
+						>
+							<template #help>
+								Optional: zusätzliche Information für den Systembericht.
+							</template>
+						</openwb-base-text-input>
 						<openwb-base-alert subtype="info">
 							Ein anderes Fahrzeug-Profil wird erst NACH dem
 							Abstecken übernommen, da es sonst durch die Änderung
@@ -2288,6 +2326,7 @@ export default {
 				"openWB/vehicle/template/charge_template/+/chargemode/scheduled_charging/plans/+",
 				"openWB/vehicle/template/charge_template/+/time_charging/plans/+",
 				"openWB/vehicle/+/name",
+				"openWB/vehicle/+/info",
 				"openWB/vehicle/+/charge_template",
 				"openWB/vehicle/+/ev_template",
 				"openWB/vehicle/+/tag_id",
