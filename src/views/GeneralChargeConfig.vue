@@ -120,10 +120,26 @@
 					</openwb-base-button-group-input>
 					<openwb-base-range-input
 						title="Verzögerung automat. Phasenumschaltung"
-						:min="1"
-						:max="15"
+						:min="0"
+						:max="14"
 						:step="1"
-						unit="Min."
+						:labels="[
+							{ label: '1&uArr; 15&dArr; Min.', value: 1 },
+							{ label: '2&uArr; 14&dArr; Min.', value: 2 },
+							{ label: '3&uArr; 13&dArr; Min.', value: 3 },
+							{ label: '4&uArr; 12&dArr; Min.', value: 4 },
+							{ label: '5&uArr; 11&dArr; Min.', value: 5 },
+							{ label: '6&uArr; 10&dArr; Min.', value: 6 },
+							{ label: '7&uArr; 9&dArr; Min.', value: 7 },
+							{ label: '8&uArr; 8&dArr; Min.', value: 8 },
+							{ label: '9&uArr; 7&dArr; Min.', value: 9 },
+							{ label: '10&uArr; 6&dArr; Min.', value: 10 },
+							{ label: '11&uArr; 5&dArr; Min.', value: 11 },
+							{ label: '12&uArr; 4&dArr; Min.', value: 12 },
+							{ label: '13&uArr; 3&dArr; Min.', value: 13 },
+							{ label: '14&uArr; 2&dArr; Min.', value: 14 },
+							{ label: '15&uArr; 1&dArr; Min.', value: 15 },
+						]"
 						:model-value="
 							$store.state.mqtt[
 								'openWB/general/chargemode_config/phase_switch_delay'
@@ -141,12 +157,12 @@
 							dieses Wertes definiert, wann die Umschaltung
 							erfolgen soll. Ist für durchgehend x Minuten die
 							Maximalstromstärke erreicht, wird auf mehrphasige
-							Ladung umgestellt. Ist die Ladung nur für ein
+							Ladung &uArr; umgestellt. Ist die Ladung nur für ein
 							Intervall unterhalb der Maximalstromstärke, beginnt
 							das Intervall für die Umschaltung erneut. Ist die
 							Ladung im mehrphasigen Modus für 16 - x Minuten auf
 							der Minimalstromstärke, wird wieder auf einphasige
-							Ladung gewechselt.<br />
+							Ladung &dArr; gewechselt.<br />
 							Ist ausreichend Überschuss vorhanden, wird beim
 							Ladestart die Umschaltverzögerung nicht abgewartet,
 							sondern direkt mit mehrphasiger Ladung begonnen.
