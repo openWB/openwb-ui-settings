@@ -1,5 +1,5 @@
 <template>
-	<div class="device-batterx-counter">
+	<div class="device-deye-counter">
 		<openwb-base-heading>
 			Einstellungen für Deye Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>

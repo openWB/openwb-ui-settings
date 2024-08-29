@@ -100,14 +100,190 @@
 				<vue3-table-lite
 					class="charge-log-table"
 					:is-static-mode="true"
-					:columns="table.columns"
+					:columns="chargeLogColumns"
 					:rows="chargeLogDataset"
 					:total="totalRecordCount"
 					:sortable="table.sortable"
 					:messages="table.messages"
 					:page-options="table.pageOptions"
 					:limit="25"
-				/>
+					:is-slot-mode="true"
+				>
+					<template #time_begin="data">
+						{{ dashIfNotSet(data.value.time_begin) }}
+					</template>
+					<template #time_end="data">
+						{{ dashIfNotSet(data.value.time_end) }}
+					</template>
+					<template #time_time_charged="data">
+						<div class="td-end">
+							{{ data.value.time_time_charged }}
+						</div>
+					</template>
+					<template #data_costs="data">
+						<div class="td-end">
+							{{ formatCosts(data.value.data_costs) }}
+						</div>
+					</template>
+					<template #data_power_source="data">
+						<div
+							v-if="data.value.data_power_source"
+							class="progress td-center"
+							:title="
+								getProgressTitle(data.value.data_power_source)
+							"
+						>
+							<div
+								class="progress-bar bg-danger"
+								role="progressbar"
+								:style="{
+									width:
+										data.value.data_power_source.grid + '%',
+								}"
+								:aria-valuenow="
+									data.value.data_power_source.grid
+								"
+								aria-valuemin="0"
+								aria-valuemax="100"
+							></div>
+							<div
+								class="progress-bar bg-primary"
+								role="progressbar"
+								:style="{
+									width:
+										data.value.data_power_source.cp + '%',
+								}"
+								:aria-valuenow="data.value.data_power_source.cp"
+								aria-valuemin="0"
+								aria-valuemax="100"
+							></div>
+							<div
+								class="progress-bar bg-warning"
+								role="progressbar"
+								:style="{
+									width:
+										data.value.data_power_source.bat + '%',
+								}"
+								:aria-valuenow="
+									data.value.data_power_source.bat
+								"
+								aria-valuemin="0"
+								aria-valuemax="100"
+							></div>
+							<div
+								class="progress-bar bg-success"
+								role="progressbar"
+								:style="{
+									width:
+										data.value.data_power_source.pv + '%',
+								}"
+								:aria-valuenow="data.value.data_power_source.pv"
+								aria-valuemin="0"
+								aria-valuemax="100"
+							></div>
+						</div>
+						<div v-else class="td-center">-</div>
+					</template>
+					<template #vehicle_chargemode="data">
+						<div
+							class="td-center tag"
+							:class="
+								getChargeModeClass(
+									data.value.vehicle_chargemode,
+								)
+							"
+						>
+							{{ data.value.vehicle_chargemode }}
+						</div>
+					</template>
+					<template #vehicle_prio="data">
+						<div
+							class="td-center tag"
+							:class="
+								data.value.vehicle_prio
+									? 'bg-success'
+									: 'bg-danger'
+							"
+						>
+							{{ formatBool(data.value.vehicle_prio) }}
+						</div>
+					</template>
+					<template #vehicle_rfid="data">
+						{{ dashIfNotSet(data.value.vehicle_rfid) }}
+					</template>
+					<template #vehicle_soc_at_start="data">
+						<div class="td-end">
+							<span class="no-wrap">
+								{{ formatSoc(data.value.vehicle_soc_at_start) }}
+							</span>
+							<span class="no-wrap">
+								({{
+									formatRange(
+										data.value.vehicle_range_at_start,
+									)
+								}})
+							</span>
+						</div>
+					</template>
+					<template #vehicle_soc_at_end="data">
+						<div class="td-end">
+							<span class="no-wrap">
+								{{ formatSoc(data.value.vehicle_soc_at_end) }}
+							</span>
+							<span class="no-wrap">
+								({{
+									formatRange(
+										data.value.vehicle_range_at_end,
+									)
+								}})
+							</span>
+						</div>
+					</template>
+					<template #chargepoint_name="data">
+						{{ dashIfNotSet(data.value.chargepoint_name) }}
+					</template>
+					<template #chargepoint_serial_number="data">
+						{{ dashIfNotSet(data.value.chargepoint_serial_number) }}
+					</template>
+					<template #data_imported_since_mode_switch="data">
+						<div class="td-end">
+							<span class="no-wrap">
+								{{
+									formatWh(
+										data.value
+											.data_imported_since_mode_switch,
+									)
+								}}
+							</span>
+							<span class="no-wrap">
+								({{
+									formatRange(data.value.data_range_charged)
+								}})
+							</span>
+						</div>
+					</template>
+					<!-- <template #data_power="data">
+						<div class="td-end">
+							{{ formatW(data.value.data_power) }}
+						</div>
+					</template> -->
+					<template #chargepoint_imported_at_start="data">
+						<div class="td-end">
+							{{
+								formatWh(
+									data.value.chargepoint_imported_at_start,
+								)
+							}}
+						</div>
+					</template>
+					<template #chargepoint_imported_at_end="data">
+						<div class="td-end">
+							{{
+								formatWh(data.value.chargepoint_imported_at_end)
+							}}
+						</div>
+					</template>
+				</vue3-table-lite>
 				<div v-if="totalRecordCount > 0">
 					<div class="row justify-content-center">
 						<openwb-base-click-button
@@ -135,7 +311,33 @@
 						:columns="totals.columns"
 						:rows="chargeLogTotals"
 						:total="1"
-					/>
+						:is-slot-mode="true"
+					>
+						<template #time_charged="data">
+							<div class="td-end">
+								{{ data.value.time_charged }}
+							</div>
+						</template>
+						<template #imported_since_mode_switch="data">
+							<div class="td-end">
+								{{
+									formatWh(
+										data.value.imported_since_mode_switch,
+									)
+								}}
+							</div>
+						</template>
+						<template #range_charged="data">
+							<div class="td-end">
+								{{ formatRange(data.value.range_charged) }}
+							</div>
+						</template>
+						<template #costs="data">
+							<div class="td-end">
+								{{ formatCosts(data.value.costs) }}
+							</div>
+						</template>
+					</vue3-table-lite>
 				</div>
 			</div>
 		</form>
@@ -156,7 +358,7 @@ import Vue3TableLite from "vue3-table-lite";
 import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
-	name: "OpenwbChargeLog",
+	name: "OpenwbChargeLogView",
 	components: {
 		Vue3TableLite,
 		FontAwesomeIcon,
@@ -175,6 +377,7 @@ export default {
 			}),
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
+				"openWB/general/charge_log_data_config",
 				"openWB/chargepoint/+/config",
 				"openWB/vehicle/+/name",
 			],
@@ -221,63 +424,49 @@ export default {
 						sortable: true,
 					},
 					{
-						label: "Fahrzeug",
-						field: "vehicle_name",
-						sortable: true,
-					},
-					{
 						label: "Dauer",
 						field: "time_time_charged",
 						sortable: true,
-						display: (row) => {
-							return this.alignEnd(row.time_time_charged);
-						},
-					},
-					{
-						label: "Energie",
-						field: "data_imported_since_mode_switch",
-						sortable: true,
-						display: (row) => {
-							return this.alignEnd(
-								this.formatNumber(
-									row.data_imported_since_mode_switch / 1000,
-									2,
-								) +
-									"&nbsp;kWh / " +
-									this.formatNumber(
-										row.data_range_charged,
-										0,
-									) +
-									"&nbsp;km",
-							);
-						},
 					},
 					{
 						label: "Kosten",
 						field: "data_costs",
 						sortable: true,
-						display: (row) => {
-							return this.alignEnd(
-								this.formatNumber(row.data_costs, 2) +
-									"&nbsp;€",
-							);
-						},
+					},
+					{
+						label: "Energieaufteilung",
+						field: "data_power_source",
+						sortable: false,
+					},
+					{
+						label: "Fahrzeug",
+						field: "vehicle_name",
+						sortable: true,
 					},
 					{
 						label: "Lademodus",
 						field: "vehicle_chargemode",
 						sortable: true,
-						display: (row) => {
-							return (
-								'<div class="td-center tag ' +
-								this.getChargeModeClass(
-									row.vehicle_chargemode,
-								) +
-								'">' +
-								row.vehicle_chargemode +
-								"</div>"
-							);
-						},
+					},
+					{
+						label: "Priorität",
+						field: "vehicle_prio",
+						sortable: true,
+					},
+					{
+						label: "ID-Tag",
+						field: "vehicle_rfid",
+						sortable: true,
+					},
+					{
+						label: "SoC Beginn",
+						field: "vehicle_soc_at_start",
+						sortable: true,
+					},
+					{
+						label: "SoC Ende",
+						field: "vehicle_soc_at_end",
+						sortable: true,
 					},
 					{
 						label: "Ladepunkt",
@@ -285,15 +474,28 @@ export default {
 						sortable: true,
 					},
 					{
-						label: "Priorität",
-						field: "vehicle_prio",
-						display: (row) => {
-							return this.translateBool(row.vehicle_prio);
-						},
+						label: "Seriennummer",
+						field: "chargepoint_serial_number",
+						sortable: true,
 					},
 					{
-						label: "ID-Tag",
-						field: "vehicle_rfid",
+						label: "Energie",
+						field: "data_imported_since_mode_switch",
+						sortable: true,
+					},
+					// {
+					// 	label: "Leistung",
+					// 	field: "data_power",
+					// 	sortable: true,
+					// },
+					{
+						label: "Zähler Beginn",
+						field: "chargepoint_imported_at_start",
+						sortable: true,
+					},
+					{
+						label: "Zähler Ende",
+						field: "chargepoint_imported_at_end",
 						sortable: true,
 					},
 				],
@@ -308,49 +510,30 @@ export default {
 						label: "Dauer",
 						field: "time_charged",
 						sortable: false,
-						display: (row) => {
-							return this.alignEnd(row.time_charged);
-						},
 					},
 					{
 						label: "Energie",
 						field: "imported_since_mode_switch",
 						sortable: false,
-						display: (row) => {
-							return this.alignEnd(
-								this.formatNumber(
-									row.imported_since_mode_switch / 1000,
-									2,
-								) + "&nbsp;kWh",
-							);
-						},
 					},
 					{
 						label: "Reichweite",
 						field: "range_charged",
 						sortable: false,
-						display: (row) => {
-							return this.alignEnd(
-								this.formatNumber(row.range_charged, 0) +
-									"&nbsp;km",
-							);
-						},
 					},
 					{
 						label: "Kosten",
 						field: "costs",
 						sortable: false,
-						display: (row) => {
-							return this.alignEnd(
-								this.formatNumber(row.costs, 2) + "&nbsp;€",
-							);
-						},
 					},
 				],
 			},
 		};
 	},
 	computed: {
+		mqttClientId() {
+			return this.$root.mqttClientId;
+		},
 		downloadUrl() {
 			const port =
 				parseInt(location.port) ||
@@ -390,8 +573,24 @@ export default {
 				return [];
 			}
 		},
+		chargeLogColumns() {
+			return this.table.columns.map((column) => {
+				return {
+					...column,
+					headerClasses: this.addClasses(column.field),
+					columnClasses: this.addClasses(column.field),
+				};
+			});
+		},
 		chargeLogDataset: {
 			get() {
+				if (
+					this.$store.state.mqtt[
+						"openWB/log/" + this.mqttClientId + "/data"
+					] == undefined
+				) {
+					return [];
+				}
 				try {
 					return this.$store.state.mqtt[
 						"openWB/log/" + this.mqttClientId + "/data"
@@ -404,6 +603,12 @@ export default {
 						return {
 							chargepoint_id: entry["chargepoint"]["id"],
 							chargepoint_name: entry["chargepoint"]["name"],
+							chargepoint_imported_at_start:
+								entry["chargepoint"]["imported_at_start"],
+							chargepoint_imported_at_end:
+								entry["chargepoint"]["imported_at_end"],
+							chargepoint_serial_number:
+								entry["chargepoint"]["serial_number"],
 							vehicle_id: entry["vehicle"]["id"],
 							vehicle_name: entry["vehicle"]["name"],
 							vehicle_chargemode: this.translateChargeMode(
@@ -411,16 +616,47 @@ export default {
 							),
 							vehicle_rfid: entry["vehicle"]["rfid"],
 							vehicle_prio: entry["vehicle"]["prio"],
+							vehicle_soc_at_start:
+								entry["vehicle"]["soc_at_start"],
+							vehicle_soc_at_end: entry["vehicle"]["soc_at_end"],
+							vehicle_range_at_start:
+								entry["vehicle"]["range_at_start"],
+							vehicle_range_at_end:
+								entry["vehicle"]["range_at_end"],
 							timestamp_begin: timestamp_begin / 1000,
-							time_begin: this.dateTimeFormat.format(
-								new Date(timestamp_begin),
-							),
+							time_begin: isNaN(timestamp_begin)
+								? null
+								: this.dateTimeFormat.format(
+										new Date(timestamp_begin),
+									),
 							timestamp_end: timestamp_end / 1000,
-							time_end: this.dateTimeFormat.format(
-								new Date(timestamp_end),
-							),
+							time_end: isNaN(timestamp_end)
+								? null
+								: this.dateTimeFormat.format(
+										new Date(timestamp_end),
+									),
 							time_time_charged: entry["time"]["time_charged"],
-							data_power: entry["data"]["power"],
+							// data_power: entry["data"]["power"],
+							data_power_source: entry["data"]["power_source"]
+								? {
+										pv:
+											entry["data"]["power_source"][
+												"pv"
+											] * 100,
+										grid:
+											entry["data"]["power_source"][
+												"grid"
+											] * 100,
+										bat:
+											entry["data"]["power_source"][
+												"bat"
+											] * 100,
+										cp:
+											entry["data"]["power_source"][
+												"cp"
+											] * 100,
+									}
+								: undefined,
 							data_range_charged: entry["data"]["range_charged"],
 							data_costs: entry["data"]["costs"],
 							data_imported_since_plugged:
@@ -430,6 +666,7 @@ export default {
 						};
 					});
 				} catch (error) {
+					console.error(error);
 					return [];
 				}
 			},
@@ -438,48 +675,111 @@ export default {
 			get() {
 				const csvString = [
 					[
-						"Ladepunkt-ID",
-						"Ladepunkt",
-						"Fahrzeug-ID",
-						"Fahrzeug",
-						"Lademodus",
-						"Priorität",
-						"ID-Tag",
-						"Beginn",
-						"Ende",
-						"Zeitstempel Beginn",
-						"Zeitstempel Ende",
-						"Dauer",
-						"Leistung",
-						"Energie",
-						"Reichweite",
-						"Kosten",
+						'"Beginn"',
+						'"Ende"',
+						'"Zeitstempel Beginn"',
+						'"Zeitstempel Ende"',
+						'"Dauer"',
+						'"Kosten"',
+						'"Energieanteil Netz"',
+						'"Energieanteil Ladepunkte"',
+						'"Energieanteil Speicher"',
+						'"Energieanteil PV"',
+						'"Fahrzeug"',
+						'"Fahrzeug-ID"',
+						'"Lademodus"',
+						'"Priorität"',
+						'"ID-Tag"',
+						'"SoC Beginn"',
+						'"SoC Ende"',
+						'"Reichweite Beginn"',
+						'"Reichweite Ende"',
+						'"Ladepunkt"',
+						'"Ladepunkt-ID"',
+						'"Zähler Seriennummer"',
+						'"Energie"',
+						'"Reichweite"',
+						// '"Leistung"',
+						'"Zählerstand Beginn"',
+						'"Zählerstand Ende"',
+						'"Energie seit Anstecken"',
 					],
 					...this.chargeLogDataset.map((row) => [
-						row.chargepoint_id,
-						'"' + row.chargepoint_name + '"',
-						row.vehicle_id,
-						'"' + row.vehicle_name + '"',
-						'"' + row.vehicle_chargemode + '"',
-						'"' + this.translateBool(row.vehicle_prio, false) + '"',
-						'"' + row.vehicle_rfid + '"',
-						'"' + row.time_begin + '"',
-						'"' + row.time_end + '"',
-						'"' + row.timestamp_begin + '"',
-						'"' + row.timestamp_end + '"',
+						row.time_begin == undefined
+							? ""
+							: '"' + row.time_begin + '"',
+						row.time_end == undefined
+							? ""
+							: '"' + row.time_end + '"',
+						row.timestamp_begin == undefined ||
+						isNaN(row.timestamp_begin)
+							? ""
+							: row.timestamp_begin,
+						row.timestamp_end == undefined ||
+						isNaN(row.timestamp_end)
+							? ""
+							: row.timestamp_end,
 						'"' + row.time_time_charged + '"',
-						this.formatNumber(row.data_power / 1000, 3),
+						this.formatCosts(row.data_costs, false),
+						row.data_power_source == undefined
+							? ""
+							: this.formatNumber(row.data_power_source.grid, 2),
+						row.data_power_source == undefined
+							? ""
+							: this.formatNumber(row.data_power_source.cp, 2),
+						row.data_power_source == undefined
+							? ""
+							: this.formatNumber(row.data_power_source.bat, 2),
+						row.data_power_source == undefined
+							? ""
+							: this.formatNumber(row.data_power_source.pv, 2),
+						'"' + row.vehicle_name + '"',
+						row.vehicle_id,
+						'"' + row.vehicle_chargemode + '"',
+						'"' + this.formatBool(row.vehicle_prio) + '"',
+						row.vehicle_rfid == undefined
+							? ""
+							: '"' + row.vehicle_rfid + '"',
+						row.vehicle_soc_at_start == undefined
+							? ""
+							: this.formatNumber(row.vehicle_soc_at_start, 0),
+						row.vehicle_soc_at_end == undefined
+							? ""
+							: this.formatNumber(row.vehicle_soc_at_end, 0),
+						row.vehicle_range_at_start == undefined
+							? ""
+							: this.formatNumber(row.vehicle_range_at_start, 0),
+						row.vehicle_range_at_end == undefined
+							? ""
+							: this.formatNumber(row.vehicle_range_at_end, 0),
+						'"' + row.chargepoint_name + '"',
+						row.chargepoint_id,
+						row.chargepoint_serial_number == undefined
+							? ""
+							: '"' + row.chargepoint_serial_number + '"',
 						this.formatNumber(
 							row.data_imported_since_mode_switch / 1000,
 							2,
 						),
 						this.formatNumber(row.data_range_charged, 0),
-						this.formatNumber(row.data_costs, 2),
+						// this.formatNumber(row.data_power / 1000, 3),
+						this.formatNumber(
+							row.chargepoint_imported_at_start / 1000,
+							2,
+						),
+						this.formatNumber(
+							row.chargepoint_imported_at_end / 1000,
+							2,
+						),
+						this.formatNumber(
+							row.data_imported_since_plugged / 1000,
+							2,
+						),
 					]),
 				]
 					.map((element) => element.join(";"))
 					.join("\n");
-				return csvString;
+				return csvString + "\n";
 			},
 		},
 		chargeLogRead: {
@@ -589,29 +889,62 @@ export default {
 				new MouseEvent("click"),
 			);
 		},
-		alignEnd(content) {
-			return '<div class="td-end">' + content + "</div>";
-		},
-		alignCenter(content) {
-			return '<div class="td-center">' + content + "</div>";
-		},
-		translateBool(value, withDiv = true) {
-			let text = "Nein";
-			let myClass = "bg-danger";
-			if (value) {
-				text = "Ja";
-				myClass = "bg-success";
+		addClasses(fieldName) {
+			if (
+				this.$store.state.mqtt[
+					"openWB/general/charge_log_data_config"
+				] !== undefined &&
+				Object.hasOwn(
+					this.$store.state.mqtt[
+						"openWB/general/charge_log_data_config"
+					],
+					fieldName,
+				)
+			) {
+				return this.$store.state.mqtt[
+					"openWB/general/charge_log_data_config"
+				][fieldName]
+					? []
+					: ["d-none"];
 			}
-			if (withDiv) {
-				return (
-					'<div class="td-center tag ' +
-					myClass +
-					'">' +
-					text +
-					"</div>"
-				);
+			return [];
+		},
+		getProgressTitle(powerSource) {
+			return (
+				`Netz: ${this.formatNumber(powerSource.grid, 0, 0)}%, ` +
+				`Ladepunkte: ${this.formatNumber(powerSource.cp, 0, 0)}%, ` +
+				`Speicher: ${this.formatNumber(powerSource.bat, 0, 0)}%, ` +
+				`PV: ${this.formatNumber(powerSource.pv, 0, 0)}%`
+			);
+		},
+		formatBool(value) {
+			return value ? "Ja" : "Nein";
+		},
+		formatW(value, unit = true) {
+			let energy = this.dashIfNotSet(this.formatNumber(value / 1000, 2));
+			return unit ? energy + "kW" : energy;
+		},
+		formatWh(value, unit = true) {
+			let energy = this.dashIfNotSet(this.formatNumber(value / 1000, 2));
+			return unit ? energy + "kWh" : energy;
+		},
+		formatRange(value, unit = true) {
+			let range = this.dashIfNotSet(this.formatNumber(value, 0));
+			return unit ? range + "km" : range;
+		},
+		formatSoc(soc, unit = true) {
+			let value = this.dashIfNotSet(this.formatNumber(soc, 0));
+			return unit ? value + "%" : value;
+		},
+		formatCosts(value, unit = true) {
+			let costs = this.dashIfNotSet(this.formatNumber(value, 2));
+			return unit ? costs + "€" : costs;
+		},
+		dashIfNotSet(value) {
+			if (value == undefined || value == "" || value == null) {
+				return "-";
 			}
-			return text;
+			return value;
 		},
 		getChargeModeClass(value) {
 			switch (value) {
@@ -632,25 +965,12 @@ export default {
 					return "bg-light";
 			}
 		},
-		translateHeading(value) {
-			switch (value) {
-				case "time_charged":
-					return "Dauer";
-				case "range_charged":
-					return "Reichweite";
-				case "imported_since_mode_switch":
-					return "Energie im Lademodus";
-				case "imported_since_plugged":
-					return "Energie seit Anstecken";
-				case "power":
-					return "Leistung";
-				case "costs":
-					return "Kosten";
-				default:
-					console.warn("unknown heading:", value);
-					return value;
-			}
-		},
+	},
+	beforeMount() {
+		// we need access to the mqttClientId which is not yet available in the data section
+		this.mqttTopicsToSubscribe.push(
+			"openWB/log/" + this.mqttClientId + "/data",
+		);
 	},
 	mounted() {
 		const today = new Date();
@@ -666,6 +986,10 @@ export default {
 <style scoped>
 .hide {
 	display: none;
+}
+
+.no-wrap {
+	white-space: nowrap;
 }
 
 .charge-log-table,
@@ -729,5 +1053,13 @@ export default {
 :deep(.tag) {
 	border-radius: 10px;
 	padding: 2px 5px;
+}
+
+:deep(.progress) {
+	height: 2rem;
+}
+
+:deep(.progress-bar.bg-warning) {
+	color: #000;
 }
 </style>

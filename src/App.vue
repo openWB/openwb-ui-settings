@@ -28,7 +28,7 @@ import Blocker from "./components/OpenwbPageBlocker.vue";
 import mqtt from "mqtt";
 
 export default {
-	name: "settings-app",
+	name: "OpenwbSettingsApp",
 	components: {
 		NavBar,
 		PageFooter,
@@ -88,7 +88,9 @@ export default {
 			// collect data
 			let topics = {};
 			if (topicsToSave === undefined) {
-				// no topics defined, so save everything we have in store
+				console.debug(
+					"no topics defined, so save everything we have in store",
+				);
 				topics = this.$store.state.mqtt;
 			} else {
 				if (Array.isArray(topicsToSave)) {
@@ -105,7 +107,8 @@ export default {
 				let setTopic = topic.replace("openWB/", "openWB/set/");
 				console.debug("saving data:", setTopic, payload);
 				this.doPublish(setTopic, payload);
-				// publishing without sleeping is inconsistent! (mqtt v4.3.7) This may change with newer versions.
+				// publishing without sleeping is inconsistent! (mqtt v4.3.7)
+				// This may change with newer versions.
 				await sleep(100);
 			}
 			console.debug("done saving data");
@@ -164,7 +167,9 @@ export default {
 					"Connection succeeded! ClientId: ",
 					this.client.options.clientId,
 				);
-				this.doSubscribe(["openWB/system/usage_terms_acknowledged"]); // required for route guard
+				// required for route guards
+				this.doSubscribe(["openWB/system/usage_terms_acknowledged"]);
+				this.doSubscribe(["openWB/system/installAssistantDone"]);
 			});
 			this.client.on("error", (error) => {
 				console.error("Connection failed", error);
@@ -184,27 +189,76 @@ export default {
 						);
 						myPayload = message.toString();
 					}
-					this.$store.commit("addTopic", {
+					this.$store.commit("updateTopic", {
 						topic: topic,
 						payload: myPayload,
 					});
 				} else {
 					this.$store.commit("removeTopic", topic);
+					// this.$store.commit("updateTopic", {
+					// 	topic: topic,
+					// 	payload: undefined,
+					// });
 				}
 			});
 		},
 		doSubscribe(topics) {
-			this.client.subscribe(topics, {}, (error) => {
-				if (error) {
-					console.error("Subscribe to topics error", error);
-					return;
+			console.debug("doSubscribe", topics);
+			topics.forEach((topic) => {
+				this.$store.commit("addSubscription", topic);
+				if (this.$store.getters.subscriptionCount(topic) == 1) {
+					if (topic.includes("#") || topic.includes("+")) {
+						console.debug(
+							"skipping init of wildcard topic:",
+							topic,
+						);
+					} else {
+						this.$store.commit("addTopic", {
+							topic: topic,
+							payload: undefined,
+						});
+					}
+					this.client.subscribe(topic, {}, (error) => {
+						if (error) {
+							console.error("Subscribe to topics error", error);
+							return;
+						}
+					});
+				} else {
+					console.debug("Already subscribed to topic: ", topic);
 				}
 			});
 		},
 		doUnsubscribe(topics) {
-			this.client.unsubscribe(topics, (error) => {
-				if (error) {
-					console.error("Unsubscribe error", error);
+			console.debug("doUnsubscribe", topics);
+			topics.forEach((topic) => {
+				this.$store.commit("removeSubscription", topic);
+				if (this.$store.getters.subscriptionCount(topic) == 0) {
+					this.client.unsubscribe(topic, (error) => {
+						if (error) {
+							console.error("Unsubscribe error", error);
+						}
+					});
+					if (topic.includes("#") || topic.includes("+")) {
+						console.debug("expanding wildcard topic:", topic);
+						Object.keys(this.getWildcardTopics(topic)).forEach(
+							(wildcardTopic) => {
+								console.debug(
+									"removing wildcardTopic:",
+									wildcardTopic,
+								);
+								this.$store.commit(
+									"removeTopic",
+									wildcardTopic,
+								);
+							},
+						);
+					} else {
+						console.debug("removing topic:", topic);
+						this.$store.commit("removeTopic", topic);
+					}
+				} else {
+					console.debug("Still subscribed to topic: ", topic);
 				}
 			});
 		},
@@ -242,6 +296,32 @@ export default {
 					timestamp: Math.floor(timestamp / 1000),
 				},
 			});
+		},
+		// ToDo: this is a duplicate of the method in the ComponentState.vue mixin
+		// refactor to a shared method!
+		getWildcardTopics(baseTopic, isRegex = false) {
+			let baseTopicRegex = baseTopic;
+			if (!isRegex) {
+				// build a valid regex based on the provided wildcard topic
+				baseTopicRegex =
+					"^" +
+					baseTopic
+						.replaceAll("/", "\\/")
+						.replaceAll("+", "[^+/]+")
+						.replaceAll("#", "[^#/]+") +
+					"$";
+			}
+			// filter and return all topics matching our regex
+			return Object.keys(this.$store.state.mqtt)
+				.filter((key) => {
+					return key.match(baseTopicRegex);
+				})
+				.reduce((obj, key) => {
+					return {
+						...obj,
+						[key]: this.$store.state.mqtt[key],
+					};
+				}, {});
 		},
 	},
 	created() {

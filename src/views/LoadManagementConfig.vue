@@ -110,7 +110,10 @@
 					<openwb-base-alert subtype="info">
 						Die maximale Leistung wird nur für den EVU-Zähler
 						berücksichtigt. Bei Zwischenzählern begrenzt das
-						Lastmanagement rein anhand der maximalen Phasenströme.
+						Lastmanagement rein anhand der maximalen
+						Phasenströme.<br />
+						Überlicherweise sind Hausanschlüsse mit 24kW und 3*35A
+						bzw. 43kW und 3*63A abgesichert.
 					</openwb-base-alert>
 					<openwb-base-card
 						v-for="counter in counterConfigs"
@@ -344,12 +347,19 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 import SortableList from "../components/OpenwbSortableList.vue";
 
 export default {
-	name: "OpenwbLoadManagementConfig",
+	name: "OpenwbLoadManagementConfigView",
 	mixins: [ComponentState],
 	emits: ["sendCommand"],
 	components: {
 		SortableList,
 		FontAwesomeIcon,
+	},
+	props: {
+		installAssistantActive: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
 	},
 	data() {
 		return {

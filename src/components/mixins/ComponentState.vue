@@ -29,9 +29,6 @@ export default {
 				"stop",
 			];
 		},
-		mqttClientId() {
-			return this.$root.mqttClientId;
-		},
 	},
 	methods: {
 		updateState(topic, value, objectPath = undefined) {
@@ -105,6 +102,9 @@ export default {
 			maxNumDigit = minNumDigits,
 			scale = 1,
 		) {
+			if (value == undefined || isNaN(value)) {
+				return undefined;
+			}
 			return (value * scale).toLocaleString(undefined, {
 				minimumFractionDigits: minNumDigits,
 				maximumFractionDigits: maxNumDigit,
@@ -169,46 +169,14 @@ export default {
 		},
 	},
 	mounted() {
-		// ToDo: Check Topic! This topic contains requested charge log data!
-		if (
-			!(`openWB/log/${this.mqttClientId}/data` in this.$store.state.mqtt)
-		) {
-			this.mqttTopicsToSubscribe.push(
-				"openWB/log/" + this.mqttClientId + "/data",
-			);
+		if (this.mqttTopicsToSubscribe.length > 0) {
+			this.$root.doSubscribe(this.mqttTopicsToSubscribe);
 		}
-		this.mqttTopicsToSubscribe.forEach((topic) => {
-			if (topic.includes("#") || topic.includes("+")) {
-				console.debug("skipping init of wildcard topic:", topic);
-			} else {
-				// prevent overwriting data with multiple subscriptions
-				if (!Object.keys(this.$store.state.mqtt).includes(topic)) {
-					this.$store.commit("addTopic", {
-						topic: topic,
-						payload: undefined,
-					});
-				} else {
-					console.error("multiple subscriptions of topic!", topic);
-				}
-			}
-		});
-		this.$root.doSubscribe(this.mqttTopicsToSubscribe);
 	},
 	unmounted() {
-		this.$root.doUnsubscribe(this.mqttTopicsToSubscribe);
-		this.mqttTopicsToSubscribe.forEach((topic) => {
-			if (topic.includes("#") || topic.includes("+")) {
-				console.debug("expanding wildcard topic:", topic);
-				Object.keys(this.getWildcardTopics(topic)).forEach(
-					(wildcardTopic) => {
-						console.debug("removing wildcardTopic:", wildcardTopic);
-						this.$store.commit("removeTopic", wildcardTopic);
-					},
-				);
-			} else {
-				this.$store.commit("removeTopic", topic);
-			}
-		});
+		if (this.mqttTopicsToSubscribe.length > 0) {
+			this.$root.doUnsubscribe(this.mqttTopicsToSubscribe);
+		}
 	},
 };
 </script>

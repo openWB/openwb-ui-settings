@@ -174,6 +174,14 @@ const routes = [
 		},
 		component: () => import("../views/DataManagement.vue"),
 	},
+	{
+		path: "/System/InstallAssistant",
+		name: "InstallAssistant",
+		meta: {
+			heading: "System - Einrichtungsassistent",
+		},
+		component: () => import("../views/InstallAssistant.vue"),
+	},
 ];
 /* examples for development only start here */
 if (import.meta.env.MODE !== "production") {
@@ -193,12 +201,21 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-	if (to.name !== "LegalSettings") {
-		// redirect to data protection page to force acceptance of usage terms
-		const usageTermsAcknowledged =
-			await store.getters.usageTermsAcknowledged;
-		if (!usageTermsAcknowledged) {
+	// get usage terms status
+	const usageTermsAcknowledged = await store.getters.usageTermsAcknowledged;
+	if (!usageTermsAcknowledged) {
+		if (to.name !== "LegalSettings") {
+			// redirect to data protection page to force acceptance of usage terms
 			return { name: "LegalSettings" };
+		}
+	} else {
+		// get install assistant status
+		const installAssistantDone = await store.getters.installAssistantDone;
+		if (!installAssistantDone) {
+			if (to.name !== "InstallAssistant") {
+				// redirect to install assistant as a first setup guide
+				return { name: "InstallAssistant" };
+			}
 		}
 	}
 });

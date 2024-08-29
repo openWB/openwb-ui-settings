@@ -1,9 +1,12 @@
 <template>
 	<div class="form-row mb-1">
 		<label v-on:click="toggleHelp" class="col-md-4 col-form-label">
-			{{ title }}
+			<slot>
+				{{ title }}
+			</slot>
 			<font-awesome-icon
 				v-if="$slots.help"
+				fixed-width
 				:icon="
 					showHelp
 						? ['fas', 'question-circle']
@@ -66,7 +69,7 @@ export default {
 	name: "OpenwbButtonGroupInput",
 	inheritAttrs: false,
 	props: {
-		title: String,
+		title: { type: String, required: false, default: "" },
 		modelValue: { type: [String, Number, Boolean] },
 		buttons: Object,
 	},
