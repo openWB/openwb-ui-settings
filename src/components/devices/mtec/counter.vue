@@ -4,13 +4,6 @@
 			Einstellungen für M-Tec Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-alert subtype="info">
-			<span class="text-danger">
-				M-Tec Zähler geben keine Ströme aus, sodass nur ein
-				Lastmanagement anhand der Gesamtleistung, aber nicht
-				phasenbasiert möglich ist.
-			</span>
-		</openwb-base-alert>
 		<openwb-base-number-input
 			title="Modbus ID"
 			required
