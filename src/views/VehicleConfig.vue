@@ -167,12 +167,14 @@
 							@update:model-value="
 								updateState(
 									'openWB/vehicle/' + vehicleId + '/info',
-									$event,'manufacturer'
+									$event,
+									'manufacturer',
 								)
 							"
 						>
 							<template #help>
-								Optional: zusätzliche Information für den Systembericht.
+								Optional: zusätzliche Information für den
+								Systembericht.
 							</template>
 						</openwb-base-text-input>
 						<openwb-base-text-input
@@ -186,12 +188,14 @@
 							@update:model-value="
 								updateState(
 									'openWB/vehicle/' + vehicleId + '/info',
-									$event,'model'
+									$event,
+									'model',
 								)
 							"
 						>
 							<template #help>
-								Optional: zusätzliche Information für den Systembericht.
+								Optional: zusätzliche Information für den
+								Systembericht.
 							</template>
 						</openwb-base-text-input>
 						<openwb-base-alert subtype="info">
