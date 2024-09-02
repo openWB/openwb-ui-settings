@@ -180,6 +180,42 @@
 									)
 								"
 							/>
+							<openwb-base-text-input
+								title="Hersteller"
+								subtype="text"
+								:model-value="
+									installedComponent.info.manufacturer
+								"
+								@update:model-value="
+									updateState(
+										installedComponentKey,
+										$event,
+										'info.manufacturer',
+									)
+								"
+							>
+								<template #help>
+									Optional: zusätzliche Information für den
+									Systembericht.
+								</template>
+							</openwb-base-text-input>
+							<openwb-base-text-input
+								title="Model"
+								subtype="text"
+								:model-value="installedComponent.info.model"
+								@update:model-value="
+									updateState(
+										installedComponentKey,
+										$event,
+										'info.model',
+									)
+								"
+							>
+								<template #help>
+									Optional: zusätzliche Information für den
+									Systembericht.
+								</template>
+							</openwb-base-text-input>
 							<hr />
 							<openwb-config-proxy
 								:deviceId="installedDevice.id"
