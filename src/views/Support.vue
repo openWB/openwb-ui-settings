@@ -193,6 +193,12 @@ export default {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
 				"openWB/system/dataprotection_acknowledged",
+				"openWB/system/serial_number",
+				"openWB/system/device",
+				"openWB/system/device/+/config",
+				"openWB/system/device/+/component/+/config",
+				"openWB/vehicle/+/name",
+				"openWB/vehicle/+/info",
 			],
 			sendDebugData: {
 				email: "",
@@ -217,6 +223,91 @@ export default {
 				});
 				this.enableSendDebugButton = false;
 			}
+		},
+	},
+	computed: {
+		getInstalledComponents() {
+			let componentText = "";
+			const devices = this.getWildcardTopics(
+				"openWB/system/device/+/config",
+			);
+			for (const [, deviceConfig] of Object.entries(devices)) {
+				const deviceId = deviceConfig.id;
+				const deviceName = deviceConfig.name;
+				componentText += `Device ID: ${deviceId}, Name: ${deviceName}\n`;
+
+				const components = this.getWildcardTopics(
+					`openWB/system/device/${deviceId}/component/+/config`,
+				);
+
+				for (const [, componentConfig] of Object.entries(components)) {
+					const componentId = componentConfig.id;
+					const componentName = componentConfig.name;
+					const componentType = componentConfig.type;
+					const manufacturer =
+						componentConfig.info?.manufacturer || "N/A";
+					const model = componentConfig.info?.model || "N/A";
+					componentText += `  Component ID: ${componentId}, Name: ${componentName}, Type: ${componentType}, Manufacturer: ${manufacturer}, Model: ${model}\n`;
+				}
+				componentText += "\n"; // Add an extra newline between devices
+			}
+			return componentText.trim();
+		},
+		getSerialNumber() {
+			const serial = this.getWildcardTopics(
+				"openWB/system/serial_number",
+			);
+			const serialKey = Object.keys(serial);
+			return serial[serialKey];
+		},
+		getVehicleDetails() {
+			let vehicleText = "";
+			const vehicles = this.getWildcardTopics("openWB/vehicle/+/name");
+			console.log(vehicles);
+			for (const [vehicleTopic, vehicleValue] of Object.entries(
+				vehicles,
+			)) {
+				const vehicleId = vehicleTopic.split("/")[2];
+				const vehicleName = vehicleValue;
+				console.log(vehicleId);
+				console.log(vehicleValue);
+				vehicleText += `VehicleID: ${vehicleId} Vehicle Name:${vehicleName}\n`;
+				console.log(vehicleText);
+
+				const vehicleDetails = this.getWildcardTopics(
+					`openWB/vehicle/${vehicleId}/info`,
+				);
+
+				for (const [, vehicleInfoValue] of Object.entries(
+					vehicleDetails,
+				)) {
+					const make = vehicleInfoValue?.manufacturer || "N/A";
+					const model = vehicleInfoValue?.model || "N/A";
+					vehicleText += `   Manufacturer: ${make} Model:${model}\n`;
+				}
+				vehicleText += "\n";
+			}
+			return vehicleText.trim();
+		},
+	},
+	watch: {
+		getInstalledComponents: {
+			handler(newValue) {
+				this.sendDebugData.installedComponents = newValue;
+			},
+			immediate: true,
+		},
+		getSerialNumber: {
+			handler(newValue) {
+				this.sendDebugData.serialNumber = newValue;
+			},
+			immediate: true,
+		},
+		getVehicleDetails: {
+			handler(newValue) {
+				this.sendDebugData.vehicles = newValue;
+			},
+			immediate: true,
 		},
 	},
 };
