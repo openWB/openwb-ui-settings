@@ -157,12 +157,13 @@
 						Automatische Sicherung in einen Cloud-Dienst
 					</openwb-base-heading>
 					<openwb-base-alert subtype="info">
-						Zwischen Mitternacht und 5:00 Uhr wird automatisch eine
+						Ist die openWB als primary konfiguriert, wid zwischen Mitternacht und 5:00 Uhr automatisch eine
 						Sicherung erstellt und in den angegebenen Cloud-Dienst
 						(nicht openWB Cloud!) hochgeladen. Ist kein Cloud-Dienst
 						konfiguriert, wird keine automatische Sicherung
 						erstellt. Die automatische Sicherung kann unabhängig von
 						der openWB Cloud genutzt werden.<br />
+						Die manuelle Cloud-Sicherung und -falls aktiviert- die Sicherung vor einem Update werden sowohl von einer primary als auch von einer secondary durchgeführt.<br/>
 						Die Anleitung zur Konfiguration des Cloud-Dienstes
 						findest Du
 						<a
