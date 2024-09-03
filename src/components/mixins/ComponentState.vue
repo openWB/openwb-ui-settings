@@ -40,6 +40,12 @@ export default {
 				payload: value,
 			});
 		},
+		ac_current2dc_power(current) {
+			return parseFloat(((current * 3 * 230) / 1000).toFixed(2));
+		},
+		dc_power2ac_current(power) {
+			return parseFloat(((power * 1000) / 230 / 3).toFixed(2));
+		},
 		getWildcardIndexList(baseTopic, isRegex = false) {
 			let baseTopicRegex = baseTopic;
 			if (!isRegex) {

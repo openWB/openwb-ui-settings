@@ -14,7 +14,7 @@
 				</div>
 				<div v-else>
 					<openwb-base-button-group-input
-						title="Nicht-ladende Fahrzeuge"
+						title="Fahrzeuge, die nicht mit Sollstrom laden"
 						:buttons="[
 							{
 								buttonValue: false,
@@ -29,22 +29,21 @@
 						]"
 						:model-value="
 							$store.state.mqtt[
-								'openWB/counter/config/reserve_for_not_charging'
+								'openWB/counter/config/consider_less_charging'
 							]
 						"
 						@update:model-value="
 							updateState(
-								'openWB/counter/config/reserve_for_not_charging',
+								'openWB/counter/config/consider_less_charging',
 								$event,
 							)
 						"
 					>
 						<template #help>
 							<p>
-								Wenn angesteckte Fahrzeuge, die nicht laden, im
+								Wenn angesteckte Fahrzeuge, die nicht ode nicht mit der Sollstromstärke laden, im
 								Lastmanagement berücksichtigt werden, wird für
-								diese der Fahrzeug-Mindeststrom bei vorliegender
-								Ladefreigabe reserviert. Dadurch können bei
+								diese der Sollstrom reserviert. Dadurch können bei
 								Eingreifen des Lastmanagements andere Fahrzeuge
 								möglicherweise nur mit reduzierter Stromstärke
 								laden und der reservierte Strom wird nicht
@@ -53,10 +52,10 @@
 								den für sie reservierten Strom.
 							</p>
 							<p>
-								Wenn angesteckte Fahrzeuge, die nicht laden,
+								Wenn angesteckte Fahrzeuge, die nicht oder nicht mit der Sollstromstärke laden,
 								nicht im Lastmanagement berücksichtigt werden,
 								wird für diese auch kein Strom bei vorliegender
-								Ladefreigabe reserviert. Andere Fahrzeuge können
+								Ladefreigabe reserviert bzw es wird nur der tatsächlich genutzte Strom im Lastmanagement berücksichtigt. Andere Fahrzeuge können
 								dadurch mit höherer Stromstärke laden. Wenn die
 								maximalen Lastmanagement-Grenzen fast erreicht
 								sind und die Fahrzeuge wieder Leistung beziehen,
@@ -366,7 +365,7 @@ export default {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
 				"openWB/counter/config/home_consumption_source_id",
-				"openWB/counter/config/reserve_for_not_charging",
+				"openWB/counter/config/consider_less_charging",
 				"openWB/counter/get/hierarchy",
 				"openWB/system/device/+/component/+/config",
 				"openWB/counter/+/config/max_currents",
