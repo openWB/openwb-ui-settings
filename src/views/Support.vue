@@ -234,7 +234,7 @@ export default {
 			for (const [, deviceConfig] of Object.entries(devices)) {
 				const deviceId = deviceConfig.id;
 				const deviceName = deviceConfig.name;
-				componentText += `Device ID: ${deviceId}, Name: ${deviceName}\n`;
+				componentText += `DID: ${deviceId}, ${deviceName}\n`;
 
 				const components = this.getWildcardTopics(
 					`openWB/system/device/${deviceId}/component/+/config`,
@@ -247,7 +247,7 @@ export default {
 					const manufacturer =
 						componentConfig.info?.manufacturer || "N/A";
 					const model = componentConfig.info?.model || "N/A";
-					componentText += `  Component ID: ${componentId}, Name: ${componentName}, Type: ${componentType}, Manufacturer: ${manufacturer}, Model: ${model}\n`;
+					componentText += `  CID: ${componentId}, ${componentName}, Type: ${componentType}, Manufacturer: ${manufacturer}, Model: ${model}\n`;
 				}
 				componentText += "\n"; // Add an extra newline between devices
 			}
@@ -271,7 +271,7 @@ export default {
 				const vehicleName = vehicleValue;
 				console.log(vehicleId);
 				console.log(vehicleValue);
-				vehicleText += `VehicleID: ${vehicleId} Vehicle Name:${vehicleName}\n`;
+				vehicleText += `ID: ${vehicleId} Name:${vehicleName}\n`;
 				console.log(vehicleText);
 
 				const vehicleDetails = this.getWildcardTopics(
