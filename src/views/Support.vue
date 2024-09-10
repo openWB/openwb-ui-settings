@@ -231,7 +231,7 @@ export default {
 			const devices = this.getWildcardTopics(
 				"openWB/system/device/+/config",
 			);
-			for (const [, deviceConfig] of Object.entries(devices)) {
+			for (const deviceConfig of Object.values(devices)) {
 				const deviceId = deviceConfig.id;
 				const deviceName = deviceConfig.name;
 				componentText += `DID: ${deviceId}, ${deviceName}\n`;
@@ -239,8 +239,7 @@ export default {
 				const components = this.getWildcardTopics(
 					`openWB/system/device/${deviceId}/component/+/config`,
 				);
-
-				for (const [, componentConfig] of Object.entries(components)) {
+				for (const componentConfig of Object.values(components)) {
 					const componentId = componentConfig.id;
 					const componentName = componentConfig.name;
 					const componentType = componentConfig.type;
@@ -254,38 +253,22 @@ export default {
 			return componentText.trim();
 		},
 		getSerialNumber() {
-			const serial = this.getWildcardTopics(
-				"openWB/system/serial_number",
-			);
-			const serialKey = Object.keys(serial);
-			return serial[serialKey];
+			const serial =
+				this.$store.state.mqtt["openWB/system/serial_number"];
+			return serial;
 		},
 		getVehicleDetails() {
 			let vehicleText = "";
 			const vehicles = this.getWildcardTopics("openWB/vehicle/+/name");
-			console.log(vehicles);
-			for (const [vehicleTopic, vehicleValue] of Object.entries(
+			for (const [vehicleTopic, vehicleName] of Object.entries(
 				vehicles,
 			)) {
 				const vehicleId = vehicleTopic.split("/")[2];
-				const vehicleName = vehicleValue;
-				console.log(vehicleId);
-				console.log(vehicleValue);
-				vehicleText += `ID: ${vehicleId} Name:${vehicleName}\n`;
-				console.log(vehicleText);
-
-				const vehicleDetails = this.getWildcardTopics(
-					`openWB/vehicle/${vehicleId}/info`,
-				);
-
-				for (const [, vehicleInfoValue] of Object.entries(
-					vehicleDetails,
-				)) {
-					const make = vehicleInfoValue?.manufacturer || "N/A";
-					const model = vehicleInfoValue?.model || "N/A";
-					vehicleText += `   Manufacturer: ${make} Model:${model}\n`;
-				}
-				vehicleText += "\n";
+				const vehicleInfo =
+					this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/info`];
+				const manufacturer = vehicleInfo.manufacturer || "N/A";
+				const model = vehicleInfo.model || "N/A";
+				vehicleText += `ID: ${vehicleId}, Name:${vehicleName}, Manufacturer: ${manufacturer}, Model:${model}\n`;
 			}
 			return vehicleText.trim();
 		},
