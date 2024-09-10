@@ -4,6 +4,12 @@
 			Einstellungen für Deye
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
+		<openwb-base-alert subtype="info">
+			<span class="text-danger">
+				Deye Wechselrichter verfügen über keine Modbus-TCP Schnittstelle. 
+				Für die Auslesung wird ein RS485/LAN-Adapter benötigt.
+			</span>
+		</openwb-base-alert>
 		<openwb-base-text-input
 			title="IP oder Hostname"
 			subtype="host"
