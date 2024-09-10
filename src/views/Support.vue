@@ -257,7 +257,7 @@ export default {
 				this.$store.state.mqtt["openWB/system/serial_number"];
 			return serial;
 		},
-		getVehicleDetails() {
+		getVehicleInfo() {
 			let vehicleText = "";
 			const vehicles = this.getWildcardTopics("openWB/vehicle/+/name");
 			for (const [vehicleTopic, vehicleName] of Object.entries(
@@ -286,7 +286,7 @@ export default {
 			},
 			immediate: true,
 		},
-		getVehicleDetails: {
+		getVehicleInfo: {
 			handler(newValue) {
 				this.sendDebugData.vehicles = newValue;
 			},
