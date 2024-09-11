@@ -225,13 +225,13 @@ export default {
 		sendDebugData() {
 			return {
 				email: this.email,
-				serialNumber: this.getSerialNumber,
-				installedComponents: this.getInstalledComponents,
-				vehicles: this.getVehicleInfo,
+				serialNumber: this.serialNumber,
+				installedComponents: this.installedComponents,
+				vehicles: this.vehicleInfo,
 				message: this.message,
 			};
 		},
-		getInstalledComponents() {
+		installedComponents() {
 			let componentText = "";
 			const devices = this.getWildcardTopics(
 				"openWB/system/device/+/config",
@@ -257,12 +257,12 @@ export default {
 			}
 			return componentText.trim();
 		},
-		getSerialNumber() {
+		serialNumber() {
 			const serial =
 				this.$store.state.mqtt["openWB/system/serial_number"];
 			return serial;
 		},
-		getVehicleInfo() {
+		vehicleInfo() {
 			let vehicleText = "";
 			const vehicles = this.getWildcardTopics("openWB/vehicle/+/name");
 			for (const [vehicleTopic, vehicleName] of Object.entries(
