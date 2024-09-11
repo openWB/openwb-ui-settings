@@ -200,13 +200,8 @@ export default {
 				"openWB/vehicle/+/name",
 				"openWB/vehicle/+/info",
 			],
-			sendDebugData: {
-				email: "",
-				serialNumber: "",
-				installedComponents: "",
-				vehicles: "",
-				message: "",
-			},
+			email: "",
+			message: "",
 			enableSendDebugButton: true,
 		};
 	},
@@ -226,6 +221,16 @@ export default {
 		},
 	},
 	computed: {
+		// Computed property for assembling sendDebugData
+		sendDebugData() {
+			return {
+				email: this.email,
+				serialNumber: this.getSerialNumber,
+				installedComponents: this.getInstalledComponents,
+				vehicles: this.getVehicleInfo,
+				message: this.message,
+			};
+		},
 		getInstalledComponents() {
 			let componentText = "";
 			const devices = this.getWildcardTopics(
@@ -248,7 +253,7 @@ export default {
 					const model = componentConfig.info?.model || "N/A";
 					componentText += `  CID: ${componentId}, ${componentName}, Type: ${componentType}, Manufacturer: ${manufacturer}, Model: ${model}\n`;
 				}
-				componentText += "\n"; // Add an extra newline between devices
+				componentText += "\n";
 			}
 			return componentText.trim();
 		},
@@ -271,26 +276,6 @@ export default {
 				vehicleText += `ID: ${vehicleId}, Name:${vehicleName}, Manufacturer: ${manufacturer}, Model:${model}\n`;
 			}
 			return vehicleText.trim();
-		},
-	},
-	watch: {
-		getInstalledComponents: {
-			handler(newValue) {
-				this.sendDebugData.installedComponents = newValue;
-			},
-			immediate: true,
-		},
-		getSerialNumber: {
-			handler(newValue) {
-				this.sendDebugData.serialNumber = newValue;
-			},
-			immediate: true,
-		},
-		getVehicleInfo: {
-			handler(newValue) {
-				this.sendDebugData.vehicles = newValue;
-			},
-			immediate: true,
 		},
 	},
 };
