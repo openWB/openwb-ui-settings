@@ -10,7 +10,8 @@
 			"
 		>
 			<template #help>
-				Der Benutzername für die Anmeldung am OVMS-Server https://ovms.dexters-web.de/.
+				Der Benutzername für die Anmeldung am OVMS-Server
+				https://ovms.dexters-web.de/.
 			</template>
 		</openwb-base-text-input>
 		<openwb-base-text-input
@@ -23,7 +24,8 @@
 			"
 		>
 			<template #help>
-				Das Passwort für die Anmeldung am OVMS-Server https://ovms.dexters-web.de/.
+				Das Passwort für die Anmeldung am OVMS-Server
+				https://ovms.dexters-web.de/.
 			</template>
 		</openwb-base-text-input>
 		<openwb-base-text-input
@@ -34,7 +36,9 @@
 				updateConfiguration($event, 'configuration.vehicleId')
 			"
 		>
-			<template #help> Die Id des Fahrzeugs im OVMS, auch Module Id genannt. </template>
+			<template #help>
+				Die Id des Fahrzeugs im OVMS, auch Module Id genannt.
+			</template>
 		</openwb-base-text-input>
 	</div>
 </template>

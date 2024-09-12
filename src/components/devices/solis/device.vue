@@ -27,7 +27,10 @@
 			title="Version"
 			notSelected="Bitte auswählen"
 			:options="[
-				{ value: 'inverter', text: 'Wechselrichter ohne Speicheranbindung' },
+				{
+					value: 'inverter',
+					text: 'Wechselrichter ohne Speicheranbindung',
+				},
 				{ value: 'hybrid', text: 'Hybridwechselrichter RHI/S Serie' },
 			]"
 			:model-value="configuration.version"

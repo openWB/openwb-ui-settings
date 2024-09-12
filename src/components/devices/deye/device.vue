@@ -6,8 +6,9 @@
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
 			<span class="text-danger">
-				Deye Wechselrichter verfügen über keine Modbus-TCP Schnittstelle. 
-				Für die Auslesung wird ein RS485/LAN-Adapter benötigt.
+				Deye Wechselrichter verfügen über keine Modbus-TCP
+				Schnittstelle. Für die Auslesung wird ein RS485/LAN-Adapter
+				benötigt.
 			</span>
 		</openwb-base-alert>
 		<openwb-base-text-input
