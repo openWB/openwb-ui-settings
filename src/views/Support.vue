@@ -80,7 +80,7 @@
 							title="E-Mail"
 							required
 							subtype="email"
-							v-model="sendDebugData.email"
+							v-model="email"
 						>
 							<template #help>
 								Deine E-Mail-Adresse, an die der Support Dir
@@ -210,7 +210,7 @@ export default {
 				"openWB/vehicle/+/name",
 				"openWB/vehicle/+/info",
 			],
-			email: "",
+			email: undefined,
 			message: "",
 			enableSendDebugButton: true,
 		};
