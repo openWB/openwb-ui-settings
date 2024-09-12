@@ -134,7 +134,8 @@
 							required
 							minlength="3"
 							maxlength="500"
-							v-model="sendDebugData.vehicles"
+							:model-value="vehicleInfo"
+							@update:model-value="vehicles = $event"
 						>
 							<template #help>
 								Gib hier an, welche Fahrzeuge geladen
@@ -221,6 +222,7 @@ export default {
 			],
 			email: undefined,
 			components: undefined,
+			vehicles: undefined,
 			message: undefined,
 			enableSendDebugButton: true,
 		};
@@ -229,6 +231,9 @@ export default {
 		sendDebugMessage() {
 			// local variables may not be populated yet
 			// so we need to check if they are undefined
+			if (this.vehicles === undefined) {
+				this.vehicles = this.vehicleInfo;
+			}
 			if (this.components === undefined) {
 				this.components = this.installedComponents;
 			}
@@ -253,7 +258,7 @@ export default {
 				serialNumber:
 					this.$store.state.mqtt["openWB/system/serial_number"],
 				installedComponents: this.components,
-				vehicles: this.vehicleInfo,
+				vehicles: this.vehicles,
 				message: this.message,
 			};
 		},
@@ -275,17 +280,20 @@ export default {
 			return componentText.trim();
 		},
 		vehicleInfo() {
+			if (this.vehicles !== undefined) {
+				return this.vehicles;
+			}
 			let vehicleText = "";
-			const vehicles = this.getWildcardTopics("openWB/vehicle/+/name");
-			for (const [vehicleTopic, vehicleName] of Object.entries(
+			const vehicles = this.getWildcardTopics("openWB/vehicle/+/info");
+			for (const [vehicleTopic, vehicleInfo] of Object.entries(
 				vehicles,
 			)) {
-				const vehicleId = vehicleTopic.split("/")[2];
-				const vehicleInfo =
-					this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/info`];
-				const manufacturer = vehicleInfo.manufacturer || "N/A";
-				const model = vehicleInfo.model || "N/A";
-				vehicleText += `ID: ${vehicleId}, Name:${vehicleName}, Manufacturer: ${manufacturer}, Model:${model}\n`;
+				const vehicleId = parseInt(vehicleTopic.split("/")[2]);
+				if (vehicleId !== 0) {
+					const manufacturer = vehicleInfo.manufacturer || "N/A";
+					const model = vehicleInfo.model || "N/A";
+					vehicleText += `(${vehicleId}) Hersteller: ${manufacturer}, Modell: ${model}\n`;
+				}
 			}
 			return vehicleText.trim();
 		},
