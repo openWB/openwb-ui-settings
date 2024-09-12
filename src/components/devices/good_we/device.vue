@@ -5,9 +5,11 @@
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
-			GoodWe-Wechselrichter verfügen über 3 Dongle: Den WiFi-Dongle, das Wifi-Lan-Kit und 
-			das Wifi-Lan-Kit 2.0. Die Einbindung über dieses Modul ist nur mit den Wifi-Lan-Kits möglich. 
-			Welches Kit benötigt wird ist vom Wechselrichter abhängig und kann bei GoodWe erfragt werden.
+			GoodWe-Wechselrichter verfügen über 3 Dongle: Den WiFi-Dongle, das
+			Wifi-Lan-Kit und das Wifi-Lan-Kit 2.0. Die Einbindung über dieses
+			Modul ist nur mit den Wifi-Lan-Kits möglich. Welches Kit benötigt
+			wird ist vom Wechselrichter abhängig und kann bei GoodWe erfragt
+			werden.
 		</openwb-base-alert>
 		<openwb-base-text-input
 			title="IP oder Hostname"

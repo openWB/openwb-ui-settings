@@ -43,8 +43,9 @@
 			"
 		>
 			<template #help>
-				Einige externe SolarEdge Wechselrichter liefern die Leistung mit falschem Vorzeichen. 
-				In diesem Fall ist die Leistung zu invertieren.
+				Einige externe SolarEdge Wechselrichter liefern die Leistung mit
+				falschem Vorzeichen. In diesem Fall ist die Leistung zu
+				invertieren.
 			</template>
 		</openwb-base-select-input>
 	</div>
