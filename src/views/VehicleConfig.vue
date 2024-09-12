@@ -195,7 +195,10 @@
 						>
 							<template #help>
 								Optional: zusätzliche Information für den
-								Systembericht.
+								Systembericht.<br />
+								Nach Möglichkeit auch Angabe des Baujahres, da
+								es durchaus beim Verhalten des Fahrzeugs
+								Unterschiede geben kann.
 							</template>
 						</openwb-base-text-input>
 						<openwb-base-alert subtype="info">
