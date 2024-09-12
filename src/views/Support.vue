@@ -115,7 +115,8 @@
 							required
 							minlength="3"
 							maxlength="500"
-							v-model="sendDebugData.installedComponents"
+							:model-value="installedComponents"
+							@update:model-value="components = $event"
 						>
 							<template #help>
 								Gib hier möglichst detailliert an, welche
@@ -219,12 +220,18 @@ export default {
 				"openWB/vehicle/+/info",
 			],
 			email: undefined,
+			components: undefined,
 			message: undefined,
 			enableSendDebugButton: true,
 		};
 	},
 	methods: {
 		sendDebugMessage() {
+			// local variables may not be populated yet
+			// so we need to check if they are undefined
+			if (this.components === undefined) {
+				this.components = this.installedComponents;
+			}
 			let myForm = document.forms["supportForm"];
 			if (!myForm.reportValidity()) {
 				console.warn("form invalid");
@@ -245,34 +252,25 @@ export default {
 				email: this.email,
 				serialNumber:
 					this.$store.state.mqtt["openWB/system/serial_number"],
-				installedComponents: this.installedComponents,
+				installedComponents: this.components,
 				vehicles: this.vehicleInfo,
 				message: this.message,
 			};
 		},
 		installedComponents() {
+			if (this.components !== undefined) {
+				return this.components;
+			}
 			let componentText = "";
-			const devices = this.getWildcardTopics(
-				"openWB/system/device/+/config",
+			const components = this.getWildcardTopics(
+				`openWB/system/device/+/component/+/config`,
 			);
-			for (const deviceConfig of Object.values(devices)) {
-				const deviceId = deviceConfig.id;
-				const deviceName = deviceConfig.name;
-				componentText += `DID: ${deviceId}, ${deviceName}\n`;
-
-				const components = this.getWildcardTopics(
-					`openWB/system/device/${deviceId}/component/+/config`,
-				);
-				for (const componentConfig of Object.values(components)) {
-					const componentId = componentConfig.id;
-					const componentName = componentConfig.name;
-					const componentType = componentConfig.type;
-					const manufacturer =
-						componentConfig.info?.manufacturer || "N/A";
-					const model = componentConfig.info?.model || "N/A";
-					componentText += `  CID: ${componentId}, ${componentName}, Type: ${componentType}, Manufacturer: ${manufacturer}, Model: ${model}\n`;
-				}
-				componentText += "\n";
+			for (const componentConfig of Object.values(components)) {
+				const componentId = componentConfig.id;
+				const manufacturer =
+					componentConfig.info?.manufacturer || "N/A";
+				const model = componentConfig.info?.model || "N/A";
+				componentText += `(${componentId}) Hersteller: ${manufacturer}, Modell: ${model}\n`;
 			}
 			return componentText.trim();
 		},
