@@ -200,7 +200,7 @@
 								</template>
 							</openwb-base-text-input>
 							<openwb-base-text-input
-								title="Model"
+								title="Modell"
 								subtype="text"
 								:model-value="installedComponent.info.model"
 								@update:model-value="

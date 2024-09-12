@@ -9,7 +9,7 @@
 				"
 				subtype="danger"
 			>
-				Sie müssen der
+				Du musst der
 				<router-link to="/System/LegalSettings">
 					Datenschutzerklärung
 				</router-link>
@@ -17,11 +17,11 @@
 			</openwb-base-alert>
 			<div v-else>
 				<openwb-base-alert subtype="success">
-					Sie haben der
+					Du hast der
 					<router-link to="/System/LegalSettings">
 						Datenschutzerklärung
 					</router-link>
-					zugestimmt und können Systemberichte senden.
+					zugestimmt und kannst Systemberichte senden.
 				</openwb-base-alert>
 				<openwb-base-card title="Systembericht">
 					<div
@@ -34,20 +34,19 @@
 						<openwb-base-alert subtype="info">
 							<ul>
 								<li>
-									Lesen Sie den Hilfetext, der durch Klick auf
-									das
+									Lies bitte den Hilfetext, der durch Klick
+									auf das
 									<FontAwesomeIcon
 										:icon="['far', 'question-circle']"
 									/>
-									angezeigt wird. Nehmen Sie das Wiki zur
-									Hilfe.
+									angezeigt wird. Nimm das Wiki zur Hilfe.
 								</li>
 								<li>
-									Vergewissern Sie sich, dass mindestens die
+									Vergewissere Dich , dass mindestens die
 									aktuelle "Release" Version installiert ist.
 								</li>
 								<li>
-									Stellen Sie beim Absenden des Berichtes die
+									Stelle beim Absenden des Berichtes die
 									Fehlerkonditionen her. Lädt ein Fahrzeug
 									nicht, sollte es angeschlossen und nicht
 									voll geladen sein. Ist PV laden betroffen,
@@ -56,25 +55,24 @@
 									wenn der Fehler aktuell vorliegt.
 								</li>
 								<li>
-									Stellen Sie sicher, dass der Lademodus
-									korrekt gewählt ist und im Falle von nicht
-									ladenden Fahrzeugen, dass der Ladepunkt auch
+									Stelle sicher, dass der Lademodus gewählt
+									ist und im Falle von nicht ladenden ladenden
+									Fahrzeugen, dass der Ladepunkt auch
 									entsperrt wurde.
 								</li>
 								<li>
 									Das Auslesen der Systemkonfiguration erfolgt
 									direkt nach den Klick auf Absenden und kann
-									einige Zeit in Anspruch nehmen. Sie erhalten
+									einige Zeit in Anspruch nehmen. Du erhältst
 									ca. 15 bis 30 Minuten nach Versand des
 									Systemberichtes von uns automatisch eine
 									E-Mail mit der Ticketnummer unter der die
 									Anfrage bei uns registriert wurde. Wir
-									melden uns bei ihnen. Bitte kontrollieren
-									Sie daher immer auch den Spam Ordner auf
-									eingehende Nachrichten. Erhalten Sie
-									trotzdem keine Ticketnummer, ist das
-									Versenden des Systemberichtes
-									fehlgeschlagen.
+									melden uns bei Dir. Bitte kontrolliere daher
+									immer auch den Spam Ordner auf eingehende
+									Nachrichten. Erhältst Du trotzdem keine
+									Ticketnummer, ist das Versenden des
+									Systemberichtes vermutlich fehlgeschlagen.
 								</li>
 							</ul>
 						</openwb-base-alert>
@@ -95,11 +93,13 @@
 							v-model="sendDebugData.serialNumber"
 						>
 							<template #help>
-								Die Seriennummer der openWB finden Sie außen am
-								Gehäuse - bei Älteren innen im Gehäuse. Sie
-								können uns aber auch eine Bestellnummer oder
+								Die Seriennummer der openWB findest Du außen am,
+								bei älteren Installationen innen im Gehäuse. Du
+								kannst uns aber auch eine Bestellnummer oder
 								Rechnungsnummer übermitteln. Das Gehäuse muss
-								nicht extra geöffnet werden!
+								nicht extra geöffnet werden!<br />
+								Bei einer gekauften openWB wird die Seriennummer
+								automatisch ermittelt.
 							</template>
 						</openwb-base-text-input>
 						<openwb-base-textarea
@@ -110,9 +110,14 @@
 							v-model="sendDebugData.installedComponents"
 						>
 							<template #help>
-								Geben Sie hier möglichst detailliert an, welche
+								Gib hier möglichst detailliert an, welche
 								Anlagenkomponenten (EVU, PV, Speicher)
-								angebunden sind.
+								angebunden sind.<br />
+								<router-link to="/HardwareInstallation">
+									Die Angaben können auch direkt in der
+									Konfiguration der Komponenten dauerhaft
+									gespeichert werden.
+								</router-link>
 							</template>
 						</openwb-base-textarea>
 						<openwb-base-textarea
@@ -123,8 +128,13 @@
 							v-model="sendDebugData.vehicles"
 						>
 							<template #help>
-								Geben Sie hier an, welche Fahrzeuge geladen
-								werden (Hersteller, Modell, Baujahr).
+								Gib hier an, welche Fahrzeuge geladen
+								(Hersteller, Modell, Baujahr).<br />
+								<router-link to="/VehicleConfiguration">
+									Die Angaben können auch direkt in der
+									Konfiguration der Fahrzeuge dauerhaft
+									gespeichert werden.
+								</router-link>
 							</template>
 						</openwb-base-textarea>
 						<openwb-base-textarea
@@ -164,7 +174,7 @@
 					subtype="success"
 				>
 					Die Daten für den Fehlerbericht werden im Hintergrund
-					zusammengestellt. Sie können diese Seite jetzt verlassen.
+					zusammengestellt. Du kannst diese Seite jetzt verlassen.
 					<font-awesome-icon fixed-width :icon="['fas', 'check']" />
 				</openwb-base-alert>
 			</div>
