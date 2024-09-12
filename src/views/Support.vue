@@ -214,7 +214,6 @@ export default {
 				"openWB/general/extern",
 				"openWB/system/dataprotection_acknowledged",
 				"openWB/system/serial_number",
-				"openWB/system/device",
 				"openWB/system/device/+/config",
 				"openWB/system/device/+/component/+/config",
 				"openWB/vehicle/+/name",
@@ -244,15 +243,14 @@ export default {
 			} else {
 				this.$emit("sendCommand", {
 					command: "sendDebug",
-					data: this.sendDebugData,
+					data: this.debugData,
 				});
 				this.enableSendDebugButton = false;
 			}
 		},
 	},
 	computed: {
-		// Computed property for assembling sendDebugData
-		sendDebugData() {
+		debugData() {
 			return {
 				email: this.email,
 				serialNumber:
