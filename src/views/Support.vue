@@ -90,7 +90,15 @@
 						<openwb-base-text-input
 							title="openWB Seriennummer"
 							required
-							v-model="sendDebugData.serialNumber"
+							:model-value="
+								$store.state.mqtt['openWB/system/serial_number']
+							"
+							@update:model-value="
+								updateState(
+									'openWB/system/serial_number',
+									$event,
+								)
+							"
 						>
 							<template #help>
 								Die Seriennummer der openWB findest Du außen am,
@@ -235,7 +243,8 @@ export default {
 		sendDebugData() {
 			return {
 				email: this.email,
-				serialNumber: this.serialNumber,
+				serialNumber:
+					this.$store.state.mqtt["openWB/system/serial_number"],
 				installedComponents: this.installedComponents,
 				vehicles: this.vehicleInfo,
 				message: this.message,
@@ -266,11 +275,6 @@ export default {
 				componentText += "\n";
 			}
 			return componentText.trim();
-		},
-		serialNumber() {
-			const serial =
-				this.$store.state.mqtt["openWB/system/serial_number"];
-			return serial;
 		},
 		vehicleInfo() {
 			let vehicleText = "";
