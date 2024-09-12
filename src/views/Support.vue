@@ -150,7 +150,7 @@
 							required
 							minlength="20"
 							maxlength="500"
-							v-model="sendDebugData.message"
+							v-model="message"
 						/>
 					</div>
 					<template
@@ -219,7 +219,7 @@ export default {
 				"openWB/vehicle/+/info",
 			],
 			email: undefined,
-			message: "",
+			message: undefined,
 			enableSendDebugButton: true,
 		};
 	},
