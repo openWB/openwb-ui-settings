@@ -228,14 +228,6 @@ export default {
 	},
 	methods: {
 		sendDebugMessage() {
-			// local variables may not be populated yet
-			// so we need to check if they are undefined
-			if (this.vehicles === undefined) {
-				this.vehicles = this.vehicleInfo;
-			}
-			if (this.components === undefined) {
-				this.components = this.installedComponents;
-			}
 			let myForm = document.forms["supportForm"];
 			if (!myForm.reportValidity()) {
 				console.warn("form invalid");
@@ -255,8 +247,8 @@ export default {
 				email: this.email,
 				serialNumber:
 					this.$store.state.mqtt["openWB/system/serial_number"],
-				installedComponents: this.components,
-				vehicles: this.vehicles,
+				installedComponents: this.installedComponents,
+				vehicles: this.vehicleInfo,
 				message: this.message,
 			};
 		},
