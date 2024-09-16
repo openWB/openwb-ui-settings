@@ -9,7 +9,7 @@
 				"
 				subtype="danger"
 			>
-				Sie müssen der
+				Du musst der
 				<router-link to="/System/LegalSettings">
 					Datenschutzerklärung
 				</router-link>
@@ -17,11 +17,11 @@
 			</openwb-base-alert>
 			<div v-else>
 				<openwb-base-alert subtype="success">
-					Sie haben der
+					Du hast der
 					<router-link to="/System/LegalSettings">
 						Datenschutzerklärung
 					</router-link>
-					zugestimmt und können Systemberichte senden.
+					zugestimmt und kannst Systemberichte senden.
 				</openwb-base-alert>
 				<openwb-base-card title="Systembericht">
 					<div
@@ -34,20 +34,19 @@
 						<openwb-base-alert subtype="info">
 							<ul>
 								<li>
-									Lesen Sie den Hilfetext, der durch Klick auf
-									das
+									Lies bitte den Hilfetext, der durch Klick
+									auf das
 									<FontAwesomeIcon
 										:icon="['far', 'question-circle']"
 									/>
-									angezeigt wird. Nehmen Sie das Wiki zur
-									Hilfe.
+									angezeigt wird. Nimm das Wiki zur Hilfe.
 								</li>
 								<li>
-									Vergewissern Sie sich, dass mindestens die
+									Vergewissere Dich , dass mindestens die
 									aktuelle "Release" Version installiert ist.
 								</li>
 								<li>
-									Stellen Sie beim Absenden des Berichtes die
+									Stelle beim Absenden des Berichtes die
 									Fehlerkonditionen her. Lädt ein Fahrzeug
 									nicht, sollte es angeschlossen und nicht
 									voll geladen sein. Ist PV laden betroffen,
@@ -56,25 +55,24 @@
 									wenn der Fehler aktuell vorliegt.
 								</li>
 								<li>
-									Stellen Sie sicher, dass der Lademodus
-									korrekt gewählt ist und im Falle von nicht
-									ladenden Fahrzeugen, dass der Ladepunkt auch
+									Stelle sicher, dass der Lademodus gewählt
+									ist und im Falle von nicht ladenden ladenden
+									Fahrzeugen, dass der Ladepunkt auch
 									entsperrt wurde.
 								</li>
 								<li>
 									Das Auslesen der Systemkonfiguration erfolgt
 									direkt nach den Klick auf Absenden und kann
-									einige Zeit in Anspruch nehmen. Sie erhalten
+									einige Zeit in Anspruch nehmen. Du erhältst
 									ca. 15 bis 30 Minuten nach Versand des
 									Systemberichtes von uns automatisch eine
 									E-Mail mit der Ticketnummer unter der die
 									Anfrage bei uns registriert wurde. Wir
-									melden uns bei ihnen. Bitte kontrollieren
-									Sie daher immer auch den Spam Ordner auf
-									eingehende Nachrichten. Erhalten Sie
-									trotzdem keine Ticketnummer, ist das
-									Versenden des Systemberichtes
-									fehlgeschlagen.
+									melden uns bei Dir. Bitte kontrolliere daher
+									immer auch den Spam Ordner auf eingehende
+									Nachrichten. Erhältst Du trotzdem keine
+									Ticketnummer, ist das Versenden des
+									Systemberichtes vermutlich fehlgeschlagen.
 								</li>
 							</ul>
 						</openwb-base-alert>
@@ -82,7 +80,7 @@
 							title="E-Mail"
 							required
 							subtype="email"
-							v-model="sendDebugData.email"
+							v-model="email"
 						>
 							<template #help>
 								Deine E-Mail-Adresse, an die der Support Dir
@@ -92,14 +90,24 @@
 						<openwb-base-text-input
 							title="openWB Seriennummer"
 							required
-							v-model="sendDebugData.serialNumber"
+							:model-value="
+								$store.state.mqtt['openWB/system/serial_number']
+							"
+							@update:model-value="
+								updateState(
+									'openWB/system/serial_number',
+									$event,
+								)
+							"
 						>
 							<template #help>
-								Die Seriennummer der openWB finden Sie außen am
-								Gehäuse - bei Älteren innen im Gehäuse. Sie
-								können uns aber auch eine Bestellnummer oder
+								Die Seriennummer der openWB findest Du außen am,
+								bei älteren Installationen innen im Gehäuse. Du
+								kannst uns aber auch eine Bestellnummer oder
 								Rechnungsnummer übermitteln. Das Gehäuse muss
-								nicht extra geöffnet werden!
+								nicht extra geöffnet werden!<br />
+								Bei einer gekauften openWB wird die Seriennummer
+								automatisch ermittelt.
 							</template>
 						</openwb-base-text-input>
 						<openwb-base-textarea
@@ -107,12 +115,18 @@
 							required
 							minlength="3"
 							maxlength="500"
-							v-model="sendDebugData.installedComponents"
+							:model-value="installedComponents"
+							@update:model-value="components = $event"
 						>
 							<template #help>
-								Geben Sie hier möglichst detailliert an, welche
+								Gib hier möglichst detailliert an, welche
 								Anlagenkomponenten (EVU, PV, Speicher)
-								angebunden sind.
+								angebunden sind.<br />
+								<router-link to="/HardwareInstallation">
+									Die Angaben können auch direkt in der
+									Konfiguration der Komponenten dauerhaft
+									gespeichert werden.
+								</router-link>
 							</template>
 						</openwb-base-textarea>
 						<openwb-base-textarea
@@ -120,11 +134,17 @@
 							required
 							minlength="3"
 							maxlength="500"
-							v-model="sendDebugData.vehicles"
+							:model-value="vehicleInfo"
+							@update:model-value="vehicles = $event"
 						>
 							<template #help>
-								Geben Sie hier an, welche Fahrzeuge geladen
-								werden (Hersteller, Modell, Baujahr).
+								Gib hier an, welche Fahrzeuge geladen
+								(Hersteller, Modell, Baujahr).<br />
+								<router-link to="/VehicleConfiguration">
+									Die Angaben können auch direkt in der
+									Konfiguration der Fahrzeuge dauerhaft
+									gespeichert werden.
+								</router-link>
 							</template>
 						</openwb-base-textarea>
 						<openwb-base-textarea
@@ -132,7 +152,7 @@
 							required
 							minlength="20"
 							maxlength="500"
-							v-model="sendDebugData.message"
+							v-model="message"
 						/>
 					</div>
 					<template
@@ -164,7 +184,7 @@
 					subtype="success"
 				>
 					Die Daten für den Fehlerbericht werden im Hintergrund
-					zusammengestellt. Sie können diese Seite jetzt verlassen.
+					zusammengestellt. Du kannst diese Seite jetzt verlassen.
 					<font-awesome-icon fixed-width :icon="['fas', 'check']" />
 				</openwb-base-alert>
 			</div>
@@ -193,14 +213,16 @@ export default {
 			mqttTopicsToSubscribe: [
 				"openWB/general/extern",
 				"openWB/system/dataprotection_acknowledged",
+				"openWB/system/serial_number",
+				"openWB/system/device/+/config",
+				"openWB/system/device/+/component/+/config",
+				"openWB/vehicle/+/name",
+				"openWB/vehicle/+/info",
 			],
-			sendDebugData: {
-				email: "",
-				serialNumber: "",
-				installedComponents: "",
-				vehicles: "",
-				message: "",
-			},
+			email: undefined,
+			components: undefined,
+			vehicles: undefined,
+			message: undefined,
 			enableSendDebugButton: true,
 		};
 	},
@@ -213,10 +235,57 @@ export default {
 			} else {
 				this.$emit("sendCommand", {
 					command: "sendDebug",
-					data: this.sendDebugData,
+					data: this.debugData,
 				});
 				this.enableSendDebugButton = false;
 			}
+		},
+	},
+	computed: {
+		debugData() {
+			return {
+				email: this.email,
+				serialNumber:
+					this.$store.state.mqtt["openWB/system/serial_number"],
+				installedComponents: this.installedComponents,
+				vehicles: this.vehicleInfo,
+				message: this.message,
+			};
+		},
+		installedComponents() {
+			if (this.components !== undefined) {
+				return this.components;
+			}
+			let componentText = "";
+			const components = this.getWildcardTopics(
+				`openWB/system/device/+/component/+/config`,
+			);
+			for (const componentConfig of Object.values(components)) {
+				const componentId = componentConfig.id;
+				const manufacturer =
+					componentConfig.info?.manufacturer || "N/A";
+				const model = componentConfig.info?.model || "N/A";
+				componentText += `(${componentId}) Hersteller: ${manufacturer}, Modell: ${model}\n`;
+			}
+			return componentText.trim();
+		},
+		vehicleInfo() {
+			if (this.vehicles !== undefined) {
+				return this.vehicles;
+			}
+			let vehicleText = "";
+			const vehicles = this.getWildcardTopics("openWB/vehicle/+/info");
+			for (const [vehicleTopic, vehicleInfo] of Object.entries(
+				vehicles,
+			)) {
+				const vehicleId = parseInt(vehicleTopic.split("/")[2]);
+				if (vehicleId !== 0) {
+					const manufacturer = vehicleInfo.manufacturer || "N/A";
+					const model = vehicleInfo.model || "N/A";
+					vehicleText += `(${vehicleId}) Hersteller: ${manufacturer}, Modell: ${model}\n`;
+				}
+			}
+			return vehicleText.trim();
 		},
 	},
 };
