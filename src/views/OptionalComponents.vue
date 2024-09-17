@@ -64,9 +64,8 @@
 							Es kann zuerst das Fahrzeug angesteckt und dann der
 							ID-Tag erfasst werden oder anders herum. Im letzten
 							Fall muss innerhalb von 5 Minuten ein Fahrzeug
-							angesteckt werden, sonst wird der ID-Tag verworfen.
-							Das Fahrzeug wird erst nach dem Anstecken
-							zugeordnet.<br />
+							angesteckt werden, sonst wird der ID-Tag
+							verworfen.<br />
 							<span v-html="$store.state.text.rfidWiki" />
 						</openwb-base-alert>
 						<openwb-base-textarea
