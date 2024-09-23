@@ -1,19 +1,26 @@
 <template>
-	<div class="device-mtec-bat">
+	<div class="device-sofar">
 		<openwb-base-heading>
-			Einstellungen für M-Tec Batteriespeicher
+			Einstellungen für Sofar
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
-		<openwb-base-select-input
-			title="Generation"
-			notSelected="Bitte auswählen"
-			:options="[
-				{ value: 2, text: 'Gen 2' },
-				{ value: 3, text: 'Gen 3' }
-			]"
-			:model-value="configuration.generation"
+		<openwb-base-text-input
+			title="IP oder Hostname"
+			subtype="host"
+			required
+			:model-value="configuration.ip_address"
 			@update:model-value="
-				updateConfiguration($event, 'configuration.generation')
+				updateConfiguration($event, 'configuration.ip_address')
+			"
+		/>
+		<openwb-base-number-input
+			title="Port"
+			required
+			:min="1"
+			:max="65535"
+			:model-value="configuration.port"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.port')
 			"
 		/>
 		<openwb-base-number-input
@@ -25,22 +32,17 @@
 			@update:model-value="
 				updateConfiguration($event, 'configuration.modbus_id')
 			"
-		>
-			<template #help>
-				Die Standard-Modbus-ID von M-Tec ist 247
-			</template>
-		</openwb-base-number-input>
+		/>
 	</div>
 </template>
 
 <script>
 export default {
-	name: "DeviceMTecBat",
+	name: "DeviceSofar",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },
 		deviceId: { default: undefined },
-		componentId: { required: true },
 	},
 	methods: {
 		updateConfiguration(event, path = undefined) {

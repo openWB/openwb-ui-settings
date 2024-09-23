@@ -1,7 +1,7 @@
 <template>
-	<div class="device-azzurro_sofar-inverter">
+	<div class="device-sofar-bat">
 		<openwb-base-heading>
-			Einstellungen für Sofar Wechselrichter
+			Einstellungen für Sofar Batteriespeicher
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-	name: "DeviceSofarInverter",
+	name: "DeviceSofarBat",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

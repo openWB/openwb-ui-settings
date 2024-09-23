@@ -1,7 +1,7 @@
 <template>
-	<div class="device-azzurro_sofar-counter">
+	<div class="device-sofar-inverter">
 		<openwb-base-heading>
-			Einstellungen für Sofar ESS Zähler
+			Einstellungen für Sofar Wechselrichter
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-	name: "DeviceSofarCounter",
+	name: "DeviceSofarInverter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

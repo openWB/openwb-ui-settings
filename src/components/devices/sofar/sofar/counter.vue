@@ -1,7 +1,7 @@
 <template>
-	<div class="device-azzurro_sofar-bat">
+	<div class="device-sofar-counter">
 		<openwb-base-heading>
-			Einstellungen für Sofar Batteriespeicher
+			Einstellungen für Sofar ESS Zähler
 			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-	name: "DeviceSofarBat",
+	name: "DeviceSofarCounter",
 	emits: ["update:configuration"],
 	props: {
 		configuration: { type: Object, required: true },

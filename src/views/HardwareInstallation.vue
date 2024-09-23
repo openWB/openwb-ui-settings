@@ -108,6 +108,7 @@
 						<openwb-config-proxy
 							:deviceId="installedDevice.id"
 							:deviceType="installedDevice.type"
+							:deviceVendor="installedDevice.vendor"
 							:configuration="installedDevice.configuration"
 							@update:configuration="
 								updateConfiguration(installedDeviceKey, $event)
@@ -220,6 +221,7 @@
 							<openwb-config-proxy
 								:deviceId="installedDevice.id"
 								:deviceType="installedDevice.type"
+								:deviceVendor="installedDevice.vendor"
 								:componentId="installedComponent.id"
 								:componentType="installedComponent.type"
 								:configuration="
@@ -236,10 +238,20 @@
 						<hr />
 						<openwb-base-select-input
 							class="mb-2"
-							v-if="getComponentList(installedDevice.type).length"
+							v-if="
+								getComponentList(
+									installedDevice.vendor,
+									installedDevice.type,
+								).length
+							"
 							title="Verfügbare Komponenten"
 							notSelected="Bitte auswählen"
-							:options="getComponentList(installedDevice.type)"
+							:options="
+								getComponentList(
+									installedDevice.vendor,
+									installedDevice.type,
+								)
+							"
 							:model-value="componentToAdd[installedDevice.id]"
 							@update:model-value="
 								componentToAdd[installedDevice.id] = $event
@@ -263,6 +275,7 @@
 										@buttonClicked="
 											addComponent(
 												installedDevice.id,
+												installedDevice.vendor,
 												installedDevice.type,
 												componentToAdd[
 													installedDevice.id
@@ -292,12 +305,17 @@
 					</openwb-base-card>
 					<hr v-if="Object.keys(installedDevices).length > 0" />
 					<openwb-base-select-input
-						class="mb-2"
+						title="Hersteller"
+						notSelected="Bitte auswählen"
+						:groups="vendorList"
+						v-model="selectedVendor"
+					/>
+					<openwb-base-select-input
 						title="Verfügbare Geräte"
 						notSelected="Bitte auswählen"
-						:options="getDeviceList()"
-						:model-value="deviceToAdd"
-						@update:model-value="deviceToAdd = $event"
+						:disabled="selectedVendor === undefined"
+						:options="deviceList"
+						v-model="deviceToAdd"
 					>
 						<template #append>
 							<span class="col-1">
@@ -415,6 +433,7 @@ export default {
 				"openWB/system/device/+/component/+/config",
 				"openWB/system/configurable/devices_components",
 			],
+			selectedVendor: undefined,
 			deviceToAdd: undefined,
 			showDeviceRemoveModal: false,
 			modalDevice: undefined,
@@ -436,6 +455,56 @@ export default {
 				return this.getWildcardTopics(
 					"openWB/system/device/+/component/+/config",
 				);
+			},
+		},
+		vendorList: {
+			get() {
+				if (
+					this.$store.state.mqtt[
+						"openWB/system/configurable/devices_components"
+					] === undefined
+				) {
+					return [];
+				}
+				return Object.entries(
+					this.$store.state.mqtt[
+						"openWB/system/configurable/devices_components"
+					],
+				)
+					.map(([groupKey, group]) => {
+						return {
+							label: group.group_name,
+							options: Object.entries(group.vendors)
+								.map(([vendorKey, vendor]) => {
+									return {
+										value: [groupKey, vendorKey],
+										text: vendor.vendor_name,
+									};
+								})
+								.sort((a, b) => a.text.localeCompare(b.text)),
+						};
+					})
+					.sort((a, b) => -a.label.localeCompare(b.label)); // reverse order to have "openWB" at the top
+			},
+		},
+		deviceList: {
+			get() {
+				if (this.selectedVendor === undefined) {
+					return [];
+				}
+				let [groupKey, vendorKey] = this.selectedVendor;
+				return Object.entries(
+					this.$store.state.mqtt[
+						"openWB/system/configurable/devices_components"
+					][groupKey].vendors[vendorKey].devices,
+				)
+					.map(([deviceKey, device]) => {
+						return {
+							value: [vendorKey, deviceKey],
+							text: device.device_name,
+						};
+					})
+					.sort((a, b) => a.text.localeCompare(b.text));
 			},
 		},
 	},
@@ -478,7 +547,8 @@ export default {
 			this.$emit("sendCommand", {
 				command: "addDevice",
 				data: {
-					type: this.deviceToAdd,
+					vendor: this.deviceToAdd[0],
+					type: this.deviceToAdd[1],
 				},
 			});
 		},
@@ -501,17 +571,13 @@ export default {
 				});
 			}
 		},
-		getDeviceList() {
-			return this.$store.state.mqtt[
-				"openWB/system/configurable/devices_components"
-			];
-		},
-		addComponent(deviceId, deviceType, componentType) {
+		addComponent(deviceId, deviceVendor, deviceType, componentType) {
 			this.$emit("sendCommand", {
 				command: "addComponent",
 				data: {
 					deviceId: deviceId,
 					deviceType: deviceType,
+					deviceVendor: deviceVendor,
 					type: componentType,
 				},
 			});
@@ -551,15 +617,38 @@ export default {
 				});
 			}
 		},
-		getComponentList(deviceType) {
-			if (deviceType === undefined) {
+		getComponentList(vendorKey, deviceKey) {
+			if (vendorKey === undefined || deviceKey === undefined) {
 				return [];
 			}
-			console.debug("finding components for '" + deviceType + "'");
-			let myDevice = this.$store.state.mqtt[
-				"openWB/system/configurable/devices_components"
-			].find((device) => device.value === deviceType);
-			return myDevice.component;
+			console.debug("finding components for", vendorKey, deviceKey);
+			let deviceComponents = [];
+			Object.values(
+				this.$store.state.mqtt[
+					"openWB/system/configurable/devices_components"
+				],
+			).every((group) => {
+				if (group.vendors[vendorKey] !== undefined) {
+					if (
+						group.vendors[vendorKey].devices[deviceKey] !==
+						undefined
+					) {
+						let components = Object.entries(
+							group.vendors[vendorKey].devices[deviceKey]
+								.components,
+						).map(([componentKey, component]) => {
+							return {
+								value: componentKey,
+								text: component.component_name,
+							};
+						});
+						deviceComponents = components;
+					}
+					return false;
+				}
+				return true;
+			});
+			return deviceComponents;
 		},
 		updateConfiguration(key, event) {
 			console.debug("updateConfiguration", key, event);
