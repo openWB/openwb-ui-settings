@@ -1,5 +1,5 @@
 <template>
-	<div class="device-azzurro_sofar">
+	<div class="device-sofar">
 		<openwb-base-heading>
 			Einstellungen für Sofar
 			<span class="small">(Modul: {{ $options.name }})</span>
