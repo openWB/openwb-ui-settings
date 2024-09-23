@@ -86,6 +86,25 @@
 						gestartet! Es werden alle eventuell vorhandenen lokalen
 						Änderungen am Programmcode mit dem Update verworfen!
 					</openwb-base-alert>
+					<openwb-base-alert
+						v-if="
+							$store.state.mqtt['openWB/system/current_branch'] !=
+							'Release'
+						"
+						subtype="danger"
+					>
+						Du bist nicht auf dem für den normalen Gebrauch
+						empfohlenen Entwicklungszweig "Release". Wir empfehlen,
+						auf diesen Zweig zu wechseln, sobald dort eine neue
+						Version verfügbar ist.<br />
+						Bevor ein Update angestoßen wird, sollte immer eine
+						Sicherung erstellt werden! Es kann zwar wieder auf eine
+						ältere Version gewechselt werden, jedoch ist nicht
+						sichergestellt, dass es dabei keine Probleme gibt.
+						Gerade wenn das Datenformat in der neuen Version
+						angepasst wurde, wird eine ältere damit Fehler
+						produzieren.
+					</openwb-base-alert>
 					<template #footer>
 						<div class="row justify-content-center">
 							<div
