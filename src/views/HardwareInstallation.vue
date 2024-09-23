@@ -238,10 +238,20 @@
 						<hr />
 						<openwb-base-select-input
 							class="mb-2"
-							v-if="getComponentList(installedDevice.vendor, installedDevice.type).length"
+							v-if="
+								getComponentList(
+									installedDevice.vendor,
+									installedDevice.type,
+								).length
+							"
 							title="Verfügbare Komponenten"
 							notSelected="Bitte auswählen"
-							:options="getComponentList(installedDevice.vendor, installedDevice.type)"
+							:options="
+								getComponentList(
+									installedDevice.vendor,
+									installedDevice.type,
+								)
+							"
 							:model-value="componentToAdd[installedDevice.id]"
 							@update:model-value="
 								componentToAdd[installedDevice.id] = $event
@@ -613,36 +623,31 @@ export default {
 			}
 			console.debug("finding components for", vendorKey, deviceKey);
 			let deviceComponents = [];
-			Object.entries(
+			Object.values(
 				this.$store.state.mqtt[
 					"openWB/system/configurable/devices_components"
 				],
-			).every(([groupKey, group]) => {
-				console.log("searching in group", groupKey);
+			).every((group) => {
 				if (group.vendors[vendorKey] !== undefined) {
 					if (
 						group.vendors[vendorKey].devices[deviceKey] !==
 						undefined
 					) {
 						let components = Object.entries(
-							group.vendors[vendorKey].devices[deviceKey].components
+							group.vendors[vendorKey].devices[deviceKey]
+								.components,
 						).map(([componentKey, component]) => {
 							return {
 								value: componentKey,
 								text: component.component_name,
 							};
 						});
-						console.log(
-							"found components",
-							components,
-						);
 						deviceComponents = components;
 					}
 					return false;
 				}
 				return true;
 			});
-			console.log("result", deviceComponents);
 			return deviceComponents;
 		},
 		updateConfiguration(key, event) {
