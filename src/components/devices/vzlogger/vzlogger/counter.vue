@@ -2,7 +2,6 @@
 	<div class="device-vzlogger-counter">
 		<openwb-base-heading>
 			Einstellungen für VZLogger Zähler
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
 			Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port | jq
@@ -38,7 +37,7 @@
 </template>
 
 <script>
-import ComponentConfigMixin from "../componentConfigMixin.vue";
+import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
 
 export default {
 	name: "DeviceVZLoggerCounter",

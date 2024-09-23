@@ -22,7 +22,7 @@
 			required
 			:min="1"
 			:max="65535"
-			:model-value="configuration.port"
+			:model-value="device.configuration.port"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.port')
 			"
@@ -44,7 +44,7 @@
 				{ value: 'v_1_7', text: 'v1.7' },
 				{ value: 'v_1_1', text: 'v1.0/ v1.1' },
 			]"
-			:model-value="configuration.version"
+			:model-value="device.configuration.version"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.version')
 			"
@@ -61,7 +61,7 @@
 				{ value: 8, text: 'ARM < 9.0' },
 				{ value: 9, text: 'ARM ab 9.0' },
 			]"
-			:model-value="configuration.firmware"
+			:model-value="device.configuration.firmware"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.firmware')
 			"
@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import DeviceConfigMixin from "../deviceConfigMixin.vue";
+import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
 
 export default {
 	name: "DeviceGoodWe",

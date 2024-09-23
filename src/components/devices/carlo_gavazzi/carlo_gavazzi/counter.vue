@@ -1,5 +1,5 @@
 <template>
-	<div class="device-carlogavazzi-counter">
+	<div class="device-carlo-gavazzi-counter">
 		<openwb-base-alert subtype="info">
 			ModbusTCP muss aktiviert sein. Ausgelesen wird ID 1 auf Port 502.
 		</openwb-base-alert>
@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import ComponentConfigMixin from "../componentConfigMixin.vue";
+import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
 
 export default {
 	name: "DeviceCarloGavazziCounter",

@@ -1,8 +1,6 @@
 <template>
 	<div class="device-sigenergy">
-		<openwb-base-heading>
-			Einstellungen für Sigenergy
-		</openwb-base-heading>
+		<openwb-base-heading>Einstellungen für Sigenergy</openwb-base-heading>
 		<openwb-base-text-input
 			title="IP oder Hostname"
 			subtype="host"
@@ -26,7 +24,7 @@
 </template>
 
 <script>
-import DeviceConfigMixin from "../deviceConfigMixin.vue";
+import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
 
 export default {
 	name: "DeviceSigenergy",

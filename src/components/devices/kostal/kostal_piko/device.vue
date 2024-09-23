@@ -1,5 +1,5 @@
 <template>
-	<div class="device-kostalpiko">
+	<div class="device-kostal-piko">
 		<openwb-base-heading>
 			Einstellungen für Kostal Piko
 		</openwb-base-heading>
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import DeviceConfigMixin from "../deviceConfigMixin.vue";
+import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
 
 export default {
 	name: "DeviceKostalPiko",

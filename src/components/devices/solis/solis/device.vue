@@ -1,14 +1,11 @@
 <template>
 	<div class="device-solis">
-		<openwb-base-heading>
-			Einstellungen für Solis
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
+		<openwb-base-heading>Einstellungen für Solis</openwb-base-heading>
 		<openwb-base-text-input
 			title="IP oder Hostname"
 			subtype="host"
 			required
-			:model-value="configuration.ip_address"
+			:model-value="device.configuration.ip_address"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.ip_address')
 			"
@@ -18,7 +15,7 @@
 			required
 			:min="1"
 			:max="65535"
-			:model-value="configuration.port"
+			:model-value="device.configuration.port"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.port')
 			"
@@ -33,7 +30,7 @@
 				},
 				{ value: 'hybrid', text: 'Hybridwechselrichter RHI/S Serie' },
 			]"
-			:model-value="configuration.version"
+			:model-value="device.configuration.version"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.version')
 			"
@@ -42,17 +39,10 @@
 </template>
 
 <script>
+import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
+
 export default {
 	name: "DeviceSolis",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [DeviceConfigMixin],
 };
 </script>

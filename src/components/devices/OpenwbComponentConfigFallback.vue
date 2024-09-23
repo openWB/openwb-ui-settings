@@ -1,22 +1,23 @@
 <template>
-	<div class="device-fallback">
+	<div class="component-fallback">
 		<openwb-base-alert
-			v-if="Object.keys(device.configuration).length == 0"
+			v-if="Object.keys(component.configuration).length == 0"
 			subtype="info"
 		>
-			Der Gerät-Typ "{{ device.type }}" bietet keine Einstellungen.
+			Der Komponenten-Typ "{{ component.type }}" bietet keine
+			Einstellungen.
 		</openwb-base-alert>
 		<div v-else>
 			<openwb-base-alert subtype="warning">
-				Es wurde keine Konfigurationsseite für den Geräte-Typ "{{
-					device.type
+				Es wurde keine Konfigurationsseite für den Komponenten-Typ "{{
+					component.type
 				}}" gefunden. Die Einstellungen können als JSON direkt
 				bearbeitet werden.
 			</openwb-base-alert>
 			<openwb-base-textarea
 				title="Konfiguration"
 				subtype="json"
-				:model-value="device.configuration"
+				:model-value="component.configuration"
 				@update:model-value="
 					updateConfiguration($event, 'configuration')
 				"
@@ -28,7 +29,7 @@
 			</openwb-base-textarea>
 			<openwb-base-alert subtype="info">
 				<pre>{{
-					JSON.stringify(device.configuration, undefined, 2)
+					JSON.stringify(component.configuration, undefined, 2)
 				}}</pre>
 			</openwb-base-alert>
 		</div>
@@ -36,10 +37,10 @@
 </template>
 
 <script>
-import DeviceConfigMixin from "./DeviceConfigMixin.vue";
+import ComponentConfigMixin from "./ComponentConfigMixin.vue";
 
 export default {
-	name: "DeviceFallback",
-	mixins: [DeviceConfigMixin],
+	name: "ComponentFallback",
+	mixins: [ComponentConfigMixin],
 };
 </script>

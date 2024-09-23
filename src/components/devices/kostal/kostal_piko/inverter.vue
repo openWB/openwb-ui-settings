@@ -1,5 +1,5 @@
 <template>
-	<div class="device-kostalpiko-inverter">
+	<div class="device-kostal-piko-inverter">
 		<openwb-base-heading>
 			Einstellungen für Kostal Piko Wechselrichter
 		</openwb-base-heading>
@@ -9,7 +9,7 @@
 				{ buttonValue: false, text: 'nicht vorhanden' },
 				{ buttonValue: true, text: 'vorhanden' },
 			]"
-			:model-value="configuration.bat_configured"
+			:model-value="component.configuration.bat_configured"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.bat_configured')
 			"
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import ComponentConfigMixin from "../componentConfigMixin.vue";
+import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
 
 export default {
 	name: "DeviceKostalPikoInverter",

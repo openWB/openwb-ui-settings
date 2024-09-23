@@ -1,5 +1,5 @@
 <template>
-	<div class="device-kostalpiko-counter">
+	<div class="device-kostal-piko-counter">
 		<openwb-base-alert subtype="info">
 			Wenn der Zähler im Hausverbrauchs-Zweig installiert ist, muss die
 			Hierarchie wie im
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import ComponentConfigMixin from "../componentConfigMixin.vue";
+import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
 
 export default {
 	name: "DeviceKostalPikoCounter",

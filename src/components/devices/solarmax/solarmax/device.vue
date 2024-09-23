@@ -15,7 +15,7 @@
 			required
 			:min="1"
 			:max="65535"
-			:model-value="configuration.port"
+			:model-value="device.configuration.port"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.port')
 			"
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import DeviceConfigMixin from "../deviceConfigMixin.vue";
+import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
 
 export default {
 	name: "DeviceSolarmax",

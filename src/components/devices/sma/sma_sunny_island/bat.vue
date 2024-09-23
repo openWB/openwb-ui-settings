@@ -2,7 +2,6 @@
 	<div class="device-sunnyisland-bat">
 		<openwb-base-heading>
 			Einstellungen für Sunny Island Batteriespeicher
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-number-input
 			title="Modbus ID"
@@ -18,6 +17,8 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
+
 export default {
 	name: "DeviceSunnyIslandBat",
 	mixins: [ComponentConfigMixin],

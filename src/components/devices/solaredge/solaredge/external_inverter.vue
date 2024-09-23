@@ -36,7 +36,7 @@
 				{ value: 1, text: 'nein' },
 				{ value: -1, text: 'ja' },
 			]"
-			:model-value="configuration.factor"
+			:model-value="component.configuration.factor"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.factor')
 			"
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import ComponentConfigMixin from "../componentConfigMixin.vue";
+import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
 
 export default {
 	name: "DeviceSolaredgeExternalInverter",

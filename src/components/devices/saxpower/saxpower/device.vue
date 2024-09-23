@@ -15,7 +15,7 @@
 			required
 			:min="1"
 			:max="65535"
-			:model-value="configuration.port"
+			:model-value="device.configuration.port"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.port')
 			"
@@ -23,7 +23,7 @@
 		<openwb-base-number-input
 			title="Modbus ID"
 			required
-			:model-value="configuration.modbus_id"
+			:model-value="device.configuration.modbus_id"
 			min="1"
 			max="255"
 			@update:model-value="
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import DeviceConfigMixin from "../deviceConfigMixin.vue";
+import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
 
 export default {
 	name: "DeviceSaxpower",

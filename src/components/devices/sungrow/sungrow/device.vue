@@ -42,7 +42,7 @@
 				{ value: 1, text: 'SG (kein Hybrid)' },
 				{ value: 2, text: 'SG (kein Hybrid) über WiNet-S Dongle' },
 			]"
-			:model-value="configuration.version"
+			:model-value="device.configuration.version"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.version')
 			"
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import DeviceConfigMixin from "../deviceConfigMixin.vue";
+import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
 
 export default {
 	name: "DeviceSungrow",

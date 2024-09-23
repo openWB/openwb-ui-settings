@@ -1,9 +1,6 @@
 <template>
 	<div class="device-mqtt">
-		<openwb-base-heading>
-			Einstellungen für MQTT
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
+		<openwb-base-heading>Einstellungen für MQTT</openwb-base-heading>
 		<openwb-base-alert subtype="info">
 			Das MQTT Modul stellt keine aktive Verbindung her, sondern erwartet,
 			dass die Daten an die angegebenen Topics im Broker gesendet werden.
@@ -20,7 +17,7 @@
 </template>
 
 <script>
-import DeviceConfigMixin from "../deviceConfigMixin.vue";
+import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
 
 export default {
 	name: "DeviceMqtt",

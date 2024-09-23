@@ -7,7 +7,7 @@
 			title="IP oder Hostname"
 			subtype="host"
 			required
-			:model-value="component.configuration.ip_address"
+			:model-value="device.configuration.ip_address"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.ip_address')
 			"
@@ -19,7 +19,7 @@
 				{ value: 0, text: 'Gateway' },
 				{ value: 1, text: 'Energy Manager' },
 			]"
-			:model-value="component.configuration.energy_manager"
+			:model-value="device.configuration.energy_manager"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.energy_manager')
 			"
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import DeviceConfigMixin from "../deviceConfigMixin.vue";
+import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
 
 export default {
 	name: "DeviceSolarwatt",

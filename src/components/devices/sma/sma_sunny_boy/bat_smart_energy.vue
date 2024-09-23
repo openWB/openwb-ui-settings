@@ -2,7 +2,6 @@
 	<div class="device-sunnyboy-bat-smart-energy">
 		<openwb-base-heading>
 			Einstellungen für SMA Sunny Boy Smart Energy Batteriespeicher
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 
 		<openwb-base-number-input
@@ -19,6 +18,8 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
+
 export default {
 	name: "DeviceSunnyBoyBatSmartEnergy",
 	mixins: [ComponentConfigMixin],
