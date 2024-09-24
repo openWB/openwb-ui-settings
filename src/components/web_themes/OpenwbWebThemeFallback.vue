@@ -36,16 +36,10 @@
 </template>
 
 <script>
+import WebThemeConfigMixin from "./WebThemeConfigMixin.vue";
+
 export default {
 	name: "WebThemeFallback",
-	emits: ["update:configuration"],
-	props: {
-		webTheme: { type: Object, required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [WebThemeConfigMixin],
 };
 </script>
