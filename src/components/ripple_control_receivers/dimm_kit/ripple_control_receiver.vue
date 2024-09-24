@@ -37,19 +37,10 @@
 </template>
 
 <script>
+import RippleControlReceiverConfigMixin from "../RippleControlReceiverConfigMixin.vue";
+
 export default {
 	name: "RippleControlReceiverDimmKit",
-	emits: ["update:configuration"],
-	props: {
-		rippleControlReceiver: { type: Object, required: true },
-	},
-	data() {
-		return {};
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [RippleControlReceiverConfigMixin],
 };
 </script>

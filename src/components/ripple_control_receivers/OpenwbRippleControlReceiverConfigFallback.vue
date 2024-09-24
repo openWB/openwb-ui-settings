@@ -41,16 +41,10 @@
 </template>
 
 <script>
+import RippleControlReceiverConfigMixin from "./RippleControlReceiverConfigMixin.vue";
+
 export default {
 	name: "RippleControlReceiverConfigFallback",
-	emits: ["update:configuration"],
-	props: {
-		rippleControlReceiver: { type: Object, required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [RippleControlReceiverConfigMixin],
 };
 </script>
