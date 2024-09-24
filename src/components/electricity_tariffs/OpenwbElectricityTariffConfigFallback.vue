@@ -25,16 +25,10 @@
 </template>
 
 <script>
+import ElectricityTariffConfigMixin from "./ElectricityTariffConfigMixin.vue";
+
 export default {
 	name: "ElectricityTariffConfigFallback",
-	emits: ["update:configuration"],
-	props: {
-		electricityTariff: { type: Object, required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ElectricityTariffConfigMixin],
 };
 </script>

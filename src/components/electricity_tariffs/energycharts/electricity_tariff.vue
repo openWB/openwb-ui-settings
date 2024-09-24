@@ -47,21 +47,10 @@
 </template>
 
 <script>
-import ComponentState from "/src/components/mixins/ComponentState.vue";
+import ElectricityTariffConfigMixin from "../ElectricityTariffConfigMixin.vue";
+
 export default {
 	name: "ElectricityTariffEnergyCharts",
-	mixins: [ComponentState],
-	emits: ["update:configuration"],
-	props: {
-		electricityTariff: { type: Object, required: true },
-	},
-	data() {
-		return {};
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ElectricityTariffConfigMixin],
 };
 </script>

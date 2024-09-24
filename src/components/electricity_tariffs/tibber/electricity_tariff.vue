@@ -52,12 +52,11 @@
 </template>
 
 <script>
+import ElectricityTariffConfigMixin from "../ElectricityTariffConfigMixin.vue";
+
 export default {
 	name: "ElectricityTariffTibber",
-	emits: ["update:configuration"],
-	props: {
-		electricityTariff: { type: Object, required: true },
-	},
+	mixins: [ElectricityTariffConfigMixin],
 	data() {
 		return {
 			tibberAPI: "https://api.tibber.com/v1-beta/gql",
@@ -65,9 +64,6 @@ export default {
 		};
 	},
 	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
 		async getTibberHomeList() {
 			if (this.electricityTariff.configuration.token === null) {
 				return;

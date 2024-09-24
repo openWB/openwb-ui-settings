@@ -28,19 +28,10 @@
 </template>
 
 <script>
+import ElectricityTariffConfigMixin from "../ElectricityTariffConfigMixin.vue";
+
 export default {
 	name: "ElectricityTariffVoltego",
-	emits: ["update:configuration"],
-	props: {
-		electricityTariff: { type: Object, required: true },
-	},
-	data() {
-		return {};
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ElectricityTariffConfigMixin],
 };
 </script>
