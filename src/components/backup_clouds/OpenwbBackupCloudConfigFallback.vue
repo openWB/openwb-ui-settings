@@ -37,16 +37,10 @@
 </template>
 
 <script>
+import BackupCloudConfigMixin from "./BackupCloudConfigMixin.vue";
+
 export default {
 	name: "BackupCloudConfigFallback",
-	emits: ["update:configuration"],
-	props: {
-		backupCloud: { type: Object, required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [BackupCloudConfigMixin],
 };
 </script>

@@ -12,19 +12,10 @@
 </template>
 
 <script>
+import BackupCloudConfigMixin from "../BackupCloudConfigMixin.vue";
+
 export default {
 	name: "BackupCloudNfs",
-	emits: ["update:configuration"],
-	props: {
-		backupCloud: { type: Object, required: true },
-	},
-	data() {
-		return {};
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [BackupCloudConfigMixin],
 };
 </script>
