@@ -96,20 +96,10 @@
 </template>
 
 <script>
+import VehicleConfigMixin from "../VehicleConfigMixin.vue";
+
 export default {
 	name: "VehicleSocEVCC",
-	emits: ["update:configuration"],
-	props: {
-		vehicleId: { required: true, type: Number },
-		vehicle: { required: true, type: Object },
-	},
-	data() {
-		return {};
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [VehicleConfigMixin],
 };
 </script>
