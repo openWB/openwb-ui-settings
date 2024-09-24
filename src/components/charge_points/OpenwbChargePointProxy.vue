@@ -31,7 +31,7 @@ export default {
 	computed: {
 		myChargePointSettingsComponent() {
 			console.debug(
-				`loading charge point settings: ${this.chargePoint.type}`
+				`loading charge point settings: ${this.chargePoint.type}`,
 			);
 			return defineAsyncComponent({
 				loader: () =>
@@ -41,7 +41,7 @@ export default {
 		},
 		myChargePointCommandsComponent() {
 			console.debug(
-				`loading charge point commands: ${this.chargePoint.type}`
+				`loading charge point commands: ${this.chargePoint.type}`,
 			);
 			return defineAsyncComponent({
 				loader: () => import(`./${this.chargePoint.type}/commands.vue`),

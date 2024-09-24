@@ -7,10 +7,10 @@
 </template>
 
 <script>
+import ChargePointCommandsMixin from "./ChargePointCommandsMixin.vue";
+
 export default {
 	name: "ChargePointCommandsFallback",
-	props: {
-		chargePoint: { type: Object, required: true },
-	},
+	mixins: [ChargePointCommandsMixin],
 };
 </script>

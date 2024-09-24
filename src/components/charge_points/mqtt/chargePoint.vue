@@ -211,16 +211,10 @@
 </template>
 
 <script>
+import ChargePointConfigMixin from "../ChargePointConfigMixin.vue";
+
 export default {
 	name: "ChargePointMqtt",
-	emits: ["update:configuration"],
-	props: {
-		chargePoint: { type: Object, required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ChargePointConfigMixin],
 };
 </script>

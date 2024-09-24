@@ -1,5 +1,5 @@
 <template>
-	<div class="device-fallback">
+	<div class="charge-point-config-fallback">
 		<openwb-base-alert
 			v-if="Object.keys(chargePoint.configuration).length == 0"
 			subtype="info"
@@ -37,16 +37,10 @@
 </template>
 
 <script>
+import ChargePointConfigMixin from "./ChargePointConfigMixin.vue";
+
 export default {
 	name: "ChargePointConfigFallback",
-	emits: ["update:configuration"],
-	props: {
-		chargePoint: { type: Object, required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ChargePointConfigMixin],
 };
 </script>

@@ -5,7 +5,9 @@
 			subtype="host"
 			required
 			:model-value="chargePoint.configuration.ip_address"
-			@update:model-value="updateConfiguration($event, 'ip_address')"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.ip_address')
+			"
 		/>
 		<openwb-base-number-input
 			title="Wartezeit"
@@ -14,7 +16,9 @@
 			:max="10"
 			unit="s"
 			:model-value="chargePoint.configuration.timeout"
-			@update:model-value="updateConfiguration($event, 'timeout')"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.timeout')
+			"
 		>
 			<template #help>
 				Zeitangabe in Sekunden, für die auf eine Antwort des Ladepunktes
@@ -26,19 +30,10 @@
 </template>
 
 <script>
+import ChargePointConfigMixin from "../ChargePointConfigMixin.vue";
+
 export default {
 	name: "ChargePointSmartwb",
-	emits: ["update:configuration"],
-	props: {
-		chargePoint: { type: Object, required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			if (path) {
-				path = "configuration." + path;
-			}
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ChargePointConfigMixin],
 };
 </script>

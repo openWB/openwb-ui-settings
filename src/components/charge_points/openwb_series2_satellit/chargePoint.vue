@@ -5,7 +5,9 @@
 			subtype="host"
 			required
 			:model-value="chargePoint.configuration.ip_address"
-			@update:model-value="updateConfiguration($event, 'ip_address')"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.ip_address')
+			"
 		/>
 		<openwb-base-number-input
 			title="Ladepunkt-Nummer"
@@ -13,7 +15,9 @@
 			:min="1"
 			:max="2"
 			:model-value="chargePoint.configuration.duo_num + 1"
-			@update:model-value="updateConfiguration($event - 1, 'duo_num')"
+			@update:model-value="
+				updateConfiguration($event - 1, 'configuration.duo_num')
+			"
 		>
 			<template #help>
 				Bei einfachen Ladepunkten ist hier immer eine "1" einzutragen.
@@ -25,19 +29,10 @@
 </template>
 
 <script>
+import ChargePointConfigMixin from "../ChargePointConfigMixin.vue";
+
 export default {
 	name: "ChargePointSatellite",
-	emits: ["update:configuration"],
-	props: {
-		chargePoint: { type: Object, required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			if (path) {
-				path = "configuration." + path;
-			}
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ChargePointConfigMixin],
 };
 </script>

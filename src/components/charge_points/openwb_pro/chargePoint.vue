@@ -5,25 +5,18 @@
 			subtype="host"
 			required
 			:model-value="chargePoint.configuration.ip_address"
-			@update:model-value="updateConfiguration($event, 'ip_address')"
+			@update:model-value="
+				updateConfiguration($event, 'configuration.ip_address')
+			"
 		/>
 	</div>
 </template>
 
 <script>
+import ChargePointConfigMixin from "../ChargePointConfigMixin.vue";
+
 export default {
 	name: "ChargePointOpenwbPro",
-	emits: ["update:configuration"],
-	props: {
-		chargePoint: { type: Object, required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			if (path) {
-				path = "configuration." + path;
-			}
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ChargePointConfigMixin],
 };
 </script>

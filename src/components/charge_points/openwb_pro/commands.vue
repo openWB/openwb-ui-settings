@@ -16,18 +16,20 @@
 </template>
 
 <script>
+import ChargePointCommandsMixin from "../ChargePointCommandsMixin.vue";
+
 export default {
 	name: "ChargePointCommandsOpenwbPro",
-	props: {
-		chargePoint: { type: Object, required: true },
-	},
+	mixins: [ChargePointCommandsMixin],
 	methods: {
 		async triggerUpdate() {
 			let formData = new FormData();
 			formData.append("command", "update");
 			formData.append(
 				"data",
-				'{"ip_address":"' + this.configuration.ip_address + '"}',
+				'{"ip_address":"' +
+					this.chargePoint.configuration.ip_address +
+					'"}',
 			);
 			const startedMessage =
 				"Die Aktualisierung der openWB Pro wird gestartet...";
