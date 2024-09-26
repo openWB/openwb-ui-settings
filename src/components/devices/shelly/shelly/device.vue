@@ -23,6 +23,7 @@
 				{ value: 1, text: 'nein' },
 			]"
 			:model-value="device.configuration.factor"
+			required
 			@update:model-value="
 				updateConfiguration($event, 'configuration.factor')
 			"

@@ -3,6 +3,7 @@
 		<openwb-base-select-input
 			title="Bauart"
 			notSelected="Bitte auswählen"
+			required
 			:options="[
 				{
 					value: 'series',

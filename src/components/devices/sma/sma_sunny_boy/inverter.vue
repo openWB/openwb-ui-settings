@@ -28,6 +28,7 @@
 				{ value: 2, text: 'Data Manager/Cluster Controller' },
 			]"
 			:model-value="component.configuration.version"
+			required
 			@update:model-value="
 				updateConfiguration($event, 'configuration.version')
 			"
