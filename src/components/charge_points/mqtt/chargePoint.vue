@@ -22,7 +22,7 @@
 								tooltip="Topic kopieren"
 							>
 								openWB/chargepoint/{{
-									chargePointId
+									chargePoint.id
 								}}/set/current</openwb-base-copy-to-clipboard
 							><br />
 							Sollwert des Ladestroms, mit Nachkommastellen
@@ -36,7 +36,7 @@
 								tooltip="Topic kopieren"
 							>
 								openWB/chargepoint/{{
-									chargePointId
+									chargePoint.id
 								}}/set/phases_to_use</openwb-base-copy-to-clipboard
 							><br />
 							Sollwert für die Anzahl Phasen als Ganzzahl
@@ -54,7 +54,7 @@
 								tooltip="Topic kopieren"
 							>
 								openWB/set/chargepoint/{{
-									chargePointId
+									chargePoint.id
 								}}/get/currents</openwb-base-copy-to-clipboard
 							><br />
 							Aktuelle Phasenströme des Ladepunktes, Array mit
@@ -69,7 +69,7 @@
 								tooltip="Topic kopieren"
 							>
 								openWB/set/chargepoint/{{
-									chargePointId
+									chargePoint.id
 								}}/get/power</openwb-base-copy-to-clipboard
 							><br />
 							Leistung in Watt, mit Nachkommastellen (Float),
@@ -83,7 +83,7 @@
 								tooltip="Topic kopieren"
 							>
 								openWB/set/chargepoint/{{
-									chargePointId
+									chargePoint.id
 								}}/get/plug_state</openwb-base-copy-to-clipboard
 							><br />
 							Zeigt an, ob aktuell ein Fahrzeug angesteckt ist,
@@ -96,7 +96,7 @@
 								tooltip="Topic kopieren"
 							>
 								openWB/set/chargepoint/{{
-									chargePointId
+									chargePoint.id
 								}}/get/charge_state</openwb-base-copy-to-clipboard
 							><br />
 							Zeigt an, ob ein Ladevorgang aktiv ist,
@@ -109,7 +109,7 @@
 								tooltip="Topic kopieren"
 							>
 								openWB/set/chargepoint/{{
-									chargePointId
+									chargePoint.id
 								}}/get/phases_in_use</openwb-base-copy-to-clipboard
 							><br />
 							Anzahl der Phasen, mit denen geladen wird, Ganzzahl
@@ -127,7 +127,7 @@
 								tooltip="Topic kopieren"
 							>
 								openWB/set/chargepoint/{{
-									chargePointId
+									chargePoint.id
 								}}/get/imported</openwb-base-copy-to-clipboard
 							><br />
 							Geladene Energie in Wh, mit Nachkommastellen
@@ -144,7 +144,7 @@
 								tooltip="Topic kopieren"
 							>
 								openWB/set/chargepoint/{{
-									chargePointId
+									chargePoint.id
 								}}/get/exported</openwb-base-copy-to-clipboard
 							><br />
 							Entladene Energie in Wh, mit Nachkommastellen
@@ -160,7 +160,7 @@
 								tooltip="Topic kopieren"
 							>
 								openWB/set/chargepoint/{{
-									chargePointId
+									chargePoint.id
 								}}/get/voltages</openwb-base-copy-to-clipboard
 							><br />
 							Aktuelle Phasenspannungen des Ladepunktes, Array mit
@@ -178,7 +178,7 @@
 								tooltip="Topic kopieren"
 							>
 								openWB/set/chargepoint/{{
-									chargePointId
+									chargePoint.id
 								}}/get/power_factors</openwb-base-copy-to-clipboard
 							><br />
 							Aktuelle Leistungsfaktoren des Ladepunktes, Array
@@ -195,7 +195,7 @@
 								tooltip="Topic kopieren"
 							>
 								openWB/set/chargepoint/{{
-									chargePointId
+									chargePoint.id
 								}}/get/rfid_tag</openwb-base-copy-to-clipboard
 							><br />
 							Eine Zeichenfolge, die einen eingelesenen Tag für
@@ -211,17 +211,10 @@
 </template>
 
 <script>
+import ChargePointConfigMixin from "../ChargePointConfigMixin.vue";
+
 export default {
 	name: "ChargePointMqtt",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		chargePointId: { default: undefined },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ChargePointConfigMixin],
 };
 </script>

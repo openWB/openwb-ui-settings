@@ -1,22 +1,22 @@
 <template>
 	<div class="vehicle-fallback">
 		<openwb-base-alert
-			v-if="Object.keys(configuration).length == 0"
+			v-if="Object.keys(vehicle.configuration).length == 0"
 			subtype="info"
 		>
-			Der Fahrzeug-Typ "{{ vehicleType }}" bietet keine Einstellungen.
+			Der Fahrzeug-Typ "{{ vehicle.type }}" bietet keine Einstellungen.
 		</openwb-base-alert>
 		<div v-else>
 			<openwb-base-alert subtype="warning">
 				Es wurde keine Konfigurationsseite für den Fahrzeug-Typ "{{
-					vehicleType
+					vehicle.type
 				}}" gefunden. Die Einstellungen können als JSON direkt
 				bearbeitet werden.
 			</openwb-base-alert>
 			<openwb-base-textarea
 				title="Konfiguration"
 				subtype="json"
-				:model-value="configuration"
+				:model-value="vehicle.configuration"
 				@update:model-value="
 					updateConfiguration($event, 'configuration')
 				"
@@ -27,25 +27,19 @@
 				</template>
 			</openwb-base-textarea>
 			<openwb-base-alert subtype="info">
-				<pre>{{ JSON.stringify(configuration, undefined, 2) }}</pre>
+				<pre>{{
+					JSON.stringify(vehicle.configuration, undefined, 2)
+				}}</pre>
 			</openwb-base-alert>
 		</div>
 	</div>
 </template>
 
 <script>
+import VehicleConfigMixin from "./VehicleConfigMixin.vue";
+
 export default {
 	name: "VehicleConfigFallback",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		vehicleId: { default: undefined },
-		vehicleType: String,
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [VehicleConfigMixin],
 };
 </script>

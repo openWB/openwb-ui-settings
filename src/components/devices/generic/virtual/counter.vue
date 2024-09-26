@@ -2,7 +2,6 @@
 	<div class="device-virtual-counter">
 		<openwb-base-heading>
 			Einstellungen für virtuelle Zähler
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-number-input
 			title="Zusätzlicher Verbrauch"
@@ -10,7 +9,7 @@
 			:step="0.05"
 			unit="kW"
 			required
-			:model-value="configuration.external_consumption / 1000"
+			:model-value="component.configuration.external_consumption / 1000"
 			@update:model-value="
 				updateConfiguration(
 					$event * 1000,
@@ -29,18 +28,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
+
 export default {
 	name: "DeviceVirtualCounter",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ComponentConfigMixin],
 };
 </script>

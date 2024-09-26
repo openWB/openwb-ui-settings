@@ -1,9 +1,6 @@
 <template>
 	<div class="device-goodwe">
-		<openwb-base-heading>
-			Einstellungen für GoodWe
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
+		<openwb-base-heading>Einstellungen für GoodWe</openwb-base-heading>
 		<openwb-base-alert subtype="info">
 			GoodWe-Wechselrichter verfügen über 3 Dongle: Den WiFi-Dongle, das
 			Wifi-Lan-Kit und das Wifi-Lan-Kit 2.0. Die Einbindung über dieses
@@ -15,7 +12,7 @@
 			title="IP oder Hostname"
 			subtype="host"
 			required
-			:model-value="configuration.ip_address"
+			:model-value="device.configuration.ip_address"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.ip_address')
 			"
@@ -25,7 +22,7 @@
 			required
 			:min="1"
 			:max="65535"
-			:model-value="configuration.port"
+			:model-value="device.configuration.port"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.port')
 			"
@@ -33,7 +30,7 @@
 		<openwb-base-number-input
 			title="Modbus ID"
 			required
-			:model-value="configuration.modbus_id"
+			:model-value="device.configuration.modbus_id"
 			min="1"
 			max="255"
 			@update:model-value="
@@ -47,7 +44,7 @@
 				{ value: 'v_1_7', text: 'v1.7' },
 				{ value: 'v_1_1', text: 'v1.0/ v1.1' },
 			]"
-			:model-value="configuration.version"
+			:model-value="device.configuration.version"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.version')
 			"
@@ -64,7 +61,7 @@
 				{ value: 8, text: 'ARM < 9.0' },
 				{ value: 9, text: 'ARM ab 9.0' },
 			]"
-			:model-value="configuration.firmware"
+			:model-value="device.configuration.firmware"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.firmware')
 			"
@@ -78,17 +75,10 @@
 </template>
 
 <script>
+import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
+
 export default {
 	name: "DeviceGoodWe",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [DeviceConfigMixin],
 };
 </script>

@@ -1,9 +1,6 @@
 <template>
 	<div class="device-fronius">
-		<openwb-base-heading>
-			Einstellungen für Fronius
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
+		<openwb-base-heading> Einstellungen für Fronius </openwb-base-heading>
 		<openwb-base-alert subtype="info">
 			Die Fronius API muss aktiviert sein.<br />
 			Sind nur Symos in Nutzung, welche über Fronius Solar Net / DATCOM
@@ -18,7 +15,7 @@
 			title="IP oder Hostname"
 			subtype="host"
 			required
-			:model-value="configuration.ip_address"
+			:model-value="device.configuration.ip_address"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.ip_address')
 			"
@@ -27,17 +24,10 @@
 </template>
 
 <script>
+import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
+
 export default {
 	name: "DeviceFronius",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [DeviceConfigMixin],
 };
 </script>

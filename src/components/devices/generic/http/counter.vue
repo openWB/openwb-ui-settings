@@ -2,14 +2,13 @@
 	<div class="device-http-counter">
 		<openwb-base-heading>
 			Einstellungen für Http Zähler
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
 			title="Pfad für Leistung"
 			subtype="text"
 			required
 			pattern="^/[-a-zA-Z0-9@:%_\+.~#?&/=]*"
-			:model-value="configuration.power_path"
+			:model-value="component.configuration.power_path"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.power_path')
 			"
@@ -26,7 +25,7 @@
 			title="Pfad für Zählerstand Bezug"
 			subtype="text"
 			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)"
-			:model-value="configuration.imported_path"
+			:model-value="component.configuration.imported_path"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.imported_path')
 			"
@@ -46,7 +45,7 @@
 			title="Pfad für Zählerstand Einspeisung"
 			subtype="text"
 			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)"
-			:model-value="configuration.exported_path"
+			:model-value="component.configuration.exported_path"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.exported_path')
 			"
@@ -66,7 +65,7 @@
 			title="Pfad für Strom Phase 1"
 			subtype="text"
 			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)"
-			:model-value="configuration.current_l1_path"
+			:model-value="component.configuration.current_l1_path"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.current_l1_path')
 			"
@@ -86,7 +85,7 @@
 			title="Pfad für Strom Phase 2"
 			subtype="text"
 			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)"
-			:model-value="configuration.current_l2_path"
+			:model-value="component.configuration.current_l2_path"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.current_l2_path')
 			"
@@ -106,7 +105,7 @@
 			title="Pfad für Strom Phase 3"
 			subtype="text"
 			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)"
-			:model-value="configuration.current_l3_path"
+			:model-value="component.configuration.current_l3_path"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.current_l3_path')
 			"
@@ -126,18 +125,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
+
 export default {
 	name: "DeviceHttpCounter",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ComponentConfigMixin],
 };
 </script>

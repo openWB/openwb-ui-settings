@@ -2,11 +2,10 @@
 	<div class="device-fronius-inverter-secondary">
 		<openwb-base-heading>
 			Einstellungen für einen sekundären Wechselrichter
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-number-input
 			title="ID"
-			:model-value="configuration.id"
+			:model-value="component.configuration.id"
 			min="0"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.id')
@@ -33,31 +32,16 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
+
 export default {
-	name: "DeviceFroniusSecondaryInverter",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
+	name: "DeviceFroniusInverterSecondary",
+	mixins: [ComponentConfigMixin],
 	computed: {
 		powerFlowUrl: {
 			get() {
-				return `http://${this.deviceIpAddress}/solar_api/v1/GetPowerFlowRealtimeData.fcgi?Scope=System`;
+				return `http://${this.device.configuration.ip_address}/solar_api/v1/GetPowerFlowRealtimeData.fcgi?Scope=System`;
 			},
-		},
-		deviceIpAddress: {
-			get() {
-				return this.$store.state.mqtt[
-					`openWB/system/device/${this.deviceId}/config`
-				]?.configuration.ip_address;
-			},
-		},
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
 		},
 	},
 };

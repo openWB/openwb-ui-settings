@@ -6,8 +6,6 @@
 		:is="myComponent"
 		:vehicleId="vehicleId"
 		:vehicle="vehicle"
-		:configuration="vehicle.configuration"
-		:vehicleType="vehicle.type"
 		@update:configuration="updateConfiguration($event)"
 	/>
 </template>

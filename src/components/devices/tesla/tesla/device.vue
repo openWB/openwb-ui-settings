@@ -1,14 +1,11 @@
 <template>
 	<div class="device-tesla">
-		<openwb-base-heading>
-			Einstellungen für Tesla
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
+		<openwb-base-heading> Einstellungen für Tesla </openwb-base-heading>
 		<openwb-base-text-input
 			title="IP oder Hostname"
 			subtype="host"
 			required
-			:model-value="configuration.ip_address"
+			:model-value="device.configuration.ip_address"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.ip_address')
 			"
@@ -17,7 +14,7 @@
 			title="E-Mail"
 			subtype="email"
 			required
-			:model-value="configuration.email"
+			:model-value="device.configuration.email"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.email')
 			"
@@ -26,7 +23,7 @@
 			title="Passwort"
 			subtype="password"
 			required
-			:model-value="configuration.password"
+			:model-value="device.configuration.password"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.password')
 			"
@@ -35,17 +32,10 @@
 </template>
 
 <script>
+import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
+
 export default {
 	name: "DeviceTesla",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [DeviceConfigMixin],
 };
 </script>

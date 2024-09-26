@@ -2,7 +2,6 @@
 	<div class="device-openwb-flex-counter">
 		<openwb-base-heading>
 			Einstellungen für openWB-Flex Zähler
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-alert subtype="info">
 			Bei saldierenden Zählern (MPM3PM, B23) werden die Zählerstände für
@@ -19,7 +18,7 @@
 				{ value: 0, text: 'MPM3PM' },
 				{ value: 2, text: 'SDM630/SDM72D-M' },
 			]"
-			:model-value="configuration.version"
+			:model-value="component.configuration.version"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.version')
 			"
@@ -29,7 +28,7 @@
 			required
 			:min="1"
 			:max="255"
-			:model-value="configuration.id"
+			:model-value="component.configuration.id"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.id')
 			"
@@ -38,18 +37,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
+
 export default {
 	name: "DeviceOpenwbFlexCounter",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ComponentConfigMixin],
 };
 </script>

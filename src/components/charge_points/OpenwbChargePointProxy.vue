@@ -1,23 +1,19 @@
 <template>
 	<openwb-base-heading>
-		Einstellungen für Ladepunkt {{ moduleName }}
+		Einstellungen für Ladepunkt Typ "{{ chargePoint.type }}"
 	</openwb-base-heading>
 	<component
 		:is="myChargePointSettingsComponent"
-		:configuration="configuration"
-		:chargePointId="chargePointId"
-		:chargePointType="chargePointType"
+		:chargePoint="chargePoint"
 		@update:configuration="updateConfiguration($event)"
 	/>
 	<hr />
 	<openwb-base-heading>
-		Befehle für Ladepunkt {{ moduleName }}
+		Befehle für Ladepunkt Typ "{{ chargePoint.type }}"
 	</openwb-base-heading>
 	<component
 		:is="myChargePointCommandsComponent"
-		:configuration="configuration"
-		:chargePointId="chargePointId"
-		:chargePointType="chargePointType"
+		:chargePoint="chargePoint"
 	/>
 </template>
 
@@ -30,28 +26,25 @@ export default {
 	name: "OpenwbChargePointProxy",
 	emits: ["update:configuration"],
 	props: {
-		chargePointId: { required: true },
-		chargePointType: { type: String, required: true },
-		configuration: { type: Object, required: true },
-		moduleName: { type: String, required: false, default: undefined },
+		chargePoint: { required: true, type: Object },
 	},
 	computed: {
 		myChargePointSettingsComponent() {
 			console.debug(
-				`loading charge point settings: ${this.chargePointType}`,
+				`loading charge point settings: ${this.chargePoint.type}`,
 			);
 			return defineAsyncComponent({
 				loader: () =>
-					import(`./${this.chargePointType}/chargePoint.vue`),
+					import(`./${this.chargePoint.type}/chargePoint.vue`),
 				errorComponent: OpenwbChargePointConfigFallback,
 			});
 		},
 		myChargePointCommandsComponent() {
 			console.debug(
-				`loading charge point commands: ${this.chargePointType}`,
+				`loading charge point commands: ${this.chargePoint.type}`,
 			);
 			return defineAsyncComponent({
-				loader: () => import(`./${this.chargePointType}/commands.vue`),
+				loader: () => import(`./${this.chargePoint.type}/commands.vue`),
 				errorComponent: OpenwbChargePointCommandsFallback,
 			});
 		},

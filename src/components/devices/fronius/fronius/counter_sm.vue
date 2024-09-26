@@ -2,7 +2,6 @@
 	<div class="device-fronius-counter-sm">
 		<openwb-base-heading>
 			Einstellungen für Fronius SmartMeter
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-select-input
 			title="Kompatibilitätsmodus"
@@ -12,7 +11,7 @@
 				{ value: 1, text: 'Variante 1' },
 				{ value: 2, text: 'Variante 2' },
 			]"
-			:model-value="configuration.variant"
+			:model-value="component.configuration.variant"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.variant')
 			"
@@ -31,7 +30,7 @@
 			required
 			min="0"
 			max="65535"
-			:model-value="configuration.meter_id"
+			:model-value="component.configuration.meter_id"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.meter_id')
 			"
@@ -58,31 +57,16 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
+
 export default {
 	name: "DeviceFroniusCounterSM",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
+	mixins: [ComponentConfigMixin],
 	computed: {
 		meterRealtimeUrl: {
 			get() {
-				return `http://${this.deviceIpAddress}/solar_api/v1/GetMeterRealtimeData.cgi?Scope=System`;
+				return `http://${this.device.configuration.ip_address}/solar_api/v1/GetMeterRealtimeData.cgi?Scope=System`;
 			},
-		},
-		deviceIpAddress: {
-			get() {
-				return this.$store.state.mqtt[
-					`openWB/system/device/${this.deviceId}/config`
-				]?.configuration.ip_address;
-			},
-		},
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
 		},
 	},
 };

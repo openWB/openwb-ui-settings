@@ -1,23 +1,23 @@
 <template>
-	<div class="device-fallback">
+	<div class="charge-point-config-fallback">
 		<openwb-base-alert
-			v-if="Object.keys(configuration).length == 0"
+			v-if="Object.keys(chargePoint.configuration).length == 0"
 			subtype="info"
 		>
-			Der Ladepunkt-Typ "{{ chargePointType }}" bietet keine
+			Der Ladepunkt-Typ "{{ chargePoint.type }}" bietet keine
 			Einstellungen.
 		</openwb-base-alert>
 		<div v-else>
 			<openwb-base-alert subtype="warning">
 				Es wurde keine Konfigurationsseite für den Ladepunkt-Typ "{{
-					chargePointType
+					chargePoint.type
 				}}" gefunden. Die Einstellungen können als JSON direkt
 				bearbeitet werden.
 			</openwb-base-alert>
 			<openwb-base-textarea
 				title="Konfiguration"
 				subtype="json"
-				:model-value="configuration"
+				:model-value="chargePoint.configuration"
 				@update:model-value="
 					updateConfiguration($event, 'configuration')
 				"
@@ -28,25 +28,19 @@
 				</template>
 			</openwb-base-textarea>
 			<openwb-base-alert subtype="info">
-				<pre>{{ JSON.stringify(configuration, undefined, 2) }}</pre>
+				<pre>{{
+					JSON.stringify(chargePoint.configuration, undefined, 2)
+				}}</pre>
 			</openwb-base-alert>
 		</div>
 	</div>
 </template>
 
 <script>
+import ChargePointConfigMixin from "./ChargePointConfigMixin.vue";
+
 export default {
 	name: "ChargePointConfigFallback",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		chargePointId: { default: undefined },
-		chargePointType: String,
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ChargePointConfigMixin],
 };
 </script>

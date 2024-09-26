@@ -130,14 +130,10 @@ import axios from "axios";
 // import { Buffer } from "buffer";
 
 import ComponentStateVue from "../../mixins/ComponentState.vue";
+import VehicleConfigMixin from "../VehicleConfigMixin.vue";
 
 export default {
 	name: "VehicleSocTesla",
-	emits: ["update:configuration"],
-	props: {
-		vehicleId: { required: true, type: Number },
-		vehicle: { required: true, type: Object },
-	},
 	data() {
 		return {
 			tesla_api_oauth2: "https://auth.tesla.com/oauth2/v3",
@@ -151,11 +147,8 @@ export default {
 			page_not_found_url: null,
 		};
 	},
-	mixins: [ComponentStateVue],
+	mixins: [ComponentStateVue, VehicleConfigMixin],
 	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
 		// tesla specific methods
 		tesla_login_window() {
 			this.tesla_gen_challenge();

@@ -1,5 +1,5 @@
 <template>
-	<div class="charge-point-internalopenwb">
+	<div class="charge-point-internal-openwb">
 		<openwb-base-select-input
 			title="Bauart"
 			notSelected="Bitte auswählen"
@@ -11,17 +11,19 @@
 				{ value: 'duo', text: 'openWB series1/2 Duo' },
 				{ value: 'socket', text: 'openWB series1/2 Buchse' },
 			]"
-			:model-value="configuration.mode"
-			@update:model-value="updateConfiguration($event, 'mode')"
+			:model-value="chargePoint.configuration.mode"
+			@update:model-value="updateMode($event)"
 		/>
 		<openwb-base-number-input
-			v-if="configuration.mode == 'duo'"
+			v-if="chargePoint.configuration.mode == 'duo'"
 			title="Ladepunkt-Nummer"
 			required
 			:min="1"
 			:max="2"
-			:model-value="configuration.duo_num + 1"
-			@update:model-value="updateConfiguration($event - 1, 'duo_num')"
+			:model-value="chargePoint.configuration.duo_num + 1"
+			@update:model-value="
+				updateConfiguration($event - 1, 'configuration.duo_num')
+			"
 		>
 			<template #help>
 				Bei einfachen Ladepunkten ist hier immer eine "1" einzutragen.
@@ -33,25 +35,18 @@
 </template>
 
 <script>
+import ChargePointConfigMixin from "../ChargePointConfigMixin.vue";
+
 export default {
 	name: "ChargePointInternalOpenwb",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		chargePointId: { default: undefined },
-	},
+	mixins: [ChargePointConfigMixin],
 	methods: {
-		updateConfiguration(event, path = undefined) {
-			if (path) {
-				if (path === "mode") {
-					// set "duo_num" to "1" for mode which only support one charge point
-					if (event == "series" || event == "socket") {
-						this.updateConfiguration(0, "duo_num");
-					}
-				}
-				path = "configuration." + path;
+		updateMode(event) {
+			// set "duo_num" to "1" for modes only supporting one charge point
+			if (event == "series" || event == "socket") {
+				this.updateConfiguration(0, "configuration.duo_num");
 			}
-			this.$emit("update:configuration", { value: event, object: path });
+			this.updateConfiguration(event, "configuration.mode");
 		},
 	},
 };

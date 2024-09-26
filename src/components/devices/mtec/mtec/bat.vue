@@ -2,7 +2,6 @@
 	<div class="device-mtec-bat">
 		<openwb-base-heading>
 			Einstellungen für M-Tec Batteriespeicher
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-select-input
 			title="Generation"
@@ -11,7 +10,7 @@
 				{ value: 2, text: 'Gen 2' },
 				{ value: 3, text: 'Gen 3' },
 			]"
-			:model-value="configuration.generation"
+			:model-value="component.configuration.generation"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.generation')
 			"
@@ -19,7 +18,7 @@
 		<openwb-base-number-input
 			title="Modbus ID"
 			required
-			:model-value="configuration.modbus_id"
+			:model-value="component.configuration.modbus_id"
 			min="1"
 			max="255"
 			@update:model-value="
@@ -34,18 +33,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
+
 export default {
 	name: "DeviceMTecBat",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ComponentConfigMixin],
 };
 </script>

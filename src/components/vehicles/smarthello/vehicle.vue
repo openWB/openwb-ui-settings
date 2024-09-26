@@ -1,5 +1,5 @@
 <template>
-	<div class="vehicle-soc-smarthello">
+	<div class="vehicle-soc-smart-hello">
 		<openwb-base-text-input
 			title="Benutzername"
 			subtype="text"
@@ -37,20 +37,10 @@
 </template>
 
 <script>
+import VehicleConfigMixin from "../VehicleConfigMixin.vue";
+
 export default {
-	name: "VehicleSocSmarthello",
-	emits: ["update:configuration"],
-	props: {
-		vehicleId: { required: true, type: Number },
-		vehicle: { required: true, type: Object },
-	},
-	data() {
-		return {};
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	name: "VehicleSocSmartHello",
+	mixins: [VehicleConfigMixin],
 };
 </script>

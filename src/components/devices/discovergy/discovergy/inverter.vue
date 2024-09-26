@@ -2,12 +2,11 @@
 	<div class="device-discovergy-inverter">
 		<openwb-base-heading>
 			Einstellungen für Discovergy Wechselrichter
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
 			title="Meter-ID"
 			required
-			:model-value="configuration.meter_id"
+			:model-value="component.configuration.meter_id"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.meter_id')
 			"
@@ -29,18 +28,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
+
 export default {
 	name: "DeviceDiscovergyInverter",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ComponentConfigMixin],
 };
 </script>

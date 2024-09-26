@@ -2,14 +2,13 @@
 	<div class="device-http-inverter">
 		<openwb-base-heading>
 			Einstellungen für Http Wechselrichter
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
 			title="Pfad für Leistung"
 			subtype="text"
 			required
 			pattern="^/[-a-zA-Z0-9@:%_\+.~#?&/=]*"
-			:model-value="configuration.power_path"
+			:model-value="component.configuration.power_path"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.power_path')
 			"
@@ -30,7 +29,7 @@
 			title="Pfad für Zählerstand Erzeugung"
 			subtype="text"
 			pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)"
-			:model-value="configuration.exported_path"
+			:model-value="component.configuration.exported_path"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.exported_path')
 			"
@@ -50,18 +49,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
+
 export default {
 	name: "DeviceHttpInverter",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ComponentConfigMixin],
 };
 </script>

@@ -2,13 +2,12 @@
 	<div class="device-json-counter">
 		<openwb-base-heading>
 			Einstellungen für JSON Zähler
-			<span class="small">(Modul: {{ $options.name }})</span>
 		</openwb-base-heading>
 		<openwb-base-text-input
 			title="Abfrage für Leistung"
 			subtype="text"
 			required
-			:model-value="configuration.jq_power"
+			:model-value="component.configuration.jq_power"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.jq_power')
 			"
@@ -28,7 +27,7 @@
 		<openwb-base-text-input
 			title="Abfrage für Zählerstand Bezug"
 			subtype="text"
-			:model-value="configuration.jq_imported"
+			:model-value="component.configuration.jq_imported"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.jq_imported')
 			"
@@ -41,7 +40,7 @@
 		<openwb-base-text-input
 			title="Abfrage für Zählerstand Einspeisung"
 			subtype="text"
-			:model-value="configuration.jq_exported"
+			:model-value="component.configuration.jq_exported"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.jq_exported')
 			"
@@ -60,7 +59,7 @@
 		<openwb-base-text-input
 			title="Abfrage für Leistung auf Phase 1"
 			subtype="text"
-			:model-value="configuration.jq_power_l1"
+			:model-value="component.configuration.jq_power_l1"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.jq_power_l1')
 			"
@@ -68,7 +67,7 @@
 		<openwb-base-text-input
 			title="Abfrage für Leistung auf Phase 2"
 			subtype="text"
-			:model-value="configuration.jq_power_l2"
+			:model-value="component.configuration.jq_power_l2"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.jq_power_l2')
 			"
@@ -76,7 +75,7 @@
 		<openwb-base-text-input
 			title="Abfrage für Leistung auf Phase 3"
 			subtype="text"
-			:model-value="configuration.jq_power_l3"
+			:model-value="component.configuration.jq_power_l3"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.jq_power_l3')
 			"
@@ -85,7 +84,7 @@
 		<openwb-base-text-input
 			title="Abfrage für Strom auf Phase 1"
 			subtype="text"
-			:model-value="configuration.jq_current_l1"
+			:model-value="component.configuration.jq_current_l1"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.jq_current_l1')
 			"
@@ -93,7 +92,7 @@
 		<openwb-base-text-input
 			title="Abfrage für Strom auf Phase 2"
 			subtype="text"
-			:model-value="configuration.jq_current_l2"
+			:model-value="component.configuration.jq_current_l2"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.jq_current_l2')
 			"
@@ -101,7 +100,7 @@
 		<openwb-base-text-input
 			title="Abfrage für Strom auf Phase 3"
 			subtype="text"
-			:model-value="configuration.jq_current_l3"
+			:model-value="component.configuration.jq_current_l3"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.jq_current_l3')
 			"
@@ -110,18 +109,10 @@
 </template>
 
 <script>
+import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
+
 export default {
 	name: "DeviceJsonCounter",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-		componentId: { required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [ComponentConfigMixin],
 };
 </script>

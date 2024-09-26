@@ -304,16 +304,10 @@
 </template>
 
 <script>
+import DisplayThemeConfigMixin from "../DisplayThemeConfigMixin.vue";
+
 export default {
 	name: "DisplayThemeCards",
-	emits: ["update:configuration"],
-	props: {
-		displayTheme: { type: Object, required: true },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [DisplayThemeConfigMixin],
 };
 </script>

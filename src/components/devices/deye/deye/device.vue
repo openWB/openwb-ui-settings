@@ -1,9 +1,6 @@
 <template>
 	<div class="device-deye">
-		<openwb-base-heading>
-			Einstellungen für Deye
-			<span class="small">(Modul: {{ $options.name }})</span>
-		</openwb-base-heading>
+		<openwb-base-heading>Einstellungen für Deye</openwb-base-heading>
 		<openwb-base-alert subtype="info">
 			<span class="text-danger">
 				Deye Wechselrichter verfügen über keine Modbus-TCP
@@ -15,7 +12,7 @@
 			title="IP oder Hostname"
 			subtype="host"
 			required
-			:model-value="configuration.ip_address"
+			:model-value="device.configuration.ip_address"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.ip_address')
 			"
@@ -25,7 +22,7 @@
 			required
 			:min="1"
 			:max="65535"
-			:model-value="configuration.port"
+			:model-value="device.configuration.port"
 			@update:model-value="
 				updateConfiguration($event, 'configuration.port')
 			"
@@ -34,17 +31,10 @@
 </template>
 
 <script>
+import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
+
 export default {
 	name: "DeviceDeye",
-	emits: ["update:configuration"],
-	props: {
-		configuration: { type: Object, required: true },
-		deviceId: { default: undefined },
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+	mixins: [DeviceConfigMixin],
 };
 </script>

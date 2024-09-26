@@ -62,16 +62,11 @@
 </template>
 
 <script>
+import VehicleConfigMixin from "../VehicleConfigMixin.vue";
+
 export default {
 	name: "VehicleSocMercedesEq",
-	emits: ["update:configuration"],
-	props: {
-		vehicleId: { required: true, type: Number },
-		vehicle: { required: true, type: Object },
-	},
-	data() {
-		return {};
-	},
+	mixins: [VehicleConfigMixin],
 	computed: {
 		callback_url() {
 			return `${location.origin}/openWB/web/settings/modules/vehicles/mercedeseq/callback_vehicle.php`;
@@ -92,9 +87,6 @@ export default {
 		},
 	},
 	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
 		// mercedes specific methods
 		login_window() {
 			console.debug("callback url", this.callback_url);
