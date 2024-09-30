@@ -1,20 +1,20 @@
 <template>
-	<openwb-base-heading>
-		Einstellungen für Ladepunkt Typ "{{ chargePoint.type }}"
-	</openwb-base-heading>
-	<component
-		:is="myChargePointSettingsComponent"
-		:chargePoint="chargePoint"
-		@update:configuration="updateConfiguration($event)"
-	/>
-	<hr />
-	<openwb-base-heading>
-		Befehle für Ladepunkt Typ "{{ chargePoint.type }}"
-	</openwb-base-heading>
-	<component
-		:is="myChargePointCommandsComponent"
-		:chargePoint="chargePoint"
-	/>
+  <openwb-base-heading>
+    Einstellungen für Ladepunkt Typ "{{ chargePoint.type }}"
+  </openwb-base-heading>
+  <component
+    :is="myChargePointSettingsComponent"
+    :charge-point="chargePoint"
+    @update:configuration="updateConfiguration($event)"
+  />
+  <hr>
+  <openwb-base-heading>
+    Befehle für Ladepunkt Typ "{{ chargePoint.type }}"
+  </openwb-base-heading>
+  <component
+    :is="myChargePointCommandsComponent"
+    :charge-point="chargePoint"
+  />
 </template>
 
 <script>
@@ -23,36 +23,36 @@ import OpenwbChargePointConfigFallback from "./OpenwbChargePointConfigFallback.v
 import OpenwbChargePointCommandsFallback from "./OpenwbChargePointCommandsFallback.vue";
 
 export default {
-	name: "OpenwbChargePointProxy",
-	emits: ["update:configuration"],
-	props: {
-		chargePoint: { required: true, type: Object },
-	},
-	computed: {
-		myChargePointSettingsComponent() {
-			console.debug(
-				`loading charge point settings: ${this.chargePoint.type}`,
-			);
-			return defineAsyncComponent({
-				loader: () =>
-					import(`./${this.chargePoint.type}/chargePoint.vue`),
-				errorComponent: OpenwbChargePointConfigFallback,
-			});
-		},
-		myChargePointCommandsComponent() {
-			console.debug(
-				`loading charge point commands: ${this.chargePoint.type}`,
-			);
-			return defineAsyncComponent({
-				loader: () => import(`./${this.chargePoint.type}/commands.vue`),
-				errorComponent: OpenwbChargePointCommandsFallback,
-			});
-		},
-	},
-	methods: {
-		updateConfiguration(event) {
-			this.$emit("update:configuration", event);
-		},
-	},
+  name: "OpenwbChargePointProxy",
+  props: {
+    chargePoint: { required: true, type: Object },
+  },
+  emits: ["update:configuration"],
+  computed: {
+    myChargePointSettingsComponent() {
+      console.debug(
+        `loading charge point settings: ${this.chargePoint.type}`,
+      );
+      return defineAsyncComponent({
+        loader: () =>
+          import(`./${this.chargePoint.type}/chargePoint.vue`),
+        errorComponent: OpenwbChargePointConfigFallback,
+      });
+    },
+    myChargePointCommandsComponent() {
+      console.debug(
+        `loading charge point commands: ${this.chargePoint.type}`,
+      );
+      return defineAsyncComponent({
+        loader: () => import(`./${this.chargePoint.type}/commands.vue`),
+        errorComponent: OpenwbChargePointCommandsFallback,
+      });
+    },
+  },
+  methods: {
+    updateConfiguration(event) {
+      this.$emit("update:configuration", event);
+    },
+  },
 };
 </script>
