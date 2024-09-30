@@ -2,12 +2,13 @@
   "name": "openwb-ui-settings",
   "version": "0.2.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview --host",
     "test:unit": "vitest run --environment jsdom --root src/",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .eslintignore",
+    "lint": "eslint . --fix",
     "build-dev": "vite build --mode=development --out-dir=/var/www/html/openWB/web/settings --emptyOutDir",
     "build-prod": "vite build --out-dir=/var/www/html/openWB/web/settings --emptyOutDir"
   },
