@@ -318,8 +318,8 @@ export default {
             this.$refs.jsonInput.setCustomValidity("");
             this.tempValue = myNewJsonValue;
             this.$emit("update:modelValue", myNewJsonValue);
-          } catch (e) {
-            console.error("parsing JSON failed: " + newValue);
+          } catch (error) {
+            console.error("parsing JSON failed: " + newValue, error);
             this.inputInvalid = true;
             this.$refs.jsonInput.setCustomValidity(
               "Ungültiger JSON Ausdruck!",

@@ -509,7 +509,7 @@ export default {
         "openWB/LegacySmartHome/config/get/Devices/+/device_name",
       ],
       warningAcknowledged: false,
-      showRestoreSection: true && !this.installAssistantActive,
+      showRestoreSection: !this.installAssistantActive,
       selectedRestoreFile: undefined,
       restoreUploadDone: false,
       selectedDataMigrationFile: undefined,

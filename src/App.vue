@@ -64,6 +64,7 @@ export default {
       try {
         return this.client.options.clientId;
       } catch (error) {
+        console.error("mqttClientId error", error);
         return undefined;
       }
     },
@@ -192,6 +193,7 @@ export default {
             console.debug(
               "Json parsing failed, fallback to string: ",
               topic,
+              error,
             );
             myPayload = message.toString();
           }
