@@ -153,7 +153,7 @@ export default {
   },
   mixins: [ComponentState],
   props: {
-    inverter: Object,
+    inverter: { type: Object, required: true },
   },
   data() {
     return {

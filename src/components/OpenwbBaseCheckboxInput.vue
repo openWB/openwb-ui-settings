@@ -49,7 +49,7 @@ export default {
   },
   inheritAttrs: false,
   props: {
-    title: String,
+    title: { type: String, required: false, default: "" },
     modelValue: { type: Boolean },
   },
   emits: ["update:modelValue"],

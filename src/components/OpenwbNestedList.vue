@@ -71,8 +71,8 @@ export default {
     FontAwesomeIcon,
   },
   props: {
-    list: { type: Object },
-    labels: { type: Object },
+    list: { type: Object, required: false, default: undefined },
+    labels: { type: Object, required: false, default: undefined },
   },
   methods: {
     classes(element) {

@@ -51,8 +51,8 @@ export default {
   },
   inheritAttrs: false,
   props: {
-    title: String,
-    buttonText: String,
+    title: { type: String, required: false, default: "" },
+    buttonText: { type: String, required: false, default: undefined },
     disabled: { type: Boolean, default: false },
     subtype: {
       type: String,

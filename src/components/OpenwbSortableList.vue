@@ -53,9 +53,9 @@ export default {
     OpenwbNestedList,
   },
   props: {
-    id: String,
-    title: String,
-    modelValue: Object,
+    id: { type: String, required: false, default: undefined },
+    title: { type: String, required: false, default: "" },
+    modelValue: { type: Array, required: false, default: undefined },
     labels: { type: Object, default: undefined },
   },
   emits: ["update:modelValue"],

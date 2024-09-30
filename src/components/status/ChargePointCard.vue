@@ -317,8 +317,8 @@ export default {
   },
   mixins: [ComponentState],
   props: {
-    installedChargePointKey: String,
-    installedChargePoint: Object,
+    installedChargePointKey: { type: String, required: true },
+    installedChargePoint: { type: Object, required: true },
   },
   data() {
     return {

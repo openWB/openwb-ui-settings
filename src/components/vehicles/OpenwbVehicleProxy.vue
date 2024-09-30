@@ -17,7 +17,7 @@ import OpenwbVehicleFallback from "./OpenwbVehicleConfigFallback.vue";
 export default {
   name: "OpenwbVehicleProxy",
   props: {
-    vehicleId: { required: true },
+    vehicleId: { type: Number, required: true },
     vehicle: { type: Object, required: true },
   },
   emits: ["update:configuration"],

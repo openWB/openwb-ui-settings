@@ -102,9 +102,9 @@ export default {
   },
   mixins: [ComponentState],
   props: {
-    vehicle: Object,
-    vehicleKey: String,
-    vehicleName: String,
+    vehicle: { type: Object, required: false, default: undefined },
+    vehicleKey: { type: String, required: true },
+    vehicleName: { type: String, default: "" },
   },
   data() {
     return {

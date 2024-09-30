@@ -12,7 +12,7 @@
 export default {
   name: "OpenwbClickButton",
   props: {
-    title: String,
+    title: { type: String, required: false, default: "" },
   },
   emits: ["buttonClicked"],
   methods: {

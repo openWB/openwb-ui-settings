@@ -52,11 +52,13 @@ export default {
       default: "secondary",
     },
     source: {
+      type: String,
+      required: true,
       validator: function (value) {
         return ["system", "client", "command"].indexOf(value) !== -1;
       },
     },
-    timestamp: { type: Number },
+    timestamp: { type: Number, required: true },
   },
   emits: ["dismiss", "hide"],
   data() {

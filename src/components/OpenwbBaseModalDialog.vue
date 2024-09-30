@@ -68,7 +68,7 @@
 export default {
   name: "OpenwbModalDialog",
   props: {
-    title: String,
+    title: { type: String, required: false, default: "" },
     subtype: {
       type: String,
       validator: function (value) {

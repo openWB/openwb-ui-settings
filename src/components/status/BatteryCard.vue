@@ -127,13 +127,13 @@ library.add(
 );
 
 export default {
-  name: "InverterCard",
+  name: "BatteryCard",
   components: {
     FontAwesomeIcon,
   },
   mixins: [ComponentState],
   props: {
-    battery: Object,
+    battery: { type: Object, required: true },
   },
   data() {
     return {
