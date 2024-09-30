@@ -1478,6 +1478,7 @@ export default {
   name: "OpenwbOptionalComponentsView",
   components: { OpenwbDisplayThemeProxy },
   mixins: [ComponentState],
+  emits: ['save', 'reset', 'defaults'],
   data() {
     return {
       mqttTopicsToSubscribe: [

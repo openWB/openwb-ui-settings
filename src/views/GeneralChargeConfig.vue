@@ -327,6 +327,7 @@ export default {
     OpenwbElectricityTariffProxy,
   },
   mixins: [ComponentState],
+  emits: ['save', 'reset', 'defaults'],
   data() {
     return {
       mqttTopicsToSubscribe: [

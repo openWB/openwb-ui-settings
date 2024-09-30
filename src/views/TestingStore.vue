@@ -370,6 +370,7 @@ export default {
     SortableList,
   },
   mixins: [ComponentState],
+  emits: ['save', 'reset', 'defaults'],
   data() {
     return {
       mqttTopicsToSubscribe: [],

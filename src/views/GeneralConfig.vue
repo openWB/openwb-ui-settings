@@ -1283,6 +1283,7 @@ export default {
       default: false,
     },
   },
+  emits: ['save', 'reset', 'defaults'],
   data() {
     return {
       mqttTopicsToSubscribe: [
