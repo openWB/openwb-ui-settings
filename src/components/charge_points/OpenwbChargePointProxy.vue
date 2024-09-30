@@ -19,15 +19,13 @@
 
 <script>
 import { defineAsyncComponent } from "vue";
+import ChargePointConfigMixin from "./ChargePointConfigMixin.vue";
 import OpenwbChargePointConfigFallback from "./OpenwbChargePointConfigFallback.vue";
 import OpenwbChargePointCommandsFallback from "./OpenwbChargePointCommandsFallback.vue";
 
 export default {
   name: "OpenwbChargePointProxy",
-  props: {
-    chargePoint: { required: true, type: Object },
-  },
-  emits: ["update:configuration"],
+  mixins: [ChargePointConfigMixin],
   computed: {
     myChargePointSettingsComponent() {
       console.debug(
@@ -47,11 +45,6 @@ export default {
         loader: () => import(`./${this.chargePoint.type}/commands.vue`),
         errorComponent: OpenwbChargePointCommandsFallback,
       });
-    },
-  },
-  methods: {
-    updateConfiguration(event) {
-      this.$emit("update:configuration", event);
     },
   },
 };
