@@ -204,7 +204,7 @@ export default {
   },
   mixins: [ComponentState],
   props: {
-    counter: Object,
+    counter: { type: Object, required: true },
   },
   data() {
     return {

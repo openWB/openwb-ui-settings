@@ -70,11 +70,11 @@ export default {
   },
   inheritAttrs: false,
   props: {
-    title: String,
-    modelValue: { type: Number },
-    unit: String,
+    title: { type: String, required: false, default: "" },
+    modelValue: { type: Number, required: false, default: undefined },
+    unit: { type: String, required: false, default: undefined },
     precision: { type: Number, default: undefined },
-    emptyValue: { required: false, default: null },
+    emptyValue: { type: [Number, null], required: false, default: null },
   },
   emits: ["update:modelValue"],
   data() {

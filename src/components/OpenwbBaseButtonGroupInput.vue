@@ -79,8 +79,8 @@ export default {
   inheritAttrs: false,
   props: {
     title: { type: String, required: false, default: "" },
-    modelValue: { type: [String, Number, Boolean] },
-    buttons: Object,
+    modelValue: { type: [String, Number, Boolean], default: undefined },
+    buttons: { type: Array, required: true },
   },
   emits: ["update:modelValue"],
   data() {

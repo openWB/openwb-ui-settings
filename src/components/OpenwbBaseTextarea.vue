@@ -82,8 +82,8 @@ export default {
   },
   inheritAttrs: false,
   props: {
-    title: String,
-    modelValue: { String, Object },
+    title: { type: String, required: false, default: "" },
+    modelValue: { type: [String, Object], required: false, default: undefined },
     subtype: {
       validator: function (value) {
         return ["text", "json"].indexOf(value) !== -1;

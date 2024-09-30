@@ -261,8 +261,8 @@ export default {
   },
   inheritAttrs: false,
   props: {
-    title: String,
-    modelValue: { type: [String, Object] },
+    title: { type: String, required: false, default: "" },
+    modelValue: { type: [String, Object], required: false, default: undefined },
     subtype: {
       validator: function (value) {
         return (
@@ -283,9 +283,9 @@ export default {
       },
       default: "text",
     },
-    pattern: String,
-    unit: String,
-    emptyValue: { required: false, default: null },
+    pattern: { type: String, required: false, default: undefined },
+    unit: { type: String, required: false, default: undefined },
+    emptyValue: { type: [String, Object, null], required: false, default: null },
     showQuickButtons: { type: Boolean, default: false },
   },
   emits: ["update:modelValue"],
