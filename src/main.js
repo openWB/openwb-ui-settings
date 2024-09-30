@@ -17,20 +17,20 @@ vApp.use(store).use(router).use(VueAxios, axios);
 
 // automatic global registering of our base components
 const componentFiles = import.meta.glob("./components/OpenwbBase*.vue", {
-	eager: true,
+  eager: true,
 });
 Object.entries(componentFiles).forEach(([path, module]) => {
-	// Get PascalCase name of component
-	const componentName = upperFirst(
-		camelCase(
-			// Gets the file name regardless of folder depth
-			path
-				.split("/")
-				.pop()
-				.replace(/\.\w+$/, ""),
-		),
-	);
-	vApp.component(componentName, module.default);
+  // Get PascalCase name of component
+  const componentName = upperFirst(
+    camelCase(
+      // Gets the file name regardless of folder depth
+      path
+        .split("/")
+        .pop()
+        .replace(/\.\w+$/, ""),
+    ),
+  );
+  vApp.component(componentName, module.default);
 });
 
 vApp.mount("#app");

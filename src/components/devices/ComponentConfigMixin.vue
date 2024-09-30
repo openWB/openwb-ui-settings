@@ -2,9 +2,9 @@
 import DeviceConfigMixin from "./DeviceConfigMixin.vue";
 
 export default {
-	mixins: [DeviceConfigMixin],
-	props: {
-		component: { type: Object, required: true },
-	},
+  mixins: [DeviceConfigMixin],
+  props: {
+    component: { type: Object, required: true },
+  },
 };
 </script>
