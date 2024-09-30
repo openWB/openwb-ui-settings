@@ -12,14 +12,12 @@
 
 <script>
 import { defineAsyncComponent } from "vue";
+import BackupCloudConfigMixin from "./BackupCloudConfigMixin.vue";
 import OpenwbBackupCloudFallback from "./OpenwbBackupCloudConfigFallback.vue";
 
 export default {
   name: "OpenwbBackupCloudProxy",
-  props: {
-    backupCloud: { type: Object, required: true },
-  },
-  emits: ["update:configuration", "sendCommand"],
+  mixins: [BackupCloudConfigMixin],
   computed: {
     myComponent() {
       console.debug(`loading backup cloud: ${this.backupCloud.type}`);
@@ -28,16 +26,6 @@ export default {
           import(`./${this.backupCloud.type}/backup_cloud.vue`),
         errorComponent: OpenwbBackupCloudFallback,
       });
-    },
-  },
-  methods: {
-    // event pass through
-    updateConfiguration(event) {
-      this.$emit("update:configuration", event);
-    },
-    // event pass through
-    sendCommand(event) {
-      this.$emit("sendCommand", event);
     },
   },
 };

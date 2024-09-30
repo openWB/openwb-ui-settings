@@ -12,15 +12,12 @@
 
 <script>
 import { defineAsyncComponent } from "vue";
+import VehicleConfigMixin from "./VehicleConfigMixin.vue";
 import OpenwbVehicleFallback from "./OpenwbVehicleConfigFallback.vue";
 
 export default {
   name: "OpenwbVehicleProxy",
-  props: {
-    vehicleId: { type: Number, required: true },
-    vehicle: { type: Object, required: true },
-  },
-  emits: ["update:configuration"],
+  mixins: [VehicleConfigMixin],
   computed: {
     myComponent() {
       console.debug(`loading vehicle: ${this.vehicle.type}`);
@@ -28,11 +25,6 @@ export default {
         loader: () => import(`./${this.vehicle.type}/vehicle.vue`),
         errorComponent: OpenwbVehicleFallback,
       });
-    },
-  },
-  methods: {
-    updateConfiguration(event) {
-      this.$emit("update:configuration", event);
     },
   },
 };

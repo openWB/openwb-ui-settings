@@ -11,14 +11,12 @@
 
 <script>
 import { defineAsyncComponent } from "vue";
+import ElectricityTariffConfigMixin from "./ElectricityTariffConfigMixin.vue";
 import OpenwbElectricityTariffFallback from "./OpenwbElectricityTariffConfigFallback.vue";
 
 export default {
   name: "OpenwbElectricityTariffProxy",
-  props: {
-    electricityTariff: { type: Object, required: true },
-  },
-  emits: ["update:configuration"],
+  mixins: [ElectricityTariffConfigMixin],
   computed: {
     myComponent() {
       console.debug(
@@ -31,11 +29,6 @@ export default {
           ),
         errorComponent: OpenwbElectricityTariffFallback,
       });
-    },
-  },
-  methods: {
-    updateConfiguration(event) {
-      this.$emit("update:configuration", event);
     },
   },
 };
