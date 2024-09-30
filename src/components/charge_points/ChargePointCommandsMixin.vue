@@ -1,7 +1,7 @@
 <script>
 export default {
-	props: {
-		chargePoint: { type: Object, required: true },
-	},
+  props: {
+    chargePoint: { type: Object, required: true },
+  },
 };
 </script>
