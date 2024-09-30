@@ -3,29 +3,19 @@
     :is="myComponent"
     :device="device"
     :component="component"
-    :configuration="
-      component ? component.configuration : device.configuration
-    "
-    :device-id="device.id"
-    :device-type="device.type"
-    :component-id="component ? component.id : undefined"
-    :component-type="component ? component.type : undefined"
     @update:configuration="updateConfiguration($event)"
   />
 </template>
 
 <script>
 import { defineAsyncComponent } from "vue";
+import ComponentConfigMixin from "./DeviceConfigMixin.vue";
 import OpenwbDeviceConfigFallback from "./OpenwbDeviceConfigFallback.vue";
 import OpenwbComponentConfigFallback from "./OpenwbComponentConfigFallback.vue";
 
 export default {
   name: "OpenwbConfigProxy",
-  props: {
-    device: { type: Object, required: true },
-    component: { type: Object, required: false, default: undefined },
-  },
-  emits: ["update:configuration"],
+  mixins: [ComponentConfigMixin],
   computed: {
     myComponent() {
       console.debug(
@@ -48,11 +38,6 @@ export default {
           errorComponent: OpenwbDeviceConfigFallback,
         });
       }
-    },
-  },
-  methods: {
-    updateConfiguration(event) {
-      this.$emit("update:configuration", event);
     },
   },
 };

@@ -77,7 +77,7 @@
       title="4. Token abrufen und speichern"
       button-text="Autorisierungs-Token abrufen"
       subtype="success"
-      @button-clicked="sendSystemCommand('retrieveMSALTokens', {})"
+      @button-clicked="sendCommand('retrieveMSALTokens', {})"
     >
       <template #help>
         Zugangstoken wird abgerufen und gespeichert, damit das Backup

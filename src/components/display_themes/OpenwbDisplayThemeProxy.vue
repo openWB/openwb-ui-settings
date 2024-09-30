@@ -42,6 +42,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasPeopleGroup, fasCertificate);
 
 import { defineAsyncComponent } from "vue";
+import DisplayThemeConfigMixin from "./DisplayThemeConfigMixin.vue";
 import OpenwbDisplayThemeFallback from "./OpenwbDisplayThemeFallback.vue";
 
 export default {
@@ -49,10 +50,7 @@ export default {
   components: {
     FontAwesomeIcon,
   },
-  props: {
-    displayTheme: { type: Object, required: true },
-  },
-  emits: ["update:configuration"],
+  mixins: [DisplayThemeConfigMixin],
   computed: {
     myComponent() {
       console.debug(`loading display theme: ${this.displayTheme.type}`);
@@ -61,11 +59,6 @@ export default {
           import(`./${this.displayTheme.type}/displayTheme.vue`),
         errorComponent: OpenwbDisplayThemeFallback,
       });
-    },
-  },
-  methods: {
-    updateConfiguration(event) {
-      this.$emit("update:configuration", event);
     },
   },
 };
