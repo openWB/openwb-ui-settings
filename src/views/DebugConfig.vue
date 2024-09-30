@@ -59,6 +59,7 @@ export default {
     OpenwbLogCard,
   },
   mixins: [ComponentState],
+  emits: ['save', 'reset', 'defaults'],
   data() {
     return {
       mqttTopicsToSubscribe: [

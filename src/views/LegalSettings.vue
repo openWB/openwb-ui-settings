@@ -131,7 +131,7 @@ export default {
     FontAwesomeIcon,
   },
   mixins: [ComponentState],
-  emits: ["sendCommand"],
+  emits: ["sendCommand", "save"],
   data() {
     return {
       mqttTopicsToSubscribe: [

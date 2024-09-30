@@ -31,7 +31,7 @@ export default {
     InstallAssistantStepTemplate,
   },
   mixins: [ComponentState],
-  emits: ["switchPage", "endAssistant"],
+  emits: ["switchPage", "endAssistant", "sendCommand"],
   data: () => ({
     mqttTopicsToSubscribe: [],
   }),

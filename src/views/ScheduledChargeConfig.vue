@@ -89,6 +89,7 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 export default {
   name: "OpenwbScheduledChargeConfigView",
   mixins: [ComponentState],
+  emits: ['save', 'reset', 'defaults'],
   data() {
     return {
       mqttTopicsToSubscribe: [

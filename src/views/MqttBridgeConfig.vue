@@ -429,7 +429,7 @@ export default {
     FontAwesomeIcon,
   },
   mixins: [ComponentState],
-  emits: ["sendCommand"],
+  emits: ["sendCommand", "save", "reset"],
   data() {
     return {
       mqttTopicsToSubscribe: [

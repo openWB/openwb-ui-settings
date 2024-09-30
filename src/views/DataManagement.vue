@@ -495,7 +495,7 @@ export default {
       default: true,
     },
   },
-  emits: ["sendCommand"],
+  emits: ["sendCommand", "save", "reset", "defaults"],
   data() {
     return {
       mqttTopicsToSubscribe: [
