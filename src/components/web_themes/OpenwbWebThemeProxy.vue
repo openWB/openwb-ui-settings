@@ -42,7 +42,6 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasPeopleGroup, fasCertificate);
 
 import { defineAsyncComponent } from "vue";
-import WebThemeConfigMixin from "./WebThemeConfigMixin.vue";
 import OpenwbWebThemeFallback from "./OpenwbWebThemeFallback.vue";
 
 export default {
@@ -50,7 +49,10 @@ export default {
   components: {
     FontAwesomeIcon,
   },
-  mixins: [WebThemeConfigMixin],
+  props: {
+    webTheme: { type: Object, required: true },
+  },
+  emits: ["update:configuration"],
   computed: {
     myComponent() {
       console.debug(`loading web theme: ${this.webTheme.name}`);
@@ -58,6 +60,11 @@ export default {
         loader: () => import(`./${this.webTheme.type}/webTheme.vue`),
         errorComponent: OpenwbWebThemeFallback,
       });
+    },
+  },
+  methods: {
+    updateConfiguration(event) {
+      this.$emit("update:configuration", event);
     },
   },
 };

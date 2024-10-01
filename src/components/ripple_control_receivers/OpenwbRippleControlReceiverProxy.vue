@@ -6,17 +6,20 @@
     :is="myComponent"
     :ripple-control-receiver="rippleControlReceiver"
     @update:configuration="updateConfiguration($event)"
+    @send-command="sendCommand($event)"
   />
 </template>
 
 <script>
 import { defineAsyncComponent } from "vue";
-import RippleControlReceiverConfigMixin from "./RippleControlReceiverConfigMixin.vue";
 import OpenwbRippleControlReceiverFallback from "./OpenwbRippleControlReceiverConfigFallback.vue";
 
 export default {
   name: "OpenwbRippleControlReceiverProxy",
-  mixins: [RippleControlReceiverConfigMixin],
+  props: {
+    rippleControlReceiver: { type: Object, required: true },
+  },
+  emits: ["update:configuration", "sendCommand"],
   computed: {
     myComponent() {
       console.debug(
@@ -29,6 +32,16 @@ export default {
           ),
         errorComponent: OpenwbRippleControlReceiverFallback,
       });
+    },
+  },
+  methods: {
+    // event pass through
+    updateConfiguration(event) {
+      this.$emit("update:configuration", event);
+    },
+    // event pass through
+    sendCommand(event) {
+      this.$emit("sendCommand", event);
     },
   },
 };
