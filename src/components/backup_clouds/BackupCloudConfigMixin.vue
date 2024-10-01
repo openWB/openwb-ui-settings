@@ -8,7 +8,7 @@ export default {
     updateConfiguration(event, path = undefined) {
       this.$emit("update:configuration", { value: event, object: path });
     },
-    sendCommand(command, data = {}) {
+    sendSystemCommand(command, data = {}) {
       this.$emit("sendCommand", {
         command: command,
         data: data,
