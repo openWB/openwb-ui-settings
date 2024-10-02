@@ -84,7 +84,7 @@
           <openwb-base-alert subtype="danger">
             Für die Wiederherstellung wird eine aktive
             Internetverbindung benötigt.<br>
-            Aktuell können nur Sicherungen wiederhergestellt werden,
+            Es können nur Sicherungen wiederhergestellt werden,
             die in den Entwicklungszweigen "master", "Beta" oder
             "Release" erstellt wurden!
           </openwb-base-alert>
