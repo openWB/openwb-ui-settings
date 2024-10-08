@@ -16,7 +16,7 @@
         </OpenwbBaseHeading>
         <openwb-base-button-input
           title="Button Input"
-          buttonText="Klick mich"
+          button-text="Klick mich"
           subtype="info"
         >
           <template #help>
@@ -261,8 +261,8 @@
               ],
             },
           ]"
-          notSelected="Bitte auswählen"
-          :addButton="true"
+          not-selected="Bitte auswählen"
+          :add-button="true"
           :model-value="$store.state.examples.select2"
           @update:model-value="updateState('select2', $event)"
           @input:add="console.log('add button pressed')"

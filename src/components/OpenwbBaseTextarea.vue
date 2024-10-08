@@ -5,8 +5,11 @@
         {{ title }}
       </slot>
     </template>
-    <template #help v-if="$slots.help">
-      <slot name="help"></slot>
+    <template
+      v-if="$slots.help"
+      #help
+    >
+      <slot name="help" />
     </template>
     <template #default>
       <div class="w-100">
@@ -50,8 +53,8 @@
           </div>
         </div>
       </div>
-		</template>
-	</openwb-base-setting-element>
+    </template>
+  </openwb-base-setting-element>
 </template>
 
 <script>
@@ -69,6 +72,7 @@ library.add(fasKeyboard, fasCode);
 export default {
   name: "OpenwbTextareaInput",
   components: {
+    OpenwbBaseSettingElement,
     FontAwesomeIcon,
   },
   inheritAttrs: false,

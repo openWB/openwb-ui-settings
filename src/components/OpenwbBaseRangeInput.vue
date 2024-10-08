@@ -5,46 +5,49 @@
         {{ title }}
       </slot>
     </template>
-    <template #help v-if="$slots.help">
-      <slot name="help"></slot>
+    <template
+      v-if="$slots.help"
+      #help
+    >
+      <slot name="help" />
     </template>
     <template #default>
       <div class="w-100">
         <div class="vaRow mb-1 w-100">
-
-        <label
-          v-if="label"
-          class="col-2 col-form-label valueLabel"
-        >
-          {{ label }}
-        </label>
-        <button
-          class="col-1 btn btn-block btn-info"
-          type="button"
-          @click="decrement"
-        >
-          <font-awesome-icon :icon="['fas', 'step-backward']" />
-        </button>
-        <div class="col">
-          <input
-            v-model.number="sliderValue"
-            type="range"
-            class="form-control-range rangeInput"
-            :min="min"
-            :max="max"
-            :step="step"
-            v-bind="$attrs"
+          <label
+            v-if="label"
+            class="col-2 col-form-label valueLabel"
           >
+            {{ label }}
+          </label>
+          <button
+            class="col-1 btn btn-block btn-info"
+            type="button"
+            @click="decrement"
+          >
+            <font-awesome-icon :icon="['fas', 'step-backward']" />
+          </button>
+          <div class="col">
+            <input
+              v-model.number="sliderValue"
+              type="range"
+              class="form-control-range rangeInput"
+              :min="min"
+              :max="max"
+              :step="step"
+              v-bind="$attrs"
+            >
+          </div>
+          <button
+            class="col-1 btn btn-block btn-info"
+            type="button"
+            @click="increment"
+          >
+            <font-awesome-icon :icon="['fas', 'step-forward']" />
+          </button>
         </div>
-        <button
-          class="col-1 btn btn-block btn-info"
-          type="button"
-          @click="increment"
-        >
-          <font-awesome-icon :icon="['fas', 'step-forward']" />
-        </button>
       </div>
-    </template
+    </template>
   </openwb-base-setting-element>
 </template>
 

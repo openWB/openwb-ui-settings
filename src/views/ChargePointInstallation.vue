@@ -274,7 +274,7 @@
           not-selected="Bitte auswählen"
           :options="getChargePointList()"
           :model-value="chargePointToAdd"
-          :addButton="true"
+          :add-button="true"
           @update:model-value="chargePointToAdd = $event"
           @input:add="addChargePoint"
         >

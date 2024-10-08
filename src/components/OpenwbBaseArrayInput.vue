@@ -1,10 +1,15 @@
 <template>
   <openwb-base-setting-element>
     <template #title>
-      <slot name="title">{{ title }}</slot>
+      <slot name="title">
+        {{ title }}
+      </slot>
     </template>
-    <template #help v-if="$slots.help">
-      <slot name="help"></slot>
+    <template
+      v-if="$slots.help"
+      #help
+    >
+      <slot name="help" />
     </template>
     <template #default>
       <div class="w-100">
@@ -86,7 +91,6 @@ import {
   faInfoCircle as fasInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
 
 library.add(
   fasTag,

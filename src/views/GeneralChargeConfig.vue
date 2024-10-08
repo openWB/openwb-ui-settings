@@ -184,8 +184,8 @@
           <openwb-base-alert
             v-if="
               $store.state.mqtt['openWB/optional/et/provider'] &&
-              $store.state.mqtt['openWB/optional/et/provider']
-                .type
+                $store.state.mqtt['openWB/optional/et/provider']
+                  .type
             "
             subtype="info"
           >

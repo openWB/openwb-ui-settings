@@ -5,15 +5,21 @@
         {{ title }}
       </slot>
     </template>
-    <template #help v-if="$slots.help">
-      <slot name="help"></slot>
+    <template
+      v-if="$slots.help"
+      #help
+    >
+      <slot name="help" />
     </template>
     <template #default>
       <div class="w-100">
         <div class="input-group">
-          <div v-if="$slots.prefix" class="input-group-prepend">
+          <div
+            v-if="$slots.prefix"
+            class="input-group-prepend"
+          >
             <div class="input-group-text">
-              <slot name="prefix"></slot>
+              <slot name="prefix" />
             </div>
           </div>
           <select
@@ -51,7 +57,10 @@
               </option>
             </optgroup>
           </select>
-          <div v-if="addButton" class="input-group-append">
+          <div
+            v-if="addButton"
+            class="input-group-append"
+          >
             <div
               class="input-group-text"
               :class="
@@ -71,8 +80,8 @@
           </div>
         </div>
       </div>
-		</template>
-	</openwb-base-setting-element>
+    </template>
+  </openwb-base-setting-element>
 </template>
 
 <script>

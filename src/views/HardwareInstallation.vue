@@ -246,7 +246,7 @@
                 )
               "
               :model-value="componentToAdd[installedDevice.id]"
-              :addButton="true"
+              :add-button="true"
               @update:model-value="
                 componentToAdd[installedDevice.id] = $event
               "
@@ -281,7 +281,7 @@
             :disabled="selectedVendor === undefined"
             :options="deviceList"
             :model-value="deviceToAdd"
-            :addButton="true"
+            :add-button="true"
             @update:model-value="deviceToAdd = $event"
             @input:add="addDevice"
           >

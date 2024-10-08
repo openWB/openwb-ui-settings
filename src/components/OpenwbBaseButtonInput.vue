@@ -5,8 +5,11 @@
         {{ title }}
       </slot>
     </template>
-    <template #help v-if="$slots.help">
-      <slot name="help"></slot>
+    <template
+      v-if="$slots.help"
+      #help
+    >
+      <slot name="help" />
     </template>
     <template #default>
       <openwb-base-click-button

@@ -5,8 +5,11 @@
         {{ title }}
       </slot>
     </template>
-    <template #help v-if="$slots.help">
-      <slot name="help"></slot>
+    <template
+      v-if="$slots.help"
+      #help
+    >
+      <slot name="help" />
     </template>
     <template #default>
       <div class="col-md-8">
@@ -26,10 +29,10 @@ import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
 
 export default {
   name: "OpenwbCheckboxInput",
-  inheritAttrs: false,
   components: {
     OpenwbBaseSettingElement,
   },
+  inheritAttrs: false,
   props: {
     title: { type: String, required: false, default: "" },
     modelValue: { type: Boolean },
