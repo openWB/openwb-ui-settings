@@ -308,69 +308,89 @@
         </div>
       </openwb-base-card>
       <openwb-base-card title="OCPP Anbindung">
-				<openwb-base-button-group-input
-					title="OCPP aktivieren"
-					:buttons="[
-						{
-							buttonValue: false,
-							text: 'Nein',
-							class: 'btn-outline-danger',
-						},
-						{
-							buttonValue: true,
-							text: 'Ja',
-							class: 'btn-outline-success',
-						},
-					]"
-					:model-value="
-						$store.state.mqtt['openWB/optional/ocpp/active']
-					"
-					@update:model-value="
-						updateState('openWB/optional/ocpp/active', $event)
-					"
-				/>
-				<div
-					v-if="
-						$store.state.mqtt['openWB/optional/ocpp/active'] ===
-						true
-					"
-				>
-					<openwb-base-alert subtype="info">
-						Die Ladepunkte übermitteln den ID-Tag, Heartbeat und den
-						Zählerstand zum Zeitpunkt des Ansteckens, Absteckens und
-						alle 5 Minuten. Eine Steuerung per OCPP ist nicht
-						möglich.<br />Alle Ladepunkte, die ihre Daten an das
-						OCPP-Backend übermitteln sollen, müssen zunächst im
-						OCPP-Backend angelegt werden. Die dort eingetragene
-						Chargebox ID muss in der openWB in den Einstellungen des
-						Ladepunkts eingetragen werden.
-					</openwb-base-alert>
-					<openwb-base-text-input
-						title="URL des OCPP-Backends"
-						subtype="host"
-						:model-value="
-							$store.state.mqtt['openWB/optional/ocpp/url']
-						"
-						@update:model-value="
-							updateState('openWB/optional/ocpp/url', $event)
-						"
-					/>
-					<openwb-base-select-input
-						title="Version"
-						notSelected="Bitte auswählen"
-						:options="[
-							{ value: 'ocpp1.6', text: 'OCPP 1.6' },
-							{ value: 'ocpp2.0.1', text: 'OCPP 2.0.1' },
-						]"
-						:model-value="
-							$store.state.mqtt['openWB/optional/ocpp/version']
-						"
-						@update:model-value="
-							updateState('openWB/optional/ocpp/version', $event)
-						"
-					/>
-				</div>
-			</openwb-base-card>
+        <openwb-base-button-group-input
+          title="OCPP aktivieren"
+          :buttons="[
+            {
+              buttonValue: false,
+              text: 'Nein',
+              class: 'btn-outline-danger',
+            },
+            {
+              buttonValue: true,
+              text: 'Ja',
+              class: 'btn-outline-success',
+            },
+          ]"
+          :model-value="
+                $store.state.mqtt[
+                  'openWB/optional/ocpp/config'
+                ]['active']
+              "
+              @update:model-value="
+                updateState(
+                  'openWB/optional/ocpp/config',
+                  $event,
+                  'active',
+                )
+              "
+        />
+        <div
+          v-if="
+            $store.state.mqtt[
+                  'openWB/optional/ocpp/config'
+                ]['active'] ===
+              true
+          "
+        >
+          <openwb-base-alert subtype="info">
+            Die Ladepunkte übermitteln den ID-Tag, Heartbeat und den
+            Zählerstand zum Zeitpunkt des Ansteckens, Absteckens und
+            alle 5 Minuten. Eine Steuerung per OCPP ist nicht
+            möglich.<br>Alle Ladepunkte, die ihre Daten an das
+            OCPP-Backend übermitteln sollen, müssen zunächst im
+            OCPP-Backend angelegt werden. Die dort eingetragene
+            Chargebox ID muss in der openWB in den Einstellungen des
+            Ladepunkts eingetragen werden.
+          </openwb-base-alert>
+          <openwb-base-text-input
+            title="URL des OCPP-Backends"
+            subtype="host"
+            :model-value="
+                $store.state.mqtt[
+                  'openWB/optional/ocpp/config'
+                ]['url']
+              "
+              @update:model-value="
+                updateState(
+                  'openWB/optional/ocpp/config',
+                  $event,
+                  'url',
+                )
+              "
+          />
+          <openwb-base-select-input
+            title="Version"
+            not-selected="Bitte auswählen"
+            :options="[
+              { value: 'ocpp1.6', text: 'OCPP 1.6' },
+              { value: 'ocpp2.0.1', text: 'OCPP 2.0.1' },
+            ]"
+            :model-value="
+                $store.state.mqtt[
+                  'openWB/optional/ocpp/config'
+                ]['version']
+              "
+              @update:model-value="
+                updateState(
+                  'openWB/optional/ocpp/config',
+                  $event,
+                  'version',
+                )
+              "
+          />
+        </div>
+      </openwb-base-card>
       <openwb-base-submit-buttons
         form-name="generalChargeConfigForm"
         @save="$emit('save')"
@@ -404,9 +424,7 @@ export default {
         "openWB/general/prices/grid",
         "openWB/general/prices/pv",
         "openWB/optional/et/provider",
-        "openWB/optional/ocpp/url",
-				"openWB/optional/ocpp/active",
-				"openWB/optional/ocpp/version",
+        "openWB/optional/ocpp/config",
         "openWB/system/configurable/electricity_tariffs",
       ],
     };
