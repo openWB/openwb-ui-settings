@@ -410,7 +410,7 @@ export default {
         "openWB/counter/config/consider_less_charging",
         "openWB/counter/get/hierarchy",
         "openWB/system/device/+/component/+/config",
-		"openWB/counter/+/config/max_power_errorcase",
+        "openWB/counter/+/config/max_power_errorcase",
         "openWB/counter/+/config/max_currents",
         "openWB/counter/+/config/max_total_power",
         "openWB/pv/+/config/max_ac_out",
