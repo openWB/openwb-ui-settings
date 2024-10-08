@@ -115,6 +115,12 @@
             berücksichtigt. Bei Zwischenzählern begrenzt das
             Lastmanagement rein anhand der maximalen
             Phasenströme.<br>
+            Wenn ein Zähler nicht auslesbar ist, wird weiterhin
+            versucht, diesen auszulesen und nach 60s die angenommene
+            Leistung im Fehlerfall verwendet, die unten für jeden Zähler
+            eingestellt wird, um eine Überlast zu
+            vermeiden. Die angenommene Leistung wird gleichmäßig auf
+            die Phasen verteilt.<br>
             Überlicherweise sind Hausanschlüsse mit 24kW und 3*35A
             bzw. 43kW und 3*63A abgesichert.
           </openwb-base-alert>
@@ -241,6 +247,33 @@
               <template #help>
                 Maximal zulässiger Strom für die Phase 3 dieses
                 (Zwischen-)Zählers.
+              </template>
+            </openwb-base-number-input>
+            <openwb-base-number-input
+              title="Maximale Leistung im Fehlerfall"
+              :min="0"
+              :step="1"
+              unit="kW"
+              :model-value="
+                $store.state.mqtt[
+                  'openWB/counter/' +
+                  counter.id +
+                  '/config/max_power_errorcase'
+                ] / 1000
+              "
+              @update:model-value="
+                updateState(
+                  'openWB/counter/' +
+                    counter.id +
+                    '/config/max_power_errorcase',
+                  $event * 1000,
+                )
+              "
+            >
+              <template #help>
+                Angenommen Leistung für diesen
+                (Zwischen-)Zähler, falls vom Zähler keine Werte
+                abgefragt werden können.
               </template>
             </openwb-base-number-input>
           </openwb-base-card>
@@ -377,6 +410,7 @@ export default {
         "openWB/counter/config/consider_less_charging",
         "openWB/counter/get/hierarchy",
         "openWB/system/device/+/component/+/config",
+        "openWB/counter/+/config/max_power_errorcase",
         "openWB/counter/+/config/max_currents",
         "openWB/counter/+/config/max_total_power",
         "openWB/pv/+/config/max_ac_out",
