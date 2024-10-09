@@ -494,7 +494,7 @@ export default {
       let options = [
         {
           value: null,
-          text: "von openWB berechnen",
+          text: "von openWB berechnen (in 99% der Fälle die richtige Einstellung)",
         },
       ];
       let groups = [
