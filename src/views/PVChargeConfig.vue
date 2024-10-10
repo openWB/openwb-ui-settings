@@ -305,23 +305,13 @@
         </div>
         <div v-else>
           <openwb-base-button-group-input
+            v-model="batMode"
             title="Laden mit Überschuss"
             :buttons="[
               { buttonValue: 'ev_mode' },
               { buttonValue: 'bat_mode' },
               { buttonValue: 'min_soc_bat_mode' },
             ]"
-            :model-value="
-              $store.state.mqtt[
-                'openWB/general/chargemode_config/pv_charging/bat_mode'
-              ]
-            "
-            @update:model-value="
-              updateState(
-                'openWB/general/chargemode_config/pv_charging/bat_mode',
-                $event,
-              )
-            "
           >
             <template #label-ev_mode>
               <font-awesome-icon
@@ -395,11 +385,7 @@
             </template>
           </openwb-base-button-group-input>
           <div
-            v-if="
-              $store.state.mqtt[
-                'openWB/general/chargemode_config/pv_charging/bat_mode'
-              ] === 'min_soc_bat_mode'
-            "
+            v-if="batMode === 'min_soc_bat_mode'"
           >
             <openwb-base-range-input
               title="Mindest-SoC des Speichers"
@@ -642,10 +628,18 @@ export default {
         }
       },
     },
-    batMode() {
-      return this.$store.state.mqtt[
-        "openWB/general/chargemode_config/pv_charging/bat_mode"
-      ];
+    batMode: {
+      get() {
+        return this.$store.state.mqtt[
+          "openWB/general/chargemode_config/pv_charging/bat_mode"
+        ];
+      },
+      set(newMode) {
+        this.updateState(
+          "openWB/general/chargemode_config/pv_charging/bat_mode",
+          newMode,
+        );
+      },
     },
   },
   watch: {

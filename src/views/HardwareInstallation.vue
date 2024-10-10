@@ -250,6 +250,16 @@
               @update:model-value="
                 componentToAdd[installedDevice.id] = $event
               "
+              @input:add="
+                addComponent(
+                  installedDevice.id,
+                  installedDevice.vendor,
+                  installedDevice.type,
+                  componentToAdd[
+                    installedDevice.id
+                  ],
+                )
+              "
             >
               <template #help>
                 Bitte eine Komponente auswählen, die hinzugefügt
