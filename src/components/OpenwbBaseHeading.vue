@@ -84,8 +84,4 @@ export default {
 .heading-text {
   cursor: default;
 }
-
-.clickable {
-  cursor: pointer;
-}
 </style>

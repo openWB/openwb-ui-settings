@@ -345,4 +345,12 @@ export default {
 .container[role="main"] {
   padding: 60px 15px 30px;
 }
+
+.clickable {
+  cursor: pointer;
+}
+
+.not-clickable {
+  cursor: not-allowed;
+}
 </style>

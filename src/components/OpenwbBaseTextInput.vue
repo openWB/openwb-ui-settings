@@ -390,10 +390,6 @@ export default {
 </script>
 
 <style scoped>
-.clickable {
-  cursor: pointer;
-}
-
 input:invalid {
   background-color: pink;
 }

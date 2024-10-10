@@ -229,8 +229,4 @@ export default {
   background-color: var(--dark);
   border: 1px solid var(--dark);
 }
-
-.clickable {
-  cursor: pointer;
-}
 </style>

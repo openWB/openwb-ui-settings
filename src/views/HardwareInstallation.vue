@@ -625,9 +625,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.clickable {
-  cursor: pointer;
-}
-</style>

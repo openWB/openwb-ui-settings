@@ -65,7 +65,7 @@
               class="input-group-text"
               :class="
                 addDisabled
-                  ? 'notClickable'
+                  ? 'not-clickable'
                   : 'bg-success clickable'
               "
               @click="addClicked()"
@@ -133,13 +133,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.clickable {
-  cursor: pointer;
-}
-
-.notClickable {
-  cursor: not-allowed;
-}
-</style>

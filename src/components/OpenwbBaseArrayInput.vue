@@ -38,7 +38,7 @@
               :class="
                 newTagValid
                   ? 'bg-success clickable'
-                  : 'notClickable'
+                  : 'not-clickable'
               "
               @click="addTag"
             >
@@ -165,14 +165,6 @@ export default {
 </script>
 
 <style scoped>
-.clickable {
-  cursor: pointer;
-}
-
-.notClickable {
-  cursor: not-allowed;
-}
-
 .remove-element:hover {
   color: var(--danger);
 }

@@ -1223,10 +1223,6 @@ export default {
 </script>
 
 <style scoped>
-.clickable {
-  cursor: pointer;
-}
-
 .highlight {
   text-transform: uppercase;
   font-weight: bold;
