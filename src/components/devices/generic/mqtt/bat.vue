@@ -64,6 +64,25 @@
           Beispiel: <span class="text-info">95</span>
         </li>
       </ul>
+      Optional: Wenn der Speicher dies unterstützt, kann folgendes Topic
+      abonniert werden, um die Entladeleistung im Speicher zu setzen. Der
+      Modus, um die Speicher-Entladung ins Fahrzeug zu steuern, kann in
+      den übergreifenden Ladeeinstellungen gesetzt werden.
+      <ul>
+        <li>
+          <openwb-base-copy-to-clipboard
+            class="text-info"
+            tooltip="Topic kopieren"
+          >
+            openWB/bat/{{
+              componentId
+            }}/set/power_limit
+          </openwb-base-copy-to-clipboard><br>
+          Entladeleistung in Watt (Float), die im Speicher gesetzt
+          werden muss.<br>
+          Beispiel: <span class="text-info">123.0</span>
+        </li>
+      </ul>
     </openwb-base-alert>
   </div>
 </template>

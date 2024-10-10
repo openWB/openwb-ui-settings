@@ -304,6 +304,73 @@
             />
           </div>
         </div>
+        <hr>
+        <openwb-base-heading>
+          Speicher-Entladung ins Fahrzeug steuern
+        </openwb-base-heading>
+        <div
+          v-if="
+            $store.state.mqtt[
+              'openWB/bat/get/power_limit_controlable'
+            ] !== 0
+          "
+        >
+          <openwb-base-button-group-input
+            title="Speicher-Entladung"
+            :buttons="[
+              {
+                buttonValue: 'no_limit',
+                text: 'immer',
+              },
+              {
+                buttonValue: 'limit_stop',
+                text: 'gesperrt, wenn Fahrzeug lädt',
+              },
+              {
+                buttonValue: 'limit_to_home_consumption',
+                text: 'für Hausverbrauch',
+              },
+            ]"
+            :model-value="
+              $store.state.mqtt[
+                'openWB/bat/config/power_limit_mode'
+              ]
+            "
+            @update:model-value="
+              updateState(
+                'openWB/bat/config/power_limit_mode',
+                $event,
+              )
+            "
+          >
+            <template #help>
+              Wenn das Entladen des Speichers immer erlaubt ist,
+              wird das Fahrzeug aus dem Speicher geladen anstatt
+              Strom aus dem Netz zu beziehen. <br>
+              Im Modus "gesperrt, wenn Fahrzeug lädt", wird die
+              Entladung nur zugelassen, wenn alle Fahrzeuge im
+              Modus PV-Laden ohne Mindeststrom oder Zielladen mit
+              PV-Überschuss laden.<br>
+              Wenn das Entladen des Speichers auf den
+              Hausverbrauch begrenzt ist und mindestens Fahrzeuge
+              nicht im Modus PV-Laden ohne Mindeststrom oder
+              Zielladen lädt, wird die Entladung des Speichers in
+              Höhe des Hausverbrauchs zugelassen. Kann die
+              Entladung am Speicher nur komplett gesperrt werden,
+              verhält sich diese Einstellung wie "gesperrt, wenn
+              Fahrzeug lädt".<br>
+              Diese Einstellung übersteuert ggf die Einstellungen
+              zur Speicher-Beachtung im Modus PV-Laden.
+            </template>
+          </openwb-base-button-group-input>
+        </div>
+        <div v-else>
+          <openwb-base-alert subtype="info">
+            Die Speicher-Entladung ins Fahrzeug kann nicht gesteuert
+            werden, da die Entladeleistung nicht an den/die
+            konfigurierten Speicher übergeben werden kann.
+          </openwb-base-alert>
+        </div>
       </openwb-base-card>
       <openwb-base-card title="OCPP Anbindung">
         <openwb-base-button-group-input
@@ -413,6 +480,8 @@ export default {
   data() {
     return {
       mqttTopicsToSubscribe: [
+        "openWB/bat/config/power_limit_mode",
+        "openWB/bat/get/power_limit_controlable",
         "openWB/general/extern",
         "openWB/general/chargemode_config/phase_switch_delay",
         "openWB/general/chargemode_config/retry_failed_phase_switches",
