@@ -57,19 +57,9 @@
 
 <script>
 export default {
-	name: "VehicleSocOVMS",
-	emits: ["update:configuration"],
-	props: {
-		vehicleId: { required: true, type: Number },
-		vehicle: { required: true, type: Object },
-	},
-	data() {
-		return {};
-	},
-	methods: {
-		updateConfiguration(event, path = undefined) {
-			this.$emit("update:configuration", { value: event, object: path });
-		},
-	},
+import VehicleConfigMixin from "../VehicleConfigMixin.vue";
+ export default {
+   name: "VehicleSocOVMS",
+   mixins: [VehicleConfigMixin],
 };
 </script>
