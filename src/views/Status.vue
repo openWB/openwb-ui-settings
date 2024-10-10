@@ -225,7 +225,7 @@ export default {
 .status {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  gap: 0 1em;
 }
 
 .status .card {

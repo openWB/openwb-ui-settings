@@ -293,31 +293,14 @@
         </openwb-base-card>
         <hr v-if="Object.keys(installedChargePoints).length > 0">
         <openwb-base-select-input
-          class="mb-2"
           title="Verfügbare Ladepunkte"
           not-selected="Bitte auswählen"
           :options="getChargePointList()"
           :model-value="chargePointToAdd"
+          :add-button="true"
           @update:model-value="chargePointToAdd = $event"
+          @input:add="addChargePoint"
         >
-          <template #append>
-            <span class="col-1">
-              <openwb-base-click-button
-                :class="
-                  chargePointToAdd === undefined
-                    ? 'btn-outline-success'
-                    : 'btn-success'
-                "
-                :disabled="chargePointToAdd === undefined"
-                @button-clicked="addChargePoint"
-              >
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'plus']"
-                />
-              </openwb-base-click-button>
-            </span>
-          </template>
           <template #help>
             Bitte einen Ladepunkt auswählen, der der openWB-Regelung
             hinzugefügt werden soll.<br>
@@ -1264,10 +1247,6 @@ export default {
 </script>
 
 <style scoped>
-.clickable {
-  cursor: pointer;
-}
-
 .highlight {
   text-transform: uppercase;
   font-weight: bold;

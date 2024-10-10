@@ -291,11 +291,7 @@ import {
   faCheckCircle as fasCheckCircle,
   faExclamationTriangle as fasExclamationTriangle,
   faTimesCircle as fasTimesCircle,
-  //   faCar as fasCar,
   faChargingStation as fasChargingStation,
-  //   faCarBattery as fasCarBattery,
-  //   faSolarPanel as fasSolarPanel,
-  //   faGaugeHigh as fasGaugeHigh,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -303,11 +299,7 @@ library.add(
   fasCheckCircle,
   fasExclamationTriangle,
   fasTimesCircle,
-  //   fasCar,
   fasChargingStation,
-  //   fasCarBattery,
-  //   fasSolarPanel,
-  //   fasGaugeHigh
 );
 
 export default {

@@ -114,7 +114,7 @@
                       "
                     />
                   </div>
-                  <hr v-if="componentKey == 'all'">
+                  <hr v-if="componentKey == 'all' && groupKey != 'hc'">
                 </div>
               </openwb-base-card>
             </div>

@@ -1,22 +1,18 @@
 <template>
-  <div class="form-row mb-1">
-    <label
-      class="col-md-4 col-form-label"
-      @click="toggleHelp"
+  <openwb-base-setting-element>
+    <template #title>
+      <slot name="title">
+        {{ title }}
+      </slot>
+    </template>
+    <template
+      v-if="$slots.help"
+      #help
     >
-      {{ title }}
-      <font-awesome-icon
-        v-if="$slots.help"
-        :icon="
-          showHelp
-            ? ['fas', 'question-circle']
-            : ['far', 'question-circle']
-        "
-        :class="showHelp ? 'text-info' : ''"
-      />
-    </label>
-    <div class="col-md-8">
-      <div class="form-row">
+      <slot name="help" />
+    </template>
+    <template #default>
+      <div class="col-md-8">
         <input
           v-model="value"
           class="form-control"
@@ -24,28 +20,17 @@
           v-bind="$attrs"
         >
       </div>
-      <span
-        v-if="showHelp"
-        class="form-row alert alert-info my-1 small"
-      >
-        <slot name="help" />
-      </span>
-    </div>
-  </div>
+    </template>
+  </openwb-base-setting-element>
 </template>
 
 <script>
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faQuestionCircle as fasQuestionCircle } from "@fortawesome/free-solid-svg-icons";
-import { faQuestionCircle as farQuestionCircle } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-
-library.add(fasQuestionCircle, farQuestionCircle);
+import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
 
 export default {
   name: "OpenwbCheckboxInput",
   components: {
-    FontAwesomeIcon,
+    OpenwbBaseSettingElement,
   },
   inheritAttrs: false,
   props: {
@@ -53,11 +38,6 @@ export default {
     modelValue: { type: Boolean },
   },
   emits: ["update:modelValue"],
-  data() {
-    return {
-      showHelp: false,
-    };
-  },
   computed: {
     value: {
       get() {
@@ -66,11 +46,6 @@ export default {
       set(newValue) {
         this.$emit("update:modelValue", newValue);
       },
-    },
-  },
-  methods: {
-    toggleHelp() {
-      this.showHelp = !this.showHelp && this.$slots.help !== undefined;
     },
   },
 };

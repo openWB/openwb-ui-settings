@@ -237,7 +237,6 @@
                   installedDevice.type,
                 ).length
               "
-              class="mb-2"
               title="Verfügbare Komponenten"
               not-selected="Bitte auswählen"
               :options="
@@ -247,43 +246,21 @@
                 )
               "
               :model-value="componentToAdd[installedDevice.id]"
+              :add-button="true"
               @update:model-value="
                 componentToAdd[installedDevice.id] = $event
               "
+              @input:add="
+                addComponent(
+                  installedDevice.id,
+                  installedDevice.vendor,
+                  installedDevice.type,
+                  componentToAdd[
+                    installedDevice.id
+                  ],
+                )
+              "
             >
-              <template #append>
-                <span class="col-1">
-                  <openwb-base-click-button
-                    :class="
-                      componentToAdd[
-                        installedDevice.id
-                      ] === undefined
-                        ? 'btn-outline-success'
-                        : 'btn-success clickable'
-                    "
-                    :disabled="
-                      componentToAdd[
-                        installedDevice.id
-                      ] === undefined
-                    "
-                    @button-clicked="
-                      addComponent(
-                        installedDevice.id,
-                        installedDevice.vendor,
-                        installedDevice.type,
-                        componentToAdd[
-                          installedDevice.id
-                        ],
-                      )
-                    "
-                  >
-                    <font-awesome-icon
-                      fixed-width
-                      :icon="['fas', 'plus']"
-                    />
-                  </openwb-base-click-button>
-                </span>
-              </template>
               <template #help>
                 Bitte eine Komponente auswählen, die hinzugefügt
                 werden soll. Für jeden Datensatz, z.B.
@@ -313,6 +290,10 @@
             not-selected="Bitte auswählen"
             :disabled="selectedVendor === undefined"
             :options="deviceList"
+            :model-value="deviceToAdd"
+            :add-button="true"
+            @update:model-value="deviceToAdd = $event"
+            @input:add="addDevice"
           >
             <template #append>
               <span class="col-1">
@@ -654,9 +635,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.clickable {
-  cursor: pointer;
-}
-</style>

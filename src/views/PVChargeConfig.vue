@@ -312,17 +312,6 @@
               { buttonValue: 'bat_mode' },
               { buttonValue: 'min_soc_bat_mode' },
             ]"
-            :model-value="
-              $store.state.mqtt[
-                'openWB/general/chargemode_config/pv_charging/bat_mode'
-              ]
-            "
-            @update:model-value="
-              updateState(
-                'openWB/general/chargemode_config/pv_charging/bat_mode',
-                $event,
-              )
-            "
           >
             <template #label-ev_mode>
               <font-awesome-icon
@@ -395,14 +384,16 @@
               </p>
             </template>
           </openwb-base-button-group-input>
-          <div v-if="batMode === 'min_soc_bat_mode'">
+          <div
+            v-if="batMode === 'min_soc_bat_mode'"
+          >
             <openwb-base-range-input
               title="Mindest-SoC des Speichers"
               :min="0"
               :max="100"
               :step="1"
               unit="%"
-              :required
+              required
               :model-value="
                 $store.state.mqtt[
                   'openWB/general/chargemode_config/pv_charging/min_bat_soc'
@@ -420,7 +411,6 @@
               Mindest-SoC
             </openwb-base-heading>
             <openwb-base-button-group-input
-              v-model="batPowerReserveActive"
               title="Ladeleistung für Speicher reservieren"
               :buttons="[
                 {
@@ -485,7 +475,6 @@
               Mindest-SoC
             </openwb-base-heading>
             <openwb-base-button-group-input
-              v-model="batPowerReserveActive"
               title="Entladung des Speichers erlauben"
               :buttons="[
                 {
@@ -639,10 +628,18 @@ export default {
         }
       },
     },
-    batMode() {
-      return this.$store.state.mqtt[
-        "openWB/general/chargemode_config/pv_charging/bat_mode"
-      ];
+    batMode: {
+      get() {
+        return this.$store.state.mqtt[
+          "openWB/general/chargemode_config/pv_charging/bat_mode"
+        ];
+      },
+      set(newMode) {
+        this.updateState(
+          "openWB/general/chargemode_config/pv_charging/bat_mode",
+          newMode,
+        );
+      },
     },
   },
   watch: {

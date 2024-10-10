@@ -1,87 +1,73 @@
 <template>
-  <div class="form-row mb-1">
-    <label
-      class="col-md-4 col-form-label"
-      @click="toggleHelp"
+  <openwb-base-setting-element>
+    <template #title>
+      <slot name="title">
+        {{ title }}
+      </slot>
+    </template>
+    <template
+      v-if="$slots.help"
+      #help
     >
-      {{ title }}
-      <font-awesome-icon
-        v-if="$slots.help"
-        :icon="
-          showHelp
-            ? ['fas', 'question-circle']
-            : ['far', 'question-circle']
-        "
-        :class="showHelp ? 'text-info' : ''"
-      />
-    </label>
-    <div class="col-md-8">
-      <div class="form-row vaRow mb-1">
-        <label
-          v-if="label"
-          class="col-2 col-form-label valueLabel"
-        >
-          {{ label }}
-        </label>
-        <button
-          class="col-1 btn btn-block btn-info"
-          type="button"
-          @click="decrement"
-        >
-          <font-awesome-icon :icon="['fas', 'step-backward']" />
-        </button>
-        <div class="col">
-          <input
-            v-model.number="sliderValue"
-            type="range"
-            class="form-control-range rangeInput"
-            :min="min"
-            :max="max"
-            :step="step"
-            v-bind="$attrs"
+      <slot name="help" />
+    </template>
+    <template #default>
+      <div class="w-100">
+        <div class="vaRow mb-1 w-100">
+          <label
+            v-if="label"
+            class="col-2 col-form-label valueLabel"
           >
+            {{ label }}
+          </label>
+          <button
+            class="col-1 btn btn-block btn-info"
+            type="button"
+            @click="decrement"
+          >
+            <font-awesome-icon :icon="['fas', 'step-backward']" />
+          </button>
+          <div class="col">
+            <input
+              v-model.number="sliderValue"
+              type="range"
+              class="form-control-range rangeInput"
+              :min="min"
+              :max="max"
+              :step="step"
+              v-bind="$attrs"
+            >
+          </div>
+          <button
+            class="col-1 btn btn-block btn-info"
+            type="button"
+            @click="increment"
+          >
+            <font-awesome-icon :icon="['fas', 'step-forward']" />
+          </button>
         </div>
-        <button
-          class="col-1 btn btn-block btn-info"
-          type="button"
-          @click="increment"
-        >
-          <font-awesome-icon :icon="['fas', 'step-forward']" />
-        </button>
       </div>
-      <div
-        v-if="showHelp"
-        class="form-row alert alert-info my-1 small"
-      >
-        <div class="col">
-          <slot name="help" />
-        </div>
-      </div>
-    </div>
-  </div>
+    </template>
+  </openwb-base-setting-element>
 </template>
 
 <script>
+import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-  faQuestionCircle as fasQuestionCircle,
   faStepForward as fasStepForward,
   faStepBackward as fasStepBackward,
 } from "@fortawesome/free-solid-svg-icons";
-import { faQuestionCircle as farQuestionCircle } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(
-  fasQuestionCircle,
-  farQuestionCircle,
-  fasStepForward,
-  fasStepBackward,
-);
+library.add(fasStepForward, fasStepBackward);
 
 export default {
   name: "OpenwbRangeInput",
   components: {
     FontAwesomeIcon,
+    OpenwbBaseSettingElement,
   },
   inheritAttrs: false,
   props: {
@@ -94,11 +80,6 @@ export default {
     labels: { type: Array, required: false, default: undefined },
   },
   emits: ["update:modelValue"],
-  data() {
-    return {
-      showHelp: false,
-    };
-  },
   computed: {
     label() {
       var currentLabel;
@@ -170,9 +151,6 @@ export default {
     },
   },
   methods: {
-    toggleHelp() {
-      this.showHelp = !this.showHelp && this.$slots.help !== undefined;
-    },
     increment() {
       var newSliderValue = Math.min(
         this.sliderValue + this.step,

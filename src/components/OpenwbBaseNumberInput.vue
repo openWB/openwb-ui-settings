@@ -1,72 +1,59 @@
 <template>
-  <div class="form-row mb-1">
-    <label
-      class="col-md-4 col-form-label"
-      @click="toggleHelp"
+  <openwb-base-setting-element>
+    <template #title>
+      <slot name="title">
+        {{ title }}
+      </slot>
+    </template>
+    <template
+      v-if="$slots.help"
+      #help
     >
-      {{ title }}
-      <font-awesome-icon
-        v-if="$slots.help"
-        :icon="
-          showHelp
-            ? ['fas', 'question-circle']
-            : ['far', 'question-circle']
-        "
-        :class="showHelp ? 'text-info' : ''"
-      />
-    </label>
-    <div class="col-md-8">
-      <div class="form-row">
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <div class="input-group-text">
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'calculator']"
-              />
-            </div>
+      <slot name="help" />
+    </template>
+    <template #default>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            <font-awesome-icon
+              fixed-width
+              :icon="['fas', 'calculator']"
+            />
           </div>
-          <input
-            v-model.number="value"
-            type="number"
-            class="form-control"
-            v-bind="$attrs"
-          >
-          <div
-            v-if="unit"
-            class="input-group-append"
-          >
-            <div class="input-group-text">
-              {{ unit }}
-            </div>
+        </div>
+        <input
+          v-model.number="value"
+          type="number"
+          class="form-control"
+          v-bind="$attrs"
+        >
+        <div
+          v-if="unit"
+          class="input-group-append"
+        >
+          <div class="input-group-text">
+            {{ unit }}
           </div>
         </div>
       </div>
-      <span
-        v-if="showHelp"
-        class="form-row alert alert-info my-1 small"
-      >
-        <slot name="help" />
-      </span>
-    </div>
-  </div>
+    </template>
+  </openwb-base-setting-element>
 </template>
 
 <script>
+import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faQuestionCircle as fasQuestionCircle,
-  faCalculator as fasCalculator,
-} from "@fortawesome/free-solid-svg-icons";
-import { faQuestionCircle as farQuestionCircle } from "@fortawesome/free-regular-svg-icons";
+import { faCalculator as fasCalculator } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasQuestionCircle, farQuestionCircle, fasCalculator);
+library.add(fasCalculator);
 
 export default {
   name: "OpenwbNumberInput",
   components: {
     FontAwesomeIcon,
+    OpenwbBaseSettingElement,
   },
   inheritAttrs: false,
   props: {
@@ -77,11 +64,6 @@ export default {
     emptyValue: { type: [Number, null], required: false, default: null },
   },
   emits: ["update:modelValue"],
-  data() {
-    return {
-      showHelp: false,
-    };
-  },
   computed: {
     value: {
       get() {
@@ -100,11 +82,6 @@ export default {
         }
         this.$emit("update:modelValue", newValue);
       },
-    },
-  },
-  methods: {
-    toggleHelp() {
-      this.showHelp = !this.showHelp && this.$slots.help !== undefined;
     },
   },
 };

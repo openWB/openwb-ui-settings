@@ -5,7 +5,6 @@
   >
     <div
       class="heading-text"
-      @click="toggleHelp"
     >
       <slot />
       <font-awesome-icon
@@ -15,7 +14,9 @@
             ? ['fas', 'question-circle']
             : ['far', 'question-circle']
         "
+        class="clickable"
         :class="showHelp ? 'text-info' : ''"
+        @click.stop="toggleHelp"
       />
     </div>
     <span
@@ -28,7 +29,7 @@
   <div class="">
     <span
       v-if="showHelp"
-      class="form-row alert alert-info small"
+      class="form-row alert alert-info small flex-fill"
     >
       <slot name="help" />
     </span>
