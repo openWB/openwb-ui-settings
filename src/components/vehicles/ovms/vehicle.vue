@@ -50,7 +50,9 @@
         updateConfiguration($event, 'configuration.vehicleId')
       "
     >
-      <template #help> Die Id des Fahrzeugs im OVMS, auch Module Id genannt. </template>
+      <template #help>
+        Die Id des Fahrzeugs im OVMS, auch Module Id genannt.
+      </template>
     </openwb-base-text-input>
   </div>
 </template>

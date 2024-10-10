@@ -321,23 +321,23 @@
             },
           ]"
           :model-value="
-                $store.state.mqtt[
-                  'openWB/optional/ocpp/config'
-                ]?.active
-              "
-              @update:model-value="
-                updateState(
-                  'openWB/optional/ocpp/config',
-                  $event,
-                  'active',
-                )
-              "
+            $store.state.mqtt[
+              'openWB/optional/ocpp/config'
+            ]?.active
+          "
+          @update:model-value="
+            updateState(
+              'openWB/optional/ocpp/config',
+              $event,
+              'active',
+            )
+          "
         />
         <div
           v-if="
             $store.state.mqtt[
-                  'openWB/optional/ocpp/config'
-                ]?.active ===
+              'openWB/optional/ocpp/config'
+            ]?.active ===
               true
           "
         >
@@ -355,17 +355,17 @@
             title="URL des OCPP-Backends"
             subtype="host"
             :model-value="
-                $store.state.mqtt[
-                  'openWB/optional/ocpp/config'
-                ]?.url
-              "
-              @update:model-value="
-                updateState(
-                  'openWB/optional/ocpp/config',
-                  $event,
-                  'url',
-                )
-              "
+              $store.state.mqtt[
+                'openWB/optional/ocpp/config'
+              ]?.url
+            "
+            @update:model-value="
+              updateState(
+                'openWB/optional/ocpp/config',
+                $event,
+                'url',
+              )
+            "
           />
           <openwb-base-select-input
             title="Version"
@@ -375,17 +375,17 @@
               { value: 'ocpp2.0.1', text: 'OCPP 2.0.1' },
             ]"
             :model-value="
-                $store.state.mqtt[
-                  'openWB/optional/ocpp/config'
-                ]?.version
-              "
-              @update:model-value="
-                updateState(
-                  'openWB/optional/ocpp/config',
-                  $event,
-                  'version',
-                )
-              "
+              $store.state.mqtt[
+                'openWB/optional/ocpp/config'
+              ]?.version
+            "
+            @update:model-value="
+              updateState(
+                'openWB/optional/ocpp/config',
+                $event,
+                'version',
+              )
+            "
           />
         </div>
       </openwb-base-card>
