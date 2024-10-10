@@ -1,8 +1,7 @@
 <template>
-  <div class="form-row mb-1 align-items-baseline">
+  <div class="form-row mb-1">
     <label
       class="col-md-4 col-form-label"
-      @click="toggleHelp"
     >
       <slot name="title">*TITLE*</slot>
       <font-awesome-icon
@@ -12,8 +11,9 @@
             ? ['fas', 'question-circle']
             : ['far', 'question-circle']
         "
-        class="ml-1"
+        class="clickable ml-1"
         :class="showHelp ? 'text-info' : ''"
+        @click.stop="toggleHelp"
       />
     </label>
     <div class="col-md-8">
@@ -41,19 +41,25 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasQuestionCircle, farQuestionCircle);
 
 export default {
-	name: "OpenwbBaseSettingElement",
-	components: {
-		FontAwesomeIcon,
-	},
-	data() {
-		return {
-			showHelp: false,
-		};
-	},
-	methods: {
-		toggleHelp() {
-			this.showHelp = !this.showHelp && this.$slots.help !== undefined;
-		},
-	},
+  name: "OpenwbBaseSettingElement",
+  components: {
+    FontAwesomeIcon,
+  },
+  data() {
+    return {
+      showHelp: false,
+    };
+  },
+  methods: {
+    toggleHelp() {
+      this.showHelp = !this.showHelp && this.$slots.help !== undefined;
+    },
+  },
 };
 </script>
+
+<style scoped>
+.clickable {
+  cursor: pointer;
+}
+</style>

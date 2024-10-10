@@ -53,7 +53,7 @@
         genutzt werden (befindet sich am Wechselrichter hinter dem
         WiNet-S Dongle), da nur hier alle Werte vollständig ausgelesen
         werden können. Den WiNet-S Dongle zusätzlich ins Heimnetz (per
-        Lan oder Wlan) einbinden, um iSolarCloud nutzen zu können.
+        LAN oder WLAN) einbinden, um iSolarCloud nutzen zu können.
       </template>
     </openwb-base-select-input>
   </div>

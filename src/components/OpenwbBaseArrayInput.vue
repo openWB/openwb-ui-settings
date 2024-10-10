@@ -52,7 +52,7 @@
           </div>
         </div>
       </div>
-      <div class="form-row tagList mt-1 w-100">
+      <div class="tagList mt-1 w-100">
         <span
           v-if="value.length == 0"
           class="noTag"

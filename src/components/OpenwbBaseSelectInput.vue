@@ -136,10 +136,10 @@ export default {
 
 <style scoped>
 .clickable {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 .notClickable {
-	cursor: not-allowed;
+  cursor: not-allowed;
 }
 </style>

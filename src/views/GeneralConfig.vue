@@ -717,11 +717,13 @@
               )
             "
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'calendar']"
-            />
-            Beginn
+            <template #title>
+              <font-awesome-icon
+                fixed-width
+                :icon="['fas', 'calendar']"
+              />
+              Beginn
+            </template>
           </openwb-base-button-group-input>
           <openwb-base-button-group-input
             :buttons="[
@@ -749,11 +751,13 @@
               )
             "
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'calendar']"
-            />
-            Ende
+            <template #title>
+              <font-awesome-icon
+                fixed-width
+                :icon="['fas', 'calendar']"
+              />
+              Ende
+            </template>
           </openwb-base-button-group-input>
           <openwb-base-button-group-input
             :buttons="[
@@ -781,11 +785,13 @@
               )
             "
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'clock']"
-            />
-            Dauer
+            <template #title>
+              <font-awesome-icon
+                fixed-width
+                :icon="['fas', 'clock']"
+              />
+              Dauer
+            </template>
           </openwb-base-button-group-input>
           <openwb-base-button-group-input
             :buttons="[
@@ -813,11 +819,13 @@
               )
             "
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'coins']"
-            />
-            Kosten
+            <template #title>
+              <font-awesome-icon
+                fixed-width
+                :icon="['fas', 'coins']"
+              />
+              Kosten
+            </template>
           </openwb-base-button-group-input>
           <openwb-base-button-group-input
             :buttons="[
@@ -845,11 +853,13 @@
               )
             "
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'pie-chart']"
-            />
-            Energieaufteilung
+            <template #title>
+              <font-awesome-icon
+                fixed-width
+                :icon="['fas', 'pie-chart']"
+              />
+              Energieaufteilung
+            </template>
           </openwb-base-button-group-input>
           <openwb-base-button-group-input
             :buttons="[
@@ -877,11 +887,13 @@
               )
             "
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'car']"
-            />
-            Name
+            <template #title>
+              <font-awesome-icon
+                fixed-width
+                :icon="['fas', 'car']"
+              />
+              Name
+            </template>
           </openwb-base-button-group-input>
           <openwb-base-button-group-input
             :buttons="[
@@ -909,11 +921,13 @@
               )
             "
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'car']"
-            />
-            Lademodus
+            <template #title>
+              <font-awesome-icon
+                fixed-width
+                :icon="['fas', 'car']"
+              />
+              Lademodus
+            </template>
           </openwb-base-button-group-input>
           <openwb-base-button-group-input
             :buttons="[
@@ -941,11 +955,13 @@
               )
             "
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'car']"
-            />
-            Priorität
+            <template #title>
+              <font-awesome-icon
+                fixed-width
+                :icon="['fas', 'car']"
+              />
+              Priorität
+            </template>
           </openwb-base-button-group-input>
           <openwb-base-button-group-input
             :buttons="[
@@ -973,11 +989,13 @@
               )
             "
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'car']"
-            />
-            ID-Tag
+            <template #title>
+              <font-awesome-icon
+                fixed-width
+                :icon="['fas', 'car']"
+              />
+              ID-Tag
+            </template>
           </openwb-base-button-group-input>
           <openwb-base-button-group-input
             :buttons="[
@@ -1005,11 +1023,13 @@
               )
             "
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'car']"
-            />
-            SoC bei Ladebeginn
+            <template #title>
+              <font-awesome-icon
+                fixed-width
+                :icon="['fas', 'car']"
+              />
+              SoC bei Ladebeginn
+            </template>
           </openwb-base-button-group-input>
           <openwb-base-button-group-input
             :buttons="[
@@ -1037,11 +1057,13 @@
               )
             "
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'car']"
-            />
-            SoC bei Ladende
+            <template #title>
+              <font-awesome-icon
+                fixed-width
+                :icon="['fas', 'car']"
+              />
+              SoC bei Ladende
+            </template>
           </openwb-base-button-group-input>
           <openwb-base-button-group-input
             :buttons="[
@@ -1069,11 +1091,13 @@
               )
             "
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'charging-station']"
-            />
-            Name
+            <template #title>
+              <font-awesome-icon
+                fixed-width
+                :icon="['fas', 'charging-station']"
+              />
+              Name
+            </template>
           </openwb-base-button-group-input>
           <openwb-base-button-group-input
             :buttons="[
@@ -1101,11 +1125,13 @@
               )
             "
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'charging-station']"
-            />
-            Seriennummer
+            <template #title>
+              <font-awesome-icon
+                fixed-width
+                :icon="['fas', 'charging-station']"
+              />
+              Seriennummer
+            </template>
           </openwb-base-button-group-input>
           <openwb-base-button-group-input
             :buttons="[
@@ -1133,11 +1159,13 @@
               )
             "
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'charging-station']"
-            />
-            Geladene Energie
+            <template #title>
+              <font-awesome-icon
+                fixed-width
+                :icon="['fas', 'charging-station']"
+              />
+              Geladene Energie
+            </template>
           </openwb-base-button-group-input>
           <openwb-base-button-group-input
             :buttons="[
@@ -1165,11 +1193,13 @@
               )
             "
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'charging-station']"
-            />
-            Zählerstand bei Ladebeginn
+            <template #title>
+              <font-awesome-icon
+                fixed-width
+                :icon="['fas', 'charging-station']"
+              />
+              Zählerstand bei Ladebeginn
+            </template>
           </openwb-base-button-group-input>
           <openwb-base-button-group-input
             :buttons="[
@@ -1197,11 +1227,13 @@
               )
             "
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'charging-station']"
-            />
-            Zählerstand bei Ladeende
+            <template #title>
+              <font-awesome-icon
+                fixed-width
+                :icon="['fas', 'charging-station']"
+              />
+              Zählerstand bei Ladeende
+            </template>
           </openwb-base-button-group-input>
           <!-- <openwb-base-button-group-input
             :buttons="[
@@ -1229,11 +1261,13 @@
               )
             "
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'charging-station']"
-            />
-            Durchschnittliche Leistung
+            <template #title>
+              <font-awesome-icon
+                fixed-width
+                :icon="['fas', 'charging-station']"
+              />
+              Durchschnittliche Leistung
+            </template>
           </openwb-base-button-group-input> -->
         </div>
       </openwb-base-card>

@@ -5,7 +5,6 @@
   >
     <div
       class="heading-text"
-      @click="toggleHelp"
     >
       <slot />
       <font-awesome-icon
@@ -15,7 +14,9 @@
             ? ['fas', 'question-circle']
             : ['far', 'question-circle']
         "
+        class="clickable"
         :class="showHelp ? 'text-info' : ''"
+        @click.stop="toggleHelp"
       />
     </div>
     <span
@@ -82,5 +83,9 @@ export default {
 
 .heading-text {
   cursor: default;
+}
+
+.clickable {
+  cursor: pointer;
 }
 </style>

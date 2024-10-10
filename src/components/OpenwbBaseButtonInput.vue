@@ -26,11 +26,13 @@
 
 <script>
 import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+import OpenwbBaseClickButton from "./OpenwbBaseClickButton.vue";
 
 export default {
   name: "OpenwbButtonInput",
   components: {
     OpenwbBaseSettingElement,
+    OpenwbBaseClickButton,
   },
   inheritAttrs: false,
   props: {
