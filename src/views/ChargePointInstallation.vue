@@ -135,6 +135,29 @@
               "
             />
           </span>
+          <openwb-base-text-input
+            v-if="
+              $store.state.mqtt['openWB/optional/ocpp/config']['active'] ===
+                true
+            "
+            title="OCPP-Chargebox ID"
+            :model-value="installedChargePoint.ocpp_chargebox_id"
+            @update:model-value="
+              updateState(
+                installedChargePointKey,
+                $event,
+                'ocpp_chargebox_id',
+              )
+            "
+          >
+            <template #help>
+              Bitte geben Sie hier die Chargebox ID ein, die im
+              OCPP_Backend für diesen Ladepunkt verwendet wird.
+              Sollen die Daten dieses Ladepunktes nicht an ein
+              OCPP-Backend übertragen werden, lasse dieses Feld
+              leer.
+            </template>
+          </openwb-base-text-input>
           <hr>
           <openwb-charge-point-proxy
             :charge-point="installedChargePoint"
@@ -1001,6 +1024,7 @@ export default {
       mqttTopicsToSubscribe: [
         "openWB/general/extern",
         "openWB/optional/dc_charging",
+        "openWB/optional/ocpp/config",
         "openWB/optional/rfid/active",
         "openWB/chargepoint/+/config",
         "openWB/chargepoint/template/+",
