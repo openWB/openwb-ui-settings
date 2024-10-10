@@ -34,7 +34,7 @@ describe("OpenwbBaseSettingElement.vue", () => {
         help: helpContent,
       },
     });
-    const titleLabel = wrapper.find("label.col-form-label");
+    const titleLabel = wrapper.find("label.col-form-label svg.clickable");
     expect(wrapper.find("span.alert.alert-info").exists()).toBe(false);
     await titleLabel.trigger("click");
     expect(wrapper.find("span.alert.alert-info").html()).toContain(
