@@ -1,6 +1,6 @@
 <template>
   <div class="device-growatt">
-    <openwb-base-heading>Einstellungen für GoodWe</openwb-base-heading>
+    <openwb-base-heading>Einstellungen für Growatt</openwb-base-heading>
     <openwb-base-text-input
       title="IP oder Hostname"
       subtype="host"
