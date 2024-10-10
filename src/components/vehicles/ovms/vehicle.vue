@@ -56,7 +56,6 @@
 </template>
 
 <script>
-export default {
 import VehicleConfigMixin from "../VehicleConfigMixin.vue";
  export default {
    name: "VehicleSocOVMS",
