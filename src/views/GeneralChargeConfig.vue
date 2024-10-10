@@ -325,7 +325,7 @@
           :model-value="
                 $store.state.mqtt[
                   'openWB/optional/ocpp/config'
-                ]['active']
+                ]?.active
               "
               @update:model-value="
                 updateState(
@@ -339,7 +339,7 @@
           v-if="
             $store.state.mqtt[
                   'openWB/optional/ocpp/config'
-                ]['active'] ===
+                ]?.active ===
               true
           "
         >
@@ -359,7 +359,7 @@
             :model-value="
                 $store.state.mqtt[
                   'openWB/optional/ocpp/config'
-                ]['url']
+                ]?.url
               "
               @update:model-value="
                 updateState(
@@ -379,7 +379,7 @@
             :model-value="
                 $store.state.mqtt[
                   'openWB/optional/ocpp/config'
-                ]['version']
+                ]?.version
               "
               @update:model-value="
                 updateState(
