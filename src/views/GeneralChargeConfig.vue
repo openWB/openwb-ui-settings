@@ -311,8 +311,8 @@
         <div
           v-if="
             $store.state.mqtt[
-              'openWB/bat/get/power_limit_controlable'
-            ] !== 0
+              'openWB/bat/get/power_limit_controllable'
+            ] === true
           "
         >
           <openwb-base-button-group-input
@@ -412,11 +412,12 @@
             Die Ladepunkte übermitteln den ID-Tag, Heartbeat und den
             Zählerstand zum Zeitpunkt des Ansteckens, Absteckens und
             alle 5 Minuten. Eine Steuerung per OCPP ist nicht
-            möglich.<br>Alle Ladepunkte, die ihre Daten an das
-            OCPP-Backend übermitteln sollen, müssen zunächst im
-            OCPP-Backend angelegt werden. Die dort eingetragene
-            Chargebox ID muss in der openWB in den Einstellungen des
-            Ladepunkts eingetragen werden.
+            möglich.<br>
+            Alle Ladepunkte, die ihre Daten an das OCPP-Backend
+            übermitteln sollen, müssen zunächst im OCPP-Backend
+            angelegt werden. Die dort eingetragene Chargebox ID
+            muss in der openWB in den Einstellungen des Ladepunkts
+            eingetragen werden.
           </openwb-base-alert>
           <openwb-base-text-input
             title="URL des OCPP-Backends"
@@ -481,7 +482,7 @@ export default {
     return {
       mqttTopicsToSubscribe: [
         "openWB/bat/config/power_limit_mode",
-        "openWB/bat/get/power_limit_controlable",
+        "openWB/bat/get/power_limit_controllable",
         "openWB/general/extern",
         "openWB/general/chargemode_config/phase_switch_delay",
         "openWB/general/chargemode_config/retry_failed_phase_switches",
