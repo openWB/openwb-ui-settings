@@ -22,7 +22,8 @@
       </p>
       <p class="font-weight-bold">
         Wichtig: Die "Angaben zur Handhabung von Phasen" des Fahrzeugs
-        ist richtig einzutragen!
+        sind richtig einzutragen! Beachte die Hilfstexte unter den
+        Fragezeichensymbolen.
       </p>
       <p>
         Bei nur einem Fahrzeug reicht das Standard-Lade-Profil aus. Bei
