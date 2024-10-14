@@ -1070,9 +1070,7 @@ export default {
     },
   },
   methods: {
-    addChargePoint(event) {
-      // prevent further processing of the click event
-      event.stopPropagation();
+    addChargePoint() {
       this.$emit("sendCommand", {
         command: "addChargepoint",
         data: { type: this.chargePointToAdd },
