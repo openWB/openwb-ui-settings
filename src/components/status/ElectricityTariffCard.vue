@@ -39,7 +39,9 @@
         :icon="['fas', 'check-circle']"
       />
       Modulmeldung:<br>
-      {{ $store.state.mqtt["openWB/optional/et/get/fault_str"] }}
+      <span style="white-space: pre-wrap">{{
+        $store.state.mqtt["openWB/optional/et/get/fault_str"]
+      }}</span>
     </openwb-base-alert>
     <openwb-base-text-input
       title="Anbieter"

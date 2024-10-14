@@ -44,9 +44,9 @@
         :icon="['fas', 'check-circle']"
       />
       Modulmeldung:<br>
-      {{
+      <span style="white-space: pre-wrap">{{
         $store.state.mqtt["openWB/bat/" + battery.id + "/get/fault_str"]
-      }}
+      }}</span>
     </openwb-base-alert>
     <openwb-base-heading>Aktuelle Werte</openwb-base-heading>
     <openwb-base-text-input
