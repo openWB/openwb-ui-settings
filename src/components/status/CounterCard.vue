@@ -44,11 +44,11 @@
         :icon="['fas', 'check-circle']"
       />
       Modulmeldung:<br>
-      {{
+      <span style="white-space: pre-wrap">{{
         $store.state.mqtt[
           "openWB/counter/" + counter.id + "/get/fault_str"
         ]
-      }}
+      }}</span>
     </openwb-base-alert>
     <openwb-base-alert
       v-if="
@@ -59,11 +59,11 @@
       subtype="info"
     >
       Statusmeldung:<br>
-      {{
+      <span style="white-space: pre-wrap">{{
         $store.state.mqtt[
           "openWB/counter/" + counter.id + "/get/state_str"
         ]
-      }}
+      }}</span>
     </openwb-base-alert>
     <openwb-base-heading>Zählerstände</openwb-base-heading>
     <openwb-base-text-input

@@ -50,19 +50,19 @@
         :icon="['fas', 'check-circle']"
       />
       Modulmeldung:<br>
-      {{
+      <span style="white-space: pre-wrap">{{
         $store.state.mqtt[
           "openWB/chargepoint/" + chargePointIndex + "/get/fault_str"
         ]
-      }}
+      }}</span>
     </openwb-base-alert>
     <openwb-base-alert subtype="info">
       Statusmeldung:<br>
-      {{
+      <span style="white-space: pre-wrap">{{
         $store.state.mqtt[
           "openWB/chargepoint/" + chargePointIndex + "/get/state_str"
         ]
-      }}
+      }}</span>
     </openwb-base-alert>
     <openwb-base-checkbox-input
       title="Fahrzeug angesteckt"

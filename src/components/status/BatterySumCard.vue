@@ -32,7 +32,9 @@
         :icon="['fas', 'check-circle']"
       />
       Modulmeldung:<br>
-      {{ $store.state.mqtt["openWB/bat/get/fault_str"] }}
+      <span style="white-space: pre-wrap">{{
+        $store.state.mqtt["openWB/bat/get/fault_str"]
+      }}</span>
     </openwb-base-alert>
     <openwb-base-heading>Zählerstände</openwb-base-heading>
     <openwb-base-text-input

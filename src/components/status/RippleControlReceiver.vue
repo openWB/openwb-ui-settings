@@ -48,11 +48,11 @@
         :icon="['fas', 'check-circle']"
       />
       Modulmeldung:<br>
-      {{
+      <span style="white-space: pre-wrap">{{
         $store.state.mqtt[
           "openWB/general/ripple_control_receiver/get/fault_str"
         ]
-      }}
+      }}</span>
     </openwb-base-alert>
     <openwb-base-text-input
       title="Status"
