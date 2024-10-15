@@ -26,7 +26,6 @@
         Ladepunkt genutzt werden und benötigen zwingend einen separaten
         primary als Steuerteil.
       </p>
-      <p>Ergänzung</p>
       <p>
         Sofern openWB als Energiemanagementsystem für steuerbare
         Verbrauchseinrichtungen (SteuVE) gemäß §14a EnWG verwendet
