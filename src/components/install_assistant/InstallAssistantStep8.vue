@@ -22,7 +22,10 @@
       </p>
       <p class="font-weight-bold">
         Wichtig: Die "Angaben zur Handhabung von Phasen" des Fahrzeugs
-        ist richtig einzutragen!
+        sind richtig einzutragen! Beachte die Hilfstexte, die Du durch Klick auf 
+        <FontAwesomeIcon
+          :icon="['far', 'question-circle']"
+        /> anzeigen kannst.
       </p>
       <p>
         Bei nur einem Fahrzeug reicht das Standard-Lade-Profil aus. Bei
@@ -57,12 +60,14 @@
 import ComponentState from "../mixins/ComponentState.vue";
 import InstallAssistantStepTemplate from "./InstallAssistantStepTemplate.vue";
 import VehicleConfigView from "../../views/VehicleConfig.vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 export default {
   name: "InstallAssistantStep8",
   components: {
     InstallAssistantStepTemplate,
     VehicleConfigView,
+    FontAwesomeIcon,
   },
   mixins: [ComponentState],
   emits: [

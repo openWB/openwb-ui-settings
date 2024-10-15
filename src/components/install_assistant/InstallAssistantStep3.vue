@@ -1,6 +1,6 @@
 <template>
   <InstallAssistantStepTemplate
-    title="3. Allgemeine Einstellungen: Auswahl des Betriebsmodus primary / secondary"
+    title="3. Allgemeine Einstellungen: Auswahl des Betriebsmodus primary (steuernd) bzw. secondary (gesteuerte WB)"
     @next-page="nextPage"
     @previous-page="previousPage"
     @end-assistant="endAssistant"
@@ -25,6 +25,13 @@
         Ladepunkten). Eine openWB Pro und Satellit können nur als s.g.
         Ladepunkt genutzt werden und benötigen zwingend einen separaten
         primary als Steuerteil.
+      </p>
+      <p>
+        Sofern openWB als Energiemanagementsystem für steuerbare
+        Verbrauchseinrichtungen (SteuVE) gemäß §14a EnWG verwendet
+        werden soll, so ist für die VNB-Signaleingänge die entsprechende
+        Hardware auszuwählen. -> s. Beschreibung zu "Steuerbare
+        Verbrauchseinrichtung".
       </p>
       <p class="font-weight-bold">
         Änderungen werden nur bei klicken auf Speichern wirksam!

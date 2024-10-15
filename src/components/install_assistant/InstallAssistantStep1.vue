@@ -1,6 +1,6 @@
 <template>
   <InstallAssistantStepTemplate
-    title="1. Datensicherung - Eine Sicherung erstellen"
+    title="1. Datensicherung der bestehenden Konfiguration"
     @next-page="nextPage"
     @previous-page="previousPage"
     @end-assistant="endAssistant"
@@ -8,7 +8,7 @@
     <template #help>
       <p>
         Wir empfehlen an dieser Stelle eine Sicherung der openWB zu
-        erzeugen, auf welche später zurückgegriffen werden kann,
+        erstellen, auf welche später zurückgegriffen werden kann,
         insbesondere, wenn die openWB schon konfiguriert war und der
         Assistent nun erneut ausgeführt wird.
       </p>
