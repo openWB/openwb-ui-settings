@@ -2,9 +2,10 @@
   <div class="ripple-control-receiver-dimm-kit">
     <openwb-base-alert subtype="info">
       In der aktuellen Implementierung werden Kontakt 1 und 2 des
-      Dimm-Kits ausgewertet. Wenn mindestens ein Kontakt offen ist, wird
-      die Ladung gesperrt. Wenn beide Kontakte geschlossen sind, darf
-      geladen werden.
+      Dimm-Kits ausgewertet. Wenn mindestens ein Kontakt die Bedingung
+      für die Ladefreigabe nicht erfüllt, wird
+      die Ladung gesperrt. Wenn beide Kontakte die Bedingung erfüllen, 
+      darf geladen werden.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
@@ -31,6 +32,17 @@
       :model-value="rippleControlReceiver.configuration.modbus_id"
       @update:model-value="
         updateConfiguration($event, 'configuration.modbus_id')
+      "
+    />
+    <openwb-base-button-group-input
+      title="Ladefreigabe, wenn Kontakte"
+      :model-value="rippleControlReceiver.configuration.sw_ok"
+      :buttons="[
+        { buttonValue: 'CLOSED', text: 'geschlossen' },
+        { buttonValue: 'OPENED', text: 'offen' },
+      ]"
+      @update:model-value="
+        updateConfiguration($event, 'configuration.sw_ok')
       "
     />
   </div>
