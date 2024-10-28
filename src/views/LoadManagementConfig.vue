@@ -141,7 +141,7 @@
             <openwb-base-number-input
               title="Maximale Leistung"
               :min="1"
-              :step="1"
+              :step="0.1"
               required
               unit="kW"
               :model-value="
@@ -252,7 +252,7 @@
             <openwb-base-number-input
               title="Maximale Leistung im Fehlerfall"
               :min="0"
-              :step="1"
+              :step="0.1"
               unit="kW"
               :model-value="
                 $store.state.mqtt[
