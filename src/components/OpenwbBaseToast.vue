@@ -8,7 +8,7 @@
       class="toast-header"
       :class="'bg-' + subtype"
     >
-      <strong class="pr-2 mr-auto">OpenWB</strong>
+      <strong class="pr-2 mr-auto">openWB</strong>
       <small
         v-if="timestamp"
         class="time-diff"
