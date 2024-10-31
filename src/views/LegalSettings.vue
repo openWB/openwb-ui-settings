@@ -99,9 +99,9 @@
           "
           subtype="warning"
         >
-          Wenn sie nicht einwilligen, wird eine ggf. konfigurierte
-          Cloud Anbindung gelöscht. Die openWB arbeitet autark wie
-          gewohnt weiter. Fernzugriff und Remote Support sind dann
+          Wenn Du nicht einwilligst, wird eine ggf. konfigurierte
+          Cloud-Anbindung gelöscht. Die openWB arbeitet autark wie
+          gewohnt weiter. Fernzugriff und Remote-Support sind dann
           nicht mehr möglich!
         </openwb-base-alert>
         <template #footer>

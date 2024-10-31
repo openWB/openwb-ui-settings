@@ -322,7 +322,7 @@
                 "Gerät" mit nur einer "Komponente" angelegt.
               </p>
               <p>
-                Das "Gerät" wird in der dropdown-Liste
+                Das "Gerät" wird in der Dropdown-Liste
                 ausgewählt und mit "+" der Regelung hinzugefügt.
                 Im Anschluss erfolgt die Konfiguration des
                 "Gerätes" innerhalb des schwarzen

@@ -21,7 +21,7 @@
       Es wird dringend empfohlen, dies nur für nicht-öffentliche
       MQTT-Server unter Verwendung starker Transport-Verschlüsselung (TLS)
       mit persönlichem Login und strenger Zugriffskontrolle (zumindest für
-      die MQTT-Thema unterhalb von "Entfernter Präfix") zu aktivieren!
+      die MQTT-Themen unterhalb von "Entfernter Präfix") zu aktivieren!
     </openwb-base-alert>
     <openwb-base-card title="Konfigurierte MQTT-Brücken">
       <template #actions>
@@ -47,7 +47,7 @@
           v-if="Object.keys(configuredMqttBridges).length === 0"
           subtype="info"
         >
-          Es wurde noch keine MQTT Brücke konfiguriert.
+          Es wurde noch keine MQTT-Brücke konfiguriert.
         </openwb-base-alert>
         <form
           v-for="(mqttBridge, mqttBridgeKey) in configuredMqttBridges"
@@ -186,7 +186,7 @@
                 Zahlen, Binde- und Unterstrichen bestehen.
                 Optional kann mit einem Schrägstrich "/" eine
                 Topic-Struktur abgebildet werden. Am Ende des
-                Präfix muss ein Schrägstrich "/" stehen.
+                Präfixes muss ein Schrägstrich "/" stehen.
               </template>
             </openwb-base-text-input>
             <openwb-base-text-input
@@ -298,7 +298,7 @@
               <template #help>
                 Aktiviert eine proprietäre Protokoll-Erweiterung
                 des Mosquitto Brokers, welche dem entfernten
-                Broker signalisiert dass es sich um eine MQTT
+                Broker signalisiert, dass es sich um eine MQTT
                 Brücke handelt. Ergibt bessere Leistung mit
                 Mosquitto-Brokern, ist jedoch inkompatibel mit
                 vielen anderen MQTT-Brokern. Daher bitte nur

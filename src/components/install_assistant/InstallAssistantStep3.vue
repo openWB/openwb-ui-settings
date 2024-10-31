@@ -7,7 +7,7 @@
   >
     <template #help>
       <p>
-        Hier wird abgefragt, ob ihr System mit mehreren openWBs oder nur
+        Hier wird abgefragt, ob Dein System mit mehreren openWBs oder nur
         mit einer openWB betrieben wird. Eine openWB kann andere openWBs
         steuern.
       </p>
@@ -34,7 +34,7 @@
         Verbrauchseinrichtung".
       </p>
       <p class="font-weight-bold">
-        Änderungen werden nur bei klicken auf Speichern wirksam!
+        Änderungen werden nur bei Klicken auf Speichern wirksam!
       </p>
     </template>
     <template #content>

@@ -33,7 +33,7 @@
               möglichen Maximum in Abhängigkeit der "Ladepunkt"-
               und "Fahrzeug"-Einstellungen durchgeführt werden.
               Voraussetzung ist die verbaute Umschaltmöglichkeit
-              zwischen 1- und 3-phasig (s.g. 1p3p).
+              zwischen 1- und 3-phasig (sog. 1p3p).
             </template>
           </openwb-base-button-group-input>
         </div>

@@ -13,17 +13,17 @@
       <p>
         Hierzu Versions-Informationen / Aktualisierung auswählen,
         Informationen aktualisieren klicken und falls ein Update
-        verfügbar ist, wird der Update button grün (zum Update bereit).
+        verfügbar ist, wird der Update-Button grün (zum Update bereit).
       </p>
       <p>
-        Bei openWB Systemen mit integriertem Display muss nach
+        Bei openWB-Systemen mit integriertem Display muss nach
         Zurücksetzen auf Werkseinstellungen oder nach Ausführen eines
-        Updates das Display wieder eingeschalten werden.
+        Updates das Display wieder eingeschaltet werden.
       </p>
       <p>
         Ein Klick auf "Änderungen" zeigt die Modifikationen. Ein Klick
         auf "Update" startet die Aktualisierung, welche auch einen
-        automatischen Reboot initiiert (bitte ca. 5 min warten). Danach
+        automatischen Reboot initiiert (bitte ca. 5 Minuten warten). Danach
         muss der Assistent neu gestartet werden.
       </p>
     </template>

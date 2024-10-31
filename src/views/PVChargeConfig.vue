@@ -291,7 +291,7 @@
               Einstellung genutzt wird, um den verfügbaren
               Überschuss in die Fahrzeuge zu laden. Voraussetzung
               ist die verbaute Umschaltmöglichkeit zwischen einer
-              und mehreren Phasen (s.g. 1p3p).
+              und mehreren Phasen (sog. 1p3p).
             </template>
           </openwb-base-button-group-input>
         </div>
@@ -442,7 +442,7 @@
                 überschreiten.<br>
                 Wird der Mindest-SoC des Speichers nicht
                 erreicht, wird der Speicher mit der hier
-                eingestellte Leistung geladen. Mit dem
+                eingestellten Leistung geladen. Mit dem
                 verbleibenden Überschuss werden die Fahrzeuge
                 geladen.
               </template>
