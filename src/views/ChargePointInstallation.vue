@@ -152,7 +152,7 @@
           >
             <template #help>
               Bitte geben Sie hier die Chargebox ID ein, die im
-              OCPP_Backend für diesen Ladepunkt verwendet wird.
+              OCPP-Backend für diesen Ladepunkt verwendet wird.
               Sollen die Daten dieses Ladepunktes nicht an ein
               OCPP-Backend übertragen werden, lasse dieses Feld
               leer.
@@ -218,7 +218,7 @@
                 einigen Fahrzeugen können durch die Regelung
                 erzwungene, längere Ladestopps (z.B. beim
                 PV-Laden) zu unerwünschten "Einschlaf"-Effekten
-                des Fahrzeuges führen. Mit diesem feature,
+                des Fahrzeuges führen. Mit diesem Feature,
                 welches hardwareseitig verbaut sein muss, kann
                 ein Abstecken des Ladesteckers simuliert werden,
                 um ein Aufwecken des Fahrzeuges zu ermöglichen.
@@ -490,7 +490,7 @@
             >
               <template #help>
                 Sperrt den Ladepunkt nach Abstecken eines
-                Fahrzeuges
+                Fahrzeuges.
               </template>
             </openwb-base-button-group-input>
             <div

@@ -51,7 +51,7 @@
             >hier</a>
             heruntergeladen werden. Beim Herunterladen bitte darauf
             achten, dass die Datei mit der Endung .tar.gz
-            gespeichert wird. Ggf das automatische Entpacken des
+            gespeichert wird. Ggf. das automatische Entpacken des
             Browsers deaktivieren.
           </openwb-base-alert>
           <div class="row justify-content-center">
@@ -169,7 +169,7 @@
             Automatische Sicherung in einen Cloud-Dienst
           </openwb-base-heading>
           <openwb-base-alert subtype="info">
-            Ist die openWB als primary konfiguriert, wid zwischen
+            Ist die openWB als primary konfiguriert, wird zwischen
             Mitternacht und 5:00 Uhr automatisch eine Sicherung
             erstellt und in den angegebenen Cloud-Dienst (nicht
             openWB Cloud!) hochgeladen. Ist kein Cloud-Dienst
@@ -209,7 +209,7 @@
             "
           >
             <openwb-base-button-group-input
-              title="Sicherung vor System Update"
+              title="Sicherung vor System-Update"
               :buttons="[
                 {
                   buttonValue: false,
@@ -419,7 +419,7 @@
         >
           <openwb-base-alert subtype="danger">
             Alle Einstellungen, angelegte Geräte/Komponenten,
-            Ladepunkte und Fahrzeuge, etc, Tages-, Monats- und
+            Ladepunkte und Fahrzeuge, etc., Tages-, Monats- und
             Jahresauswertungen sowie das Ladeprotokoll werden
             unwiederbringlich gelöscht. Auch die Vorkonfiguration im
             Auslieferungszustand wird gelöscht. Die openWB muss
