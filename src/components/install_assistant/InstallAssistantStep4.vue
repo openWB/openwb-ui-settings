@@ -36,7 +36,7 @@
         Informationen zu den Eingabefeldern zu finden.
       </p>
       <p class="font-weight-bold">
-        Änderungen werden nur bei Klicken auf Speichern wirksam!
+        Änderungen werden nur durch Klicken auf Speichern wirksam!
       </p>
     </template>
     <template #content>

@@ -261,7 +261,7 @@
           </openwb-base-heading>
           <openwb-base-alert subtype="info">
             Bei Sofort- und Zeitladen wird nur geladen, wenn der
-            Strompreis unter dem maximalen angegebenen Strompreis
+            Strompreis unter dem angegebenen maximalen Strompreis
             liegt. Für Zielladen wird die Ladedauer ermittelt und
             dann zu den günstigsten Stunden geladen.<br>
             Wenn keine Preise abgefragt werden können, wird bei
