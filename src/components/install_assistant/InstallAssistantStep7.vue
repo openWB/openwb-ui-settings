@@ -10,7 +10,7 @@
         Im Lastmanagement werden die maximale Leistung sowie die
         maximalen Ströme für jede Phase des Zählermoduls sowie bei
         Hybrid-Systemen (per DC-angebundener Speicher) die maximale
-        Ausgangsleistung des Wechselrichters der PV Anlage eingetragen,
+        Ausgangsleistung des Wechselrichters der PV-Anlage eingetragen,
         falls eine solche vorhanden ist.
       </p>
       <p>
@@ -41,7 +41,7 @@
       </p>
       <p />
       <p class="font-weight-bold">
-        Änderungen werden nur bei klicken auf Speichern wirksam!
+        Änderungen werden nur durch Klicken auf Speichern wirksam!
       </p>
     </template>
     <template #content>

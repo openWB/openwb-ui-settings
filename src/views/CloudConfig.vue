@@ -7,7 +7,7 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeCloud($event)"
   >
-    Wollen Sie den vorhandenen Cloud Zugang wirklich entfernen? Dieser
+    Willst Du den vorhandenen Cloud Zugang wirklich entfernen? Dieser
     Vorgang kann nicht rückgängig gemacht werden!
   </openwb-base-modal-dialog>
   <!-- main content -->
@@ -20,7 +20,7 @@
       "
       subtype="danger"
     >
-      Sie müssen der
+      Du musst der
       <router-link to="/System/LegalSettings">
         Datenschutzerklärung
       </router-link>
@@ -28,17 +28,17 @@
     </openwb-base-alert>
     <div v-else>
       <openwb-base-alert subtype="success">
-        Sie haben der
+        Du hast der
         <router-link to="/System/LegalSettings">
           Datenschutzerklärung
         </router-link>
-        zugestimmt und können die openWB Cloud nutzen.
+        zugestimmt und kannst die openWB Cloud nutzen.
       </openwb-base-alert>
       <openwb-base-alert
         v-if="!enableRemoveCloudButton"
         subtype="warning"
       >
-        Der Zugang wurde entfernt. Bitte starten Sie die openWB neu, um
+        Der Zugang wurde entfernt. Bitte starte die openWB neu, um
         die Änderungen anzuwenden!
       </openwb-base-alert>
       <form
@@ -48,10 +48,10 @@
         <openwb-base-card title="Neuen Zugang erstellen">
           <openwb-base-alert subtype="warning">
             Derzeit können keine neuen Zugänge für die openWB Cloud
-            angelegt werden. Bitte nutzen Sie die in/an der openWB
+            angelegt werden. Bitte nutze die in/an der openWB
             notierten Zugangsdaten im unteren Bereich dieser Seite.
             Wenn bei einer gekauften openWB keine Zugangsdaten
-            vorhanden sind, schreiben Sie bitte eine Mail unter
+            vorhanden sind, schreibe bitte eine Mail unter
             Angabe der Bestell- und/oder Seriennummer an
             <a
               href="mailto:support@openwb.de"
@@ -286,13 +286,13 @@
           v-if="!enableCloudConnectButton || !enableNewCloudButton"
           subtype="warning"
         >
-          Der Zugang wurde eingerichtet. Bitte starten Sie die openWB
+          Der Zugang wurde eingerichtet. Bitte starte die die openWB
           neu, um die Änderungen anzuwenden!
         </openwb-base-alert>
         <openwb-base-card title="Vorhandener Cloud Zugang">
           <openwb-base-heading>
             <span>
-              Mit diesen Zugangsdaten können Sie sich in der
+              Mit diesen Zugangsdaten kannst Du dich in der
               <a
                 href="https://remote.openwb.de/"
                 target="_blank"

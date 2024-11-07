@@ -17,7 +17,7 @@
         ]"
         @modal-result="nextPage($event)"
       >
-        Bevor der Assistent gestartet wird ist sicherzustellen, dass
+        Bevor der Assistent gestartet wird, ist sicherzustellen, dass
         kein Ladevorgang aktiv ist! Zur Sicherheit bitte zusätzlich alle
         Fahrzeuge von der Ladestation / den Ladestationen abstecken!
       </openwb-base-modal-dialog>

@@ -20,7 +20,7 @@
       <p>
         Nachfolgend werden die Eigenschaften des Ladepunktes wie
         IP-Adresse und elektrischer Anschluss definiert. Die meisten
-        openWB werden 3-phasig angeschlossen! Bei mehreren openWB's ist
+        openWB werden 3-phasig angeschlossen! Bei mehreren Ladepunkten ist
         auf phasenrotierten Anschluss der openWB-Zuleitung zu achten!
         Abschließend wird die korrekte Zuordnung der Phase 1 des
         Ladekabels zur zugehörigen EVU-Zählerphase konfiguriert. Dies
@@ -46,7 +46,7 @@
         zugeordnet.
       </p>
       <p class="font-weight-bold">
-        Änderungen werden nur bei klicken auf Speichern wirksam!
+        Änderungen werden nur durch Klicken auf Speichern wirksam!
       </p>
     </template>
     <template #content>

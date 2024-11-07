@@ -36,7 +36,7 @@
               Modus "Automatik" entscheidet die Regelung, welche
               Einstellung genutzt wird, um das Ziel zu erreichen.
               Voraussetzung ist die verbaute Umschaltmöglichkeit
-              zwischen 1- und 3-phasig (s.g. 1p3p).
+              zwischen 1- und 3-phasig (sog. 1p3p).
             </template>
           </openwb-base-button-group-input>
           <openwb-base-button-group-input
@@ -67,7 +67,7 @@
               Modus "Automatik" entscheidet die Regelung, welche
               Einstellung genutzt wird, um das Ziel zu erreichen.
               Voraussetzung ist die verbaute Umschaltmöglichkeit
-              zwischen 1- und 3-phasig (s.g. 1p3p).
+              zwischen 1- und 3-phasig (sog. 1p3p).
             </template>
           </openwb-base-button-group-input>
         </div>

@@ -41,7 +41,7 @@
         Fahrzeug vorhanden, reicht das Standard-Fahrzeug aus.
       </p>
       <p class="font-weight-bold">
-        Änderungen werden nur bei klicken auf Speichern wirksam!
+        Änderungen werden nur durch Klicken auf Speichern wirksam!
       </p>
     </template>
     <template #content>

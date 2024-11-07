@@ -172,7 +172,7 @@
           <openwb-base-heading>
             Berechnung der Ladekosten
             <template #help>
-              Zur Berechnung der Ladekosten im Lade-Log werden
+              Zur Berechnung der Ladekosten im Lade-Protokoll werden
               stundenweise die Anteile der Stromquellen (Speicher,
               Netz, PV) berechnet und mit den hier angegebenen
               Preisen multipliziert.<br>
@@ -261,7 +261,7 @@
           </openwb-base-heading>
           <openwb-base-alert subtype="info">
             Bei Sofort- und Zeitladen wird nur geladen, wenn der
-            Strompreis unter dem maximalen angegeben Strompreis
+            Strompreis unter dem angegebenen maximalen Strompreis
             liegt. Für Zielladen wird die Ladedauer ermittelt und
             dann zu den günstigsten Stunden geladen.<br>
             Wenn keine Preise abgefragt werden können, wird bei
