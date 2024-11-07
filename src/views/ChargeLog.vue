@@ -402,7 +402,7 @@ export default {
           },
           vehicle: {
             id: [],
-            rfid: [],
+            tag: [],
             chargemode: [],
             prio: undefined,
           },
