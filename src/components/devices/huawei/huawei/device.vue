@@ -3,8 +3,8 @@
     <openwb-base-heading> Einstellungen für Huawei </openwb-base-heading>
     <openwb-base-alert subtype="info">
       Die Antwort der Huawei Wechselrichter benötigt sehr viel Zeit.
-      Es wird empfohlen das Regelintervall der openWB auf 
-      "Sehr Langsam" zu stellen.
+      Es wird empfohlen, dass Regelintervall der openWB auf 
+      "sehr langsam" zu stellen.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
