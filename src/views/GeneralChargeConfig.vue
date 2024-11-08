@@ -74,42 +74,32 @@
               Die gezählten Fehlversuche werden mit dem Abstecken zurückgesetzt.
             </template>
           </openwb-base-button-group-input>
-          <openwb-base-range-input
+          <openwb-base-number-input
             title="Verzögerung automat. Phasenumschaltung"
-            :min="0"
-            :max="14"
+            unit="Min."
+            :min="5"
+            :max="20"
             :step="1"
-            :labels="[
-              { label: '1&uArr; 15&dArr; Min.', value: 1 },
-              { label: '2&uArr; 14&dArr; Min.', value: 2 },
-              { label: '3&uArr; 13&dArr; Min.', value: 3 },
-              { label: '4&uArr; 12&dArr; Min.', value: 4 },
-              { label: '5&uArr; 11&dArr; Min.', value: 5 },
-              { label: '6&uArr; 10&dArr; Min.', value: 6 },
-              { label: '7&uArr; 9&dArr; Min.', value: 7 },
-              { label: '8&uArr; 8&dArr; Min.', value: 8 },
-              { label: '9&uArr; 7&dArr; Min.', value: 9 },
-              { label: '10&uArr; 6&dArr; Min.', value: 10 },
-              { label: '11&uArr; 5&dArr; Min.', value: 11 },
-              { label: '12&uArr; 4&dArr; Min.', value: 12 },
-              { label: '13&uArr; 3&dArr; Min.', value: 13 },
-              { label: '14&uArr; 2&dArr; Min.', value: 14 },
-              { label: '15&uArr; 1&dArr; Min.', value: 15 },
-            ]"
-            :model-value="$store.state.mqtt['openWB/general/chargemode_config/phase_switch_delay']"
-            @update:model-value="updateState('openWB/general/chargemode_config/phase_switch_delay', $event)"
+            :model-value="
+              $store.state.mqtt[
+                'openWB/general/chargemode_config/phase_switch_delay'
+              ]
+            "
+            @update:model-value="
+              updateState(
+                'openWB/general/chargemode_config/phase_switch_delay',
+                $event,
+              )
+            "
           >
             <template #help>
-              Um zu viele Umschaltungen zu vermeiden, wird Anhand dieses Wertes definiert, wann die Umschaltung erfolgen
-              soll. Ist für durchgehend x Minuten die Maximalstromstärke erreicht, wird auf mehrphasige Ladung &uArr;
-              umgestellt. Ist die Ladung nur für ein Intervall unterhalb der Maximalstromstärke, beginnt das Intervall
-              für die Umschaltung erneut. Ist die Ladung im mehrphasigen Modus für 16 - x Minuten auf der
-              Minimalstromstärke, wird wieder auf einphasige Ladung &dArr; gewechselt.<br />
-              Ist ausreichend Überschuss vorhanden, wird beim Ladestart die Umschaltverzögerung nicht abgewartet,
+              Um zu viele Umschaltungen zu vermeiden, wird mindestens die hier eingestellte Zeit zwischen zwei Umschaltungen abgewartet. Das Umschalten auf mehrphasiges Laden erfolgt nur, wenn mit der maximalen Stromstärke geladen wird und genug Leistung für mehrphasiges Laden zur Verfügung steht. Auf einphasiges Laden wird zurückgeschaltet, wenn auf die minimale Stromstärke heruntergeregelt wurde. Die Verzögerung wird nur bei der automatischen Phasenumschaltung bei Überschuss-Laden abgewartet.<br>
+              Ist ausreichend Überschuss vorhanden, wird beim
+              Ladestart die Umschaltverzögerung nicht abgewartet,
               sondern direkt mit mehrphasiger Ladung begonnen.
             </template>
-          </openwb-base-range-input>
-          <hr />
+          </openwb-base-number-input>
+          <hr>
           <openwb-base-heading>
             Berechnung der Ladekosten
             <template #help>
