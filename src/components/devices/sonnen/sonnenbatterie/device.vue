@@ -60,6 +60,18 @@
         </span>
       </template>
     </openwb-base-select-input>
+    <openwb-base-text-input
+      v-if="device.configuration.variant === 3"
+      title="API-Token"
+      subtype="password"
+      :model-value="device.configuration.api_v2_token"
+      @update:model-value="updateConfiguration($event, 'configuration.api_v2_token')"
+    >
+      <template #help>
+        API-Token für JSON-API v2. Dieses Token wird benötigt, um die Daten abzurufen. Es kann in der Weboberfläche der
+        SonnenBatterie unter "Software-Integration" erstellt werden.
+      </template>
+    </openwb-base-text-input>
   </div>
 </template>
 
