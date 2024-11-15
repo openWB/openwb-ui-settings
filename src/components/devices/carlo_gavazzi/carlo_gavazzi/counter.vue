@@ -1,8 +1,6 @@
 <template>
   <div class="device-carlo-gavazzi-counter">
-    <openwb-base-alert subtype="info">
-      ModbusTCP muss aktiviert sein. Ausgelesen wird ID 1 auf Port 502.
-    </openwb-base-alert>
+    <openwb-base-alert subtype="info"> ModbusTCP muss aktiviert sein. </openwb-base-alert>
   </div>
 </template>
 
