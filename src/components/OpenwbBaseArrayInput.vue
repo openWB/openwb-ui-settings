@@ -31,15 +31,11 @@
             class="form-control"
             v-bind="$attrs"
             @keyup.enter="addTag"
-          >
+          />
           <div class="input-group-append">
             <div
               class="input-group-text"
-              :class="
-                newTagValid
-                  ? 'bg-success clickable'
-                  : 'not-clickable'
-              "
+              :class="newTagValid ? 'bg-success clickable' : 'not-clickable'"
               @click="addTag"
             >
               <slot name="input-add">
@@ -92,12 +88,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(
-  fasTag,
-  fasTimesCircle,
-  fasPlus,
-  fasInfoCircle,
-);
+library.add(fasTag, fasTimesCircle, fasPlus, fasInfoCircle);
 
 export default {
   name: "OpenwbArrayInput",
@@ -139,10 +130,7 @@ export default {
     },
     newTagValid: {
       get() {
-        return (
-          this.newTag.length > 0 &&
-          !this.value.includes(this.newTag)
-        );
+        return this.newTag.length > 0 && !this.value.includes(this.newTag);
       },
     },
   },

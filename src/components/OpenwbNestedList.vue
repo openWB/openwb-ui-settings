@@ -56,13 +56,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(
-  fasArrowsAlt,
-  fasChargingStation,
-  fasCarBattery,
-  fasSolarPanel,
-  fasGaugeHigh,
-);
+library.add(fasArrowsAlt, fasChargingStation, fasCarBattery, fasSolarPanel, fasGaugeHigh);
 
 export default {
   name: "OpenwbNestedList",

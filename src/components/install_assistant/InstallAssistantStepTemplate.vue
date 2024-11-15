@@ -56,7 +56,7 @@
               src="/img/openWB_logo_light.png"
               alt="openWB Logo"
               class="w-100"
-            >
+            />
           </slot>
         </div>
         <div class="col py-2">
@@ -71,10 +71,7 @@
 import ComponentState from "../mixins/ComponentState.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faCaretLeft as fasCaretLeft,
-  faCaretRight as fasCaretRight,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCaretLeft as fasCaretLeft, faCaretRight as fasCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasCaretLeft, fasCaretRight);

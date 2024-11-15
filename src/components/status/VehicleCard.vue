@@ -12,34 +12,16 @@
       {{ vehicleName }} (ID: {{ vehicleIndex }})
     </template>
     <openwb-base-alert
-      v-if="
-        $store.state.mqtt[
-          'openWB/vehicle/' + vehicleIndex + '/get/fault_state'
-        ] !== undefined
-      "
-      :subtype="
-        statusLevel[
-          $store.state.mqtt[
-            'openWB/vehicle/' + vehicleIndex + '/get/fault_state'
-          ]
-        ]
-      "
+      v-if="$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/fault_state'] !== undefined"
+      :subtype="statusLevel[$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/fault_state']]"
     >
       <font-awesome-icon
-        v-if="
-          $store.state.mqtt[
-            'openWB/vehicle/' + vehicleIndex + '/get/fault_state'
-          ] == 1
-        "
+        v-if="$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/fault_state'] == 1"
         fixed-width
         :icon="['fas', 'exclamation-triangle']"
       />
       <font-awesome-icon
-        v-else-if="
-          $store.state.mqtt[
-            'openWB/vehicle/' + vehicleIndex + '/get/fault_state'
-          ] == 2
-        "
+        v-else-if="$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/fault_state'] == 2"
         fixed-width
         :icon="['fas', 'times-circle']"
       />
@@ -48,11 +30,9 @@
         fixed-width
         :icon="['fas', 'check-circle']"
       />
-      Modulmeldung:<br>
+      Modulmeldung:<br />
       <span style="white-space: pre-wrap">{{
-        $store.state.mqtt[
-          "openWB/vehicle/" + vehicleIndex + "/get/fault_str"
-        ]
+        $store.state.mqtt["openWB/vehicle/" + vehicleIndex + "/get/fault_str"]
       }}</span>
     </openwb-base-alert>
     <openwb-base-heading>Fahrzeugdaten</openwb-base-heading>
@@ -61,9 +41,7 @@
       readonly
       class="text-right text-monospace"
       unit="%"
-      :model-value="
-        $store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/soc']
-      "
+      :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/soc']"
     />
     <openwb-base-number-input
       title="Reichweite"
@@ -119,19 +97,9 @@ export default {
     },
     socTimestamp: {
       get() {
-        if (
-          this.$store.state.mqtt[
-            "openWB/vehicle/" +
-              this.vehicleIndex +
-              "/get/soc_timestamp"
-          ] !== undefined
-        ) {
+        if (this.$store.state.mqtt["openWB/vehicle/" + this.vehicleIndex + "/get/soc_timestamp"] !== undefined) {
           return new Date(
-            this.$store.state.mqtt[
-              "openWB/vehicle/" +
-                this.vehicleIndex +
-                "/get/soc_timestamp"
-            ] * 1000,
+            this.$store.state.mqtt["openWB/vehicle/" + this.vehicleIndex + "/get/soc_timestamp"] * 1000,
           ).toLocaleString();
         } else {
           return "-";
@@ -140,16 +108,8 @@ export default {
     },
     socRange: {
       get() {
-        if (
-          this.$store.state.mqtt[
-            "openWB/vehicle/" + this.vehicleIndex + "/get/range"
-          ] !== undefined
-        ) {
-          return Math.round(
-            this.$store.state.mqtt[
-              "openWB/vehicle/" + this.vehicleIndex + "/get/range"
-            ],
-          );
+        if (this.$store.state.mqtt["openWB/vehicle/" + this.vehicleIndex + "/get/range"] !== undefined) {
+          return Math.round(this.$store.state.mqtt["openWB/vehicle/" + this.vehicleIndex + "/get/range"]);
         } else {
           return 0;
         }

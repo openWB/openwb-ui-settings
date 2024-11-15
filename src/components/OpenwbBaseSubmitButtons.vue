@@ -23,8 +23,7 @@
     :buttons="[{ text: 'Ok', event: 'confirm', subtype: 'danger' }]"
     @modal-result="handleModalDefaults"
   >
-    Wollen Sie wirklich alle Werte dieser Seite auf die Werkseinstellungen
-    zurücksetzen?
+    Wollen Sie wirklich alle Werte dieser Seite auf die Werkseinstellungen zurücksetzen?
   </openwb-base-modal-dialog>
   <div class="row justify-content-center mb-1">
     <div class="col-md-4 d-flex py-1 justify-content-center">
@@ -80,11 +79,7 @@
 
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faCheck as fasCheck,
-  faUndo as fasUndo,
-  faTimes as fasTimes,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCheck as fasCheck, faUndo as fasUndo, faTimes as fasTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasCheck, fasUndo, fasTimes);

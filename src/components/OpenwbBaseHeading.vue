@@ -3,17 +3,11 @@
     class="card-text card-text-heading"
     v-bind="$attrs"
   >
-    <div
-      class="heading-text"
-    >
+    <div class="heading-text">
       <slot />
       <font-awesome-icon
         v-if="$slots.help"
-        :icon="
-          showHelp
-            ? ['fas', 'question-circle']
-            : ['far', 'question-circle']
-        "
+        :icon="showHelp ? ['fas', 'question-circle'] : ['far', 'question-circle']"
         class="clickable"
         :class="showHelp ? 'text-info' : ''"
         @click.stop="toggleHelp"
@@ -38,10 +32,7 @@
 
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faQuestionCircle as fasQuestionCircle,
-  faCheck as fasCheck,
-} from "@fortawesome/free-solid-svg-icons";
+import { faQuestionCircle as fasQuestionCircle, faCheck as fasCheck } from "@fortawesome/free-solid-svg-icons";
 import { faQuestionCircle as farQuestionCircle } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 

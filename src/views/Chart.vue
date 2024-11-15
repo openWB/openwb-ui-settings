@@ -79,42 +79,22 @@
                   v-for="(component, componentKey) in group"
                   :key="componentKey"
                 >
-                  <openwb-base-heading
-                    v-if="groupKey !== 'hc'"
-                  >
-                    {{
-                      getTotalsLabel(
-                        groupKey,
-                        componentKey,
-                      )
-                    }}
+                  <openwb-base-heading v-if="groupKey !== 'hc'">
+                    {{ getTotalsLabel(groupKey, componentKey) }}
                   </openwb-base-heading>
                   <div
-                    v-for="(
-                      measurement, measurementKey
-                    ) in component"
+                    v-for="(measurement, measurementKey) in component"
                     :key="measurementKey"
                   >
                     <openwb-base-text-input
-                      :title="
-                        getTotalsLabel(
-                          groupKey,
-                          componentKey,
-                          measurementKey,
-                        )
-                      "
+                      :title="getTotalsLabel(groupKey, componentKey, measurementKey)"
                       readonly
                       class="text-right"
                       unit="kWh"
-                      :model-value="
-                        formatNumber(
-                          measurement / 1000,
-                          3,
-                        )
-                      "
+                      :model-value="formatNumber(measurement / 1000, 3)"
                     />
                   </div>
-                  <hr v-if="componentKey == 'all' && groupKey != 'hc'">
+                  <hr v-if="componentKey == 'all' && groupKey != 'hc'" />
                 </div>
               </openwb-base-card>
             </div>
@@ -137,14 +117,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(
-  fasChargingStation,
-  fasCarBattery,
-  fasSolarPanel,
-  fasGaugeHigh,
-  fasHouseSignal,
-  fasHouse,
-);
+library.add(fasChargingStation, fasCarBattery, fasSolarPanel, fasGaugeHigh, fasHouseSignal, fasHouse);
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 
@@ -712,8 +685,7 @@ export default {
           tooltip: {
             enabled: true,
             callbacks: {
-              label: (item) =>
-                `${item.dataset.label}: ${item.formattedValue} ${item.dataset.unit}`,
+              label: (item) => `${item.dataset.label}: ${item.formattedValue} ${item.dataset.unit}`,
             },
           },
           legend: {
@@ -948,24 +920,14 @@ export default {
     },
     commandData() {
       var dataObject = {
-        date:
-          this.chartRequestDate.year +
-          this.chartRequestDate.month +
-          this.chartRequestDate.day,
-        day:
-          this.chartRequestDate.year +
-          this.chartRequestDate.month +
-          this.chartRequestDate.day,
+        date: this.chartRequestDate.year + this.chartRequestDate.month + this.chartRequestDate.day,
+        day: this.chartRequestDate.year + this.chartRequestDate.month + this.chartRequestDate.day,
       };
       switch (this.chartRange) {
         case "month":
           dataObject = {
-            date:
-              this.chartRequestDate.year +
-              this.chartRequestDate.month,
-            month:
-              this.chartRequestDate.year +
-              this.chartRequestDate.month,
+            date: this.chartRequestDate.year + this.chartRequestDate.month,
+            month: this.chartRequestDate.year + this.chartRequestDate.month,
           };
           break;
         case "year":
@@ -1002,49 +964,25 @@ export default {
       return false;
     },
     chartTotals() {
-      if (
-        this.$store.state.mqtt[this.baseTopic + this.commandData.date]
-      ) {
+      if (this.$store.state.mqtt[this.baseTopic + this.commandData.date]) {
         if (
-          Object.prototype.hasOwnProperty.call(
-            this.$store.state.mqtt[
-              this.baseTopic + this.commandData.date
-            ],
-            "totals",
-          )
+          Object.prototype.hasOwnProperty.call(this.$store.state.mqtt[this.baseTopic + this.commandData.date], "totals")
         ) {
           var totals = JSON.parse(
-            JSON.stringify(
-              this.$store.state.mqtt[
-                this.baseTopic + this.commandData.date
-              ].totals,
-            ),
+            JSON.stringify(this.$store.state.mqtt[this.baseTopic + this.commandData.date].totals),
           );
           // remove not relevant data for easier parsing
           delete totals.energy_source;
           Object.keys(totals.counter).forEach((component) => {
-            if (
-              Object.prototype.hasOwnProperty.call(
-                totals.counter[component],
-                "grid",
-              )
-            ) {
+            if (Object.prototype.hasOwnProperty.call(totals.counter[component], "grid")) {
               delete totals.counter[component].grid;
             }
           });
           // check if "all" key is present and necessary
           Object.keys(totals).forEach((key) => {
-            if (
-              Object.prototype.hasOwnProperty.call(
-                totals[key],
-                "all",
-              )
-            ) {
+            if (Object.prototype.hasOwnProperty.call(totals[key], "all")) {
               // delete key "all" if we only have one component of type "bat" or "pv"
-              if (
-                Object.keys(totals[key]).length <= 2 &&
-                ["bat", "pv"].includes(key)
-              ) {
+              if (Object.keys(totals[key]).length <= 2 && ["bat", "pv"].includes(key)) {
                 delete totals[key].all;
               } else {
                 // move key "all" to the beginning
@@ -1061,64 +999,29 @@ export default {
       return undefined;
     },
     chartDataObject() {
-      if (
-        this.$store.state.mqtt[this.baseTopic + this.commandData.date]
-      ) {
-        var chartEntries =
-          this.$store.state.mqtt[
-            this.baseTopic + this.commandData.date
-          ];
-        if (
-          Object.prototype.hasOwnProperty.call(
-            chartEntries,
-            "entries",
-          )
-        ) {
+      if (this.$store.state.mqtt[this.baseTopic + this.commandData.date]) {
+        var chartEntries = this.$store.state.mqtt[this.baseTopic + this.commandData.date];
+        if (Object.prototype.hasOwnProperty.call(chartEntries, "entries")) {
           chartEntries = chartEntries.entries;
         }
-        var myData = JSON.parse(JSON.stringify(chartEntries)).map(
-          (row) => {
-            row.timestamp = row.timestamp * 1000;
-            return row;
-          },
-        );
+        var myData = JSON.parse(JSON.stringify(chartEntries)).map((row) => {
+          row.timestamp = row.timestamp * 1000;
+          return row;
+        });
         return myData;
       }
       return undefined;
     },
     chartData() {
       if (this.chartDataObject) {
-        var baseObjectsToProcess = [
-          "pv",
-          "counter",
-          "bat",
-          "cp",
-          "sh",
-          "ev",
-          "hc",
-        ];
-        const lastElement =
-          this.chartDataObject[this.chartDataObject.length - 1];
+        var baseObjectsToProcess = ["pv", "counter", "bat", "cp", "sh", "ev", "hc"];
+        const lastElement = this.chartDataObject[this.chartDataObject.length - 1];
         if (lastElement) {
           baseObjectsToProcess.forEach((baseObject) => {
-            if (
-              Object.prototype.hasOwnProperty.call(
-                lastElement,
-                baseObject,
-              )
-            ) {
-              if (
-                Object.prototype.hasOwnProperty.call(
-                  lastElement[baseObject],
-                  "all",
-                )
-              ) {
+            if (Object.prototype.hasOwnProperty.call(lastElement, baseObject)) {
+              if (Object.prototype.hasOwnProperty.call(lastElement[baseObject], "all")) {
                 // remove "all" key if we only have one component of type "bat" or "pv"
-                if (
-                  ["bat", "pv"].includes(baseObject) &&
-                  Object.keys(lastElement[baseObject])
-                    .length <= 2
-                ) {
+                if (["bat", "pv"].includes(baseObject) && Object.keys(lastElement[baseObject]).length <= 2) {
                   delete lastElement[baseObject].all;
                 } else {
                   // move "all" key to the beginning
@@ -1129,17 +1032,11 @@ export default {
                 }
               }
               // add all datasets available in the last entry
-              Object.entries(lastElement[baseObject]).forEach(
-                ([key, value]) => {
-                  Object.keys(value).forEach((entryKey) => {
-                    this.initDataset(
-                      baseObject,
-                      key,
-                      entryKey,
-                    );
-                  });
-                },
-              );
+              Object.entries(lastElement[baseObject]).forEach(([key, value]) => {
+                Object.keys(value).forEach((entryKey) => {
+                  this.initDataset(baseObject, key, entryKey);
+                });
+              });
             }
           });
         }
@@ -1171,25 +1068,16 @@ export default {
         return;
       }
       const { datasetIndex, index } = element[0];
-      const clickedDate =
-        this.chartData.datasets[datasetIndex].data[index].date;
+      const clickedDate = this.chartData.datasets[datasetIndex].data[index].date;
       var newDate = "";
       var newRange = "";
       switch (this.chartRange) {
         case "month":
-          newDate =
-            clickedDate.substring(0, 4) +
-            "-" +
-            clickedDate.substring(4, 6) +
-            "-" +
-            clickedDate.substring(6);
+          newDate = clickedDate.substring(0, 4) + "-" + clickedDate.substring(4, 6) + "-" + clickedDate.substring(6);
           newRange = "day";
           break;
         case "year":
-          newDate =
-            clickedDate.substring(0, 4) +
-            "-" +
-            clickedDate.substring(4, 6);
+          newDate = clickedDate.substring(0, 4) + "-" + clickedDate.substring(4, 6);
           newRange = "month";
           break;
       }
@@ -1254,22 +1142,12 @@ export default {
     hideDataset(baseObject, objectKey, elementKey) {
       // if dataset "all" is present, hide component datasets
       if (["bat", "pv", "cp"].includes(baseObject)) {
-        if (
-          Object.prototype.hasOwnProperty.call(
-            this.chartTotals[baseObject],
-            "all",
-          ) &&
-          objectKey != "all"
-        ) {
+        if (Object.prototype.hasOwnProperty.call(this.chartTotals[baseObject], "all") && objectKey != "all") {
           return true;
         }
       }
       // if elementKey ends with "grid", "bat", "pv" or "cp", hide the dataset
-      if (
-        ["grid", "bat", "pv", "cp"].includes(
-          elementKey.split("_").pop(),
-        )
-      ) {
+      if (["grid", "bat", "pv", "cp"].includes(elementKey.split("_").pop())) {
         return true;
       }
       return false;
@@ -1282,11 +1160,7 @@ export default {
      * @param {string} measurementKey - The key of the measurement.
      * @returns {string} The label for the totals.
      */
-    getTotalsLabel(
-      groupKey,
-      componentKey = undefined,
-      measurementKey = undefined,
-    ) {
+    getTotalsLabel(groupKey, componentKey = undefined, measurementKey = undefined) {
       var label = "*test*";
       if (!componentKey && !measurementKey) {
         switch (groupKey) {
@@ -1313,15 +1187,11 @@ export default {
         } else {
           if (
             Object.prototype.hasOwnProperty.call(
-              this.$store.state.mqtt[
-                this.baseTopic + this.commandData.date
-              ],
+              this.$store.state.mqtt[this.baseTopic + this.commandData.date],
               "names",
             )
           ) {
-            return this.$store.state.mqtt[
-              this.baseTopic + this.commandData.date
-            ].names[componentKey];
+            return this.$store.state.mqtt[this.baseTopic + this.commandData.date].names[componentKey];
           }
         }
       }
@@ -1345,11 +1215,7 @@ export default {
               case "energy_imported_cp":
                 return "Ladung (Ladepunkt-Anteil)";
               default:
-                console.warn(
-                  "unknown measurement key:",
-                  groupKey,
-                  measurementKey,
-                );
+                console.warn("unknown measurement key:", groupKey, measurementKey);
             }
             break;
           case "counter":
@@ -1361,11 +1227,7 @@ export default {
               case "energy_exported":
                 return "Einspeisung/Erzeugung";
               default:
-                console.warn(
-                  "unknown measurement key:",
-                  groupKey,
-                  measurementKey,
-                );
+                console.warn("unknown measurement key:", groupKey, measurementKey);
             }
             break;
           case "pv":
@@ -1374,11 +1236,7 @@ export default {
               case "energy_exported":
                 return "Erzeugung";
               default:
-                console.warn(
-                  "unknown measurement key:",
-                  groupKey,
-                  measurementKey,
-                );
+                console.warn("unknown measurement key:", groupKey, measurementKey);
             }
             break;
           case "sh":
@@ -1390,11 +1248,7 @@ export default {
               case "energy_exported":
                 return "Erzeugung";
               default:
-                console.warn(
-                  "unknown measurement key:",
-                  groupKey,
-                  measurementKey,
-                );
+                console.warn("unknown measurement key:", groupKey, measurementKey);
             }
             break;
           case "hc":
@@ -1411,25 +1265,13 @@ export default {
               case "energy_imported_cp":
                 return "Verbrauch (Ladepunkt-Anteil)";
               default:
-                console.warn(
-                  "unknown measurement key:",
-                  groupKey,
-                  measurementKey,
-                );
+                console.warn("unknown measurement key:", groupKey, measurementKey);
             }
             break;
           default:
             console.warn("unknown group key:", groupKey);
         }
-        return (
-          "*" +
-          groupKey +
-          "+" +
-          componentKey +
-          "+" +
-          measurementKey +
-          "*"
-        );
+        return "*" + groupKey + "+" + componentKey + "+" + measurementKey + "*";
       }
       return label;
     },
@@ -1469,23 +1311,15 @@ export default {
       } else {
         if (
           Object.prototype.hasOwnProperty.call(
-            this.$store.state.mqtt[
-              this.baseTopic + this.commandData.date
-            ],
+            this.$store.state.mqtt[this.baseTopic + this.commandData.date],
             "names",
           ) &&
           Object.prototype.hasOwnProperty.call(
-            this.$store.state.mqtt[
-              this.baseTopic + this.commandData.date
-            ].names,
+            this.$store.state.mqtt[this.baseTopic + this.commandData.date].names,
             objectKey,
           )
         ) {
-          label = [
-            this.$store.state.mqtt[
-              this.baseTopic + this.commandData.date
-            ].names[objectKey],
-          ];
+          label = [this.$store.state.mqtt[this.baseTopic + this.commandData.date].names[objectKey]];
         }
       }
       switch (baseObject) {
@@ -1553,9 +1387,7 @@ export default {
           }
           break;
       }
-      return `${label.join(" ")}${
-        details.length ? " (" + details.join(", ") + ")" : ""
-      }`;
+      return `${label.join(" ")}${details.length ? " (" + details.join(", ") + ")" : ""}`;
     },
     /**
      * Returns the index of the dataset with the specified dataset key.
@@ -1584,59 +1416,32 @@ export default {
     addDataset(baseObject, objectKey, elementKey, datasetKey) {
       // do not add dataset if objectKey is not present in totals[baseObject]
       if (
-        Object.prototype.hasOwnProperty.call(
-          this.chartTotals,
-          baseObject,
-        ) &&
-        !Object.prototype.hasOwnProperty.call(
-          this.chartTotals[baseObject],
-          objectKey,
-        )
+        Object.prototype.hasOwnProperty.call(this.chartTotals, baseObject) &&
+        !Object.prototype.hasOwnProperty.call(this.chartTotals[baseObject], objectKey)
       ) {
         return;
       }
       var datasetTemplate = baseObject + "-" + elementKey;
       if (this.datasetTemplates[datasetTemplate]) {
-        var newDataset = JSON.parse(
-          JSON.stringify(this.datasetTemplates[datasetTemplate]),
-        );
+        var newDataset = JSON.parse(JSON.stringify(this.datasetTemplates[datasetTemplate]));
         newDataset.parsing.yAxisKey = datasetKey;
         newDataset.jsonKey = datasetKey;
         newDataset.data = this.chartDataObject;
         // build dataset label
-        newDataset.label = this.getDatasetLabel(
-          baseObject,
-          objectKey,
-          elementKey,
-          datasetKey,
-        );
+        newDataset.label = this.getDatasetLabel(baseObject, objectKey, elementKey, datasetKey);
         if (newDataset.labelSuffix != undefined) {
-          newDataset.label =
-            newDataset.label + newDataset.labelSuffix;
+          newDataset.label = newDataset.label + newDataset.labelSuffix;
         }
-        newDataset.hidden = this.hideDataset(
-          baseObject,
-          objectKey,
-          elementKey,
-        );
+        newDataset.hidden = this.hideDataset(baseObject, objectKey, elementKey);
         if (objectKey == "all") {
-          if (
-            !["grid", "pv", "bat", "cp"].includes(
-              elementKey.split("_").slice(-1)[0],
-            )
-          ) {
+          if (!["grid", "pv", "bat", "cp"].includes(elementKey.split("_").slice(-1)[0])) {
             // do not stack totals
             delete newDataset.stack;
           }
         }
         return this.chartDatasets.datasets.push(newDataset) - 1;
       } else {
-        console.warn(
-          "no matching template found for: " +
-            datasetKey +
-            " with template: " +
-            datasetTemplate,
-        );
+        console.warn("no matching template found for: " + datasetKey + " with template: " + datasetTemplate);
       }
       return;
     },
@@ -1664,32 +1469,17 @@ export default {
           counter: ["energy_imported", "energy_exported"],
           pv: ["energy_exported"],
           bat: ["energy_imported", "energy_exported"],
-          cp: [
-            "energy_imported",
-            "energy_imported_grid",
-            "energy_imported_pv",
-            "energy_imported_bat",
-          ],
+          cp: ["energy_imported", "energy_imported_grid", "energy_imported_pv", "energy_imported_bat"],
           sh: ["energy_imported", "energy_exported"],
           ev: [],
-          hc: [
-            "energy_imported",
-            "energy_imported_grid",
-            "energy_imported_pv",
-            "energy_imported_bat",
-          ],
+          hc: ["energy_imported", "energy_imported_grid", "energy_imported_pv", "energy_imported_bat"],
         };
       }
       const datasetKey = baseObject + "." + objectKey + "." + elementKey;
       if (elementKeysToAdd[baseObject].includes(elementKey)) {
         var index = this.getDatasetIndex(datasetKey);
         if (index == undefined) {
-          index = this.addDataset(
-            baseObject,
-            objectKey,
-            elementKey,
-            datasetKey,
-          );
+          index = this.addDataset(baseObject, objectKey, elementKey, datasetKey);
         }
       } else {
         console.debug("skipping dataset:", datasetKey);
@@ -1701,11 +1491,9 @@ export default {
      */
     setupScaleX() {
       this.chartOptions.scales.x.time.unit = this.chartScaleX.unit;
-      this.chartOptions.scales.x.time.tooltipFormat =
-        this.chartScaleX.tooltipFormat;
+      this.chartOptions.scales.x.time.tooltipFormat = this.chartScaleX.tooltipFormat;
       this.chartOptions.scales.x.title.text = this.chartScaleX.text;
-      this.chartOptions.scales.x.ticks.maxTicksLimit =
-        this.chartScaleX.maxTicksLimit;
+      this.chartOptions.scales.x.ticks.maxTicksLimit = this.chartScaleX.maxTicksLimit;
     },
     /**
      * Requests chart data based on the selected chart range.
@@ -1760,16 +1548,10 @@ export default {
       const today = new Date();
       this.currentDate = String(today.getFullYear());
       if (this.chartRange != "year") {
-        this.currentDate =
-          this.currentDate +
-          "-" +
-          String(today.getMonth() + 1).padStart(2, "0");
+        this.currentDate = this.currentDate + "-" + String(today.getMonth() + 1).padStart(2, "0");
       }
       if (this.chartRange == "day") {
-        this.currentDate =
-          this.currentDate +
-          "-" +
-          String(today.getDate()).padStart(2, "0");
+        this.currentDate = this.currentDate + "-" + String(today.getDate()).padStart(2, "0");
       }
       if (!this.blockChartInit) {
         if (this.initialDate == undefined || this.initialDate == "") {

@@ -6,9 +6,7 @@
       subtype="host"
       required
       :model-value="device.configuration.ip_address"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.ip_address')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.ip_address')"
     />
     <openwb-base-number-input
       title="Port"
@@ -16,9 +14,7 @@
       :min="1"
       :max="65535"
       :model-value="device.configuration.port"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.port')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.port')"
     />
     <openwb-base-select-input
       title="Version"
@@ -31,9 +27,7 @@
         { value: 'hybrid', text: 'Hybridwechselrichter RHI/S Serie' },
       ]"
       :model-value="device.configuration.version"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.version')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.version')"
     />
   </div>
 </template>

@@ -6,9 +6,7 @@
       subtype="host"
       required
       :model-value="device.configuration.ip_address"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.ip_address')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.ip_address')"
     />
   </div>
 </template>

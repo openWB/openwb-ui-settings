@@ -17,28 +17,21 @@
           v-for="button in buttons"
           :key="button.value"
           class="btn"
-          :class="[
-            value == button.buttonValue ? 'active' : '',
-            button.class ? button.class : 'btn-outline-info',
-          ]"
+          :class="[value == button.buttonValue ? 'active' : '', button.class ? button.class : 'btn-outline-info']"
         >
           <input
             v-model="value"
             type="radio"
             :value="button.buttonValue"
             v-bind="$attrs"
-          >
+          />
           <slot :name="'label-' + button.buttonValue">
             {{ button.text }}
           </slot>
           <font-awesome-icon
             fixed-width
             :icon="['fas', 'check']"
-            :style="[
-              value == button.buttonValue
-                ? 'visibility: visible'
-                : 'visibility: hidden',
-            ]"
+            :style="[value == button.buttonValue ? 'visibility: visible' : 'visibility: hidden']"
           />
         </label>
       </div>

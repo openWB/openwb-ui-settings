@@ -63,11 +63,7 @@
           >
             <div
               class="input-group-text"
-              :class="
-                addDisabled
-                  ? 'not-clickable'
-                  : 'bg-success clickable'
-              "
+              :class="addDisabled ? 'not-clickable' : 'bg-success clickable'"
               @click="addClicked()"
             >
               <slot name="inputAdd">
@@ -102,7 +98,11 @@ export default {
   inheritAttrs: false,
   props: {
     title: { type: String, required: false, default: "" },
-    modelValue: { type: [String, Number, Array, null], required: false, default: undefined },
+    modelValue: {
+      type: [String, Number, Array, null],
+      required: false,
+      default: undefined,
+    },
     groups: { type: Array, required: false, default: undefined },
     options: { type: Array, required: false, default: undefined },
     notSelected: { type: String, default: undefined },

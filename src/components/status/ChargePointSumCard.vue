@@ -17,9 +17,7 @@
       class="text-right text-monospace"
       step="0.001"
       unit="kW"
-      :model-value="
-        formatNumberTopic('openWB/chargepoint/get/power', 3, 3, 0.001)
-      "
+      :model-value="formatNumberTopic('openWB/chargepoint/get/power', 3, 3, 0.001)"
     />
     <openwb-base-text-input
       title="Zählerstand laden"
@@ -27,14 +25,7 @@
       class="text-right text-monospace"
       step="0.001"
       unit="kWh"
-      :model-value="
-        formatNumberTopic(
-          'openWB/chargepoint/get/imported',
-          3,
-          3,
-          0.001,
-        )
-      "
+      :model-value="formatNumberTopic('openWB/chargepoint/get/imported', 3, 3, 0.001)"
     />
     <openwb-base-text-input
       title="Zählerstand entladen"
@@ -42,14 +33,7 @@
       class="text-right text-monospace"
       step="0.001"
       unit="kWh"
-      :model-value="
-        formatNumberTopic(
-          'openWB/chargepoint/get/exported',
-          3,
-          3,
-          0.001,
-        )
-      "
+      :model-value="formatNumberTopic('openWB/chargepoint/get/exported', 3, 3, 0.001)"
     />
     <openwb-base-heading>Historie</openwb-base-heading>
     <openwb-base-text-input
@@ -58,14 +42,7 @@
       class="text-right text-monospace"
       step="0.001"
       unit="kWh"
-      :model-value="
-        formatNumberTopic(
-          'openWB/chargepoint/get/daily_imported',
-          3,
-          3,
-          0.001,
-        )
-      "
+      :model-value="formatNumberTopic('openWB/chargepoint/get/daily_imported', 3, 3, 0.001)"
     />
     <openwb-base-text-input
       title="Heute entladen"
@@ -73,14 +50,7 @@
       class="text-right text-monospace"
       step="0.001"
       unit="kWh"
-      :model-value="
-        formatNumberTopic(
-          'openWB/chargepoint/get/daily_exported',
-          3,
-          3,
-          0.001,
-        )
-      "
+      :model-value="formatNumberTopic('openWB/chargepoint/get/daily_exported', 3, 3, 0.001)"
     />
   </openwb-base-card>
 </template>
@@ -89,14 +59,10 @@
 import ComponentState from "../mixins/ComponentState.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faChargingStation as fasChargingStation,
-} from "@fortawesome/free-solid-svg-icons";
+import { faChargingStation as fasChargingStation } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(
-  fasChargingStation,
-);
+library.add(fasChargingStation);
 
 export default {
   name: "ChargePointSumCard",

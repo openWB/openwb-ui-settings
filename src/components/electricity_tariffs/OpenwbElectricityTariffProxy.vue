@@ -1,7 +1,5 @@
 <template>
-  <openwb-base-heading>
-    Einstellungen für Modul "{{ electricityTariff.name }}"
-  </openwb-base-heading>
+  <openwb-base-heading> Einstellungen für Modul "{{ electricityTariff.name }}" </openwb-base-heading>
   <component
     :is="myComponent"
     :electricity-tariff="electricityTariff"
@@ -21,14 +19,9 @@ export default {
   emits: ["update:configuration"],
   computed: {
     myComponent() {
-      console.debug(
-        `loading electricity tariff cloud: ${this.electricityTariff.type}`,
-      );
+      console.debug(`loading electricity tariff cloud: ${this.electricityTariff.type}`);
       return defineAsyncComponent({
-        loader: () =>
-          import(
-            `./${this.electricityTariff.type}/electricity_tariff.vue`
-          ),
+        loader: () => import(`./${this.electricityTariff.type}/electricity_tariff.vue`),
         errorComponent: OpenwbElectricityTariffFallback,
       });
     },

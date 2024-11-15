@@ -12,7 +12,8 @@
       <small
         v-if="timestamp"
         class="time-diff"
-      >{{ relativeTime }}</small>
+        >{{ relativeTime }}</small
+      >
       <button
         type="button"
         class="ml-2 mb-1 close"
@@ -36,18 +37,7 @@ export default {
     topic: { type: String, required: true },
     subtype: {
       validator: function (value) {
-        return (
-          [
-            "info",
-            "success",
-            "warning",
-            "danger",
-            "primary",
-            "secondary",
-            "light",
-            "dark",
-          ].indexOf(value) !== -1
-        );
+        return ["info", "success", "warning", "danger", "primary", "secondary", "light", "dark"].indexOf(value) !== -1;
       },
       default: "secondary",
     },

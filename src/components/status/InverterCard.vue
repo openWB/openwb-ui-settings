@@ -11,30 +11,14 @@
       />
       {{ inverter.name }} (ID: {{ inverter.id }})
     </template>
-    <openwb-base-alert
-      :subtype="
-        statusLevel[
-          $store.state.mqtt[
-            'openWB/pv/' + inverter.id + '/get/fault_state'
-          ]
-        ]
-      "
-    >
+    <openwb-base-alert :subtype="statusLevel[$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state']]">
       <font-awesome-icon
-        v-if="
-          $store.state.mqtt[
-            'openWB/pv/' + inverter.id + '/get/fault_state'
-          ] == 1
-        "
+        v-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 1"
         fixed-width
         :icon="['fas', 'exclamation-triangle']"
       />
       <font-awesome-icon
-        v-else-if="
-          $store.state.mqtt[
-            'openWB/pv/' + inverter.id + '/get/fault_state'
-          ] == 2
-        "
+        v-else-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 2"
         fixed-width
         :icon="['fas', 'times-circle']"
       />
@@ -43,10 +27,8 @@
         fixed-width
         :icon="['fas', 'check-circle']"
       />
-      Modulmeldung:<br>
-      <span style="white-space: pre-wrap">{{
-        $store.state.mqtt["openWB/pv/" + inverter.id + "/get/fault_str"]
-      }}</span>
+      Modulmeldung:<br />
+      <span style="white-space: pre-wrap">{{ $store.state.mqtt["openWB/pv/" + inverter.id + "/get/fault_str"] }}</span>
     </openwb-base-alert>
     <openwb-base-text-input
       title="Zählerstand"
@@ -54,14 +36,7 @@
       class="text-right text-monospace"
       step="0.001"
       unit="kWh"
-      :model-value="
-        formatNumberTopic(
-          'openWB/pv/' + inverter.id + '/get/exported',
-          3,
-          3,
-          0.001,
-        )
-      "
+      :model-value="formatNumberTopic('openWB/pv/' + inverter.id + '/get/exported', 3, 3, 0.001)"
     />
     <openwb-base-text-input
       title="Leistung"
@@ -69,14 +44,7 @@
       class="text-right text-monospace"
       step="0.001"
       unit="kW"
-      :model-value="
-        formatNumberTopic(
-          'openWB/pv/' + inverter.id + '/get/power',
-          3,
-          3,
-          0.001,
-        )
-      "
+      :model-value="formatNumberTopic('openWB/pv/' + inverter.id + '/get/power', 3, 3, 0.001)"
     />
     <openwb-base-heading>Erträge</openwb-base-heading>
     <openwb-base-text-input
@@ -85,14 +53,7 @@
       class="text-right text-monospace"
       step="0.001"
       unit="kWh"
-      :model-value="
-        formatNumberTopic(
-          'openWB/pv/' + inverter.id + '/get/daily_exported',
-          3,
-          3,
-          0.001,
-        )
-      "
+      :model-value="formatNumberTopic('openWB/pv/' + inverter.id + '/get/daily_exported', 3, 3, 0.001)"
     />
     <openwb-base-text-input
       title="Dieser Monat"
@@ -100,14 +61,7 @@
       class="text-right text-monospace"
       step="0.001"
       unit="kWh"
-      :model-value="
-        formatNumberTopic(
-          'openWB/pv/' + inverter.id + '/get/monthly_exported',
-          3,
-          3,
-          0.001,
-        )
-      "
+      :model-value="formatNumberTopic('openWB/pv/' + inverter.id + '/get/monthly_exported', 3, 3, 0.001)"
     />
     <openwb-base-text-input
       title="Dieses Jahr"
@@ -115,14 +69,7 @@
       class="text-right text-monospace"
       step="0.001"
       unit="kWh"
-      :model-value="
-        formatNumberTopic(
-          'openWB/pv/' + inverter.id + '/get/yearly_exported',
-          3,
-          3,
-          0.001,
-        )
-      "
+      :model-value="formatNumberTopic('openWB/pv/' + inverter.id + '/get/yearly_exported', 3, 3, 0.001)"
     />
   </openwb-base-card>
 </template>
@@ -139,12 +86,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(
-  fasCheckCircle,
-  fasExclamationTriangle,
-  fasTimesCircle,
-  fasSolarPanel,
-);
+library.add(fasCheckCircle, fasExclamationTriangle, fasTimesCircle, fasSolarPanel);
 
 export default {
   name: "InverterCard",

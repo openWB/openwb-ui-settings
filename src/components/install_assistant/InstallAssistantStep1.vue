@@ -7,10 +7,8 @@
   >
     <template #help>
       <p>
-        Wir empfehlen an dieser Stelle eine Sicherung der openWB zu
-        erstellen, auf welche später zurückgegriffen werden kann,
-        insbesondere, wenn die openWB schon konfiguriert war und der
-        Assistent nun erneut ausgeführt wird.
+        Wir empfehlen an dieser Stelle eine Sicherung der openWB zu erstellen, auf welche später zurückgegriffen werden
+        kann, insbesondere, wenn die openWB schon konfiguriert war und der Assistent nun erneut ausgeführt wird.
       </p>
     </template>
     <template #content>
@@ -38,14 +36,7 @@ export default {
     DataManagement,
   },
   mixins: [ComponentState],
-  emits: [
-    "save",
-    "reset",
-    "defaults",
-    "sendCommand",
-    "switchPage",
-    "endAssistant",
-  ],
+  emits: ["save", "reset", "defaults", "sendCommand", "switchPage", "endAssistant"],
   data: () => ({
     mqttTopicsToSubscribe: [],
   }),

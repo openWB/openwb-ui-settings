@@ -7,39 +7,29 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeCloud($event)"
   >
-    Willst Du den vorhandenen Cloud Zugang wirklich entfernen? Dieser
-    Vorgang kann nicht rückgängig gemacht werden!
+    Willst Du den vorhandenen Cloud Zugang wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht werden!
   </openwb-base-modal-dialog>
   <!-- main content -->
   <div class="cloud-config">
     <openwb-base-alert
-      v-if="
-        $store.state.mqtt[
-          'openWB/system/dataprotection_acknowledged'
-        ] !== true
-      "
+      v-if="$store.state.mqtt['openWB/system/dataprotection_acknowledged'] !== true"
       subtype="danger"
     >
       Du musst der
-      <router-link to="/System/LegalSettings">
-        Datenschutzerklärung
-      </router-link>
+      <router-link to="/System/LegalSettings"> Datenschutzerklärung </router-link>
       zustimmen, um die openWB Cloud nutzen zu können.
     </openwb-base-alert>
     <div v-else>
       <openwb-base-alert subtype="success">
         Du hast der
-        <router-link to="/System/LegalSettings">
-          Datenschutzerklärung
-        </router-link>
+        <router-link to="/System/LegalSettings"> Datenschutzerklärung </router-link>
         zugestimmt und kannst die openWB Cloud nutzen.
       </openwb-base-alert>
       <openwb-base-alert
         v-if="!enableRemoveCloudButton"
         subtype="warning"
       >
-        Der Zugang wurde entfernt. Bitte starte die openWB neu, um
-        die Änderungen anzuwenden!
+        Der Zugang wurde entfernt. Bitte starte die openWB neu, um die Änderungen anzuwenden!
       </openwb-base-alert>
       <form
         v-if="!cloudBridgeKey"
@@ -47,12 +37,9 @@
       >
         <openwb-base-card title="Neuen Zugang erstellen">
           <openwb-base-alert subtype="warning">
-            Derzeit können keine neuen Zugänge für die openWB Cloud
-            angelegt werden. Bitte nutze die in/an der openWB
-            notierten Zugangsdaten im unteren Bereich dieser Seite.
-            Wenn bei einer gekauften openWB keine Zugangsdaten
-            vorhanden sind, schreibe bitte eine Mail unter
-            Angabe der Bestell- und/oder Seriennummer an
+            Derzeit können keine neuen Zugänge für die openWB Cloud angelegt werden. Bitte nutze die in/an der openWB
+            notierten Zugangsdaten im unteren Bereich dieser Seite. Wenn bei einer gekauften openWB keine Zugangsdaten
+            vorhanden sind, schreibe bitte eine Mail unter Angabe der Bestell- und/oder Seriennummer an
             <a
               href="mailto:support@openwb.de"
               subject="Cloud Zugangsdaten"
@@ -94,8 +81,7 @@
             ]"
           >
             <template #help>
-              Wenn diese openWB über einen Partner erworben wurde,
-              kann hier ein Support-Zugang für diesen freigegeben
+              Wenn diese openWB über einen Partner erworben wurde, kann hier ein Support-Zugang für diesen freigegeben
               werden.
             </template>
           </openwb-base-button-group-input>
@@ -103,17 +89,8 @@
             v-if="newCloudData.partner"
             title="Gültige Partner-IDs"
             no-elements-message="Keine Partner-ID zugeordnet."
-            :model-value="
-              $store.state.mqtt[
-                'openWB/system/mqtt/valid_partner_ids'
-              ]
-            "
-            @update:model-value="
-              updateState(
-                'openWB/system/mqtt/valid_partner_ids',
-                $event,
-              )
-            "
+            :model-value="$store.state.mqtt['openWB/system/mqtt/valid_partner_ids']"
+            @update:model-value="updateState('openWB/system/mqtt/valid_partner_ids', $event)"
           >
             <template #input-prefix>
               <font-awesome-icon
@@ -128,20 +105,14 @@
               />
             </template>
             <template #help>
-              Die Partner-ID erhältst Du von Deinem Installateur.
-              Ist hier keine Partner-ID eingetragen, dann kann
-              auch niemand - trotz aktiviertem Zugang für Partner
-              - über das Partner-Portal auf diese openWB
-              zugreifen!
+              Die Partner-ID erhältst Du von Deinem Installateur. Ist hier keine Partner-ID eingetragen, dann kann auch
+              niemand - trotz aktiviertem Zugang für Partner - über das Partner-Portal auf diese openWB zugreifen!
             </template>
           </openwb-base-array-input>
           <template
             v-if="
-              $store.state.mqtt['openWB/general/extern'] ===
-                false &&
-                $store.state.mqtt[
-                  'openWB/system/dataprotection_acknowledged'
-                ] === true
+              $store.state.mqtt['openWB/general/extern'] === false &&
+              $store.state.mqtt['openWB/system/dataprotection_acknowledged'] === true
             "
             #footer
           >
@@ -172,8 +143,7 @@
           subtype="info"
           class="mb-2"
         >
-          Der neue Zugang wird eingerichtet. Dieser Vorgang kann bis
-          zu einer Minute dauern. Bitte warten.
+          Der neue Zugang wird eingerichtet. Dieser Vorgang kann bis zu einer Minute dauern. Bitte warten.
         </openwb-base-alert>
       </form>
       <form
@@ -210,8 +180,7 @@
             ]"
           >
             <template #help>
-              Wenn diese openWB über einen Partner erworben wurde,
-              kann hier ein Support-Zugang für diesen freigegeben
+              Wenn diese openWB über einen Partner erworben wurde, kann hier ein Support-Zugang für diesen freigegeben
               werden.
             </template>
           </openwb-base-button-group-input>
@@ -219,17 +188,8 @@
             v-if="connectCloudData.partner"
             title="Gültige Partner-IDs"
             no-elements-message="Keine Partner-ID zugeordnet."
-            :model-value="
-              $store.state.mqtt[
-                'openWB/system/mqtt/valid_partner_ids'
-              ]
-            "
-            @update:model-value="
-              updateState(
-                'openWB/system/mqtt/valid_partner_ids',
-                $event,
-              )
-            "
+            :model-value="$store.state.mqtt['openWB/system/mqtt/valid_partner_ids']"
+            @update:model-value="updateState('openWB/system/mqtt/valid_partner_ids', $event)"
           >
             <template #input-prefix>
               <font-awesome-icon
@@ -244,31 +204,21 @@
               />
             </template>
             <template #help>
-              Die Partner-ID erhältst Du von Deinem Installateur.
-              Ist hier keine Partner-ID eingetragen, dann kann
-              auch niemand - trotz aktiviertem Zugang für Partner
-              - über das Partner-Portal auf diese openWB
-              zugreifen!
+              Die Partner-ID erhältst Du von Deinem Installateur. Ist hier keine Partner-ID eingetragen, dann kann auch
+              niemand - trotz aktiviertem Zugang für Partner - über das Partner-Portal auf diese openWB zugreifen!
             </template>
           </openwb-base-array-input>
           <template
             v-if="
-              $store.state.mqtt['openWB/general/extern'] ===
-                false &&
-                $store.state.mqtt[
-                  'openWB/system/dataprotection_acknowledged'
-                ] === true
+              $store.state.mqtt['openWB/general/extern'] === false &&
+              $store.state.mqtt['openWB/system/dataprotection_acknowledged'] === true
             "
             #footer
           >
             <div class="row justify-content-center">
               <openwb-base-click-button
                 class="col-4"
-                :class="
-                  enableCloudConnectButton
-                    ? 'btn-success'
-                    : 'btn-outline-success'
-                "
+                :class="enableCloudConnectButton ? 'btn-success' : 'btn-outline-success'"
                 :disabled="!enableCloudConnectButton"
                 @button-clicked="connectCloud"
               >
@@ -286,8 +236,7 @@
           v-if="!enableCloudConnectButton || !enableNewCloudButton"
           subtype="warning"
         >
-          Der Zugang wurde eingerichtet. Bitte starte die die openWB
-          neu, um die Änderungen anzuwenden!
+          Der Zugang wurde eingerichtet. Bitte starte die die openWB neu, um die Änderungen anzuwenden!
         </openwb-base-alert>
         <openwb-base-card title="Vorhandener Cloud Zugang">
           <openwb-base-heading>
@@ -317,7 +266,7 @@
             subtype="password"
             disabled
           />
-          <hr>
+          <hr />
           <openwb-base-button-group-input
             title="Zugang für Partner"
             :buttons="[
@@ -333,17 +282,10 @@
               },
             ]"
             :model-value="cloudSettings.partner"
-            @update:model-value="
-              updateState(
-                cloudBridgeKey,
-                $event,
-                'access.partner',
-              )
-            "
+            @update:model-value="updateState(cloudBridgeKey, $event, 'access.partner')"
           >
             <template #help>
-              Wenn diese openWB über einen Partner erworben wurde,
-              kann hier ein Support-Zugang für diesen freigegeben
+              Wenn diese openWB über einen Partner erworben wurde, kann hier ein Support-Zugang für diesen freigegeben
               werden.
             </template>
           </openwb-base-button-group-input>
@@ -351,17 +293,8 @@
             v-if="cloudSettings.partner"
             title="Gültige Partner-IDs"
             no-elements-message="Keine Partner-ID zugeordnet."
-            :model-value="
-              $store.state.mqtt[
-                'openWB/system/mqtt/valid_partner_ids'
-              ]
-            "
-            @update:model-value="
-              updateState(
-                'openWB/system/mqtt/valid_partner_ids',
-                $event,
-              )
-            "
+            :model-value="$store.state.mqtt['openWB/system/mqtt/valid_partner_ids']"
+            @update:model-value="updateState('openWB/system/mqtt/valid_partner_ids', $event)"
           >
             <template #input-prefix>
               <font-awesome-icon
@@ -376,22 +309,15 @@
               />
             </template>
             <template #help>
-              Die Partner-ID erhältst Du von Deinem Installateur.
-              Ist hier keine Partner-ID eingetragen, dann kann
-              auch niemand - trotz aktiviertem Zugang für Partner
-              - über das Partner-Portal auf diese openWB
-              zugreifen!
+              Die Partner-ID erhältst Du von Deinem Installateur. Ist hier keine Partner-ID eingetragen, dann kann auch
+              niemand - trotz aktiviertem Zugang für Partner - über das Partner-Portal auf diese openWB zugreifen!
             </template>
           </openwb-base-array-input>
           <template #footer>
             <div class="row justify-content-center">
               <openwb-base-click-button
                 class="col-4"
-                :class="
-                  enableRemoveCloudButton
-                    ? 'btn-danger'
-                    : 'btn-outline-danger'
-                "
+                :class="enableRemoveCloudButton ? 'btn-danger' : 'btn-outline-danger'"
                 :disabled="!enableRemoveCloudButton"
                 @button-clicked="removeCloudModal($event)"
               >
@@ -427,7 +353,7 @@ export default {
     FontAwesomeIcon,
   },
   mixins: [ComponentState],
-  emits: ["sendCommand", 'save', 'reset', 'defaults'],
+  emits: ["sendCommand", "save", "reset", "defaults"],
   data() {
     return {
       mqttTopicsToSubscribe: [
@@ -455,9 +381,7 @@ export default {
   computed: {
     cloudBridge: {
       get() {
-        let bridges = this.getWildcardTopics(
-          "openWB/system/mqtt/bridge/+",
-        );
+        let bridges = this.getWildcardTopics("openWB/system/mqtt/bridge/+");
         for (const [key, value] of Object.entries(bridges)) {
           if (!value.remote.is_openwb_cloud) {
             delete bridges[key];
@@ -479,10 +403,8 @@ export default {
     cloudSettings: {
       get() {
         return {
-          username:
-            this.cloudBridge[this.cloudBridgeKey].remote.username,
-          password:
-            this.cloudBridge[this.cloudBridgeKey].remote.password,
+          username: this.cloudBridge[this.cloudBridgeKey].remote.username,
+          password: this.cloudBridge[this.cloudBridgeKey].remote.password,
           partner: this.cloudBridge[this.cloudBridgeKey].access
             ? this.cloudBridge[this.cloudBridgeKey].access.partner
             : false,

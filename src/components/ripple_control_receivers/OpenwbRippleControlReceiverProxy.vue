@@ -1,7 +1,5 @@
 <template>
-  <openwb-base-heading>
-    Einstellungen für RSE-Modul "{{ rippleControlReceiver.name }}"
-  </openwb-base-heading>
+  <openwb-base-heading> Einstellungen für RSE-Modul "{{ rippleControlReceiver.name }}" </openwb-base-heading>
   <component
     :is="myComponent"
     :ripple-control-receiver="rippleControlReceiver"
@@ -22,14 +20,9 @@ export default {
   emits: ["update:configuration", "sendCommand"],
   computed: {
     myComponent() {
-      console.debug(
-        `loading backup cloud: ${this.rippleControlReceiver.type}`,
-      );
+      console.debug(`loading backup cloud: ${this.rippleControlReceiver.type}`);
       return defineAsyncComponent({
-        loader: () =>
-          import(
-            `./${this.rippleControlReceiver.type}/ripple_control_receiver.vue`
-          ),
+        loader: () => import(`./${this.rippleControlReceiver.type}/ripple_control_receiver.vue`),
         errorComponent: OpenwbRippleControlReceiverFallback,
       });
     },

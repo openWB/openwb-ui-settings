@@ -7,8 +7,8 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeDevice"
   >
-    Wollen Sie das Gerät "{{ modalDeviceName }}" inklusive aller Komponenten
-    wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht werden!
+    Wollen Sie das Gerät "{{ modalDeviceName }}" inklusive aller Komponenten wirklich entfernen? Dieser Vorgang kann
+    nicht rückgängig gemacht werden!
   </openwb-base-modal-dialog>
   <openwb-base-modal-dialog
     :show="showComponentRemoveModal"
@@ -17,8 +17,8 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeComponent"
   >
-    Wollen Sie die Komponente "{{ modalComponentName }}" wirklich entfernen?
-    Dieser Vorgang kann nicht rückgängig gemacht werden!
+    Wollen Sie die Komponente "{{ modalComponentName }}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig
+    gemacht werden!
   </openwb-base-modal-dialog>
   <!-- main content -->
   <div class="hardwareInstallation">
@@ -27,25 +27,19 @@
         v-if="!installAssistantActive"
         subtype="info"
       >
-        Wenn neue Komponenten - insbesondere Zähler - konfiguriert
-        wurden, ist auch das
-        <router-link to="/LoadManagementConfiguration">
-          Lastmanagement
-        </router-link>
+        Wenn neue Komponenten - insbesondere Zähler - konfiguriert wurden, ist auch das
+        <router-link to="/LoadManagementConfiguration"> Lastmanagement </router-link>
         zu prüfen!
       </openwb-base-alert>
       <openwb-base-card title="Geräte und Komponenten">
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
           <openwb-base-alert subtype="info">
-            Diese Einstellungen sind nicht verfügbar, solange sich
-            diese openWB im Steuerungsmodus "secondary" befindet.
+            Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
           </openwb-base-alert>
         </div>
         <div v-else>
           <openwb-base-card
-            v-for="(
-              installedDevice, installedDeviceKey
-            ) in installedDevices"
+            v-for="(installedDevice, installedDeviceKey) in installedDevices"
             :key="installedDevice.id"
             :collapsible="true"
             :collapsed="true"
@@ -62,13 +56,7 @@
               <openwb-base-avatar
                 v-if="!slotProps.collapsed"
                 class="bg-danger clickable"
-                @click="
-                  removeDeviceModal(
-                    installedDevice.id,
-                    installedDevice.name,
-                    $event,
-                  )
-                "
+                @click="removeDeviceModal(installedDevice.id, installedDevice.name, $event)"
               >
                 <font-awesome-icon
                   fixed-width
@@ -77,24 +65,13 @@
               </openwb-base-avatar>
               <div v-else>
                 <openwb-base-avatar
-                  v-for="installedComponent in getMyInstalledComponents(
-                    installedDevice.id,
-                  )"
+                  v-for="installedComponent in getMyInstalledComponents(installedDevice.id)"
                   :key="installedComponent.id"
-                  :class="
-                    'ml-1 bg-' +
-                      getComponentTypeClass(
-                        installedComponent.type,
-                      )
-                  "
+                  :class="'ml-1 bg-' + getComponentTypeClass(installedComponent.type)"
                 >
                   <font-awesome-icon
                     fixed-width
-                    :icon="
-                      getComponentTypeIcon(
-                        installedComponent.type,
-                      )
-                    "
+                    :icon="getComponentTypeIcon(installedComponent.type)"
                   />
                 </openwb-base-avatar>
               </div>
@@ -103,49 +80,32 @@
               title="Bezeichnung"
               subtype="text"
               :model-value="installedDevice.name"
-              @update:model-value="
-                updateState(installedDeviceKey, $event, 'name')
-              "
+              @update:model-value="updateState(installedDeviceKey, $event, 'name')"
             />
-            <hr>
+            <hr />
             <openwb-config-proxy
               :device="installedDevice"
-              @update:configuration="
-                updateConfiguration(installedDeviceKey, $event)
-              "
+              @update:configuration="updateConfiguration(installedDeviceKey, $event)"
             />
-            <hr>
+            <hr />
             <openwb-base-heading>Komponenten</openwb-base-heading>
             <openwb-base-alert
-              v-if="
-                !deviceHasConfiguredComponents(
-                  installedDevice.id,
-                )
-              "
+              v-if="!deviceHasConfiguredComponents(installedDevice.id)"
               subtype="warning"
             >
-              Es wurden noch keine Komponenten zu diesem Gerät
-              angelegt.
+              Es wurden noch keine Komponenten zu diesem Gerät angelegt.
             </openwb-base-alert>
             <openwb-base-card
-              v-for="(
-                installedComponent, installedComponentKey
-              ) in getMyInstalledComponents(installedDevice.id)"
+              v-for="(installedComponent, installedComponentKey) in getMyInstalledComponents(installedDevice.id)"
               :key="installedComponent.id"
               :collapsible="true"
               :collapsed="true"
-              :subtype="
-                getComponentTypeClass(installedComponent.type)
-              "
+              :subtype="getComponentTypeClass(installedComponent.type)"
             >
               <template #header>
                 <font-awesome-icon
                   fixed-width
-                  :icon="
-                    getComponentTypeIcon(
-                      installedComponent.type,
-                    )
-                  "
+                  :icon="getComponentTypeIcon(installedComponent.type)"
                 />
                 {{ installedComponent.name }}
               </template>
@@ -173,111 +133,62 @@
                 title="Bezeichnung"
                 subtype="text"
                 :model-value="installedComponent.name"
-                @update:model-value="
-                  updateState(
-                    installedComponentKey,
-                    $event,
-                    'name',
-                  )
-                "
+                @update:model-value="updateState(installedComponentKey, $event, 'name')"
               />
               <openwb-base-text-input
                 title="Hersteller"
                 subtype="text"
-                :model-value="
-                  installedComponent.info.manufacturer
-                "
-                @update:model-value="
-                  updateState(
-                    installedComponentKey,
-                    $event,
-                    'info.manufacturer',
-                  )
-                "
+                :model-value="installedComponent.info.manufacturer"
+                @update:model-value="updateState(installedComponentKey, $event, 'info.manufacturer')"
               >
-                <template #help>
-                  Optional: zusätzliche Information für den
-                  Systembericht.
-                </template>
+                <template #help> Optional: zusätzliche Information für den Systembericht. </template>
               </openwb-base-text-input>
               <openwb-base-text-input
                 title="Modell"
                 subtype="text"
                 :model-value="installedComponent.info.model"
-                @update:model-value="
-                  updateState(
-                    installedComponentKey,
-                    $event,
-                    'info.model',
-                  )
-                "
+                @update:model-value="updateState(installedComponentKey, $event, 'info.model')"
               >
-                <template #help>
-                  Optional: zusätzliche Information für den
-                  Systembericht.
-                </template>
+                <template #help> Optional: zusätzliche Information für den Systembericht. </template>
               </openwb-base-text-input>
-              <hr>
+              <hr />
               <openwb-config-proxy
                 :device="installedDevice"
                 :component="installedComponent"
-                @update:configuration="
-                  updateConfiguration(
-                    installedComponentKey,
-                    $event,
-                  )
-                "
+                @update:configuration="updateConfiguration(installedComponentKey, $event)"
               />
             </openwb-base-card>
-            <hr>
+            <hr />
             <openwb-base-select-input
-              v-if="
-                getComponentList(
-                  installedDevice.vendor,
-                  installedDevice.type,
-                ).length
-              "
+              v-if="getComponentList(installedDevice.vendor, installedDevice.type).length"
               title="Verfügbare Komponenten"
               not-selected="Bitte auswählen"
-              :options="
-                getComponentList(
-                  installedDevice.vendor,
-                  installedDevice.type,
-                )
-              "
+              :options="getComponentList(installedDevice.vendor, installedDevice.type)"
               :model-value="componentToAdd[installedDevice.id]"
               :add-button="true"
-              @update:model-value="
-                componentToAdd[installedDevice.id] = $event
-              "
+              @update:model-value="componentToAdd[installedDevice.id] = $event"
               @input:add="
                 addComponent(
                   installedDevice.id,
                   installedDevice.vendor,
                   installedDevice.type,
-                  componentToAdd[
-                    installedDevice.id
-                  ],
+                  componentToAdd[installedDevice.id],
                 )
               "
             >
               <template #help>
-                Bitte eine Komponente auswählen, die hinzugefügt
-                werden soll. Für jeden Datensatz, z.B.
-                Wechselrichter- und Batteriedaten, muss eine
-                Wechselrichter- und eine Batteriekomponente
-                hinzugefügt werden.
+                Bitte eine Komponente auswählen, die hinzugefügt werden soll. Für jeden Datensatz, z.B. Wechselrichter-
+                und Batteriedaten, muss eine Wechselrichter- und eine Batteriekomponente hinzugefügt werden.
               </template>
             </openwb-base-select-input>
             <openwb-base-alert
               v-else
               subtype="info"
             >
-              Dieses System bietet keine Komponenten zur
-              Installation an.
+              Dieses System bietet keine Komponenten zur Installation an.
             </openwb-base-alert>
           </openwb-base-card>
-          <hr v-if="Object.keys(installedDevices).length > 0">
+          <hr v-if="Object.keys(installedDevices).length > 0" />
           <openwb-base-select-input
             v-model="selectedVendor"
             title="Hersteller"
@@ -297,36 +208,23 @@
           >
             <template #help>
               <p>
-                Die openWB-Regelung ist auf Werte von
-                Messpunkten (Zähler, Energy Meter usw.)
-                angewiesen. Hierfür werden "Geräte" und
-                "Komponenten" verwendet.<br>
-                Ein "Gerät" wird hierbei durch seine
-                Verbindungseinstellungen (z.B. IP-Adresse)
-                spezifiziert (häufig durch manuelle Eingabe oder
-                manchmal automatisch ermittelt) und kann über
-                mehrere untergeordnete "Komponenten" verfügen,
-                z.B. einen Messpunkt für PV-Erzeugung, einen
-                Messpunkt für Netzeinspeisung/-bezug am
-                EVU-Punkt usw.. Ein "Gerät" bedingt somit immer
-                mindestens eine zugehörige "Komponente".
+                Die openWB-Regelung ist auf Werte von Messpunkten (Zähler, Energy Meter usw.) angewiesen. Hierfür werden
+                "Geräte" und "Komponenten" verwendet.<br />
+                Ein "Gerät" wird hierbei durch seine Verbindungseinstellungen (z.B. IP-Adresse) spezifiziert (häufig
+                durch manuelle Eingabe oder manchmal automatisch ermittelt) und kann über mehrere untergeordnete
+                "Komponenten" verfügen, z.B. einen Messpunkt für PV-Erzeugung, einen Messpunkt für
+                Netzeinspeisung/-bezug am EVU-Punkt usw.. Ein "Gerät" bedingt somit immer mindestens eine zugehörige
+                "Komponente".
               </p>
               <p>
-                Bsp: Werden die Werte von verschiedenen
-                Messpunkten (z.B. PV und EVU) über die gleiche
-                IP-Adresse abgefragt, wird dafür ein "Gerät" mit
-                zwei "Komponenten" für PV- und EVU- Messpunkt
-                angelegt.<br>
-                Verfügt dagegen jeder Messpunkt über eine eigene
-                IP-Adresse, wird jeder Messpunkt als eigenes
-                "Gerät" mit nur einer "Komponente" angelegt.
+                Bsp: Werden die Werte von verschiedenen Messpunkten (z.B. PV und EVU) über die gleiche IP-Adresse
+                abgefragt, wird dafür ein "Gerät" mit zwei "Komponenten" für PV- und EVU- Messpunkt angelegt.<br />
+                Verfügt dagegen jeder Messpunkt über eine eigene IP-Adresse, wird jeder Messpunkt als eigenes "Gerät"
+                mit nur einer "Komponente" angelegt.
               </p>
               <p>
-                Das "Gerät" wird in der Dropdown-Liste
-                ausgewählt und mit "+" der Regelung hinzugefügt.
-                Im Anschluss erfolgt die Konfiguration des
-                "Gerätes" innerhalb des schwarzen
-                "Geräte"-Reiters.
+                Das "Gerät" wird in der Dropdown-Liste ausgewählt und mit "+" der Regelung hinzugefügt. Im Anschluss
+                erfolgt die Konfiguration des "Gerätes" innerhalb des schwarzen "Geräte"-Reiters.
               </p>
             </template>
           </openwb-base-select-input>
@@ -356,15 +254,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(
-  fasPlus,
-  fasNetworkWired,
-  fasMicrochip,
-  fasTrash,
-  fasCarBattery,
-  fasSolarPanel,
-  fasGaugeHigh,
-);
+library.add(fasPlus, fasNetworkWired, fasMicrochip, fasTrash, fasCarBattery, fasSolarPanel, fasGaugeHigh);
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbConfigProxy from "../components/devices/OpenwbConfigProxy.vue";
@@ -412,25 +302,15 @@ export default {
     },
     installedComponents: {
       get() {
-        return this.getWildcardTopics(
-          "openWB/system/device/+/component/+/config",
-        );
+        return this.getWildcardTopics("openWB/system/device/+/component/+/config");
       },
     },
     vendorList: {
       get() {
-        if (
-          this.$store.state.mqtt[
-            "openWB/system/configurable/devices_components"
-          ] === undefined
-        ) {
+        if (this.$store.state.mqtt["openWB/system/configurable/devices_components"] === undefined) {
           return [];
         }
-        return Object.entries(
-          this.$store.state.mqtt[
-            "openWB/system/configurable/devices_components"
-          ],
-        )
+        return Object.entries(this.$store.state.mqtt["openWB/system/configurable/devices_components"])
           .map(([groupKey, group]) => {
             return {
               label: group.group_name,
@@ -454,9 +334,7 @@ export default {
         }
         let [groupKey, vendorKey] = this.selectedVendor;
         return Object.entries(
-          this.$store.state.mqtt[
-            "openWB/system/configurable/devices_components"
-          ][groupKey].vendors[vendorKey].devices,
+          this.$store.state.mqtt["openWB/system/configurable/devices_components"][groupKey].vendors[vendorKey].devices,
         )
           .map(([deviceKey, device]) => {
             return {
@@ -494,14 +372,10 @@ export default {
       return ["fas", "fa-microchip"];
     },
     getMyInstalledComponents(deviceId) {
-      return this.getWildcardTopics(
-        "openWB/system/device/" + deviceId + "/component/+/config",
-      );
+      return this.getWildcardTopics("openWB/system/device/" + deviceId + "/component/+/config");
     },
     deviceHasConfiguredComponents(deviceId) {
-      return (
-        Object.keys(this.getMyInstalledComponents(deviceId)).length > 0
-      );
+      return Object.keys(this.getMyInstalledComponents(deviceId)).length > 0;
     },
     addDevice() {
       this.$emit("sendCommand", {
@@ -522,9 +396,7 @@ export default {
     removeDevice(event) {
       this.showDeviceRemoveModal = false;
       if (event == "confirm") {
-        console.info(
-          "request removal of device '" + this.modalDevice + "'",
-        );
+        console.info("request removal of device '" + this.modalDevice + "'");
         this.$emit("sendCommand", {
           command: "removeDevice",
           data: { id: this.modalDevice },
@@ -542,13 +414,7 @@ export default {
         },
       });
     },
-    removeComponentModal(
-      deviceId,
-      componentId,
-      componentType,
-      componentName,
-      event,
-    ) {
+    removeComponentModal(deviceId, componentId, componentType, componentName, event) {
       // prevent further processing of the click event
       event.stopPropagation();
       this.modalComponent = {
@@ -583,25 +449,17 @@ export default {
       }
       console.debug("finding components for", vendorKey, deviceKey);
       let deviceComponents = [];
-      Object.values(
-        this.$store.state.mqtt[
-          "openWB/system/configurable/devices_components"
-        ],
-      ).every((group) => {
+      Object.values(this.$store.state.mqtt["openWB/system/configurable/devices_components"]).every((group) => {
         if (group.vendors[vendorKey] !== undefined) {
-          if (
-            group.vendors[vendorKey].devices[deviceKey] !==
-            undefined
-          ) {
-            let components = Object.entries(
-              group.vendors[vendorKey].devices[deviceKey]
-                .components,
-            ).map(([componentKey, component]) => {
-              return {
-                value: componentKey,
-                text: component.component_name,
-              };
-            });
+          if (group.vendors[vendorKey].devices[deviceKey] !== undefined) {
+            let components = Object.entries(group.vendors[vendorKey].devices[deviceKey].components).map(
+              ([componentKey, component]) => {
+                return {
+                  value: componentKey,
+                  text: component.component_name,
+                };
+              },
+            );
             deviceComponents = components;
           }
           return false;

@@ -12,24 +12,14 @@
       />
       Variabler Stromtarif
     </template>
-    <openwb-base-alert
-      :subtype="
-        statusLevel[
-          $store.state.mqtt['openWB/optional/et/get/fault_state']
-        ]
-      "
-    >
+    <openwb-base-alert :subtype="statusLevel[$store.state.mqtt['openWB/optional/et/get/fault_state']]">
       <font-awesome-icon
-        v-if="
-          $store.state.mqtt['openWB/optional/et/get/fault_state'] == 1
-        "
+        v-if="$store.state.mqtt['openWB/optional/et/get/fault_state'] == 1"
         fixed-width
         :icon="['fas', 'exclamation-triangle']"
       />
       <font-awesome-icon
-        v-else-if="
-          $store.state.mqtt['openWB/optional/et/get/fault_state'] == 2
-        "
+        v-else-if="$store.state.mqtt['openWB/optional/et/get/fault_state'] == 2"
         fixed-width
         :icon="['fas', 'times-circle']"
       />
@@ -38,10 +28,8 @@
         fixed-width
         :icon="['fas', 'check-circle']"
       />
-      Modulmeldung:<br>
-      <span style="white-space: pre-wrap">{{
-        $store.state.mqtt["openWB/optional/et/get/fault_str"]
-      }}</span>
+      Modulmeldung:<br />
+      <span style="white-space: pre-wrap">{{ $store.state.mqtt["openWB/optional/et/get/fault_str"] }}</span>
     </openwb-base-alert>
     <openwb-base-text-input
       title="Anbieter"
@@ -71,12 +59,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(
-  fasCheckCircle,
-  fasExclamationTriangle,
-  fasTimesCircle,
-  fasRankingStar,
-);
+library.add(fasCheckCircle, fasExclamationTriangle, fasTimesCircle, fasRankingStar);
 
 import { Line as ChartjsLine } from "vue-chartjs";
 import "chartjs-adapter-luxon";
@@ -93,17 +76,7 @@ import {
   TimeScale,
   Filler,
 } from "chart.js";
-Chart.register(
-  Tooltip,
-  Legend,
-  LineController,
-  LineElement,
-  PointElement,
-  LinearScale,
-  TimeScale,
-  Filler,
-  ZoomPlugin,
-);
+Chart.register(Tooltip, Legend, LineController, LineElement, PointElement, LinearScale, TimeScale, Filler, ZoomPlugin);
 
 export default {
   name: "ElectricityTariffCard",
@@ -226,8 +199,7 @@ export default {
   },
   computed: {
     electricityTariffConfigured() {
-      const provider =
-        this.$store.state.mqtt["openWB/optional/et/provider"];
+      const provider = this.$store.state.mqtt["openWB/optional/et/provider"];
       if (provider !== undefined) {
         return provider.type !== null;
       }
@@ -238,8 +210,7 @@ export default {
     },
     chartDataObject() {
       if (this.$store.state.mqtt["openWB/optional/et/get/prices"]) {
-        var chartEntries =
-          this.$store.state.mqtt["openWB/optional/et/get/prices"];
+        var chartEntries = this.$store.state.mqtt["openWB/optional/et/get/prices"];
         var myData = [];
         // proper scaling:
         // timestamp: seconds -> milliseconds

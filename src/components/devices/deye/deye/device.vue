@@ -3,8 +3,7 @@
     <openwb-base-heading>Einstellungen für Deye</openwb-base-heading>
     <openwb-base-alert subtype="info">
       <span class="text-danger">
-        Deye Wechselrichter verfügen über keine Modbus-TCP
-        Schnittstelle. Für die Auslesung wird ein RS485/LAN-Adapter
+        Deye Wechselrichter verfügen über keine Modbus-TCP Schnittstelle. Für die Auslesung wird ein RS485/LAN-Adapter
         benötigt.
       </span>
     </openwb-base-alert>
@@ -13,9 +12,7 @@
       subtype="host"
       required
       :model-value="device.configuration.ip_address"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.ip_address')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.ip_address')"
     />
     <openwb-base-number-input
       title="Port"
@@ -23,9 +20,7 @@
       :min="1"
       :max="65535"
       :model-value="device.configuration.port"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.port')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.port')"
     />
   </div>
 </template>

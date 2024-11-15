@@ -36,7 +36,7 @@
               :max="max"
               :step="step"
               v-bind="$attrs"
-            >
+            />
           </div>
           <button
             class="col-1 btn btn-block btn-info"
@@ -55,10 +55,7 @@
 import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faStepForward as fasStepForward,
-  faStepBackward as fasStepBackward,
-} from "@fortawesome/free-solid-svg-icons";
+import { faStepForward as fasStepForward, faStepBackward as fasStepBackward } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasStepForward, fasStepBackward);
@@ -123,16 +120,8 @@ export default {
               break;
             }
           }
-          if (
-            myValue === undefined &&
-            this.modelValue !== undefined
-          ) {
-            console.warn(
-              "sliderValue: not found in values: ",
-              this.modelValue,
-              "using min as default: ",
-              this.min,
-            );
+          if (myValue === undefined && this.modelValue !== undefined) {
+            console.warn("sliderValue: not found in values: ", this.modelValue, "using min as default: ", this.min);
             return this.min;
           } else {
             return myValue;
@@ -152,24 +141,14 @@ export default {
   },
   methods: {
     increment() {
-      var newSliderValue = Math.min(
-        this.sliderValue + this.step,
-        this.max,
-      );
+      var newSliderValue = Math.min(this.sliderValue + this.step, this.max);
       // rounding needed!
-      this.sliderValue =
-        Math.round(newSliderValue * Math.pow(10, this.precision)) /
-        Math.pow(10, this.precision);
+      this.sliderValue = Math.round(newSliderValue * Math.pow(10, this.precision)) / Math.pow(10, this.precision);
     },
     decrement() {
-      var newSliderValue = Math.max(
-        this.sliderValue - this.step,
-        this.min,
-      );
+      var newSliderValue = Math.max(this.sliderValue - this.step, this.min);
       // rounding needed!
-      this.sliderValue =
-        Math.round(newSliderValue * Math.pow(10, this.precision)) /
-        Math.pow(10, this.precision);
+      this.sliderValue = Math.round(newSliderValue * Math.pow(10, this.precision)) / Math.pow(10, this.precision);
     },
   },
 };

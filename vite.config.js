@@ -50,10 +50,7 @@ export default defineConfig(({ command, mode }) => {
               if (id.includes("bootstrap")) {
                 return "vendor-bootstrap";
               }
-              if (
-                id.includes("chart.js") ||
-                id.includes("chartjs")
-              ) {
+              if (id.includes("chart.js") || id.includes("chartjs")) {
                 return "vendor-chartjs";
               }
               // if (id.includes("mqtt")) {

@@ -2,20 +2,16 @@
   <div class="device-goodwe">
     <openwb-base-heading>Einstellungen für GoodWe</openwb-base-heading>
     <openwb-base-alert subtype="info">
-      GoodWe-Wechselrichter verfügen über 3 Dongle: Den WiFi-Dongle, das
-      Wifi-Lan-Kit und das Wifi-Lan-Kit 2.0. Die Einbindung über dieses
-      Modul ist nur mit den Wifi-Lan-Kits möglich. Welches Kit benötigt
-      wird ist vom Wechselrichter abhängig und kann bei GoodWe erfragt
-      werden.
+      GoodWe-Wechselrichter verfügen über 3 Dongle: Den WiFi-Dongle, das Wifi-Lan-Kit und das Wifi-Lan-Kit 2.0. Die
+      Einbindung über dieses Modul ist nur mit den Wifi-Lan-Kits möglich. Welches Kit benötigt wird ist vom
+      Wechselrichter abhängig und kann bei GoodWe erfragt werden.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
       subtype="host"
       required
       :model-value="device.configuration.ip_address"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.ip_address')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.ip_address')"
     />
     <openwb-base-number-input
       title="Port"
@@ -23,9 +19,7 @@
       :min="1"
       :max="65535"
       :model-value="device.configuration.port"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.port')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.port')"
     />
     <openwb-base-number-input
       title="Modbus ID"
@@ -33,9 +27,7 @@
       :model-value="device.configuration.modbus_id"
       min="1"
       max="255"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.modbus_id')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
     />
     <openwb-base-select-input
       title="API-Version"
@@ -46,13 +38,11 @@
       ]"
       :model-value="device.configuration.version"
       required
-      @update:model-value="
-        updateConfiguration($event, 'configuration.version')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.version')"
     >
       <template #help>
-        Die Wahl der API-Version beeinflusst die Auslesung der
-        Speicherleistung und der Import/ Export Werte des Zählers.
+        Die Wahl der API-Version beeinflusst die Auslesung der Speicherleistung und der Import/ Export Werte des
+        Zählers.
       </template>
     </openwb-base-select-input>
     <openwb-base-select-input
@@ -64,13 +54,10 @@
       ]"
       :model-value="device.configuration.firmware"
       required
-      @update:model-value="
-        updateConfiguration($event, 'configuration.firmware')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.firmware')"
     >
       <template #help>
-        Die Auswahl der Firmware-Version beeinflusst die Auslesung der
-        Wirkleistung und der Phasenströme des Zählers.
+        Die Auswahl der Firmware-Version beeinflusst die Auslesung der Wirkleistung und der Phasenströme des Zählers.
       </template>
     </openwb-base-select-input>
   </div>

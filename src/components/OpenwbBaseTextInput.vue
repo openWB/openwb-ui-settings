@@ -49,11 +49,7 @@
               <font-awesome-icon
                 v-if="subtype == 'password'"
                 fixed-width
-                :icon="
-                  showPassword
-                    ? ['fas', 'unlock']
-                    : ['fas', 'lock']
-                "
+                :icon="showPassword ? ['fas', 'unlock'] : ['fas', 'lock']"
               />
               <font-awesome-icon
                 v-if="subtype == 'time'"
@@ -61,11 +57,7 @@
                 :icon="['fas', 'clock']"
               />
               <font-awesome-icon
-                v-if="
-                  subtype == 'date' ||
-                    subtype == 'month' ||
-                    subtype == 'year'
-                "
+                v-if="subtype == 'date' || subtype == 'month' || subtype == 'year'"
                 fixed-width
                 :icon="['fas', 'calendar-day']"
               />
@@ -80,7 +72,7 @@
             :class="{ invalid: inputInvalid }"
             v-bind="$attrs"
             :pattern="pattern"
-          >
+          />
           <input
             v-if="subtype == 'json'"
             ref="jsonInput"
@@ -89,7 +81,7 @@
             class="form-control"
             v-bind="$attrs"
             :pattern="pattern"
-          >
+          />
           <input
             v-if="subtype == 'password'"
             ref="passwordInput"
@@ -98,7 +90,7 @@
             class="form-control"
             v-bind="$attrs"
             :pattern="pattern"
-          >
+          />
           <input
             v-if="subtype == 'host'"
             ref="hostInput"
@@ -106,7 +98,7 @@
             type="text"
             class="form-control"
             v-bind="$attrs"
-          >
+          />
           <input
             v-if="['email', 'url'].includes(subtype)"
             v-model="value"
@@ -114,7 +106,7 @@
             :type="subtype"
             class="form-control"
             v-bind="$attrs"
-          >
+          />
           <input
             v-if="subtype == 'time'"
             ref="timeInput"
@@ -122,7 +114,7 @@
             type="time"
             class="form-control"
             v-bind="$attrs"
-          >
+          />
           <input
             v-if="subtype == 'date'"
             ref="dateInput"
@@ -130,7 +122,7 @@
             type="date"
             class="form-control"
             v-bind="$attrs"
-          >
+          />
           <input
             v-if="subtype == 'month'"
             ref="monthInput"
@@ -138,7 +130,7 @@
             type="month"
             class="form-control"
             v-bind="$attrs"
-          >
+          />
           <input
             v-if="subtype == 'year'"
             ref="yearInput"
@@ -146,7 +138,7 @@
             type="number"
             class="form-control"
             v-bind="$attrs"
-          >
+          />
           <div
             v-if="unit"
             class="input-group-append"
@@ -163,41 +155,23 @@
             <div class="input-group-text">
               <font-awesome-icon
                 fixed-width
-                :icon="
-                  showPassword
-                    ? ['far', 'eye']
-                    : ['far', 'eye-slash']
-                "
+                :icon="showPassword ? ['far', 'eye'] : ['far', 'eye-slash']"
               />
             </div>
           </div>
           <div
-            v-if="
-              showQuickButtons &&
-                (subtype == 'date' ||
-                  subtype == 'month' ||
-                  subtype == 'year')
-            "
+            v-if="showQuickButtons && (subtype == 'date' || subtype == 'month' || subtype == 'year')"
             class="input-group-append clickable"
             @click="modify(-1)"
           >
-            <div class="input-group-text">
-              -
-            </div>
+            <div class="input-group-text">-</div>
           </div>
           <div
-            v-if="
-              showQuickButtons &&
-                (subtype == 'date' ||
-                  subtype == 'month' ||
-                  subtype == 'year')
-            "
+            v-if="showQuickButtons && (subtype == 'date' || subtype == 'month' || subtype == 'year')"
             class="input-group-append clickable"
             @click="modify(1)"
           >
-            <div class="input-group-text">
-              +
-            </div>
+            <div class="input-group-text">+</div>
           </div>
         </div>
       </div>
@@ -221,10 +195,7 @@ import {
   faClock as fasClock,
   faCalendarDay as fasCalendarDay,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  faEye as farEye,
-  faEyeSlash as farEyeSlash,
-} from "@fortawesome/free-regular-svg-icons";
+import { faEye as farEye, faEyeSlash as farEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(
@@ -255,26 +226,20 @@ export default {
     subtype: {
       validator: function (value) {
         return (
-          [
-            "text",
-            "email",
-            "host",
-            "url",
-            "user",
-            "json",
-            "password",
-            "time",
-            "date",
-            "month",
-            "year",
-          ].indexOf(value) !== -1
+          ["text", "email", "host", "url", "user", "json", "password", "time", "date", "month", "year"].indexOf(
+            value,
+          ) !== -1
         );
       },
       default: "text",
     },
     pattern: { type: String, required: false, default: undefined },
     unit: { type: String, required: false, default: undefined },
-    emptyValue: { type: [String, Object, null], required: false, default: null },
+    emptyValue: {
+      type: [String, Object, null],
+      required: false,
+      default: null,
+    },
     showQuickButtons: { type: Boolean, default: false },
   },
   emits: ["update:modelValue"],
@@ -309,9 +274,7 @@ export default {
           } catch (error) {
             console.error("parsing JSON failed: " + newValue, error);
             this.inputInvalid = true;
-            this.$refs.jsonInput.setCustomValidity(
-              "Ungültiger JSON Ausdruck!",
-            );
+            this.$refs.jsonInput.setCustomValidity("Ungültiger JSON Ausdruck!");
             this.tempValue = newValue;
           }
         } else {
@@ -365,19 +328,14 @@ export default {
           break;
         case "month":
           newDate.setMonth(newDate.getMonth() + offset);
-          newValue =
-            String(newDate.getFullYear()) +
-            "-" +
-            String(newDate.getMonth() + 1).padStart(2, "0");
+          newValue = String(newDate.getFullYear()) + "-" + String(newDate.getMonth() + 1).padStart(2, "0");
           break;
         case "year":
           newDate.setYear(newDate.getFullYear() + offset);
           newValue = String(newDate.getFullYear());
           break;
         default:
-          console.warn(
-            `cannot modify input of subtype '${this.subtype}'`,
-          );
+          console.warn(`cannot modify input of subtype '${this.subtype}'`);
           return;
       }
       if (newValue > this.inputRef.max || newValue < this.inputRef.min) {

@@ -42,18 +42,7 @@ export default {
     subtype: {
       type: String,
       validator: function (value) {
-        return (
-          [
-            "info",
-            "success",
-            "warning",
-            "danger",
-            "primary",
-            "secondary",
-            "light",
-            "dark",
-          ].indexOf(value) !== -1
-        );
+        return ["info", "success", "warning", "danger", "primary", "secondary", "light", "dark"].indexOf(value) !== -1;
       },
       default: "secondary",
     },
