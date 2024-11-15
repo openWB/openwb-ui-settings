@@ -76,8 +76,8 @@
           <openwb-base-heading>Wiederherstellung</openwb-base-heading>
           <openwb-base-alert subtype="danger">
             Für die Wiederherstellung wird eine aktive Internetverbindung benötigt.<br />
-            Aktuell können nur Sicherungen wiederhergestellt werden, die in den Entwicklungszweigen "master", "Beta"
-            oder "Release" erstellt wurden!
+            Es können nur Sicherungen wiederhergestellt werden, die in den Entwicklungszweigen "master", "Beta" oder
+            "Release" erstellt wurden!
           </openwb-base-alert>
           <div class="input-group">
             <div class="input-group-prepend">
