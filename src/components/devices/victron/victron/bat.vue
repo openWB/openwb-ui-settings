@@ -1,17 +1,13 @@
 <template>
   <div class="device-victron-bat">
-    <openwb-base-heading>
-      Einstellungen für Victron Batteriespeicher
-    </openwb-base-heading>
+    <openwb-base-heading> Einstellungen für Victron Batteriespeicher </openwb-base-heading>
     <openwb-base-number-input
       title="Modbus ID"
       required
       :model-value="component.configuration.modbus_id"
       min="1"
       max="255"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.modbus_id')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
     />
   </div>
 </template>

@@ -31,12 +31,8 @@ describe("OpenwbBaseArrayInput.vue", () => {
     });
     const renderedTextInput = wrapper.find("input[type=text]");
     await renderedTextInput.setValue(newTag);
-    const renderedAddButton = wrapper.find(
-      ".input-group-append .input-group-text",
-    );
+    const renderedAddButton = wrapper.find(".input-group-append .input-group-text");
     await renderedAddButton.trigger("click");
-    expect(wrapper.emitted("update:modelValue")[0]).toStrictEqual([
-      [newTag],
-    ]);
+    expect(wrapper.emitted("update:modelValue")[0]).toStrictEqual([[newTag]]);
   });
 });

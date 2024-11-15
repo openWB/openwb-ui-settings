@@ -46,11 +46,7 @@
               :key="button.text"
               type="button"
               class="btn"
-              :class="
-                button.subtype
-                  ? 'btn-' + button.subtype
-                  : 'btn-secondary'
-              "
+              :class="button.subtype ? 'btn-' + button.subtype : 'btn-secondary'"
               data-dismiss="modal"
               :data-event="button.event ? button.event : 'close'"
               @click="handleClick"
@@ -72,18 +68,7 @@ export default {
     subtype: {
       type: String,
       validator: function (value) {
-        return (
-          [
-            "info",
-            "success",
-            "warning",
-            "danger",
-            "primary",
-            "secondary",
-            "light",
-            "dark",
-          ].indexOf(value) !== -1
-        );
+        return ["info", "success", "warning", "danger", "primary", "secondary", "light", "dark"].indexOf(value) !== -1;
       },
       default: "secondary",
     },
@@ -91,11 +76,7 @@ export default {
     footerAlignment: {
       type: String,
       validator: function (value) {
-        return (
-          ["around", "between", "center", "end", "start"].indexOf(
-            value,
-          ) !== -1
-        );
+        return ["around", "between", "center", "end", "start"].indexOf(value) !== -1;
       },
       default: "end",
     },

@@ -1,16 +1,10 @@
 <template>
   <div class="form-row mb-1">
-    <label
-      class="col-md-4 col-form-label"
-    >
+    <label class="col-md-4 col-form-label">
       <slot name="title">*TITLE*</slot>
       <font-awesome-icon
         v-if="$slots.help"
-        :icon="
-          showHelp
-            ? ['fas', 'question-circle']
-            : ['far', 'question-circle']
-        "
+        :icon="showHelp ? ['fas', 'question-circle'] : ['far', 'question-circle']"
         class="clickable ml-1"
         :class="showHelp ? 'text-info' : ''"
         @click.stop="toggleHelp"

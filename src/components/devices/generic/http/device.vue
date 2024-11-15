@@ -6,14 +6,11 @@
       subtype="url"
       required
       :model-value="device.configuration.url"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.url')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.url')"
     >
       <template #help>
-        Hier sind die Verbindungsangaben für den Http-Server
-        einzutragen. Der Pfad für die einzelnen Daten wird in der
-        Komponente hinterlegt.<br>
+        Hier sind die Verbindungsangaben für den Http-Server einzutragen. Der Pfad für die einzelnen Daten wird in der
+        Komponente hinterlegt.<br />
         Beispiel: http://mein.server:8080
       </template>
     </openwb-base-text-input>

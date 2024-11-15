@@ -62,11 +62,7 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faBell as fasBell } from "@fortawesome/free-solid-svg-icons";
 import { faBell as farBell } from "@fortawesome/free-regular-svg-icons";
-import {
-  FontAwesomeIcon,
-  FontAwesomeLayers,
-  FontAwesomeLayersText,
-} from "@fortawesome/vue-fontawesome";
+import { FontAwesomeIcon, FontAwesomeLayers, FontAwesomeLayersText } from "@fortawesome/vue-fontawesome";
 
 library.add(fasBell, farBell);
 
@@ -82,10 +78,7 @@ export default {
   mixins: [ComponentState],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/system/messages/+",
-        "openWB/command/" + this.$root.mqttClientId + "/messages/+",
-      ],
+      mqttTopicsToSubscribe: ["openWB/system/messages/+", "openWB/command/" + this.$root.mqttClientId + "/messages/+"],
       showAllMessages: false,
       hiddenMessages: [],
     };
@@ -94,16 +87,9 @@ export default {
     alertLevel() {
       let result = this.messages.reduce((total, currentMessage) => {
         if (
-          (total == "light" &&
-            ["info", "success", "warning", "danger"].includes(
-              currentMessage.type,
-            )) ||
-          (total == "info" &&
-            ["success", "warning", "danger"].includes(
-              currentMessage.type,
-            )) ||
-          (total == "success" &&
-            ["warning", "danger"].includes(currentMessage.type)) ||
+          (total == "light" && ["info", "success", "warning", "danger"].includes(currentMessage.type)) ||
+          (total == "info" && ["success", "warning", "danger"].includes(currentMessage.type)) ||
+          (total == "success" && ["warning", "danger"].includes(currentMessage.type)) ||
           (total == "warning" && currentMessage.type == "danger")
         ) {
           total = currentMessage.type;
@@ -139,9 +125,7 @@ export default {
      * get initial error message
      */
     systemMessages() {
-      let messageTopics = this.getWildcardTopics(
-        "openWB/system/messages/+",
-      );
+      let messageTopics = this.getWildcardTopics("openWB/system/messages/+");
       var messageList = [];
       for (const [key, element] of Object.entries(messageTopics)) {
         messageList.push({ topic: key, ...element });
@@ -149,9 +133,7 @@ export default {
       return messageList;
     },
     clientMessages() {
-      let messageTopics = this.getWildcardTopics(
-        "openWB/command/" + this.$root.mqttClientId + "/messages/+",
-      );
+      let messageTopics = this.getWildcardTopics("openWB/command/" + this.$root.mqttClientId + "/messages/+");
       var messageList = [];
       for (const [key, element] of Object.entries(messageTopics)) {
         messageList.push({ topic: key, ...element });

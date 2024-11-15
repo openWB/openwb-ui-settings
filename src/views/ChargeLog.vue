@@ -51,9 +51,7 @@
             :options="chargeModeList"
             @update:model-value="requestChargeLog()"
           >
-            <template #help>
-              Es können mehrere Elemente ausgewählt werden.
-            </template>
+            <template #help> Es können mehrere Elemente ausgewählt werden. </template>
           </openwb-base-select-input>
           <openwb-base-select-input
             v-model="chargeLogRequestData.filter.chargepoint.id"
@@ -62,9 +60,7 @@
             :options="chargePointList"
             @update:model-value="requestChargeLog()"
           >
-            <template #help>
-              Es können mehrere Elemente ausgewählt werden.
-            </template>
+            <template #help> Es können mehrere Elemente ausgewählt werden. </template>
           </openwb-base-select-input>
           <openwb-base-select-input
             v-model="chargeLogRequestData.filter.vehicle.id"
@@ -73,24 +69,19 @@
             :options="vehicleList"
             @update:model-value="requestChargeLog()"
           >
-            <template #help>
-              Es können mehrere Elemente ausgewählt werden.
-            </template>
+            <template #help> Es können mehrere Elemente ausgewählt werden. </template>
           </openwb-base-select-input>
           <openwb-base-array-input
             v-model="chargeLogRequestData.filter.vehicle.tag"
             title="ID-Tags"
             @update:model-value="requestChargeLog()"
           >
-            <template #help>
-              Es können mehrere Tags als Filter verwendet werden.
-            </template>
+            <template #help> Es können mehrere Tags als Filter verwendet werden. </template>
           </openwb-base-array-input>
         </openwb-base-card>
       </openwb-base-card>
       <openwb-base-alert subtype="info">
-        Das komplette Ladeprotokoll kann automatisiert über folgende URL
-        abgerufen werden:
+        Das komplette Ladeprotokoll kann automatisiert über folgende URL abgerufen werden:
         <a :href="downloadUrl">{{ downloadUrl }}</a>
       </openwb-base-alert>
       <openwb-base-alert
@@ -132,20 +123,15 @@
             <div
               v-if="data.value.data_power_source"
               class="progress td-center"
-              :title="
-                getProgressTitle(data.value.data_power_source)
-              "
+              :title="getProgressTitle(data.value.data_power_source)"
             >
               <div
                 class="progress-bar bg-danger"
                 role="progressbar"
                 :style="{
-                  width:
-                    data.value.data_power_source.grid + '%',
+                  width: data.value.data_power_source.grid + '%',
                 }"
-                :aria-valuenow="
-                  data.value.data_power_source.grid
-                "
+                :aria-valuenow="data.value.data_power_source.grid"
                 aria-valuemin="0"
                 aria-valuemax="100"
               />
@@ -153,8 +139,7 @@
                 class="progress-bar bg-primary"
                 role="progressbar"
                 :style="{
-                  width:
-                    data.value.data_power_source.cp + '%',
+                  width: data.value.data_power_source.cp + '%',
                 }"
                 :aria-valuenow="data.value.data_power_source.cp"
                 aria-valuemin="0"
@@ -164,12 +149,9 @@
                 class="progress-bar bg-warning"
                 role="progressbar"
                 :style="{
-                  width:
-                    data.value.data_power_source.bat + '%',
+                  width: data.value.data_power_source.bat + '%',
                 }"
-                :aria-valuenow="
-                  data.value.data_power_source.bat
-                "
+                :aria-valuenow="data.value.data_power_source.bat"
                 aria-valuemin="0"
                 aria-valuemax="100"
               />
@@ -177,8 +159,7 @@
                 class="progress-bar bg-success"
                 role="progressbar"
                 :style="{
-                  width:
-                    data.value.data_power_source.pv + '%',
+                  width: data.value.data_power_source.pv + '%',
                 }"
                 :aria-valuenow="data.value.data_power_source.pv"
                 aria-valuemin="0"
@@ -195,11 +176,7 @@
           <template #vehicle_chargemode="data">
             <div
               class="td-center tag"
-              :class="
-                getChargeModeClass(
-                  data.value.vehicle_chargemode,
-                )
-              "
+              :class="getChargeModeClass(data.value.vehicle_chargemode)"
             >
               {{ data.value.vehicle_chargemode }}
             </div>
@@ -207,11 +184,7 @@
           <template #vehicle_prio="data">
             <div
               class="td-center tag"
-              :class="
-                data.value.vehicle_prio
-                  ? 'bg-success'
-                  : 'bg-danger'
-              "
+              :class="data.value.vehicle_prio ? 'bg-success' : 'bg-danger'"
             >
               {{ formatBool(data.value.vehicle_prio) }}
             </div>
@@ -224,13 +197,7 @@
               <span class="no-wrap">
                 {{ formatSoc(data.value.vehicle_soc_at_start) }}
               </span>
-              <span class="no-wrap">
-                ({{
-                  formatRange(
-                    data.value.vehicle_range_at_start,
-                  )
-                }})
-              </span>
+              <span class="no-wrap"> ({{ formatRange(data.value.vehicle_range_at_start) }}) </span>
             </div>
           </template>
           <template #vehicle_soc_at_end="data">
@@ -238,13 +205,7 @@
               <span class="no-wrap">
                 {{ formatSoc(data.value.vehicle_soc_at_end) }}
               </span>
-              <span class="no-wrap">
-                ({{
-                  formatRange(
-                    data.value.vehicle_range_at_end,
-                  )
-                }})
-              </span>
+              <span class="no-wrap"> ({{ formatRange(data.value.vehicle_range_at_end) }}) </span>
             </div>
           </template>
           <template #chargepoint_name="data">
@@ -256,18 +217,9 @@
           <template #data_imported_since_mode_switch="data">
             <div class="td-end">
               <span class="no-wrap">
-                {{
-                  formatWh(
-                    data.value
-                      .data_imported_since_mode_switch,
-                  )
-                }}
+                {{ formatWh(data.value.data_imported_since_mode_switch) }}
               </span>
-              <span class="no-wrap">
-                ({{
-                  formatRange(data.value.data_range_charged)
-                }})
-              </span>
+              <span class="no-wrap"> ({{ formatRange(data.value.data_range_charged) }}) </span>
             </div>
           </template>
           <!-- <template #data_power="data">
@@ -277,18 +229,12 @@
           </template> -->
           <template #chargepoint_imported_at_start="data">
             <div class="td-end">
-              {{
-                formatWh(
-                  data.value.chargepoint_imported_at_start,
-                )
-              }}
+              {{ formatWh(data.value.chargepoint_imported_at_start) }}
             </div>
           </template>
           <template #chargepoint_imported_at_end="data">
             <div class="td-end">
-              {{
-                formatWh(data.value.chargepoint_imported_at_end)
-              }}
+              {{ formatWh(data.value.chargepoint_imported_at_end) }}
             </div>
           </template>
         </vue3-table-lite>
@@ -331,11 +277,7 @@
             </template>
             <template #imported_since_mode_switch="data">
               <div class="td-end">
-                {{
-                  formatWh(
-                    data.value.imported_since_mode_switch,
-                  )
-                }}
+                {{ formatWh(data.value.imported_since_mode_switch) }}
               </div>
             </template>
             <template #range_charged="data">
@@ -357,10 +299,7 @@
 
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faFilter as fasFilter,
-  faDownload as fasDownload,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFilter as fasFilter, faDownload as fasDownload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasFilter, fasDownload);
@@ -546,22 +485,13 @@ export default {
       return this.$root.mqttClientId;
     },
     downloadUrl() {
-      const port =
-        parseInt(location.port) ||
-        (location.protocol == "https:" ? 443 : 80);
+      const port = parseInt(location.port) || (location.protocol == "https:" ? 443 : 80);
       const baseUrl = `${location.protocol}//${location.hostname}:${port}/openWB/web/settings/downloadChargeLog.php`;
-      return (
-        baseUrl +
-        `?year=${this.chargeLogRequestData.year}&month=${this.chargeLogRequestData.month}`
-      );
+      return baseUrl + `?year=${this.chargeLogRequestData.year}&month=${this.chargeLogRequestData.month}`;
     },
     chargeLogDate: {
       get() {
-        return (
-          this.chargeLogRequestData.year +
-          "-" +
-          this.chargeLogRequestData.month
-        );
+        return this.chargeLogRequestData.year + "-" + this.chargeLogRequestData.month;
       },
       set(newValue) {
         let splitDate = newValue.split("-");
@@ -570,16 +500,8 @@ export default {
       },
     },
     chargeLogTotals() {
-      if (
-        this.$store.state.mqtt[
-          "openWB/log/" + this.mqttClientId + "/data"
-        ]
-      ) {
-        return [
-          this.$store.state.mqtt[
-            "openWB/log/" + this.mqttClientId + "/data"
-          ]["totals"],
-        ];
+      if (this.$store.state.mqtt["openWB/log/" + this.mqttClientId + "/data"]) {
+        return [this.$store.state.mqtt["openWB/log/" + this.mqttClientId + "/data"]["totals"]];
       } else {
         return [];
       }
@@ -595,85 +517,47 @@ export default {
     },
     chargeLogDataset: {
       get() {
-        if (
-          this.$store.state.mqtt[
-            "openWB/log/" + this.mqttClientId + "/data"
-          ] == undefined
-        ) {
+        if (this.$store.state.mqtt["openWB/log/" + this.mqttClientId + "/data"] == undefined) {
           return [];
         }
         try {
-          return this.$store.state.mqtt[
-            "openWB/log/" + this.mqttClientId + "/data"
-          ]["entries"].map((entry) => {
+          return this.$store.state.mqtt["openWB/log/" + this.mqttClientId + "/data"]["entries"].map((entry) => {
             // ToDo: timestamps should already be in unix timestamp format from backend
-            var timestamp_begin = Date.parse(
-              entry["time"]["begin"],
-            );
+            var timestamp_begin = Date.parse(entry["time"]["begin"]);
             var timestamp_end = Date.parse(entry["time"]["end"]);
             return {
               chargepoint_id: entry["chargepoint"]["id"],
               chargepoint_name: entry["chargepoint"]["name"],
-              chargepoint_imported_at_start:
-                entry["chargepoint"]["imported_at_start"],
-              chargepoint_imported_at_end:
-                entry["chargepoint"]["imported_at_end"],
-              chargepoint_serial_number:
-                entry["chargepoint"]["serial_number"],
+              chargepoint_imported_at_start: entry["chargepoint"]["imported_at_start"],
+              chargepoint_imported_at_end: entry["chargepoint"]["imported_at_end"],
+              chargepoint_serial_number: entry["chargepoint"]["serial_number"],
               vehicle_id: entry["vehicle"]["id"],
               vehicle_name: entry["vehicle"]["name"],
-              vehicle_chargemode: this.translateChargeMode(
-                entry["vehicle"]["chargemode"],
-              ),
+              vehicle_chargemode: this.translateChargeMode(entry["vehicle"]["chargemode"]),
               vehicle_rfid: entry["vehicle"]["rfid"],
               vehicle_prio: entry["vehicle"]["prio"],
-              vehicle_soc_at_start:
-                entry["vehicle"]["soc_at_start"],
+              vehicle_soc_at_start: entry["vehicle"]["soc_at_start"],
               vehicle_soc_at_end: entry["vehicle"]["soc_at_end"],
-              vehicle_range_at_start:
-                entry["vehicle"]["range_at_start"],
-              vehicle_range_at_end:
-                entry["vehicle"]["range_at_end"],
+              vehicle_range_at_start: entry["vehicle"]["range_at_start"],
+              vehicle_range_at_end: entry["vehicle"]["range_at_end"],
               timestamp_begin: timestamp_begin / 1000,
-              time_begin: isNaN(timestamp_begin)
-                ? null
-                : this.dateTimeFormat.format(
-                    new Date(timestamp_begin),
-                  ),
+              time_begin: isNaN(timestamp_begin) ? null : this.dateTimeFormat.format(new Date(timestamp_begin)),
               timestamp_end: timestamp_end / 1000,
-              time_end: isNaN(timestamp_end)
-                ? null
-                : this.dateTimeFormat.format(
-                    new Date(timestamp_end),
-                  ),
+              time_end: isNaN(timestamp_end) ? null : this.dateTimeFormat.format(new Date(timestamp_end)),
               time_time_charged: entry["time"]["time_charged"],
               // data_power: entry["data"]["power"],
               data_power_source: entry["data"]["power_source"]
                 ? {
-                    pv:
-                      entry["data"]["power_source"][
-                        "pv"
-                      ] * 100,
-                    grid:
-                      entry["data"]["power_source"][
-                        "grid"
-                      ] * 100,
-                    bat:
-                      entry["data"]["power_source"][
-                        "bat"
-                      ] * 100,
-                    cp:
-                      entry["data"]["power_source"][
-                        "cp"
-                      ] * 100,
+                    pv: entry["data"]["power_source"]["pv"] * 100,
+                    grid: entry["data"]["power_source"]["grid"] * 100,
+                    bat: entry["data"]["power_source"]["bat"] * 100,
+                    cp: entry["data"]["power_source"]["cp"] * 100,
                   }
                 : undefined,
               data_range_charged: entry["data"]["range_charged"],
               data_costs: entry["data"]["costs"],
-              data_imported_since_plugged:
-                entry["data"]["imported_since_plugged"],
-              data_imported_since_mode_switch:
-                entry["data"]["imported_since_mode_switch"],
+              data_imported_since_plugged: entry["data"]["imported_since_plugged"],
+              data_imported_since_mode_switch: entry["data"]["imported_since_mode_switch"],
             };
           });
         } catch (error) {
@@ -716,76 +600,34 @@ export default {
             '"Energie seit Anstecken"',
           ],
           ...this.chargeLogDataset.map((row) => [
-            row.time_begin == undefined
-              ? ""
-              : '"' + row.time_begin + '"',
-            row.time_end == undefined
-              ? ""
-              : '"' + row.time_end + '"',
-            row.timestamp_begin == undefined ||
-            isNaN(row.timestamp_begin)
-              ? ""
-              : row.timestamp_begin,
-            row.timestamp_end == undefined ||
-            isNaN(row.timestamp_end)
-              ? ""
-              : row.timestamp_end,
+            row.time_begin == undefined ? "" : '"' + row.time_begin + '"',
+            row.time_end == undefined ? "" : '"' + row.time_end + '"',
+            row.timestamp_begin == undefined || isNaN(row.timestamp_begin) ? "" : row.timestamp_begin,
+            row.timestamp_end == undefined || isNaN(row.timestamp_end) ? "" : row.timestamp_end,
             '"' + row.time_time_charged + '"',
             this.formatCosts(row.data_costs, false),
-            row.data_power_source == undefined
-              ? ""
-              : this.formatNumber(row.data_power_source.grid, 2),
-            row.data_power_source == undefined
-              ? ""
-              : this.formatNumber(row.data_power_source.cp, 2),
-            row.data_power_source == undefined
-              ? ""
-              : this.formatNumber(row.data_power_source.bat, 2),
-            row.data_power_source == undefined
-              ? ""
-              : this.formatNumber(row.data_power_source.pv, 2),
+            row.data_power_source == undefined ? "" : this.formatNumber(row.data_power_source.grid, 2),
+            row.data_power_source == undefined ? "" : this.formatNumber(row.data_power_source.cp, 2),
+            row.data_power_source == undefined ? "" : this.formatNumber(row.data_power_source.bat, 2),
+            row.data_power_source == undefined ? "" : this.formatNumber(row.data_power_source.pv, 2),
             '"' + row.vehicle_name + '"',
             row.vehicle_id,
             '"' + row.vehicle_chargemode + '"',
             '"' + this.formatBool(row.vehicle_prio) + '"',
-            row.vehicle_rfid == undefined
-              ? ""
-              : '"' + row.vehicle_rfid + '"',
-            row.vehicle_soc_at_start == undefined
-              ? ""
-              : this.formatNumber(row.vehicle_soc_at_start, 0),
-            row.vehicle_soc_at_end == undefined
-              ? ""
-              : this.formatNumber(row.vehicle_soc_at_end, 0),
-            row.vehicle_range_at_start == undefined
-              ? ""
-              : this.formatNumber(row.vehicle_range_at_start, 0),
-            row.vehicle_range_at_end == undefined
-              ? ""
-              : this.formatNumber(row.vehicle_range_at_end, 0),
+            row.vehicle_rfid == undefined ? "" : '"' + row.vehicle_rfid + '"',
+            row.vehicle_soc_at_start == undefined ? "" : this.formatNumber(row.vehicle_soc_at_start, 0),
+            row.vehicle_soc_at_end == undefined ? "" : this.formatNumber(row.vehicle_soc_at_end, 0),
+            row.vehicle_range_at_start == undefined ? "" : this.formatNumber(row.vehicle_range_at_start, 0),
+            row.vehicle_range_at_end == undefined ? "" : this.formatNumber(row.vehicle_range_at_end, 0),
             '"' + row.chargepoint_name + '"',
             row.chargepoint_id,
-            row.chargepoint_serial_number == undefined
-              ? ""
-              : '"' + row.chargepoint_serial_number + '"',
-            this.formatNumber(
-              row.data_imported_since_mode_switch / 1000,
-              2,
-            ),
+            row.chargepoint_serial_number == undefined ? "" : '"' + row.chargepoint_serial_number + '"',
+            this.formatNumber(row.data_imported_since_mode_switch / 1000, 2),
             this.formatNumber(row.data_range_charged, 0),
             // this.formatNumber(row.data_power / 1000, 3),
-            this.formatNumber(
-              row.chargepoint_imported_at_start / 1000,
-              2,
-            ),
-            this.formatNumber(
-              row.chargepoint_imported_at_end / 1000,
-              2,
-            ),
-            this.formatNumber(
-              row.data_imported_since_plugged / 1000,
-              2,
-            ),
+            this.formatNumber(row.chargepoint_imported_at_start / 1000, 2),
+            this.formatNumber(row.chargepoint_imported_at_end / 1000, 2),
+            this.formatNumber(row.data_imported_since_plugged / 1000, 2),
           ]),
         ]
           .map((element) => element.join(";"))
@@ -824,9 +666,7 @@ export default {
       return chargeModeList;
     },
     chargePointList() {
-      let chargePoints = this.getWildcardTopics(
-        "openWB/chargepoint/+/config",
-      );
+      let chargePoints = this.getWildcardTopics("openWB/chargepoint/+/config");
       var chargePointList = [{ value: undefined, text: "Alle" }];
       for (const [, element] of Object.entries(chargePoints)) {
         chargePointList.push({ value: element.id, text: element.name });
@@ -845,37 +685,28 @@ export default {
   },
   beforeMount() {
     // we need access to the mqttClientId which is not yet available in the data section
-    this.mqttTopicsToSubscribe.push(
-      "openWB/log/" + this.mqttClientId + "/data",
-    );
+    this.mqttTopicsToSubscribe.push("openWB/log/" + this.mqttClientId + "/data");
   },
   mounted() {
     const today = new Date();
-    this.currentMonth = this.chargeLogDate =
-      today.getFullYear() +
-      "-" +
-      String(today.getMonth() + 1).padStart(2, "0");
+    this.currentMonth = this.chargeLogDate = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, "0");
     this.requestChargeLog();
   },
   methods: {
     cleanRequestData() {
       if ("id" in this.chargeLogRequestData.filter.chargepoint) {
-        this.chargeLogRequestData.filter.chargepoint.id =
-          this.chargeLogRequestData.filter.chargepoint.id.filter(
-            (element) => element != undefined,
-          );
+        this.chargeLogRequestData.filter.chargepoint.id = this.chargeLogRequestData.filter.chargepoint.id.filter(
+          (element) => element != undefined,
+        );
       }
       if ("chargemode" in this.chargeLogRequestData.filter.vehicle) {
         this.chargeLogRequestData.filter.vehicle.chargemode =
-          this.chargeLogRequestData.filter.vehicle.chargemode.filter(
-            (element) => element != undefined,
-          );
+          this.chargeLogRequestData.filter.vehicle.chargemode.filter((element) => element != undefined);
       }
       if ("id" in this.chargeLogRequestData.filter.vehicle) {
-        this.chargeLogRequestData.filter.vehicle.id =
-          this.chargeLogRequestData.filter.vehicle.id.filter(
-            (element) => element != undefined,
-          );
+        this.chargeLogRequestData.filter.vehicle.id = this.chargeLogRequestData.filter.vehicle.id.filter(
+          (element) => element != undefined,
+        );
       }
     },
     requestChargeLog() {
@@ -903,34 +734,16 @@ export default {
     },
     downloadChargeLog() {
       // based on: http://jsfiddle.net/k56eezxp/
-      this.$refs.downloadChargeLogLink.setAttribute(
-        "download",
-        "Ladeprotokoll-" + this.chargeLogDate + ".csv",
-      );
-      this.$refs.downloadChargeLogLink.href = this.makeTextFile(
-        this.chargeLogCsv,
-      );
-      this.$refs.downloadChargeLogLink.dispatchEvent(
-        new MouseEvent("click"),
-      );
+      this.$refs.downloadChargeLogLink.setAttribute("download", "Ladeprotokoll-" + this.chargeLogDate + ".csv");
+      this.$refs.downloadChargeLogLink.href = this.makeTextFile(this.chargeLogCsv);
+      this.$refs.downloadChargeLogLink.dispatchEvent(new MouseEvent("click"));
     },
     addClasses(fieldName) {
       if (
-        this.$store.state.mqtt[
-          "openWB/general/charge_log_data_config"
-        ] !== undefined &&
-        Object.hasOwn(
-          this.$store.state.mqtt[
-            "openWB/general/charge_log_data_config"
-          ],
-          fieldName,
-        )
+        this.$store.state.mqtt["openWB/general/charge_log_data_config"] !== undefined &&
+        Object.hasOwn(this.$store.state.mqtt["openWB/general/charge_log_data_config"], fieldName)
       ) {
-        return this.$store.state.mqtt[
-          "openWB/general/charge_log_data_config"
-        ][fieldName]
-          ? []
-          : ["d-none"];
+        return this.$store.state.mqtt["openWB/general/charge_log_data_config"][fieldName] ? [] : ["d-none"];
       }
       return [];
     },

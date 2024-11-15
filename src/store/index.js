@@ -97,27 +97,11 @@ export default createStore({
     updateTopic(state, message) {
       // helper function to update nested objects py path
       const setPath = (object, path, value) =>
-        path
-          .split(".")
-          .reduce(
-            (o, p, i) =>
-              (o[p] =
-                path.split(".").length === ++i
-                  ? value
-                  : o[p] || {}),
-            object,
-          );
+        path.split(".").reduce((o, p, i) => (o[p] = path.split(".").length === ++i ? value : o[p] || {}), object);
 
-      if (
-        message.topic in state.mqtt ||
-        !(message.topic in state.examples)
-      ) {
+      if (message.topic in state.mqtt || !(message.topic in state.examples)) {
         if (message.objectPath != undefined) {
-          setPath(
-            state.mqtt[message.topic],
-            message.objectPath,
-            message.payload,
-          );
+          setPath(state.mqtt[message.topic], message.objectPath, message.payload);
         } else {
           state.mqtt[message.topic] = message.payload;
         }
@@ -125,20 +109,12 @@ export default createStore({
         console.debug("topic not found in state.mqtt: ", message.topic);
         if (message.topic in state.examples) {
           if (message.objectPath != undefined) {
-            setPath(
-              state.examples[message.topic],
-              message.objectPath,
-              message.payload,
-            );
+            setPath(state.examples[message.topic], message.objectPath, message.payload);
           } else {
             state.examples[message.topic] = message.payload;
           }
         } else {
-          console.warn(
-            "topic not found in state: ",
-            message.topic,
-            " giving up",
-          );
+          console.warn("topic not found in state: ", message.topic, " giving up");
         }
       }
     },
@@ -149,11 +125,7 @@ export default createStore({
       } else {
         state.mqttSubscriptions[topic] = 1;
       }
-      console.debug(
-        "subscription count: ",
-        topic,
-        state.mqttSubscriptions[topic],
-      );
+      console.debug("subscription count: ", topic, state.mqttSubscriptions[topic]);
     },
     removeSubscription(state, topic) {
       // remove subscription from list or decrement count
@@ -170,13 +142,8 @@ export default createStore({
   getters: {
     usageTermsAcknowledged(state) {
       return new Promise((resolve) => {
-        if (
-          state.mqtt["openWB/system/usage_terms_acknowledged"] !==
-          undefined
-        ) {
-          resolve(
-            state.mqtt["openWB/system/usage_terms_acknowledged"],
-          );
+        if (state.mqtt["openWB/system/usage_terms_acknowledged"] !== undefined) {
+          resolve(state.mqtt["openWB/system/usage_terms_acknowledged"]);
         } else {
           var timer, interval;
           // add general timeout if topic not set
@@ -186,18 +153,10 @@ export default createStore({
           }, 5000);
           // check until we received valid data
           interval = setInterval(() => {
-            if (
-              state.mqtt[
-                "openWB/system/usage_terms_acknowledged"
-              ] !== undefined
-            ) {
+            if (state.mqtt["openWB/system/usage_terms_acknowledged"] !== undefined) {
               clearTimeout(timer);
               clearInterval(interval);
-              resolve(
-                state.mqtt[
-                  "openWB/system/usage_terms_acknowledged"
-                ],
-              );
+              resolve(state.mqtt["openWB/system/usage_terms_acknowledged"]);
             }
           }, 100);
         }
@@ -205,10 +164,7 @@ export default createStore({
     },
     installAssistantDone(state) {
       return new Promise((resolve) => {
-        if (
-          state.mqtt["openWB/system/installAssistantDone"] !==
-          undefined
-        ) {
+        if (state.mqtt["openWB/system/installAssistantDone"] !== undefined) {
           resolve(state.mqtt["openWB/system/installAssistantDone"]);
         } else {
           var timer, interval;
@@ -219,17 +175,10 @@ export default createStore({
           }, 5000);
           // check until we received valid data
           interval = setInterval(() => {
-            if (
-              state.mqtt["openWB/system/installAssistantDone"] !==
-              undefined
-            ) {
+            if (state.mqtt["openWB/system/installAssistantDone"] !== undefined) {
               clearTimeout(timer);
               clearInterval(interval);
-              resolve(
-                state.mqtt[
-                  "openWB/system/installAssistantDone"
-                ],
-              );
+              resolve(state.mqtt["openWB/system/installAssistantDone"]);
             }
           }, 100);
         }

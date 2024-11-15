@@ -8,8 +8,8 @@
       @button-clicked="triggerUpdate"
     >
       <template #help>
-        Mit diesem Befehl können Sie die Aktualisierung der openWB Pro
-        anstoßen. Bitte beachten Sie, dass kein Fahrzeug angesteckt ist.
+        Mit diesem Befehl können Sie die Aktualisierung der openWB Pro anstoßen. Bitte beachten Sie, dass kein Fahrzeug
+        angesteckt ist.
       </template>
     </openwb-base-button-input>
   </div>
@@ -25,14 +25,8 @@ export default {
     async triggerUpdate() {
       let formData = new FormData();
       formData.append("command", "update");
-      formData.append(
-        "data",
-        '{"ip_address":"' +
-          this.chargePoint.configuration.ip_address +
-          '"}',
-      );
-      const startedMessage =
-        "Die Aktualisierung der openWB Pro wird gestartet...";
+      formData.append("data", '{"ip_address":"' + this.chargePoint.configuration.ip_address + '"}');
+      const startedMessage = "Die Aktualisierung der openWB Pro wird gestartet...";
       this.$root.postClientMessage(startedMessage, "info");
       console.debug(location);
       this.axios
@@ -45,8 +39,7 @@ export default {
           { timeout: 5000 },
         )
         .then(() => {
-          const successMessage =
-            "Die Aktualisierung der openWB Pro wurde erfolgreich gestartet.";
+          const successMessage = "Die Aktualisierung der openWB Pro wurde erfolgreich gestartet.";
           this.$root.postClientMessage(successMessage, "success");
         })
         .catch((error) => {
@@ -54,24 +47,18 @@ export default {
           if (error.response) {
             // The request was made and the server responded with a status code
             // that falls out of the range of 2xx
-            console.error(
-              error.response.status,
-              error.response.data,
-            );
-            alertMessage +=
-              error.response.status + ": " + error.response.data;
+            console.error(error.response.status, error.response.data);
+            alertMessage += error.response.status + ": " + error.response.data;
           } else if (error.request) {
             // The request was made but no response was received
             // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
             // http.ClientRequest in node.js
             console.error(error.request);
-            alertMessage +=
-              "Es wurde keine Antwort vom Server empfangen.";
+            alertMessage += "Es wurde keine Antwort vom Server empfangen.";
           } else {
             // Something happened in setting up the request that triggered an Error
             console.error("Error", error.message);
-            alertMessage +=
-              "Es ist ein unbekannter Fehler aufgetreten.";
+            alertMessage += "Es ist ein unbekannter Fehler aufgetreten.";
           }
           this.$root.postClientMessage(alertMessage, "danger");
         });

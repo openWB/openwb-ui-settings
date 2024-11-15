@@ -7,24 +7,21 @@
   >
     <template #help>
       <p>
-        Bitte ein System-Update durchführen, um die Software auf den
-        neuesten Stand der Features und Funktionen zu bringen.
+        Bitte ein System-Update durchführen, um die Software auf den neuesten Stand der Features und Funktionen zu
+        bringen.
       </p>
       <p>
-        Hierzu Versions-Informationen / Aktualisierung auswählen,
-        Informationen aktualisieren klicken und falls ein Update
-        verfügbar ist, wird der Update-Button grün (zum Update bereit).
+        Hierzu Versions-Informationen / Aktualisierung auswählen, Informationen aktualisieren klicken und falls ein
+        Update verfügbar ist, wird der Update-Button grün (zum Update bereit).
       </p>
       <p>
-        Bei openWB-Systemen mit integriertem Display muss nach
-        Zurücksetzen auf Werkseinstellungen oder nach Ausführen eines
-        Updates das Display wieder eingeschaltet werden.
+        Bei openWB-Systemen mit integriertem Display muss nach Zurücksetzen auf Werkseinstellungen oder nach Ausführen
+        eines Updates das Display wieder eingeschaltet werden.
       </p>
       <p>
-        Ein Klick auf "Änderungen" zeigt die Modifikationen. Ein Klick
-        auf "Update" startet die Aktualisierung, welche auch einen
-        automatischen Reboot initiiert (bitte ca. 5 Minuten warten). Danach
-        muss der Assistent neu gestartet werden.
+        Ein Klick auf "Änderungen" zeigt die Modifikationen. Ein Klick auf "Update" startet die Aktualisierung, welche
+        auch einen automatischen Reboot initiiert (bitte ca. 5 Minuten warten). Danach muss der Assistent neu gestartet
+        werden.
       </p>
     </template>
     <template #content>
@@ -51,14 +48,7 @@ export default {
     SystemView,
   },
   mixins: [ComponentState],
-  emits: [
-    "save",
-    "reset",
-    "defaults",
-    "sendCommand",
-    "switchPage",
-    "endAssistant",
-  ],
+  emits: ["save", "reset", "defaults", "sendCommand", "switchPage", "endAssistant"],
   data: () => ({
     mqttTopicsToSubscribe: [],
   }),

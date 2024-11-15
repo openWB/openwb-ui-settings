@@ -6,9 +6,7 @@
       subtype="host"
       required
       :model-value="device.configuration.ip_address"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.ip_address')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.ip_address')"
     />
     <openwb-base-select-input
       title="Phase"
@@ -20,9 +18,7 @@
       ]"
       :model-value="device.configuration.phase"
       required
-      @update:model-value="
-        updateConfiguration($event, 'configuration.phase')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.phase')"
     />
   </div>
 </template>

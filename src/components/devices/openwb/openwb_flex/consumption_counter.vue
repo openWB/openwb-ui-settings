@@ -1,14 +1,10 @@
 <template>
   <div class="device-openwb-flex-consumption-counter">
-    <openwb-base-heading>
-      Einstellungen für openWB-Flex Verbrauchszähler
-    </openwb-base-heading>
+    <openwb-base-heading> Einstellungen für openWB-Flex Verbrauchszähler </openwb-base-heading>
     <openwb-base-alert subtype="info">
-      Bei saldierenden Zählern (B23) werden die Zählerstände für
-      Einspeisung und Bezug aus dem Zähler ausgelesen. Bei Zählern, die
-      nicht saldierend arbeiten (SDM120, SDM630, SDM72D-M), wird der
-      Zählerstand für den Bezug aus dem Zähler ausgelesen. Eine Messung
-      der Einspeisung ist nicht möglich.
+      Bei saldierenden Zählern (B23) werden die Zählerstände für Einspeisung und Bezug aus dem Zähler ausgelesen. Bei
+      Zählern, die nicht saldierend arbeiten (SDM120, SDM630, SDM72D-M), wird der Zählerstand für den Bezug aus dem
+      Zähler ausgelesen. Eine Messung der Einspeisung ist nicht möglich.
     </openwb-base-alert>
     <openwb-base-select-input
       title="Zählermodell"
@@ -20,9 +16,7 @@
       ]"
       :model-value="component.configuration.version"
       required
-      @update:model-value="
-        updateConfiguration($event, 'configuration.version')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.version')"
     />
     <openwb-base-number-input
       title="Modbus-ID"
@@ -30,9 +24,7 @@
       :min="1"
       :max="255"
       :model-value="component.configuration.id"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.id')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.id')"
     />
   </div>
 </template>

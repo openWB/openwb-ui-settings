@@ -1,8 +1,6 @@
 <template>
   <div class="device-studer-inverter">
-    <openwb-base-heading>
-      Einstellungen für Studer Wechselrichter
-    </openwb-base-heading>
+    <openwb-base-heading> Einstellungen für Studer Wechselrichter </openwb-base-heading>
     <openwb-base-button-group-input
       title="Typ der MPPT Solarladeregler"
       :buttons="[
@@ -11,9 +9,7 @@
       ]"
       :model-value="component.configuration.vc_type"
       required
-      @update:model-value="
-        updateConfiguration($event, 'configuration.vc_type')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.vc_type')"
     />
     <openwb-base-number-input
       title="Anzahl MPPT Solarladeregler"
@@ -21,13 +17,9 @@
       :min="1"
       :max="9"
       :model-value="component.configuration.vc_count"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.vc_count')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.vc_count')"
     >
-      <template #help>
-        Anzahl (1-9) der Studer MPPT Solarladeregler im System (VS/VT)
-      </template>
+      <template #help> Anzahl (1-9) der Studer MPPT Solarladeregler im System (VS/VT) </template>
     </openwb-base-number-input>
   </div>
 </template>

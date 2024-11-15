@@ -6,9 +6,8 @@
     >
       <h2>Achtung!</h2>
       <p>
-        Vor allen Aktionen auf dieser Seite ist sicherzustellen, dass
-        kein Ladevorgang aktiv ist! Zur Sicherheit bitte zusätzlich alle
-        Fahrzeuge von der Ladestation / den Ladestationen abstecken!
+        Vor allen Aktionen auf dieser Seite ist sicherzustellen, dass kein Ladevorgang aktiv ist! Zur Sicherheit bitte
+        zusätzlich alle Fahrzeuge von der Ladestation / den Ladestationen abstecken!
       </p>
       <openwb-base-button-group-input
         v-model="warningAcknowledged"
@@ -36,9 +35,7 @@
           :collapsed="!installAssistantActive"
         >
           <openwb-base-text-input
-            v-model="
-              $store.state.mqtt['openWB/system/current_branch']
-            "
+            v-model="$store.state.mqtt['openWB/system/current_branch']"
             title="Entwicklungszweig"
             readonly
           />
@@ -48,21 +45,13 @@
             readonly
           />
           <openwb-base-text-input
-            v-model="
-              $store.state.mqtt['openWB/system/current_commit']
-            "
+            v-model="$store.state.mqtt['openWB/system/current_commit']"
             title="installierte Version"
             readonly
-            :class="
-              updateAvailable ? 'text-danger' : 'text-success'
-            "
+            :class="updateAvailable ? 'text-danger' : 'text-success'"
           />
           <openwb-base-text-input
-            v-model="
-              $store.state.mqtt[
-                'openWB/system/current_branch_commit'
-              ]
-            "
+            v-model="$store.state.mqtt['openWB/system/current_branch_commit']"
             title="aktuellste Version"
             readonly
           />
@@ -75,9 +64,7 @@
           >
             <ul class="missing-commits">
               <li
-                v-for="(commit, key) in $store.state.mqtt[
-                  'openWB/system/current_missing_commits'
-                ]"
+                v-for="(commit, key) in $store.state.mqtt['openWB/system/current_missing_commits']"
                 :key="key"
               >
                 {{ commit }}
@@ -85,39 +72,25 @@
             </ul>
           </openwb-base-card>
           <openwb-base-alert subtype="danger">
-            Nach einem Update wird die Ladestation direkt neu
-            gestartet! Es werden alle eventuell vorhandenen lokalen
+            Nach einem Update wird die Ladestation direkt neu gestartet! Es werden alle eventuell vorhandenen lokalen
             Änderungen am Programmcode mit dem Update verworfen!
           </openwb-base-alert>
           <openwb-base-alert
-            v-if="
-              $store.state.mqtt['openWB/system/current_branch'] !=
-                'Release'
-            "
+            v-if="$store.state.mqtt['openWB/system/current_branch'] != 'Release'"
             subtype="danger"
           >
-            Du bist nicht auf dem für den normalen Gebrauch
-            empfohlenen Entwicklungszweig "Release". Wir empfehlen,
-            auf diesen Zweig zu wechseln, sobald dort eine neue
-            Version verfügbar ist.<br>
-            Bevor ein Update angestoßen wird, sollte immer eine
-            Sicherung erstellt werden! Es kann zwar wieder auf eine
-            ältere Version gewechselt werden, jedoch ist nicht
-            sichergestellt, dass es dabei keine Probleme gibt.
-            Gerade wenn das Datenformat in der neuen Version
-            angepasst wurde, wird eine ältere damit Fehler
-            produzieren.
+            Du bist nicht auf dem für den normalen Gebrauch empfohlenen Entwicklungszweig "Release". Wir empfehlen, auf
+            diesen Zweig zu wechseln, sobald dort eine neue Version verfügbar ist.<br />
+            Bevor ein Update angestoßen wird, sollte immer eine Sicherung erstellt werden! Es kann zwar wieder auf eine
+            ältere Version gewechselt werden, jedoch ist nicht sichergestellt, dass es dabei keine Probleme gibt. Gerade
+            wenn das Datenformat in der neuen Version angepasst wurde, wird eine ältere damit Fehler produzieren.
           </openwb-base-alert>
           <template #footer>
             <div class="row justify-content-center">
-              <div
-                class="col-md-4 d-flex py-1 justify-content-center"
-              >
+              <div class="col-md-4 d-flex py-1 justify-content-center">
                 <openwb-base-click-button
                   class="btn-info"
-                  @button-clicked="
-                    sendSystemCommand('systemFetchVersions')
-                  "
+                  @button-clicked="sendSystemCommand('systemFetchVersions')"
                 >
                   Informationen aktualisieren
                   <font-awesome-icon
@@ -126,15 +99,9 @@
                   />
                 </openwb-base-click-button>
               </div>
-              <div
-                class="col-md-4 d-flex py-1 justify-content-center"
-              >
+              <div class="col-md-4 d-flex py-1 justify-content-center">
                 <openwb-base-click-button
-                  :class="
-                    updateAvailable
-                      ? 'btn-success clickable'
-                      : 'btn-outline-success'
-                  "
+                  :class="updateAvailable ? 'btn-success clickable' : 'btn-outline-success'"
                   :disabled="!updateAvailable"
                   @button-clicked="systemUpdate()"
                 >
@@ -159,21 +126,15 @@
           :collapsed="true"
         >
           <openwb-base-alert subtype="danger">
-            Wenn die Ladestation ausgeschaltet wird, muss sie
-            komplett spannungsfrei geschaltet werden. Erst beim
-            erneuten Zuschalten der Spannung fährt das System wieder
-            hoch.
+            Wenn die Ladestation ausgeschaltet wird, muss sie komplett spannungsfrei geschaltet werden. Erst beim
+            erneuten Zuschalten der Spannung fährt das System wieder hoch.
           </openwb-base-alert>
           <template #footer>
             <div class="row justify-content-center">
-              <div
-                class="col-md-4 d-flex py-1 justify-content-center"
-              >
+              <div class="col-md-4 d-flex py-1 justify-content-center">
                 <openwb-base-click-button
                   class="btn-warning"
-                  @button-clicked="
-                    sendSystemCommand('systemReboot')
-                  "
+                  @button-clicked="sendSystemCommand('systemReboot')"
                 >
                   Neustart
                   <font-awesome-icon
@@ -182,14 +143,10 @@
                   />
                 </openwb-base-click-button>
               </div>
-              <div
-                class="col-md-4 d-flex py-1 justify-content-center"
-              >
+              <div class="col-md-4 d-flex py-1 justify-content-center">
                 <openwb-base-click-button
                   class="btn-danger"
-                  @button-clicked="
-                    sendSystemCommand('systemShutdown')
-                  "
+                  @button-clicked="sendSystemCommand('systemShutdown')"
                 >
                   Ausschalten
                   <font-awesome-icon
@@ -213,43 +170,28 @@
           :collapsed="true"
         >
           <openwb-base-alert subtype="danger">
-            Nach einem Wechsel wird die Ladestation direkt neu
-            gestartet! Es werden alle lokalen Änderungen mit dem
+            Nach einem Wechsel wird die Ladestation direkt neu gestartet! Es werden alle lokalen Änderungen mit dem
             Wechsel verworfen!
           </openwb-base-alert>
           <openwb-base-alert subtype="warning">
-            Bevor auf einen neuen Entwicklungszweig gewechselt wird
-            sollte immer eine Sicherung erstellt werden! Es kann
-            zwar wieder auf eine ältere Version gewechselt werden,
-            jedoch ist nicht sichergestellt, dass es dabei keine
-            Probleme gibt. Gerade wenn das Datenformat in der neuen
-            Version angepasst wurde, wird eine ältere damit Fehler
-            produzieren.<br>
-            Für den normalen Betrieb wird der Zweig "Release"
-            empfohlen. Der Softwarestand wurde ausgiebig getestet,
-            sodass ein Fehlverhalten relativ unwahrscheinlich
-            ist.<br>
-            Der "Beta" Zweig beinhaltet Vorabversionen, bei denen
-            die Entwicklung soweit abgeschlossen ist. Die
-            enthaltenen Anpassungen wurden rudimentär getestet,
-            können aber durchaus noch Fehler enthalten.<br>
-            Die aktuelle Softwareentwicklung findet im Zweig
-            "master" statt. Die enthaltenen Anpassungen sind
-            teilweise noch nicht getestet und enthalten potentiell
-            Fehler.<br>
-            Einträge, die mit "feature" beginnen, sind
-            experimentelle Entwicklungszweige, die nicht für den
-            allgemeinen Gebrauch gedacht sind.
+            Bevor auf einen neuen Entwicklungszweig gewechselt wird sollte immer eine Sicherung erstellt werden! Es kann
+            zwar wieder auf eine ältere Version gewechselt werden, jedoch ist nicht sichergestellt, dass es dabei keine
+            Probleme gibt. Gerade wenn das Datenformat in der neuen Version angepasst wurde, wird eine ältere damit
+            Fehler produzieren.<br />
+            Für den normalen Betrieb wird der Zweig "Release" empfohlen. Der Softwarestand wurde ausgiebig getestet,
+            sodass ein Fehlverhalten relativ unwahrscheinlich ist.<br />
+            Der "Beta" Zweig beinhaltet Vorabversionen, bei denen die Entwicklung soweit abgeschlossen ist. Die
+            enthaltenen Anpassungen wurden rudimentär getestet, können aber durchaus noch Fehler enthalten.<br />
+            Die aktuelle Softwareentwicklung findet im Zweig "master" statt. Die enthaltenen Anpassungen sind teilweise
+            noch nicht getestet und enthalten potentiell Fehler.<br />
+            Einträge, die mit "feature" beginnen, sind experimentelle Entwicklungszweige, die nicht für den allgemeinen
+            Gebrauch gedacht sind.
           </openwb-base-alert>
           <openwb-base-select-input
             title="Entwicklungszweig"
             :groups="getBranchGroups()"
-            :model-value="
-              $store.state.mqtt['openWB/system/current_branch']
-            "
-            @update:model-value="
-              updateState('openWB/system/current_branch', $event)
-            "
+            :model-value="$store.state.mqtt['openWB/system/current_branch']"
+            @update:model-value="updateState('openWB/system/current_branch', $event)"
           />
           <openwb-base-select-input
             v-model="selectedTag"
@@ -258,15 +200,9 @@
           />
           <template #footer>
             <div class="row justify-content-center">
-              <div
-                class="col-md-4 d-flex py-1 justify-content-center"
-              >
+              <div class="col-md-4 d-flex py-1 justify-content-center">
                 <openwb-base-click-button
-                  :class="
-                    releaseChangeValid
-                      ? 'btn-danger clickable'
-                      : 'btn-outline-danger'
-                  "
+                  :class="releaseChangeValid ? 'btn-danger clickable' : 'btn-outline-danger'"
                   :disabled="!releaseChangeValid"
                   @button-clicked="switchBranch()"
                 >
@@ -298,13 +234,7 @@ import {
   faDownload as fasDownload,
   faSkullCrossbones as fasSkullCrossbones,
 } from "@fortawesome/free-solid-svg-icons";
-library.add(
-  fasArrowAltCircleUp,
-  fasUndo,
-  fasPowerOff,
-  fasDownload,
-  fasSkullCrossbones,
-);
+library.add(fasArrowAltCircleUp, fasUndo, fasPowerOff, fasDownload, fasSkullCrossbones);
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import ComponentState from "../components/mixins/ComponentState.vue";
@@ -349,9 +279,7 @@ export default {
     releaseChangeValid() {
       return (
         this.$store.state.mqtt["openWB/system/current_branch"] in
-          this.$store.state.mqtt[
-            "openWB/system/available_branches"
-          ] &&
+          this.$store.state.mqtt["openWB/system/available_branches"] &&
         "tags" in
           this.$store.state.mqtt["openWB/system/available_branches"][
             this.$store.state.mqtt["openWB/system/current_branch"]
@@ -389,8 +317,7 @@ export default {
         return 0;
       };
 
-      var source =
-        this.$store.state.mqtt["openWB/system/available_branches"];
+      var source = this.$store.state.mqtt["openWB/system/available_branches"];
       var groups = [
         { label: "Allgemein", options: [] },
         { label: "Alpha-Zweig", options: [] },

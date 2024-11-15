@@ -18,7 +18,7 @@
           class="form-control"
           type="checkbox"
           v-bind="$attrs"
-        >
+        />
       </div>
     </template>
   </openwb-base-setting-element>

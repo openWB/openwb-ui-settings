@@ -11,30 +11,14 @@
       />
       {{ battery.name }} (ID: {{ battery.id }})
     </template>
-    <openwb-base-alert
-      :subtype="
-        statusLevel[
-          $store.state.mqtt[
-            'openWB/bat/' + battery.id + '/get/fault_state'
-          ]
-        ]
-      "
-    >
+    <openwb-base-alert :subtype="statusLevel[$store.state.mqtt['openWB/bat/' + battery.id + '/get/fault_state']]">
       <font-awesome-icon
-        v-if="
-          $store.state.mqtt[
-            'openWB/bat/' + battery.id + '/get/fault_state'
-          ] == 1
-        "
+        v-if="$store.state.mqtt['openWB/bat/' + battery.id + '/get/fault_state'] == 1"
         fixed-width
         :icon="['fas', 'exclamation-triangle']"
       />
       <font-awesome-icon
-        v-else-if="
-          $store.state.mqtt[
-            'openWB/bat/' + battery.id + '/get/fault_state'
-          ] == 2
-        "
+        v-else-if="$store.state.mqtt['openWB/bat/' + battery.id + '/get/fault_state'] == 2"
         fixed-width
         :icon="['fas', 'times-circle']"
       />
@@ -43,10 +27,8 @@
         fixed-width
         :icon="['fas', 'check-circle']"
       />
-      Modulmeldung:<br>
-      <span style="white-space: pre-wrap">{{
-        $store.state.mqtt["openWB/bat/" + battery.id + "/get/fault_str"]
-      }}</span>
+      Modulmeldung:<br />
+      <span style="white-space: pre-wrap">{{ $store.state.mqtt["openWB/bat/" + battery.id + "/get/fault_str"] }}</span>
     </openwb-base-alert>
     <openwb-base-heading>Aktuelle Werte</openwb-base-heading>
     <openwb-base-text-input
@@ -55,23 +37,14 @@
       class="text-right text-monospace"
       step="0.001"
       unit="kW"
-      :model-value="
-        formatNumberTopic(
-          'openWB/bat/' + battery.id + '/get/power',
-          3,
-          3,
-          0.001,
-        )
-      "
+      :model-value="formatNumberTopic('openWB/bat/' + battery.id + '/get/power', 3, 3, 0.001)"
     />
     <openwb-base-number-input
       title="Ladestand"
       readonly
       class="text-right text-monospace"
       unit="%"
-      :model-value="
-        $store.state.mqtt['openWB/bat/' + battery.id + '/get/soc']
-      "
+      :model-value="$store.state.mqtt['openWB/bat/' + battery.id + '/get/soc']"
     />
     <openwb-base-heading>Zählerstände</openwb-base-heading>
     <openwb-base-text-input
@@ -80,14 +53,7 @@
       class="text-right text-monospace"
       step="0.001"
       unit="kWh"
-      :model-value="
-        formatNumberTopic(
-          'openWB/bat/' + battery.id + '/get/imported',
-          3,
-          3,
-          0.001,
-        )
-      "
+      :model-value="formatNumberTopic('openWB/bat/' + battery.id + '/get/imported', 3, 3, 0.001)"
     />
     <openwb-base-text-input
       title="Entladung"
@@ -95,14 +61,7 @@
       class="text-right text-monospace"
       step="0.001"
       unit="kWh"
-      :model-value="
-        formatNumberTopic(
-          'openWB/bat/' + battery.id + '/get/exported',
-          3,
-          3,
-          0.001,
-        )
-      "
+      :model-value="formatNumberTopic('openWB/bat/' + battery.id + '/get/exported', 3, 3, 0.001)"
     />
   </openwb-base-card>
 </template>
@@ -119,12 +78,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(
-  fasCheckCircle,
-  fasExclamationTriangle,
-  fasTimesCircle,
-  fasCarBattery,
-);
+library.add(fasCheckCircle, fasExclamationTriangle, fasTimesCircle, fasCarBattery);
 
 export default {
   name: "BatteryCard",

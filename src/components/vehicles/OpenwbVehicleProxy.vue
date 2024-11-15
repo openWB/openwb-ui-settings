@@ -1,7 +1,5 @@
 <template>
-  <openwb-base-heading>
-    Einstellungen für SoC-Modul "{{ vehicle.name }}"
-  </openwb-base-heading>
+  <openwb-base-heading> Einstellungen für SoC-Modul "{{ vehicle.name }}" </openwb-base-heading>
   <component
     :is="myComponent"
     :vehicle-id="vehicleId"

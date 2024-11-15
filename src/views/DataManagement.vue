@@ -6,9 +6,8 @@
     >
       <h2>Achtung!</h2>
       <p>
-        Vor allen Aktionen auf dieser Seite ist sicherzustellen, dass
-        kein Ladevorgang aktiv ist! Zur Sicherheit bitte zusätzlich alle
-        Fahrzeuge von der Ladestation / den Ladestationen abstecken!
+        Vor allen Aktionen auf dieser Seite ist sicherzustellen, dass kein Ladevorgang aktiv ist! Zur Sicherheit bitte
+        zusätzlich alle Fahrzeuge von der Ladestation / den Ladestationen abstecken!
       </p>
       <openwb-base-button-group-input
         v-model="warningAcknowledged"
@@ -37,27 +36,21 @@
         <form name="backupForm">
           <openwb-base-heading>Sicherung</openwb-base-heading>
           <openwb-base-alert subtype="danger">
-            Aktuell können nur Sicherungen wiederhergestellt werden,
-            die in den Entwicklungszweigen "master", "Beta" oder
-            "Release" erstellt wurden!
+            Aktuell können nur Sicherungen wiederhergestellt werden, die in den Entwicklungszweigen "master", "Beta"
+            oder "Release" erstellt wurden!
           </openwb-base-alert>
           <openwb-base-alert subtype="info">
-            Nachdem die Sicherung abgeschlossen ist, kann die
-            erstellte Datei über den Link in der Benachrichtigung
-            oder
+            Nachdem die Sicherung abgeschlossen ist, kann die erstellte Datei über den Link in der Benachrichtigung oder
             <a
               href="/openWB/data/backup/"
               target="_blank"
-            >hier</a>
-            heruntergeladen werden. Beim Herunterladen bitte darauf
-            achten, dass die Datei mit der Endung .tar.gz
-            gespeichert wird. Ggf. das automatische Entpacken des
-            Browsers deaktivieren.
+              >hier</a
+            >
+            heruntergeladen werden. Beim Herunterladen bitte darauf achten, dass die Datei mit der Endung .tar.gz
+            gespeichert wird. Ggf. das automatische Entpacken des Browsers deaktivieren.
           </openwb-base-alert>
           <div class="row justify-content-center">
-            <div
-              class="col-md-4 d-flex py-1 justify-content-center"
-            >
+            <div class="col-md-4 d-flex py-1 justify-content-center">
               <openwb-base-click-button
                 class="btn-success clickable"
                 @button-clicked="
@@ -79,14 +72,12 @@
           v-if="showRestoreSection"
           name="restoreForm"
         >
-          <hr>
+          <hr />
           <openwb-base-heading>Wiederherstellung</openwb-base-heading>
           <openwb-base-alert subtype="danger">
-            Für die Wiederherstellung wird eine aktive
-            Internetverbindung benötigt.<br>
-            Aktuell können nur Sicherungen wiederhergestellt werden,
-            die in den Entwicklungszweigen "master", "Beta" oder
-            "Release" erstellt wurden!
+            Für die Wiederherstellung wird eine aktive Internetverbindung benötigt.<br />
+            Aktuell können nur Sicherungen wiederhergestellt werden, die in den Entwicklungszweigen "master", "Beta"
+            oder "Release" erstellt wurden!
           </openwb-base-alert>
           <div class="input-group">
             <div class="input-group-prepend">
@@ -104,28 +95,20 @@
                 class="custom-file-input"
                 accept=".tar.gz,application/gzip,application/tar+gzip"
                 @change="updateSelectedRestoreFile($event)"
-              >
+              />
               <label
                 id="input-file-label"
                 class="custom-file-label"
                 for="input-file"
                 data-browse="Suchen"
               >
-                {{
-                  selectedRestoreFile
-                    ? selectedRestoreFile.name
-                    : "Bitte eine Datei auswählen"
-                }}
+                {{ selectedRestoreFile ? selectedRestoreFile.name : "Bitte eine Datei auswählen" }}
               </label>
             </div>
             <div class="input-group-append">
               <button
                 class="btn"
-                :class="
-                  selectedRestoreFile
-                    ? 'btn-success clickable'
-                    : 'btn-outline-success'
-                "
+                :class="selectedRestoreFile ? 'btn-success clickable' : 'btn-outline-success'"
                 :disabled="!selectedRestoreFile"
                 type="button"
                 @click="uploadRestoreFile()"
@@ -139,15 +122,9 @@
             </div>
           </div>
           <div class="row justify-content-center">
-            <div
-              class="col-md-4 d-flex py-1 justify-content-center"
-            >
+            <div class="col-md-4 d-flex py-1 justify-content-center">
               <openwb-base-click-button
-                :class="
-                  restoreUploadDone
-                    ? 'btn-success clickable'
-                    : 'btn-outline-success'
-                "
+                :class="restoreUploadDone ? 'btn-success clickable' : 'btn-outline-success'"
                 :disabled="!restoreUploadDone"
                 @button-clicked="restoreBackup()"
               >
@@ -164,23 +141,16 @@
           v-if="showBackupCloudSection"
           name="cloudBackupForm"
         >
-          <hr>
-          <openwb-base-heading>
-            Automatische Sicherung in einen Cloud-Dienst
-          </openwb-base-heading>
+          <hr />
+          <openwb-base-heading> Automatische Sicherung in einen Cloud-Dienst </openwb-base-heading>
           <openwb-base-alert subtype="info">
-            Ist die openWB als primary konfiguriert, wird zwischen
-            Mitternacht und 5:00 Uhr automatisch eine Sicherung
-            erstellt und in den angegebenen Cloud-Dienst (nicht
-            openWB Cloud!) hochgeladen. Ist kein Cloud-Dienst
-            konfiguriert, wird keine automatische Sicherung
-            erstellt. Die automatische Sicherung kann unabhängig von
-            der openWB Cloud genutzt werden.<br>
-            Die manuelle Cloud-Sicherung und -falls aktiviert- die
-            Sicherung vor einem Update werden sowohl von einer
-            primary als auch von einer secondary durchgeführt.<br>
-            Die Anleitung zur Konfiguration des Cloud-Dienstes
-            findest Du
+            Ist die openWB als primary konfiguriert, wird zwischen Mitternacht und 5:00 Uhr automatisch eine Sicherung
+            erstellt und in den angegebenen Cloud-Dienst (nicht openWB Cloud!) hochgeladen. Ist kein Cloud-Dienst
+            konfiguriert, wird keine automatische Sicherung erstellt. Die automatische Sicherung kann unabhängig von der
+            openWB Cloud genutzt werden.<br />
+            Die manuelle Cloud-Sicherung und -falls aktiviert- die Sicherung vor einem Update werden sowohl von einer
+            primary als auch von einer secondary durchgeführt.<br />
+            Die Anleitung zur Konfiguration des Cloud-Dienstes findest Du
             <a
               href="https://github.com/openWB/core/wiki/Cloud-Sicherung"
               target="_blank"
@@ -194,20 +164,10 @@
             class="mb-2"
             title="Backup-Cloud"
             :options="backupCloudList"
-            :model-value="
-              $store.state.mqtt[
-                'openWB/system/backup_cloud/config'
-              ]?.type
-            "
+            :model-value="$store.state.mqtt['openWB/system/backup_cloud/config']?.type"
             @update:model-value="updateSelectedBackupCloud($event)"
           />
-          <div
-            v-if="
-              $store.state.mqtt[
-                'openWB/system/backup_cloud/config'
-              ]?.type
-            "
-          >
+          <div v-if="$store.state.mqtt['openWB/system/backup_cloud/config']?.type">
             <openwb-base-button-group-input
               title="Sicherung vor System-Update"
               :buttons="[
@@ -222,48 +182,24 @@
                   class: 'btn-outline-success',
                 },
               ]"
-              :model-value="
-                $store.state.mqtt[
-                  'openWB/system/backup_cloud/backup_before_update'
-                ]
-              "
-              @update:model-value="
-                updateState(
-                  'openWB/system/backup_cloud/backup_before_update',
-                  $event,
-                )
-              "
+              :model-value="$store.state.mqtt['openWB/system/backup_cloud/backup_before_update']"
+              @update:model-value="updateState('openWB/system/backup_cloud/backup_before_update', $event)"
             >
               <template #help>
-                Ist diese Option aktiviert, dann wird vor jedem
-                System-Update automatisch eine Sicherung
-                erstellt und diese in die Backup-Cloud
-                hochgeladen.
+                Ist diese Option aktiviert, dann wird vor jedem System-Update automatisch eine Sicherung erstellt und
+                diese in die Backup-Cloud hochgeladen.
               </template>
             </openwb-base-button-group-input>
             <openwb-base-button-input
               title="Manuelle Cloud-Sicherung"
               button-text="Sicherung erstellen und hochladen"
               subtype="success"
-              @button-clicked="
-                sendSystemCommand('createCloudBackup', {})
-              "
+              @button-clicked="sendSystemCommand('createCloudBackup', {})"
             />
             <openwb-backup-cloud-proxy
-              :backup-cloud="
-                $store.state.mqtt[
-                  'openWB/system/backup_cloud/config'
-                ]
-              "
-              @update:configuration="
-                updateConfiguration(
-                  'openWB/system/backup_cloud/config',
-                  $event,
-                )
-              "
-              @send-command="
-                sendSystemCommand($event.command, $event.args)
-              "
+              :backup-cloud="$store.state.mqtt['openWB/system/backup_cloud/config']"
+              @update:configuration="updateConfiguration('openWB/system/backup_cloud/config', $event)"
+              @send-command="sendSystemCommand($event.command, $event.args)"
             />
           </div>
           <openwb-base-submit-buttons
@@ -285,23 +221,16 @@
       >
         <form name="dataMigrationForm">
           <openwb-base-alert subtype="info">
-            Hier kann die Sicherung einer älteren 1.9er Version
-            hochgeladen werden, um vorhandene historische Daten
-            (Diagramme und Ladeprotokolle) sowie Cloud-Daten und
-            Seriennummer in diese Installation zu importieren. Die
-            Zuordnung zwischen den alten und neuen Komponenten muss
-            manuell durchgeführt werden.
+            Hier kann die Sicherung einer älteren 1.9er Version hochgeladen werden, um vorhandene historische Daten
+            (Diagramme und Ladeprotokolle) sowie Cloud-Daten und Seriennummer in diese Installation zu importieren. Die
+            Zuordnung zwischen den alten und neuen Komponenten muss manuell durchgeführt werden.
           </openwb-base-alert>
           <openwb-base-alert subtype="danger">
-            Die Portierung kann bei vielen historischen Daten von
-            mehreren Jahren durchaus bis zu 30 Minuten dauern. Die
-            openWB in dieser Zeit bitte nicht herunterfahren! Du
-            erhältst eine Meldung, wenn die Datenübernahme
-            abgeschlossen ist.<br>
-            Vor der Datenübernahme unbedingt eine Sicherung
-            erstellen.<br>
-            Die Datenübernahme kann nur durch Einspielen einer
-            Sicherung rückgängig gemacht werden!
+            Die Portierung kann bei vielen historischen Daten von mehreren Jahren durchaus bis zu 30 Minuten dauern. Die
+            openWB in dieser Zeit bitte nicht herunterfahren! Du erhältst eine Meldung, wenn die Datenübernahme
+            abgeschlossen ist.<br />
+            Vor der Datenübernahme unbedingt eine Sicherung erstellen.<br />
+            Die Datenübernahme kann nur durch Einspielen einer Sicherung rückgängig gemacht werden!
           </openwb-base-alert>
           <div class="input-group">
             <div class="input-group-prepend">
@@ -318,31 +247,21 @@
                 type="file"
                 class="custom-file-input"
                 accept=".tar.gz,application/gzip,application/tar+gzip"
-                @change="
-                  updateSelectedDataMigrationFile($event)
-                "
-              >
+                @change="updateSelectedDataMigrationFile($event)"
+              />
               <label
                 id="data-migration-file-label"
                 class="custom-file-label"
                 for="data-migration-file"
                 data-browse="Suchen"
               >
-                {{
-                  selectedDataMigrationFile
-                    ? selectedDataMigrationFile.name
-                    : "Bitte eine Datei auswählen"
-                }}
+                {{ selectedDataMigrationFile ? selectedDataMigrationFile.name : "Bitte eine Datei auswählen" }}
               </label>
             </div>
             <div class="input-group-append">
               <button
                 class="btn"
-                :class="
-                  selectedDataMigrationFile
-                    ? 'btn-success clickable'
-                    : 'btn-outline-success'
-                "
+                :class="selectedDataMigrationFile ? 'btn-success clickable' : 'btn-outline-success'"
                 :disabled="!selectedDataMigrationFile"
                 type="button"
                 @click="uploadDataMigrationFile()"
@@ -355,9 +274,7 @@
               </button>
             </div>
           </div>
-          <openwb-base-heading>
-            Zuordnung der Komponenten
-          </openwb-base-heading>
+          <openwb-base-heading> Zuordnung der Komponenten </openwb-base-heading>
           <div
             v-for="section in dataMigrationConfig"
             :key="section.sectionName"
@@ -370,30 +287,20 @@
               :key="configuration.key"
               v-model="dataMigrationMapping[configuration.key]"
               :title="configuration.label"
-              :options="
-                getMigrationOptions(configuration.validTypes)
-              "
+              :options="getMigrationOptions(configuration.validTypes)"
             >
               <template
                 v-if="configuration.help"
                 #help
               >
-                {{
-                  configuration.help
-                }}
+                {{ configuration.help }}
               </template>
             </openwb-base-select-input>
           </div>
           <div class="row justify-content-center">
-            <div
-              class="col-md-4 d-flex py-1 justify-content-center"
-            >
+            <div class="col-md-4 d-flex py-1 justify-content-center">
               <openwb-base-click-button
-                :class="
-                  dataMigrationUploadDone
-                    ? 'btn-success clickable'
-                    : 'btn-outline-success'
-                "
+                :class="dataMigrationUploadDone ? 'btn-success clickable' : 'btn-outline-success'"
                 :disabled="!dataMigrationUploadDone"
                 @button-clicked="dataMigration()"
               >
@@ -418,20 +325,14 @@
           :collapsed="true"
         >
           <openwb-base-alert subtype="danger">
-            Alle Einstellungen, angelegte Geräte/Komponenten,
-            Ladepunkte und Fahrzeuge, etc., Tages-, Monats- und
-            Jahresauswertungen sowie das Ladeprotokoll werden
-            unwiederbringlich gelöscht. Auch die Vorkonfiguration im
-            Auslieferungszustand wird gelöscht. Die openWB muss
-            danach komplett neu eingerichtet werden. Die openWB wird
-            hierfür automatisch neu gestartet. Bitte erstelle vor
-            dem Zurücksetzen eine Sicherung!
+            Alle Einstellungen, angelegte Geräte/Komponenten, Ladepunkte und Fahrzeuge, etc., Tages-, Monats- und
+            Jahresauswertungen sowie das Ladeprotokoll werden unwiederbringlich gelöscht. Auch die Vorkonfiguration im
+            Auslieferungszustand wird gelöscht. Die openWB muss danach komplett neu eingerichtet werden. Die openWB wird
+            hierfür automatisch neu gestartet. Bitte erstelle vor dem Zurücksetzen eine Sicherung!
           </openwb-base-alert>
           <template #footer>
             <div class="row justify-content-center">
-              <div
-                class="col-md-4 d-flex py-1 justify-content-center"
-              >
+              <div class="col-md-4 d-flex py-1 justify-content-center">
                 <openwb-base-click-button
                   class="btn-danger clickable"
                   @button-clicked="factoryReset()"
@@ -464,13 +365,7 @@ import {
   faUpload as fasUpload,
   faBoxOpen as fasBoxOpen,
 } from "@fortawesome/free-solid-svg-icons";
-library.add(
-  fasSkullCrossbones,
-  fasArchive,
-  fasFileArchive,
-  fasUpload,
-  fasBoxOpen,
-);
+library.add(fasSkullCrossbones, fasArchive, fasFileArchive, fasUpload, fasBoxOpen);
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import ComponentState from "../components/mixins/ComponentState.vue";
@@ -699,19 +594,13 @@ export default {
   },
   computed: {
     backupCloudList() {
-      return this.$store.state.mqtt[
-        "openWB/system/configurable/backup_clouds"
-      ];
+      return this.$store.state.mqtt["openWB/system/configurable/backup_clouds"];
     },
     componentConfigurations() {
-      return this.getWildcardTopics(
-        "openWB/system/device/+/component/+/config",
-      );
+      return this.getWildcardTopics("openWB/system/device/+/component/+/config");
     },
     chargePointOptions() {
-      let chargePoints = this.getWildcardTopics(
-        "openWB/chargepoint/+/config",
-      );
+      let chargePoints = this.getWildcardTopics("openWB/chargepoint/+/config");
       var myOptions = [];
       for (const element of Object.values(chargePoints)) {
         myOptions.push({ value: element.id, text: element.name });
@@ -755,18 +644,14 @@ export default {
       return myOptions;
     },
     smartHomeOptions() {
-      let smartHomeDevices = this.getWildcardTopics(
-        "openWB/LegacySmartHome/config/get/Devices/+/device_configured",
-      );
+      let smartHomeDevices = this.getWildcardTopics("openWB/LegacySmartHome/config/get/Devices/+/device_configured");
       var myOptions = [];
       for (const [key, value] of Object.entries(smartHomeDevices)) {
         if (value == 1) {
           let id = parseInt(key.match(/\/(\d\d?)\//)[1]);
           myOptions.push({
             value: id,
-            text: this.$store.state.mqtt[
-              `openWB/LegacySmartHome/config/get/Devices/${id}/device_name`
-            ],
+            text: this.$store.state.mqtt[`openWB/LegacySmartHome/config/get/Devices/${id}/device_name`],
           });
         }
       }
@@ -783,23 +668,13 @@ export default {
       return componentType.split("_").includes(verifier);
     },
     getBackupCloudDefaultConfiguration(backupCloudType) {
-      const backupCloudDefaults = this.backupCloudList.find(
-        (element) => element.value == backupCloudType,
-      );
-      if (
-        Object.prototype.hasOwnProperty.call(
-          backupCloudDefaults,
-          "defaults",
-        )
-      ) {
+      const backupCloudDefaults = this.backupCloudList.find((element) => element.value == backupCloudType);
+      if (Object.prototype.hasOwnProperty.call(backupCloudDefaults, "defaults")) {
         return {
           ...JSON.parse(JSON.stringify(backupCloudDefaults.defaults)),
         };
       }
-      console.warn(
-        "no default configuration found for backup cloud type!",
-        backupCloudType,
-      );
+      console.warn("no default configuration found for backup cloud type!", backupCloudType);
       return {};
     },
     sendSystemCommand(command, data = {}) {
@@ -840,15 +715,8 @@ export default {
       this.updateState(key, event.value, event.object);
     },
     updateSelectedBackupCloud($event) {
-      this.updateState(
-        "openWB/system/backup_cloud/config",
-        $event,
-        "type",
-      );
-      this.updateState(
-        "openWB/system/backup_cloud/config",
-        this.getBackupCloudDefaultConfiguration($event),
-      );
+      this.updateState("openWB/system/backup_cloud/config", $event, "type");
+      this.updateState("openWB/system/backup_cloud/config", this.getBackupCloudDefaultConfiguration($event));
     },
     updateSelectedRestoreFile(event) {
       this.selectedRestoreFile = event.target.files[0];
@@ -859,64 +727,39 @@ export default {
     uploadFile(target, selectedFile, successMessage) {
       return new Promise((resolve) => {
         if (selectedFile !== undefined) {
-          this.$root.postClientMessage(
-            "Hochladen der Datei gestartet.",
-            "info",
-          );
+          this.$root.postClientMessage("Hochladen der Datei gestartet.", "info");
           let formData = new FormData();
           formData.append("file", selectedFile);
           formData.append("target", target);
           this.axios
-            .post(
-              location.protocol +
-                "//" +
-                location.host +
-                "/openWB/web/settings/uploadFile.php",
-              formData,
-              {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                },
+            .post(location.protocol + "//" + location.host + "/openWB/web/settings/uploadFile.php", formData, {
+              headers: {
+                "Content-Type": "multipart/form-data",
               },
-            )
+            })
             .then(() => {
-              this.$root.postClientMessage(
-                successMessage,
-                "success",
-              );
+              this.$root.postClientMessage(successMessage, "success");
               resolve(true);
             })
             .catch((error) => {
               if (error.response) {
                 // The request was made and the server responded with a status code
                 // that falls out of the range of 2xx
-                console.error(
-                  error.response.status,
-                  error.response.data,
-                );
+                console.error(error.response.status, error.response.data);
                 var alertMessage =
-                  "Hochladen der Datei fehlgeschlagen!" +
-                  "<br />" +
-                  error.response.status +
-                  ": " +
-                  error.response.data;
+                  "Hochladen der Datei fehlgeschlagen!" + "<br />" + error.response.status + ": " + error.response.data;
               } else if (error.request) {
                 // The request was made but no response was received
                 // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
                 // http.ClientRequest in node.js
                 console.error(error.request);
-                alertMessage +=
-                  "Es wurde keine Antwort vom Server empfangen.";
+                alertMessage += "Es wurde keine Antwort vom Server empfangen.";
               } else {
                 // Something happened in setting up the request that triggered an Error
                 console.error("Error", error.message);
-                alertMessage +=
-                  "Es ist ein unbekannter Fehler aufgetreten.";
+                alertMessage += "Es ist ein unbekannter Fehler aufgetreten.";
               }
-              this.$root.postClientMessage(
-                alertMessage,
-                "danger",
-              );
+              this.$root.postClientMessage(alertMessage, "danger");
               resolve(false);
             });
         } else {
@@ -927,23 +770,13 @@ export default {
     },
     async uploadRestoreFile() {
       const successMessage =
-        "Die Sicherungsdatei wurde erfolgreich hochgeladen. " +
-        "Sie können die Wiederherstellung jetzt starten.";
-      this.restoreUploadDone = await this.uploadFile(
-        "restore",
-        this.selectedRestoreFile,
-        successMessage,
-      );
+        "Die Sicherungsdatei wurde erfolgreich hochgeladen. " + "Sie können die Wiederherstellung jetzt starten.";
+      this.restoreUploadDone = await this.uploadFile("restore", this.selectedRestoreFile, successMessage);
     },
     async uploadDataMigrationFile() {
       const successMessage =
-        "Die Sicherungsdatei wurde erfolgreich hochgeladen. " +
-        "Sie können den Import jetzt starten.";
-      this.dataMigrationUploadDone = await this.uploadFile(
-        "migrate",
-        this.selectedDataMigrationFile,
-        successMessage,
-      );
+        "Die Sicherungsdatei wurde erfolgreich hochgeladen. " + "Sie können den Import jetzt starten.";
+      this.dataMigrationUploadDone = await this.uploadFile("migrate", this.selectedDataMigrationFile, successMessage);
     },
     restoreBackup() {
       this.sendSystemCommand("restoreBackup");
