@@ -32,15 +32,29 @@ $csv_format = [
 	"data imported_since_plugged" => ["header" => "Energie seit Anstecken", "type" => "energy"],
 ];
 
-if (!preg_match("/[0-9]{4}/", $_GET["year"]) || !preg_match("/^((0?[1-9])|(1[0-2]))$/", $_GET["month"])) {
-	http_response_code(400);
-	die("invalid data");
+if (!preg_match("/[0-9]{4}/", $_GET["year"])) {
+    http_response_code(400);
+    die("invalid data");
 }
 
-$file_name = sprintf('%04d%02d', $_GET["year"], $_GET["month"]);
-$charge_log_file = $charge_log_path . $file_name . ".json";
-$charge_log_data = json_decode(file_get_contents($charge_log_file), true);
-
+// Wenn der Monat angegeben ist und gültig, dann verwenden wir diesen Monat
+if (isset($_GET["month"]) && preg_match("/^((0?[1-9])|(1[0-2]))$/", $_GET["month"])) {
+    $month = $_GET["month"];
+    $file_name = sprintf('%04d%02d', $year, $month);
+    $charge_log_file = $charge_log_path . $file_name . ".json";
+    $charge_log_data = json_decode(file_get_contents($charge_log_file), true);
+} else {
+    // Wenn kein Monat angegeben wurde, alle Monate des Jahres exportieren
+    $charge_log_data = [];
+    for ($month = 1; $month <= 12; $month++) {
+        $file_name = sprintf('%04d%02d', $year, $month);
+        $charge_log_file = $charge_log_path . $file_name . ".json";
+        if (file_exists($charge_log_file)) {
+            $monthly_data = json_decode(file_get_contents($charge_log_file), true);
+            $charge_log_data = array_merge($charge_log_data, $monthly_data);
+        }
+    }
+}
 function newRow()
 {
 	global $csv_format;
