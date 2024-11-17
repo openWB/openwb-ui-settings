@@ -81,8 +81,9 @@
         </openwb-base-card>
       </openwb-base-card>
       <openwb-base-alert subtype="info">
-        Das komplette Ladeprotokoll kann automatisiert über folgende URL abgerufen werden:
-        <a :href="downloadUrl">{{ downloadUrl }}</a>
+        Das komplette Ladeprotokoll kann automatisiert über folgende URLs abgerufen werden:
+        <a :href="downloadUrl">{{ downloadUrl }}</a> <br>
+        <a :href="downloadUrlYear">{{ downloadUrlYear }}</a>
       </openwb-base-alert>
       <openwb-base-alert
         v-if="!chargeLogRead"
@@ -488,6 +489,11 @@ export default {
       const port = parseInt(location.port) || (location.protocol == "https:" ? 443 : 80);
       const baseUrl = `${location.protocol}//${location.hostname}:${port}/openWB/web/settings/downloadChargeLog.php`;
       return baseUrl + `?year=${this.chargeLogRequestData.year}&month=${this.chargeLogRequestData.month}`;
+    },
+    downloadUrlYear() {
+      const port = parseInt(location.port) || (location.protocol == "https:" ? 443 : 80);
+      const baseUrl = `${location.protocol}//${location.hostname}:${port}/openWB/web/settings/downloadChargeLog.php`;
+      return baseUrl + `?year=${this.chargeLogRequestData.year}`;
     },
     chargeLogDate: {
       get() {
