@@ -313,6 +313,13 @@
         </sortable-list>
       </openwb-base-card>
 
+      <openwb-base-card title="IO Config">
+        <openwb-io-config
+          v-model="$store.state.examples.ioConfig"
+          title="IO Configuration"
+        />
+      </openwb-base-card>
+
       <openwb-base-submit-buttons
         form-name="testingStoreForm"
         @save="$emit('save')"
@@ -326,11 +333,13 @@
 <script>
 import ComponentState from "../components/mixins/ComponentState.vue";
 import SortableList from "../components/OpenwbSortableList.vue";
+import OpenwbIoConfig from "../components/OpenwbIoConfig.vue";
 
 export default {
   name: "OpenwbTestingStoreView",
   components: {
     SortableList,
+    OpenwbIoConfig,
   },
   mixins: [ComponentState],
   emits: ["save", "reset", "defaults"],
