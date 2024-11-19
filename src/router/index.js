@@ -119,6 +119,14 @@ const routes = [
     component: () => import("../views/VehicleConfig.vue"),
   },
   {
+    path: "/IoConfiguration",
+    name: "IoConfiguration",
+    meta: {
+      heading: "Konfiguration - Ein- und Ausgänge",
+    },
+    component: () => import("../views/IoConfig.vue"),
+  },
+  {
     path: "/System/CloudConfiguration",
     name: "CloudConfig",
     meta: {
