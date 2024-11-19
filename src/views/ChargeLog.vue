@@ -81,8 +81,9 @@
         </openwb-base-card>
       </openwb-base-card>
       <openwb-base-alert subtype="info">
-        Das komplette Ladeprotokoll kann automatisiert über folgende URLs abgerufen werden:
-        <a :href="downloadUrl">{{ downloadUrl }}</a> <br>
+        Das Ladeprotokoll kann monatsweise automatisiert über folgende URL abgerufen werden:
+        <a :href="downloadUrlMonth">{{ downloadUrlMonth }}</a> <br>
+        Das komplette Ladeprotokoll für das gesamte Jahr kann automatisiert über folgende URL abgerufen werden:
         <a :href="downloadUrlYear">{{ downloadUrlYear }}</a>
       </openwb-base-alert>
       <openwb-base-alert
@@ -485,7 +486,7 @@ export default {
     mqttClientId() {
       return this.$root.mqttClientId;
     },
-    downloadUrl() {
+    downloadUrlMonth() {
       const port = parseInt(location.port) || (location.protocol == "https:" ? 443 : 80);
       const baseUrl = `${location.protocol}//${location.hostname}:${port}/openWB/web/settings/downloadChargeLog.php`;
       return baseUrl + `?year=${this.chargeLogRequestData.year}&month=${this.chargeLogRequestData.month}`;
