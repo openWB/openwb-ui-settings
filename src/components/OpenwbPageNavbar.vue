@@ -183,6 +183,13 @@
             >
               Fahrzeuge
             </router-link>
+            <router-link
+              to="/IoConfiguration"
+              class="dropdown-item"
+              active-class="active disabled"
+            >
+              Ein-/Ausgänge
+            </router-link>
             <div class="dropdown-divider" />
             <a
               href="modules/legacy_smart_home/smarthomeconfig.php"
