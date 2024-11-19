@@ -1,8 +1,6 @@
 <template>
   <div class="device-openwb-batkit-bat">
-    <openwb-base-heading>
-      Einstellungen für openWB EVU-Kit Batteriespeicher
-    </openwb-base-heading>
+    <openwb-base-heading> Einstellungen für openWB EVU-Kit Batteriespeicher </openwb-base-heading>
     <openwb-base-select-input
       title="Zählermodell"
       not-selected="Bitte auswählen"
@@ -13,9 +11,7 @@
       ]"
       :model-value="component.configuration.version"
       required
-      @update:model-value="
-        updateConfiguration($event, 'configuration.version')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.version')"
     />
   </div>
 </template>

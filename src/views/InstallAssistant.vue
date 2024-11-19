@@ -5,9 +5,7 @@
       :show="showEndAssistantModal"
       title="Assistent beenden"
       subtype="danger"
-      :buttons="[
-        { text: 'Beenden', event: 'confirm', subtype: 'danger' },
-      ]"
+      :buttons="[{ text: 'Beenden', event: 'confirm', subtype: 'danger' }]"
       @modal-result="endAssistant"
     >
       Wollen Sie den Assistenten wirklich vorzeitig beenden?
@@ -50,10 +48,7 @@ export default {
     myStepComponent() {
       console.debug(`loading assistant page: ${this.currentPage}`);
       return defineAsyncComponent({
-        loader: () =>
-          import(
-            `../components/install_assistant/InstallAssistantStep${this.currentPage}.vue`
-          ),
+        loader: () => import(`../components/install_assistant/InstallAssistantStep${this.currentPage}.vue`),
       });
     },
   },
@@ -91,10 +86,7 @@ export default {
       this.showEndAssistantModal = false;
       if (event == "confirm") {
         this.updateState("openWB/system/installAssistantDone", true);
-        this.$root.doPublish(
-          "openWB/set/system/installAssistantDone",
-          true,
-        );
+        this.$root.doPublish("openWB/set/system/installAssistantDone", true);
         this.$router.push("/Status");
       }
     },

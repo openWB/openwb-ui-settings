@@ -8,18 +8,10 @@
       :buttons="myButtons"
       @modal-result="handleModalResult($event)"
     >
-      <p v-if="bootInProgress">
-        Der Systemstart ist noch nicht abgeschlossen.
-      </p>
-      <p v-if="updateInProgress">
-        Es wird eine Systemaktualisierung ausgeführt.
-      </p>
-      <p v-if="!(bootInProgress || updateInProgress) && reloadRequired">
-        Bitte die Seite neu laden.
-      </p>
-      <p v-else>
-        Bitte warten...
-      </p>
+      <p v-if="bootInProgress">Der Systemstart ist noch nicht abgeschlossen.</p>
+      <p v-if="updateInProgress">Es wird eine Systemaktualisierung ausgeführt.</p>
+      <p v-if="!(bootInProgress || updateInProgress) && reloadRequired">Bitte die Seite neu laden.</p>
+      <p v-else>Bitte warten...</p>
     </openwb-base-modal-dialog>
   </div>
 </template>
@@ -32,10 +24,7 @@ export default {
   mixins: [ComponentState],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/system/boot_done",
-        "openWB/system/update_in_progress",
-      ],
+      mqttTopicsToSubscribe: ["openWB/system/boot_done", "openWB/system/update_in_progress"],
     };
   },
   computed: {
@@ -48,10 +37,7 @@ export default {
       return "???";
     },
     myButtons() {
-      if (
-        !(this.bootInProgress || this.updateInProgress) &&
-        this.reloadRequired
-      ) {
+      if (!(this.bootInProgress || this.updateInProgress) && this.reloadRequired) {
         return [
           {
             text: "Jetzt neu laden",
@@ -63,18 +49,13 @@ export default {
       return [];
     },
     bootInProgress() {
-      if (
-        this.$store.state.mqtt["openWB/system/boot_done"] == undefined
-      ) {
+      if (this.$store.state.mqtt["openWB/system/boot_done"] == undefined) {
         return true;
       }
       return !this.$store.state.mqtt["openWB/system/boot_done"];
     },
     updateInProgress() {
-      if (
-        this.$store.state.mqtt["openWB/system/update_in_progress"] ==
-        undefined
-      ) {
+      if (this.$store.state.mqtt["openWB/system/update_in_progress"] == undefined) {
         return false;
       }
       return this.$store.state.mqtt["openWB/system/update_in_progress"];
@@ -83,11 +64,7 @@ export default {
       return this.$store.state.local.reloadRequired;
     },
     showModalBlocker() {
-      return (
-        this.bootInProgress ||
-        this.updateInProgress ||
-        this.reloadRequired
-      );
+      return this.bootInProgress || this.updateInProgress || this.reloadRequired;
     },
   },
   methods: {

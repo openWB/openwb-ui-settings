@@ -1,7 +1,5 @@
 <template>
-  <openwb-base-heading>
-    Einstellungen für Backup-Cloud Modul "{{ backupCloud.name }}"
-  </openwb-base-heading>
+  <openwb-base-heading> Einstellungen für Backup-Cloud Modul "{{ backupCloud.name }}" </openwb-base-heading>
   <component
     :is="myComponent"
     :backup-cloud="backupCloud"
@@ -24,8 +22,7 @@ export default {
     myComponent() {
       console.debug(`loading backup cloud: ${this.backupCloud.type}`);
       return defineAsyncComponent({
-        loader: () =>
-          import(`./${this.backupCloud.type}/backup_cloud.vue`),
+        loader: () => import(`./${this.backupCloud.type}/backup_cloud.vue`),
         errorComponent: OpenwbBackupCloudFallback,
       });
     },

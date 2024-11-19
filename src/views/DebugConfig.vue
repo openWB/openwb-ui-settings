@@ -9,28 +9,20 @@
             { buttonValue: 20, text: 'Info' },
             { buttonValue: 10, text: 'Details' },
           ]"
-          :model-value="
-            $store.state.mqtt['openWB/system/debug_level']
-          "
-          @update:model-value="
-            updateState('openWB/system/debug_level', $event)
-          "
+          :model-value="$store.state.mqtt['openWB/system/debug_level']"
+          @update:model-value="updateState('openWB/system/debug_level', $event)"
         >
           <template #help>
-            Wenn der Debug Level auf "Info" oder "Details" gesetzt
-            wird, werden mehr Informationen in die Logdateien
-            geschrieben. Im normalen Betrieb sollte immer "Warnungen
-            und Fehler" gewählt werden, um die Schreibvorgänge auf
-            der SD-Karte zu reduzieren.
+            Wenn der Debug Level auf "Info" oder "Details" gesetzt wird, werden mehr Informationen in die Logdateien
+            geschrieben. Im normalen Betrieb sollte immer "Warnungen und Fehler" gewählt werden, um die Schreibvorgänge
+            auf der SD-Karte zu reduzieren.
           </template>
         </openwb-base-button-group-input>
         <openwb-base-alert subtype="warning">
-          Achtung! In den Einstellungen "Info" und "Details" können in
-          den Logdateien sensible Daten wie Benutzernamen und
-          Passwörter enthalten sein. Diese sollten vor dem
-          Veröffentlichen z.B. im Forum unkenntlich gemacht werden.
-          Private IP-Adressen (z.B. 192.168.x.x) müssen nicht maskiert
-          werden, da diese nicht über das Internet erreichbar sind.
+          Achtung! In den Einstellungen "Info" und "Details" können in den Logdateien sensible Daten wie Benutzernamen
+          und Passwörter enthalten sein. Diese sollten vor dem Veröffentlichen z.B. im Forum unkenntlich gemacht werden.
+          Private IP-Adressen (z.B. 192.168.x.x) müssen nicht maskiert werden, da diese nicht über das Internet
+          erreichbar sind.
         </openwb-base-alert>
       </openwb-base-card>
       <openwb-base-submit-buttons
@@ -59,13 +51,10 @@ export default {
     OpenwbLogCard,
   },
   mixins: [ComponentState],
-  emits: ['save', 'reset', 'defaults'],
+  emits: ["save", "reset", "defaults"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/system/debug_level",
-      ],
+      mqttTopicsToSubscribe: ["openWB/general/extern", "openWB/system/debug_level"],
       logFiles: [
         {
           title: "Main-Log",

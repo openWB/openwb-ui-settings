@@ -5,9 +5,7 @@
       subtype="host"
       required
       :model-value="chargePoint.configuration.ip_address"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.ip_address')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.ip_address')"
     />
     <openwb-base-number-input
       title="Wartezeit"
@@ -16,14 +14,11 @@
       :max="10"
       unit="s"
       :model-value="chargePoint.configuration.timeout"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.timeout')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.timeout')"
     >
       <template #help>
-        Zeitangabe in Sekunden, für die auf eine Antwort des Ladepunktes
-        gewartet wird. Wird diese Zeit überschritten, so wird von einer
-        Kommunikationsstörung ausgegangen.
+        Zeitangabe in Sekunden, für die auf eine Antwort des Ladepunktes gewartet wird. Wird diese Zeit überschritten,
+        so wird von einer Kommunikationsstörung ausgegangen.
       </template>
     </openwb-base-number-input>
   </div>

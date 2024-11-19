@@ -7,8 +7,7 @@
       fixed-width
       :icon="['fas', 'certificate']"
     />
-    Das ausgewählte Web Theme "{{ webTheme.name }}" wird von openWB
-    gepflegt.
+    Das ausgewählte Web Theme "{{ webTheme.name }}" wird von openWB gepflegt.
   </openwb-base-alert>
   <openwb-base-alert
     v-else
@@ -18,12 +17,9 @@
       fixed-width
       :icon="['fas', 'people-group']"
     />
-    Das ausgewählte Theme wird in unserer Community gepflegt. Rückfragen
-    oder Probleme bitte im Forum diskutieren.
+    Das ausgewählte Theme wird in unserer Community gepflegt. Rückfragen oder Probleme bitte im Forum diskutieren.
   </openwb-base-alert>
-  <openwb-base-heading>
-    Einstellungen für Web Theme "{{ webTheme.name }}"
-  </openwb-base-heading>
+  <openwb-base-heading> Einstellungen für Web Theme "{{ webTheme.name }}" </openwb-base-heading>
   <component
     :is="myComponent"
     :web-theme="webTheme"
@@ -33,10 +29,7 @@
 
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faPeopleGroup as fasPeopleGroup,
-  faCertificate as fasCertificate,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPeopleGroup as fasPeopleGroup, faCertificate as fasCertificate } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasPeopleGroup, fasCertificate);

@@ -10,9 +10,7 @@
         { value: 1, text: 'Hi 5/10' },
       ]"
       :model-value="device.configuration.source"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.source')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.source')"
     />
     <openwb-base-text-input
       v-if="device.configuration.source == 1"
@@ -20,9 +18,7 @@
       subtype="host"
       required
       :model-value="device.configuration.ip_address"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.ip_address')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.ip_address')"
     />
     <openwb-base-number-input
       v-if="device.configuration.source == 1"
@@ -32,9 +28,7 @@
       :min="1"
       :max="65535"
       :model-value="device.configuration.port"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.port')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.port')"
     />
     <openwb-base-number-input
       v-if="device.configuration.source == 1"
@@ -43,9 +37,7 @@
       :model-value="device.configuration.modbus_id"
       min="1"
       max="255"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.modbus_id')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
     />
     <openwb-base-select-input
       title="Firmware Version"
@@ -56,9 +48,7 @@
         { value: 1, text: 'EMS 1.23V oder neuer' },
       ]"
       :model-value="device.configuration.version"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.version')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.version')"
     />
   </div>
 </template>

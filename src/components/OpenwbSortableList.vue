@@ -16,9 +16,7 @@
       v-model="value"
       :labels="labels"
     />
-    <div v-else>
-      Warte auf Daten...
-    </div>
+    <div v-else>Warte auf Daten...</div>
   </openwb-base-setting-element>
 </template>
 

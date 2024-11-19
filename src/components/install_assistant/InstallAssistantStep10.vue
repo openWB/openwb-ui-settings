@@ -9,12 +9,9 @@
     <template #content>
       <h2>Die Grundkonfiguration ist abgeschlossen.</h2>
       <p>
-        Die grundlegende Konfiguration der openWB ist abgeschlossen. Du
-        wirst mit Beendigung dieses Assistenten auf die Statusseite
-        weitergeleitet. Bitte überprüfe die dargestellten Informationen
-        und passe bei Unstimmigkeiten die Einstellungen in den
-        jeweiligen Konfigurationsseiten an (openWB -> Einstellungen ->
-        Konfiguration).
+        Die grundlegende Konfiguration der openWB ist abgeschlossen. Du wirst mit Beendigung dieses Assistenten auf die
+        Statusseite weitergeleitet. Bitte überprüfe die dargestellten Informationen und passe bei Unstimmigkeiten die
+        Einstellungen in den jeweiligen Konfigurationsseiten an (openWB -> Einstellungen -> Konfiguration).
       </p>
     </template>
   </InstallAssistantStepTemplate>

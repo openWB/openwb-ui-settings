@@ -6,14 +6,9 @@
       subtype="host"
       required
       :model-value="device.configuration.ip_address"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.ip_address')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.ip_address')"
     >
-      <template #help>
-        Bei Angabe des Ports muss auch das Schema mit angegeben werden:
-        http://ip:port
-      </template>
+      <template #help> Bei Angabe des Ports muss auch das Schema mit angegeben werden: http://ip:port </template>
     </openwb-base-text-input>
   </div>
 </template>

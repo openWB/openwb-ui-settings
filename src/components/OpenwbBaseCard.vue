@@ -33,11 +33,7 @@
         <font-awesome-icon
           v-if="collapsible"
           fixed-width
-          :icon="
-            isCollapsed
-              ? ['fas', 'chevron-right']
-              : ['fas', 'chevron-down']
-          "
+          :icon="isCollapsed ? ['fas', 'chevron-right'] : ['fas', 'chevron-down']"
         />
       </span>
     </div>
@@ -59,10 +55,7 @@
 
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faChevronRight as fasChevronRight,
-  faChevronDown as fasChevronDown,
-} from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight as fasChevronRight, faChevronDown as fasChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasChevronRight, fasChevronDown);
@@ -78,17 +71,8 @@ export default {
     subtype: {
       validator: function (value) {
         return (
-          [
-            "info",
-            "success",
-            "warning",
-            "danger",
-            "primary",
-            "secondary",
-            "light",
-            "dark",
-            "pink",
-          ].indexOf(value) !== -1
+          ["info", "success", "warning", "danger", "primary", "secondary", "light", "dark", "pink"].indexOf(value) !==
+          -1
         );
       },
       default: "secondary",

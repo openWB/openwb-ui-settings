@@ -46,9 +46,7 @@
             class="input-group-append"
           >
             <div class="input-group-text">
-              <small class="form-text text-muted text-right">
-                {{ length }} / {{ $attrs.maxlength }}
-              </small>
+              <small class="form-text text-muted text-right"> {{ length }} / {{ $attrs.maxlength }} </small>
             </div>
           </div>
         </div>
@@ -61,10 +59,7 @@
 import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-	faKeyboard as fasKeyboard,
-	faCode as fasCode,
-} from "@fortawesome/free-solid-svg-icons";
+import { faKeyboard as fasKeyboard, faCode as fasCode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasKeyboard, fasCode);
@@ -117,9 +112,7 @@ export default {
           } catch (error) {
             console.warn("parsing JSON failed: " + newValue, error);
             this.inputInvalid = true;
-            this.$refs.jsonInput.setCustomValidity(
-              "Ungültiger JSON Ausdruck!",
-            );
+            this.$refs.jsonInput.setCustomValidity("Ungültiger JSON Ausdruck!");
             this.tempValue = newValue;
           }
         } else {

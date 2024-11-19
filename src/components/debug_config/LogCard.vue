@@ -13,9 +13,7 @@
         <font-awesome-icon
           fixed-width
           :class="loading ? 'fa-spin-pulse' : ''"
-          :icon="
-            loading ? ['fas', 'spinner'] : ['fas', 'file-download']
-          "
+          :icon="loading ? ['fas', 'spinner'] : ['fas', 'file-download']"
         />
       </openwb-base-avatar>
     </template>
@@ -25,10 +23,7 @@
 
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faFileDownload as fasFileDownload,
-  faSpinner as fasSpinner,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFileDownload as fasFileDownload, faSpinner as fasSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasFileDownload, fasSpinner);
@@ -94,10 +89,7 @@ export default {
       var logContents = "";
 
       for (let i = 4; i >= 1; i--) {
-        const result = await this.getFilePromise(
-          fileName + "." + i,
-          true,
-        );
+        const result = await this.getFilePromise(fileName + "." + i, true);
         logContents += result;
       }
 

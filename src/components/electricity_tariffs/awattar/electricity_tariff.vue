@@ -8,14 +8,11 @@
         { value: 'at', text: 'Österreich' },
       ]"
       :model-value="electricityTariff.configuration.country"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.country')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.country')"
     >
       <template #help>
-        Es werden die abgefragten Börsenpreise verwendet, die aWATTar
-        bereitstellt. aWATTar-Gebühren oder Steuern werden nicht
-        berücksichtigt.
+        Es werden die abgefragten Börsenpreise verwendet, die aWATTar bereitstellt. aWATTar-Gebühren oder Steuern werden
+        nicht berücksichtigt.
       </template>
     </openwb-base-select-input>
   </div>

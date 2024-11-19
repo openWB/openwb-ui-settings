@@ -47,9 +47,7 @@ export default {
       connection: {
         protocol: location.protocol == "https:" ? "wss" : "ws",
         host: location.hostname,
-        port:
-          parseInt(location.port) ||
-          (location.protocol == "https:" ? 443 : 80),
+        port: parseInt(location.port) || (location.protocol == "https:" ? 443 : 80),
         endpoint: "/ws",
         connectTimeout: 4000,
         reconnectPeriod: 4000,
@@ -85,9 +83,7 @@ export default {
      */
     async saveValues(topicsToSave = undefined) {
       function sleep(milliseconds) {
-        return new Promise((resolve) =>
-          setTimeout(resolve, milliseconds),
-        );
+        return new Promise((resolve) => setTimeout(resolve, milliseconds));
       }
 
       console.debug("saving values...");
@@ -95,15 +91,12 @@ export default {
       // collect data
       let topics = {};
       if (topicsToSave === undefined) {
-        console.debug(
-          "no topics defined, so save everything we have in store",
-        );
+        console.debug("no topics defined, so save everything we have in store");
         topics = this.$store.state.mqtt;
       } else {
         if (Array.isArray(topicsToSave)) {
           topicsToSave.forEach((topicToSave) => {
-            topics[topicToSave] =
-              this.$store.state.mqtt[topicToSave];
+            topics[topicToSave] = this.$store.state.mqtt[topicToSave];
           });
         } else {
           console.error("expected array, got ", typeof topicsToSave);
@@ -143,11 +136,7 @@ export default {
      * @param {Object} event - Command object to send
      */
     sendCommand(event) {
-      this.doPublish(
-        "openWB/set/command/" + this.client.options.clientId + "/todo",
-        event,
-        false,
-      );
+      this.doPublish("openWB/set/command/" + this.client.options.clientId + "/todo", event, false);
     },
     /**
      * Establishes a connection to the configured broker
@@ -160,8 +149,7 @@ export default {
       // mqtts encrypted TCP connection
       // wxs WeChat mini app connection
       // alis Alipay mini app connection
-      const { protocol, host, port, endpoint, ...options } =
-        this.connection;
+      const { protocol, host, port, endpoint, ...options } = this.connection;
       const connectUrl = `${protocol}://${host}:${port}${endpoint}`;
       console.debug("connecting to broker:", connectUrl);
       try {
@@ -170,10 +158,7 @@ export default {
         console.error("mqtt.connect error", error);
       }
       this.client.on("connect", () => {
-        console.debug(
-          "Connection succeeded! ClientId: ",
-          this.client.options.clientId,
-        );
+        console.debug("Connection succeeded! ClientId: ", this.client.options.clientId);
         // required for route guards
         this.doSubscribe(["openWB/system/usage_terms_acknowledged"]);
         this.doSubscribe(["openWB/system/installAssistantDone"]);
@@ -190,11 +175,7 @@ export default {
           try {
             myPayload = JSON.parse(message.toString());
           } catch (error) {
-            console.debug(
-              "Json parsing failed, fallback to string: ",
-              topic,
-              error,
-            );
+            console.debug("Json parsing failed, fallback to string: ", topic, error);
             myPayload = message.toString();
           }
           this.$store.commit("updateTopic", {
@@ -216,10 +197,7 @@ export default {
         this.$store.commit("addSubscription", topic);
         if (this.$store.getters.subscriptionCount(topic) == 1) {
           if (topic.includes("#") || topic.includes("+")) {
-            console.debug(
-              "skipping init of wildcard topic:",
-              topic,
-            );
+            console.debug("skipping init of wildcard topic:", topic);
           } else {
             this.$store.commit("addTopic", {
               topic: topic,
@@ -249,18 +227,10 @@ export default {
           });
           if (topic.includes("#") || topic.includes("+")) {
             console.debug("expanding wildcard topic:", topic);
-            Object.keys(this.getWildcardTopics(topic)).forEach(
-              (wildcardTopic) => {
-                console.debug(
-                  "removing wildcardTopic:",
-                  wildcardTopic,
-                );
-                this.$store.commit(
-                  "removeTopic",
-                  wildcardTopic,
-                );
-              },
-            );
+            Object.keys(this.getWildcardTopics(topic)).forEach((wildcardTopic) => {
+              console.debug("removing wildcardTopic:", wildcardTopic);
+              this.$store.commit("removeTopic", wildcardTopic);
+            });
           } else {
             console.debug("removing topic:", topic);
             this.$store.commit("removeTopic", topic);
@@ -275,25 +245,16 @@ export default {
         qos: qos,
         retain: retain,
       };
-      this.client.publish(
-        topic,
-        JSON.stringify(payload),
-        options,
-        (error) => {
-          if (error) {
-            console.error("Publish error", error);
-          }
-        },
-      );
+      this.client.publish(topic, JSON.stringify(payload), options, (error) => {
+        if (error) {
+          console.error("Publish error", error);
+        }
+      });
     },
     postClientMessage(message, type = "secondary") {
       console.debug("postMessage:", message, type);
       const timestamp = Date.now();
-      const topic =
-        "openWB/command/" +
-        this.mqttClientId +
-        "/messages/" +
-        timestamp;
+      const topic = "openWB/command/" + this.mqttClientId + "/messages/" + timestamp;
       this.$store.commit({
         type: "addTopic",
         topic: topic,
@@ -312,12 +273,7 @@ export default {
       if (!isRegex) {
         // build a valid regex based on the provided wildcard topic
         baseTopicRegex =
-          "^" +
-          baseTopic
-            .replaceAll("/", "\\/")
-            .replaceAll("+", "[^+/]+")
-            .replaceAll("#", "[^#/]+") +
-          "$";
+          "^" + baseTopic.replaceAll("/", "\\/").replaceAll("+", "[^+/]+").replaceAll("#", "[^#/]+") + "$";
       }
       // filter and return all topics matching our regex
       return Object.keys(this.$store.state.mqtt)

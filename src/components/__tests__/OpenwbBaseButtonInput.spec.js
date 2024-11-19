@@ -5,7 +5,7 @@ import OpenwbBaseButtonInput from "../OpenwbBaseButtonInput.vue";
 describe("OpenwbBaseButtonInput.vue", () => {
   // general constants
   const title = "Button Test";
-  const buttonText= "Test Button";
+  const buttonText = "Test Button";
   const buttonSubtype = "success";
   // check title prop
   it("render title", () => {

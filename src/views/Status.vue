@@ -2,16 +2,11 @@
   <div class="status">
     <!-- all charge points -->
     <charge-point-sum-card
-      v-if="
-        numChargePointsInstalled > 1 &&
-          $store.state.mqtt['openWB/general/extern'] === false
-      "
+      v-if="numChargePointsInstalled > 1 && $store.state.mqtt['openWB/general/extern'] === false"
     />
     <!-- individual charge points -->
     <charge-point-card
-      v-for="(
-        installedChargePoint, installedChargePointKey
-      ) in installedChargePoints"
+      v-for="(installedChargePoint, installedChargePointKey) in installedChargePoints"
       :key="installedChargePointKey"
       :installed-charge-point="installedChargePoint"
       :installed-charge-point-key="installedChargePointKey"
@@ -23,12 +18,7 @@
       :counter="counter"
     />
     <!-- all inverters -->
-    <inverter-sum-card
-      v-if="
-        numInvertersInstalled > 1 &&
-          $store.state.mqtt['openWB/general/extern'] === false
-      "
-    />
+    <inverter-sum-card v-if="numInvertersInstalled > 1 && $store.state.mqtt['openWB/general/extern'] === false" />
     <!-- individual inverters -->
     <inverter-card
       v-for="inverter in inverterConfigs"
@@ -36,12 +26,7 @@
       :inverter="inverter"
     />
     <!-- all batteries -->
-    <battery-sum-card
-      v-if="
-        numBatteriesInstalled > 1 &&
-          $store.state.mqtt['openWB/general/extern'] === false
-      "
-    />
+    <battery-sum-card v-if="numBatteriesInstalled > 1 && $store.state.mqtt['openWB/general/extern'] === false" />
     <!-- individual batteries -->
     <battery-card
       v-for="battery in batteryConfigs"
@@ -125,16 +110,10 @@ export default {
   computed: {
     installedChargePoints: {
       get() {
-        let chargePoints = this.getWildcardTopics(
-          "openWB/chargepoint/+/config",
-        );
+        let chargePoints = this.getWildcardTopics("openWB/chargepoint/+/config");
         let myObj = {};
         for (const [key, element] of Object.entries(chargePoints)) {
-          if (
-            element.type === "internal_openwb" ||
-            this.$store.state.mqtt["openWB/general/extern"] ===
-              false
-          ) {
+          if (element.type === "internal_openwb" || this.$store.state.mqtt["openWB/general/extern"] === false) {
             myObj[key] = element;
           }
         }
@@ -152,9 +131,7 @@ export default {
           return {};
         }
         return this.filterComponentsByType(
-          this.getWildcardTopics(
-            "openWB/system/device/+/component/+/config",
-          ),
+          this.getWildcardTopics("openWB/system/device/+/component/+/config"),
           "counter",
         );
       },
@@ -170,9 +147,7 @@ export default {
           return {};
         }
         return this.filterComponentsByType(
-          this.getWildcardTopics(
-            "openWB/system/device/+/component/+/config",
-          ),
+          this.getWildcardTopics("openWB/system/device/+/component/+/config"),
           "inverter",
         );
       },
@@ -187,12 +162,7 @@ export default {
         if (this.$store.state.mqtt["openWB/general/extern"] === true) {
           return {};
         }
-        return this.filterComponentsByType(
-          this.getWildcardTopics(
-            "openWB/system/device/+/component/+/config",
-          ),
-          "bat",
-        );
+        return this.filterComponentsByType(this.getWildcardTopics("openWB/system/device/+/component/+/config"), "bat");
       },
     },
     vehicleNames: {

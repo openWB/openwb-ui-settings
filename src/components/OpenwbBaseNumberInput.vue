@@ -26,7 +26,7 @@
           type="number"
           class="form-control"
           v-bind="$attrs"
-        >
+        />
         <div
           v-if="unit"
           class="input-group-append"
@@ -68,11 +68,7 @@ export default {
     value: {
       get() {
         if (this.precision !== undefined) {
-          return parseFloat(
-            Math.round(
-              this.modelValue * Math.pow(10, this.precision),
-            ) / Math.pow(10, this.precision),
-          );
+          return parseFloat(Math.round(this.modelValue * Math.pow(10, this.precision)) / Math.pow(10, this.precision));
         }
         return this.modelValue;
       },

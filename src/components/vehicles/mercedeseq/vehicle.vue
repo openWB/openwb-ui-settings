@@ -5,42 +5,30 @@
       required
       subtype="user"
       :model-value="vehicle.configuration.client_id"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.client_id')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.client_id')"
     >
-      <template #help>
-        Die im Developer Portal angelegte Client-ID.
-      </template>
+      <template #help> Die im Developer Portal angelegte Client-ID. </template>
     </openwb-base-text-input>
     <openwb-base-text-input
       title="Client Secret"
       required
       subtype="password"
       :model-value="vehicle.configuration.client_secret"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.client_secret')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.client_secret')"
     >
-      <template #help>
-        Das im Developer Portal angelegte Client Secret.
-      </template>
+      <template #help> Das im Developer Portal angelegte Client Secret. </template>
     </openwb-base-text-input>
     <openwb-base-text-input
       title="VIN"
       required
       :model-value="vehicle.configuration.vin"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.vin')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.vin')"
     >
-      <template #help>
-        Die Fahrgestellnummer des Fahrzeugs.
-      </template>
+      <template #help> Die Fahrgestellnummer des Fahrzeugs. </template>
     </openwb-base-text-input>
     <openwb-base-alert subtype="info">
-      Vor dem Anmelden bitte die Angaben speichern.<br>
-      Die Callback-URL für die Anmeldung lautet:<br>
+      Vor dem Anmelden bitte die Angaben speichern.<br />
+      Die Callback-URL für die Anmeldung lautet:<br />
       <openwb-base-copy-to-clipboard
         class="text-info"
         tooltip="URL kopieren"
@@ -56,8 +44,8 @@
       @button-clicked="login_window"
     >
       <template #help>
-        Es wird ein neues Browserfenster geöffnet, in dem Sie sich bei
-        Mercedes mit Ihren Zugangsdaten anmelden können.<br>
+        Es wird ein neues Browserfenster geöffnet, in dem Sie sich bei Mercedes mit Ihren Zugangsdaten anmelden
+        können.<br />
       </template>
     </openwb-base-button-input>
   </div>
