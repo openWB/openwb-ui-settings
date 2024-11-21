@@ -48,6 +48,11 @@
             readonly
             :model-value="$store.state.mqtt[installedIoDeviceKey].type"
           />
+          <hr />
+          <openwb-io-device-proxy
+            :io-device="installedIoDevice"
+            @update:configuration="updateConfiguration(installedIoDeviceKey, $event)"
+          />
         </openwb-base-card>
         <hr v-if="Object.keys(installedIoDevices).length > 0" />
         <openwb-base-select-input
@@ -80,11 +85,13 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasTrash);
 
 import ComponentState from "../components/mixins/ComponentState.vue";
+import OpenwbIoDeviceProxy from "../components/io_devices/OpenwbIoDeviceProxy.vue";
 
 export default {
   name: "OpenwbIoConfigView",
   components: {
     FontAwesomeIcon,
+    OpenwbIoDeviceProxy,
   },
   mixins: [ComponentState],
   props: {
@@ -94,7 +101,7 @@ export default {
       default: false,
     },
   },
-  emits: ["save", "reset", "defaults", "sendCommand"],
+  emits: ["save", "reset", "defaults", "send-command"],
   data() {
     return {
       mqttTopicsToSubscribe: ["openWB/system/configurable/io_devices", "openWB/system/io/+/config"],
@@ -119,8 +126,7 @@ export default {
         : "I/O-Gerät " + ioDeviceIndex;
     },
     addIoDevice() {
-      console.log("addIoDevice", this.ioDeviceToAdd);
-      this.$emit("sendCommand", {
+      this.$emit("send-command", {
         command: "addIoDevice",
         data: { type: this.ioDeviceToAdd },
       });
@@ -134,12 +140,15 @@ export default {
     removeIoDevice(ioDeviceIndex, event) {
       this.showIoDeleteModal = false;
       if (event == "confirm") {
-        console.debug("request removal of io device '" + ioDeviceIndex + "'");
-        this.$emit("sendCommand", {
+        this.$emit("send-command", {
           command: "removeIoDevice",
           data: { id: ioDeviceIndex },
         });
       }
+    },
+    updateConfiguration(key, event) {
+      console.debug("updateConfiguration", key, event);
+      this.updateState(key, event.value, event.object);
     },
   },
 };
