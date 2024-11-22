@@ -274,7 +274,7 @@ export default {
         let installedComponentsConfigs = this.getWildcardTopics("openWB/system/device/+/component/+/config");
         return Object.keys(installedComponentsConfigs)
           .filter((key) => {
-            return installedComponentsConfigs[key].type.includes("counter");
+            return installedComponentsConfigs[key]?.type.includes("counter");
           })
           .reduce((obj, key) => {
             return {
@@ -287,7 +287,7 @@ export default {
     counterOptions() {
       var myOptions = [];
       for (const element of Object.values(this.componentConfigurations)) {
-        if (this.isComponentType(element.type, "counter")) {
+        if (this.isComponentType(element?.type, "counter")) {
           myOptions.push({ value: element.id, text: element.name });
         }
       }
@@ -303,7 +303,7 @@ export default {
         let installedComponentsConfigs = this.getWildcardTopics("openWB/system/device/+/component/+/config");
         return Object.keys(installedComponentsConfigs)
           .filter((key) => {
-            return installedComponentsConfigs[key].type.includes("inverter");
+            return installedComponentsConfigs[key]?.type.includes("inverter");
           })
           .reduce((obj, key) => {
             return {
@@ -379,7 +379,7 @@ export default {
       return myChargePoint;
     },
     isComponentType(componentType, verifier) {
-      return componentType.split("_").includes(verifier);
+      return componentType?.split("_").includes(verifier);
     },
   },
 };
