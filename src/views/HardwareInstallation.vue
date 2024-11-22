@@ -40,7 +40,7 @@
         <div v-else>
           <openwb-base-card
             v-for="(installedDevice, installedDeviceKey) in installedDevices"
-            :key="installedDevice.id"
+            :key="installedDeviceKey"
             :collapsible="true"
             :collapsed="true"
             subtype="dark"
@@ -50,13 +50,13 @@
                 fixed-width
                 :icon="['fas', 'network-wired']"
               />
-              {{ installedDevice.name }}
+              {{ installedDevice?.name }}
             </template>
             <template #actions="slotProps">
               <openwb-base-avatar
                 v-if="!slotProps.collapsed"
                 class="bg-danger clickable"
-                @click="removeDeviceModal(installedDevice.id, installedDevice.name, $event)"
+                @click="removeDeviceModal(installedDevice?.id, installedDevice?.name, $event)"
               >
                 <font-awesome-icon
                   fixed-width
@@ -65,7 +65,7 @@
               </openwb-base-avatar>
               <div v-else>
                 <openwb-base-avatar
-                  v-for="installedComponent in getMyInstalledComponents(installedDevice.id)"
+                  v-for="installedComponent in getMyInstalledComponents(installedDevice?.id)"
                   :key="installedComponent.id"
                   :class="'ml-1 bg-' + getComponentTypeClass(installedComponent.type)"
                 >
@@ -79,7 +79,7 @@
             <openwb-base-text-input
               title="Bezeichnung"
               subtype="text"
-              :model-value="installedDevice.name"
+              :model-value="installedDevice?.name"
               @update:model-value="updateState(installedDeviceKey, $event, 'name')"
             />
             <hr />
@@ -90,7 +90,7 @@
             <hr />
             <openwb-base-heading>Komponenten</openwb-base-heading>
             <openwb-base-alert
-              v-if="!deviceHasConfiguredComponents(installedDevice.id)"
+              v-if="!deviceHasConfiguredComponents(installedDevice?.id)"
               subtype="warning"
             >
               Es wurden noch keine Komponenten zu diesem Gerät angelegt.
