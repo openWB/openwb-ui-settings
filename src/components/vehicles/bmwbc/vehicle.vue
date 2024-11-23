@@ -26,6 +26,24 @@
     >
       <template #help> Die Fahrgestellnummer des Fahrzeugs. </template>
     </openwb-base-text-input>
+    <openwb-base-text-input
+      title="Captcha-Token"
+      required
+      :model-value="vehicle.configuration.captcha_token"
+      @update:model-value="updateConfiguration($event, 'configuration.captcha_token')"
+    >
+      <template #help> Zum erstmaligen Login z.B. nach einem Neustart ist ein <b>aktuelles Captcha-Token</b> notwendig.<br>
+                       Dazu bitte folgende Schritte durchführen:<br>
+                       1. in einem neuen Browser-Tab auf diese Seite gehen:<br>
+                          <b>https://bimmer-connected.readthedocs.io/en/latest/captcha/rest_of_world.html</b><br>
+                       2. Dort "Ich bin ein Mensch" und dann Submit anclicken.<br>
+                          Als Ergebnis wird ein sehr langer String angezeigt. <br>
+                       3. Diesen String komplett mit <b>Copy&Paste</b> in das Feld Captcha-Token eingeben.<br>
+                       4. Die Konfiguration speichern.<br>
+                       5. <b>Sofort einmal im Desktop manuell (Kreispfeil) den SoC für das Fahrzeug abrufen.</b><br>
+                       6. <b>Fertig.</b> Ab jetzt wird bis zum nächsten Neustart das sog. Refresh-Token verwendet.<br>
+                       <b>Achtung: Das Captcha-Token kann nur einmal verwendet werden und gilt nur kurze Zeit!</b></template>
+    </openwb-base-text-input>
     <openwb-base-button-group-input
       title="SoC während der Ladung berechnen"
       :buttons="[
