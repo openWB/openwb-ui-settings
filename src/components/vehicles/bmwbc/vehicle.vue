@@ -35,8 +35,19 @@
       <template #help> Zum erstmaligen Login z.B. nach einem Neustart ist ein <b>aktuelles Captcha-Token</b> notwendig.<br>
                        Dazu bitte folgende Schritte durchführen:<br>
                        1. in einem neuen Browser-Tab auf diese Seite gehen:<br>
-                          <b>https://bimmer-connected.readthedocs.io/en/latest/captcha/rest_of_world.html</b><br>
-                       2. Dort "Ich bin ein Mensch" und dann Submit anclicken.<br>
+                       <a
+                          class="nav-link"
+                          href="https://bimmer-connected.readthedocs.io/en/latest/captcha/rest_of_world.html"
+                          target="_blank"
+                        >
+                        Captcha Lösen
+                        <font-awesome-icon
+                          fixed-width
+                          :icon="[fas, external-link-alt]"
+                        />
+                        </a>
+                          (https://bimmer-connected.readthedocs.io/en/latest/captcha/rest_of_world.html)<br>
+                       2. Dort falls angefragt das Captcha lösen und/oder "Ich bin ein Mensch" und dann Submit anclicken.<br>
                           Als Ergebnis wird ein sehr langer String angezeigt. <br>
                        3. Diesen String komplett mit <b>Copy&Paste</b> in das Feld Captcha-Token eingeben.<br>
                        4. Die Konfiguration speichern.<br>
