@@ -36,7 +36,6 @@
                        Dazu bitte folgende Schritte durchführen:<br>
                        1. in einem neuen Browser-Tab auf diese Seite gehen:<br>
                        <a
-                          class="nav-link"
                           href="https://bimmer-connected.readthedocs.io/en/latest/captcha/rest_of_world.html"
                           target="_blank"
                         >
