@@ -9,23 +9,27 @@
         fixed-width
         :icon="['fas', 'solar-panel']"
       />
-      {{ inverter.name }} {{formatNumberTopic('openWB/pv/' + inverter.id + '/get/power', 3, 3, 0.001)}} kW
+      {{ inverter.name }} {{ formatNumberTopic("openWB/pv/" + inverter.id + "/get/power", 3, 3, 0.001) }} kW
       <font-awesome-icon
-          v-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 1"
-          fixed-width
-          :icon="['fas', 'exclamation-triangle']"
-          class="text-warning"
-        />
-        <font-awesome-icon
-          v-else-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 2"
-          fixed-width
-          :icon="['fas', 'times-circle']"
-          class="text-danger"
-        />
+        v-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 1"
+        fixed-width
+        :icon="['fas', 'exclamation-triangle']"
+        class="text-warning"
+      />
+      <font-awesome-icon
+        v-else-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 2"
+        fixed-width
+        :icon="['fas', 'times-circle']"
+        class="text-danger"
+      />
     </template>
-    
+
     <openwb-base-alert :subtype="statusLevel[5]">
-      <BTableSimple small borderless responsive >
+      <BTableSimple
+        small
+        borderless
+        responsive
+      >
         <BTbody>
           <BTr>
             <BTh rowspan="2">Aktuelle Werte</BTh>
@@ -35,26 +39,39 @@
           </BTr>
           <BTr>
             <BTd />
-            <BTd class="text-right text-monospace">{{this.formatNumberTopic(
-              "openWB/pv/" + this.inverter.id + "/get/power", 3, 3, 0.001) + " kW"}}</BTd>
-            <BTd class="text-right text-monospace">{{ this.formatNumberTopic('openWB/pv/' + this.inverter.id + '/get/exported', 3, 3, 0.001) + ' kWh' }}</BTd>
+            <BTd class="text-right text-monospace">{{
+              formatNumberTopic("openWB/pv/" + inverter.id + "/get/power", 3, 3, 0.001) + " kW"
+            }}</BTd>
+            <BTd class="text-right text-monospace">{{
+              formatNumberTopic("openWB/pv/" + inverter.id + "/get/exported", 3, 3, 0.001) + " kWh"
+            }}</BTd>
           </BTr>
         </BTbody>
       </BTableSimple>
     </openwb-base-alert>
     <openwb-base-alert :subtype="statusLevel[5]">
-      <BTableSimple small borderless responsive >
+      <BTableSimple
+        small
+        borderless
+        responsive
+      >
         <BTbody>
           <BTr>
             <BTh rowspan="3">Erträge</BTh>
             <BTd class="text-right">Heute</BTd>
             <BTd class="text-right">Monat</BTd>
-            <BTd class="text-right">Jahr</BTd>       
+            <BTd class="text-right">Jahr</BTd>
           </BTr>
           <BTr>
-            <BTd class="text-right text-monospace">{{this.formatNumberTopic('openWB/pv/' + this.inverter.id + '/get/daily_exported', 3, 3, 0.001) + ' kWh'}}</BTd>
-            <BTd class="text-right text-monospace">{{this.formatNumberTopic('openWB/pv/' + this.inverter.id + '/get/monthly_exported', 3, 3, 0.001) + ' kWh'}}</BTd>
-            <BTd class="text-right text-monospace">{{this.formatNumberTopic('openWB/pv/' + this.inverter.id + '/get/yearly_exported', 3, 3, 0.001) + ' kWh'}}</BTd>
+            <BTd class="text-right text-monospace">{{
+              formatNumberTopic("openWB/pv/" + inverter.id + "/get/daily_exported", 3, 3, 0.001) + " kWh"
+            }}</BTd>
+            <BTd class="text-right text-monospace">{{
+              formatNumberTopic("openWB/pv/" + inverter.id + "/get/monthly_exported", 3, 3, 0.001) + " kWh"
+            }}</BTd>
+            <BTd class="text-right text-monospace">{{
+              formatNumberTopic("openWB/pv/" + inverter.id + "/get/yearly_exported", 3, 3, 0.001) + " kWh"
+            }}</BTd>
           </BTr>
         </BTbody>
       </BTableSimple>
@@ -77,7 +94,9 @@
           :icon="['fas', 'check-circle']"
         />
         Modulmeldung:<br />
-        <span style="white-space: pre-wrap">{{ $store.state.mqtt["openWB/pv/" + inverter.id + "/get/fault_str"] }}</span>
+        <span style="white-space: pre-wrap">{{
+          $store.state.mqtt["openWB/pv/" + inverter.id + "/get/fault_str"]
+        }}</span>
       </openwb-base-alert>
       <div class="text-right ml-4">ID: {{ inverter.id }}</div>
     </template>
@@ -102,7 +121,12 @@ library.add(fasCheckCircle, fasExclamationTriangle, fasTimesCircle, fasSolarPane
 export default {
   name: "InverterCard",
   components: {
-    FontAwesomeIcon, BTableSimple, BTr, BTh, BTd , BTbody
+    FontAwesomeIcon,
+    BTableSimple,
+    BTr,
+    BTh,
+    BTd,
+    BTbody,
   },
   mixins: [ComponentState],
   props: {
@@ -110,7 +134,7 @@ export default {
   },
   data() {
     return {
-        statusLevel: ["success", "warning", "danger", "primary", "secondary", "light", "dark"],
+      statusLevel: ["success", "warning", "danger", "primary", "secondary", "light", "dark"],
     };
   },
 };
