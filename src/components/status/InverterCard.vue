@@ -67,10 +67,10 @@
               formatNumberTopic("openWB/pv/" + inverter.id + "/get/daily_exported", 3, 3, 0.001) + " kWh"
             }}</BTd>
             <BTd class="text-right text-monospace">{{
-              formatNumberTopic("openWB/pv/" + inverter.id + "/get/monthly_exported", 3, 3, 0.001) + " kWh"
+              formatNumberTopic("openWB/pv/" + inverter.id + "/get/monthly_exported", 1, 1, 0.001) + " kWh"
             }}</BTd>
             <BTd class="text-right text-monospace">{{
-              formatNumberTopic("openWB/pv/" + inverter.id + "/get/yearly_exported", 3, 3, 0.001) + " kWh"
+              formatNumberTopic("openWB/pv/" + inverter.id + "/get/yearly_exported", 0, 0, 0.001) + " kWh"
             }}</BTd>
           </BTr>
         </BTbody>
