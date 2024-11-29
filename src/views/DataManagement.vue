@@ -352,6 +352,94 @@
           </template>
         </openwb-base-card>
       </form>
+      <form
+        v-if="!installAssistantActive"
+        name="zabbixConfigured"
+      >
+        <openwb-base-card
+          title="Monitoring"
+          subtype="success"
+          :collapsible="true"
+          :collapsed="true"
+        >
+          <openwb-base-alert subtype="info">
+            Einstellung des Monitoring-Accounts um Statusmeldungen 
+            der openWB per E-Mail zu erhalten.
+          </openwb-base-alert>
+          <openwb-base-text-input
+            title="Zielhost"
+            subtype="host"
+            required
+            :model-value="
+              $store.state.mqtt[
+                'openWB/optional/zabbix/destination_host'
+              ]
+            "
+            @update:model-value="
+              updateState(
+                'openWB/optional/zabbix/destination_host',
+                $event,
+              )
+            "
+          />
+          <openwb-base-text-input
+            title="Eigener Hostname"
+            subtype="user"
+            required
+            :model-value="
+              $store.state.mqtt[
+                'openWB/optional/zabbix/hostname'
+              ]
+            "
+            @update:model-value="
+              updateState(
+                'openWB/optional/zabbix/hostname',
+                $event,
+              )
+            "
+          />
+          <openwb-base-text-input
+            title="PSK Identifier"
+            subtype="text"
+            required
+            :model-value="
+              $store.state.mqtt[
+                'openWB/optional/zabbix/psk_identifier'
+              ]
+            "
+            @update:model-value="
+              updateState(
+                'openWB/optional/zabbix/psk_identifier',
+                $event,
+              )
+            "
+          />
+          <openwb-base-text-input
+            title="PSK Key"
+            subtype="password"
+            required
+            :model-value="
+              $store.state.mqtt[
+                'openWB/optional/zabbix/psk_key'
+              ]
+            "
+            @update:model-value="
+              updateState(
+                'openWB/optional/zabbix/psk_key',
+                $event,
+              )
+            "
+          />
+        <template #footer>
+          <openwb-base-submit-buttons
+            :form-name="zabbixConfigured"
+            :hide-defaults="true"
+            @save="$emit('save')"
+            @reset="$emit('reset')"
+          />
+        </template>
+        </openwb-base-card>
+      </form>
     </div>
   </div>
 </template>
