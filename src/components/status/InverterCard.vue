@@ -86,7 +86,7 @@
 
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
-import { BTable, BTableLite, BTableSimple,  BTfoot, BThead, BTr, BTh, BTd, BTbody } from "bootstrap-vue-next";
+import { BTableSimple, BTr, BTh, BTd, BTbody } from "bootstrap-vue-next";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -102,7 +102,7 @@ library.add(fasCheckCircle, fasExclamationTriangle, fasTimesCircle, fasSolarPane
 export default {
   name: "InverterCard",
   components: {
-    FontAwesomeIcon, BTableLite, BTable, BTableSimple,  BTfoot, BThead, BTr, BTh, BTd , BTbody
+    FontAwesomeIcon, BTableSimple, BTr, BTh, BTd , BTbody
   },
   mixins: [ComponentState],
   props: {
