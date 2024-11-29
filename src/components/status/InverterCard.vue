@@ -3,13 +3,14 @@
     subtype="success"
     :collapsible="true"
     :collapsed="true"
+    
   >
     <template #header>
       <font-awesome-icon
         fixed-width
         :icon="['fas', 'solar-panel']"
       />
-      {{ inverter.name }} (ID: {{ inverter.id }})
+      {{ inverter.name }} {{formatNumberTopic('openWB/pv/' + inverter.id + '/get/power', 3, 3, 0.001)}} kW
     </template>
     <openwb-base-alert :subtype="statusLevel[$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state']]">
       <font-awesome-icon
@@ -30,52 +31,54 @@
       Modulmeldung:<br />
       <span style="white-space: pre-wrap">{{ $store.state.mqtt["openWB/pv/" + inverter.id + "/get/fault_str"] }}</span>
     </openwb-base-alert>
-    <openwb-base-text-input
-      title="Zählerstand"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/pv/' + inverter.id + '/get/exported', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Leistung"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kW"
-      :model-value="formatNumberTopic('openWB/pv/' + inverter.id + '/get/power', 3, 3, 0.001)"
-    />
-    <openwb-base-heading>Erträge</openwb-base-heading>
-    <openwb-base-text-input
-      title="Heute"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/pv/' + inverter.id + '/get/daily_exported', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Dieser Monat"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/pv/' + inverter.id + '/get/monthly_exported', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Dieses Jahr"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/pv/' + inverter.id + '/get/yearly_exported', 3, 3, 0.001)"
-    />
+
+    
+    <openwb-base-alert :subtype="statusLevel[5]">
+    <BTableSimple small borderless responsive >
+
+    <BTbody>
+      <BTr>
+        <BTh rowspan="2">Aktuelle Werte</BTh>
+        <BTd></BTd>
+        <BTd class="text-right">Leistung</BTd>
+        <BTd class="text-right">Zählerstand</BTd>
+      </BTr>
+      <BTr>
+        
+        <BTd />
+        <BTd class="text-right text-monospace">{{this.formatNumberTopic(
+          "openWB/pv/" + this.inverter.id + "/get/power", 3, 3, 0.001) + " kW"}}</BTd>
+        <BTd class="text-right text-monospace">{{ this.formatNumberTopic('openWB/pv/' + this.inverter.id + '/get/exported', 3, 3, 0.001) + ' kWh' }}</BTd>
+      </BTr>
+      </BTbody>
+      </BTableSimple>
+    </openwb-base-alert>
+    <openwb-base-alert :subtype="statusLevel[5]">
+      <BTableSimple small borderless responsive >
+      <BTbody>
+      <BTr>
+        <BTh rowspan="3">Erträge</BTh>
+        <BTd class="text-right">Heute</BTd>
+        <BTd class="text-right">Monat</BTd>
+        <BTd class="text-right">Jahr</BTd>       
+      </BTr>
+      <BTr>
+        <BTd class="text-right text-monospace">{{this.formatNumberTopic('openWB/pv/' + this.inverter.id + '/get/daily_exported', 3, 3, 0.001) + ' kWh'}}</BTd>
+        <BTd class="text-right text-monospace">{{this.formatNumberTopic('openWB/pv/' + this.inverter.id + '/get/monthly_exported', 3, 3, 0.001) + ' kWh'}}</BTd>
+        <BTd class="text-right text-monospace">{{this.formatNumberTopic('openWB/pv/' + this.inverter.id + '/get/yearly_exported', 3, 3, 0.001) + ' kWh'}}</BTd>
+      </BTr>
+    </BTbody>
+  </BTableSimple>
+  </openwb-base-alert>
+  <template #footer>
+    <div class="text-right"> ID: {{ inverter.id }}</div>
+  </template>
   </openwb-base-card>
 </template>
 
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
+import { BTable, BTableLite, BTableSimple,  BTfoot, BThead, BTr, BTh, BTd, BTbody } from "bootstrap-vue-next";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -91,7 +94,7 @@ library.add(fasCheckCircle, fasExclamationTriangle, fasTimesCircle, fasSolarPane
 export default {
   name: "InverterCard",
   components: {
-    FontAwesomeIcon,
+    FontAwesomeIcon, BTableLite, BTable, BTableSimple,  BTfoot, BThead, BTr, BTh, BTd , BTbody
   },
   mixins: [ComponentState],
   props: {
@@ -99,7 +102,7 @@ export default {
   },
   data() {
     return {
-      statusLevel: ["success", "warning", "danger"],
+        statusLevel: ["success", "warning", "danger", "primary", "secondary", "light", "dark"],
     };
   },
 };
