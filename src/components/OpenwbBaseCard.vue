@@ -1,7 +1,7 @@
 <template>
   <div
     class="card"
-    :class="'border-' + light"
+    :class="'border-' + subtype"
   >
     <div
       class="card-header py-1"
@@ -96,6 +96,8 @@ export default {
 </script>
 
 <style>
+
+
 .card {
   margin-bottom: 1rem;
   border-radius: 8px;
@@ -107,6 +109,8 @@ export default {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
+
+
 
 .card .card-header {
   font-weight: bold;
@@ -170,4 +174,6 @@ export default {
 .card-header.bg-success .btn-outline-info:hover {
   border-color: white;
 }
+
+
 </style>
