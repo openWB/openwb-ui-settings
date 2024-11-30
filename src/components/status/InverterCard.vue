@@ -25,28 +25,27 @@
     </template>
 
     <openwb-base-alert :subtype="statusLevel[5]">
-
       <table class="table table-sm table-borderless">
         <tbody>
           <tr>
-            <th >Aktuelle Werte</th>
+            <th>Aktuelle Werte</th>
             <td class="text-right">Leistung</td>
             <td class="text-right">Zählerstand</td>
           </tr>
           <tr>
             <td></td>
-            <td class="text-right text-monospace">{{
-              formatNumberTopic("openWB/pv/" + inverter.id + "/get/power", 3, 3, 0.001) + " kW"
-            }}</td>
-            <td class="text-right text-monospace">{{
-              formatNumberTopic("openWB/pv/" + inverter.id + "/get/exported", 3, 3, 0.001) + " kWh"
-            }}</td>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic("openWB/pv/" + inverter.id + "/get/power", 3, 3, 0.001) + " kW" }}
+            </td>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic("openWB/pv/" + inverter.id + "/get/exported", 3, 3, 0.001) + " kWh" }}
+            </td>
           </tr>
         </tbody>
       </table>
     </openwb-base-alert>
     <openwb-base-alert :subtype="statusLevel[5]">
-      <table class="table table-sm table-borderless ">
+      <table class="table table-sm table-borderless">
         <tbody>
           <tr>
             <th rowspan="2">Erträge</th>
@@ -55,15 +54,15 @@
             <td class="text-right">Jahr</td>
           </tr>
           <tr>
-            <td class="text-right text-monospace">{{
-              formatNumberTopic("openWB/pv/" + inverter.id + "/get/daily_exported", 3, 3, 0.001) + " kWh"
-            }}</td>
-            <td class="text-right text-monospace">{{
-              formatNumberTopic("openWB/pv/" + inverter.id + "/get/monthly_exported", 1, 1, 0.001) + " kWh"
-            }}</td>
-            <td class="text-right text-monospace">{{
-              formatNumberTopic("openWB/pv/" + inverter.id + "/get/yearly_exported", 0, 0, 0.001) + " kWh"
-            }}</Td>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic("openWB/pv/" + inverter.id + "/get/daily_exported", 3, 3, 0.001) + " kWh" }}
+            </td>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic("openWB/pv/" + inverter.id + "/get/monthly_exported", 1, 1, 0.001) + " kWh" }}
+            </td>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic("openWB/pv/" + inverter.id + "/get/yearly_exported", 0, 0, 0.001) + " kWh" }}
+            </td>
           </tr>
         </tbody>
       </table>
@@ -85,7 +84,10 @@
           fixed-width
           :icon="['fas', 'check-circle']"
         />
-        Modulmeldung:<br />
+        Modulmeldung:
+        <span v-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] != 0">
+          <br />
+        </span>
         <span style="white-space: pre-wrap">{{
           $store.state.mqtt["openWB/pv/" + inverter.id + "/get/fault_str"]
         }}</span>
