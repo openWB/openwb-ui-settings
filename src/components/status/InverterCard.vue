@@ -25,56 +25,48 @@
     </template>
 
     <openwb-base-alert :subtype="statusLevel[5]">
-      <BTableSimple
-        small
-        borderless
-        responsive
-      >
-        <BTbody>
-          <BTr>
-            <BTh rowspan="2">Aktuelle Werte</BTh>
-            <BTd></BTd>
-            <BTd class="text-right">Leistung</BTd>
-            <BTd class="text-right">Zählerstand</BTd>
-          </BTr>
-          <BTr>
-            <BTd />
-            <BTd class="text-right text-monospace">{{
+
+      <table class="table table-sm table-borderless">
+        <tbody>
+          <tr>
+            <th >Aktuelle Werte</th>
+            <td class="text-right">Leistung</td>
+            <td class="text-right">Zählerstand</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td class="text-right text-monospace">{{
               formatNumberTopic("openWB/pv/" + inverter.id + "/get/power", 3, 3, 0.001) + " kW"
-            }}</BTd>
-            <BTd class="text-right text-monospace">{{
+            }}</td>
+            <td class="text-right text-monospace">{{
               formatNumberTopic("openWB/pv/" + inverter.id + "/get/exported", 3, 3, 0.001) + " kWh"
-            }}</BTd>
-          </BTr>
-        </BTbody>
-      </BTableSimple>
+            }}</td>
+          </tr>
+        </tbody>
+      </table>
     </openwb-base-alert>
     <openwb-base-alert :subtype="statusLevel[5]">
-      <BTableSimple
-        small
-        borderless
-        responsive
-      >
-        <BTbody>
-          <BTr>
-            <BTh rowspan="3">Erträge</BTh>
-            <BTd class="text-right">Heute</BTd>
-            <BTd class="text-right">Monat</BTd>
-            <BTd class="text-right">Jahr</BTd>
-          </BTr>
-          <BTr>
-            <BTd class="text-right text-monospace">{{
+      <table class="table table-sm table-borderless ">
+        <tbody>
+          <tr>
+            <th rowspan="2">Erträge</th>
+            <td class="text-right">Heute</td>
+            <td class="text-right">Monat</td>
+            <td class="text-right">Jahr</td>
+          </tr>
+          <tr>
+            <td class="text-right text-monospace">{{
               formatNumberTopic("openWB/pv/" + inverter.id + "/get/daily_exported", 3, 3, 0.001) + " kWh"
-            }}</BTd>
-            <BTd class="text-right text-monospace">{{
+            }}</td>
+            <td class="text-right text-monospace">{{
               formatNumberTopic("openWB/pv/" + inverter.id + "/get/monthly_exported", 1, 1, 0.001) + " kWh"
-            }}</BTd>
-            <BTd class="text-right text-monospace">{{
+            }}</td>
+            <td class="text-right text-monospace">{{
               formatNumberTopic("openWB/pv/" + inverter.id + "/get/yearly_exported", 0, 0, 0.001) + " kWh"
-            }}</BTd>
-          </BTr>
-        </BTbody>
-      </BTableSimple>
+            }}</Td>
+          </tr>
+        </tbody>
+      </table>
     </openwb-base-alert>
     <template #footer>
       <openwb-base-alert :subtype="statusLevel[$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state']]">
@@ -105,7 +97,6 @@
 
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
-import { BTableSimple, BTr, BTh, BTd, BTbody } from "bootstrap-vue-next";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -122,11 +113,6 @@ export default {
   name: "InverterCard",
   components: {
     FontAwesomeIcon,
-    BTableSimple,
-    BTr,
-    BTh,
-    BTd,
-    BTbody,
   },
   mixins: [ComponentState],
   props: {
