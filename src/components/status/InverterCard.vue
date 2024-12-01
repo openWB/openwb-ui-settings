@@ -10,18 +10,28 @@
         :icon="['fas', 'solar-panel']"
       />
       {{ inverter.name }} {{ formatNumberTopic("openWB/pv/" + inverter.id + "/get/power", 3, 3, 0.001) }} kW
-      <font-awesome-icon
+      <button
         v-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 1"
-        fixed-width
-        :icon="['fas', 'exclamation-triangle']"
-        class="text-warning"
-      />
-      <font-awesome-icon
-        v-else-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 2"
-        fixed-width
-        :icon="['fas', 'times-circle']"
-        class="text-danger"
-      />
+        type="button"
+        class="btn btn-warning btn-sm p-1 ml-2"
+      >
+        <font-awesome-icon
+          fixed-width
+          :icon="['fas', 'exclamation-triangle']"
+        />
+        Warnung
+      </button>
+      <button
+        v-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 2"
+        type="button"
+        class="btn btn-danger btn-sm p-1 ml-2"
+      >
+        <font-awesome-icon
+          fixed-width
+          :icon="['fas', 'times-circle']"
+        />
+        Fehler
+      </button>
     </template>
 
     <openwb-base-alert :subtype="statusLevel[5]">
@@ -68,31 +78,41 @@
       </table>
     </openwb-base-alert>
     <template #footer>
-      <openwb-base-alert :subtype="statusLevel[$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state']]">
-        <font-awesome-icon
-          v-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 1"
-          fixed-width
-          :icon="['fas', 'exclamation-triangle']"
-        />
-        <font-awesome-icon
-          v-else-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 2"
-          fixed-width
-          :icon="['fas', 'times-circle']"
-        />
-        <font-awesome-icon
-          v-else
-          fixed-width
-          :icon="['fas', 'check-circle']"
-        />
-        Modulmeldung:
-        <span v-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] != 0">
-          <br />
-        </span>
-        <span style="white-space: pre-wrap">{{
-          $store.state.mqtt["openWB/pv/" + inverter.id + "/get/fault_str"]
-        }}</span>
-      </openwb-base-alert>
-      <div class="text-right ml-4">ID: {{ inverter.id }}</div>
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <openwb-base-alert
+              :subtype="statusLevel[$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state']]"
+            >
+              <font-awesome-icon
+                v-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 1"
+                fixed-width
+                :icon="['fas', 'exclamation-triangle']"
+              />
+              <font-awesome-icon
+                v-else-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 2"
+                fixed-width
+                :icon="['fas', 'times-circle']"
+              />
+              <font-awesome-icon
+                v-else
+                fixed-width
+                :icon="['fas', 'check-circle']"
+              />
+              Modulmeldung:
+              <span v-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] != 0">
+                <br />
+              </span>
+              <span style="white-space: pre-wrap">{{
+                $store.state.mqtt["openWB/pv/" + inverter.id + "/get/fault_str"]
+              }}</span>
+            </openwb-base-alert>
+          </div>
+          <div class="col col-auto">
+            <div class="text-right">ID: {{ inverter.id }}</div>
+          </div>
+        </div>
+      </div>
     </template>
   </openwb-base-card>
 </template>
