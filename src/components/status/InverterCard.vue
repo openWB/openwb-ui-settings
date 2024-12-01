@@ -9,7 +9,12 @@
         fixed-width
         :icon="['fas', 'solar-panel']"
       />
-      {{ inverter.name }} {{ formatNumberTopic("openWB/pv/" + inverter.id + "/get/power", 3, 3, 0.001) }} kW
+      {{ inverter.name }}
+    </template>
+    <template #actions>
+      <div v-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 0">
+        {{ formatNumberTopic("openWB/pv/" + inverter.id + "/get/power", 3, 3, 0.001) }} kW
+      </div>
       <button
         v-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 1"
         type="button"
