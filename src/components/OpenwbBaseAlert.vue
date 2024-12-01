@@ -27,14 +27,14 @@ export default {
   padding: 16px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-family:  sans-serif;
+  font-family: sans-serif;
   font-size: 1rem;
   line-height: 1.5;
   margin-bottom: 16px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  
-
 }
 
 /* Alert subtype color variants */
@@ -53,5 +53,4 @@ export default {
   background-color: #343a40;
   color: #ffffff;
 }
-
 </style>
