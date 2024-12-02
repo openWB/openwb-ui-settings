@@ -39,7 +39,7 @@
       </button>
     </template>
 
-    <openwb-base-alert :subtype="statusLevel[5]">
+    <openwb-base-alert subtype="light">
       <table class="table table-sm table-borderless">
         <tbody>
           <tr>
@@ -59,7 +59,7 @@
         </tbody>
       </table>
     </openwb-base-alert>
-    <openwb-base-alert :subtype="statusLevel[5]">
+    <openwb-base-alert subtype="light">
       <table class="table table-sm table-borderless">
         <tbody>
           <tr>
@@ -134,6 +134,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
+
 library.add(fasCheckCircle, fasExclamationTriangle, fasTimesCircle, fasSolarPanel);
 
 export default {
@@ -147,7 +148,7 @@ export default {
   },
   data() {
     return {
-      statusLevel: ["success", "warning", "danger", "primary", "secondary", "light", "dark"],
+      statusLevel: ["success", "warning", "danger"],
     };
   },
 };
