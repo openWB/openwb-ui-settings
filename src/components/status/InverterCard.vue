@@ -15,28 +15,10 @@
       <div v-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 0">
         {{ formatNumberTopic("openWB/pv/" + inverter.id + "/get/power", 3, 3, 0.001) }} kW
       </div>
-      <button
-        v-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 1"
-        type="button"
-        class="btn btn-warning btn-sm p-1 ml-2"
-      >
-        <font-awesome-icon
-          fixed-width
-          :icon="['fas', 'exclamation-triangle']"
-        />
-        Warnung
-      </button>
-      <button
-        v-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 2"
-        type="button"
-        class="btn btn-danger btn-sm p-1 ml-2"
-      >
-        <font-awesome-icon
-          fixed-width
-          :icon="['fas', 'times-circle']"
-        />
-        Fehler
-      </button>
+      <openwb-base-label
+        v-else
+        subtype="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state']"
+      />
     </template>
 
     <openwb-base-alert subtype="light">
@@ -133,7 +115,6 @@ import {
   faSolarPanel as fasSolarPanel,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-
 
 library.add(fasCheckCircle, fasExclamationTriangle, fasTimesCircle, fasSolarPanel);
 
