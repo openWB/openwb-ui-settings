@@ -21,7 +21,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 /* Base styles for the alert card */
 .card-text.alert {
   padding: 16px;
