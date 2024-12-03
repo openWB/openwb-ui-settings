@@ -362,82 +362,48 @@
           :collapsible="true"
           :collapsed="true"
         >
-          <openwb-base-alert subtype="info">
-            Einstellung des Monitoring-Accounts um Statusmeldungen 
-            der openWB per E-Mail zu erhalten.
-          </openwb-base-alert>
-          <openwb-base-text-input
-            title="Zielhost"
-            subtype="host"
-            required
-            :model-value="
-              $store.state.mqtt[
-                'openWB/optional/zabbix/destination_host'
-              ]
-            "
-            @update:model-value="
-              updateState(
-                'openWB/optional/zabbix/destination_host',
-                $event,
-              )
-            "
-          />
-          <openwb-base-text-input
-            title="Eigener Hostname"
-            subtype="user"
-            required
-            :model-value="
-              $store.state.mqtt[
-                'openWB/optional/zabbix/hostname'
-              ]
-            "
-            @update:model-value="
-              updateState(
-                'openWB/optional/zabbix/hostname',
-                $event,
-              )
-            "
-          />
-          <openwb-base-text-input
-            title="PSK Identifier"
-            subtype="text"
-            required
-            :model-value="
-              $store.state.mqtt[
-                'openWB/optional/zabbix/psk_identifier'
-              ]
-            "
-            @update:model-value="
-              updateState(
-                'openWB/optional/zabbix/psk_identifier',
-                $event,
-              )
-            "
-          />
-          <openwb-base-text-input
-            title="PSK Key"
-            subtype="password"
-            required
-            :model-value="
-              $store.state.mqtt[
-                'openWB/optional/zabbix/psk_key'
-              ]
-            "
-            @update:model-value="
-              updateState(
-                'openWB/optional/zabbix/psk_key',
-                $event,
-              )
-            "
-          />
-        <template #footer>
-          <openwb-base-submit-buttons
-            :form-name="zabbixConfigured"
-            :hide-defaults="true"
-            @save="$emit('save')"
-            @reset="$emit('reset')"
-          />
-        </template>
+          <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+            <openwb-base-alert subtype="info">
+              Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary"
+              befindet.
+            </openwb-base-alert>
+          </div>
+          <div v-else>
+            <openwb-base-alert subtype="info">
+              Das Monitoring informiert Dich sofort per E-Mail, wenn eine Deiner Kompnenten oder Ladepunkte ein Problem
+              hat oder die openWB nicht mehr erreichbar ist.
+            </openwb-base-alert>
+            <openwb-base-select-input
+              class="mb-2"
+              title="Anbieter"
+              :options="monitoringList"
+              :model-value="
+                $store.state.mqtt['openWB/optional/monitoring/config']
+                  ? $store.state.mqtt['openWB/optional/monitoring/config'].type
+                  : ''
+              "
+              @update:model-value="updateSelectedMonitoring($event)"
+            />
+            <div
+              v-if="
+                $store.state.mqtt['openWB/optional/monitoring/config'] &&
+                $store.state.mqtt['openWB/optional/monitoring/config'].type
+              "
+            >
+              <openwb-monitoring-proxy
+                :monitoring="$store.state.mqtt['openWB/optional/monitoring/config']"
+                @update:configuration="updateConfiguration('openWB/optional/monitoring/config', $event)"
+              />
+            </div>
+          </div>
+          <template #footer>
+            <openwb-base-submit-buttons
+              :form-name="zabbixConfigured"
+              :hide-defaults="true"
+              @save="$emit('save')"
+              @reset="$emit('reset')"
+            />
+          </template>
         </openwb-base-card>
       </form>
     </div>
@@ -458,12 +424,14 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbBackupCloudProxy from "../components/backup_clouds/OpenwbBackupCloudProxy.vue";
+import OpenwbMonitoringProxy from "../components/monitoring/OpenwbMonitoringProxy.vue";
 
 export default {
   name: "OpenwbDataManagementView",
   components: {
     FontAwesomeIcon,
     OpenwbBackupCloudProxy,
+    OpenwbMonitoringProxy,
   },
   mixins: [ComponentState],
   props: {
@@ -483,10 +451,12 @@ export default {
     return {
       mqttTopicsToSubscribe: [
         "openWB/system/configurable/backup_clouds",
+        "openWB/system/configurable/monitoring",
         "openWB/system/backup_cloud/config",
         "openWB/system/backup_cloud/backup_before_update",
         "openWB/system/device/+/component/+/config",
         "openWB/chargepoint/+/config",
+        "openWB/optional/monitoring/config",
         "openWB/vehicle/+/name",
         "openWB/LegacySmartHome/config/get/Devices/+/device_configured",
         "openWB/LegacySmartHome/config/get/Devices/+/device_name",
@@ -713,6 +683,9 @@ export default {
       }
       return myOptions;
     },
+    monitoringList() {
+      return this.$store.state.mqtt["openWB/system/configurable/monitoring"];
+    },
     batteryOptions() {
       var myOptions = [];
       for (const element of Object.values(this.componentConfigurations)) {
@@ -855,6 +828,18 @@ export default {
           resolve(false);
         }
       });
+    },
+    getMonitoringDefaultConfiguration(monitoringType) {
+      const monitoringDefaults = this.monitoringList.find((element) => element.value == monitoringType);
+      if (Object.prototype.hasOwnProperty.call(monitoringDefaults, "defaults")) {
+        return { ...monitoringDefaults.defaults };
+      }
+      console.warn("no default configuration found for monitoring type!", monitoringType);
+      return {};
+    },
+    updateSelectedMonitoring($event) {
+      this.updateState("openWB/optional/monitoring/config", $event, "type");
+      this.updateState("openWB/optional/monitoring/config", this.getMonitoringDefaultConfiguration($event));
     },
     async uploadRestoreFile() {
       const successMessage =
