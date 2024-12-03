@@ -26,15 +26,11 @@
           <tr>
             <th>Aktuelle Werte</th>
             <td class="text-right">Leistung</td>
-            <td class="text-right">Netzfrequenz</td>
           </tr>
           <tr>
             <td></td>
             <td class="text-right text-monospace">
               {{ formatNumberTopic("openWB/counter/" + counter.id + "/get/power", 3, 3, 0.001) + " kW" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic("openWB/counter/" + counter.id + "/get/frequency", 3) + " Hz" }}
             </td>
           </tr>
         </tbody>
@@ -88,6 +84,12 @@
             <td class="text-right">Leistungsfaktor</td>
             <td class="text-right text-monospace">
               {{ formatPhaseArrayNumberTopic("openWB/counter/" + counter.id + "/get/power_factors", 2) }}
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right">Netzfrequenz</td>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic("openWB/counter/" + counter.id + "/get/frequency", 3) + " Hz" }}
             </td>
           </tr>
         </tbody>
