@@ -139,33 +139,114 @@
           <tr>
             <td class="text-right">⚡Spannung</td>
             <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/voltages", 1) + " V" }}
+              {{
+                formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/voltages", 1).split(
+                  " / ",
+                )[0] + " V"
+              }}
+            </td>
+            <td class="text-right text-monospace">
+              {{
+                formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/voltages", 1).split(
+                  " / ",
+                )[1] + " V"
+              }}
+            </td>
+            <td class="text-right text-monospace">
+              {{
+                formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/voltages", 1).split(
+                  " / ",
+                )[2] + " V"
+              }}
             </td>
           </tr>
           <tr>
             <td class="text-right">🔌Strom</td>
             <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/currents", 2) + " A" }}
+              {{
+                formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/currents", 2).split(
+                  " / ",
+                )[0] + " A"
+              }}
+            </td>
+            <td class="text-right text-monospace">
+              {{
+                formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/currents", 2).split(
+                  " / ",
+                )[1] + " A"
+              }}
+            </td>
+            <td class="text-right text-monospace">
+              {{
+                formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/currents", 2).split(
+                  " / ",
+                )[2] + " A"
+              }}
             </td>
           </tr>
           <tr>
             <td class="text-right">Wirkleistung</td>
             <td class="text-right text-monospace">
               {{
-                formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/powers", 3, 3, 0.001) +
-                " kW"
+                formatPhaseArrayNumberTopic(
+                  "openWB/chargepoint/" + chargePointIndex + "/get/powers",
+                  3,
+                  3,
+                  0.001,
+                ).split(" / ")[0] + " kW"
+              }}
+            </td>
+            <td class="text-right text-monospace">
+              {{
+                formatPhaseArrayNumberTopic(
+                  "openWB/chargepoint/" + chargePointIndex + "/get/powers",
+                  3,
+                  3,
+                  0.001,
+                ).split(" / ")[1] + " kW"
+              }}
+            </td>
+            <td class="text-right text-monospace">
+              {{
+                formatPhaseArrayNumberTopic(
+                  "openWB/chargepoint/" + chargePointIndex + "/get/powers",
+                  3,
+                  3,
+                  0.001,
+                ).split(" / ")[2] + " kW"
               }}
             </td>
           </tr>
           <tr>
             <td class="text-right">Leistungsfaktor</td>
             <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/power_factors", 2) }}
+              {{
+                formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/power_factors", 2).split(
+                  " / ",
+                )[0]
+              }}
+            </td>
+            <td class="text-right text-monospace">
+              {{
+                formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/power_factors", 2).split(
+                  " / ",
+                )[1]
+              }}
+            </td>
+            <td class="text-right text-monospace">
+              {{
+                formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/power_factors", 2).split(
+                  " / ",
+                )[2]
+              }}
             </td>
           </tr>
           <tr>
             <td class="text-right">Netzfrequenz</td>
-            <td class="text-right text-monospace">
+            <td
+              colspan="3"
+              class="text-center text-monospace"
+            >
               {{ formatNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/frequency", 3) + " Hz" }}
             </td>
           </tr>
