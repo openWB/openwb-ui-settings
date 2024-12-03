@@ -11,66 +11,89 @@
       />
       Alle Wechselrichter
     </template>
-    <openwb-base-alert :subtype="statusLevel[$store.state.mqtt['openWB/pv/get/fault_state']]">
-      <font-awesome-icon
-        v-if="$store.state.mqtt['openWB/pv/get/fault_state'] == 1"
-        fixed-width
-        :icon="['fas', 'exclamation-triangle']"
-      />
-      <font-awesome-icon
-        v-else-if="$store.state.mqtt['openWB/pv/get/fault_state'] == 2"
-        fixed-width
-        :icon="['fas', 'times-circle']"
-      />
-      <font-awesome-icon
+    <template #actions>
+      <div v-if="$store.state.mqtt['openWB/pv/get/fault_state'] == 0">
+        {{ formatNumberTopic("openWB/pv/get/power", 3, 3, 0.001) }} kW
+      </div>
+      <openwb-base-label
         v-else
-        fixed-width
-        :icon="['fas', 'check-circle']"
+        :subtype="statuslevel[$store.state.mqtt['openWB/pv/get/fault_state']]"
       />
-      Modulmeldung:<br />
-      <span style="white-space: pre-wrap">{{ $store.state.mqtt["openWB/pv/get/fault_str"] }}</span>
+    </template>
+    <openwb-base-alert subtype="light">
+      <table class="table table-sm table-borderless">
+        <tbody>
+          <tr>
+            <th>Aktuelle Werte</th>
+            <td class="text-right">Leistung</td>
+            <td class="text-right">Zählerstand</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic("openWB/pv/get/power", 3, 3, 0.001) + " kW" }}
+            </td>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic("openWB/pv/get/exported", 3, 3, 0.001) + " kWh" }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </openwb-base-alert>
-    <openwb-base-text-input
-      title="Zählerstand"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/pv/get/exported', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Leistung"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kW"
-      :model-value="formatNumberTopic('openWB/pv/get/power', 3, 3, 0.001)"
-    />
-    <openwb-base-heading>Erträge</openwb-base-heading>
-    <openwb-base-text-input
-      title="Heute"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/pv/get/daily_exported', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Dieser Monat"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/pv/get/monthly_exported', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Dieses Jahr"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/pv/get/yearly_exported', 3, 3, 0.001)"
-    />
+    <openwb-base-alert subtype="light">
+      <table class="table table-sm table-borderless">
+        <tbody>
+          <tr>
+            <th rowspan="2">Erträge</th>
+            <td class="text-right">Heute</td>
+            <td class="text-right">Monat</td>
+            <td class="text-right">Jahr</td>
+          </tr>
+          <tr>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic("openWB/pv/get/daily_exported", 3, 3, 0.001) + " kWh" }}
+            </td>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic("openWB/pv/get/monthly_exported", 1, 1, 0.001) + " kWh" }}
+            </td>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic("openWB/pv/get/yearly_exported", 0, 0, 0.001) + " kWh" }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </openwb-base-alert>
+
+    <template #footer>
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <openwb-base-alert :subtype="statusLevel[$store.state.mqtt['openWB/pv/get/fault_state']]">
+              <font-awesome-icon
+                v-if="$store.state.mqtt['openWB/pv/get/fault_state'] == 1"
+                fixed-width
+                :icon="['fas', 'exclamation-triangle']"
+              />
+              <font-awesome-icon
+                v-else-if="$store.state.mqtt['openWB/pv/get/fault_state'] == 2"
+                fixed-width
+                :icon="['fas', 'times-circle']"
+              />
+              <font-awesome-icon
+                v-else
+                fixed-width
+                :icon="['fas', 'check-circle']"
+              />
+              Modulmeldung:
+              <span v-if="$store.state.mqtt['openWB/pv/get/fault_state'] != 0">
+                <br />
+              </span>
+              <span style="white-space: pre-wrap">{{ $store.state.mqtt["openWB/pv/get/fault_str"] }}</span>
+            </openwb-base-alert>
+          </div>
+        </div>
+      </div>
+    </template>
   </openwb-base-card>
 </template>
 
