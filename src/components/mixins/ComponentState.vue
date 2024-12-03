@@ -88,10 +88,10 @@ export default {
       if (value >= 1000) {
         minNumDigits = 0;
         maxNumDigit = 0;
-      } else if (value >= 10) {
+      } else if (value >= 10 && minNumDigits > 1) {
         minNumDigits = 1;
         maxNumDigit = 1;
-      } else if (value >= 1) {
+      } else if (value >= 1 && minNumDigits > 2) {
         minNumDigits = 2;
         maxNumDigit = 2;
       }
