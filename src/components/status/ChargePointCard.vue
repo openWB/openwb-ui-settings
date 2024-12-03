@@ -60,7 +60,7 @@
           <tr>
             <td />
             <td class="text-right text-monospace">
-              {{ formatNumberTopic("openWB/chargepoint/" + chargePointIndex + "/set/current", 2) }}
+              {{ formatNumberTopic("openWB/chargepoint/" + chargePointIndex + "/set/current", 2) + " A" }}
             </td>
             <td class="text-right text-monospace">
               {{ formatNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/power", 3, 3, 0.001) + " kW" }}
@@ -266,14 +266,20 @@ export default {
         return parseInt(this.installedChargePointKey.match(/(?:\/)(\d+)(?=\/)/)[1]);
       },
     },
-    chargingStatus() {
-      if (this.plugState == 1 && this.chargeState == 1) {
-        return { icon: ["fas", "plug-circle-bolt"], text: "Fahrzeug angesteckt, Ladevorgang aktiv" };
-      } else if (this.plugState == 1) {
-        return { icon: ["fas", "plug-circle-check"], text: "Fahrzeug angesteckt, kein Ladevorgang aktiv" };
-      } else {
-        return { icon: ["fas", "plug-circle-minus"], text: "Kein Fahrzeug angesteckt" };
-      }
+    chargingStatus: {
+      get() {
+        let ID = this.chargePointIndex;
+        let plugState = this.$store.state.mqtt["openWB/chargepoint/" + ID + "/get/plug_state"];
+        let chargeState = this.$store.state.mqtt["openWB/chargepoint/" + ID + "/get/charge_state"];
+
+        if (plugState == 1 && chargeState == 1) {
+          return { icon: ["fas", "plug-circle-bolt"], text: "Fahrzeug angesteckt, Ladevorgang aktiv" };
+        } else if (plugState == 1) {
+          return { icon: ["fas", "plug-circle-check"], text: "Fahrzeug angesteckt, kein Ladevorgang aktiv" };
+        } else {
+          return { icon: ["fas", "plug-circle-minus"], text: "Kein Fahrzeug angesteckt" };
+        }
+      },
     },
   },
 };
