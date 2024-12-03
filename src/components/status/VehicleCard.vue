@@ -22,30 +22,6 @@
         :subtype="statuslevel[$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/fault_state']]"
       />
     </template>
-    <openwb-base-alert
-      v-if="$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/fault_state'] !== undefined"
-      :subtype="statusLevel[$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/fault_state']]"
-    >
-      <font-awesome-icon
-        v-if="$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/fault_state'] == 1"
-        fixed-width
-        :icon="['fas', 'exclamation-triangle']"
-      />
-      <font-awesome-icon
-        v-else-if="$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/fault_state'] == 2"
-        fixed-width
-        :icon="['fas', 'times-circle']"
-      />
-      <font-awesome-icon
-        v-else
-        fixed-width
-        :icon="['fas', 'check-circle']"
-      />
-      Modulmeldung:<br />
-      <span style="white-space: pre-wrap">{{
-        $store.state.mqtt["openWB/vehicle/" + vehicleIndex + "/get/fault_str"]
-      }}</span>
-    </openwb-base-alert>
     <openwb-base-alert subtype="light">
       <table class="table table-sm table-borderless">
         <tbody>
