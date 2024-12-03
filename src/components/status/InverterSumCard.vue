@@ -12,12 +12,12 @@
       Alle Wechselrichter
     </template>
     <template #actions>
-      <div v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 0">
-        {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }} kW
+      <div v-if="$store.state.mqtt['openWB/pv/get/fault_state'] == 0">
+        {{ formatNumberTopic("openWB/pv/get/power", 3, 3, 0.001) }} kW
       </div>
       <openwb-base-label
         v-else
-        :subtype="statuslevel[$store.state.mqtt[baseTopic + '/get/fault_state']]"
+        :subtype="statuslevel[$store.state.mqtt['openWB/pv/get/fault_state']]"
       />
     </template>
     <openwb-base-alert subtype="light">
@@ -31,10 +31,10 @@
           <tr>
             <td></td>
             <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) + " kW" }}
+              {{ formatNumberTopic("openWB/pv/get/power", 3, 3, 0.001) + " kW" }}
             </td>
             <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) + " kWh" }}
+              {{ formatNumberTopic("openWB/pv/get/exported", 3, 3, 0.001) + " kWh" }}
             </td>
           </tr>
         </tbody>
@@ -51,13 +51,13 @@
           </tr>
           <tr>
             <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) + " kWh" }}
+              {{ formatNumberTopic("openWB/pv/get/daily_exported", 3, 3, 0.001) + " kWh" }}
             </td>
             <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/monthly_exported", 1, 1, 0.001) + " kWh" }}
+              {{ formatNumberTopic("openWB/pv/get/monthly_exported", 1, 1, 0.001) + " kWh" }}
             </td>
             <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/yearly_exported", 0, 0, 0.001) + " kWh" }}
+              {{ formatNumberTopic("openWB/pv/get/yearly_exported", 0, 0, 0.001) + " kWh" }}
             </td>
           </tr>
         </tbody>
@@ -68,14 +68,14 @@
       <div class="container">
         <div class="row">
           <div class="col">
-            <openwb-base-alert :subtype="statusLevel[$store.state.mqtt[baseTopic + '/get/fault_state']]">
+            <openwb-base-alert :subtype="statusLevel[$store.state.mqtt['openWB/pv/get/fault_state']]">
               <font-awesome-icon
-                v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 1"
+                v-if="$store.state.mqtt['openWB/pv/get/fault_state'] == 1"
                 fixed-width
                 :icon="['fas', 'exclamation-triangle']"
               />
               <font-awesome-icon
-                v-else-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 2"
+                v-else-if="$store.state.mqtt['openWB/pv/get/fault_state'] == 2"
                 fixed-width
                 :icon="['fas', 'times-circle']"
               />
@@ -85,10 +85,10 @@
                 :icon="['fas', 'check-circle']"
               />
               Modulmeldung:
-              <span v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] != 0">
+              <span v-if="$store.state.mqtt['openWB/pv/get/fault_state'] != 0">
                 <br />
               </span>
-              <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
+              <span style="white-space: pre-wrap">{{ $store.state.mqtt["openWB/pv/get/fault_str"] }}</span>
             </openwb-base-alert>
           </div>
         </div>
@@ -121,13 +121,6 @@ export default {
     return {
       statusLevel: ["success", "warning", "danger"],
     };
-  },
-  computed: {
-    baseTopic: {
-      get() {
-        return "openWB/pv";
-      },
-    },
   },
 };
 </script>
