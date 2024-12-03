@@ -17,7 +17,7 @@
       </div>
       <openwb-base-label
         v-else
-        subtype="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state']"
+        :subtype="statuslevel[$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state']]"
       />
     </template>
 
