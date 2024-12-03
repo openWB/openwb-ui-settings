@@ -9,7 +9,18 @@
         fixed-width
         :icon="['fas', 'car']"
       />
-      {{ vehicleName }} (ID: {{ vehicleIndex }})
+      {{ vehicleName }}
+    </template>
+    <template #actions>
+      <div v-if="getVehicleStatus == 'success'">
+        <div v-if="$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/soc']">
+          {{ $store.state.mqtt["openWB/vehicle/" + vehicleIndex + "/get/soc"] }}%
+        </div>
+      </div>
+      <openwb-base-label
+        v-else
+        :subtype="statuslevel[$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/fault_state']]"
+      />
     </template>
     <openwb-base-alert
       v-if="$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/fault_state'] !== undefined"
@@ -35,27 +46,66 @@
         $store.state.mqtt["openWB/vehicle/" + vehicleIndex + "/get/fault_str"]
       }}</span>
     </openwb-base-alert>
-    <openwb-base-heading>Fahrzeugdaten</openwb-base-heading>
-    <openwb-base-number-input
-      title="Ladestand"
-      readonly
-      class="text-right text-monospace"
-      unit="%"
-      :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/soc']"
-    />
-    <openwb-base-number-input
-      title="Reichweite"
-      readonly
-      class="text-right text-monospace"
-      unit="km"
-      :model-value="socRange"
-    />
-    <openwb-base-text-input
-      title="Letzter Zeitstempel"
-      readonly
-      class="text-right text-monospace"
-      :model-value="socTimestamp"
-    />
+    <openwb-base-alert subtype="light">
+      <table class="table table-sm table-borderless">
+        <tbody>
+          <tr>
+            <th colspan="3">Fahrzeugdaten</th>
+          </tr>
+          <tr>
+            <td class="text-right">Ladestand</td>
+            <td class="text-right">Reichweite</td>
+            <td class="text-right">Letzter Zeitstempel</td>
+          </tr>
+          <tr>
+            <td class="text-right text-monospace">
+              {{
+                formatNumberTopic($store.state.mqtt["openWB/vehicle/" + vehicleIndex + "/get/soc"], 1, 1, 0.001) + " %"
+              }}
+            </td>
+            <td class="text-right text-monospace">
+              {{ socRange + " km" }}
+            </td>
+            <td class="text-right text-monospace">{{ socTimestamp }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </openwb-base-alert>
+    <template #footer>
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <openwb-base-alert :subtype="getVehicleStatus">
+              <font-awesome-icon
+                v-if="$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/fault_state'] == 1"
+                fixed-width
+                :icon="['fas', 'exclamation-triangle']"
+              />
+              <font-awesome-icon
+                v-else-if="$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/fault_state'] == 2"
+                fixed-width
+                :icon="['fas', 'times-circle']"
+              />
+              <font-awesome-icon
+                v-else
+                fixed-width
+                :icon="['fas', 'check-circle']"
+              />
+              Modulmeldung:
+              <span v-if="$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/fault_state'] != 0">
+                <br />
+              </span>
+              <span style="white-space: pre-wrap">{{
+                $store.state.mqtt["openWB/vehicle/" + vehicleIndex + "/get/fault_str"]
+              }}</span>
+            </openwb-base-alert>
+          </div>
+          <div class="col col-auto">
+            <div class="text-right">ID: {{ vehicleIndex }}</div>
+          </div>
+        </div>
+      </div>
+    </template>
   </openwb-base-card>
 </template>
 
@@ -113,6 +163,17 @@ export default {
         } else {
           return 0;
         }
+      },
+    },
+    getVehicleStatus: {
+      get() {
+        if (this.$store.state.mqtt["openWB/vehicle/" + this.vehicleIndex + "/get/fault_state"] === undefined) {
+          return "success"; // Default status level for undefined
+        }
+        return (
+          this.statusLevel[this.$store.state.mqtt["openWB/vehicle/" + this.vehicleIndex + "/get/fault_state"]] ||
+          "success"
+        ); // Default to 'light' if faultState is not in statusLevel}
       },
     },
   },
