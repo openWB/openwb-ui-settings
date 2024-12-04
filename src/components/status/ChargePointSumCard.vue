@@ -12,7 +12,7 @@
       Alle Ladepunkte
     </template>
     <template #actions>
-      {{ formatNumberTopic("openWB/chargepoint/get/power", 3, 3, 0.001) + " kW" }}
+      {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) + " kW" }}
     </template>
     <openwb-base-alert subtype="light">
       <table class="table table-sm table-borderless">
@@ -24,7 +24,7 @@
           <tr>
             <td />
             <td class="text-right text-monospace">
-              {{ formatNumberTopic("openWB/chargepoint/get/power", 3, 3, 0.001) + " kW" }}
+              {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) + " kW" }}
             </td>
           </tr>
         </tbody>
@@ -42,19 +42,19 @@
           <tr>
             <td class="text-right">Heute</td>
             <td class="text-right text-monospace">
-              {{ formatNumberTopic("openWB/chargepoint/get/daily_imported", 3, 3, 0.001) + " kWh" }}
+              {{ formatNumberTopic(baseTopic + "/get/daily_imported", 3, 3, 0.001) + " kWh" }}
             </td>
             <td class="text-right text-monospace">
-              {{ formatNumberTopic("openWB/chargepoint/get/daily_exported", 3, 3, 0.001) + " kWh" }}
+              {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) + " kWh" }}
             </td>
           </tr>
           <tr>
             <td class="text-right">Gesamt</td>
             <td class="text-right text-monospace">
-              {{ formatNumberTopic("openWB/chargepoint/get/daily_imported", 3, 3, 0.001) + " kWh" }}
+              {{ formatNumberTopic(baseTopic + "/get/daily_imported", 3, 3, 0.001) + " kWh" }}
             </td>
             <td class="text-right text-monospace">
-              {{ formatNumberTopic("openWB/chargepoint/get/daily_exported", 3, 3, 0.001) + " kWh" }}
+              {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) + " kWh" }}
             </td>
           </tr>
         </tbody>
@@ -78,5 +78,12 @@ export default {
     FontAwesomeIcon,
   },
   mixins: [ComponentState],
+  computed: {
+    baseTopic: {
+      get() {
+        return "openWB/chargepoint";
+      },
+    },
+  },
 };
 </script>

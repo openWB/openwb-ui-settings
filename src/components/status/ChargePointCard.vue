@@ -12,8 +12,8 @@
       {{ installedChargePoint.name }}
     </template>
     <template #actions>
-      <div v-if="$store.state.mqtt['openWB/chargepoint/' + chargePointIndex + '/get/fault_state'] == 0">
-        {{ formatNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/power", 3, 3, 0.001) }} kW
+      <div v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 0">
+        {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }} kW
         <font-awesome-icon
           fixed-width
           :icon="chargingStatus.icon"
@@ -22,7 +22,7 @@
       </div>
       <openwb-base-label
         v-else
-        :subtype="statusLevel[$store.state.mqtt['openWB/chargepoint/' + chargePointIndex + '/get/fault_state']]"
+        :subtype="statusLevel[$store.state.mqtt[baseTopic + '/get/fault_state']]"
       />
     </template>
 
@@ -44,9 +44,7 @@
       </table>
       <openwb-base-alert subtype="info">
         Statusmeldung:<br />
-        <span style="white-space: pre-wrap">{{
-          $store.state.mqtt["openWB/chargepoint/" + chargePointIndex + "/get/state_str"]
-        }}</span>
+        <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/state_str"] }}</span>
       </openwb-base-alert>
     </openwb-base-alert>
     <openwb-base-alert subtype="light">
@@ -60,10 +58,10 @@
           <tr>
             <td />
             <td class="text-right text-monospace">
-              {{ formatNumberTopic("openWB/chargepoint/" + chargePointIndex + "/set/current", 2) + " A" }}
+              {{ formatNumberTopic(baseTopic + "/set/current", 2) + " A" }}
             </td>
             <td class="text-right text-monospace">
-              {{ formatNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/power", 3, 3, 0.001) + " kW" }}
+              {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) + " kW" }}
             </td>
           </tr>
           <tr>
@@ -84,10 +82,10 @@
               v-else
               class="text-right text-monospace"
             >
-              {{ formatNumberTopic("openWB/chargepoint/" + chargePointIndex + "/set/phases_to_use") }}
+              {{ formatNumberTopic(baseTopic + "/set/phases_to_use") }}
             </td>
             <td class="text-right text-monospace">
-              {{ formatNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/phases_in_use") }}
+              {{ formatNumberTopic(baseTopic + "/get/phases_in_use") }}
             </td>
           </tr>
         </tbody>
@@ -105,25 +103,19 @@
           <tr>
             <td class="text-right">Heute</td>
             <td class="text-right text-monospace">
-              {{
-                formatNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/daily_imported", 3, 3, 0.001) +
-                " kWh"
-              }}
+              {{ formatNumberTopic(baseTopic + "/get/daily_imported", 3, 3, 0.001) + " kWh" }}
             </td>
             <td class="text-right text-monospace">
-              {{
-                formatNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/daily_exported", 3, 3, 0.001) +
-                " kWh"
-              }}
+              {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) + " kWh" }}
             </td>
           </tr>
           <tr>
             <td class="text-right">Gesamt</td>
             <td class="text-right text-monospace">
-              {{ formatNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/imported", 3, 3, 0.001) + " kWh" }}
+              {{ formatNumberTopic(baseTopic + "/get/imported", 3, 3, 0.001) + " kWh" }}
             </td>
             <td class="text-right text-monospace">
-              {{ formatNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/exported", 3, 3, 0.001) + " kWh" }}
+              {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) + " kWh" }}
             </td>
           </tr>
         </tbody>
@@ -139,106 +131,49 @@
           <tr>
             <td class="text-right">⚡Spannung</td>
             <td class="text-right text-monospace">
-              {{
-                formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/voltages", 1).split(
-                  " / ",
-                )[0] + " V"
-              }}
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[0] + " V" }}
             </td>
             <td class="text-right text-monospace">
-              {{
-                formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/voltages", 1).split(
-                  " / ",
-                )[1] + " V"
-              }}
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[1] + " V" }}
             </td>
             <td class="text-right text-monospace">
-              {{
-                formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/voltages", 1).split(
-                  " / ",
-                )[2] + " V"
-              }}
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[2] + " V" }}
             </td>
           </tr>
           <tr>
             <td class="text-right">🔌Strom</td>
             <td class="text-right text-monospace">
-              {{
-                formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/currents", 2).split(
-                  " / ",
-                )[0] + " A"
-              }}
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[0] + " A" }}
             </td>
             <td class="text-right text-monospace">
-              {{
-                formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/currents", 2).split(
-                  " / ",
-                )[1] + " A"
-              }}
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[1] + " A" }}
             </td>
             <td class="text-right text-monospace">
-              {{
-                formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/currents", 2).split(
-                  " / ",
-                )[2] + " A"
-              }}
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[2] + " A" }}
             </td>
           </tr>
           <tr>
             <td class="text-right">Wirkleistung</td>
             <td class="text-right text-monospace">
-              {{
-                formatPhaseArrayNumberTopic(
-                  "openWB/chargepoint/" + chargePointIndex + "/get/powers",
-                  3,
-                  3,
-                  0.001,
-                ).split(" / ")[0] + " kW"
-              }}
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001).split(" / ")[0] + " kW" }}
             </td>
             <td class="text-right text-monospace">
-              {{
-                formatPhaseArrayNumberTopic(
-                  "openWB/chargepoint/" + chargePointIndex + "/get/powers",
-                  3,
-                  3,
-                  0.001,
-                ).split(" / ")[1] + " kW"
-              }}
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001).split(" / ")[1] + " kW" }}
             </td>
             <td class="text-right text-monospace">
-              {{
-                formatPhaseArrayNumberTopic(
-                  "openWB/chargepoint/" + chargePointIndex + "/get/powers",
-                  3,
-                  3,
-                  0.001,
-                ).split(" / ")[2] + " kW"
-              }}
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001).split(" / ")[2] + " kW" }}
             </td>
           </tr>
           <tr>
             <td class="text-right">Leistungsfaktor</td>
             <td class="text-right text-monospace">
-              {{
-                formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/power_factors", 2).split(
-                  " / ",
-                )[0]
-              }}
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/power_factors", 2).split(" / ")[0] }}
             </td>
             <td class="text-right text-monospace">
-              {{
-                formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/power_factors", 2).split(
-                  " / ",
-                )[1]
-              }}
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/power_factors", 2).split(" / ")[1] }}
             </td>
             <td class="text-right text-monospace">
-              {{
-                formatPhaseArrayNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/power_factors", 2).split(
-                  " / ",
-                )[2]
-              }}
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/power_factors", 2).split(" / ")[2] }}
             </td>
           </tr>
           <tr>
@@ -247,7 +182,7 @@
               colspan="3"
               class="text-center text-monospace"
             >
-              {{ formatNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/frequency", 3) + " Hz" }}
+              {{ formatNumberTopic(baseTopic + "/get/frequency", 3) + " Hz" }}
             </td>
           </tr>
         </tbody>
@@ -257,16 +192,14 @@
       <div class="container">
         <div class="row">
           <div class="col">
-            <openwb-base-alert
-              :subtype="statusLevel[$store.state.mqtt['openWB/chargepoint/' + chargePointIndex + '/get/fault_state']]"
-            >
+            <openwb-base-alert :subtype="statusLevel[$store.state.mqtt[baseTopic + '/get/fault_state']]">
               <font-awesome-icon
-                v-if="$store.state.mqtt['openWB/chargepoint/' + chargePointIndex + '/get/fault_state'] == 1"
+                v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 1"
                 fixed-width
                 :icon="['fas', 'exclamation-triangle']"
               />
               <font-awesome-icon
-                v-else-if="$store.state.mqtt['openWB/chargepoint/' + chargePointIndex + '/get/fault_state'] == 2"
+                v-else-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 2"
                 fixed-width
                 :icon="['fas', 'times-circle']"
               />
@@ -276,12 +209,10 @@
                 :icon="['fas', 'check-circle']"
               />
               Modulmeldung:
-              <span v-if="$store.state.mqtt['openWB/chargepoint/' + chargePointIndex + '/get/fault_state'] != 0">
+              <span v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] != 0">
                 <br />
               </span>
-              <span style="white-space: pre-wrap">{{
-                $store.state.mqtt["openWB/chargepoint/" + chargePointIndex + "/get/fault_str"]
-              }}</span>
+              <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
             </openwb-base-alert>
           </div>
           <div class="col col-auto">
@@ -345,6 +276,11 @@ export default {
     chargePointIndex: {
       get() {
         return parseInt(this.installedChargePointKey.match(/(?:\/)(\d+)(?=\/)/)[1]);
+      },
+    },
+    baseTopic: {
+      get() {
+        return "openWB/chargepoint/" + this.chargePointIndex;
       },
     },
     chargingStatus: {
