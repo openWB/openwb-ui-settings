@@ -32,7 +32,7 @@
       </div>
     </openwb-base-alert>
     <template #footer>
-      <openwb-base-alert :subtype="statusLevel[$store.state.mqtt[baseTopic + '/get/fault_state']]">
+      <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
         <font-awesome-icon
           v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 1"
           fixed-width
