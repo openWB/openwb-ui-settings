@@ -11,6 +11,9 @@
       />
       Alle Speicher
     </template>
+    <template #actions>
+      <openwb-base-label :subtype="getFaultStateSubtype(baseTopic)" />
+    </template>
     <openwb-base-alert :subtype="statusLevel[$store.state.mqtt[baseTopic + '/get/fault_state']]">
       <font-awesome-icon
         v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 1"
@@ -111,7 +114,7 @@ export default {
   computed: {
     baseTopic: {
       get() {
-        return "openWB/bat/";
+        return "openWB/bat";
       },
     },
   },

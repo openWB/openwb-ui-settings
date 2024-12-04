@@ -12,16 +12,12 @@
       Alle Wechselrichter
     </template>
     <template #actions>
-      <div v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 0">
+      <div v-if="getFaultStateSubtype(baseTopic) == 'success'">
         {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }} kW
       </div>
       <openwb-base-label
-        v-else-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == undefined"
-        subtype="warning"
-      />
-      <openwb-base-label
         v-else
-        :subtype="statuslevel[$store.state.mqtt[baseTopic + '/get/fault_state']]"
+        :subtype="getFaultStateSubtype(baseTopic)"
       />
     </template>
     <openwb-base-alert subtype="light">
@@ -121,11 +117,6 @@ export default {
     FontAwesomeIcon,
   },
   mixins: [ComponentState],
-  data() {
-    return {
-      statusLevel: ["success", "warning", "danger"],
-    };
-  },
   computed: {
     baseTopic: {
       get() {
