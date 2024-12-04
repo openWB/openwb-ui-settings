@@ -59,10 +59,10 @@
           <tr>
             <td class="text-right">Gesamt</td>
             <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/daily_imported", 3, 3, 0.001) + " kWh" }}
+              {{ formatNumberTopic(baseTopic + "/get/imported", 3, 3, 0.001) + " kWh" }}
             </td>
             <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) + " kWh" }}
+              {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) + " kWh" }}
             </td>
           </tr>
         </tbody>
