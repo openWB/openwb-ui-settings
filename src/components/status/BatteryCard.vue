@@ -43,17 +43,26 @@
       <table class="table table-sm table-borderless">
         <tbody>
           <tr>
-            <th>Zählerstand</th>
-            <td class="text-right">Ladung</td>
-            <td class="text-right">Entladung</td>
+            <th>Zählerstände</th>
+            <td class="text-right">Geladen</td>
+            <td class="text-right">Entladen</td>
           </tr>
           <tr>
-            <td></td>
+            <td class="text-right">Heute</td>
             <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/imported", 3, 3, 0.001) + " kWh" }}
+              {{ formatNumberTopic(baseTopic + "/get/daily_imported", 3, 3, 0.001) + " kWh" }}
             </td>
             <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) + " kWh" }}
+              {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) + " kWh" }}
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right">Gesamt</td>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic(baseTopic + "/get/daily_imported", 3, 3, 0.001) + " kWh" }}
+            </td>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) + " kWh" }}
             </td>
           </tr>
         </tbody>
