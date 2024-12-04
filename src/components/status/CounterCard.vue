@@ -17,7 +17,7 @@
       </div>
       <openwb-base-label
         v-else-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == undefined"
-        :subtype="warning"
+        subtype="warning"
       />
       <openwb-base-label
         v-else
