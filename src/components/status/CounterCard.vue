@@ -16,6 +16,10 @@
         {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }} kW
       </div>
       <openwb-base-label
+        v-else-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == undefined"
+        :subtype="warning"
+      />
+      <openwb-base-label
         v-else
         subtype="$store.state.mqtt[baseTopic + '/get/fault_state']"
       />
@@ -65,14 +69,16 @@
           <tr>
             <td class="text-right">⚡Spannung</td>
             <td class="text-right text-monospace">
-              {{
-                formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[0] + " V" }}
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[0] + " V" }}
             </td>
             <td class="text-right text-monospace">
               {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[1] + " V" }}
             </td>
             <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[2].split(" / ")[0] + " V"
+              {{
+                formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1)
+                  .split(" / ")[2]
+                  .split(" / ")[0] + " V"
               }}
             </td>
             <td class="text-right text-monospace">

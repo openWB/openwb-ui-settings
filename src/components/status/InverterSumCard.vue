@@ -16,6 +16,10 @@
         {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }} kW
       </div>
       <openwb-base-label
+        v-else-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == undefined"
+        :subtype="warning"
+      />
+      <openwb-base-label
         v-else
         :subtype="statuslevel[$store.state.mqtt[baseTopic + '/get/fault_state']]"
       />

@@ -16,6 +16,10 @@
         {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }} kW
       </div>
       <openwb-base-label
+        v-else-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == undefined"
+        :subtype="warning"
+      />
+      <openwb-base-label
         v-else
         :subtype="statuslevel[$store.state.mqtt[baseTopic + '/get/fault_state']]"
       />
@@ -132,6 +136,21 @@ export default {
     baseTopic: {
       get() {
         return "openWB/pv/" + this.inverter.id;
+      },
+    },
+    readstatusLevel: {
+      get() {
+        //read fault_str from broker, map to statusLevel
+        switch (this.store.state.mqtt[this.baseTopic + "/get/fault_state"]) {
+          case 0:
+            return "success";
+          case 1:
+            return "warning";
+          case 2:
+            return "danger";
+          default:
+            return "warning";
+        }
       },
     },
   },

@@ -16,6 +16,10 @@
         <div v-if="$store.state.mqtt[baseTopic + '/get/soc']">{{ $store.state.mqtt[baseTopic + "/get/soc"] }}%</div>
       </div>
       <openwb-base-label
+        v-else-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == undefined"
+        :subtype="warning"
+      />
+      <openwb-base-label
         v-else
         :subtype="statuslevel[$store.state.mqtt[baseTopic + '/get/fault_state']]"
       />
