@@ -138,6 +138,24 @@ export default {
           return value;
       }
     },
+    getFaultStateSubtype(baseTopic) {
+      const faultState = this.$store.state.mqtt[baseTopic + "/get/fault_state"];
+
+      if (faultState === undefined) {
+        return "warning"; // Handle undefined case
+      }
+
+      switch (faultState) {
+        case 0:
+          return "success";
+        case 1:
+          return "warning";
+        case 2:
+          return "danger";
+        default:
+          return "dark"; // Default case for all other values
+      }
+    },
   },
 };
 </script>
