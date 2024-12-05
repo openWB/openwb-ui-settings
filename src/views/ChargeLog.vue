@@ -486,16 +486,24 @@ export default {
     mqttClientId() {
       return this.$root.mqttClientId;
     },
+     baseUrl() {
+      const port = parseInt(location.port) || (location.protocol === "https:" ? 443 : 80);
+      return `${location.protocol}//${location.hostname}:${port}/openWB/web/settings/downloadChargeLog.php`;
+    },
     downloadUrlMonth() {
-      const port = parseInt(location.port) || (location.protocol == "https:" ? 443 : 80);
-      const baseUrl = `${location.protocol}//${location.hostname}:${port}/openWB/web/settings/downloadChargeLog.php`;
-      return baseUrl + `?year=${this.chargeLogRequestData.year}&month=${this.chargeLogRequestData.month}`;
+      if (!this.chargeLogRequestData.year || !this.chargeLogRequestData.month) {
+        console.error("Fehlende Parameter für Monat oder Jahr");
+        return null; // oder ein Standardwert, falls gewünscht
+      }
+      return `${this.baseUrl}?year=${this.chargeLogRequestData.year}&month=${this.chargeLogRequestData.month}`;
     },
     downloadUrlYear() {
-      const port = parseInt(location.port) || (location.protocol == "https:" ? 443 : 80);
-      const baseUrl = `${location.protocol}//${location.hostname}:${port}/openWB/web/settings/downloadChargeLog.php`;
-      return baseUrl + `?year=${this.chargeLogRequestData.year}`;
-    },
+      if (!this.chargeLogRequestData.year) {
+        console.error("Fehlendes Jahr");
+        return null; // oder ein Standardwert
+      }
+      return `${this.baseUrl}?year=${this.chargeLogRequestData.year}`;
+    }
     chargeLogDate: {
       get() {
         return this.chargeLogRequestData.year + "-" + this.chargeLogRequestData.month;
