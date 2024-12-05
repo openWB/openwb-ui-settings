@@ -63,7 +63,7 @@
             <th colspan="3">Werte pro Phase</th>
           </tr>
           <tr>
-            <td class="text-right">⚡Spannung</td>
+            <td class="text-right">Spannung</td>
             <td class="text-right text-monospace">
               {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[0] + " V" }}
             </td>
@@ -75,7 +75,7 @@
             </td>
           </tr>
           <tr>
-            <td class="text-right">🔌Strom</td>
+            <td class="text-right">Strom</td>
             <td class="text-right text-monospace">
               {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[0] + " A" }}
             </td>
