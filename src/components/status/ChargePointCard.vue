@@ -51,6 +51,19 @@
       :model-value="$store.state.mqtt['openWB/chargepoint/' + chargePointIndex + '/get/charge_state'] == 1"
     />
     <openwb-base-text-input
+      title="maximale Ladeleistung"
+      readonly
+      class="text-right text-monospace"
+      step="0.01"
+      unit="kW"
+      :model-value="
+        Math.floor((formatNumberTopic(
+          'openWB/chargepoint/' + chargePointIndex + '/get/max_evse_current',
+          0,
+        )*3*230/1000))
+      "
+    />
+    <openwb-base-text-input
       title="Zählerstand laden"
       readonly
       class="text-right text-monospace"
