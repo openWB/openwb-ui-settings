@@ -3,6 +3,7 @@
     subtype="danger"
     :collapsible="true"
     :collapsed="true"
+    class="pb-0"
   >
     <template #header>
       <font-awesome-icon
@@ -22,7 +23,9 @@
     </template>
     <openwb-base-card
       title="Aktuelle Werte"
-      subtype="light"
+      subtype="white"
+      body-bg="white"
+      class="py-1"
     >
       <div class="row">
         <div class="col-6">Leistung</div>
@@ -39,7 +42,9 @@
     </openwb-base-card>
     <openwb-base-card
       title="Zählerstände"
-      subtype="light"
+      subtype="white"
+      body-bg="white"
+      class="py-1"
     >
       <div class="row">
         <div class="col-5">Export</div>
@@ -56,7 +61,9 @@
     </openwb-base-card>
     <openwb-base-card
       title="Werte pro Phase"
-      subtype="light"
+      subtype="white"
+      body-bg="white"
+      class="py-1"
     >
       <div class="row">
         <div class="col-md-4">Spannung [V]</div>
@@ -126,7 +133,7 @@
     <template #footer>
       <div class="container">
         <div class="row">
-          <div class="col">
+          <div class="col px-0">
             <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
               <font-awesome-icon
                 v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 1"
@@ -150,7 +157,7 @@
               <span style="white-space: pre-wrap">{{ $store.state.mqtt["baseTopic + '/get//fault_str"] }}</span>
             </openwb-base-alert>
           </div>
-          <div class="col col-auto">
+          <div class="col col-auto pr-0">
             <div class="text-right">ID: {{ counter.id }}</div>
           </div>
         </div>

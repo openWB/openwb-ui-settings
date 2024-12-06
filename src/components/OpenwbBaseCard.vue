@@ -40,7 +40,8 @@
     </div>
     <div
       v-if="isCollapsed === false"
-      class="card-body bg-light"
+      class="card-body"
+      :class="'bg-' + bodyBg"
       v-bind="$attrs"
     >
       <slot />
@@ -72,11 +73,22 @@ export default {
     subtype: {
       validator: function (value) {
         return (
-          ["info", "success", "warning", "danger", "primary", "secondary", "light", "dark", "pink"].indexOf(value) !==
-          -1
+          ["info", "success", "warning", "danger", "primary", "secondary", "light", "dark", "pink", "white"].indexOf(
+            value,
+          ) !== -1
         );
       },
       default: "secondary",
+    },
+    bodyBg: {
+      validator: function (value) {
+        return (
+          ["info", "success", "warning", "danger", "primary", "secondary", "light", "dark", "pink", "white"].indexOf(
+            value,
+          ) !== -1
+        );
+      },
+      default: "light",
     },
     collapsible: { type: Boolean, default: false },
     collapsed: { type: Boolean, default: false },
