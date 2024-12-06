@@ -13,115 +13,116 @@
     </template>
     <template #actions>
       <div v-if="getFaultStateSubtype(baseTopic) == 'success'">
-        {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }} kW
+        {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW
       </div>
       <openwb-base-label
         v-else
         :subtype="getFaultStateSubtype(baseTopic)"
       />
     </template>
-    <openwb-base-alert subtype="light">
-      <table class="table table-sm table-borderless">
-        <tbody>
-          <tr>
-            <th>Aktuelle Werte</th>
-            <td class="text-right">Leistung</td>
-          </tr>
-          <tr>
-            <td></td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) + " kW" }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </openwb-base-alert>
-    <openwb-base-alert subtype="light">
-      <table class="table table-sm table-borderless">
-        <tbody>
-          <tr>
-            <th>Zählerstände</th>
-            <td class="text-right">Export</td>
-            <td class="text-right">Import</td>
-          </tr>
-          <tr>
-            <td></td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) + " kWh" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/imported", 3, 3, 0.001) + " kWh" }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </openwb-base-alert>
-    <openwb-base-alert subtype="light">
-      <table class="table table-sm table-borderless">
-        <tbody>
-          <tr>
-            <th colspan="3">Werte pro Phase</th>
-          </tr>
-          <tr>
-            <td class="text-right">Spannung</td>
-            <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[0] + " V" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[1] + " V" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[2] + " V" }}
-            </td>
-          </tr>
-          <tr>
-            <td class="text-right">Strom</td>
-            <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[0] + " A" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[1] + " A" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[2] + " A" }}
-            </td>
-          </tr>
-          <tr>
-            <td class="text-right">Wirkleistung</td>
-            <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001).split(" / ")[0] + " kW" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001).split(" / ")[1] + " kW" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001).split(" / ")[2] + " kW" }}
-            </td>
-          </tr>
-          <tr>
-            <td class="text-right">Leistungsfaktor</td>
-            <td class="text-right text-monospace">
+    <openwb-base-card
+      title="Aktuelle Werte"
+      subtype="light"
+    >
+      <div class="row">
+        <div class="col-6">Leistung</div>
+        <div class="col text-right text-monospace pl-0">
+          {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) + " kW" }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-6">Netzfrequenz</div>
+        <div class="col text-right text-monospace pl-0">
+          {{ formatNumberTopic(baseTopic + "/get/frequency", 3) + " Hz" }}
+        </div>
+      </div>
+    </openwb-base-card>
+    <openwb-base-card
+      title="Zählerstände"
+      subtype="light"
+    >
+      <div class="row">
+        <div class="col-5">Export</div>
+        <div class="col text-right text-monospace pl-0">
+          {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) + " kWh" }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-5">Import</div>
+        <div class="col text-right text-monospace pl-0">
+          {{ formatNumberTopic(baseTopic + "/get/imported", 3, 3, 0.001) + " kWh" }}
+        </div>
+      </div>
+    </openwb-base-card>
+    <openwb-base-card
+      title="Werte pro Phase"
+      subtype="light"
+    >
+      <div class="row">
+        <div class="col-md-4">Spannung [V]</div>
+        <div class="col">
+          <div class="row">
+            <div class="col text-right text-monospace pl-0">
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[0] }}
+            </div>
+            <div class="col text-right text-monospace pl-0">
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[1] }}
+            </div>
+            <div class="col text-right text-monospace pl-0">
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[2] }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">Strom [A]</div>
+        <div class="col">
+          <div class="row">
+            <div class="col text-right text-monospace pl-0">
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[0] }}
+            </div>
+            <div class="col text-right text-monospace pl-0">
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[1] }}
+            </div>
+            <div class="col text-right text-monospace pl-0">
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[2] }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">Wirkleistung [kW]</div>
+        <div class="col">
+          <div class="row">
+            <div class="col text-right text-monospace pl-0">
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001).split(" / ")[0] }}
+            </div>
+            <div class="col text-right text-monospace pl-0">
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001).split(" / ")[1] }}
+            </div>
+            <div class="col text-right text-monospace pl-0">
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001).split(" / ")[2] }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">Leistungsfaktor</div>
+        <div class="col">
+          <div class="row">
+            <div class="col text-right text-monospace pl-0">
               {{ formatPhaseArrayNumberTopic(baseTopic + "/get/power_factors", 2).split(" / ")[0] }}
-            </td>
-            <td class="text-right text-monospace">
+            </div>
+            <div class="col text-right text-monospace pl-0">
               {{ formatPhaseArrayNumberTopic(baseTopic + "/get/power_factors", 2).split(" / ")[1] }}
-            </td>
-            <td class="text-right text-monospace">
+            </div>
+            <div class="col text-right text-monospace pl-0">
               {{ formatPhaseArrayNumberTopic(baseTopic + "/get/power_factors", 2).split(" / ")[2] }}
-            </td>
-          </tr>
-          <tr>
-            <td class="text-right">Netzfrequenz</td>
-            <td
-              colspan="3"
-              class="text-center text-monospace"
-            >
-              {{ formatNumberTopic(baseTopic + "/get/frequency", 3) + " Hz" }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </openwb-base-alert>
+            </div>
+          </div>
+        </div>
+      </div>
+    </openwb-base-card>
     <template #footer>
       <div class="container">
         <div class="row">
