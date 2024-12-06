@@ -4,9 +4,10 @@ import OpenwbBaseCard from "../OpenwbBaseCard.vue";
 
 describe("Card.vue", () => {
   it("adds class props.subtype when passed", () => {
+    const title = "My Title";
     const subtype = "info";
     const wrapper = mount(OpenwbBaseCard, {
-      props: { subtype },
+      props: { subtype, title },
     });
     const card = wrapper.find("div.card");
     expect(card.classes()).toContain("border-" + subtype);
@@ -44,9 +45,11 @@ describe("Card.vue", () => {
     expect(card.html()).toContain(slotContent);
   });
   it("render marker when collapsible", () => {
+    const title = "My Title";
     const collapsible = true;
     const wrapper = mount(OpenwbBaseCard, {
       props: {
+        title,
         collapsible,
       },
     });
@@ -54,10 +57,12 @@ describe("Card.vue", () => {
     expect(cardHeader.html()).toContain("chevron-down");
   });
   it("do not render card body when collapsed", async () => {
+    const title = "My Title";
     const collapsible = true;
     const collapsed = true;
     const wrapper = mount(OpenwbBaseCard, {
       props: {
+        title,
         collapsible,
         collapsed,
       },
@@ -70,8 +75,10 @@ describe("Card.vue", () => {
     expect(card.html()).toContain("card-body");
   });
   it("render actions slot when passed", () => {
+    const title = "My Title";
     const slotContent = "<span>Actions slot content.</span>";
     const wrapper = mount(OpenwbBaseCard, {
+      props: { title },
       slots: {
         actions: slotContent,
       },
