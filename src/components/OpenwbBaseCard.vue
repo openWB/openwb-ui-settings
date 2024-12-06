@@ -4,6 +4,7 @@
     :class="'border-' + subtype"
   >
     <div
+      v-if="title !== undefined || $slots.header"
       class="card-header py-1"
       :class="'bg-' + subtype"
       @click="toggleBody"
@@ -67,7 +68,7 @@ export default {
   },
   inheritAttrs: false,
   props: {
-    title: { type: String, default: "# no title set #" },
+    title: { type: String, default: undefined },
     subtype: {
       validator: function (value) {
         return (
