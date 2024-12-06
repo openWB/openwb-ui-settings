@@ -12,38 +12,49 @@
       />
       Variabler Stromtarif
     </template>
-    <openwb-base-alert :subtype="statusLevel[$store.state.mqtt['openWB/optional/et/get/fault_state']]">
-      <font-awesome-icon
-        v-if="$store.state.mqtt['openWB/optional/et/get/fault_state'] == 1"
-        fixed-width
-        :icon="['fas', 'exclamation-triangle']"
-      />
-      <font-awesome-icon
-        v-else-if="$store.state.mqtt['openWB/optional/et/get/fault_state'] == 2"
-        fixed-width
-        :icon="['fas', 'times-circle']"
-      />
-      <font-awesome-icon
-        v-else
-        fixed-width
-        :icon="['fas', 'check-circle']"
-      />
-      Modulmeldung:<br />
-      <span style="white-space: pre-wrap">{{ $store.state.mqtt["openWB/optional/et/get/fault_str"] }}</span>
+    <openwb-base-alert subtype="light">
+      <table class="table table-sm table-borderless">
+        <tbody>
+          <tr>
+            <th>Anbieter</th>
+            <td>{{ $store.state.mqtt[baseTopic + "/provider"].name }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="openwb-chart">
+        <chartjs-line
+          v-if="chartDataRead"
+          ref="myChart"
+          :data="chartDataObject"
+          :options="chartOptions"
+        />
+      </div>
     </openwb-base-alert>
-    <openwb-base-text-input
-      title="Anbieter"
-      readonly
-      :model-value="$store.state.mqtt['openWB/optional/et/provider'].name"
-    />
-    <div class="openwb-chart">
-      <chartjs-line
-        v-if="chartDataRead"
-        ref="myChart"
-        :data="chartDataObject"
-        :options="chartOptions"
-      />
-    </div>
+
+    <template #footer>
+      <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
+        <font-awesome-icon
+          v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 1"
+          fixed-width
+          :icon="['fas', 'exclamation-triangle']"
+        />
+        <font-awesome-icon
+          v-else-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 2"
+          fixed-width
+          :icon="['fas', 'times-circle']"
+        />
+        <font-awesome-icon
+          v-else
+          fixed-width
+          :icon="['fas', 'check-circle']"
+        />
+        Modulmeldung:
+        <span v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] != 0">
+          <br />
+        </span>
+        <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
+      </openwb-base-alert>
+    </template>
   </openwb-base-card>
 </template>
 
@@ -231,6 +242,11 @@ export default {
       const dataObject = this.chartDatasets;
       dataObject.datasets[0].data = myData;
       return dataObject;
+    },
+    baseTopic: {
+      get() {
+        return "openWB/optional/et";
+      },
     },
   },
 };

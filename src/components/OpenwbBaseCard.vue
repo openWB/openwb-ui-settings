@@ -4,6 +4,7 @@
     :class="'border-' + subtype"
   >
     <div
+      v-if="title !== undefined || $slots.header"
       class="card-header py-1"
       :class="'bg-' + subtype"
       @click="toggleBody"
@@ -40,6 +41,7 @@
     <div
       v-if="isCollapsed === false"
       class="card-body"
+      :class="'bg-' + bodyBg"
       v-bind="$attrs"
     >
       <slot />
@@ -67,15 +69,26 @@ export default {
   },
   inheritAttrs: false,
   props: {
-    title: { type: String, default: "# no title set #" },
+    title: { type: String, default: undefined },
     subtype: {
       validator: function (value) {
         return (
-          ["info", "success", "warning", "danger", "primary", "secondary", "light", "dark", "pink"].indexOf(value) !==
-          -1
+          ["info", "success", "warning", "danger", "primary", "secondary", "light", "dark", "pink", "white"].indexOf(
+            value,
+          ) !== -1
         );
       },
       default: "secondary",
+    },
+    bodyBg: {
+      validator: function (value) {
+        return (
+          ["info", "success", "warning", "danger", "primary", "secondary", "light", "dark", "pink", "white"].indexOf(
+            value,
+          ) !== -1
+        );
+      },
+      default: "light",
     },
     collapsible: { type: Boolean, default: false },
     collapsed: { type: Boolean, default: false },
@@ -98,6 +111,7 @@ export default {
 <style>
 .card {
   margin-bottom: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .card .card-header {

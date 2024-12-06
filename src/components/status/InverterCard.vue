@@ -9,68 +9,94 @@
         fixed-width
         :icon="['fas', 'solar-panel']"
       />
-      {{ inverter.name }} (ID: {{ inverter.id }})
+      {{ inverter.name }}
     </template>
-    <openwb-base-alert :subtype="statusLevel[$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state']]">
-      <font-awesome-icon
-        v-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 1"
-        fixed-width
-        :icon="['fas', 'exclamation-triangle']"
-      />
-      <font-awesome-icon
-        v-else-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 2"
-        fixed-width
-        :icon="['fas', 'times-circle']"
-      />
-      <font-awesome-icon
+    <template #actions>
+      <div v-if="getFaultStateSubtype(baseTopic) == 'success'">
+        {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }} kW
+      </div>
+      <openwb-base-label
         v-else
-        fixed-width
-        :icon="['fas', 'check-circle']"
+        :subtype="getFaultStateSubtype(baseTopic)"
       />
-      Modulmeldung:<br />
-      <span style="white-space: pre-wrap">{{ $store.state.mqtt["openWB/pv/" + inverter.id + "/get/fault_str"] }}</span>
+    </template>
+
+    <openwb-base-alert subtype="light">
+      <table class="table table-sm table-borderless">
+        <tbody>
+          <tr>
+            <th>Aktuelle Werte</th>
+            <td class="text-right">Leistung</td>
+            <td class="text-right">Zählerstand</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) + " kW" }}
+            </td>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) + " kWh" }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </openwb-base-alert>
-    <openwb-base-text-input
-      title="Zählerstand"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/pv/' + inverter.id + '/get/exported', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Leistung"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kW"
-      :model-value="formatNumberTopic('openWB/pv/' + inverter.id + '/get/power', 3, 3, 0.001)"
-    />
-    <openwb-base-heading>Erträge</openwb-base-heading>
-    <openwb-base-text-input
-      title="Heute"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/pv/' + inverter.id + '/get/daily_exported', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Dieser Monat"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/pv/' + inverter.id + '/get/monthly_exported', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Dieses Jahr"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/pv/' + inverter.id + '/get/yearly_exported', 3, 3, 0.001)"
-    />
+    <openwb-base-alert subtype="light">
+      <table class="table table-sm table-borderless">
+        <tbody>
+          <tr>
+            <th rowspan="2">Erträge</th>
+            <td class="text-right">Heute</td>
+            <td class="text-right">Monat</td>
+            <td class="text-right">Jahr</td>
+          </tr>
+          <tr>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) + " kWh" }}
+            </td>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic(baseTopic + "/get/monthly_exported", 1, 1, 0.001) + " kWh" }}
+            </td>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic(baseTopic + "/get/yearly_exported", 0, 0, 0.001) + " kWh" }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </openwb-base-alert>
+    <template #footer>
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
+              <font-awesome-icon
+                v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 1"
+                fixed-width
+                :icon="['fas', 'exclamation-triangle']"
+              />
+              <font-awesome-icon
+                v-else-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 2"
+                fixed-width
+                :icon="['fas', 'times-circle']"
+              />
+              <font-awesome-icon
+                v-else
+                fixed-width
+                :icon="['fas', 'check-circle']"
+              />
+              Modulmeldung:
+              <span v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] != 0">
+                <br />
+              </span>
+              <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
+            </openwb-base-alert>
+          </div>
+          <div class="col col-auto">
+            <div class="text-right">ID: {{ inverter.id }}</div>
+          </div>
+        </div>
+      </div>
+    </template>
   </openwb-base-card>
 </template>
 
@@ -101,6 +127,28 @@ export default {
     return {
       statusLevel: ["success", "warning", "danger"],
     };
+  },
+  computed: {
+    baseTopic: {
+      get() {
+        return "openWB/pv/" + this.inverter.id;
+      },
+    },
+    readstatusLevel: {
+      get() {
+        //read fault_str from broker, map to statusLevel
+        switch (this.store.state.mqtt[this.baseTopic + "/get/fault_state"]) {
+          case 0:
+            return "success";
+          case 1:
+            return "warning";
+          case 2:
+            return "danger";
+          default:
+            return "warning";
+        }
+      },
+    },
   },
 };
 </script>
