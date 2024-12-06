@@ -21,53 +21,52 @@
       />
     </template>
 
-    <openwb-base-alert subtype="light">
-      <table class="table table-sm table-borderless">
-        <tbody>
-          <tr>
-            <th>Aktuelle Werte</th>
-            <td class="text-right">Leistung</td>
-            <td class="text-right">Zählerstand</td>
-          </tr>
-          <tr>
-            <td></td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) + " kW" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) + " kWh" }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </openwb-base-alert>
-    <openwb-base-alert subtype="light">
-      <table class="table table-sm table-borderless">
-        <tbody>
-          <tr>
-            <th rowspan="2">Erträge</th>
-            <td class="text-right">Heute</td>
-            <td class="text-right">Monat</td>
-            <td class="text-right">Jahr</td>
-          </tr>
-          <tr>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) + " kWh" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/monthly_exported", 1, 1, 0.001) + " kWh" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/yearly_exported", 0, 0, 0.001) + " kWh" }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </openwb-base-alert>
+    <openwb-base-card
+      title="Aktuelle Werte"
+      subtype="white"
+      body-bd="bg-white"
+      class="py-1 mb-2"
+    >
+      <div class="row">
+        <div class="col text-right">Leistung</div>
+        <div class="col text-right">Zählerstand</div>
+      </div>
+      <div class="row">
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) + " kW" }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) + " kWh" }}
+        </div>
+      </div>
+    </openwb-base-card>
+    <openwb-base-card
+      title="Erträge"
+      subtype="white"
+      body-bg="bg-white"
+      class="py-1 mb-2"
+    >
+      <div class="row">
+        <div class="col text-right">Heute</div>
+        <div class="col text-right">Monat</div>
+        <div class="col text-right">Jahr</div>
+      </div>
+      <div class="row">
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) + " kWh" }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/monthly_exported", 1, 1, 0.001) + " kWh" }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/yearly_exported", 0, 0, 0.001) + " kWh" }}
+        </div>
+      </div>
+    </openwb-base-card>
     <template #footer>
       <div class="container">
         <div class="row">
-          <div class="col">
+          <div class="col px-0">
             <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
               <font-awesome-icon
                 v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 1"

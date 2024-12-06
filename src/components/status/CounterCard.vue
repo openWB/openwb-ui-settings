@@ -24,19 +24,19 @@
     <openwb-base-card
       title="Aktuelle Werte"
       subtype="white"
-      body-bg="white"
-      class="py-1"
+      body-bg="bg-white"
+      class="py-1 mb-2"
     >
       <div class="row">
-        <div class="col-6">Leistung</div>
-        <div class="col text-right text-monospace pl-0">
-          {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) + " kW" }}
-        </div>
+        <div class="col-6 text-right">Leistung</div>
+        <div class="col-6 text-right">Netzfrequenz</div>
       </div>
       <div class="row">
-        <div class="col-6">Netzfrequenz</div>
         <div class="col text-right text-monospace pl-0">
-          {{ formatNumberTopic(baseTopic + "/get/frequency", 3) + " Hz" }}
+          {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) + "&nbsp;kW" }}
+        </div>
+        <div class="col text-right text-monospace pl-0">
+          {{ formatNumberTopic(baseTopic + "/get/frequency", 3) + "&nbsp;Hz" }}
         </div>
       </div>
     </openwb-base-card>
@@ -44,18 +44,18 @@
       title="Zählerstände"
       subtype="white"
       body-bg="white"
-      class="py-1"
+      class="py-1 mb-2"
     >
       <div class="row">
-        <div class="col-5">Export</div>
-        <div class="col text-right text-monospace pl-0">
-          {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) + " kWh" }}
-        </div>
+        <div class="col-6 text-right">Export</div>
+        <div class="col-6 text-right">Import</div>
       </div>
       <div class="row">
-        <div class="col-5">Import</div>
         <div class="col text-right text-monospace pl-0">
-          {{ formatNumberTopic(baseTopic + "/get/imported", 3, 3, 0.001) + " kWh" }}
+          {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) + "&nbsp;kWh" }}
+        </div>
+        <div class="col text-right text-monospace pl-0">
+          {{ formatNumberTopic(baseTopic + "/get/imported", 3, 3, 0.001) + "&nbsp;kWh" }}
         </div>
       </div>
     </openwb-base-card>
@@ -63,10 +63,10 @@
       title="Werte pro Phase"
       subtype="white"
       body-bg="white"
-      class="py-1"
+      class="py-1 mb-2"
     >
       <div class="row">
-        <div class="col-md-4">Spannung [V]</div>
+        <div class="col-md-4 pr-1 text-center text-md-right">Spannung [V]</div>
         <div class="col">
           <div class="row">
             <div class="col text-right text-monospace pl-0">
@@ -82,7 +82,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-4">Strom [A]</div>
+        <div class="col-md-4 pr-0 text-center text-md-right">Strom [A]</div>
         <div class="col">
           <div class="row">
             <div class="col text-right text-monospace pl-0">
@@ -98,7 +98,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-4">Wirkleistung [kW]</div>
+        <div class="col-md-4 pr-0 text-center text-md-right">Wirkleistung [kW]</div>
         <div class="col">
           <div class="row">
             <div class="col text-right text-monospace pl-0">
@@ -114,7 +114,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-4">Leistungsfaktor</div>
+        <div class="col-md-4 pr-0 text-center text-md-right">Leistungsfaktor</div>
         <div class="col">
           <div class="row">
             <div class="col text-right text-monospace pl-0">

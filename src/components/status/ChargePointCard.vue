@@ -26,168 +26,165 @@
       />
     </template>
 
-    <openwb-base-alert subtype="light">
-      <table class="table table-sm table-borderless">
-        <tbody>
-          <tr>
-            <th>Status</th>
-            <td class="text-right">
-              <font-awesome-icon
-                fixed-width
-                :icon="chargingStatus.icon"
-                :title="chargingStatus.text"
-              />
-              {{ chargingStatus.text }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <openwb-base-card
+      subtype="white"
+      body-bg="bg-white"
+      class="py-1 mb-4"
+    >
+      <div class="row py-2">
+        <div class="col col-auto font-weight-bold">Status</div>
+        <div class="col text-right">
+          <font-awesome-icon
+            fixed-width
+            :icon="chargingStatus.icon"
+            :title="chargingStatus.text"
+          />
+          {{ chargingStatus.text }}
+        </div>
+      </div>
+
       <openwb-base-alert subtype="info">
         Statusmeldung:<br />
         <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/state_str"] }}</span>
       </openwb-base-alert>
-    </openwb-base-alert>
-    <openwb-base-alert subtype="light">
-      <table class="table table-sm table-borderless">
-        <tbody>
-          <tr>
-            <th>Ladevorgang</th>
-            <td class="text-right">Vorgabe Ladestrom</td>
-            <td class="text-right">Leistung</td>
-          </tr>
-          <tr>
-            <td />
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/set/current", 2) + " A" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) + " kW" }}
-            </td>
-          </tr>
-          <tr>
-            <th>Phasen</th>
-            <td class="text-right">Vorgabe</td>
-            <td class="text-right">Aktuell</td>
-          </tr>
+    </openwb-base-card>
 
-          <tr>
-            <td></td>
-            <td
-              v-if="$store.state.mqtt['openWB/general/extern'] === true"
-              class="text-right text-monospace"
-            >
-              {{ formatNumberTopic("openWB/internal_chargepoint/" + chargePointIndex + "/data/phases_to_use") }}
-            </td>
-            <td
-              v-else
-              class="text-right text-monospace"
-            >
-              {{ formatNumberTopic(baseTopic + "/set/phases_to_use") }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/phases_in_use") }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </openwb-base-alert>
+    <openwb-base-card
+      subtype="white"
+      body-bg="bg-white"
+      class="py-1 mb-4"
+      title="Ladevorgang"
+    >
+      <div class="row">
+        <div class="col text-right">Ladestrom Vorgabe</div>
+        <div class="col text-right">Leistung</div>
+      </div>
+      <div class="row">
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/set/current", 2) }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-right">Phasen Vorgabe</div>
+        <div class="col text-right">Phasen Aktuell</div>
+      </div>
+      <div class="row">
+        <div
+          v-if="$store.state.mqtt['openWB/general/extern'] === true"
+          class="col text-right text-monospace"
+        >
+          {{ formatNumberTopic("openWB/internal_chargepoint/" + chargePointIndex + "/data/phases_to_use") }}
+        </div>
+        <div
+          v-else
+          class="col text-right text-monospace"
+        >
+          {{ formatNumberTopic(baseTopic + "/set/phases_to_use") }}
+        </div>
 
-    <openwb-base-alert subtype="light">
-      <table class="table table-sm table-borderless">
-        <tbody>
-          <tr>
-            <th>Zählerstände</th>
-            <td class="text-right">Geladen</td>
-            <td class="text-right">Entladen</td>
-          </tr>
-          <tr>
-            <td class="text-right">Heute</td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/daily_imported", 3, 3, 0.001) + " kWh" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) + " kWh" }}
-            </td>
-          </tr>
-          <tr>
-            <td class="text-right">Gesamt</td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/imported", 3, 3, 0.001) + " kWh" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) + " kWh" }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </openwb-base-alert>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/phases_in_use") }}
+        </div>
+      </div>
+    </openwb-base-card>
 
-    <openwb-base-alert subtype="light">
-      <table class="table table-sm table-borderless">
-        <tbody>
-          <tr>
-            <th colspan="3">Werte pro Phase</th>
-          </tr>
-          <tr>
-            <td class="text-right">Spannung</td>
-            <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[0] + " V" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[1] + " V" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[2] + " V" }}
-            </td>
-          </tr>
-          <tr>
-            <td class="text-right">Strom</td>
-            <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[0] + " A" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[1] + " A" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[2] + " A" }}
-            </td>
-          </tr>
-          <tr>
-            <td class="text-right">Wirkleistung</td>
-            <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001).split(" / ")[0] + " kW" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001).split(" / ")[1] + " kW" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001).split(" / ")[2] + " kW" }}
-            </td>
-          </tr>
-          <tr>
-            <td class="text-right">Leistungsfaktor</td>
-            <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/power_factors", 2).split(" / ")[0] }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/power_factors", 2).split(" / ")[1] }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/power_factors", 2).split(" / ")[2] }}
-            </td>
-          </tr>
-          <tr>
-            <td class="text-right">Netzfrequenz</td>
-            <td
-              colspan="3"
-              class="text-center text-monospace"
-            >
-              {{ formatNumberTopic(baseTopic + "/get/frequency", 3) + " Hz" }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </openwb-base-alert>
+    <openwb-base-card
+      subtype="white"
+      body-bg="bg-white"
+      class="py-1 mb-4"
+      title="Zählerstände"
+    >
+      <div class="row">
+        <div class="col" />
+        <div class="col text-right">Geladen</div>
+        <div class="col text-right">Entladen</div>
+      </div>
+      <div class="row">
+        <div class="col text-right">Heute</div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/daily_imported", 3, 3, 0.001) + " kWh" }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) + " kWh" }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-right">Gesamt</div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/imported", 3, 3, 0.001) + " kWh" }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) + " kWh" }}
+        </div>
+      </div>
+    </openwb-base-card>
+
+    <openwb-base-card
+      subtype="white"
+      body-bg="bg-white"
+      class="py-1 mb-4"
+      title="Werte pro Phase"
+    >
+      <div class="row">
+        <div class="col-md-4 pr-1 text-center text-md-right">Spannung [V]</div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[0] }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[1] }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[2] }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 pr-1 text-center text-md-right">Strom [A]</div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[0] }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[1] }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[2] }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 pr-1 text-center text-md-right">Wirkleistung [kW]</div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001).split(" / ")[0] }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001).split(" / ")[1] }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001).split(" / ")[2] }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 pr-1 text-center text-md-right">Leistungsfaktor</div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/power_factors", 2).split(" / ")[0] }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/power_factors", 2).split(" / ")[1] }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/power_factors", 2).split(" / ")[2] }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 pr-1 text-center text-md-right">Netzfrequenz</div>
+        <div class="col" />
+        <div class="col text-center text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/frequency", 3) + " Hz" }}
+        </div>
+        <div class="col" />
+      </div>
+    </openwb-base-card>
     <template #footer>
       <div class="container">
         <div class="row">

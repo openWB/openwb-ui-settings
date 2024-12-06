@@ -24,33 +24,31 @@
         :subtype="statuslevel[$store.state.mqtt[baseTopic + '/get/fault_state']]"
       />
     </template>
-    <openwb-base-alert subtype="light">
-      <table class="table table-sm table-borderless">
-        <tbody>
-          <tr>
-            <th colspan="3">Fahrzeugdaten</th>
-          </tr>
-          <tr>
-            <td class="text-right">Ladestand</td>
-            <td class="text-right">Reichweite</td>
-            <td class="text-right">Letzter Zeitstempel</td>
-          </tr>
-          <tr>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic($store.state.mqtt[baseTopic + "/get/soc"], 1, 1, 0.001) + " %" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ socRange + " km" }}
-            </td>
-            <td class="text-right text-monospace">{{ socTimestamp }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </openwb-base-alert>
+    <openwb-base-card
+      title="Fahrzeugdaten"
+      subtype="white"
+      body-bg="bg-white"
+      class="py-1 mb-2"
+    >
+      <div class="row">
+        <div class="col pr-0 text-right">Ladestand</div>
+        <div class="col pr-0 text-right">Reichweite</div>
+        <div class="col pr-0 text-right">Letzter Zeitstempel</div>
+      </div>
+      <div class="row">
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic($store.state.mqtt[baseTopic + "/get/soc"], 1, 1, 0.001) + " %" }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ socRange + " km" }}
+        </div>
+        <div class="col text-right text-monospace">{{ socTimestamp }}</div>
+      </div>
+    </openwb-base-card>
     <template #footer>
       <div class="container">
         <div class="row">
-          <div class="col">
+          <div class="col px-0">
             <openwb-base-alert :subtype="getVehicleStatus">
               <font-awesome-icon
                 v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 1"

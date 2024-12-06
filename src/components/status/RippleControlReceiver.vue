@@ -9,19 +9,28 @@
       <font-awesome-icon :icon="['fas', 'tower-broadcast']" />
       Steuerbare Verbrauchseinrichtung (RSE)
     </template>
-    <openwb-base-alert subtype="light">
-      <table class="table table-sm table-borderless">
-        <tbody>
-          <tr>
-            <th>Status</th>
-            <td v-if="$store.state.mqtt[baseTopic + '/get/override_value'] == 0">Laden gesperrt</td>
-            <td v-else>
-              Laden erlaubt (
-              {{ $store.state.mqtt[baseTopic + "/get/override_value"] }}% )
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <openwb-base-card
+      title="Aktuelle Werte"
+      subtype="white"
+      body-bg="bg-white"
+      class="py-1 mb-2"
+    >
+      <div class="row">
+        <div class="col">Status</div>
+        <div
+          v-if="$store.state.mqtt[baseTopic + '/get/override_value'] == 0"
+          class="col"
+        >
+          Laden gesperrt
+        </div>
+        <div
+          v-else
+          class="col"
+        >
+          Laden erlaubt (
+          {{ $store.state.mqtt[baseTopic + "/get/override_value"] }}% )
+        </div>
+      </div>
       <div class="openwb-chart">
         <chartjs-line
           v-if="chartDataRead"
@@ -30,7 +39,7 @@
           :options="chartOptions"
         />
       </div>
-    </openwb-base-alert>
+    </openwb-base-card>
     <template #footer>
       <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
         <font-awesome-icon

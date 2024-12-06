@@ -119,6 +119,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: none;
 }
 
 .card .card-header .subheader {
@@ -174,5 +175,13 @@ export default {
 .card-header.bg-success .btn-outline-info.active,
 .card-header.bg-success .btn-outline-info:hover {
   border-color: white;
+}
+
+.card.border-white {
+  background-color: bg-border-white; /* Ensure this matches the background color of other elements */
+}
+
+.card-header .card.border-white {
+  background-color: inherit; /* Change this to match the background color of the card body */
 }
 </style>
