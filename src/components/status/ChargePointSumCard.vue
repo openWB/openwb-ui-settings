@@ -11,47 +11,55 @@
       />
       Alle Ladepunkte
     </template>
-    <openwb-base-text-input
-      title="Leistung"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kW"
-      :model-value="formatNumberTopic('openWB/chargepoint/get/power', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Zählerstand laden"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/chargepoint/get/imported', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Zählerstand entladen"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/chargepoint/get/exported', 3, 3, 0.001)"
-    />
-    <openwb-base-heading>Historie</openwb-base-heading>
-    <openwb-base-text-input
-      title="Heute geladen"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/chargepoint/get/daily_imported', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Heute entladen"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/chargepoint/get/daily_exported', 3, 3, 0.001)"
-    />
+    <template #actions>
+      {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) + " kW" }}
+    </template>
+    <openwb-base-alert subtype="light">
+      <table class="table table-sm table-borderless">
+        <tbody>
+          <tr>
+            <th>Ladevorgang</th>
+            <td class="text-right">Leistung</td>
+          </tr>
+          <tr>
+            <td />
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) + " kW" }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </openwb-base-alert>
+
+    <openwb-base-alert subtype="light">
+      <table class="table table-sm table-borderless">
+        <tbody>
+          <tr>
+            <th>Zählerstände</th>
+            <td class="text-right">Geladen</td>
+            <td class="text-right">Entladen</td>
+          </tr>
+          <tr>
+            <td class="text-right">Heute</td>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic(baseTopic + "/get/daily_imported", 3, 3, 0.001) + " kWh" }}
+            </td>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) + " kWh" }}
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right">Gesamt</td>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic(baseTopic + "/get/imported", 3, 3, 0.001) + " kWh" }}
+            </td>
+            <td class="text-right text-monospace">
+              {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) + " kWh" }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </openwb-base-alert>
   </openwb-base-card>
 </template>
 
@@ -70,5 +78,12 @@ export default {
     FontAwesomeIcon,
   },
   mixins: [ComponentState],
+  computed: {
+    baseTopic: {
+      get() {
+        return "openWB/chargepoint";
+      },
+    },
+  },
 };
 </script>

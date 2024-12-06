@@ -84,7 +84,19 @@ export default {
       if (value == undefined || isNaN(value)) {
         return undefined;
       }
-      return (value * scale).toLocaleString(undefined, {
+      value = value * scale;
+      if (value >= 1000) {
+        minNumDigits = 0;
+        maxNumDigit = 0;
+      } else if (value >= 10 && minNumDigits > 1) {
+        minNumDigits = 1;
+        maxNumDigit = 1;
+      } else if (value >= 1 && minNumDigits > 2) {
+        minNumDigits = 2;
+        maxNumDigit = 2;
+      }
+
+      return value.toLocaleString(undefined, {
         minimumFractionDigits: minNumDigits,
         maximumFractionDigits: maxNumDigit,
       });
@@ -124,6 +136,24 @@ export default {
         default:
           console.warn("unknown charge mode:", value);
           return value;
+      }
+    },
+    getFaultStateSubtype(baseTopic) {
+      const faultState = this.$store.state.mqtt[baseTopic + "/get/fault_state"];
+
+      if (faultState === undefined) {
+        return "warning"; // Handle undefined case
+      }
+
+      switch (faultState) {
+        case 0:
+          return "success";
+        case 1:
+          return "warning";
+        case 2:
+          return "danger";
+        default:
+          return "dark"; // Default case for all other values
       }
     },
   },
