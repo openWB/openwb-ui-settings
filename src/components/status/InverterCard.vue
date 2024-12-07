@@ -15,10 +15,13 @@
       <div v-if="getFaultStateSubtype(baseTopic) == 'success'">
         {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }} kW
       </div>
-      <openwb-base-label
+      <span
         v-else
-        :subtype="getFaultStateSubtype(baseTopic)"
-      />
+        :class="'subheader pill bg-' + getFaultStateSubtype(baseTopic)"
+      >
+        <div v-if="getFaultStateSubtype(baseTopic) == 'warning'">Warnung</div>
+        <div v-else>Fehler</div>
+      </span>
     </template>
 
     <openwb-base-card

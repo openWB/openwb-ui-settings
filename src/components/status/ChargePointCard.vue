@@ -20,10 +20,13 @@
           :title="chargingStatus.text"
         />
       </div>
-      <openwb-base-label
+      <span
         v-else
-        :subtype="getFaultStateSubtype(baseTopic)"
-      />
+        :class="'subheader pill bg-' + getFaultStateSubtype(baseTopic)"
+      >
+        <div v-if="getFaultStateSubtype(baseTopic) == 'warning'">Warnung</div>
+        <div v-else>Fehler</div>
+      </span>
     </template>
 
     <openwb-base-card

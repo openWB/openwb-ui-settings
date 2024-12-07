@@ -15,14 +15,13 @@
       <div v-if="getVehicleStatus == 'success'">
         <div v-if="$store.state.mqtt[baseTopic + '/get/soc']">{{ $store.state.mqtt[baseTopic + "/get/soc"] }}%</div>
       </div>
-      <openwb-base-label
-        v-else-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == undefined"
-        subtype="warning"
-      />
-      <openwb-base-label
+      <span
         v-else
-        :subtype="statuslevel[$store.state.mqtt[baseTopic + '/get/fault_state']]"
-      />
+        :class="'subheader pill bg-' + getVehicleStatus"
+      >
+        <div v-if="getVehicleStatus == 'warning'">Warnung</div>
+        <div v-else>Fehler</div>
+      </span>
     </template>
     <openwb-base-card
       title="Fahrzeugdaten"
