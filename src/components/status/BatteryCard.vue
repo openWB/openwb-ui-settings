@@ -3,6 +3,7 @@
     subtype="warning"
     :collapsible="true"
     :collapsed="true"
+    class="pb-0"
   >
     <template #header>
       <font-awesome-icon
@@ -16,62 +17,65 @@
         {{ formatNumberTopic(baseTopic + "/get/power", 1, 1, 0.001) }} kW /
         {{ $store.state.mqtt[baseTopic + "/get/soc"] }}%
       </div>
-      <openwb-base-label
+      <span
         v-else
-        :subtype="getFaultStateSubtype(baseTopic)"
-      />
+        :class="'subheader pill bg-' + getFaultStateSubtype(baseTopic)"
+      >
+        <div v-if="getFaultStateSubtype(baseTopic) == 'warning'">Warnung</div>
+        <div v-else>Fehler</div>
+      </span>
     </template>
-    <openwb-base-alert subtype="light">
-      <table class="table table-sm table-borderless">
-        <tbody>
-          <tr>
-            <th>Aktuelle Werte</th>
-            <td class="text-right">Leistung</td>
-            <td class="text-right">Ladestand</td>
-          </tr>
-          <tr>
-            <td></td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) + " kW" }}
-            </td>
-            <td class="text-right text-monospace">{{ $store.state.mqtt[baseTopic + "/get/soc"] }}%</td>
-          </tr>
-        </tbody>
-      </table>
-    </openwb-base-alert>
-    <openwb-base-alert subtype="light">
-      <table class="table table-sm table-borderless">
-        <tbody>
-          <tr>
-            <th>Zählerstände</th>
-            <td class="text-right">Geladen</td>
-            <td class="text-right">Entladen</td>
-          </tr>
-          <tr>
-            <td class="text-right">Heute</td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/daily_imported", 3, 3, 0.001) + " kWh" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) + " kWh" }}
-            </td>
-          </tr>
-          <tr>
-            <td class="text-right">Gesamt</td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/imported", 3, 3, 0.001) + " kWh" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) + " kWh" }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </openwb-base-alert>
+    <openwb-base-card
+      title="Aktuelle Werte"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <div class="row">
+        <div class="col-6 text-right">Leistung</div>
+        <div class="col-6 text-right">Ladestand</div>
+      </div>
+      <div class="row">
+        <div class="col text-right text-monospace pl-0">
+          {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW
+        </div>
+        <div class="col text-right text-monospace pl-0">{{ $store.state.mqtt[baseTopic + "/get/soc"] }}&nbsp;%</div>
+      </div>
+    </openwb-base-card>
+    <openwb-base-card
+      title="Zählerstände"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <div class="row">
+        <div class="col"></div>
+        <div class="col text-right">Geladen</div>
+        <div class="col text-right">Entladen</div>
+      </div>
+      <div class="row">
+        <div class="col text-right">Heute</div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/daily_imported", 3, 3, 0.001) + "&nbsp;kWh" }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) + "&nbsp;kWh" }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-right">Gesamt</div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/imported", 3, 3, 0.001) + "&nbsp;kWh" }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) + "&nbsp;kWh" }}
+        </div>
+      </div>
+    </openwb-base-card>
     <template #footer>
       <div class="container">
         <div class="row">
-          <div class="col">
+          <div class="col px-0">
             <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
               <font-awesome-icon
                 v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 1"

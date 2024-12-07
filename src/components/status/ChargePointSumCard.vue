@@ -14,52 +14,52 @@
     <template #actions>
       {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) + " kW" }}
     </template>
-    <openwb-base-alert subtype="light">
-      <table class="table table-sm table-borderless">
-        <tbody>
-          <tr>
-            <th>Ladevorgang</th>
-            <td class="text-right">Leistung</td>
-          </tr>
-          <tr>
-            <td />
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) + " kW" }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </openwb-base-alert>
+    <openwb-base-card
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-4"
+    >
+      <div class="row py-2">
+        <div class="col font-weight-bold">Ladevorgang</div>
+        <div class="col text-right">Leistung</div>
+      </div>
+      <div class="row">
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}
+        </div>
+      </div>
+    </openwb-base-card>
 
-    <openwb-base-alert subtype="light">
-      <table class="table table-sm table-borderless">
-        <tbody>
-          <tr>
-            <th>Zählerstände</th>
-            <td class="text-right">Geladen</td>
-            <td class="text-right">Entladen</td>
-          </tr>
-          <tr>
-            <td class="text-right">Heute</td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/daily_imported", 3, 3, 0.001) + " kWh" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) + " kWh" }}
-            </td>
-          </tr>
-          <tr>
-            <td class="text-right">Gesamt</td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/imported", 3, 3, 0.001) + " kWh" }}
-            </td>
-            <td class="text-right text-monospace">
-              {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) + " kWh" }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </openwb-base-alert>
+    <openwb-base-card
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-4"
+      title="Zählerstände"
+    >
+      <div class="row">
+        <div class="col" />
+        <div class="col text-right">Geladen</div>
+        <div class="col text-right">Entladen</div>
+      </div>
+      <div class="row">
+        <div class="col text-right">Heute</div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/daily_imported", 3, 3, 0.001) + " kWh" }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) + " kWh" }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-right">Gesamt</div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/imported", 3, 3, 0.001) + " kWh" }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) + " kWh" }}
+        </div>
+      </div>
+    </openwb-base-card>
   </openwb-base-card>
 </template>
 
