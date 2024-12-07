@@ -31,7 +31,7 @@
 
     <openwb-base-card
       subtype="white"
-      body-bg="bg-white"
+      body-bg="white"
       class="py-1 mb-4"
     >
       <div class="row py-2">
@@ -54,7 +54,7 @@
 
     <openwb-base-card
       subtype="white"
-      body-bg="bg-white"
+      body-bg="white"
       class="py-1 mb-4"
       title="Ladevorgang"
     >
@@ -96,7 +96,7 @@
 
     <openwb-base-card
       subtype="white"
-      body-bg="bg-white"
+      body-bg="white"
       class="py-1 mb-4"
       title="Zählerstände"
     >
@@ -127,7 +127,7 @@
 
     <openwb-base-card
       subtype="white"
-      body-bg="bg-white"
+      body-bg="white"
       class="py-1 mb-4"
       title="Werte pro Phase"
     >

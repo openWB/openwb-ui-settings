@@ -45,7 +45,7 @@
     <openwb-base-card
       title="Erträge"
       subtype="white"
-      body-bg="bg-white"
+      body-bg="white"
       class="py-1 mb-2"
     >
       <div class="row">
