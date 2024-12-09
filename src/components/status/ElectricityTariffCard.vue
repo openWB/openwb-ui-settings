@@ -12,15 +12,17 @@
       />
       Variabler Stromtarif
     </template>
-    <openwb-base-alert subtype="light">
-      <table class="table table-sm table-borderless">
-        <tbody>
-          <tr>
-            <th>Anbieter</th>
-            <td>{{ $store.state.mqtt[baseTopic + "/provider"].name }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <openwb-base-card
+      title="Aktuelle Werte"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <div class="row">
+        <div class="col">Anbieter</div>
+        <div class="row">{{ $store.state.mqtt[baseTopic + "/provider"].name }}</div>
+      </div>
+
       <div class="openwb-chart">
         <chartjs-line
           v-if="chartDataRead"
@@ -29,7 +31,7 @@
           :options="chartOptions"
         />
       </div>
-    </openwb-base-alert>
+    </openwb-base-card>
 
     <template #footer>
       <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
