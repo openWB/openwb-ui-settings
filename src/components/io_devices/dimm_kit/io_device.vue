@@ -4,8 +4,8 @@
       title="IP oder Hostname"
       subtype="host"
       required
-      :model-value="ioDevice.configuration.ip_address"
-      @update:model-value="updateConfiguration($event, 'configuration.ip_address')"
+      :model-value="ioDevice.configuration.host"
+      @update:model-value="updateConfiguration($event, 'configuration.host')"
     />
     <openwb-base-number-input
       title="Port"
