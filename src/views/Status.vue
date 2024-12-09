@@ -202,7 +202,7 @@ export default {
   align-self: start;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 991px) {
   .status {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
