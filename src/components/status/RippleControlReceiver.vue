@@ -4,6 +4,7 @@
     subtype="secondary"
     :collapsible="true"
     :collapsed="true"
+    class="pb-0"
   >
     <template #header>
       <font-awesome-icon :icon="['fas', 'tower-broadcast']" />
@@ -27,8 +28,7 @@
           v-else
           class="col"
         >
-          Laden erlaubt (
-          {{ $store.state.mqtt[baseTopic + "/get/override_value"] }}% )
+          Laden erlaubt ({{ $store.state.mqtt[baseTopic + "/get/override_value"] }}&nbsp;%)
         </div>
       </div>
       <div class="openwb-chart">

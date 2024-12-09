@@ -4,6 +4,7 @@
     subtype="secondary"
     :collapsible="true"
     :collapsed="true"
+    class="pb-0"
   >
     <template #header>
       <font-awesome-icon
@@ -12,17 +13,27 @@
       />
       Variabler Stromtarif
     </template>
+    <template #actions>
+      <div
+        v-if="getFaultStateSubtype(baseTopic) == 'success'"
+        class="text-right"
+      >
+        {{ currentPrice }}&nbsp;€/kWh
+      </div>
+      <span
+        v-else
+        :class="'subheader pill bg-' + getFaultStateSubtype(baseTopic)"
+      >
+        <div v-if="getFaultStateSubtype(baseTopic) == 'warning'">Warnung</div>
+        <div v-else>Fehler</div>
+      </span>
+    </template>
     <openwb-base-card
-      title="Aktuelle Werte"
+      :title="'Anbieter: ' + $store.state.mqtt[baseTopic + '/provider'].name"
       subtype="white"
       body-bg="white"
       class="py-1 mb-2"
     >
-      <div class="row">
-        <div class="col">Anbieter</div>
-        <div class="row">{{ $store.state.mqtt[baseTopic + "/provider"].name }}</div>
-      </div>
-
       <div class="openwb-chart">
         <chartjs-line
           v-if="chartDataRead"
@@ -244,6 +255,9 @@ export default {
       const dataObject = this.chartDatasets;
       dataObject.datasets[0].data = myData;
       return dataObject;
+    },
+    currentPrice() {
+      return this.chartDataObject.datasets[0].data[0].price;
     },
     baseTopic: {
       get() {

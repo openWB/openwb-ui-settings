@@ -3,6 +3,7 @@
     subtype="success"
     :collapsible="true"
     :collapsed="true"
+    class="pb-0"
   >
     <template #header>
       <font-awesome-icon
@@ -12,8 +13,11 @@
       {{ inverter.name }}
     </template>
     <template #actions>
-      <div v-if="getFaultStateSubtype(baseTopic) == 'success'">
-        {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }} kW
+      <div
+        v-if="getFaultStateSubtype(baseTopic) == 'success'"
+        class="text-right"
+      >
+        {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW
       </div>
       <span
         v-else
@@ -27,7 +31,7 @@
     <openwb-base-card
       title="Aktuelle Werte"
       subtype="white"
-      body-bd="bg-white"
+      body-bg="white"
       class="py-1 mb-2"
     >
       <div class="row">
@@ -93,7 +97,7 @@
               <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
             </openwb-base-alert>
           </div>
-          <div class="col col-auto">
+          <div class="col col-auto pr-0">
             <div class="text-right">ID: {{ inverter.id }}</div>
           </div>
         </div>

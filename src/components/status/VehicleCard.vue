@@ -3,6 +3,7 @@
     subtype="info"
     :collapsible="true"
     :collapsed="true"
+    class="pb-0"
   >
     <template #header>
       <font-awesome-icon
@@ -12,12 +13,18 @@
       {{ vehicleName }}
     </template>
     <template #actions>
-      <div v-if="getVehicleStatus == 'success'">
-        <div v-if="$store.state.mqtt[baseTopic + '/get/soc']">{{ $store.state.mqtt[baseTopic + "/get/soc"] }}%</div>
+      <div
+        v-if="getVehicleStatus == 'success'"
+        class="text-right"
+      >
+        <div v-if="$store.state.mqtt[baseTopic + '/get/soc']">
+          {{ $store.state.mqtt[baseTopic + "/get/soc"] }}&nbsp;%
+        </div>
       </div>
       <span
         v-else
-        :class="'subheader pill bg-' + getVehicleStatus"
+        class="subheader pill"
+        :class="'bg-' + getVehicleStatus"
       >
         <div v-if="getVehicleStatus == 'warning'">Warnung</div>
         <div v-else>Fehler</div>
@@ -71,7 +78,7 @@
               <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
             </openwb-base-alert>
           </div>
-          <div class="col col-auto">
+          <div class="col col-auto pr-0">
             <div class="text-right">ID: {{ vehicleIndex }}</div>
           </div>
         </div>

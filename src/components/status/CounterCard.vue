@@ -13,7 +13,10 @@
       {{ counter.name }}
     </template>
     <template #actions>
-      <div v-if="getFaultStateSubtype(baseTopic) == 'success'">
+      <div
+        v-if="getFaultStateSubtype(baseTopic) == 'success'"
+        class="text-right"
+      >
         {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW
       </div>
       <span
@@ -69,7 +72,7 @@
       class="py-1 mb-2"
     >
       <div class="row">
-        <div class="col-md-4 pr-1 text-center text-md-right">Spannung [V]</div>
+        <div class="col-md-4 pr-0 text-center text-md-right">Spannung [V]</div>
         <div class="col">
           <div class="row">
             <div class="col text-right text-monospace pl-0">

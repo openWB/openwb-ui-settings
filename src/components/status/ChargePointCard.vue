@@ -3,6 +3,7 @@
     subtype="primary"
     :collapsible="true"
     :collapsed="true"
+    class="pb-0"
   >
     <template #header>
       <font-awesome-icon
@@ -12,8 +13,11 @@
       {{ installedChargePoint.name }}
     </template>
     <template #actions>
-      <div v-if="getFaultStateSubtype(baseTopic) == 'success'">
-        {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }} kW
+      <div
+        v-if="getFaultStateSubtype(baseTopic) == 'success'"
+        class="text-right"
+      >
+        {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW
         <font-awesome-icon
           fixed-width
           :icon="chargingStatus.icon"
@@ -32,7 +36,7 @@
     <openwb-base-card
       subtype="white"
       body-bg="white"
-      class="py-1 mb-4"
+      class="py-1 mb-2"
     >
       <div class="row py-2">
         <div class="col col-auto font-weight-bold">Status</div>
@@ -55,7 +59,7 @@
     <openwb-base-card
       subtype="white"
       body-bg="white"
-      class="py-1 mb-4"
+      class="py-1 mb-2"
       title="Ladevorgang"
     >
       <div class="row">
@@ -97,29 +101,28 @@
     <openwb-base-card
       subtype="white"
       body-bg="white"
-      class="py-1 mb-4"
+      class="py-1 mb-2"
       title="Zählerstände"
     >
-      <div class="row">
-        <div class="col" />
-        <div class="col text-right">Geladen</div>
-        <div class="col text-right">Entladen</div>
+      <div class="row justify-content-end">
+        <div class="col-4 text-right">Geladen</div>
+        <div class="col-4 text-right">Entladen</div>
       </div>
       <div class="row">
         <div class="col text-right">Heute</div>
-        <div class="col text-right text-monospace">
+        <div class="col-4 text-right text-monospace">
           {{ formatNumberTopic(baseTopic + "/get/daily_imported", 3, 3, 0.001) + " kWh" }}
         </div>
-        <div class="col text-right text-monospace">
+        <div class="col-4 text-right text-monospace">
           {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) + " kWh" }}
         </div>
       </div>
       <div class="row">
         <div class="col text-right">Gesamt</div>
-        <div class="col text-right text-monospace">
+        <div class="col-4 text-right text-monospace">
           {{ formatNumberTopic(baseTopic + "/get/imported", 3, 3, 0.001) + " kWh" }}
         </div>
-        <div class="col text-right text-monospace">
+        <div class="col-4 text-right text-monospace">
           {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) + " kWh" }}
         </div>
       </div>
@@ -128,7 +131,7 @@
     <openwb-base-card
       subtype="white"
       body-bg="white"
-      class="py-1 mb-4"
+      class="py-1 mb-2"
       title="Werte pro Phase"
     >
       <div class="row">
@@ -181,17 +184,15 @@
       </div>
       <div class="row">
         <div class="col-md-4 pr-1 text-center text-md-right">Netzfrequenz</div>
-        <div class="col" />
         <div class="col text-center text-monospace">
           {{ formatNumberTopic(baseTopic + "/get/frequency", 3) + " Hz" }}
         </div>
-        <div class="col" />
       </div>
     </openwb-base-card>
     <template #footer>
       <div class="container">
         <div class="row">
-          <div class="col">
+          <div class="col px-0">
             <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
               <font-awesome-icon
                 v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 1"
@@ -215,7 +216,7 @@
               <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
             </openwb-base-alert>
           </div>
-          <div class="col col-auto">
+          <div class="col col-auto pr-0">
             <div class="text-right">ID: {{ chargePointIndex }}</div>
           </div>
         </div>

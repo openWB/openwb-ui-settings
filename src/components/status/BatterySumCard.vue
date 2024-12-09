@@ -13,9 +13,12 @@
       Alle Speicher
     </template>
     <template #actions>
-      <div v-if="getFaultStateSubtype(baseTopic) == 'success'">
-        {{ formatNumberTopic(baseTopic + "/get/power", 1, 1, 0.001) }} kW /
-        {{ $store.state.mqtt[baseTopic + "/get/soc"] }}%
+      <div
+        v-if="getFaultStateSubtype(baseTopic) == 'success'"
+        class="text-right"
+      >
+        {{ formatNumberTopic(baseTopic + "/get/power", 1, 1, 0.001) }}&nbsp;kW /
+        {{ $store.state.mqtt[baseTopic + "/get/soc"] }}&nbsp;%
       </div>
       <span
         v-else

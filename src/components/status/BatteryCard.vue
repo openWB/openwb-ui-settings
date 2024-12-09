@@ -13,9 +13,12 @@
       {{ battery.name }}
     </template>
     <template #actions>
-      <div v-if="getFaultStateSubtype(baseTopic) == 'success'">
-        {{ formatNumberTopic(baseTopic + "/get/power", 1, 1, 0.001) }} kW /
-        {{ $store.state.mqtt[baseTopic + "/get/soc"] }}%
+      <div
+        v-if="getFaultStateSubtype(baseTopic) == 'success'"
+        class="text-right"
+      >
+        {{ formatNumberTopic(baseTopic + "/get/power", 1, 1, 0.001) }}&nbsp;kW /
+        {{ $store.state.mqtt[baseTopic + "/get/soc"] }}&nbsp;%
       </div>
       <span
         v-else
@@ -99,7 +102,7 @@
               <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
             </openwb-base-alert>
           </div>
-          <div class="col col-auto">
+          <div class="col col-auto pr-0">
             <div class="text-right">ID: {{ battery.id }}</div>
           </div>
         </div>
