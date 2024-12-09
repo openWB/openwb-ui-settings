@@ -41,7 +41,7 @@
     <div
       v-if="isCollapsed === false"
       class="card-body"
-      :class="'bg-' + bodyBg"
+      :class="[title == undefined && !$slots.header ? 'border-radius-inherit' : '', 'bg-' + bodyBg]"
       v-bind="$attrs"
     >
       <slot />
@@ -114,10 +114,6 @@ export default {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.card-body {
-  border-radius: inherit;
-}
-
 .card .card-header {
   font-weight: bold;
   display: flex;
@@ -162,7 +158,8 @@ export default {
 
 .bg-warning,
 .bg-pink,
-.bg-light {
+.bg-light,
+.bg-white {
   color: #212529;
 }
 
@@ -187,5 +184,14 @@ export default {
 
 .card-header .card.border-white {
   background-color: inherit; /* Change this to match the background color of the card body */
+}
+
+.card .card-body {
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
+}
+
+.card .card-body.border-radius-inherit {
+  border-radius: inherit;
 }
 </style>
