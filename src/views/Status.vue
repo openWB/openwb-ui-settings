@@ -42,8 +42,12 @@
     />
     <!-- electricity tariff -->
     <electricity-tariff-card />
-    <!-- ripple-control-receiver -->
-    <ripple-control-receiver-card />
+    <!-- io devices -->
+    <io-device-card
+      v-for="ioDevice in ioDeviceConfigs"
+      :key="ioDevice.id"
+      :io-device="ioDevice"
+    />
   </div>
 </template>
 
@@ -55,7 +59,7 @@ import InverterSumCard from "../components/status/InverterSumCard.vue";
 import InverterCard from "../components/status/InverterCard.vue";
 import BatterySumCard from "../components/status/BatterySumCard.vue";
 import BatteryCard from "../components/status/BatteryCard.vue";
-import RippleControlReceiverCard from "../components/status/RippleControlReceiver.vue";
+import IoDeviceCard from "../components/status/IoDeviceCard.vue";
 import VehicleCard from "../components/status/VehicleCard.vue";
 import ElectricityTariffCard from "../components/status/ElectricityTariffCard.vue";
 import ComponentState from "../components/mixins/ComponentState.vue";
@@ -70,7 +74,7 @@ export default {
     InverterCard,
     BatterySumCard,
     BatteryCard,
-    RippleControlReceiverCard,
+    IoDeviceCard,
     VehicleCard,
     ElectricityTariffCard,
   },
@@ -104,6 +108,9 @@ export default {
         // vehicles
         "openWB/vehicle/+/name",
         "openWB/vehicle/+/get/+",
+        // io devices
+        "openWB/system/io/+/config",
+        "openWB/io/states/+/get/+",
       ],
     };
   },
@@ -134,6 +141,11 @@ export default {
           this.getWildcardTopics("openWB/system/device/+/component/+/config"),
           "counter",
         );
+      },
+    },
+    ioDeviceConfigs: {
+      get() {
+        return this.getWildcardTopics("openWB/system/io/+/config");
       },
     },
     numInvertersInstalled: {
