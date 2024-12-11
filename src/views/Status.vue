@@ -40,6 +40,12 @@
       :vehicle-key="vehicleKey"
       :vehicle-name="vehicleName"
     />
+    <!-- io devices -->
+    <io-device-card
+      v-for="ioDevice in ioDeviceConfigs"
+      :key="ioDevice.id"
+      :io-device="ioDevice"
+    />
     <!-- electricity tariff -->
     <electricity-tariff-card v-if="$store.state.mqtt['openWB/general/extern'] === false" />
     <!-- ripple-control-receiver -->
@@ -55,7 +61,7 @@ import InverterSumCard from "../components/status/InverterSumCard.vue";
 import InverterCard from "../components/status/InverterCard.vue";
 import BatterySumCard from "../components/status/BatterySumCard.vue";
 import BatteryCard from "../components/status/BatteryCard.vue";
-import RippleControlReceiverCard from "../components/status/RippleControlReceiver.vue";
+import IoDeviceCard from "../components/status/IoDeviceCard.vue";
 import VehicleCard from "../components/status/VehicleCard.vue";
 import ElectricityTariffCard from "../components/status/ElectricityTariffCard.vue";
 import ComponentState from "../components/mixins/ComponentState.vue";
@@ -70,7 +76,7 @@ export default {
     InverterCard,
     BatterySumCard,
     BatteryCard,
-    RippleControlReceiverCard,
+    IoDeviceCard,
     VehicleCard,
     ElectricityTariffCard,
   },
@@ -81,6 +87,9 @@ export default {
         "openWB/general/extern",
         // components
         "openWB/system/device/+/component/+/config",
+        // io devices
+        "openWB/system/io/+/config",
+        "openWB/io/states/+/get/+",
         // vehicles
         "openWB/vehicle/+/name",
         // individual charge points
@@ -115,6 +124,11 @@ export default {
           this.getWildcardTopics("openWB/system/device/+/component/+/config"),
           "counter",
         );
+      },
+    },
+    ioDeviceConfigs: {
+      get() {
+        return this.getWildcardTopics("openWB/system/io/+/config");
       },
     },
     numInvertersInstalled: {
