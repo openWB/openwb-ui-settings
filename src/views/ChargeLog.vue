@@ -503,7 +503,7 @@ export default {
         return null; // oder ein Standardwert
       }
       return `${this.baseUrl}?year=${this.chargeLogRequestData.year}`;
-    }
+    },
     chargeLogDate: {
       get() {
         return this.chargeLogRequestData.year + "-" + this.chargeLogRequestData.month;
