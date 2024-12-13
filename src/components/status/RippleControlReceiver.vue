@@ -31,36 +31,14 @@
           Laden erlaubt ({{ $store.state.mqtt[baseTopic + "/get/override_value"] }}&nbsp;%)
         </div>
       </div>
-      <div class="openwb-chart">
-        <chartjs-line
-          v-if="chartDataRead"
-          ref="myChart"
-          :data="chartDataObject"
-          :options="chartOptions"
-        />
-      </div>
     </openwb-base-card>
     <template #footer>
       <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
         <font-awesome-icon
-          v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 1"
           fixed-width
-          :icon="['fas', 'exclamation-triangle']"
-        />
-        <font-awesome-icon
-          v-else-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 2"
-          fixed-width
-          :icon="['fas', 'times-circle']"
-        />
-        <font-awesome-icon
-          v-else
-          fixed-width
-          :icon="['fas', 'check-circle']"
+          :icon="stateIcon"
         />
         Modulmeldung:
-        <span v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] != 0">
-          <br />
-        </span>
         <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
       </openwb-base-alert>
     </template>
@@ -95,7 +73,6 @@ export default {
         "openWB/general/ripple_control_receiver/get/override_value",
         "openWB/general/ripple_control_receiver/module",
       ],
-      statusLevel: ["success", "warning", "danger"],
     };
   },
   computed: {

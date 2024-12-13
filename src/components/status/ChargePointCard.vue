@@ -51,7 +51,7 @@
       </div>
 
       <openwb-base-alert subtype="info">
-        Statusmeldung:<br />
+        Statusmeldung:
         <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/state_str"] }}</span>
       </openwb-base-alert>
     </openwb-base-card>
@@ -67,11 +67,9 @@
         <div class="col text-right">Leistung</div>
       </div>
       <div class="row">
+        <div class="col text-right text-monospace">{{ formatNumberTopic(baseTopic + "/set/current", 2) }}&nbsp;A</div>
         <div class="col text-right text-monospace">
-          {{ formatNumberTopic(baseTopic + "/set/current", 2) }}
-        </div>
-        <div class="col text-right text-monospace">
-          {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}
+          {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW
         </div>
       </div>
       <div class="row">
@@ -111,19 +109,19 @@
       <div class="row">
         <div class="col text-right">Heute</div>
         <div class="col-4 text-right text-monospace">
-          {{ formatNumberTopic(baseTopic + "/get/daily_imported", 3, 3, 0.001) + " kWh" }}
+          {{ formatNumberTopic(baseTopic + "/get/daily_imported", 3, 3, 0.001) }}&nbsp;kWh
         </div>
         <div class="col-4 text-right text-monospace">
-          {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) + " kWh" }}
+          {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) }}&nbsp;kWh
         </div>
       </div>
       <div class="row">
         <div class="col text-right">Gesamt</div>
         <div class="col-4 text-right text-monospace">
-          {{ formatNumberTopic(baseTopic + "/get/imported", 3, 3, 0.001) + " kWh" }}
+          {{ formatNumberTopic(baseTopic + "/get/imported", 3, 3, 0.001) }}&nbsp;kWh
         </div>
         <div class="col-4 text-right text-monospace">
-          {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) + " kWh" }}
+          {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) }}&nbsp;kWh
         </div>
       </div>
     </openwb-base-card>
@@ -185,7 +183,7 @@
       <div class="row">
         <div class="col-md-4 pr-1 text-center text-md-right">Netzfrequenz</div>
         <div class="col text-center text-monospace">
-          {{ formatNumberTopic(baseTopic + "/get/frequency", 3) + " Hz" }}
+          {{ formatNumberTopic(baseTopic + "/get/frequency", 3) }}&nbsp;Hz
         </div>
       </div>
     </openwb-base-card>
@@ -195,24 +193,10 @@
           <div class="col px-0">
             <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
               <font-awesome-icon
-                v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 1"
                 fixed-width
-                :icon="['fas', 'exclamation-triangle']"
-              />
-              <font-awesome-icon
-                v-else-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 2"
-                fixed-width
-                :icon="['fas', 'times-circle']"
-              />
-              <font-awesome-icon
-                v-else
-                fixed-width
-                :icon="['fas', 'check-circle']"
+                :icon="stateIcon"
               />
               Modulmeldung:
-              <span v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] != 0">
-                <br />
-              </span>
               <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
             </openwb-base-alert>
           </div>
@@ -267,11 +251,6 @@ export default {
   props: {
     installedChargePointKey: { type: String, required: true },
     installedChargePoint: { type: Object, required: true },
-  },
-  data() {
-    return {
-      statusLevel: ["success", "warning", "danger"],
-    };
   },
   computed: {
     chargePointIndex: {

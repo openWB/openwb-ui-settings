@@ -14,6 +14,23 @@ export default {
     chargeModes() {
       return ["instant_charging", "pv_charging", "scheduled_charging", "time_charging", "standby", "stop"];
     },
+    statusLevel() {
+      return ["success", "warning", "danger"];
+    },
+    stateIcon: {
+      get() {
+        switch (this.$store.state.mqtt[this.baseTopic + "/get/fault_state"]) {
+          case 0:
+            return ["fas", "check-circle"];
+          case 1:
+            return ["fas", "exclamation-triangle"];
+          case 2:
+            return ["fas", "times-circle"];
+          default:
+            return ["fas", "check-circle"];
+        }
+      },
+    },
   },
   mounted() {
     if (this.mqttTopicsToSubscribe.length > 0) {

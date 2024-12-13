@@ -142,25 +142,11 @@
           <div class="col px-0">
             <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
               <font-awesome-icon
-                v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 1"
                 fixed-width
-                :icon="['fas', 'exclamation-triangle']"
-              />
-              <font-awesome-icon
-                v-else-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 2"
-                fixed-width
-                :icon="['fas', 'times-circle']"
-              />
-              <font-awesome-icon
-                v-else
-                fixed-width
-                :icon="['fas', 'check-circle']"
+                :icon="stateIcon"
               />
               Modulmeldung:
-              <span v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] != 0">
-                <br />
-              </span>
-              <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + '/get/fault_str'] }}</span>
+              <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
             </openwb-base-alert>
           </div>
           <div class="col col-auto pr-0">
@@ -194,11 +180,6 @@ export default {
   mixins: [ComponentState],
   props: {
     counter: { type: Object, required: true },
-  },
-  data() {
-    return {
-      statusLevel: ["success", "warning", "danger"],
-    };
   },
   computed: {
     baseTopic: {

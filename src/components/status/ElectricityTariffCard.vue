@@ -18,7 +18,7 @@
         v-if="getFaultStateSubtype(baseTopic) == 'success'"
         class="text-right"
       >
-        {{ currentPrice }}&nbsp;€/kWh
+        {{ currentPrice }}&nbsp;ct/kWh
       </div>
       <span
         v-else
@@ -47,24 +47,10 @@
     <template #footer>
       <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
         <font-awesome-icon
-          v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 1"
           fixed-width
-          :icon="['fas', 'exclamation-triangle']"
-        />
-        <font-awesome-icon
-          v-else-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 2"
-          fixed-width
-          :icon="['fas', 'times-circle']"
-        />
-        <font-awesome-icon
-          v-else
-          fixed-width
-          :icon="['fas', 'check-circle']"
+          :icon="stateIcon"
         />
         Modulmeldung:
-        <span v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] != 0">
-          <br />
-        </span>
         <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
       </openwb-base-alert>
     </template>
@@ -117,7 +103,6 @@ export default {
         "openWB/optional/et/get/fault_str",
         "openWB/optional/et/get/prices",
       ],
-      statusLevel: ["success", "warning", "danger"],
       chartDatasets: {
         datasets: [
           {
@@ -257,7 +242,7 @@ export default {
       return dataObject;
     },
     currentPrice() {
-      return this.chartDataObject.datasets[0].data[0].price;
+      return this.formatNumber(this.chartDataObject.datasets[0].data[0].price || 0, 2);
     },
     baseTopic: {
       get() {

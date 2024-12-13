@@ -39,10 +39,10 @@
       </div>
       <div class="row">
         <div class="col text-right text-monospace">
-          {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) + " kW" }}
+          {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW
         </div>
         <div class="col text-right text-monospace">
-          {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) + " kWh" }}
+          {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) }}&nbsp;kWh
         </div>
       </div>
     </openwb-base-card>
@@ -59,13 +59,13 @@
       </div>
       <div class="row">
         <div class="col text-right text-monospace">
-          {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) + " kWh" }}
+          {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) }}&nbsp;kWh
         </div>
         <div class="col text-right text-monospace">
-          {{ formatNumberTopic(baseTopic + "/get/monthly_exported", 1, 1, 0.001) + " kWh" }}
+          {{ formatNumberTopic(baseTopic + "/get/monthly_exported", 1, 1, 0.001) }}&nbsp;kWh
         </div>
         <div class="col text-right text-monospace">
-          {{ formatNumberTopic(baseTopic + "/get/yearly_exported", 0, 0, 0.001) + " kWh" }}
+          {{ formatNumberTopic(baseTopic + "/get/yearly_exported", 0, 0, 0.001) }}&nbsp;kWh
         </div>
       </div>
     </openwb-base-card>
@@ -76,24 +76,10 @@
           <div class="col px-0">
             <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
               <font-awesome-icon
-                v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 1"
                 fixed-width
-                :icon="['fas', 'exclamation-triangle']"
-              />
-              <font-awesome-icon
-                v-else-if="$store.state.mqtt[baseTopic + '/get/fault_state'] == 2"
-                fixed-width
-                :icon="['fas', 'times-circle']"
-              />
-              <font-awesome-icon
-                v-else
-                fixed-width
-                :icon="['fas', 'check-circle']"
+                :icon="stateIcon"
               />
               Modulmeldung:
-              <span v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] != 0">
-                <br />
-              </span>
               <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
             </openwb-base-alert>
           </div>
