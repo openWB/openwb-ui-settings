@@ -160,7 +160,7 @@
               <span v-if="$store.state.mqtt[baseTopic + '/get/fault_state'] != 0">
                 <br />
               </span>
-              <span style="white-space: pre-wrap">{{ $store.state.mqtt["baseTopic + '/get//fault_str"] }}</span>
+              <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + '/get/fault_str'] }}</span>
             </openwb-base-alert>
           </div>
           <div class="col col-auto pr-0">

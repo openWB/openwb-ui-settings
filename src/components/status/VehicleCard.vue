@@ -43,7 +43,7 @@
       </div>
       <div class="row">
         <div class="col text-right text-monospace">
-          {{ formatNumberTopic($store.state.mqtt[baseTopic + "/get/soc"], 1, 1, 0.001) + " %" }}
+          {{ formatNumberTopic(baseTopic + '/get/soc') + " %" }}
         </div>
         <div class="col text-right text-monospace">
           {{ socRange + " km" }}
