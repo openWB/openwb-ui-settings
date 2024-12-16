@@ -3,6 +3,7 @@
     subtype="warning"
     :collapsible="true"
     :collapsed="true"
+    class="pb-0"
   >
     <template #header>
       <font-awesome-icon
@@ -11,75 +12,79 @@
       />
       Alle Speicher
     </template>
-    <openwb-base-alert :subtype="statusLevel[$store.state.mqtt['openWB/bat/get/fault_state']]">
-      <font-awesome-icon
-        v-if="$store.state.mqtt['openWB/bat/get/fault_state'] == 1"
-        fixed-width
-        :icon="['fas', 'exclamation-triangle']"
-      />
-      <font-awesome-icon
-        v-else-if="$store.state.mqtt['openWB/bat/get/fault_state'] == 2"
-        fixed-width
-        :icon="['fas', 'times-circle']"
-      />
-      <font-awesome-icon
+    <template #actions>
+      <div
+        v-if="getFaultStateSubtype(baseTopic) == 'success'"
+        class="text-right"
+      >
+        {{ formatNumberTopic(baseTopic + "/get/power", 1, 1, 0.001) }}&nbsp;kW /
+        {{ $store.state.mqtt[baseTopic + "/get/soc"] }}&nbsp;%
+      </div>
+      <span
         v-else
-        fixed-width
-        :icon="['fas', 'check-circle']"
-      />
-      Modulmeldung:<br />
-      <span style="white-space: pre-wrap">{{ $store.state.mqtt["openWB/bat/get/fault_str"] }}</span>
-    </openwb-base-alert>
-    <openwb-base-heading>Zählerstände</openwb-base-heading>
-    <openwb-base-text-input
-      title="Ladung"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/bat/get/imported', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Entladung"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/bat/get/exported', 3, 3, 0.001)"
-    />
-    <openwb-base-heading>Tageswerte</openwb-base-heading>
-    <openwb-base-text-input
-      title="Ladung"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/bat/get/daily_imported', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Entladung"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/bat/get/daily_exported', 3, 3, 0.001)"
-    />
-    <openwb-base-heading>Saldierte Werte</openwb-base-heading>
-    <openwb-base-text-input
-      title="Leistung"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kW"
-      :model-value="formatNumberTopic('openWB/bat/get/power', 3, 3, 0.001)"
-    />
-    <openwb-base-number-input
-      title="Ladestand"
-      readonly
-      class="text-right text-monospace"
-      unit="%"
-      :model-value="$store.state.mqtt['openWB/bat/get/soc']"
-    />
+        :class="'subheader pill bg-' + getFaultStateSubtype(baseTopic)"
+      >
+        <div v-if="getFaultStateSubtype(baseTopic) == 'warning'">Warnung</div>
+        <div v-else>Fehler</div>
+      </span>
+    </template>
+    <openwb-base-card
+      title="Aktuelle Werte"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <div class="row">
+        <div class="col-6 text-right">Leistung</div>
+        <div class="col-6 text-right">Ladestand</div>
+      </div>
+      <div class="row">
+        <div class="col text-right text-monospace pl-0">
+          {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW
+        </div>
+        <div class="col text-right text-monospace pl-0">{{ $store.state.mqtt[baseTopic + "/get/soc"] }}&nbsp;%</div>
+      </div>
+    </openwb-base-card>
+    <openwb-base-card
+      title="Zählerstände"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <div class="row">
+        <div class="col"></div>
+        <div class="col text-right">Geladen</div>
+        <div class="col text-right">Entladen</div>
+      </div>
+      <div class="row">
+        <div class="col text-right">Heute</div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/daily_imported", 3, 3, 0.001) }}&nbsp;kWh
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) }}&nbsp;kWh
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-right">Gesamt</div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/imported", 3, 3, 0.001) }}&nbsp;kWh
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) }}&nbsp;kWh
+        </div>
+      </div>
+    </openwb-base-card>
+    <template #footer>
+      <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
+        <font-awesome-icon
+          fixed-width
+          :icon="stateIcon"
+        />
+        Modulmeldung:
+        <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
+      </openwb-base-alert>
+    </template>
   </openwb-base-card>
 </template>
 
@@ -103,10 +108,12 @@ export default {
     FontAwesomeIcon,
   },
   mixins: [ComponentState],
-  data() {
-    return {
-      statusLevel: ["success", "warning", "danger"],
-    };
+  computed: {
+    baseTopic: {
+      get() {
+        return "openWB/bat";
+      },
+    },
   },
 };
 </script>
