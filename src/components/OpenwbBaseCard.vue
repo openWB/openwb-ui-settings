@@ -186,11 +186,6 @@ export default {
   background-color: inherit; /* Change this to match the background color of the card body */
 }
 
-.card .card-body {
-  border-bottom-left-radius: inherit;
-  border-bottom-right-radius: inherit;
-}
-
 .card .card-body.border-radius-inherit {
   border-radius: inherit;
 }

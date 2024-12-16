@@ -202,7 +202,7 @@ export default {
   right: 0;
   top: 55px;
   padding: 0.25rem;
-  max-width: 275px;
+  width: 275px;
 }
 
 .openwb-toast-container.full-height {
