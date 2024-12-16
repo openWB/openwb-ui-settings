@@ -53,6 +53,41 @@
         Dezimaltrennzeichen erwartet, welche die aktuelle Reichweite darstellt.
       </template>
     </openwb-base-text-input>
+    <openwb-base-button-group-input
+      title="SoC während der Ladung berechnen"
+      :buttons="[
+        {
+          buttonValue: false,
+          text: 'Nein',
+          class: 'btn-outline-danger',
+        },
+        {
+          buttonValue: true,
+          text: 'Ja',
+          class: 'btn-outline-success',
+        },
+      ]"
+      :model-value="vehicle.configuration.calculate_soc"
+      @update:model-value="updateConfiguration($event, 'configuration.calculate_soc')"
+    >
+      <template #help>
+        Berechnet den Ladestand (SoC) während der Ladung. Dies ist notwendig, wenn der SoC nicht über die Schnittstelle
+        des Fahrzeugs abgerufen werden kann. Die Berechnung erfolgt über die Ladeleistung und die Ladedauer.
+        <br />
+        Derzeit u.a. notwendig für Peugeot, Opel, Citroen und DS.
+      </template>
+    </openwb-base-button-group-input>
+    <openwb-base-number-input
+      title="Timeout für http-Abfragen"
+      subtype="number"
+      :model-value="vehicle.configuration.timeout"
+      @update:model-value="updateConfiguration($event, 'configuration.timeout')"
+    >
+      <template #help>
+        Ermöglicht es einen Timeout für die http-Abfragen zu setzen. Der Wert wird in Sekunden angegeben. Standardwert
+        ist 5 Sekunden sofern kein anderer Wert angegeben ist.
+      </template>
+    </openwb-base-number-input>
   </div>
 </template>
 
