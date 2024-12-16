@@ -3,59 +3,67 @@
     subtype="info"
     :collapsible="true"
     :collapsed="true"
+    class="pb-0"
   >
     <template #header>
       <font-awesome-icon
         fixed-width
         :icon="['fas', 'car']"
       />
-      {{ vehicleName }} (ID: {{ vehicleIndex }})
+      {{ vehicleName }}
     </template>
-    <openwb-base-alert
-      v-if="$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/fault_state'] !== undefined"
-      :subtype="statusLevel[$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/fault_state']]"
-    >
-      <font-awesome-icon
-        v-if="$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/fault_state'] == 1"
-        fixed-width
-        :icon="['fas', 'exclamation-triangle']"
-      />
-      <font-awesome-icon
-        v-else-if="$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/fault_state'] == 2"
-        fixed-width
-        :icon="['fas', 'times-circle']"
-      />
-      <font-awesome-icon
+    <template #actions>
+      <div
+        v-if="getVehicleStatus == 'success'"
+        class="text-right"
+      >
+        <div v-if="soc != '-'">{{ soc }}&nbsp;%</div>
+      </div>
+      <span
         v-else
-        fixed-width
-        :icon="['fas', 'check-circle']"
-      />
-      Modulmeldung:<br />
-      <span style="white-space: pre-wrap">{{
-        $store.state.mqtt["openWB/vehicle/" + vehicleIndex + "/get/fault_str"]
-      }}</span>
-    </openwb-base-alert>
-    <openwb-base-heading>Fahrzeugdaten</openwb-base-heading>
-    <openwb-base-number-input
-      title="Ladestand"
-      readonly
-      class="text-right text-monospace"
-      unit="%"
-      :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleIndex + '/get/soc']"
-    />
-    <openwb-base-number-input
-      title="Reichweite"
-      readonly
-      class="text-right text-monospace"
-      unit="km"
-      :model-value="socRange"
-    />
-    <openwb-base-text-input
-      title="Letzter Zeitstempel"
-      readonly
-      class="text-right text-monospace"
-      :model-value="socTimestamp"
-    />
+        class="subheader pill"
+        :class="'bg-' + getVehicleStatus"
+      >
+        <div v-if="getVehicleStatus == 'warning'">Warnung</div>
+        <div v-else>Fehler</div>
+      </span>
+    </template>
+    <openwb-base-card
+      title="Fahrzeugdaten"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <div class="row">
+        <div class="col pr-0 text-right">Ladestand</div>
+        <div class="col pr-0 text-right">Reichweite</div>
+        <div class="col pr-0 text-right">Letzter Zeitstempel</div>
+      </div>
+      <div class="row">
+        <div class="col text-right text-monospace">{{ soc }}&nbsp;%</div>
+        <div class="col text-right text-monospace">{{ socRange }}&nbsp;km</div>
+        <div class="col text-right text-monospace">{{ socTimestamp }}</div>
+      </div>
+    </openwb-base-card>
+    <template #footer>
+      <div class="container">
+        <div class="row">
+          <div class="col px-0">
+            <openwb-base-alert :subtype="getVehicleStatus">
+              <font-awesome-icon
+                fixed-width
+                :icon="stateIcon"
+              />
+              Modulmeldung:
+              <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
+            </openwb-base-alert>
+          </div>
+          <div class="col col-auto pr-0">
+            <div class="text-right">ID: {{ vehicleIndex }}</div>
+          </div>
+        </div>
+      </div>
+    </template>
   </openwb-base-card>
 </template>
 
@@ -84,15 +92,15 @@ export default {
     vehicleKey: { type: String, required: true },
     vehicleName: { type: String, default: "" },
   },
-  data() {
-    return {
-      statusLevel: ["success", "warning", "danger"],
-    };
-  },
   computed: {
     vehicleIndex: {
       get() {
         return parseInt(this.vehicleKey.match(/(?:\/)(\d+)(?=\/)/)[1]);
+      },
+    },
+    soc: {
+      get() {
+        return this.formatNumberTopic(this.baseTopic + "/get/soc");
       },
     },
     socTimestamp: {
@@ -113,6 +121,22 @@ export default {
         } else {
           return 0;
         }
+      },
+    },
+    getVehicleStatus: {
+      get() {
+        if (this.$store.state.mqtt["openWB/vehicle/" + this.vehicleIndex + "/get/fault_state"] === undefined) {
+          return "success"; // Default status level for undefined
+        }
+        return (
+          this.statusLevel[this.$store.state.mqtt["openWB/vehicle/" + this.vehicleIndex + "/get/fault_state"]] ||
+          "success"
+        ); // Default to 'light' if faultState is not in statusLevel}
+      },
+    },
+    baseTopic: {
+      get() {
+        return "openWB/vehicle/" + this.vehicleIndex;
       },
     },
   },
