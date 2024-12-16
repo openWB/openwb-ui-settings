@@ -11,7 +11,7 @@
         },
         { value: 'duo', text: 'openWB series1/2 Duo' },
         { value: 'socket', text: 'openWB series1/2 Buchse' },
-        { value: 'pro', text: 'openWB Pro' },
+        { value: 'pro_plus', text: 'openWB Pro+' },
       ]"
       :model-value="chargePoint.configuration.mode"
       @update:model-value="updateMode($event)"
@@ -42,7 +42,7 @@ export default {
   methods: {
     updateMode(event) {
       // reset "duo_num" for modes only supporting one charge point
-      if (["series", "socket", "pro"].includes(event)) {
+      if (["series", "socket", "pro_plus"].includes(event)) {
         this.updateConfiguration(0, "configuration.duo_num");
       }
       this.updateConfiguration(event, "configuration.mode");
