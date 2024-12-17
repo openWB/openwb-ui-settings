@@ -1,14 +1,24 @@
 <template>
   <!-- modal dialogs -->
   <openwb-base-modal-dialog
-    :show="showIoDeleteModal"
+    :show="showIoDeviceDeleteModal"
     title="Modul löschen"
     subtype="danger"
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
-    @modal-result="removeIoDevice(modalIoIndex, $event)"
+    @modal-result="removeIoDevice(modalIoDeviceIndex, $event)"
   >
-    Wollen Sie das Ein-/Ausgangs-Gerät "{{ getIoDeviceName(modalIoIndex) }}" (ID: {{ modalIoIndex }}) wirklich
-    entfernen? Dieser Vorgang kann nicht rückgängig gemacht werden!
+    Wollen Sie das Ein-/Ausgangs-Gerät "{{ getIoDeviceName(modalIoDeviceIndex) }}" (ID: {{ modalIoDeviceIndex }})
+    wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht werden!
+  </openwb-base-modal-dialog>
+  <openwb-base-modal-dialog
+    :show="showIoActionDeleteModal"
+    title="Aktion löschen"
+    subtype="danger"
+    :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
+    @modal-result="removeIoAction(modalIoActionIndex, $event)"
+  >
+    Wollen Sie das Ein-/Ausgangs-Gerät "{{ getIoDeviceName(modalIoDeviceIndex) }}" (ID: {{ modalIoDeviceIndex }})
+    wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht werden!
   </openwb-base-modal-dialog>
 
   <!-- main content -->
@@ -67,6 +77,60 @@
           <template #help> Bitte ein I/O-Modul auswählen, das hinzugefügt werden soll. </template>
         </openwb-base-select-input>
       </openwb-base-card>
+
+      <openwb-base-card title="Ein-/Ausgangs-Aktionen">
+        <openwb-base-card
+          v-for="(installedIoAction, installedIoActionKey) in installedIoActions"
+          :key="installedIoActionKey"
+          :title="installedIoAction?.name + ' (ID: ' + installedIoAction?.id + ')'"
+          :collapsible="true"
+          :collapsed="true"
+          subtype="primary"
+        >
+          <template #actions="slotProps">
+            <openwb-base-avatar
+              v-if="!slotProps.collapsed"
+              class="bg-danger clickable"
+              @click="removeIoActionModal(installedIoActionKey, $event)"
+            >
+              <font-awesome-icon
+                fixed-width
+                :icon="['fas', 'trash']"
+              />
+            </openwb-base-avatar>
+          </template>
+          <openwb-base-text-input
+            title="Bezeichnung"
+            subtype="text"
+            :model-value="installedIoAction.name"
+            @update:model-value="updateState(installedIoActionKey, $event, 'name')"
+          />
+          <openwb-base-text-input
+            title="Modul"
+            subtype="text"
+            disabled
+            readonly
+            :model-value="[installedIoAction.group, installedIoAction.type].join(' / ')"
+          />
+          <hr />
+          <openwb-io-action-proxy
+            :io-action="installedIoAction"
+            @update:configuration="updateConfiguration(installedIoActionKey, $event)"
+          />
+        </openwb-base-card>
+        <hr v-if="Object.keys(installedIoActions).length > 0" />
+        <openwb-base-select-input
+          title="Verfügbare Aktionen"
+          not-selected="Bitte auswählen"
+          :groups="ioActionList"
+          :model-value="ioActionToAdd"
+          :add-button="true"
+          @update:model-value="ioActionToAdd = $event"
+          @input:add="addIoAction"
+        >
+          <template #help> Bitte eine I/O-Aktion auswählen, die hinzugefügt werden soll. </template>
+        </openwb-base-select-input>
+      </openwb-base-card>
       <openwb-base-submit-buttons
         form-name="ioConfigForm"
         @save="$emit('save')"
@@ -86,12 +150,14 @@ library.add(fasTrash);
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbIoDeviceProxy from "../components/io_devices/OpenwbIoDeviceProxy.vue";
+import OpenwbIoActionProxy from "../components/io_actions/OpenwbIoActionProxy.vue";
 
 export default {
   name: "OpenwbIoConfigView",
   components: {
     FontAwesomeIcon,
     OpenwbIoDeviceProxy,
+    OpenwbIoActionProxy,
   },
   mixins: [ComponentState],
   props: {
@@ -104,18 +170,56 @@ export default {
   emits: ["save", "reset", "defaults", "send-command"],
   data() {
     return {
-      mqttTopicsToSubscribe: ["openWB/system/configurable/io_devices", "openWB/system/io/+/config"],
-      showIoDeleteModal: false,
+      mqttTopicsToSubscribe: [
+        "openWB/system/configurable/io_devices",
+        "openWB/system/io/+/config",
+        "openWB/system/configurable/io_actions",
+        "openWB/io/action/+/config",
+      ],
+      showIoDeviceDeleteModal: false,
+      modalIoDeviceIndex: undefined,
       ioDeviceToAdd: undefined,
+      showIoActionDeleteModal: false,
+      modalIoActionIndex: undefined,
+      ioActionToAdd: undefined,
     };
   },
   computed: {
-    ioDeviceList() {
-      return this.$store.state.mqtt["openWB/system/configurable/io_devices"];
+    ioDeviceList: {
+      get() {
+        return this.$store.state.mqtt["openWB/system/configurable/io_devices"];
+      },
     },
     installedIoDevices: {
       get() {
         return this.getWildcardTopics("openWB/system/io/+/config");
+      },
+    },
+    ioActionList: {
+      get() {
+        if (this.$store.state.mqtt["openWB/system/configurable/io_actions"] === undefined) {
+          return [];
+        }
+        return Object.entries(this.$store.state.mqtt["openWB/system/configurable/io_actions"])
+          .map(([groupKey, group]) => {
+            return {
+              label: group.group_name,
+              options: group.actions
+                .map((action) => {
+                  return {
+                    value: [groupKey, action.value],
+                    text: action.text,
+                  };
+                })
+                .sort((a, b) => a.text.localeCompare(b.text)),
+            };
+          })
+          .sort((a, b) => a.label.localeCompare(b.label));
+      },
+    },
+    installedIoActions: {
+      get() {
+        return this.getWildcardTopics("openWB/io/action/+/config");
       },
     },
   },
@@ -134,15 +238,36 @@ export default {
     removeIoDeviceModal(ioDevice, event) {
       // prevent further processing of the click event
       event.stopPropagation();
-      this.modalIoIndex = parseInt(ioDevice.match(/(?:\/)(\d+)(?=\/)/)[1]);
-      this.showIoDeleteModal = true;
+      this.modalIoDeviceIndex = parseInt(ioDevice.match(/(?:\/)(\d+)(?=\/)/)[1]);
+      this.showIoDeviceDeleteModal = true;
     },
     removeIoDevice(ioDeviceIndex, event) {
-      this.showIoDeleteModal = false;
+      this.showIoDeviceDeleteModal = false;
       if (event == "confirm") {
         this.$emit("send-command", {
           command: "removeIoDevice",
           data: { id: ioDeviceIndex },
+        });
+      }
+    },
+    addIoAction() {
+      this.$emit("send-command", {
+        command: "addIoAction",
+        data: { type: this.ioActionToAdd },
+      });
+    },
+    removeIoActionModal(ioAction, event) {
+      // prevent further processing of the click event
+      event.stopPropagation();
+      this.modalIoActionIndex = parseInt(ioAction.match(/(?:\/)(\d+)(?=\/)/)[1]);
+      this.showIoActionDeleteModal = true;
+    },
+    removeIoAction(ioActionIndex, event) {
+      this.showIoActionDeleteModal = false;
+      if (event == "confirm") {
+        this.$emit("send-command", {
+          command: "removeIoAction",
+          data: { id: ioActionIndex },
         });
       }
     },
