@@ -29,7 +29,6 @@
 
     <div v-if="warningAcknowledged || installAssistantActive">
       <openwb-base-card
-        v-if="updateAvailable"
         title="System Information"
         subtype="info"
         :collapsible="true"
