@@ -83,7 +83,7 @@
 import VehicleConfigMixin from "../VehicleConfigMixin.vue";
 
 export default {
-  name: "VehicleSocHttp",
+  name: "VehicleSocJson",
   mixins: [VehicleConfigMixin],
 };
 </script>
