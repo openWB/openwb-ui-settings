@@ -51,7 +51,7 @@
       :model-value="$store.state.mqtt['openWB/chargepoint/' + chargePointIndex + '/get/charge_state'] == 1"
     />
     <openwb-base-text-input
-      title="maximale Ladeleistung"
+      title="maximale Nennleistung"
       readonly
       class="text-right text-monospace"
       step="0.01"
