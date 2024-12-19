@@ -10,7 +10,11 @@
         fixed-width
         :icon="['fas', 'charging-station']"
       />
-      {{ installedChargePoint.name }}
+      {{ installedChargePoint.name }} (Nennleistung: 
+      {{Math.floor((formatNumberTopic(
+          'openWB/chargepoint/' + chargePointIndex +
+          '/get/max_evse_current', 0)*3*230/1000))}}&nbsp;kW
+          )
     </template>
     <template #actions>
       <div
@@ -26,148 +30,186 @@
       </div>
       <span
         v-else
-        fixed-width
-        :icon="['fas', 'check-circle']"
-      />
-      Modulmeldung:<br />
-      <span style="white-space: pre-wrap">{{
-        $store.state.mqtt["openWB/chargepoint/" + chargePointIndex + "/get/fault_str"]
-      }}</span>
-    </openwb-base-alert>
-    <openwb-base-alert subtype="info">
-      Statusmeldung:<br />
-      <span style="white-space: pre-wrap">{{
-        $store.state.mqtt["openWB/chargepoint/" + chargePointIndex + "/get/state_str"]
-      }}</span>
-    </openwb-base-alert>
-    <openwb-base-checkbox-input
-      title="Fahrzeug angesteckt"
-      disabled
-      :model-value="$store.state.mqtt['openWB/chargepoint/' + chargePointIndex + '/get/plug_state'] == 1"
-    />
-    <openwb-base-checkbox-input
-      title="Ladevorgang aktiv"
-      disabled
-      :model-value="$store.state.mqtt['openWB/chargepoint/' + chargePointIndex + '/get/charge_state'] == 1"
-    />
-    <openwb-base-text-input
-      title="maximale Nennleistung"
-      readonly
-      class="text-right text-monospace"
-      step="0.01"
-      unit="kW"
-      :model-value="
-        Math.floor((formatNumberTopic(
-          'openWB/chargepoint/' + chargePointIndex + '/get/max_evse_current',
-          0,
-        )*3*230/1000))
-      "
-    />
-    <openwb-base-text-input
-      title="Zählerstand laden"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/chargepoint/' + chargePointIndex + '/get/imported', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Zählerstand entladen"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/chargepoint/' + chargePointIndex + '/get/exported', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Heute geladen"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/chargepoint/' + chargePointIndex + '/get/daily_imported', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Heute entladen"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/chargepoint/' + chargePointIndex + '/get/daily_exported', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Wirkleistung"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kW"
-      :model-value="formatNumberTopic('openWB/chargepoint/' + chargePointIndex + '/get/power', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Ladestromvorgabe"
-      readonly
-      class="text-right text-monospace"
-      step="0.01"
-      unit="A"
-      :model-value="formatNumberTopic('openWB/chargepoint/' + chargePointIndex + '/set/current', 2)"
-    />
-    <openwb-base-text-input
-      title="Netzfrequenz"
-      readonly
-      class="text-right text-monospace"
-      step="0.01"
-      unit="Hz"
-      :model-value="formatNumberTopic('openWB/chargepoint/' + chargePointIndex + '/get/frequency', 2)"
-    />
-    <openwb-base-heading>Werte pro Phase</openwb-base-heading>
-    <openwb-base-text-input
-      title="Spannung"
-      readonly
-      class="text-right text-monospace"
-      unit="V"
-      :model-value="formatPhaseArrayNumberTopic('openWB/chargepoint/' + chargePointIndex + '/get/voltages', 1)"
-    />
-    <openwb-base-text-input
-      title="Strom"
-      readonly
-      class="text-right text-monospace"
-      unit="A"
-      :model-value="formatPhaseArrayNumberTopic('openWB/chargepoint/' + chargePointIndex + '/get/currents', 2)"
-    />
-    <openwb-base-text-input
-      title="Wirkleistung"
-      readonly
-      class="text-right text-monospace"
-      unit="kW"
-      :model-value="formatPhaseArrayNumberTopic('openWB/chargepoint/' + chargePointIndex + '/get/powers', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Leistungsfaktor"
-      readonly
-      class="text-right text-monospace"
-      :model-value="formatPhaseArrayNumberTopic('openWB/chargepoint/' + chargePointIndex + '/get/power_factors', 2)"
-    />
-    <openwb-base-heading>Phasen</openwb-base-heading>
-    <openwb-base-text-input
-      v-if="$store.state.mqtt['openWB/general/extern'] === true"
-      title="Vorgabe"
-      readonly
-      class="text-right text-monospace"
-      :model-value="formatNumberTopic('openWB/internal_chargepoint/' + chargePointIndex + '/data/phases_to_use')"
-    />
-    <openwb-base-text-input
-      v-else
-      title="Vorgabe"
-      readonly
-      class="text-right text-monospace"
-      :model-value="formatNumberTopic('openWB/chargepoint/' + chargePointIndex + '/set/phases_to_use')"
-    />
-    <openwb-base-text-input
-      title="Aktuell"
-      readonly
-      class="text-right text-monospace"
-      :model-value="formatNumberTopic('openWB/chargepoint/' + chargePointIndex + '/get/phases_in_use')"
-    />
+        :class="'subheader pill bg-' + getFaultStateSubtype(baseTopic)"
+      >
+        <div v-if="getFaultStateSubtype(baseTopic) == 'warning'">Warnung</div>
+        <div v-else>Fehler</div>
+      </span>
+    </template>
+
+    <openwb-base-card
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <div class="row py-2">
+        <div class="col col-auto font-weight-bold">Status</div>
+        <div class="col text-right">
+          <font-awesome-icon
+            fixed-width
+            :icon="chargingStatus.icon"
+            :title="chargingStatus.text"
+          />
+          {{ chargingStatus.text }}
+        </div>
+      </div>
+
+      <openwb-base-alert subtype="info">
+        Statusmeldung:
+        <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/state_str"] }}</span>
+      </openwb-base-alert>
+    </openwb-base-card>
+
+    <openwb-base-card
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+      title="Ladevorgang"
+    >
+      <div class="row">
+        <div class="col text-right">Ladestrom Vorgabe</div>
+        <div class="col text-right">Leistung</div>
+      </div>
+      <div class="row">
+        <div class="col text-right text-monospace">{{ formatNumberTopic(baseTopic + "/set/current", 2) }}&nbsp;A</div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-right">Phasen Vorgabe</div>
+        <div class="col text-right">Phasen Aktuell</div>
+      </div>
+      <div class="row">
+        <div
+          v-if="$store.state.mqtt['openWB/general/extern'] === true"
+          class="col text-right text-monospace"
+        >
+          {{ formatNumberTopic("openWB/internal_chargepoint/" + chargePointIndex + "/data/phases_to_use") }}
+        </div>
+        <div
+          v-else
+          class="col text-right text-monospace"
+        >
+          {{ formatNumberTopic(baseTopic + "/set/phases_to_use") }}
+        </div>
+
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/phases_in_use") }}
+        </div>
+      </div>
+    </openwb-base-card>
+
+    <openwb-base-card
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+      title="Zählerstände"
+    >
+      <div class="row justify-content-end">
+        <div class="col-4 text-right">Geladen</div>
+        <div class="col-4 text-right">Entladen</div>
+      </div>
+      <div class="row">
+        <div class="col text-right">Heute</div>
+        <div class="col-4 text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/daily_imported", 3, 3, 0.001) }}&nbsp;kWh
+        </div>
+        <div class="col-4 text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) }}&nbsp;kWh
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-right">Gesamt</div>
+        <div class="col-4 text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/imported", 3, 3, 0.001) }}&nbsp;kWh
+        </div>
+        <div class="col-4 text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) }}&nbsp;kWh
+        </div>
+      </div>
+    </openwb-base-card>
+
+    <openwb-base-card
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+      title="Werte pro Phase"
+    >
+      <div class="row">
+        <div class="col-md-4 pr-1 text-center text-md-right">Spannung [V]</div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[0] }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[1] }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[2] }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 pr-1 text-center text-md-right">Strom [A]</div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[0] }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[1] }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[2] }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 pr-1 text-center text-md-right">Wirkleistung [kW]</div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001).split(" / ")[0] }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001).split(" / ")[1] }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001).split(" / ")[2] }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 pr-1 text-center text-md-right">Leistungsfaktor</div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/power_factors", 2).split(" / ")[0] }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/power_factors", 2).split(" / ")[1] }}
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/power_factors", 2).split(" / ")[2] }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 pr-1 text-center text-md-right">Netzfrequenz</div>
+        <div class="col text-center text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/frequency", 3) }}&nbsp;Hz
+        </div>
+      </div>
+    </openwb-base-card>
+    <template #footer>
+      <div class="container">
+        <div class="row">
+          <div class="col px-0">
+            <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
+              <font-awesome-icon
+                fixed-width
+                :icon="stateIcon"
+              />
+              Modulmeldung:
+              <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
+            </openwb-base-alert>
+          </div>
+          <div class="col col-auto pr-0">
+            <div class="text-right">ID: {{ chargePointIndex }}</div>
+          </div>
+        </div>
+      </div>
+    </template>
   </openwb-base-card>
 </template>
 
