@@ -1,7 +1,7 @@
 <template>
   <openwb-base-card
     :title="title"
-    class="log-card mt-3"
+    class="log-card"
     :collapsible="true"
     :collapsed="true"
   >

@@ -4,6 +4,7 @@
     :class="'border-' + subtype"
   >
     <div
+      v-if="title !== undefined || $slots.header"
       class="card-header py-1"
       :class="'bg-' + subtype"
       @click="toggleBody"
@@ -40,6 +41,11 @@
     <div
       v-if="isCollapsed === false"
       class="card-body"
+      :class="[
+        title == undefined && !$slots.header ? 'border-radius-top-inherit' : '',
+        $slots.footer ? '' : 'border-radius-bottom-inherit',
+        'bg-' + bodyBg,
+      ]"
       v-bind="$attrs"
     >
       <slot />
@@ -67,15 +73,26 @@ export default {
   },
   inheritAttrs: false,
   props: {
-    title: { type: String, default: "# no title set #" },
+    title: { type: String, default: undefined },
     subtype: {
       validator: function (value) {
         return (
-          ["info", "success", "warning", "danger", "primary", "secondary", "light", "dark", "pink"].indexOf(value) !==
-          -1
+          ["info", "success", "warning", "danger", "primary", "secondary", "light", "dark", "pink", "white"].indexOf(
+            value,
+          ) !== -1
         );
       },
       default: "secondary",
+    },
+    bodyBg: {
+      validator: function (value) {
+        return (
+          ["info", "success", "warning", "danger", "primary", "secondary", "light", "dark", "pink", "white"].indexOf(
+            value,
+          ) !== -1
+        );
+      },
+      default: "light",
     },
     collapsible: { type: Boolean, default: false },
     collapsed: { type: Boolean, default: false },
@@ -98,6 +115,7 @@ export default {
 <style>
 .card {
   margin-bottom: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .card .card-header {
@@ -105,6 +123,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: none;
 }
 
 .card .card-header .subheader {
@@ -143,7 +162,8 @@ export default {
 
 .bg-warning,
 .bg-pink,
-.bg-light {
+.bg-light,
+.bg-white {
   color: #212529;
 }
 
@@ -160,5 +180,23 @@ export default {
 .card-header.bg-success .btn-outline-info.active,
 .card-header.bg-success .btn-outline-info:hover {
   border-color: white;
+}
+
+.card.border-white {
+  background-color: bg-border-white; /* Ensure this matches the background color of other elements */
+}
+
+.card-header .card.border-white {
+  background-color: inherit; /* Change this to match the background color of the card body */
+}
+
+.card-body.border-radius-top-inherit {
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+}
+
+.card-body.border-radius-bottom-inherit {
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
 }
 </style>

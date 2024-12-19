@@ -26,7 +26,30 @@
         ]"
       />
     </openwb-base-alert>
+
     <div v-if="warningAcknowledged || installAssistantActive">
+      <openwb-base-card
+        title="System Information"
+        subtype="info"
+        :collapsible="true"
+        :collapsed="true"
+      >
+        <openwb-base-text-input
+          v-model="$store.state.mqtt['openWB/system/serial_number']"
+          title="Seriennummer"
+          readonly
+        />
+        <openwb-base-text-input
+          v-model="$store.state.mqtt['openWB/system/ip_address']"
+          title="IP-Adresse"
+          readonly
+        />
+        <openwb-base-text-input
+          v-model="$store.state.mqtt['openWB/system/mac_address']"
+          title="MAC-Adresse"
+          readonly
+        />
+      </openwb-base-card>
       <form name="versionInfoForm">
         <openwb-base-card
           title="Versions-Informationen / Aktualisierung"
@@ -263,6 +286,9 @@ export default {
         "openWB/system/available_branches",
         "openWB/system/current_branch",
         "openWB/system/version",
+        "openWB/system/serial_number",
+        "openWB/system/ip_address",
+        "openWB/system/mac_address",
       ],
       warningAcknowledged: false,
       selectedTag: "*HEAD*",

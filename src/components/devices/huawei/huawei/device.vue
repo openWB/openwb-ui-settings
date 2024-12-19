@@ -2,9 +2,8 @@
   <div class="device-huawei">
     <openwb-base-heading> Einstellungen für Huawei </openwb-base-heading>
     <openwb-base-alert subtype="info">
-      Die Antwort der Huawei Wechselrichter benötigt sehr viel Zeit.
-      Es wird empfohlen, dass Regelintervall der openWB auf 
-      "sehr langsam" zu stellen.
+      Die Antwort der Huawei Wechselrichter benötigt sehr viel Zeit. Es wird empfohlen, dass Regelintervall der openWB
+      auf "sehr langsam" zu stellen.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
@@ -35,6 +34,27 @@
         Die IDs 1 bis 15 sind für einzelne Wechselrichter reserviert.
       </template>
     </openwb-base-number-input>
+    <openwb-base-select-input
+      title="Anbindung"
+      not-selected="Bitte auswählen"
+      :options="[
+        { value: 's_dongle', text: 'SDongle' },
+        { value: 'modbus_rtu', text: 'Modbus RTU (bspw via Protoss)' },
+      ]"
+      :model-value="device.configuration.type"
+      required
+      @update:model-value="
+        updateConfiguration($event, 'configuration.type')
+      "
+    >
+      <template #help>
+        Die Anbindung über den Huawei SDongle erfordert die Regelgeschwindigkeit 
+        "sehr langsam". Alternativ kann Huawei auch mittels Wandler (bspw Protoss) 
+        über den Modbus RTU Ausgang des Wechselrichters abgefragt werden. Hier gibt 
+        es keine Einschränkungen der Regelgeschwindigkeit. Eine gleichzeitige 
+        Nutzung von SDongle und Modbus RTU ist nicht möglich.
+      </template>
+    </openwb-base-select-input>
   </div>
 </template>
 

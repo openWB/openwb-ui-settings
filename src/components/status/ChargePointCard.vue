@@ -3,28 +3,28 @@
     subtype="primary"
     :collapsible="true"
     :collapsed="true"
+    class="pb-0"
   >
     <template #header>
       <font-awesome-icon
         fixed-width
         :icon="['fas', 'charging-station']"
       />
-      {{ installedChargePoint.name }} (ID: {{ chargePointIndex }})
+      {{ installedChargePoint.name }}
     </template>
-    <openwb-base-alert
-      :subtype="statusLevel[$store.state.mqtt['openWB/chargepoint/' + chargePointIndex + '/get/fault_state']]"
-    >
-      <font-awesome-icon
-        v-if="$store.state.mqtt['openWB/chargepoint/' + chargePointIndex + '/get/fault_state'] == 1"
-        fixed-width
-        :icon="['fas', 'exclamation-triangle']"
-      />
-      <font-awesome-icon
-        v-else-if="$store.state.mqtt['openWB/chargepoint/' + chargePointIndex + '/get/fault_state'] == 2"
-        fixed-width
-        :icon="['fas', 'times-circle']"
-      />
-      <font-awesome-icon
+    <template #actions>
+      <div
+        v-if="getFaultStateSubtype(baseTopic) == 'success'"
+        class="text-right"
+      >
+        {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW
+        <font-awesome-icon
+          fixed-width
+          :icon="chargingStatus.icon"
+          :title="chargingStatus.text"
+        />
+      </div>
+      <span
         v-else
         fixed-width
         :icon="['fas', 'check-circle']"
@@ -180,10 +180,29 @@ import {
   faExclamationTriangle as fasExclamationTriangle,
   faTimesCircle as fasTimesCircle,
   faChargingStation as fasChargingStation,
+  faPlug as fasPlug,
+  faBolt as fasBolt,
+  faBan as fasBan,
+  faPlugCirclePlus as fasPlugCirclePlus,
+  faPlugCircleMinus as fasPlugCircleMinus,
+  faPlugCircleCheck as fasPlugCircleCheck,
+  faPlugCircleBolt as fasPlugCircleBolt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasCheckCircle, fasExclamationTriangle, fasTimesCircle, fasChargingStation);
+library.add(
+  fasCheckCircle,
+  fasExclamationTriangle,
+  fasTimesCircle,
+  fasChargingStation,
+  fasPlug,
+  fasBolt,
+  fasBan,
+  fasPlugCirclePlus,
+  fasPlugCircleMinus,
+  fasPlugCircleCheck,
+  fasPlugCircleBolt,
+);
 
 export default {
   name: "ChargePointCard",
@@ -195,15 +214,30 @@ export default {
     installedChargePointKey: { type: String, required: true },
     installedChargePoint: { type: Object, required: true },
   },
-  data() {
-    return {
-      statusLevel: ["success", "warning", "danger"],
-    };
-  },
   computed: {
     chargePointIndex: {
       get() {
         return parseInt(this.installedChargePointKey.match(/(?:\/)(\d+)(?=\/)/)[1]);
+      },
+    },
+    baseTopic: {
+      get() {
+        return "openWB/chargepoint/" + this.chargePointIndex;
+      },
+    },
+    chargingStatus: {
+      get() {
+        let ID = this.chargePointIndex;
+        let plugState = this.$store.state.mqtt["openWB/chargepoint/" + ID + "/get/plug_state"];
+        let chargeState = this.$store.state.mqtt["openWB/chargepoint/" + ID + "/get/charge_state"];
+
+        if (plugState == 1 && chargeState == 1) {
+          return { icon: ["fas", "plug-circle-bolt"], text: "Fahrzeug angesteckt, Ladevorgang aktiv" };
+        } else if (plugState == 1) {
+          return { icon: ["fas", "plug-circle-check"], text: "Fahrzeug angesteckt, kein Ladevorgang aktiv" };
+        } else {
+          return { icon: ["fas", "plug-circle-minus"], text: "Kein Fahrzeug angesteckt" };
+        }
       },
     },
   },
