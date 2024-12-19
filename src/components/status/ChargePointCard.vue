@@ -10,7 +10,11 @@
         fixed-width
         :icon="['fas', 'charging-station']"
       />
-      {{ installedChargePoint.name }}
+      {{ installedChargePoint.name }} (Nennleistung: 
+      {{Math.floor((formatNumberTopic(
+          'openWB/chargepoint/' + chargePointIndex +
+          '/get/max_evse_current', 0)*3*230/1000))}}&nbsp;kW
+          )
     </template>
     <template #actions>
       <div
