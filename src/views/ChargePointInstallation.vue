@@ -389,9 +389,9 @@
             <openwb-base-number-input
               v-else
               title="Maximalleistung"
-              :min="75"
-              :max="300"
-              :step="75"
+              :min="22"
+              :max="420"
+              :step="1"
               unit="kW"
               :precision="5"
               :model-value="ac_current2dc_power(chargePointTemplate.dc_max_current)"

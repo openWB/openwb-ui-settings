@@ -81,8 +81,10 @@
         </openwb-base-card>
       </openwb-base-card>
       <openwb-base-alert subtype="info">
-        Das komplette Ladeprotokoll kann automatisiert über folgende URL abgerufen werden:
-        <a :href="downloadUrl">{{ downloadUrl }}</a>
+        Das Ladeprotokoll kann monatsweise automatisiert über folgende URL abgerufen werden:
+        <a :href="downloadUrlMonth">{{ downloadUrlMonth }}</a> <br>
+        Das komplette Ladeprotokoll für das gesamte Jahr kann automatisiert über folgende URL abgerufen werden:
+        <a :href="downloadUrlYear">{{ downloadUrlYear }}</a>
       </openwb-base-alert>
       <openwb-base-alert
         v-if="!chargeLogRead"
@@ -484,10 +486,23 @@ export default {
     mqttClientId() {
       return this.$root.mqttClientId;
     },
-    downloadUrl() {
-      const port = parseInt(location.port) || (location.protocol == "https:" ? 443 : 80);
-      const baseUrl = `${location.protocol}//${location.hostname}:${port}/openWB/web/settings/downloadChargeLog.php`;
-      return baseUrl + `?year=${this.chargeLogRequestData.year}&month=${this.chargeLogRequestData.month}`;
+     baseUrl() {
+      const port = parseInt(location.port) || (location.protocol === "https:" ? 443 : 80);
+      return `${location.protocol}//${location.hostname}:${port}/openWB/web/settings/downloadChargeLog.php`;
+    },
+    downloadUrlMonth() {
+      if (!this.chargeLogRequestData.year || !this.chargeLogRequestData.month) {
+        console.error("Fehlende Parameter für Monat oder Jahr");
+        return null; // oder ein Standardwert, falls gewünscht
+      }
+      return `${this.baseUrl}?year=${this.chargeLogRequestData.year}&month=${this.chargeLogRequestData.month}`;
+    },
+    downloadUrlYear() {
+      if (!this.chargeLogRequestData.year) {
+        console.error("Fehlendes Jahr");
+        return null; // oder ein Standardwert
+      }
+      return `${this.baseUrl}?year=${this.chargeLogRequestData.year}`;
     },
     chargeLogDate: {
       get() {

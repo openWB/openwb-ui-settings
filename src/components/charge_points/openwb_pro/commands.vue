@@ -12,6 +12,17 @@
         angesteckt ist.
       </template>
     </openwb-base-button-input>
+    <openwb-base-button-input
+      title="Einstellungen öffnen"
+      button-text="Zu den Einstellungen"
+      subtype="success"
+      :disabled="chargePoint.configuration.ip_address == undefined"
+      @button-clicked="openSettings"
+    >
+      <template #help>
+        Mit diesem Befehl können Sie die Einstellungen der openWB Pro in einem neuen Browser-Tab oder -Fenster öffnen.
+      </template>
+    </openwb-base-button-input>
   </div>
 </template>
 
@@ -62,6 +73,9 @@ export default {
           }
           this.$root.postClientMessage(alertMessage, "danger");
         });
+    },
+    openSettings() {
+      window.open("http://" + this.chargePoint.configuration.ip_address, "_blank");
     },
   },
 };

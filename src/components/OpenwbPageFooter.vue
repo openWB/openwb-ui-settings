@@ -29,6 +29,7 @@ export default {
   /* vertically center the text there */
   z-index: 1030;
   /* same as menu */
+  box-shadow: 0 -4px 8px 4px rgba(0, 0, 0, 0.15);
 }
 
 .container {

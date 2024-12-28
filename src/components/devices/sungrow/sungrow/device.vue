@@ -45,6 +45,22 @@
         zusätzlich ins Heimnetz (per LAN oder WLAN) einbinden, um iSolarCloud nutzen zu können.
       </template>
     </openwb-base-select-input>
+    <openwb-base-select-input
+      title="Firmware"
+      :options="[
+        { value: 'v111', text: 'kleiner v112' },
+        { value: 'v112', text: 'ab v112' }
+      ]"
+      :model-value="device.configuration.firmware"
+      required
+      @update:model-value="
+        updateConfiguration($event, 'configuration.firmware')
+      "
+    >
+      <template #help>
+        Ab Firmware v112 ändert sich die Auslesung der Speicherleistung.
+      </template>
+    </openwb-base-select-input>
   </div>
 </template>
 

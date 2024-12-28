@@ -3,74 +3,92 @@
     subtype="success"
     :collapsible="true"
     :collapsed="true"
+    class="pb-0"
   >
     <template #header>
       <font-awesome-icon
         fixed-width
         :icon="['fas', 'solar-panel']"
       />
-      {{ inverter.name }} (ID: {{ inverter.id }})
+      {{ inverter.name }}
     </template>
-    <openwb-base-alert :subtype="statusLevel[$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state']]">
-      <font-awesome-icon
-        v-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 1"
-        fixed-width
-        :icon="['fas', 'exclamation-triangle']"
-      />
-      <font-awesome-icon
-        v-else-if="$store.state.mqtt['openWB/pv/' + inverter.id + '/get/fault_state'] == 2"
-        fixed-width
-        :icon="['fas', 'times-circle']"
-      />
-      <font-awesome-icon
+    <template #actions>
+      <div
+        v-if="getFaultStateSubtype(baseTopic) == 'success'"
+        class="text-right"
+      >
+        {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW
+      </div>
+      <span
         v-else
-        fixed-width
-        :icon="['fas', 'check-circle']"
-      />
-      Modulmeldung:<br />
-      <span style="white-space: pre-wrap">{{ $store.state.mqtt["openWB/pv/" + inverter.id + "/get/fault_str"] }}</span>
-    </openwb-base-alert>
-    <openwb-base-text-input
-      title="Zählerstand"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/pv/' + inverter.id + '/get/exported', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Leistung"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kW"
-      :model-value="formatNumberTopic('openWB/pv/' + inverter.id + '/get/power', 3, 3, 0.001)"
-    />
-    <openwb-base-heading>Erträge</openwb-base-heading>
-    <openwb-base-text-input
-      title="Heute"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/pv/' + inverter.id + '/get/daily_exported', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Dieser Monat"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/pv/' + inverter.id + '/get/monthly_exported', 3, 3, 0.001)"
-    />
-    <openwb-base-text-input
-      title="Dieses Jahr"
-      readonly
-      class="text-right text-monospace"
-      step="0.001"
-      unit="kWh"
-      :model-value="formatNumberTopic('openWB/pv/' + inverter.id + '/get/yearly_exported', 3, 3, 0.001)"
-    />
+        :class="'subheader pill bg-' + getFaultStateSubtype(baseTopic)"
+      >
+        <div v-if="getFaultStateSubtype(baseTopic) == 'warning'">Warnung</div>
+        <div v-else>Fehler</div>
+      </span>
+    </template>
+
+    <openwb-base-card
+      title="Aktuelle Werte"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <div class="row">
+        <div class="col text-right">Leistung</div>
+        <div class="col text-right">Zählerstand</div>
+      </div>
+      <div class="row">
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) }}&nbsp;kWh
+        </div>
+      </div>
+    </openwb-base-card>
+    <openwb-base-card
+      title="Erträge"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <div class="row">
+        <div class="col text-right">Heute</div>
+        <div class="col text-right">Monat</div>
+        <div class="col text-right">Jahr</div>
+      </div>
+      <div class="row">
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/daily_exported", 3, 3, 0.001) }}&nbsp;kWh
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/monthly_exported", 1, 1, 0.001) }}&nbsp;kWh
+        </div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/yearly_exported", 0, 0, 0.001) }}&nbsp;kWh
+        </div>
+      </div>
+    </openwb-base-card>
+    <template #footer>
+      <div class="container">
+        <div class="row">
+          <div class="col px-0">
+            <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
+              <font-awesome-icon
+                fixed-width
+                :icon="stateIcon"
+              />
+              Modulmeldung:
+              <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
+            </openwb-base-alert>
+          </div>
+          <div class="col col-auto pr-0">
+            <div class="text-right">ID: {{ inverter.id }}</div>
+          </div>
+        </div>
+      </div>
+    </template>
   </openwb-base-card>
 </template>
 
@@ -97,10 +115,12 @@ export default {
   props: {
     inverter: { type: Object, required: true },
   },
-  data() {
-    return {
-      statusLevel: ["success", "warning", "danger"],
-    };
+  computed: {
+    baseTopic: {
+      get() {
+        return "openWB/pv/" + this.inverter.id;
+      },
+    },
   },
 };
 </script>
