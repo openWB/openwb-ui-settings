@@ -41,6 +41,21 @@
         Dezimaltrennzeichen erwartet, welche die aktuelle Reichweite darstellt.
       </template>
     </openwb-base-text-input>
+    <openwb-base-text-input
+      title="Abfrage für Zeitstempel"
+      subtype="text"
+      :model-value="vehicle.configuration.timestamp_pattern"
+      @update:model-value="updateConfiguration($event, 'configuration.timestamp_pattern')"
+    >
+      <template #help>
+        Zur Analyse der Werte aus dem json-Objekt wird jq benutzt. Ist die Json Antwort z.B. {"response":{"soc":"39.8",
+        "range": "207", "timestamp":1734054449}} So muss hier .response.timestamp eingetragen werden.
+        <br />
+        Es wird vom Server entweder eine Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
+        Dezimaltrennzeichen als Epoch Zeitstempel oder eine UTC formatierte Zeit erwartet welche den Zeitstempel der
+        gelieferten Werte darstellt.
+      </template>
+    </openwb-base-text-input>
     <openwb-base-button-group-input
       title="SoC während der Ladung berechnen"
       :buttons="[
