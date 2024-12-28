@@ -38,7 +38,8 @@
         "range": "207", "timestamp":1734054449}} So muss hier .response.range eingetragen werden.
         <br />
         Es wird vom Server eine Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
-        Dezimaltrennzeichen erwartet, welche die aktuelle Reichweite darstellt.
+        Dezimaltrennzeichen erwartet, welche die aktuelle Reichweite darstellt. <br />
+        Ohne Angabe wird die Reichweite nicht abgefragt und auf Null gesetzt.
       </template>
     </openwb-base-text-input>
     <openwb-base-text-input
@@ -53,7 +54,8 @@
         <br />
         Es wird vom Server entweder eine Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
         Dezimaltrennzeichen als Epoch Zeitstempel oder eine UTC formatierte Zeit erwartet welche den Zeitstempel der
-        gelieferten Werte darstellt.
+        gelieferten Werte darstellt. <br />
+        Ohne Angabe wird der Zeitpunkt des Datenabrufs als Zeitstempel verwendet.
       </template>
     </openwb-base-text-input>
     <openwb-base-button-group-input
