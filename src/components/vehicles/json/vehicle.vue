@@ -53,8 +53,8 @@
         "range": "207", "timestamp":1734054449}} So muss hier .response.timestamp eingetragen werden.
         <br />
         Es wird vom Server entweder eine Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
-        Dezimaltrennzeichen als Epoch Zeitstempel oder eine UTC formatierte Zeit erwartet welche den Zeitstempel der
-        gelieferten Werte darstellt. <br />
+        Dezimaltrennzeichen als Epoch Zeitstempel oder eine ISO 8601 formatierte Zeit erwartet welche den Zeitstempel
+        der gelieferten Werte darstellt. <br />
         Ohne Angabe wird der Zeitpunkt des Datenabrufs als Zeitstempel verwendet.
       </template>
     </openwb-base-text-input>
