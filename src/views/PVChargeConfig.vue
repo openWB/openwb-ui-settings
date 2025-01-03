@@ -65,6 +65,13 @@
             <template #help> Obere Grenze des Regelbereichs. </template>
           </openwb-base-number-input>
           <hr />
+          <openwb-base-alert subtype="warning" v-if="
+            ($store.state.mqtt['openWB/general/chargemode_config/pv_charging/switch_on_threshold']) - 
+            ($store.state.mqtt['openWB/general/chargemode_config/pv_charging/switch_off_threshold']) < 1400">
+            Der einphasige Mindestladestrom von 6A ergibt eine Ladeleistung von etwa 1,4kW. Ein- und 
+            Ausschaltschwelle sollten daher mindestens 1,4kW auseinander liegen, um ständiges 
+            Ein- und Ausschalten zu vermeiden.
+          </openwb-base-alert>
           <openwb-base-number-input
             title="Einschaltschwelle"
             :min="0"
