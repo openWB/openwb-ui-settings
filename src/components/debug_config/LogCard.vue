@@ -8,25 +8,55 @@
     <template #actions>
       <openwb-base-avatar
         class="bg-success clickable"
-        @click.stop="loadLog(logFile)"
+        @click.stop="loadLog(logFile, selectedVariant)"
       >
         <font-awesome-icon
           fixed-width
           :class="loading ? 'fa-spin-pulse' : ''"
           :icon="loading ? ['fas', 'spinner'] : ['fas', 'file-download']"
+          title="Log laden/aktualisieren"
         />
       </openwb-base-avatar>
     </template>
+    <openwb-base-alert
+      v-if="foundFiles.length > 0"
+      subtype="info"
+    >
+      Im {{ title }} stehen unterschiedliche Logauszüge zur Verfügung. Standardmässig werden Logs des letzten Durchaufs
+      geladen, für viele Fälle sollte dies ausreichen. Optional kann auch das gesamte Log geladen werden.<br />
+      Wurde eine Warnung oder ein Fehler protokolliert steht zusätzlich der letzte Durchlauf mit Warnungen und Fehlern
+      zur Verfügung.<br />
+      <openwb-base-select-input
+        v-model="selectedVariant"
+        title="Logfile"
+        required
+        :options="foundFiles.map((file) => ({ value: file.suffix, text: file.title }))"
+        @change="loadLog(logFile, selectedVariant)"
+      />
+    </openwb-base-alert>
+    <div class="col-12 text-right">
+      <a
+        href="#"
+        @click.prevent="copyToClipboard"
+        >Kopiere Log in die Zwischenablage</a
+      >
+    </div>
     <pre class="log-data mb-0">{{ logData }}</pre>
+
+    <!-- Text with hyperlink to copy logData to clipboard -->
   </openwb-base-card>
 </template>
 
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faFileDownload as fasFileDownload, faSpinner as fasSpinner } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFileDownload as fasFileDownload,
+  faSpinner as fasSpinner,
+  faFileAlt as fasFileAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasFileDownload, fasSpinner);
+library.add(fasFileDownload, fasSpinner, fasFileAlt);
 
 export default {
   name: "OpenwbLogCard",
@@ -47,16 +77,25 @@ export default {
     return {
       logData: "-- noch nicht geladen --",
       loading: false,
+      foundFiles: [], // Array to store found files with title, suffix, and description
+      selectedVariant: "", // Selected file variant
     };
   },
+  mounted() {
+    this.checkLatestLog(this.logFile);
+  },
   methods: {
-    async getFilePromise(myFile, ignore404 = false) {
+    async getFilePromise(myFile, ignore404 = false, handleError = true) {
       return this.axios
         .get(location.protocol + "//" + location.host + myFile)
         .then((response) => {
-          return response.data;
+          const data = response.data;
+          return data ? data : "-- Log ist leer --";
         })
         .catch((error) => {
+          if (!handleError) {
+            throw error;
+          }
           if (error.response) {
             // The request was made and the server responded with a status code
             // that falls out of the range of 2xx
@@ -83,10 +122,13 @@ export default {
           }
         });
     },
-    async loadLog(fileName) {
+    async loadLog(fileName, fileNameVariant = "") {
       this.logData = "wird aktualisiert...";
       this.loading = true;
       var logContents = "";
+      if (fileNameVariant) {
+        fileName = fileName.replace(".log", `.${fileNameVariant}.log`);
+      }
 
       for (let i = 4; i >= 1; i--) {
         const result = await this.getFilePromise(fileName + "." + i, true);
@@ -98,6 +140,64 @@ export default {
 
       this.logData = logContents;
       this.loading = false;
+    },
+    async checkLatestLog(fileName) {
+      // Define file name variations
+      const fileVariations = [
+        { suffix: "latest", title: "Letzter Durchlauf", description: "Logs des Letzten Durchlauf laden" },
+        {
+          suffix: "latest-warning",
+          title: "Letzter Durchlauf mit Warnung oder Fehler",
+          description: "Fehlerprotokoll laden",
+        },
+        // Add more variations as needed
+      ];
+      // Check for the existence of the .latest log file
+      this.foundFiles = [];
+      for (const variation of fileVariations) {
+        const variantFileName = fileName.replace(".log", `.${variation.suffix}.log`);
+        try {
+          await this.getFilePromise(variantFileName, false, false);
+          this.foundFiles.push(variation);
+          if (variation.suffix === "latest") {
+            this.selectedVariant = "latest";
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      if (this.foundFiles.length > 0) {
+        this.foundFiles.push({
+          suffix: "",
+          title: "Vollständiges Log",
+          description: "Vollständiges Log laden",
+        });
+      }
+    },
+    copyToClipboard() {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard
+          .writeText(this.logData)
+          .then(() => {
+            alert("Logs in die Zwischenablage kopiert.");
+          })
+          .catch((err) => {
+            console.error("Fehler beim Kopieren in die Zwischenablage: ", err);
+          });
+      } else {
+        // Fallback method for older browsers and non-HTTPS contexts
+        const textArea = document.createElement("textarea");
+        textArea.value = this.logData;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+          document.execCommand("copy");
+          alert("Logs in die Zwischenablage kopiert.");
+        } catch (err) {
+          console.error("Fehler beim Kopieren in die Zwischenablage: ", err);
+        }
+        document.body.removeChild(textArea);
+      }
     },
   },
 };
