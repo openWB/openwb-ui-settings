@@ -34,16 +34,24 @@
         @change="loadLog(logFile, selectedVariant)"
       />
     </openwb-base-alert>
-    <div class="col-12 text-right">
+
+    <div
+      v-if="!copyMessage"
+      class="text-right"
+    >
       <a
         href="#"
         @click.prevent="copyToClipboard"
         >Kopiere Log in die Zwischenablage</a
       >
     </div>
+    <div
+      v-if="copyMessage"
+      class="copy-message text-right"
+    >
+      {{ copyMessage }}
+    </div>
     <pre class="log-data mb-0">{{ logData }}</pre>
-
-    <!-- Text with hyperlink to copy logData to clipboard -->
   </openwb-base-card>
 </template>
 
@@ -79,6 +87,7 @@ export default {
       loading: false,
       foundFiles: [], // Array to store found files with title, suffix, and description
       selectedVariant: "", // Selected file variant
+      copyMessage: "", // Message to show when log data is copied
     };
   },
   mounted() {
@@ -179,7 +188,7 @@ export default {
         navigator.clipboard
           .writeText(this.logData)
           .then(() => {
-            alert("Logs in die Zwischenablage kopiert.");
+            this.showCopyMessage("Logs in Zwischenablage kopiert");
           })
           .catch((err) => {
             console.error("Fehler beim Kopieren in die Zwischenablage: ", err);
@@ -192,12 +201,18 @@ export default {
         textArea.select();
         try {
           document.execCommand("copy");
-          alert("Logs in die Zwischenablage kopiert.");
+          this.showCopyMessage("Logs in Zwischenablage kopiert");
         } catch (err) {
           console.error("Fehler beim Kopieren in die Zwischenablage: ", err);
         }
         document.body.removeChild(textArea);
       }
+    },
+    showCopyMessage(message) {
+      this.copyMessage = message;
+      setTimeout(() => {
+        this.copyMessage = "";
+      }, 3000); // Message disappears after 3 seconds
     },
   },
 };
@@ -207,5 +222,8 @@ export default {
 .log-data {
   max-height: 70vh;
   overflow-y: scroll;
+}
+.copy-message {
+  color: green;
 }
 </style>
