@@ -88,23 +88,28 @@ export default {
     };
   },
   methods: {
-    async getFilePromise(myFile, ignore404 = false, handleError = true) {
-      return this.axios
-        .get(location.protocol + "//" + location.host + myFile)
+    async getFilePromise(myFile, ignore404 = false, handleError = true, useHead = false) {
+      const requestMethod = useHead ? "head" : "get";
+      return this.axios[requestMethod](location.protocol + "//" + location.host + myFile)
         .then((response) => {
-          const data = response.data;
-          return data ? data : "-- Log ist leer --";
+          if (useHead) {
+            // If the request is successful, the file exists
+            return true;
+          } else {
+            const data = response.data;
+            return data ? data : "log file is empty";
+          }
         })
         .catch((error) => {
           if (!handleError) {
             throw error;
           }
           if (error.response) {
-            // The request was made and the server responded with a status code
+            // The request was made but the server responded with a status code
             // that falls out of the range of 2xx
             if (error.response.status == 404 && ignore404) {
               // ignore a 404 if requested, used for rotated log files which may not exist yet
-              return "";
+              return useHead ? false : "";
             }
             return (
               "A 404 is expected if running node.js dev server!\n" +
@@ -144,7 +149,7 @@ export default {
       this.logData = logContents;
       this.loading = false;
     },
-    async checkLatestLog(fileName) {
+    checkLatestLog(fileName) {
       // Define file name variations
       const fileVariations = [
         { suffix: "latest", title: "Letzter Durchlauf", description: "Logs des Letzten Durchlauf laden" },
@@ -160,7 +165,7 @@ export default {
       for (const variation of fileVariations) {
         const variantFileName = fileName.replace(".log", `.${variation.suffix}.log`);
         try {
-          await this.getFilePromise(variantFileName, false, false);
+          this.getFilePromise(variantFileName, false, false, true);
           this.foundFiles.push(variation);
           if (variation.suffix === "latest") {
             this.selectedVariant = "latest";
