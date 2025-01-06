@@ -74,7 +74,7 @@
           @update:model-value="ioDeviceToAdd = $event"
           @input:add="addIoDevice"
         >
-          <template #help> Bitte ein I/O-Modul auswählen, das hinzugefügt werden soll. </template>
+          <template #help> Bitte ein Ein-/Ausgangs-Modul auswählen, das hinzugefügt werden soll. </template>
         </openwb-base-select-input>
       </openwb-base-card>
 
@@ -115,11 +115,13 @@
           <hr />
           <openwb-io-action-proxy
             :io-action="installedIoAction"
+            :io-devices="installedIoDevices"
             @update:configuration="updateConfiguration(installedIoActionKey, $event)"
           />
         </openwb-base-card>
         <hr v-if="Object.keys(installedIoActions).length > 0" />
         <openwb-base-select-input
+          v-if="Object.keys(installedIoDevices).length > 0"
           title="Verfügbare Aktionen"
           not-selected="Bitte auswählen"
           :groups="ioActionList"
@@ -128,8 +130,15 @@
           @update:model-value="ioActionToAdd = $event"
           @input:add="addIoAction"
         >
-          <template #help> Bitte eine I/O-Aktion auswählen, die hinzugefügt werden soll. </template>
+          <template #help> Bitte eine Ein-/Ausgangs-Aktion auswählen, die hinzugefügt werden soll. </template>
         </openwb-base-select-input>
+        <openwb-base-alert
+          v-else
+          subtype="warning"
+        >
+          Keine Ein-/Ausgangs-Geräte vorhanden!<br />
+          Bitte fügen Sie zuerst ein Ein-/Ausgangs-Gerät hinzu, bevor Sie Aktionen konfigurieren.
+        </openwb-base-alert>
       </openwb-base-card>
       <openwb-base-submit-buttons
         form-name="ioConfigForm"

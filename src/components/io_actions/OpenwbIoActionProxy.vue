@@ -3,6 +3,7 @@
   <component
     :is="myComponent"
     :io-action="ioAction"
+    :io-devices="ioDevices"
     @update:configuration="updateConfiguration($event)"
     @send-command="sendCommand($event)"
   />
@@ -16,13 +17,14 @@ export default {
   name: "OpenwbIoActionProxy",
   props: {
     ioAction: { type: Object, required: true },
+    ioDevices: { type: Object, required: true },
   },
   emits: ["update:configuration", "sendCommand"],
   computed: {
     myComponent() {
-      console.debug(`loading io action: ${this.ioAction.type}`);
+      console.debug(`loading io action: ${this.ioAction.group} / ${this.ioAction.type}`);
       return defineAsyncComponent({
-        loader: () => import(`./${this.ioAction.type}/io_action.vue`),
+        loader: () => import(`./${this.ioAction.group}/${this.ioAction.type}/io_action.vue`),
         errorComponent: OpenwbIoActionConfigFallback,
       });
     },
