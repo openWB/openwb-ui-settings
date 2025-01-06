@@ -149,7 +149,7 @@ export default {
       this.logData = logContents;
       this.loading = false;
     },
-    checkLatestLog(fileName) {
+    async checkLatestLog(fileName) {
       // Define file name variations
       const fileVariations = [
         { suffix: "latest", title: "Letzter Durchlauf", description: "Logs des Letzten Durchlauf laden" },
@@ -165,10 +165,11 @@ export default {
       for (const variation of fileVariations) {
         const variantFileName = fileName.replace(".log", `.${variation.suffix}.log`);
         try {
-          this.getFilePromise(variantFileName, false, false, true);
+          await this.getFilePromise(variantFileName, false, false, true);
           this.foundFiles.push(variation);
           if (variation.suffix === "latest") {
             this.selectedVariant = "latest";
+            console.log("Found latest log file: ", variantFileName);
           }
         } catch (error) {
           console.log(error);
@@ -182,8 +183,8 @@ export default {
         });
       }
     },
-    onCardExpand() {
-      this.checkLatestLog(this.logFile);
+    async onCardExpand() {
+      await this.checkLatestLog(this.logFile);
       this.loadLog(this.logFile, this.selectedVariant);
     },
     copyToClipboard() {
