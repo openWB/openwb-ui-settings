@@ -4,6 +4,7 @@
     class="log-card"
     :collapsible="true"
     :collapsed="true"
+    @expanded="onCardExpand"
   >
     <template #actions>
       <openwb-base-avatar
@@ -22,7 +23,7 @@
       v-if="foundFiles.length > 0"
       subtype="info"
     >
-      Im {{ title }} stehen unterschiedliche Logauszüge zur Verfügung. Standardmässig werden Logs des letzten Durchaufs
+      Im {{ title }} stehen unterschiedliche Logauszüge zur Verfügung. Standardmässig werden Logs des letzten Durchlaufs
       geladen, für viele Fälle sollte dies ausreichen. Optional kann auch das gesamte Log geladen werden.<br />
       Wurde eine Warnung oder ein Fehler protokolliert steht zusätzlich der letzte Durchlauf mit Warnungen und Fehlern
       zur Verfügung.<br />
@@ -49,7 +50,7 @@
       v-if="copyMessage"
       class="copy-message text-right"
     >
-      {{ copyMessage }}
+      Logs in die Zwischenablage kopiert.
     </div>
     <pre class="log-data mb-0">{{ logData }}</pre>
   </openwb-base-card>
@@ -57,14 +58,10 @@
 
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faFileDownload as fasFileDownload,
-  faSpinner as fasSpinner,
-  faFileAlt as fasFileAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFileDownload as fasFileDownload, faSpinner as fasSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasFileDownload, fasSpinner, fasFileAlt);
+library.add(fasFileDownload, fasSpinner);
 
 export default {
   name: "OpenwbLogCard",
@@ -87,11 +84,8 @@ export default {
       loading: false,
       foundFiles: [], // Array to store found files with title, suffix, and description
       selectedVariant: "", // Selected file variant
-      copyMessage: "", // Message to show when log data is copied
+      copyMessage: false, // Flag to show copy message
     };
-  },
-  mounted() {
-    this.checkLatestLog(this.logFile);
   },
   methods: {
     async getFilePromise(myFile, ignore404 = false, handleError = true) {
@@ -183,12 +177,16 @@ export default {
         });
       }
     },
+    onCardExpand() {
+      this.checkLatestLog(this.logFile);
+      this.loadLog(this.logFile, this.selectedVariant);
+    },
     copyToClipboard() {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard
           .writeText(this.logData)
           .then(() => {
-            this.showCopyMessage("Logs in Zwischenablage kopiert");
+            this.showCopyMessage();
           })
           .catch((err) => {
             console.error("Fehler beim Kopieren in die Zwischenablage: ", err);
@@ -201,17 +199,17 @@ export default {
         textArea.select();
         try {
           document.execCommand("copy");
-          this.showCopyMessage("Logs in Zwischenablage kopiert");
+          this.showCopyMessage();
         } catch (err) {
           console.error("Fehler beim Kopieren in die Zwischenablage: ", err);
         }
         document.body.removeChild(textArea);
       }
     },
-    showCopyMessage(message) {
-      this.copyMessage = message;
+    showCopyMessage() {
+      this.copyMessage = true;
       setTimeout(() => {
-        this.copyMessage = "";
+        this.copyMessage = false;
       }, 3000); // Message disappears after 3 seconds
     },
   },
@@ -222,8 +220,5 @@ export default {
 .log-data {
   max-height: 70vh;
   overflow-y: scroll;
-}
-.copy-message {
-  color: green;
 }
 </style>
