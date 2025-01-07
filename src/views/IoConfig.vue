@@ -102,7 +102,7 @@
           <openwb-base-text-input
             title="Bezeichnung"
             subtype="text"
-            :model-value="installedIoAction.name"
+            :model-value="installedIoAction?.name"
             @update:model-value="updateState(installedIoActionKey, $event, 'name')"
           />
           <openwb-base-text-input
@@ -110,12 +110,14 @@
             subtype="text"
             disabled
             readonly
-            :model-value="[installedIoAction.group, installedIoAction.type].join(' / ')"
+            :model-value="[installedIoAction?.group, installedIoAction?.type].join(' / ')"
           />
           <hr />
           <openwb-io-action-proxy
+            v-if="installedIoAction !== undefined"
             :io-action="installedIoAction"
             :io-devices="installedIoDevices"
+            :installed-charge-points="installedChargePoints"
             @update:configuration="updateConfiguration(installedIoActionKey, $event)"
           />
         </openwb-base-card>
@@ -184,6 +186,7 @@ export default {
         "openWB/system/io/+/config",
         "openWB/system/configurable/io_actions",
         "openWB/io/action/+/config",
+        "openWB/chargepoint/+/config",
       ],
       showIoDeviceDeleteModal: false,
       modalIoDeviceIndex: undefined,
@@ -229,6 +232,11 @@ export default {
     installedIoActions: {
       get() {
         return this.getWildcardTopics("openWB/io/action/+/config");
+      },
+    },
+    installedChargePoints: {
+      get() {
+        return this.getWildcardTopics("openWB/chargepoint/+/config");
       },
     },
   },
