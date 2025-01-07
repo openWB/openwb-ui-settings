@@ -29,7 +29,7 @@
           >
             <option
               v-if="notSelected !== undefined"
-              :value="undefined"
+              :value="emptyValue"
               disabled
             >
               -- {{ notSelected }} --
@@ -103,6 +103,7 @@ export default {
       required: false,
       default: undefined,
     },
+    emptyValue: { type: [String, Number], required: false, default: undefined },
     groups: { type: Array, required: false, default: undefined },
     options: { type: Array, required: false, default: undefined },
     notSelected: { type: String, default: undefined },
