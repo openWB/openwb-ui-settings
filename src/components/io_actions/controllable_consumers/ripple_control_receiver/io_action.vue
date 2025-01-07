@@ -84,6 +84,20 @@
       </tr>
     </tbody>
   </table>
+  <hr />
+  <openwb-base-heading>Anwenden auf...</openwb-base-heading>
+  <openwb-base-select-input
+    title="Ladepunkte"
+    :options="availableChargePoints"
+    :model-value="ioAction?.configuration.cp_ids"
+    multiple
+    @update:model-value="updateConfiguration($event, 'configuration.cp_ids')"
+  >
+    <template #help>
+      Bitte die Ladepunkte auswählen, auf die das Verhalten angewendet werden soll. Es können mehrere Ladepunkte
+      ausgewählt werden.
+    </template>
+  </openwb-base-select-input>
 </template>
 
 <script>

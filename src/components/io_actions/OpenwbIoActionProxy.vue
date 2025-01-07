@@ -20,22 +20,9 @@
       :is="myComponent"
       :io-action="ioAction"
       :io-device="ioDevices[`openWB/system/io/${ioAction.configuration.io_device}/config`]"
+      :available-charge-points="availableChargePoints"
       @update:configuration="updateConfiguration($event)"
     />
-    <hr />
-    <openwb-base-heading title="Verhalten anwenden auf..."> Verhalten anwenden auf... </openwb-base-heading>
-    <openwb-base-select-input
-      title="Ladepunkte"
-      :options="availableChargePoints"
-      :model-value="ioAction?.configuration.cp_ids"
-      multiple
-      @update:model-value="updateConfiguration($event, 'configuration.cp_ids')"
-    >
-      <template #help>
-        Bitte die Ladepunkte auswählen, auf die das Verhalten angewendet werden soll. Es können mehrere Ladepunkte
-        ausgewählt werden.
-      </template>
-    </openwb-base-select-input>
   </div>
 </template>
 
