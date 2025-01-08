@@ -7,6 +7,7 @@ export default {
     ioAction: { type: Object, required: true },
     ioDevice: { type: Object, required: true },
     availableChargePoints: { type: Array, required: false, default: () => [] },
+    availableComponents: { type: Array, required: false, default: () => [] },
   },
   emits: ["update:configuration", "sendCommand"],
   methods: {
