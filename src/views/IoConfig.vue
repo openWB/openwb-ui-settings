@@ -118,6 +118,7 @@
             :io-action="installedIoAction"
             :io-devices="installedIoDevices"
             :installed-charge-points="installedChargePoints"
+            :installed-components="installedComponents"
             @update:configuration="updateConfiguration(installedIoActionKey, $event)"
           />
         </openwb-base-card>
@@ -187,6 +188,7 @@ export default {
         "openWB/system/configurable/io_actions",
         "openWB/io/action/+/config",
         "openWB/chargepoint/+/config",
+        "openWB/system/device/+/component/+/config",
       ],
       showIoDeviceDeleteModal: false,
       modalIoDeviceIndex: undefined,
@@ -237,6 +239,11 @@ export default {
     installedChargePoints: {
       get() {
         return this.getWildcardTopics("openWB/chargepoint/+/config");
+      },
+    },
+    installedComponents: {
+      get() {
+        return this.getWildcardTopics("openWB/system/device/+/component/+/config");
       },
     },
   },
