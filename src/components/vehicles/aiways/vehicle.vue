@@ -1,8 +1,9 @@
 <template>
   <div class="vehicle-soc-aiways">
     <openwb-base-alert subtype="info">
-      Alle Werte müssen von der Aiways App abgefangen werden. Dazu kann die Anleitung unter
-      <a href="https://community.home-assistant.io/t/read-aiways-u5-state-of-charge/466441/5">Link</a> verwendet werden.
+      Alle Werte müssen von der Aiways App abgefangen werden. Dazu kann diese
+      <a href="https://community.home-assistant.io/t/read-aiways-u5-state-of-charge/466441/5"> Anleitung </a> verwendet
+      werden.
     </openwb-base-alert>
     <openwb-base-text-input
       title="User ID"
