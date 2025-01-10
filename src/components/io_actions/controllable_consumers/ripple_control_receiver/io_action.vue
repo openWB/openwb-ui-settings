@@ -40,7 +40,7 @@
         <td
           v-for="deviceInputKey in Object.keys(ioDevice.input.digital)"
           :key="deviceInputKey"
-          class="input"
+          class="text-center"
         >
           <font-awesome-icon
             :title="getTitle(pattern.input_matrix[deviceInputKey])"
@@ -205,9 +205,5 @@ th {
   left: 50%;
   transform: rotate(-90deg);
   transform-origin: left center;
-}
-
-.input {
-  text-align: center;
 }
 </style>

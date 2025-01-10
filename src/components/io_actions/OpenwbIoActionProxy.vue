@@ -14,7 +14,7 @@
       ausgewählt werden.
     </template>
   </openwb-base-select-input>
-  <div v-if="ioAction?.configuration.io_device">
+  <div v-if="ioAction?.configuration.io_device !== null">
     <hr />
     <component
       :is="myComponent"
