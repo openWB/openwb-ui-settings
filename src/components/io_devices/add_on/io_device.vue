@@ -3,6 +3,7 @@
     <openwb-base-select-input
       title="Installiert auf..."
       not-selected="Bitte auswählen"
+      :empty-value="null"
       :options="[{ value: 'localhost', text: 'dieser openWB' }]"
       :groups="availableIoSources"
       :model-value="ioDevice.configuration.host"
