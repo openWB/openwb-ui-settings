@@ -24,7 +24,7 @@
       <p>
         Der EVU-Zähler (rot) schließt alle weiteren Komponenten wie WR und Speicher unter sich ein. Bei AC-eingebundenen
         Speichern befinden sich WR und Speicher in derselben Ebene, bei DC-eingebundenen Speichern (Hybrid) der Speicher
-        unterhalb des WR. Die Ladepunkte (z.B. Externe openWB) befinden sich auf derselben Ebene wie der WR und
+        unterhalb des WR. Die Ladepunkte (z.B. secondary openWB) befinden sich auf derselben Ebene wie der WR und
         unterhalb des EVU-Zählers. Anpassungen der Anordnungen sind über die Pfeil-Bereiche der Komponenten durch
         einfaches Verschieben mit der Maus oder am Smartphone möglich.
       </p>

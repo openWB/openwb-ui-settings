@@ -8,8 +8,8 @@
     <template #help>
       <p>
         Enthält die steuernde openWB (primary) Ladetechnik, wird bei "Verfügbare Ladepunkte" Interne openWB ausgewählt.
-        Weitere LP werden im primary als Externe openWB (als secondary konfigurierte openWB) oder andere WB-Typen wie
-        Pro, Satellit eingebunden.
+        Weitere LP werden im primary als secondary konfigurierte openWB oder andere WB-Typen wie Pro, Satellit
+        eingebunden.
       </p>
       <p>Bei openWBs ab Werk kann hier bereits ein Ladepunkt eingetragen sein.</p>
       <p>

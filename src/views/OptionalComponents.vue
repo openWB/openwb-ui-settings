@@ -57,7 +57,8 @@
               :model-value="idTagList.join('\n')"
             >
               <template #help>
-                Solange diese Seite geöffnet ist, werden alle erfassten ID-Tags in dieser Liste aufgeführt.
+                Solange diese Seite geöffnet ist, werden alle erfassten ID-Tags in dieser Liste aufgeführt. Bei der
+                openWB Pro/Pro+ nur bei angestecktem Fahrzeug.
               </template>
             </openwb-base-textarea>
           </div>
@@ -199,7 +200,7 @@
         <div v-else>
           <hr />
           <openwb-base-button-group-input
-            title="Ladepunkte auf externen openWB"
+            title="Ladepunkte auf secondary openWB"
             :model-value="$store.state.mqtt['openWB/optional/int_display/only_local_charge_points']"
             :buttons="[
               {
@@ -216,7 +217,7 @@
             @update:model-value="updateState('openWB/optional/int_display/only_local_charge_points', $event)"
           >
             <template #help>
-              Hiermit kann festgelegt werden, ob an angebundenen externen openWB alle oder nur die jeweils lokalen
+              Hiermit kann festgelegt werden, ob an angebundenen secondary openWB alle oder nur die jeweils lokalen
               Ladepunkte angezeigt werden sollen.
             </template>
           </openwb-base-button-group-input>
