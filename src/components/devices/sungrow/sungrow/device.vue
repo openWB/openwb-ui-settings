@@ -46,6 +46,7 @@
       </template>
     </openwb-base-select-input>
     <openwb-base-select-input
+      v-if="device.configuration.version === 0"
       title="Firmware"
       :options="[
         { value: 'v1', text: 'bis November 2024' },
