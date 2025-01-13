@@ -3,7 +3,7 @@
     v-slot="slotProps"
     :model-value="value"
     :digital-inputs="ioDevice.input.digital"
-    :enable-add-delete="false"
+    :enable-add-delete="true"
   >
     <select
       class="form-control"
