@@ -79,8 +79,11 @@ export default {
     updateIoDevice(value) {
       this.updateConfiguration(value, "configuration.io_device");
       // clear input configuration
-      if (Object.prototype.hasOwnProperty.call(this.ioAction.configuration, "input_pattern")) {
-        this.updateConfiguration([], "configuration.input_pattern");
+      if (Array.isArray(this.ioAction.configuration?.input_pattern)) {
+        let clearedInputPattern = this.ioAction.configuration.input_pattern.map((input) => {
+          return { value: input.value, input_matrix: {} };
+        });
+        this.updateConfiguration(clearedInputPattern, "configuration.input_pattern");
       }
       if (Object.prototype.hasOwnProperty.call(this.ioAction.configuration, "digital_input")) {
         this.updateConfiguration(null, "configuration.digital_input");
