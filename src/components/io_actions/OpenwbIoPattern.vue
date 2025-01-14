@@ -1,5 +1,5 @@
 <template>
-  <table class="w-100">
+  <table class="w-100 mb-2">
     <colgroup>
       <col
         :span="numInputs"
@@ -24,7 +24,8 @@
         <th v-if="enableAddDelete">
           <openwb-base-click-button
             class="bg-success text-white"
-            tooltip="Muster hinzufügen"
+            :tooltip="addPatternTooltip"
+            :disabled="addPatternDisabled"
             @click="addPattern()"
           >
             <font-awesome-icon :icon="['fas', 'plus']" />
@@ -61,7 +62,8 @@
         <td v-if="enableAddDelete">
           <openwb-base-click-button
             class="bg-danger text-white"
-            tooltip="Muster löschen"
+            :tooltip="deletePatternTooltip"
+            :disabled="deletePatternDisabled"
             @click="deletePattern(patternKey)"
           >
             <font-awesome-icon :icon="['fas', 'trash']" />
@@ -118,6 +120,8 @@ export default {
     digitalInputs: { type: Object, required: true },
     modelValue: { type: Array, required: true },
     enableAddDelete: { type: Boolean, default: true },
+    minPatterns: { type: Number, default: 1 },
+    maxPatterns: { type: Number, default: 10 },
   },
   emits: ["update:modelValue"],
   computed: {
@@ -131,6 +135,30 @@ export default {
     },
     numInputs() {
       return Object.keys(this.digitalInputs).length;
+    },
+    addPatternDisabled() {
+      return this.value.length >= this.maxPatterns;
+    },
+    addPatternTooltip() {
+      if (this.addPatternDisabled) {
+        if (this.maxPatterns === 1) {
+          return "Es kann maximal ein Muster definiert werden";
+        }
+        return `Es können maximal ${this.maxPatterns} Muster definiert werden`;
+      }
+      return "Muster hinzufügen";
+    },
+    deletePatternDisabled() {
+      return this.value.length <= this.minPatterns;
+    },
+    deletePatternTooltip() {
+      if (this.deletePatternDisabled) {
+        if (this.minPatterns === 1) {
+          return "Es muss mindestens ein Muster definiert sein";
+        }
+        return `Es müssen mindestens ${this.minPatterns} Muster definiert sein`;
+      }
+      return "Muster löschen";
     },
   },
   methods: {
@@ -157,7 +185,7 @@ export default {
     addPattern() {
       this.value.push({
         input_matrix: {},
-        value: 1,
+        value: null,
       });
     },
   },
