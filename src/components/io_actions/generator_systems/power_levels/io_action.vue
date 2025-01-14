@@ -11,7 +11,7 @@
   <hr />
   <openwb-base-heading title="Verhalten anwenden auf..."> Verhalten anwenden auf... </openwb-base-heading>
   <openwb-base-select-input
-    title="Erzeugungsanlagen"
+    title="Erzeugungsanlage"
     not-selected="Bitte auswählen"
     :empty-value="null"
     :options="availableGenerators"

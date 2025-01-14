@@ -4,6 +4,7 @@
     :model-value="value"
     :digital-inputs="ioDevice.input.digital"
     :enable-add-delete="true"
+    :min-patterns="2"
   >
     <select
       class="form-control"
@@ -13,7 +14,7 @@
     >
       <option
         disabled="disabled"
-        value="undefined"
+        value="null"
       >
         -- Bitte auswählen --
       </option>
