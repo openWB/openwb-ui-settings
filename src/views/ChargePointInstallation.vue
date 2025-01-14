@@ -208,7 +208,8 @@
                 steuert = primary oder ferngesteuert wird = secondary
               </li>
               <li>
-                Externe openWB - wenn diese openWB (primary) die Fernsteuerung von externen openWB (secondary) übernimmt
+                Seconadry openWB - wenn diese openWB (primary) die Fernsteuerung von weiteren openWB (secondary)
+                übernimmt
               </li>
               <li>MQTT-Ladepunkt - nur zur Nutzung des openWB-Simulators zugelassen</li>
               <li>openWB Pro - wenn diese openWB (primary) die Fernsteuerung einer openWB Pro (secondary) übernimmt</li>
