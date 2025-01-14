@@ -97,22 +97,33 @@ export default {
     collapsible: { type: Boolean, default: false },
     collapsed: { type: Boolean, default: false },
   },
+  emits: ["collapsed", "expanded"],
   data() {
     return {
       isCollapsed: this.collapsible && this.collapsed,
     };
+  },
+  watch: {
+    collapsed(newVal) {
+      this.isCollapsed = newVal;
+    },
   },
   methods: {
     toggleBody() {
       if (this.collapsible === true) {
         this.isCollapsed = !this.isCollapsed;
       }
+      if (this.isCollapsed) {
+        this.$emit("collapsed");
+      } else {
+        this.$emit("expanded");
+      }
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
 .card {
   margin-bottom: 1rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
