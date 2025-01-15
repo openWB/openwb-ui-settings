@@ -43,16 +43,13 @@
       ]"
       :model-value="device.configuration.type"
       required
-      @update:model-value="
-        updateConfiguration($event, 'configuration.type')
-      "
+      @update:model-value="updateConfiguration($event, 'configuration.type')"
     >
       <template #help>
-        Die Anbindung über den Huawei SDongle erfordert die Regelgeschwindigkeit 
-        "sehr langsam". Alternativ kann Huawei auch mittels Wandler (bspw Protoss) 
-        über den Modbus RTU Ausgang des Wechselrichters abgefragt werden. Hier gibt 
-        es keine Einschränkungen der Regelgeschwindigkeit. Eine gleichzeitige 
-        Nutzung von SDongle und Modbus RTU ist nicht möglich.
+        Die Anbindung über den Huawei SDongle erfordert die Regelgeschwindigkeit "sehr langsam". Alternativ kann Huawei
+        auch mittels Wandler (bspw Protoss) über den Modbus RTU Ausgang des Wechselrichters abgefragt werden. Hier gibt
+        es keine Einschränkungen der Regelgeschwindigkeit. Eine gleichzeitige Nutzung von SDongle und Modbus RTU ist
+        nicht möglich.
       </template>
     </openwb-base-select-input>
   </div>

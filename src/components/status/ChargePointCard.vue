@@ -54,9 +54,11 @@
         Statusmeldung:
         <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/state_str"] }}</span>
       </openwb-base-alert>
-      max. Ladeleistung: 
-      {{(max_power = formatNumberTopic('openWB/chargepoint/' + chargePointIndex +
-              '/get/max_evse_current', 0)) == "-" ? max_power : Math.floor(max_power*3*230/1000)
+      max. Ladeleistung:
+      {{
+        (max_power = formatNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/max_evse_current", 0)) == "-"
+          ? max_power
+          : Math.floor((max_power * 3 * 230) / 1000)
       }}&nbsp;kW
     </openwb-base-card>
 
