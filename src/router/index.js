@@ -63,14 +63,6 @@ const routes = [
     component: () => import("../views/PVChargeConfig.vue"),
   },
   {
-    path: "/TimeChargeConfig",
-    name: "TimeChargeConfig",
-    meta: {
-      heading: "Ladeeinstellungen - Zeitladen",
-    },
-    component: () => import("../views/TimeChargeConfig.vue"),
-  },
-  {
     path: "/ScheduledChargeConfig",
     name: "ScheduledChargeConfig",
     meta: {
