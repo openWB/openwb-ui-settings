@@ -1409,6 +1409,70 @@
                   @update:model-value="updateState(planKey, $event, 'frequency.weekly.' + dayIndex)"
                 />
               </div>
+              <openwb-base-button-group-input
+                title="Strompreisbasiert Laden"
+                :buttons="[
+                  {
+                    buttonValue: false,
+                    text: 'Nein',
+                    class: 'btn-outline-danger',
+                  },
+                  {
+                    buttonValue: true,
+                    text: 'Ja',
+                    class: 'btn-outline-success',
+                  },
+                ]"
+                :model-value="plan.et_active"
+                @update:model-value="updateState(planKey, $event, 'et_active')"
+              />
+              <div v-if="template.et_active == true">
+                <div
+                  v-if="
+                    !$store.state.mqtt['openWB/optional/et/provider'] ||
+                    !$store.state.mqtt['openWB/optional/et/provider'].type
+                  "
+                >
+                  <openwb-base-alert subtype="danger">
+                    Bitte in den übergreifenden Ladeeinstellungen einen Strompreis-Anbieter konfigurieren.
+                  </openwb-base-alert>
+                </div>
+              </div>
+              <openwb-base-button-group-input
+                title="Anzahl Phasen Zielladen"
+                :buttons="[
+                  { buttonValue: 1, text: '1' },
+                  { buttonValue: 3, text: 'Maximum' },
+                  { buttonValue: 0, text: 'Automatik' },
+                ]"
+                :model-value="plan.phases_to_use"
+                @update:model-value="updateState(planKey, $event, 'phases_to_use')"
+              >
+                <template #help>
+                  Hier kann eingestellt werden, ob Ladevorgänge im Modus "Zielladen" mit nur einer Phase oder dem möglichen
+                  Maximum in Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Im Modus
+                  "Automatik" entscheidet die Regelung, welche Einstellung genutzt wird, um das Ziel zu erreichen.
+                  Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen 1- und 3-phasig (sog. 1p3p).
+                </template>
+              </openwb-base-button-group-input>
+              <openwb-base-button-group-input
+                title="Anzahl Phasen bei PV-Überschuss"
+                :buttons="[
+                  { buttonValue: 1, text: '1' },
+                  { buttonValue: 3, text: 'Maximum' },
+                  { buttonValue: 0, text: 'Automatik' },
+                ]"
+                :model-value="plan.phases_to_use_pv"
+                @update:model-value="updateState(planKey, $event, 'phases_to_use_pv')"
+              >
+                <template #help>
+                  Hier kann eingestellt werden, ob Ladevorgänge im Modus "Zielladen" bei Laden mit PV-Überschuss mit nur
+                  einer Phase oder dem möglichen Maximum in Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen
+                  durchgeführt werden. Im Modus "Automatik" entscheidet die Regelung, welche Einstellung genutzt wird, um
+                  das Ziel zu erreichen. Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen 1- und 3-phasig (sog.
+                  1p3p).
+                </template>
+              </openwb-base-button-group-input>
             </openwb-base-card>
             <div v-if="!installAssistantActive">
               <hr />
