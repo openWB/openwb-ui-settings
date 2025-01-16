@@ -112,13 +112,6 @@
               Übergreifendes
             </router-link>
             <router-link
-              to="/InstantChargeConfig"
-              class="dropdown-item"
-              active-class="active disabled"
-            >
-              Sofortladen
-            </router-link>
-            <router-link
               to="/PVChargeConfig"
               class="dropdown-item"
               active-class="active disabled"
