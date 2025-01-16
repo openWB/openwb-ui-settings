@@ -732,8 +732,8 @@
                   class: 'btn-outline-primary',
                 },
                 {
-                  buttonValue: 'standby',
-                  text: 'Standby',
+                  buttonValue: 'eco',
+                  text: 'Eco',
                   class: 'btn-outline-secondary',
                 },
                 {
@@ -838,49 +838,6 @@
                   Fahrzeug zurückgesetzt.
                 </template>
               </openwb-base-button-group-input>
-              <openwb-base-button-group-input
-                title="Strompreisbasiert Laden"
-                :buttons="[
-                  {
-                    buttonValue: false,
-                    text: 'Nein',
-                    class: 'btn-outline-danger',
-                  },
-                  {
-                    buttonValue: true,
-                    text: 'Ja',
-                    class: 'btn-outline-success',
-                  },
-                ]"
-                :model-value="template.et.active"
-                @update:model-value="updateState(templateKey, $event, 'et.active')"
-              />
-              <div v-if="template.et.active == true">
-                <div
-                  v-if="
-                    !$store.state.mqtt['openWB/optional/et/provider'] ||
-                    !$store.state.mqtt['openWB/optional/et/provider'].type
-                  "
-                >
-                  <openwb-base-alert subtype="danger">
-                    Bitte in den übergreifenden Ladeeinstellungen einen Strompreis-Anbieter konfigurieren.
-                  </openwb-base-alert>
-                </div>
-                <openwb-base-number-input
-                  title="Preisgrenze für Zeit- & Sofortladen"
-                  min="-80"
-                  max="80"
-                  step="0.01"
-                  :precision="2"
-                  unit="ct/kWh"
-                  :model-value="template.et.max_price * 100000"
-                  @update:model-value="
-                    updateState(templateKey, parseFloat(($event / 100000).toFixed(7)), 'et.max_price')
-                  "
-                >
-                  <template #help> Für Zielladen werden die günstigsten Stunden ermittelt. </template>
-                </openwb-base-number-input>
-              </div>
               <hr />
             </div>
             <openwb-base-heading>Sofortladen</openwb-base-heading>
