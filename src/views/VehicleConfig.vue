@@ -977,47 +977,75 @@
                 weshalb der niedrigste Leistungswert empfohlen wird.
               </template>
             </openwb-base-number-input>
-            <openwb-base-range-input
-              title="SoC-Limit für das Fahrzeug"
-              :min="0"
-              :max="20"
-              :step="1"
-              unit="%"
-              :labels="[
-                { label: 5, value: 5 },
-                { label: 10, value: 10 },
-                { label: 15, value: 15 },
-                { label: 20, value: 20 },
-                { label: 25, value: 25 },
-                { label: 30, value: 30 },
-                { label: 35, value: 35 },
-                { label: 40, value: 40 },
-                { label: 45, value: 45 },
-                { label: 50, value: 50 },
-                { label: 55, value: 55 },
-                { label: 60, value: 60 },
-                { label: 65, value: 65 },
-                { label: 70, value: 70 },
-                { label: 75, value: 75 },
-                { label: 80, value: 80 },
-                { label: 85, value: 85 },
-                { label: 90, value: 90 },
-                { label: 95, value: 95 },
-                { label: 100, value: 100 },
-                { label: 'Aus', value: 101 },
+            <openwb-base-button-group-input
+              title="Anzahl Phasen"
+              :buttons="[
+                { buttonValue: 1, text: '1' },
+                { buttonValue: 3, text: 'Maximum' },
+                { buttonValue: 0, text: 'Automatik' },
               ]"
-              :model-value="template.chargemode.pv_charging.max_soc"
-              @update:model-value="updateState(templateKey, $event, 'chargemode.pv_charging.max_soc')"
+              :model-value="template.chargemode.pv_charging.phases_to_use"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.pv_charging.phases_to_use')"
             >
               <template #help>
-                Bei der Einstellung "100%" wird die Ladung sofort mit Erreichen der 100% beendet. Dadurch erfolgt KEIN
-                Balancing der Batteriezellen. Ist dies gewünscht (sollte ab und an durchgeführt werden), muss hier "Aus"
-                gewählt werden (Schieberegler ganz nach rechts stellen), um die Ladung MIT Balancing bis zur Beendigung
-                durch das Fahrzeug weiterlaufen zu lassen.<br />
+                Hier kann eingestellt werden, ob Ladevorgänge mit einer Phase oder dem möglichen Maximum in Abhängigkeit
+                der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Im Modus "Automatik" entscheidet die
+                Regelung, welche Einstellung genutzt wird, um den verfügbaren Überschuss in die Fahrzeuge zu laden.
+                Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen einer und mehreren Phasen (sog. 1p3p).
+              </template>
+            </openwb-base-button-group-input>
+            <openwb-base-button-group-input
+              title="Begrenzung"
+              :buttons="[
+                {
+                  buttonValue: 'none',
+                  text: 'Aus',
+                },
+                {
+                  buttonValue: 'soc',
+                  text: 'Fahrzeug-SoC',
+                },
+                {
+                  buttonValue: 'amount',
+                  text: 'Energie',
+                },
+              ]"
+              :model-value="template.chargemode.pv_charging.limit.selected"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.pv_charging.limit.selected')"
+            >
+              <template #help>
+                Sofortladen kann ohne Fahrzeug-SoC-Begrenzung (Aus), mit Begrenzung des Fahrzeug-SoC (SoC) bei
+                konfiguriertem SoC-Auslesemodul oder mittels Vorgabe eine gewünschten Energiemenge in kWh (Energie)
+                genutzt werden.
+              </template>
+            </openwb-base-button-group-input>
+            <openwb-base-range-input
+              title="SoC-Limit für das Fahrzeug"
+              :min="5"
+              :max="100"
+              :step="5"
+              unit="%"
+              :model-value="template.chargemode.pv_charging.limit.soc"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.pv_charging.limit.soc')"
+            >
+              <template #help>
                 Um die Fahrzeug-SoC-Begrenzung nutzen zu können, muss ein SoC-Modul für das jeweilige Fahrzeug
                 eingerichtet sein (siehe "Konfiguration" -> "Fahrzeuge" -> "SoC-Modul").
               </template>
             </openwb-base-range-input>
+            <openwb-base-number-input
+              title="Energie-Limit"
+              unit="kWh"
+              :min="1"
+              :step="1"
+              :model-value="template.chargemode.pv_charging.limit.amount / 1000"
+              @update:model-value="updateState(templateKey, $event * 1000, 'chargemode.pv_charging.limit.amount')"
+            >
+              <template #help>
+                Die geladene Energiemenge wird beim Wechsel des Lademodus oder nach dem Anstecken, wenn Sofortladen
+                schon ausgewählt ist, neu gezählt.
+              </template>
+            </openwb-base-number-input>
             <openwb-base-range-input
               title="Mindest-SoC für das Fahrzeug"
               :min="0"
@@ -1090,6 +1118,21 @@
                 Netzbezug).
               </template>
             </openwb-base-number-input>
+            <openwb-base-button-group-input
+              title="Anzahl Phasen Mindest-SoC"
+              :buttons="[
+                { buttonValue: 1, text: '1' },
+                { buttonValue: 3, text: 'Maximum' },
+              ]"
+              :model-value="template.chargemode.pv_charging.phases_to_use_min_soc"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.pv_charging.phases_to_use_min_soc')"
+            >
+              <template #help>
+                Hier kann eingestellt werden, ob Ladevorgänge mit einer Phase oder dem möglichen Maximum in Abhängigkeit
+                der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Voraussetzung ist die verbaute
+                Umschaltmöglichkeit zwischen einer und mehreren Phasen (sog. 1p3p).
+              </template>
+            </openwb-base-button-group-input>
             <openwb-base-button-group-input
               title="Einspeisegrenze beachten"
               :buttons="[
