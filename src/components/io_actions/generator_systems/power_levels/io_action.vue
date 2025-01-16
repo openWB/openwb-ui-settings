@@ -9,17 +9,16 @@
     {{ slotProps.pattern.value * 100 }}&nbsp;%
   </openwb-io-pattern>
   <hr />
-  <openwb-base-heading title="Verhalten anwenden auf..."> Verhalten anwenden auf... </openwb-base-heading>
   <openwb-base-select-input
-    title="Erzeugungsanlage"
+    title="Verhalten anwenden auf..."
     not-selected="Bitte auswählen"
     :empty-value="null"
-    :options="availableGenerators"
+    :groups="availableDevices"
     :model-value="ioAction?.configuration.component_id"
     @update:model-value="updateConfiguration($event, 'configuration.component_id')"
   >
     <template #help>
-      Bitte die Erzeugungsanlage auswählen, auf welcher das Verhalten angewendet werden soll. Es kann nur eine
+      Bitte die Erzeugungsanlage auswählen, auf welche das Verhalten angewendet werden soll. Es kann nur eine
       Erzeugungsanlage ausgewählt werden.
     </template>
   </openwb-base-select-input>
@@ -44,12 +43,17 @@ export default {
         this.updateConfiguration(newValue, "configuration.input_pattern");
       },
     },
-    availableGenerators() {
-      return this.availableComponents
-        .filter((component) => component.type === "inverter")
-        .map((component) => {
-          return { value: component.value, text: component.text };
-        });
+    availableDevices() {
+      return [
+        {
+          label: "Wechselrichter",
+          options: this.availableComponents
+            .filter((component) => component.type === "inverter")
+            .map((component) => {
+              return { value: component.value, text: component.text };
+            }),
+        },
+      ];
     },
   },
 };
