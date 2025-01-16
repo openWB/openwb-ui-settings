@@ -1474,6 +1474,110 @@
                 </template>
               </openwb-base-button-group-input>
             </openwb-base-card>
+            <hr />
+            <openwb-base-heading>Eco</openwb-base-heading>
+            <openwb-base-range-input
+              :title="'Minimaler Dauerstrom unter der Preisgrenze' + (dcChargingEnabled ? ' (AC)' : '')"
+              :min="6"
+              :max="32"
+              :step="1"
+              unit="A"
+              :model-value="template.chargemode.eco_charging.current"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.eco_charging.current')"
+            />
+            <openwb-base-number-input
+              v-if="dcChargingEnabled === true"
+              title="Minimale Dauerleistung unter der Preisgrenze (DC)"
+              unit="kW"
+              :min="0"
+              :model-value="ac_current2dc_power(template.chargemode.eco_charging.dc_current)"
+              @update:model-value="
+                updateState(templateKey, dc_power2ac_current($event), 'chargemode.eco_charging.dc_current')
+              "
+            />
+            <openwb-base-button-group-input
+              title="Anzahl Phasen"
+              :buttons="[
+                { buttonValue: 1, text: '1' },
+                { buttonValue: 3, text: 'Maximum' },
+                { buttonValue: 0, text: 'Automatik' },
+              ]"
+              :model-value="template.chargemode.eco_charging.phases_to_use"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.eco_charging.phases_to_use')"
+            >
+              <template #help>
+                Hier kann eingestellt werden, ob Ladevorgänge mit einer Phase oder dem möglichen Maximum in Abhängigkeit
+                der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Im Modus "Automatik" entscheidet die
+                Regelung, welche Einstellung genutzt wird, um den verfügbaren Überschuss in die Fahrzeuge zu laden.
+                Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen einer und mehreren Phasen (sog. 1p3p).
+              </template>
+            </openwb-base-button-group-input>
+            <openwb-base-button-group-input
+              title="Begrenzung"
+              :buttons="[
+                {
+                  buttonValue: 'none',
+                  text: 'Aus',
+                },
+                {
+                  buttonValue: 'soc',
+                  text: 'Fahrzeug-SoC',
+                },
+                {
+                  buttonValue: 'amount',
+                  text: 'Energie',
+                },
+              ]"
+              :model-value="template.chargemode.eco_charging.limit.selected"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.eco_charging.limit.selected')"
+            >
+              <template #help>
+                Sofortladen kann ohne Fahrzeug-SoC-Begrenzung (Aus), mit Begrenzung des Fahrzeug-SoC (SoC) bei
+                konfiguriertem SoC-Auslesemodul oder mittels Vorgabe eine gewünschten Energiemenge in kWh (Energie)
+                genutzt werden.
+              </template>
+            </openwb-base-button-group-input>
+            <openwb-base-range-input
+              title="SoC-Limit für das Fahrzeug"
+              :min="5"
+              :max="100"
+              :step="5"
+              unit="%"
+              :model-value="template.chargemode.eco_charging.limit.soc"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.eco_charging.limit.soc')"
+            >
+              <template #help>
+                Um die Fahrzeug-SoC-Begrenzung nutzen zu können, muss ein SoC-Modul für das jeweilige Fahrzeug
+                eingerichtet sein (siehe "Konfiguration" -> "Fahrzeuge" -> "SoC-Modul").
+              </template>
+            </openwb-base-range-input>
+            <openwb-base-number-input
+              title="Energie-Limit"
+              unit="kWh"
+              :min="1"
+              :step="1"
+              :model-value="template.chargemode.eco_charging.limit.amount / 1000"
+              @update:model-value="updateState(templateKey, $event * 1000, 'chargemode.eco_charging.limit.amount')"
+            >
+              <template #help>
+                Die geladene Energiemenge wird beim Wechsel des Lademodus oder nach dem Anstecken, wenn Sofortladen
+                schon ausgewählt ist, neu gezählt.
+              </template>
+            </openwb-base-number-input>
+            <openwb-base-number-input
+              title="Preisgrenze für strompreisbasiertes Laden"
+              min="-80"
+              max="80"
+              step="0.01"
+              :precision="2"
+              unit="ct/kWh"
+              :model-value="template.chargemode.eco_charging.max_price * 100000"
+              @update:model-value="
+                updateState(templateKey, parseFloat(($event / 100000).toFixed(7)), 'chargemode.eco_charging.max_price')
+              "
+            >
+              <template #help> Für Zielladen werden die günstigsten Stunden ermittelt. </template>
+            </openwb-base-number-input>
             <div v-if="!installAssistantActive">
               <hr />
               <openwb-base-heading>
