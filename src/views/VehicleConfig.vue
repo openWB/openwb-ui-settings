@@ -720,7 +720,7 @@
               :buttons="[
                 {
                   buttonValue: 'instant_charging',
-                  text: 'Sofortladen',
+                  text: 'Sofort',
                   class: 'btn-outline-danger',
                 },
                 {
@@ -730,7 +730,7 @@
                 },
                 {
                   buttonValue: 'scheduled_charging',
-                  text: 'Zielladen',
+                  text: 'Ziel',
                   class: 'btn-outline-primary',
                 },
                 {
@@ -842,7 +842,7 @@
               </openwb-base-button-group-input>
               <hr />
             </div>
-            <openwb-base-heading>Sofortladen</openwb-base-heading>
+            <openwb-base-heading>Sofort</openwb-base-heading>
             <openwb-base-range-input
               :title="'Soll-Ladestrom' + (dcChargingEnabled ? ' (AC)' : '')"
               :min="6"
@@ -930,7 +930,7 @@
               </template>
             </openwb-base-number-input>
             <hr />
-            <openwb-base-heading>PV-Laden</openwb-base-heading>
+            <openwb-base-heading>PV</openwb-base-heading>
             <openwb-base-range-input
               :title="'Minimaler Dauerstrom' + (dcChargingEnabled ? ' (AC)' : '')"
               :min="0"
@@ -1158,7 +1158,7 @@
             </openwb-base-button-group-input>
             <hr />
             <openwb-base-heading>
-              Zielladen
+              Ziel
               <template #actions>
                 <openwb-base-avatar
                   class="bg-success clickable"
@@ -1451,10 +1451,10 @@
                 @update:model-value="updateState(planKey, $event, 'phases_to_use')"
               >
                 <template #help>
-                  Hier kann eingestellt werden, ob Ladevorgänge im Modus "Zielladen" mit nur einer Phase oder dem möglichen
-                  Maximum in Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Im Modus
-                  "Automatik" entscheidet die Regelung, welche Einstellung genutzt wird, um das Ziel zu erreichen.
-                  Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen 1- und 3-phasig (sog. 1p3p).
+                  Hier kann eingestellt werden, ob Ladevorgänge im Modus "Zielladen" mit nur einer Phase oder dem
+                  möglichen Maximum in Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden.
+                  Im Modus "Automatik" entscheidet die Regelung, welche Einstellung genutzt wird, um das Ziel zu
+                  erreichen. Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen 1- und 3-phasig (sog. 1p3p).
                 </template>
               </openwb-base-button-group-input>
               <openwb-base-button-group-input
@@ -1470,9 +1470,9 @@
                 <template #help>
                   Hier kann eingestellt werden, ob Ladevorgänge im Modus "Zielladen" bei Laden mit PV-Überschuss mit nur
                   einer Phase oder dem möglichen Maximum in Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen
-                  durchgeführt werden. Im Modus "Automatik" entscheidet die Regelung, welche Einstellung genutzt wird, um
-                  das Ziel zu erreichen. Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen 1- und 3-phasig (sog.
-                  1p3p).
+                  durchgeführt werden. Im Modus "Automatik" entscheidet die Regelung, welche Einstellung genutzt wird,
+                  um das Ziel zu erreichen. Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen 1- und 3-phasig
+                  (sog. 1p3p).
                 </template>
               </openwb-base-button-group-input>
             </openwb-base-card>
@@ -1737,9 +1737,9 @@
                 @update:model-value="updateState(planKey, $event, 'phases_to_use')"
               >
                 <template #help>
-                  Hier kann eingestellt werden, ob Ladevorgänge mit einer Phase oder dem möglichen
-                  Maximum in Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. 
-                  Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen 1- und 3-phasig (sog. 1p3p).
+                  Hier kann eingestellt werden, ob Ladevorgänge mit einer Phase oder dem möglichen Maximum in
+                  Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Voraussetzung ist die
+                  verbaute Umschaltmöglichkeit zwischen 1- und 3-phasig (sog. 1p3p).
                 </template>
               </openwb-base-button-group-input>
             </openwb-base-card>
