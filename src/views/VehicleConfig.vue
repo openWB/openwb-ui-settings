@@ -904,6 +904,21 @@
               "
             />
             <openwb-base-button-group-input
+              title="Anzahl Phasen"
+              :buttons="[
+                { buttonValue: 1, text: '1' },
+                { buttonValue: 3, text: 'Maximum' },
+              ]"
+              :model-value="template.chargemode.instant_charging.phases_to_use"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.instant_charging.phases_to_use')"
+            >
+              <template #help>
+                Hier kann eingestellt werden, ob Ladevorgänge mit einer Phase oder dem möglichen Maximum in Abhängigkeit
+                der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Voraussetzung ist die verbaute
+                Umschaltmöglichkeit zwischen 1- und 3-phasig (s.g. 1p3p).
+              </template>
+            </openwb-base-button-group-input>
+            <openwb-base-button-group-input
               title="Begrenzung"
               :buttons="[
                 {
