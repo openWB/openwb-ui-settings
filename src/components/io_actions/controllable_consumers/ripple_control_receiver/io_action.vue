@@ -23,17 +23,16 @@
     </select>
   </openwb-io-pattern>
   <hr />
-  <openwb-base-heading>Anwenden auf...</openwb-base-heading>
   <openwb-base-select-input
-    title="Ladepunkte"
-    :options="availableChargePoints"
+    title="Anwenden auf..."
+    :groups="availableDevices"
     :model-value="ioAction?.configuration.cp_ids"
     multiple
     @update:model-value="updateConfiguration($event, 'configuration.cp_ids')"
   >
     <template #help>
-      Bitte die Ladepunkte auswählen, auf die das Verhalten angewendet werden soll. Es können mehrere Ladepunkte
-      ausgewählt werden.
+      Bitte die Ladepunkte und/oder Komponenten auswählen, auf die das Verhalten angewendet werden soll. Es können
+      mehrere Einträge ausgewählt werden.
     </template>
   </openwb-base-select-input>
 </template>
@@ -56,6 +55,14 @@ export default {
       set(newValue) {
         this.updateConfiguration(newValue, "configuration.input_pattern");
       },
+    },
+    availableDevices() {
+      return [
+        {
+          label: "Ladepunkte",
+          options: this.availableChargePoints,
+        },
+      ];
     },
   },
 };
