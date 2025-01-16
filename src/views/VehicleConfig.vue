@@ -1608,7 +1608,7 @@
                 @update:model-value="updateState(planKey, dc_power2ac_current($event), 'dc_current')"
               />
               <openwb-base-button-group-input
-                title="Ziel"
+                title="Begrenzung"
                 :buttons="[
                   { buttonValue: 'none', text: 'Aus' },
                   {
@@ -1725,6 +1725,21 @@
                   @update:model-value="updateState(planKey, $event, 'frequency.weekly.' + dayIndex)"
                 />
               </div>
+              <openwb-base-button-group-input
+                title="Anzahl Phasen"
+                :buttons="[
+                  { buttonValue: 1, text: '1' },
+                  { buttonValue: 3, text: 'Maximum' },
+                ]"
+                :model-value="plan.phases_to_use"
+                @update:model-value="updateState(planKey, $event, 'phases_to_use')"
+              >
+                <template #help>
+                  Hier kann eingestellt werden, ob Ladevorgänge mit einer Phase oder dem möglichen
+                  Maximum in Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. 
+                  Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen 1- und 3-phasig (sog. 1p3p).
+                </template>
+              </openwb-base-button-group-input>
             </openwb-base-card>
           </openwb-base-card>
         </div>
