@@ -1,6 +1,9 @@
 <template>
   <openwb-base-setting-element>
-    <template #title>
+    <template
+      v-if="$slots.title || title"
+      #title
+    >
       <slot name="title">
         {{ title }}
       </slot>
@@ -97,7 +100,7 @@ export default {
   },
   inheritAttrs: false,
   props: {
-    title: { type: String, required: false, default: "" },
+    title: { type: String, required: false, default: undefined },
     modelValue: {
       type: [String, Number, Array, null],
       required: false,

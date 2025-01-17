@@ -1,7 +1,13 @@
 <template>
-  <div class="form-row mb-1">
-    <label class="col-md-4 col-form-label">
-      <slot name="title">*TITLE*</slot>
+  <div
+    class="form-row"
+    :class="$slots.title ? 'mb-1' : 'mx-0'"
+  >
+    <label
+      v-if="$slots.title"
+      class="col-md-4 col-form-label"
+    >
+      <slot name="title" />
       <font-awesome-icon
         v-if="$slots.help"
         :icon="showHelp ? ['fas', 'question-circle'] : ['far', 'question-circle']"
@@ -10,8 +16,8 @@
         @click.stop="toggleHelp"
       />
     </label>
-    <div class="col-md-8">
-      <div class="form-row">
+    <div :class="$slots.title ? 'col-md-8' : 'col px-0'">
+      <div :class="{ 'form-row': $slots.title }">
         <slot>*ELEMENT MISSING*</slot>
       </div>
       <div class="form-row">
