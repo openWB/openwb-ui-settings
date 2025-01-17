@@ -4,6 +4,12 @@
       <openwb-base-card title="Elemente mit BaseSettingElement">
         <OpenwbBaseHeading> Basiselement </OpenwbBaseHeading>
         <OpenwbBaseSettingElement>
+          <template #title>
+            <span style="font-style: italic">
+              Styled
+              <span style="font-weight: bold">Title</span> Slot
+            </span>
+          </template>
           <template #help>
             Basis-Element für alle weiteren Elemente. Das ist ein
             <a href="test">Link</a>.
@@ -236,6 +242,19 @@
         >
           <template #help> Hilfetext </template>
         </openwb-base-button-group-input>
+        <openwb-base-heading>
+          Select Element ohne Label:
+          <openwb-base-select-input
+            class="mb-1"
+            not-selected="Bitte auswählen"
+            :options="[
+              { value: 1, text: 'Eins' },
+              { value: 2, text: 'Zwei' },
+            ]"
+            :model-value="$store.state.examples.select1"
+            @update:model-value="updateState('select1', $event)"
+          />
+        </openwb-base-heading>
         <hr />
         <openwb-base-checkbox-input
           title="1. Checkbox"

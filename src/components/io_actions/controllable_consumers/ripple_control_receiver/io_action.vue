@@ -6,21 +6,17 @@
     :enable-add-delete="true"
     :min-patterns="2"
   >
-    <select
-      class="form-control"
+    <openwb-base-select-input
       required
-      :value="slotProps.pattern.value"
-      @input="slotProps.pattern.value = $event.target.value"
-    >
-      <option
-        disabled="disabled"
-        value="null"
-      >
-        -- Bitte auswählen --
-      </option>
-      <option value="0">sperren</option>
-      <option value="1">freigeben</option>
-    </select>
+      not-selected="Bitte auswählen"
+      :empty-value="null"
+      :options="[
+        { value: 0, text: 'sperren' },
+        { value: 1, text: 'freigeben' },
+      ]"
+      :model-value="slotProps.pattern.value"
+      @update:model-value="slotProps.pattern.value = $event"
+    />
   </openwb-io-pattern>
   <hr />
   <openwb-base-select-input
