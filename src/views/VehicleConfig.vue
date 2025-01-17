@@ -1564,6 +1564,16 @@
                 schon ausgewählt ist, neu gezählt.
               </template>
             </openwb-base-number-input>
+            <div
+              v-if="
+                !$store.state.mqtt['openWB/optional/et/provider'] ||
+                !$store.state.mqtt['openWB/optional/et/provider'].type
+              "
+            >
+              <openwb-base-alert subtype="danger">
+                Bitte in den übergreifenden Ladeeinstellungen einen Strompreis-Anbieter konfigurieren. Ohne Strompreis-Anbieter wird im Modus Eco nur geladen, wenn Überschuss vorhanden ist.
+              </openwb-base-alert>
+            </div>
             <openwb-base-number-input
               title="Preisgrenze für strompreisbasiertes Laden"
               min="-80"
@@ -1576,7 +1586,6 @@
                 updateState(templateKey, parseFloat(($event / 100000).toFixed(7)), 'chargemode.eco_charging.max_price')
               "
             >
-              <template #help> Für Zielladen werden die günstigsten Stunden ermittelt. </template>
             </openwb-base-number-input>
             <div v-if="!installAssistantActive">
               <hr />
