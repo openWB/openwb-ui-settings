@@ -103,20 +103,12 @@ export default {
       isCollapsed: this.collapsible && this.collapsed,
     };
   },
-  watch: {
-    collapsed(newVal) {
-      this.isCollapsed = newVal;
-    },
-  },
+
   methods: {
     toggleBody() {
       if (this.collapsible === true) {
         this.isCollapsed = !this.isCollapsed;
-      }
-      if (this.isCollapsed) {
-        this.$emit("collapsed");
-      } else {
-        this.$emit("expanded");
+        this.$emit(this.isCollapsed ? "collapsed" : "expanded");
       }
     },
   },
