@@ -47,7 +47,7 @@
       >
     </div>
     <div
-      v-if="copyMessage"
+      v-else
       class="copy-message text-right"
     >
       Logs in die Zwischenablage kopiert.
