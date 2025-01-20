@@ -732,7 +732,7 @@
                   class: 'btn-outline-primary',
                 },
                 {
-                  buttonValue: 'eco',
+                  buttonValue: 'eco_charging',
                   text: 'Eco',
                   class: 'btn-outline-secondary',
                 },
@@ -1175,9 +1175,7 @@
                 Ist der berechnete Zeitpunkt des Ladestarts noch nicht erreicht, wird mit Überschuss geladen. Auch nach
                 Erreichen des Ziel-SoCs wird mit Überschuss geladen, solange bis das "SoC-Limit für das Fahrzeug"
                 erreicht wird.<br />
-                Kann der Ziel-SoC bzw. die Energiemenge NICHT erreicht werden, z.B. weil das Auto zu spät angesteckt
-                wurde oder das Lastmanagement eingegriffen hat, wird bis 20 Minuten nach dem angegebenen Termin mit der
-                Maximalstromstärke geladen. Danach wird der Termin verworfen und mit Überschuss geladen.
+                Es wird nach den Vorgaben des Zeitplan geladen, dessen Zieltermin am nächsten liegt. Ist der Zielzeitpunkt vorbei, wird solange weitergeladen bis, das Ziel erreicht oder das Auto abgesteckt wird.
               </template>
             </openwb-base-heading>
             <openwb-base-card
@@ -1571,7 +1569,8 @@
               "
             >
               <openwb-base-alert subtype="danger">
-                Bitte in den übergreifenden Ladeeinstellungen einen Strompreis-Anbieter konfigurieren. Ohne Strompreis-Anbieter wird im Modus Eco nur geladen, wenn Überschuss vorhanden ist.
+                Bitte in den übergreifenden Ladeeinstellungen einen Strompreis-Anbieter konfigurieren. Ohne
+                Strompreis-Anbieter wird im Modus Eco nur geladen, wenn Überschuss vorhanden ist.
               </openwb-base-alert>
             </div>
             <openwb-base-number-input
