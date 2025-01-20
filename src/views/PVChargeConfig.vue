@@ -68,7 +68,7 @@
           <openwb-base-alert subtype="danger">
             Die Differenzleistung zw. Ein- und Abschaltschwelle sollte mind. 1.4kW (230V x 6A) betragen. (Konfiguriert:
             {{
-              ($store.state.mqtt["openWB/general/chargemode_config/pv_charging/switch_on_threshold"] -
+              ($store.state.mqtt["openWB/general/chargemode_config/pv_charging/switch_on_threshold"] +
                 $store.state.mqtt["openWB/general/chargemode_config/pv_charging/switch_off_threshold"]) /
               1000
             }}&nbsp;kW)
