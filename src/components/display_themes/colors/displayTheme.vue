@@ -36,7 +36,6 @@
     
   </div>
 </template>
-
 <script>
 import DisplayThemeConfigMixin from "../DisplayThemeConfigMixin.vue";
 
