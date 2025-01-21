@@ -124,6 +124,11 @@ export default {
     maxPatterns: { type: Number, default: 10 },
   },
   emits: ["update:modelValue"],
+  data() {
+    return {
+      testPattern: { ...this.digitalInputs },
+    };
+  },
   computed: {
     value: {
       get() {
@@ -160,6 +165,16 @@ export default {
       }
       return "Muster löschen";
     },
+  },
+  watch: {
+    digitalInputs() {
+      this.testPattern = { ...this.digitalInputs };
+    },
+  },
+  mounted() {
+    while (this.value.length < this.minPatterns) {
+      this.addPattern();
+    }
   },
   methods: {
     getIcon(input) {
