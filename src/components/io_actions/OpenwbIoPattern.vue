@@ -10,6 +10,12 @@
     <thead>
       <tr>
         <th :colspan="numInputs">Eingangsmuster</th>
+        <th
+          rowspan="2"
+          class="input-header"
+        >
+          <div>Prüfergebnis</div>
+        </th>
         <th :colspan="enableAddDelete ? 2 : 1"></th>
       </tr>
       <tr>
@@ -56,6 +62,14 @@
             @mouseup.stop.prevent
           />
         </td>
+        <td class="text-center">
+          <font-awesome-icon
+            title="Muster passt"
+            :icon="['fas', 'check-circle']"
+            class="text-success fa-fw"
+            :class="{ hidden: !patternMatch(patternKey) }"
+          />
+        </td>
         <td v-bind="$attrs">
           <slot :pattern="pattern">{{ pattern.value }}</slot>
         </td>
@@ -70,8 +84,55 @@
           </openwb-base-click-button>
         </td>
       </tr>
+      <tr>
+        <td
+          v-for="deviceInputKey in Object.keys(digitalInputs)"
+          :key="deviceInputKey"
+          class="pt-4"
+        ></td>
+        <td :colspan="enableAddDelete ? 3 : 2"></td>
+      </tr>
+      <tr class="bg-info">
+        <td
+          v-for="deviceInputKey in Object.keys(digitalInputs)"
+          :key="deviceInputKey"
+          class="text-center text-body"
+        >
+          <font-awesome-icon
+            :title="getTitle(testPattern[deviceInputKey])"
+            :icon="getIcon(testPattern[deviceInputKey])"
+            :class="getIconClass(testPattern[deviceInputKey])"
+            class="fa-fw clickable"
+            size="2x"
+            :transform="testPattern[deviceInputKey] == undefined ? 'shrink-6' : null"
+            :mask="testPattern[deviceInputKey] == undefined ? ['fas', 'square'] : null"
+            @click.stop.prevent="toggleTestPattern(deviceInputKey)"
+            @mousedown.stop.prevent
+            @mouseup.stop.prevent
+          />
+        </td>
+        <td
+          class="pl-2"
+          :colspan="enableAddDelete ? 3 : 2"
+        >
+          Prüfmuster
+          <font-awesome-icon
+            :icon="showHelp ? ['fas', 'question-circle'] : ['far', 'question-circle']"
+            class="clickable ml-1"
+            @click.stop="toggleHelp"
+          />
+        </td>
+      </tr>
     </tbody>
   </table>
+  <openwb-base-alert
+    v-if="showHelp"
+    subtype="info"
+  >
+    Mit dem Prüfmuster kann getestet werden, ob die Eingangsmuster zum gewünschten Verhalten passen. Ein grüner Haken
+    der Spalte "Prüfung" zeigt an, dass das Eingangsmuster zu dem Prüfmuster passt. Eingangsmuster mit unterschiedlichem
+    Verhalten dürfen nicht gleichzeitig passen, da sonst das Verhalten nicht eindeutig ist.
+  </openwb-base-alert>
 </template>
 
 <script>
@@ -82,9 +143,25 @@ import {
   faQuestion as fasQuestion,
   faTrash as fasTrash,
   faPlus as fasPlus,
+  faCheckCircle as fasCheckCircle,
+  faQuestionCircle as fasQuestionCircle,
 } from "@fortawesome/free-solid-svg-icons";
-import { faSquare as farSquare, faSquareMinus as farSquareMinus } from "@fortawesome/free-regular-svg-icons";
-library.add(fasSquare, fasQuestion, farSquare, farSquareMinus, fasTrash, fasPlus);
+import {
+  faSquare as farSquare,
+  faSquareMinus as farSquareMinus,
+  faQuestionCircle as farQuestionCircle,
+} from "@fortawesome/free-regular-svg-icons";
+library.add(
+  fasSquare,
+  fasQuestion,
+  farSquare,
+  farSquareMinus,
+  fasTrash,
+  fasPlus,
+  fasCheckCircle,
+  fasQuestionCircle,
+  farQuestionCircle,
+);
 
 const states = {
   undefined: {
@@ -126,6 +203,7 @@ export default {
   emits: ["update:modelValue"],
   data() {
     return {
+      showHelp: false,
       testPattern: { ...this.digitalInputs },
     };
   },
@@ -177,6 +255,9 @@ export default {
     }
   },
   methods: {
+    toggleHelp() {
+      this.showHelp = !this.showHelp;
+    },
     getIcon(input) {
       return states[input].icon;
     },
@@ -193,6 +274,17 @@ export default {
       } else {
         delete this.value[patternKey].input_matrix[deviceInputKey];
       }
+    },
+    toggleTestPattern(deviceInputKey) {
+      this.testPattern[deviceInputKey] = !this.testPattern[deviceInputKey];
+    },
+    patternMatch(patternKey) {
+      return Object.keys(this.value[patternKey].input_matrix).every((deviceInputKey) => {
+        if (this.testPattern[deviceInputKey] === undefined) {
+          return true;
+        }
+        return this.value[patternKey].input_matrix[deviceInputKey] === this.testPattern[deviceInputKey];
+      });
     },
     deletePattern(patternKey) {
       delete this.value.splice(patternKey, 1);
@@ -224,5 +316,9 @@ th {
   left: 50%;
   transform: rotate(-90deg);
   transform-origin: left center;
+}
+
+.hidden {
+  visibility: hidden;
 }
 </style>
