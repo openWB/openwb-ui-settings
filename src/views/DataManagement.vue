@@ -370,7 +370,7 @@
           </div>
           <div v-else>
             <openwb-base-alert subtype="info">
-              Das Monitoring informiert Dich sofort per E-Mail, wenn eine Deiner Kompnenten oder Ladepunkte ein Problem
+              Das Monitoring informiert Dich sofort per E-Mail, wenn eine Deiner Komponenten oder Ladepunkte ein Problem
               hat oder die openWB nicht mehr erreichbar ist.
             </openwb-base-alert>
             <openwb-base-select-input
