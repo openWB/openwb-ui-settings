@@ -1473,7 +1473,11 @@
               </openwb-base-button-group-input>
             </openwb-base-card>
             <hr />
-            <openwb-base-heading>Eco</openwb-base-heading>
+            <openwb-base-heading>Eco
+              <template #help>
+                Im Eco-Modus wird eine Preisgrenze vorgegeben und wenn der Strompreis unter dieser Grenze liegt, wird mit dem eingestellten minimalen Dauerstrom geladen. Falls vorhanden, wird mit Überschuss geladen.
+              </template>
+            </openwb-base-heading>
             <openwb-base-range-input
               :title="'Minimaler Dauerstrom unter der Preisgrenze' + (dcChargingEnabled ? ' (AC)' : '')"
               :min="6"
