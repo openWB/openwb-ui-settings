@@ -42,6 +42,8 @@
           <select
             v-model="time[0]"
             class="form-control"
+            required
+            @change="updateEndOptions(index)"
           >
             <option
               value=""
@@ -62,6 +64,7 @@
           <select
             v-model="time[1]"
             class="form-control"
+            required
           >
             <option
               value=""
@@ -70,7 +73,7 @@
               -- Bitte auswählen --
             </option>
             <option
-              v-for="option in generateTimeOptions('01:00', '24:00')"
+              v-for="option in endOptions[index]"
               :key="option.value"
               :value="option.value"
             >
@@ -122,7 +125,9 @@ export default {
   },
   emits: ["update:modelValue"],
   data() {
-    return {};
+    return {
+      endOptions: this.modelValue.map(() => this.generateTimeOptions("01:00", "24:00")),
+    };
   },
   computed: {
     value: {
@@ -151,6 +156,16 @@ export default {
     },
     removeTime(timeIndex) {
       this.value.splice(timeIndex, 1);
+    },
+    updateEndOptions(index) {
+      const startTime = this.value[index][0];
+      if (startTime) {
+        const startHour = parseInt(startTime.split(":")[0], 10) + 1;
+        const startString = startHour.toString().padStart(2, "0") + ":00";
+        this.endOptions[index] = this.generateTimeOptions(startString, "24:00");
+      } else {
+        this.endOptions[index] = this.generateTimeOptions("01:00", "24:00");
+      }
     },
   },
 };
