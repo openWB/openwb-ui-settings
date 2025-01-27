@@ -1,5 +1,15 @@
 <template>
   <div class="io-device-add-on">
+    <openwb-base-alert subtype="warning">
+      Die Kontakte der AddOn-Platine sind nicht galvanisch oder optisch getrennt. Es wird dringend empfohlen, mit
+      Koppelrelais zu arbeiten.<br />
+      Weiterhin muss für die Verwendung der Kontakte in einer openWB series2 eine weitere Kabeldurchführung in das
+      Gehäuse gebohrt werden. Da es hierbei zu Undichtigkeiten kommen kann, ist dies nur von fachkundigen Personen
+      durchzuführen.<br />
+      Es wird keine Haftung für Schäden übernommen, die durch die direkte Beschaltung der Kontakte oder eine zusätzliche
+      Bohrung im Gehäuse entstehen.<br />
+      Es wird der Einsatz des Dimm- & Control-Kits empfohlen!
+    </openwb-base-alert>
     <openwb-base-select-input
       title="Installiert auf..."
       not-selected="Bitte auswählen"
