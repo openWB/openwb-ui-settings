@@ -75,12 +75,12 @@
       <openwb-base-select-input
         title="Quartale"
         :options="[
-          { value: 1, text: '1. Quartal' },
-          { value: 2, text: '2. Quartal' },
-          { value: 3, text: '3. Quartal' },
-          { value: 4, text: '4. Quartal' },
+          { value: ['01-01', '31-03'], text: '1. Quartal' },
+          { value: ['01-04', '30-06'], text: '2. Quartal' },
+          { value: ['01-07', '30-09'], text: '3. Quartal' },
+          { value: ['01-10', '31-12'], text: '4. Quartal' },
         ]"
-        :model-value="tariff.active_times.quarters"
+        :model-value="tariff.active_times.dates"
         multiple
         required
         @update:model-value="updateQuarters($event, index)"
@@ -131,7 +131,7 @@ export default {
         name: "Neuer Tarif",
         price: 0,
         active_times: {
-          quarters: [],
+          dates: [],
           times: [["", ""]],
         },
       });
@@ -142,8 +142,14 @@ export default {
       this.updateConfiguration(this.electricityTariff.configuration.tariffs, "configuration.tariffs");
     },
     updateQuarters(value, index) {
-      this.electricityTariff.configuration.tariffs[index].active_times.quarters = value;
+      console.log(value);
+      console.log("old dates", this.electricityTariff.configuration.tariffs[index].active_times.dates);
+      console.log("old tariffs", this.electricityTariff.configuration.tariffs, "configuration.tariffs");
+
+      this.electricityTariff.configuration.tariffs[index].active_times.dates = value;
+      console.log("new dates", this.electricityTariff.configuration.tariffs[index].active_times.dates);
       this.updateConfiguration(this.electricityTariff.configuration.tariffs, "configuration.tariffs");
+      console.log("new tariffs", this.electricityTariff.configuration.tariffs, "configuration.tariffs");
     },
   },
 };
