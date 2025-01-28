@@ -142,14 +142,8 @@ export default {
       this.updateConfiguration(this.electricityTariff.configuration.tariffs, "configuration.tariffs");
     },
     updateQuarters(value, index) {
-      console.log(value);
-      console.log("old dates", this.electricityTariff.configuration.tariffs[index].active_times.dates);
-      console.log("old tariffs", this.electricityTariff.configuration.tariffs, "configuration.tariffs");
-
       this.electricityTariff.configuration.tariffs[index].active_times.dates = value;
-      console.log("new dates", this.electricityTariff.configuration.tariffs[index].active_times.dates);
       this.updateConfiguration(this.electricityTariff.configuration.tariffs, "configuration.tariffs");
-      console.log("new tariffs", this.electricityTariff.configuration.tariffs, "configuration.tariffs");
     },
   },
 };
