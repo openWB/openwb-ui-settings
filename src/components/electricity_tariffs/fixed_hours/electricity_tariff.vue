@@ -10,8 +10,8 @@
       :precision="3"
       required
       unit="ct/kWh"
-      :model-value="electricityTariff.configuration.default_price"
-      @update:model-value="updateConfiguration(parseFloat($event.toFixed(3)), 'configuration.default_price')"
+      :model-value="electricityTariff.configuration.default_price * 100"
+      @update:model-value="updateConfiguration(parseFloat(($event / 100).toFixed(3)), 'configuration.default_price')"
     >
       <template #help> Standardpreis sofern kein anderer Tarif aktiv ist. </template>
     </openwb-base-number-input>
@@ -34,7 +34,8 @@
       v-if="electricityTariff.configuration.tariffs.length === 0"
       subtype="info"
     >
-      Es wurde noch kein Tarif konfiguriert.
+      Es wurde noch kein Tarif konfiguriert. Klicken Sie auf das Plus-Symbol um einen neuen Tarif hinzuzufügen.<br />
+      Tarife ermöglichen es unterschiedliche Preise für unterschiedliche Zeiten zu definieren.
     </openwb-base-alert>
     <openwb-base-card
       v-for="(tariff, index) in electricityTariff.configuration.tariffs"
@@ -68,19 +69,20 @@
         :precision="3"
         required
         unit="ct/kWh"
-        :model-value="tariff.price"
-        @update:model-value="updateTariff(parseFloat($event.toFixed(3)), index, 'price')"
+        :model-value="tariff.price * 100"
+        @update:model-value="updateTariff(parseFloat(($event / 100).toFixed(3)), index, 'price')"
       />
       <openwb-base-select-input
         title="Quartale"
         :options="[
-          { value: '1', text: '1. Quartal' },
-          { value: '2', text: '2. Quartal' },
-          { value: '3', text: '3. Quartal' },
-          { value: '4', text: '4. Quartal' },
+          { value: 1, text: '1. Quartal' },
+          { value: 2, text: '2. Quartal' },
+          { value: 3, text: '3. Quartal' },
+          { value: 4, text: '4. Quartal' },
         ]"
         :model-value="tariff.active_times.quarters"
         multiple
+        required
         @update:model-value="updateQuarters($event, index)"
       />
       <time-table
