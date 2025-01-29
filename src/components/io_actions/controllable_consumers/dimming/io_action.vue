@@ -20,6 +20,7 @@
   <openwb-base-select-input
     title="Anwenden auf..."
     :groups="availableDevices"
+    required
     multiple
     :disabled="Object.keys(value[0].input_matrix).length > 0 ? false : true"
     :model-value="ioAction?.configuration.devices"
@@ -55,7 +56,7 @@ export default {
       return [
         {
           label: "Ladepunkte",
-          options: this.availableChargePoints.map((cp) => ({ value: `cp${cp.value}`, text: cp.text })),
+          options: this.availableChargePoints.map((cp) => ({ value: [`cp${cp.value}`], text: cp.text })),
         },
       ];
     },

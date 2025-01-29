@@ -21,10 +21,12 @@
   <hr />
   <openwb-base-select-input
     title="Anwenden auf..."
+    :empty-value="[]"
     :groups="availableDevices"
-    :model-value="ioAction?.configuration.cp_ids"
+    required
     multiple
-    @update:model-value="updateConfiguration($event, 'configuration.cp_ids')"
+    :model-value="ioAction?.configuration.devices"
+    @update:model-value="updateConfiguration($event, 'configuration.devices')"
   >
     <template #help>
       Bitte die Ladepunkte und/oder Komponenten auswählen, auf die das Verhalten angewendet werden soll. Es können
@@ -56,7 +58,7 @@ export default {
       return [
         {
           label: "Ladepunkte",
-          options: this.availableChargePoints,
+          options: this.availableChargePoints.map((cp) => ({ value: [`cp${cp.value}`], text: cp.text })),
         },
       ];
     },
