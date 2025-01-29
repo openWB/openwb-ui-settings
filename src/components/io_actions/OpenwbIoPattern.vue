@@ -11,6 +11,7 @@
       <tr>
         <th :colspan="numInputs">Eingangsmuster</th>
         <th
+          v-if="showTestPattern"
           rowspan="2"
           class="input-header"
         >
@@ -62,7 +63,10 @@
             @mouseup.stop.prevent
           />
         </td>
-        <td class="text-center">
+        <td
+          v-if="showTestPattern"
+          class="text-center"
+        >
           <font-awesome-icon
             title="Muster passt"
             :icon="['fas', 'check-circle']"
@@ -84,15 +88,20 @@
           </openwb-base-click-button>
         </td>
       </tr>
-      <tr>
+      <tr v-if="showTestPattern">
         <td
           v-for="deviceInputKey in Object.keys(digitalInputs)"
           :key="deviceInputKey"
           class="pt-4"
-        ></td>
+        >
+          &nbsp;
+        </td>
         <td :colspan="enableAddDelete ? 3 : 2"></td>
       </tr>
-      <tr class="bg-info">
+      <tr
+        v-if="showTestPattern"
+        class="bg-info"
+      >
         <td
           v-for="deviceInputKey in Object.keys(digitalInputs)"
           :key="deviceInputKey"
@@ -125,14 +134,20 @@
       </tr>
     </tbody>
   </table>
-  <openwb-base-alert
-    v-if="showHelp"
-    subtype="info"
+  <openwb-base-button-group-input
+    v-model="showTestPattern"
+    title="Prüfmuster"
+    :buttons="[
+      { buttonValue: false, text: 'Verbergen' },
+      { buttonValue: true, text: 'Anzeigen' },
+    ]"
   >
-    Mit dem Prüfmuster kann getestet werden, ob die Eingangsmuster zum gewünschten Verhalten passen. Ein grüner Haken
-    der Spalte "Prüfung" zeigt an, dass das Eingangsmuster zu dem Prüfmuster passt. Eingangsmuster mit unterschiedlichem
-    Verhalten dürfen nicht gleichzeitig passen, da sonst das Verhalten nicht eindeutig ist.
-  </openwb-base-alert>
+    <template #help>
+      Das Prüfmuster ist eine Hilfe um zu testen, ob die Eingangsmuster zum gewünschten Verhalten passen. Ein grüner
+      Haken in der Spalte "Prüfergebnis" zeigt an, dass das Eingangsmuster zu dem Prüfmuster passt. Eingangsmuster mit
+      unterschiedlichem Verhalten dürfen nicht gleichzeitig passen, da sonst das Verhalten nicht eindeutig ist.
+    </template>
+  </openwb-base-button-group-input>
 </template>
 
 <script>
@@ -203,7 +218,7 @@ export default {
   emits: ["update:modelValue"],
   data() {
     return {
-      showHelp: false,
+      showTestPattern: false,
       testPattern: { ...this.digitalInputs },
     };
   },

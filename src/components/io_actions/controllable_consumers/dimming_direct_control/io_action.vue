@@ -8,12 +8,12 @@
   <openwb-base-select-input
     title="Verhalten anwenden auf..."
     not-selected="Bitte auswählen"
-    :empty-value="null"
+    :empty-value="[]"
     :groups="availableDevices"
     required
     :disabled="Object.keys(value[0].input_matrix).length > 0 ? false : true"
-    :model-value="ioAction?.configuration.device"
-    @update:model-value="updateConfiguration($event, 'configuration.device')"
+    :model-value="ioAction?.configuration.devices"
+    @update:model-value="updateConfiguration($event, 'configuration.devices')"
   >
     <template #help>
       Bitte den Ladepunkt oder die Komponente auswählen, auf welche das Verhalten angewendet werden soll. Es kann nur
@@ -45,7 +45,7 @@ export default {
       return [
         {
           label: "Ladepunkte",
-          options: this.availableChargePoints.map((cp) => ({ value: `cp${cp.value}`, text: cp.text })),
+          options: this.availableChargePoints.map((cp) => ({ value: [[`cp${cp.value}`]], text: cp.text })),
         },
       ];
     },
