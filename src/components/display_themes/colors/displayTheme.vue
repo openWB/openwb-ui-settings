@@ -33,7 +33,6 @@
     >
       <template #help> Der PIN muss aus 4 bis 10 Zahlen bestehen. </template>
     </openwb-base-text-input>
-    
   </div>
 </template>
 <script>

@@ -39,7 +39,6 @@ export default {
       formData.append("data", '{"ip_address":"' + this.chargePoint.configuration.ip_address + '"}');
       const startedMessage = "Die Aktualisierung der openWB Pro wird gestartet...";
       this.$root.postClientMessage(startedMessage, "info");
-      console.debug(location);
       this.axios
         .post(
           location.protocol +

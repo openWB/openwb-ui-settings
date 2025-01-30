@@ -1811,7 +1811,6 @@ export default {
     addVehicle(event) {
       // prevent further processing of the click event
       event.stopPropagation();
-      console.info("requesting new vehicle...");
       this.$emit("sendCommand", {
         command: "addVehicle",
         data: {},
@@ -1826,7 +1825,6 @@ export default {
     removeVehicle(vehicleIndex, event) {
       this.showVehicleModal = false;
       if (event == "confirm") {
-        console.info("request removal of vehicle '" + vehicleIndex + "'");
         this.$emit("sendCommand", {
           command: "removeVehicle",
           data: { id: vehicleIndex },
@@ -1857,7 +1855,6 @@ export default {
     addEvTemplate(event) {
       // prevent further processing of the click event
       event.stopPropagation();
-      console.info("requesting new ev template...");
       this.$emit("sendCommand", {
         command: "addEvTemplate",
         data: {},
@@ -1873,7 +1870,6 @@ export default {
     removeEvTemplate(evTemplateIndex, event) {
       this.showEvTemplateModal = false;
       if (event == "confirm") {
-        console.info("request removal of ev template '" + evTemplateIndex + "'");
         this.$emit("sendCommand", {
           command: "removeEvTemplate",
           data: { id: evTemplateIndex },
@@ -1888,7 +1884,6 @@ export default {
     addChargeTemplate(event) {
       // prevent further processing of the click event
       event.stopPropagation();
-      console.info("requesting new charge template...");
       this.$emit("sendCommand", {
         command: "addChargeTemplate",
         data: {},
@@ -1907,7 +1902,6 @@ export default {
     removeChargeTemplate(chargeTemplateIndex, event) {
       this.showChargeTemplateModal = false;
       if (event == "confirm") {
-        console.info("request removal of charge template '" + chargeTemplateIndex + "'");
         this.$emit("sendCommand", {
           command: "removeChargeTemplate",
           data: { id: chargeTemplateIndex },
@@ -1934,7 +1928,6 @@ export default {
     addChargeTemplateSchedulePlan(template, event) {
       // prevent further processing of the click event
       event.stopPropagation();
-      console.info("requesting new charge template schedule plan...");
       // get trailing characters as index
       let templateIndex = parseInt(template.match(/([^/]+)$/)[0]);
       this.$emit("sendCommand", {
@@ -1953,7 +1946,6 @@ export default {
     removeChargeTemplateSchedulePlan(templateIndex, planIndex, event) {
       this.showChargeTemplateSchedulePlanModal = false;
       if (event == "confirm") {
-        console.info("request removal of charge template '" + templateIndex + "' schedule plan '" + planIndex + "'");
         this.$emit("sendCommand", {
           command: "removeChargeTemplateSchedulePlan",
           data: { template: templateIndex, plan: planIndex },
@@ -1972,7 +1964,6 @@ export default {
     addChargeTemplateTimeChargingPlan(template, event) {
       // prevent further processing of the click event
       event.stopPropagation();
-      console.info("requesting new charge template time charging plan...");
       // get trailing characters as index
       let templateIndex = parseInt(template.match(/([^/]+)$/)[0]);
       this.$emit("sendCommand", {
@@ -1991,9 +1982,6 @@ export default {
     removeChargeTemplateTimeChargingPlan(templateIndex, planIndex, event) {
       this.showChargeTemplateTimeChargingPlanModal = false;
       if (event == "confirm") {
-        console.info(
-          "request removal of charge template '" + templateIndex + "' time charging plan '" + planIndex + "'",
-        );
         this.$emit("sendCommand", {
           command: "removeChargeTemplateTimeChargingPlan",
           data: { template: templateIndex, plan: planIndex },

@@ -208,7 +208,7 @@
                 steuert = primary oder ferngesteuert wird = secondary
               </li>
               <li>
-                Seconadry openWB - wenn diese openWB (primary) die Fernsteuerung von weiteren openWB (secondary)
+                Secondary openWB - wenn diese openWB (primary) die Fernsteuerung von weiteren openWB (secondary)
                 übernimmt
               </li>
               <li>MQTT-Ladepunkt - nur zur Nutzung des openWB-Simulators zugelassen</li>
@@ -398,7 +398,6 @@
               :model-value="ac_current2dc_power(chargePointTemplate.dc_max_current)"
               @update:model-value="updateState(chargePointTemplateKey, dc_power2ac_current($event), 'dc_max_current')"
             />
-            <hr />
             <div v-if="!installAssistantActive">
               <hr />
               <openwb-base-heading> Automatische Sperre </openwb-base-heading>
@@ -720,7 +719,6 @@ export default {
     removeChargePoint(chargePointIndex, event) {
       this.showChargePointModal = false;
       if (event == "confirm") {
-        console.debug("request removal of charge point '" + chargePointIndex + "'");
         this.$emit("sendCommand", {
           command: "removeChargepoint",
           data: { id: chargePointIndex },
@@ -765,7 +763,6 @@ export default {
     removeChargePointTemplate(chargePointTemplateIndex, event) {
       this.showChargePointTemplateModal = false;
       if (event == "confirm") {
-        console.debug("request removal of chargePoint template '" + chargePointTemplateIndex + "'");
         this.$emit("sendCommand", {
           command: "removeChargepointTemplate",
           data: { id: chargePointTemplateIndex },
@@ -775,7 +772,6 @@ export default {
     addChargePointTemplateAutolockPlan(chargePointTemplate, event) {
       // prevent further processing of the click event
       event.stopPropagation();
-      console.info("requesting new charge point template autolock plan...");
       let chargePointTemplateIndex = this.getChargePointTemplateIndex(chargePointTemplate);
       this.$emit("sendCommand", {
         command: "addAutolockPlan",
@@ -792,13 +788,6 @@ export default {
     removeChargePointTemplateAutolockPlan(chargePointTemplateIndex, autolockPlanIndex, event) {
       this.showChargePointTemplateAutolockPlanModal = false;
       if (event == "confirm") {
-        console.debug(
-          "request removal of chargePoint template '" +
-            chargePointTemplateIndex +
-            "' autolock plan '" +
-            autolockPlanIndex +
-            "'",
-        );
         this.$emit("sendCommand", {
           command: "removeAutolockPlan",
           data: {

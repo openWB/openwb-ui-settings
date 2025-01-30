@@ -1,5 +1,5 @@
 <template>
-  <div class="electricity-tariff-energycharts">
+  <div class="electricity-tariff-energy-charts">
     <openwb-base-alert subtype="info">
       Börsenstrompreise von Energy Charts (energy-charts.info)<br />
       Die Rohdaten werden von Wissenschaftlern des Fraunhofer-Instituts für Solare Energiesysteme ISE aus zahlreichen

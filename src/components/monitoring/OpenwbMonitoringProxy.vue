@@ -19,7 +19,7 @@ export default {
   emits: ["update:configuration"],
   computed: {
     myComponent() {
-      console.debug(`loading monitoring: ${this.monitoring.type}`);
+      console.debug(`loading monitoring: ${this.monitoring.name} (${this.monitoring.type})`);
       return defineAsyncComponent({
         loader: () => import(`./${this.monitoring.type}/monitoring.vue`),
         errorComponent: OpenwbMonitoringFallback,

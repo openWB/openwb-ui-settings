@@ -104,9 +104,6 @@ export default {
           return undefined;
       }
     },
-    // elementEdit(id) {
-    //   console.log("edit Element:", id);
-    // },
   },
 };
 </script>

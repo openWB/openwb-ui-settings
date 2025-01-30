@@ -6,7 +6,7 @@
     </openwb-base-heading>
     <openwb-base-alert subtype="info">
       <span class="text-danger">
-        Als EVU-Zähler werden nur dreiphasige Shellys unterstützt (z.B. Shelly 3EM, Shelly Pro 3EM)</span
+        Als EVU-Zähler werden nur dreiphasige Shelly unterstützt (z.B. Shelly 3EM, Shelly Pro 3EM)</span
       ><br />
       Diese Komponente benötigt keine Einstellungen.
     </openwb-base-alert>

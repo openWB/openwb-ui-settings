@@ -48,7 +48,7 @@ export default {
   emits: ["update:configuration"],
   computed: {
     myComponent() {
-      console.debug(`loading web theme: ${this.webTheme.name}`);
+      console.debug(`loading web theme: ${this.webTheme.name} (${this.webTheme.type})`);
       return defineAsyncComponent({
         loader: () => import(`./${this.webTheme.type}/webTheme.vue`),
         errorComponent: OpenwbWebThemeFallback,

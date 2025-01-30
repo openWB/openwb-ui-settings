@@ -2,8 +2,8 @@
   <div class="device-shelly">
     <openwb-base-heading> Einstellungen für Shelly </openwb-base-heading>
     <openwb-base-alert subtype="info">
-      Unterstützt werden theoretisch alle ein- und dreiphasigen Shellys der Generation 1-3. Getestete Modelle sind
-      Shelly 1pm, 1pm plus, Pro Pro 3EM, Plug S.
+      Unterstützt werden theoretisch alle ein- und dreiphasigen Shelly der Generation 1-3. Getestete Modelle sind Shelly
+      1pm, 1pm plus, Pro Pro 3EM, Plug S.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"

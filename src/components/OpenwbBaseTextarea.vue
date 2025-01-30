@@ -93,7 +93,7 @@ export default {
       get() {
         if (this.subtype == "json") {
           if (this.inputInvalid) {
-            console.debug("returning invalid String");
+            console.debug("returning invalid JSON as String");
             return this.tempValue;
           } else {
             return JSON.stringify(this.tempValue, undefined, 2);
