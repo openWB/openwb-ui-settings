@@ -1,5 +1,5 @@
 <template>
-  <div class="device-carlogavazzi">
+  <div class="device-carlo-gavazzi">
     <openwb-base-heading> Einstellungen für Carlo Gavazzi </openwb-base-heading>
     <openwb-base-text-input
       title="IP oder Hostname"

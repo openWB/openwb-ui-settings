@@ -208,7 +208,7 @@
                 steuert = primary oder ferngesteuert wird = secondary
               </li>
               <li>
-                Seconadry openWB - wenn diese openWB (primary) die Fernsteuerung von weiteren openWB (secondary)
+                Secondary openWB - wenn diese openWB (primary) die Fernsteuerung von weiteren openWB (secondary)
                 übernimmt
               </li>
               <li>MQTT-Ladepunkt - nur zur Nutzung des openWB-Simulators zugelassen</li>
@@ -398,7 +398,6 @@
               :model-value="ac_current2dc_power(chargePointTemplate.dc_max_current)"
               @update:model-value="updateState(chargePointTemplateKey, dc_power2ac_current($event), 'dc_max_current')"
             />
-            <hr />
             <div v-if="!installAssistantActive">
               <hr />
               <openwb-base-heading> Automatische Sperre </openwb-base-heading>
