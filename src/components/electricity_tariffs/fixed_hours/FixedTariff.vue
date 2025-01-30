@@ -43,11 +43,6 @@
         { value: '01-10;31-12', text: '4. Quartal' },
       ]"
     />
-    <openwb-base-text-input
-      v-model="tariff.active_times.dates"
-      title="Test"
-      readonly
-    />
     <time-table
       v-model="tariff.active_times.times"
       title="Aktive Zeiten"
