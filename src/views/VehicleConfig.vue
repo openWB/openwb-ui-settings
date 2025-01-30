@@ -907,10 +907,7 @@
               :model-value="template.chargemode.instant_charging.limit.amount / 1000"
               @update:model-value="updateState(templateKey, $event * 1000, 'chargemode.instant_charging.limit.amount')"
             >
-              <template #help>
-                Die geladene Energiemenge wird beim Wechsel des Lademodus oder nach dem Anstecken, wenn Sofortladen
-                schon ausgewählt ist, neu gezählt.
-              </template>
+              <template #help> Die geladene Energiemenge wird nach dem Anstecken neu gezählt. </template>
             </openwb-base-number-input>
             <hr />
             <openwb-base-heading>PV</openwb-base-heading>
@@ -1026,10 +1023,7 @@
               :model-value="template.chargemode.pv_charging.limit.amount / 1000"
               @update:model-value="updateState(templateKey, $event * 1000, 'chargemode.pv_charging.limit.amount')"
             >
-              <template #help>
-                Die geladene Energiemenge wird beim Wechsel des Lademodus oder nach dem Anstecken, wenn Sofortladen
-                schon ausgewählt ist, neu gezählt.
-              </template>
+              <template #help> Die geladene Energiemenge wird nach dem Anstecken neu gezählt. </template>
             </openwb-base-number-input>
             <openwb-base-range-input
               title="Mindest-SoC für das Fahrzeug"
@@ -1160,7 +1154,8 @@
                 Ist der berechnete Zeitpunkt des Ladestarts noch nicht erreicht, wird mit Überschuss geladen. Auch nach
                 Erreichen des Ziel-SoCs wird mit Überschuss geladen, solange bis das "SoC-Limit für das Fahrzeug"
                 erreicht wird.<br />
-                Es wird nach den Vorgaben des Zeitplan geladen, dessen Zieltermin am nächsten liegt. Ist der Zielzeitpunkt vorbei, wird solange weitergeladen bis, das Ziel erreicht oder das Auto abgesteckt wird.
+                Es wird nach den Vorgaben des Zeitplan geladen, dessen Zieltermin am nächsten liegt. Ist der
+                Zielzeitpunkt vorbei, wird solange weitergeladen bis, das Ziel erreicht oder das Auto abgesteckt wird.
               </template>
             </openwb-base-heading>
             <openwb-base-card
@@ -1458,9 +1453,11 @@
               </openwb-base-button-group-input>
             </openwb-base-card>
             <hr />
-            <openwb-base-heading>Eco
+            <openwb-base-heading
+              >Eco
               <template #help>
-                Im Eco-Modus wird eine Preisgrenze vorgegeben und wenn der Strompreis unter dieser Grenze liegt, wird mit dem eingestellten minimalen Dauerstrom geladen. Falls vorhanden, wird mit Überschuss geladen.
+                Im Eco-Modus wird eine Preisgrenze vorgegeben und wenn der Strompreis unter dieser Grenze liegt, wird
+                mit dem eingestellten minimalen Dauerstrom geladen. Falls vorhanden, wird mit Überschuss geladen.
               </template>
             </openwb-base-heading>
             <openwb-base-range-input
@@ -1546,10 +1543,7 @@
               :model-value="template.chargemode.eco_charging.limit.amount / 1000"
               @update:model-value="updateState(templateKey, $event * 1000, 'chargemode.eco_charging.limit.amount')"
             >
-              <template #help>
-                Die geladene Energiemenge wird beim Wechsel des Lademodus oder nach dem Anstecken, wenn Sofortladen
-                schon ausgewählt ist, neu gezählt.
-              </template>
+              <template #help> Die geladene Energiemenge wird nach dem Anstecken neu gezählt. </template>
             </openwb-base-number-input>
             <div
               v-if="
