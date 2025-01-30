@@ -32,7 +32,7 @@
       @update:model-value="tariff.price = parseFloat(($event / 100).toFixed(3))"
     />
     <openwb-base-select-input
-      v-model="tariff.active_times.dates"
+      v-model="dates"
       title="Quartale"
       required
       multiple
@@ -76,6 +76,18 @@ export default {
       },
       set(newValue) {
         this.$emit("update:modelValue", newValue);
+      },
+    },
+    dates: {
+      get() {
+        // convert date array from tariff to string for select input
+        // [["01-01", "31-03"], ["01-04", "30-06"]] -> ["01-01;31-03", "01-04;30-06"]
+        return this.tariff.active_times.dates.map(([begin, end]) => `${begin};${end}`);
+      },
+      set(newValue) {
+        // convert string from select input to date array for tariff
+        // ["01-01;31-03", "01-04;30-06"] -> [["01-01", "31-03"], ["01-04", "30-06"]]
+        this.tariff.active_times.dates = newValue.map((date) => date.split(";"));
       },
     },
   },
