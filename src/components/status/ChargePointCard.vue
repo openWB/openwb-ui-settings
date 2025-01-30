@@ -28,7 +28,7 @@
         v-else
         :class="'subheader pill bg-' + getFaultStateSubtype(baseTopic)"
       >
-        <div v-if="getFaultStateSubtype(baseTopic) == 'warning'">Warnung</div>
+        <div v-if="getFaultStateSubtype(baseTopic) == 'warning'">Info</div>
         <div v-else>Fehler</div>
       </span>
     </template>

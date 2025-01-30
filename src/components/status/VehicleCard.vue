@@ -24,7 +24,7 @@
         class="subheader pill"
         :class="'bg-' + getVehicleStatus"
       >
-        <div v-if="getVehicleStatus == 'warning'">Warnung</div>
+        <div v-if="getVehicleStatus == 'warning'">Info</div>
         <div v-else>Fehler</div>
       </span>
     </template>
