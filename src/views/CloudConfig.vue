@@ -444,7 +444,6 @@ export default {
     removeCloud(event) {
       this.showCloudRemoveModal = false;
       if (event == "confirm") {
-        console.info("request removal of cloud");
         // clear valid_partner_ids
         this.updateState("openWB/system/mqtt/valid_partner_ids", []);
         this.$emit("sendCommand", {

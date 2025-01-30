@@ -396,7 +396,6 @@ export default {
     removeDevice(event) {
       this.showDeviceRemoveModal = false;
       if (event == "confirm") {
-        console.info("request removal of device '" + this.modalDevice + "'");
         this.$emit("sendCommand", {
           command: "removeDevice",
           data: { id: this.modalDevice },
@@ -428,15 +427,6 @@ export default {
     removeComponent(event) {
       this.showComponentRemoveModal = false;
       if (event == "confirm") {
-        console.info(
-          "request removal of component '" +
-            this.modalComponent.id +
-            "' from device '" +
-            this.modalComponent.deviceId +
-            "' type '" +
-            this.modalComponent.type +
-            "'",
-        );
         this.$emit("sendCommand", {
           command: "removeComponent",
           data: this.modalComponent,
@@ -447,7 +437,6 @@ export default {
       if (vendorKey === undefined || deviceKey === undefined) {
         return [];
       }
-      console.debug("finding components for", vendorKey, deviceKey);
       let deviceComponents = [];
       Object.values(this.$store.state.mqtt["openWB/system/configurable/devices_components"]).every((group) => {
         if (group.vendors[vendorKey] !== undefined) {

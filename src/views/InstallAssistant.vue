@@ -46,7 +46,6 @@ export default {
      * @returns {Component} The dynamically loaded component for the current page of the install assistant.
      */
     myStepComponent() {
-      console.debug(`loading assistant page: ${this.currentPage}`);
       return defineAsyncComponent({
         loader: () => import(`../components/install_assistant/InstallAssistantStep${this.currentPage}.vue`),
       });
