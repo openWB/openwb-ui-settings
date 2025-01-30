@@ -978,23 +978,6 @@
               </template>
             </openwb-base-number-input>
             <openwb-base-button-group-input
-              title="Anzahl Phasen"
-              :buttons="[
-                { buttonValue: 1, text: '1' },
-                { buttonValue: 3, text: 'Maximum' },
-                { buttonValue: 0, text: 'Automatik' },
-              ]"
-              :model-value="template.chargemode.pv_charging.phases_to_use"
-              @update:model-value="updateState(templateKey, $event, 'chargemode.pv_charging.phases_to_use')"
-            >
-              <template #help>
-                Hier kann eingestellt werden, ob Ladevorgänge mit einer Phase oder dem möglichen Maximum in Abhängigkeit
-                der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Im Modus "Automatik" entscheidet die
-                Regelung, welche Einstellung genutzt wird, um den verfügbaren Überschuss in die Fahrzeuge zu laden.
-                Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen einer und mehreren Phasen (sog. 1p3p).
-              </template>
-            </openwb-base-button-group-input>
-            <openwb-base-button-group-input
               title="Begrenzung"
               :buttons="[
                 {
