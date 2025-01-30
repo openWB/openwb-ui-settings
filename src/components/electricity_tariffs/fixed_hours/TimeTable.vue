@@ -83,6 +83,7 @@
         </template>
         <template #action>
           <openwb-base-avatar
+            v-if="value.length > 1"
             class="bg-danger clickable"
             title="Zeitbereich entfernen"
             @click.stop="removeTime(index)"
