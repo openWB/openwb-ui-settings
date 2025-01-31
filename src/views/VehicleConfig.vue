@@ -1574,7 +1574,7 @@
             <div v-if="!installAssistantActive">
               <hr />
               <openwb-base-heading>
-                Laden nach Zeitplan
+                Zeitladen
                 <template #actions>
                   <openwb-base-avatar
                     class="bg-success clickable"
@@ -1723,7 +1723,6 @@
                 <template #help> Bestimmt die Art der Grenze für den Ladevorgang. </template>
               </openwb-base-button-group-input>
               <openwb-base-range-input
-                v-if="plan.limit.selected == 'soc'"
                 title="Ziel-SoC für das Fahrzeug"
                 :min="5"
                 :max="100"
@@ -1737,7 +1736,6 @@
                 </template>
               </openwb-base-range-input>
               <openwb-base-number-input
-                v-if="plan.limit.selected == 'amount'"
                 title="Ziel-Energie"
                 unit="kWh"
                 :min="1"
