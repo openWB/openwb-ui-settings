@@ -125,11 +125,6 @@
           :colspan="enableAddDelete ? 3 : 2"
         >
           Prüfmuster
-          <font-awesome-icon
-            :icon="showHelp ? ['fas', 'question-circle'] : ['far', 'question-circle']"
-            class="clickable ml-1"
-            @click.stop="toggleHelp"
-          />
         </td>
       </tr>
     </tbody>
