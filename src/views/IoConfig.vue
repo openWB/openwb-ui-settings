@@ -17,8 +17,8 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeIoAction(modalIoActionIndex, $event)"
   >
-    Wollen Sie das Ein-/Ausgangs-Gerät "{{ getIoDeviceName(modalIoDeviceIndex) }}" (ID: {{ modalIoDeviceIndex }})
-    wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht werden!
+    Wollen Sie die Aktion "{{ getIoDeviceName(modalIoActionIndex) }}" (ID: {{ modalIoActionIndex }}) wirklich entfernen?
+    Dieser Vorgang kann nicht rückgängig gemacht werden!
   </openwb-base-modal-dialog>
 
   <!-- main content -->
