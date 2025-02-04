@@ -10,14 +10,15 @@
     not-selected="Bitte auswählen"
     :empty-value="[]"
     :groups="availableDevices"
+    multiple
     required
     :disabled="Object.keys(value[0].input_matrix).length > 0 ? false : true"
     :model-value="ioAction?.configuration.devices"
     @update:model-value="updateConfiguration($event, 'configuration.devices')"
   >
     <template #help>
-      Bitte den Ladepunkt oder die Komponente auswählen, auf welche das Verhalten angewendet werden soll. Es kann nur
-      ein Eintrag ausgewählt werden.
+      Bitte den Ladepunkt oder die Komponente auswählen, auf welche das Verhalten angewendet werden soll. Es können
+      mehrere Einträge ausgewählt werden.
     </template>
   </openwb-base-select-input>
 </template>
@@ -45,7 +46,7 @@ export default {
       return [
         {
           label: "Ladepunkte",
-          options: this.availableChargePoints.map((cp) => ({ value: [[`cp${cp.value}`]], text: cp.text })),
+          options: this.availableChargePoints.map((cp) => ({ value: [`cp${cp.value}`], text: cp.text })),
         },
       ];
     },
