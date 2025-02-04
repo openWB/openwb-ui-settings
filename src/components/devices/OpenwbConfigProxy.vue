@@ -1,6 +1,6 @@
 <template>
   <component
-    :is="myComponent"
+    :is="getComponent()"
     :device="device"
     :component="component"
     :configuration="component ? component.configuration : device.configuration"
@@ -24,8 +24,8 @@ export default {
     component: { type: Object, required: false, default: undefined },
   },
   emits: ["update:configuration"],
-  computed: {
-    myComponent() {
+  methods: {
+    getComponent() {
       console.debug(
         `loading component: ${this.device.name} (${this.device.type}) / ${this.component?.name} (${this.component?.type})`,
       );
@@ -41,8 +41,6 @@ export default {
         });
       }
     },
-  },
-  methods: {
     updateConfiguration(event) {
       this.$emit("update:configuration", event);
     },

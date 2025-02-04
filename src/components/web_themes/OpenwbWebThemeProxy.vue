@@ -21,7 +21,7 @@
   </openwb-base-alert>
   <openwb-base-heading> Einstellungen für Web Theme "{{ webTheme.name }}" </openwb-base-heading>
   <component
-    :is="myComponent"
+    :is="getThemeComponent()"
     :web-theme="webTheme"
     @update:configuration="updateConfiguration($event)"
   />
@@ -46,16 +46,14 @@ export default {
     webTheme: { type: Object, required: true },
   },
   emits: ["update:configuration"],
-  computed: {
-    myComponent() {
+  methods: {
+    getThemeComponent() {
       console.debug(`loading web theme: ${this.webTheme.name} (${this.webTheme.type})`);
       return defineAsyncComponent({
         loader: () => import(`./${this.webTheme.type}/webTheme.vue`),
         errorComponent: OpenwbWebThemeFallback,
       });
     },
-  },
-  methods: {
     updateConfiguration(event) {
       this.$emit("update:configuration", event);
     },
