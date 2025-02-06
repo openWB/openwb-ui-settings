@@ -1,20 +1,16 @@
 <template>
-  <openwb-base-card
-    subtype="primary"
-    :collapsible="true"
-    :collapsed="true"
-    class="pb-0"
-  >
-    <template #header>
+  <status-card subtype="primary">
+    <template #header-left>
       <font-awesome-icon
         fixed-width
         :icon="['fas', 'charging-station']"
       />
       Alle Ladepunkte
     </template>
-    <template #actions>
+    <template #header-right>
       <span class="text-right"> {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW </span>
     </template>
+    <!-- Ladevorgang -->
     <openwb-base-card
       subtype="white"
       body-bg="white"
@@ -30,7 +26,7 @@
         </div>
       </div>
     </openwb-base-card>
-
+    <!-- Zählerstände -->
     <openwb-base-card
       subtype="white"
       body-bg="white"
@@ -60,11 +56,12 @@
         </div>
       </div>
     </openwb-base-card>
-  </openwb-base-card>
+  </status-card>
 </template>
 
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
+import StatusCard from "./StatusCard.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faChargingStation as fasChargingStation } from "@fortawesome/free-solid-svg-icons";
@@ -75,6 +72,7 @@ library.add(fasChargingStation);
 export default {
   name: "ChargePointSumCard",
   components: {
+    StatusCard,
     FontAwesomeIcon,
   },
   mixins: [ComponentState],
