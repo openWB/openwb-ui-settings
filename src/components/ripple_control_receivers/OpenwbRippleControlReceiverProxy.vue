@@ -1,7 +1,7 @@
 <template>
   <openwb-base-heading> Einstellungen für RSE-Modul "{{ rippleControlReceiver.name }}" </openwb-base-heading>
   <component
-    :is="myComponent"
+    :is="getRippleControlReceiverComponent()"
     :ripple-control-receiver="rippleControlReceiver"
     @update:configuration="updateConfiguration($event)"
     @send-command="sendCommand($event)"
@@ -18,8 +18,8 @@ export default {
     rippleControlReceiver: { type: Object, required: true },
   },
   emits: ["update:configuration", "sendCommand"],
-  computed: {
-    myComponent() {
+  methods: {
+    getRippleControlReceiverComponent() {
       console.debug(
         `loading ripple control receiver: ${this.rippleControlReceiver.name} (${this.rippleControlReceiver.type})`,
       );
@@ -28,8 +28,6 @@ export default {
         errorComponent: OpenwbRippleControlReceiverFallback,
       });
     },
-  },
-  methods: {
     // event pass through
     updateConfiguration(event) {
       this.$emit("update:configuration", event);

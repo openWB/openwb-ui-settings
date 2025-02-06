@@ -1,7 +1,7 @@
 <template>
   <openwb-base-heading> Einstellungen für SoC-Modul "{{ vehicle.name }}" </openwb-base-heading>
   <component
-    :is="myComponent"
+    :is="getVehicleComponent()"
     :vehicle-id="vehicleId"
     :vehicle="vehicle"
     @update:configuration="updateConfiguration($event)"
@@ -19,16 +19,14 @@ export default {
     vehicle: { type: Object, required: true },
   },
   emits: ["update:configuration"],
-  computed: {
-    myComponent() {
+  methods: {
+    getVehicleComponent() {
       console.debug(`loading vehicle: ${this.vehicle.name} (${this.vehicle.type})`);
       return defineAsyncComponent({
         loader: () => import(`./${this.vehicle.type}/vehicle.vue`),
         errorComponent: OpenwbVehicleFallback,
       });
     },
-  },
-  methods: {
     updateConfiguration(event) {
       this.$emit("update:configuration", event);
     },
