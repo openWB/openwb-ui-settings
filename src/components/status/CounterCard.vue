@@ -1,32 +1,19 @@
 <template>
-  <openwb-base-card
+  <status-card
     subtype="danger"
-    :collapsible="true"
-    :collapsed="true"
-    class="pb-0"
+    :component-id="counter.id"
+    :state="$store.state.mqtt[baseTopic + '/get/fault_state']"
+    :state-message="$store.state.mqtt[baseTopic + '/get/fault_str']"
   >
-    <template #header>
+    <template #header-left>
       <font-awesome-icon
         fixed-width
         :icon="['fas', 'gauge-high']"
       />
       {{ counter.name }}
     </template>
-    <template #actions>
-      <div
-        v-if="getFaultStateSubtype(baseTopic) == 'success'"
-        class="text-right"
-      >
-        {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW
-      </div>
-      <span
-        v-else
-        :class="'subheader pill bg-' + getFaultStateSubtype(baseTopic)"
-      >
-        <div v-if="getFaultStateSubtype(baseTopic) == 'warning'">Warnung</div>
-        <div v-else>Fehler</div>
-      </span>
-    </template>
+    <template #header-right>{{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW</template>
+    <!-- Aktuelle Werte -->
     <openwb-base-card
       title="Aktuelle Werte"
       subtype="white"
@@ -46,6 +33,7 @@
         </div>
       </div>
     </openwb-base-card>
+    <!-- Zählerstände -->
     <openwb-base-card
       title="Zählerstände"
       subtype="white"
@@ -65,6 +53,7 @@
         </div>
       </div>
     </openwb-base-card>
+    <!-- Werte pro Phase -->
     <openwb-base-card
       title="Werte pro Phase"
       subtype="white"
@@ -136,45 +125,23 @@
         </div>
       </div>
     </openwb-base-card>
-    <template #footer>
-      <div class="container">
-        <div class="row">
-          <div class="col px-0">
-            <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
-              <font-awesome-icon
-                fixed-width
-                :icon="stateIcon"
-              />
-              Modulmeldung:
-              <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
-            </openwb-base-alert>
-          </div>
-          <div class="col col-auto pr-0">
-            <div class="text-right">ID: {{ counter.id }}</div>
-          </div>
-        </div>
-      </div>
-    </template>
-  </openwb-base-card>
+  </status-card>
 </template>
 
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
+import StatusCard from "./StatusCard.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faCheckCircle as fasCheckCircle,
-  faExclamationTriangle as fasExclamationTriangle,
-  faTimesCircle as fasTimesCircle,
-  faGaugeHigh as fasGaugeHigh,
-} from "@fortawesome/free-solid-svg-icons";
+import { faGaugeHigh as fasGaugeHigh } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasCheckCircle, fasExclamationTriangle, fasTimesCircle, fasGaugeHigh);
+library.add(fasGaugeHigh);
 
 export default {
   name: "CounterCard",
   components: {
+    StatusCard,
     FontAwesomeIcon,
   },
   mixins: [ComponentState],

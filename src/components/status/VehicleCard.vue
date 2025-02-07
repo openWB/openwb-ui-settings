@@ -1,33 +1,24 @@
 <template>
-  <openwb-base-card
+  <status-card
     subtype="info"
-    :collapsible="true"
-    :collapsed="true"
-    class="pb-0"
+    :component-id="vehicleIndex"
+    :state="$store.state.mqtt[baseTopic + '/get/fault_state']"
+    :state-message="$store.state.mqtt[baseTopic + '/get/fault_str']"
   >
-    <template #header>
+    <template #header-left>
       <font-awesome-icon
         fixed-width
         :icon="['fas', 'car']"
       />
       {{ vehicleName }}
     </template>
-    <template #actions>
-      <div
-        v-if="getVehicleStatus == 'success'"
-        class="text-right"
-      >
-        <div v-if="soc != '-'">{{ soc }}&nbsp;%</div>
-      </div>
-      <span
-        v-else
-        class="subheader pill"
-        :class="'bg-' + getVehicleStatus"
-      >
-        <div v-if="getVehicleStatus == 'warning'">Warnung</div>
-        <div v-else>Fehler</div>
-      </span>
+    <template
+      v-if="soc != '-'"
+      #header-right
+    >
+      {{ soc }}&nbsp;%
     </template>
+    <!-- Fahrzeugdaten -->
     <openwb-base-card
       title="Fahrzeugdaten"
       subtype="white"
@@ -45,45 +36,23 @@
         <div class="col text-right text-monospace">{{ socTimestamp }}</div>
       </div>
     </openwb-base-card>
-    <template #footer>
-      <div class="container">
-        <div class="row">
-          <div class="col px-0">
-            <openwb-base-alert :subtype="getVehicleStatus">
-              <font-awesome-icon
-                fixed-width
-                :icon="stateIcon"
-              />
-              Modulmeldung:
-              <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
-            </openwb-base-alert>
-          </div>
-          <div class="col col-auto pr-0">
-            <div class="text-right">ID: {{ vehicleIndex }}</div>
-          </div>
-        </div>
-      </div>
-    </template>
-  </openwb-base-card>
+  </status-card>
 </template>
 
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
+import StatusCard from "./StatusCard.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faCheckCircle as fasCheckCircle,
-  faExclamationTriangle as fasExclamationTriangle,
-  faTimesCircle as fasTimesCircle,
-  faCar as fasCar,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCar as fasCar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasCheckCircle, fasExclamationTriangle, fasTimesCircle, fasCar);
+library.add(fasCar);
 
 export default {
   name: "VehicleCard",
   components: {
+    StatusCard,
     FontAwesomeIcon,
   },
   mixins: [ComponentState],
@@ -105,10 +74,8 @@ export default {
     },
     socTimestamp: {
       get() {
-        if (this.$store.state.mqtt["openWB/vehicle/" + this.vehicleIndex + "/get/soc_timestamp"] !== undefined) {
-          return new Date(
-            this.$store.state.mqtt["openWB/vehicle/" + this.vehicleIndex + "/get/soc_timestamp"] * 1000,
-          ).toLocaleString();
+        if (this.$store.state.mqtt[this.baseTopic + "/get/soc_timestamp"] !== undefined) {
+          return new Date(this.$store.state.mqtt[this.baseTopic + "/get/soc_timestamp"] * 1000).toLocaleString();
         } else {
           return "-";
         }
@@ -116,22 +83,11 @@ export default {
     },
     socRange: {
       get() {
-        if (this.$store.state.mqtt["openWB/vehicle/" + this.vehicleIndex + "/get/range"] !== undefined) {
-          return Math.round(this.$store.state.mqtt["openWB/vehicle/" + this.vehicleIndex + "/get/range"]);
+        if (this.$store.state.mqtt[this.baseTopic + "/get/range"] !== undefined) {
+          return Math.round(this.$store.state.mqtt[this.baseTopic + "/get/range"]);
         } else {
           return 0;
         }
-      },
-    },
-    getVehicleStatus: {
-      get() {
-        if (this.$store.state.mqtt["openWB/vehicle/" + this.vehicleIndex + "/get/fault_state"] === undefined) {
-          return "success"; // Default status level for undefined
-        }
-        return (
-          this.statusLevel[this.$store.state.mqtt["openWB/vehicle/" + this.vehicleIndex + "/get/fault_state"]] ||
-          "success"
-        ); // Default to 'light' if faultState is not in statusLevel}
       },
     },
     baseTopic: {
