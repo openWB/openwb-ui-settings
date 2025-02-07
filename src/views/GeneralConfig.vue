@@ -841,7 +841,7 @@ export default {
           { label: "openWB", options: [] },
           { label: "Community", options: [] },
         ];
-        this.webThemeList.forEach((theme) => {
+        this.webThemeList?.forEach((theme) => {
           if (theme.official === true) {
             groups[0].options.push(theme);
           } else {
