@@ -201,7 +201,7 @@ export default {
             price: value * 100000,
           });
         }
-        // repeat last dataset with 59min 95sec offset
+        // repeat last dataset with 59min 59sec offset
         const lastData = myData.slice(-1)[0];
         myData.push({
           timestamp: lastData.timestamp + (60 * 60 - 1) * 1000,
@@ -213,6 +213,9 @@ export default {
       return dataObject;
     },
     currentPrice() {
+      if (this.chartDataObject.datasets[0].data === undefined || this.chartDataObject.datasets[0].data.length === 0) {
+        return this.formatNumber(0, 2);
+      }
       return this.formatNumber(this.chartDataObject.datasets[0].data[0].price || 0, 2);
     },
     baseTopic: {

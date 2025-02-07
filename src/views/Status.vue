@@ -79,18 +79,6 @@ export default {
     return {
       mqttTopicsToSubscribe: [
         "openWB/general/extern",
-        // charge points total
-        "openWB/chargepoint/get/power",
-        "openWB/chargepoint/get/imported",
-        "openWB/chargepoint/get/exported",
-        "openWB/chargepoint/get/daily_imported",
-        "openWB/chargepoint/get/daily_exported",
-        // individual charge points
-        "openWB/chargepoint/+/config",
-        "openWB/chargepoint/+/get/+",
-        "openWB/chargepoint/+/get/connected_vehicle/info",
-        "openWB/chargepoint/+/set/+",
-        "openWB/internal_chargepoint/+/data/phases_to_use",
         // components
         "openWB/system/device/+/component/+/config",
         // counter
@@ -104,6 +92,19 @@ export default {
         // vehicles
         "openWB/vehicle/+/name",
         "openWB/vehicle/+/get/+",
+        // charge points total
+        "openWB/chargepoint/get/power",
+        "openWB/chargepoint/get/imported",
+        "openWB/chargepoint/get/exported",
+        "openWB/chargepoint/get/daily_imported",
+        "openWB/chargepoint/get/daily_exported",
+        // individual charge points
+        // these topics must be subscribed at last to avoid a buffer overflow
+        "openWB/chargepoint/+/config",
+        "openWB/chargepoint/+/get/+",
+        "openWB/chargepoint/+/get/connected_vehicle/info",
+        "openWB/chargepoint/+/set/+",
+        "openWB/internal_chargepoint/+/data/phases_to_use",
       ],
     };
   },

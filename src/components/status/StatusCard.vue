@@ -13,6 +13,7 @@
         <slot name="header-right"></slot>
       </div>
       <font-awesome-icon
+        :class="state === 0 ? `text-${subtype}` : ''"
         class="ml-1"
         fixed-width
         :icon="stateIcon"
