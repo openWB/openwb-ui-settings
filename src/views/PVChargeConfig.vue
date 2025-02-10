@@ -65,13 +65,9 @@
             <template #help> Obere Grenze des Regelbereichs. </template>
           </openwb-base-number-input>
           <hr />
-          <openwb-base-alert subtype="danger">
+          <openwb-base-alert :subtype="chargingSwitchRange < 1400 ? 'danger' : 'info'">
             Die Differenzleistung zw. Ein- und Abschaltschwelle sollte mind. 1.4kW (230V x 6A) betragen. (Konfiguriert:
-            {{
-              ($store.state.mqtt["openWB/general/chargemode_config/pv_charging/switch_on_threshold"] +
-                $store.state.mqtt["openWB/general/chargemode_config/pv_charging/switch_off_threshold"]) /
-              1000
-            }}&nbsp;kW)
+            {{ chargingSwitchRange / 1000 }}&nbsp;kW)
           </openwb-base-alert>
           <openwb-base-number-input
             title="Einschaltschwelle"
@@ -454,6 +450,14 @@ export default {
           case "individual":
             break;
         }
+      },
+    },
+    chargingSwitchRange: {
+      get() {
+        return (
+          this.$store.state.mqtt["openWB/general/chargemode_config/pv_charging/switch_on_threshold"] +
+          this.$store.state.mqtt["openWB/general/chargemode_config/pv_charging/switch_off_threshold"]
+        );
       },
     },
     batMode: {

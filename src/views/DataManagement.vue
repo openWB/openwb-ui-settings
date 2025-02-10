@@ -213,7 +213,7 @@
         </form>
       </openwb-base-card>
       <openwb-base-card
-        v-if="!installAssistantActive"
+        v-if="!installAssistantActive && !$store.state.mqtt['openWB/general/extern']"
         title="Datenübernahme"
         subtype="success"
         :collapsible="true"
@@ -450,6 +450,7 @@ export default {
   data() {
     return {
       mqttTopicsToSubscribe: [
+        "openWB/general/extern",
         "openWB/system/configurable/backup_clouds",
         "openWB/system/configurable/monitoring",
         "openWB/system/backup_cloud/config",

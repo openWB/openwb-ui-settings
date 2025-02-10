@@ -1,301 +1,309 @@
 <template>
   <div class="chargeLog">
-    <form name="chargeLogForm">
-      <openwb-base-card title="Filter">
-        <openwb-base-text-input
-          v-model="chargeLogDate"
-          title="Zeitraum"
-          subtype="month"
-          min="2018-01"
-          :show-quick-buttons="true"
-          :max="currentMonth"
-          @update:model-value="requestChargeLog()"
-        />
-        <openwb-base-card
-          title="Erweiterte Optionen"
-          :collapsible="true"
-          :collapsed="true"
-        >
-          <template #header>
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'filter']"
-            />
-            Erweiterte Optionen
-          </template>
-          <openwb-base-button-group-input
-            v-model="chargeLogRequestData.filter.vehicle.prio"
-            title="Priorität"
-            :buttons="[
-              {
-                buttonValue: undefined,
-                text: 'Alle',
-              },
-              {
-                buttonValue: false,
-                text: 'Nein',
-                class: 'btn-outline-danger',
-              },
-              {
-                buttonValue: true,
-                text: 'Ja',
-                class: 'btn-outline-success',
-              },
-            ]"
+    <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+      <openwb-base-alert subtype="info">
+        Das Ladeprotokoll ist nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet. Du
+        findest alle Ladevorgänge in der openWB, die sich im Steuerungsmodus "primary" befindet.
+      </openwb-base-alert>
+    </div>
+    <div v-else>
+      <form name="chargeLogForm">
+        <openwb-base-card title="Filter">
+          <openwb-base-text-input
+            v-model="chargeLogDate"
+            title="Zeitraum"
+            subtype="month"
+            min="2018-01"
+            :show-quick-buttons="true"
+            :max="currentMonth"
             @update:model-value="requestChargeLog()"
           />
-          <openwb-base-select-input
-            v-model="chargeLogRequestData.filter.vehicle.chargemode"
-            title="Lademodus"
-            multiple
-            :options="chargeModeList"
-            @update:model-value="requestChargeLog()"
+          <openwb-base-card
+            title="Erweiterte Optionen"
+            :collapsible="true"
+            :collapsed="true"
           >
-            <template #help> Es können mehrere Elemente ausgewählt werden. </template>
-          </openwb-base-select-input>
-          <openwb-base-select-input
-            v-model="chargeLogRequestData.filter.chargepoint.id"
-            title="Ladepunkt"
-            multiple
-            :options="chargePointList"
-            @update:model-value="requestChargeLog()"
-          >
-            <template #help> Es können mehrere Elemente ausgewählt werden. </template>
-          </openwb-base-select-input>
-          <openwb-base-select-input
-            v-model="chargeLogRequestData.filter.vehicle.id"
-            title="Fahrzeug"
-            multiple
-            :options="vehicleList"
-            @update:model-value="requestChargeLog()"
-          >
-            <template #help> Es können mehrere Elemente ausgewählt werden. </template>
-          </openwb-base-select-input>
-          <openwb-base-array-input
-            v-model="chargeLogRequestData.filter.vehicle.tag"
-            title="ID-Tags"
-            @update:model-value="requestChargeLog()"
-          >
-            <template #help> Es können mehrere Tags als Filter verwendet werden. </template>
-          </openwb-base-array-input>
-        </openwb-base-card>
-      </openwb-base-card>
-      <openwb-base-alert subtype="info">
-        Das Ladeprotokoll kann monatsweise automatisiert über folgende URL abgerufen werden:
-        <a :href="downloadUrlMonth">{{ downloadUrlMonth }}</a> <br />
-        Das komplette Ladeprotokoll für das gesamte Jahr kann automatisiert über folgende URL abgerufen werden:
-        <a :href="downloadUrlYear">{{ downloadUrlYear }}</a>
-      </openwb-base-alert>
-      <openwb-base-alert
-        v-if="!chargeLogRead"
-        subtype="info"
-      >
-        Es wurden noch keine Daten abgerufen.
-      </openwb-base-alert>
-      <div v-else>
-        <vue3-table-lite
-          class="charge-log-table"
-          :is-static-mode="true"
-          :columns="chargeLogColumns"
-          :rows="chargeLogDataset"
-          :total="totalRecordCount"
-          :sortable="table.sortable"
-          :messages="table.messages"
-          :page-options="table.pageOptions"
-          :limit="25"
-          :is-slot-mode="true"
-        >
-          <template #time_begin="data">
-            {{ dashIfNotSet(data.value.time_begin) }}
-          </template>
-          <template #time_end="data">
-            {{ dashIfNotSet(data.value.time_end) }}
-          </template>
-          <template #time_time_charged="data">
-            <div class="td-end">
-              {{ data.value.time_time_charged }}
-            </div>
-          </template>
-          <template #data_costs="data">
-            <div class="td-end">
-              {{ formatCosts(data.value.data_costs) }}
-            </div>
-          </template>
-          <template #data_power_source="data">
-            <div
-              v-if="data.value.data_power_source"
-              class="progress td-center"
-              :title="getProgressTitle(data.value.data_power_source)"
-            >
-              <div
-                class="progress-bar bg-danger"
-                role="progressbar"
-                :style="{
-                  width: data.value.data_power_source.grid + '%',
-                }"
-                :aria-valuenow="data.value.data_power_source.grid"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              />
-              <div
-                class="progress-bar bg-primary"
-                role="progressbar"
-                :style="{
-                  width: data.value.data_power_source.cp + '%',
-                }"
-                :aria-valuenow="data.value.data_power_source.cp"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              />
-              <div
-                class="progress-bar bg-warning"
-                role="progressbar"
-                :style="{
-                  width: data.value.data_power_source.bat + '%',
-                }"
-                :aria-valuenow="data.value.data_power_source.bat"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              />
-              <div
-                class="progress-bar bg-success"
-                role="progressbar"
-                :style="{
-                  width: data.value.data_power_source.pv + '%',
-                }"
-                :aria-valuenow="data.value.data_power_source.pv"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              />
-            </div>
-            <div
-              v-else
-              class="td-center"
-            >
-              -
-            </div>
-          </template>
-          <template #vehicle_chargemode="data">
-            <div
-              class="td-center tag"
-              :class="getChargeModeClass(data.value.vehicle_chargemode)"
-            >
-              {{ data.value.vehicle_chargemode }}
-            </div>
-          </template>
-          <template #vehicle_prio="data">
-            <div
-              class="td-center tag"
-              :class="data.value.vehicle_prio ? 'bg-success' : 'bg-danger'"
-            >
-              {{ formatBool(data.value.vehicle_prio) }}
-            </div>
-          </template>
-          <template #vehicle_rfid="data">
-            {{ dashIfNotSet(data.value.vehicle_rfid) }}
-          </template>
-          <template #vehicle_soc_at_start="data">
-            <div class="td-end">
-              <span class="no-wrap">
-                {{ formatSoc(data.value.vehicle_soc_at_start) }}
-              </span>
-              <span class="no-wrap"> ({{ formatRange(data.value.vehicle_range_at_start) }}) </span>
-            </div>
-          </template>
-          <template #vehicle_soc_at_end="data">
-            <div class="td-end">
-              <span class="no-wrap">
-                {{ formatSoc(data.value.vehicle_soc_at_end) }}
-              </span>
-              <span class="no-wrap"> ({{ formatRange(data.value.vehicle_range_at_end) }}) </span>
-            </div>
-          </template>
-          <template #chargepoint_name="data">
-            {{ dashIfNotSet(data.value.chargepoint_name) }}
-          </template>
-          <template #chargepoint_serial_number="data">
-            {{ dashIfNotSet(data.value.chargepoint_serial_number) }}
-          </template>
-          <template #data_imported_since_mode_switch="data">
-            <div class="td-end">
-              <span class="no-wrap">
-                {{ formatWh(data.value.data_imported_since_mode_switch) }}
-              </span>
-              <span class="no-wrap"> ({{ formatRange(data.value.data_range_charged) }}) </span>
-            </div>
-          </template>
-          <!-- <template #data_power="data">
-            <div class="td-end">
-              {{ formatW(data.value.data_power) }}
-            </div>
-          </template> -->
-          <template #chargepoint_imported_at_start="data">
-            <div class="td-end">
-              {{ formatWh(data.value.chargepoint_imported_at_start) }}
-            </div>
-          </template>
-          <template #chargepoint_imported_at_end="data">
-            <div class="td-end">
-              {{ formatWh(data.value.chargepoint_imported_at_end) }}
-            </div>
-          </template>
-        </vue3-table-lite>
-        <div v-if="totalRecordCount > 0">
-          <div class="row justify-content-center">
-            <openwb-base-click-button
-              class="col-4 btn-success"
-              @button-clicked="downloadChargeLog()"
-            >
-              Als CSV exportieren
+            <template #header>
               <font-awesome-icon
                 fixed-width
-                :icon="['fas', 'download']"
+                :icon="['fas', 'filter']"
               />
-            </openwb-base-click-button>
-            <a
-              ref="downloadChargeLogLink"
-              class="hide"
+              Erweiterte Optionen
+            </template>
+            <openwb-base-button-group-input
+              v-model="chargeLogRequestData.filter.vehicle.prio"
+              title="Priorität"
+              :buttons="[
+                {
+                  buttonValue: undefined,
+                  text: 'Alle',
+                },
+                {
+                  buttonValue: false,
+                  text: 'Nein',
+                  class: 'btn-outline-danger',
+                },
+                {
+                  buttonValue: true,
+                  text: 'Ja',
+                  class: 'btn-outline-success',
+                },
+              ]"
+              @update:model-value="requestChargeLog()"
             />
-          </div>
-          <div class="row">
-            <div class="col">
-              <h2>Summe</h2>
-            </div>
-          </div>
-          <!-- ToDo: build a table component -->
+            <openwb-base-select-input
+              v-model="chargeLogRequestData.filter.vehicle.chargemode"
+              title="Lademodus"
+              multiple
+              :options="chargeModeList"
+              @update:model-value="requestChargeLog()"
+            >
+              <template #help> Es können mehrere Elemente ausgewählt werden. </template>
+            </openwb-base-select-input>
+            <openwb-base-select-input
+              v-model="chargeLogRequestData.filter.chargepoint.id"
+              title="Ladepunkt"
+              multiple
+              :options="chargePointList"
+              @update:model-value="requestChargeLog()"
+            >
+              <template #help> Es können mehrere Elemente ausgewählt werden. </template>
+            </openwb-base-select-input>
+            <openwb-base-select-input
+              v-model="chargeLogRequestData.filter.vehicle.id"
+              title="Fahrzeug"
+              multiple
+              :options="vehicleList"
+              @update:model-value="requestChargeLog()"
+            >
+              <template #help> Es können mehrere Elemente ausgewählt werden. </template>
+            </openwb-base-select-input>
+            <openwb-base-array-input
+              v-model="chargeLogRequestData.filter.vehicle.tag"
+              title="ID-Tags"
+              @update:model-value="requestChargeLog()"
+            >
+              <template #help> Es können mehrere Tags als Filter verwendet werden. </template>
+            </openwb-base-array-input>
+          </openwb-base-card>
+        </openwb-base-card>
+        <openwb-base-alert subtype="info">
+          Das Ladeprotokoll kann monatsweise automatisiert über folgende URL abgerufen werden:
+          <a :href="downloadUrlMonth">{{ downloadUrlMonth }}</a> <br />
+          Das komplette Ladeprotokoll für das gesamte Jahr kann automatisiert über folgende URL abgerufen werden:
+          <a :href="downloadUrlYear">{{ downloadUrlYear }}</a>
+        </openwb-base-alert>
+        <openwb-base-alert
+          v-if="!chargeLogRead"
+          subtype="info"
+        >
+          Es wurden noch keine Daten abgerufen.
+        </openwb-base-alert>
+        <div v-else>
           <vue3-table-lite
-            class="charge-log-totals"
+            class="charge-log-table"
             :is-static-mode="true"
-            :is-hide-paging="true"
-            :columns="totals.columns"
-            :rows="chargeLogTotals"
-            :total="1"
+            :columns="chargeLogColumns"
+            :rows="chargeLogDataset"
+            :total="totalRecordCount"
+            :sortable="table.sortable"
+            :messages="table.messages"
+            :page-options="table.pageOptions"
+            :limit="25"
             :is-slot-mode="true"
           >
-            <template #time_charged="data">
+            <template #time_begin="data">
+              {{ dashIfNotSet(data.value.time_begin) }}
+            </template>
+            <template #time_end="data">
+              {{ dashIfNotSet(data.value.time_end) }}
+            </template>
+            <template #time_time_charged="data">
               <div class="td-end">
-                {{ data.value.time_charged }}
+                {{ data.value.time_time_charged }}
               </div>
             </template>
-            <template #imported_since_mode_switch="data">
+            <template #data_costs="data">
               <div class="td-end">
-                {{ formatWh(data.value.imported_since_mode_switch) }}
+                {{ formatCosts(data.value.data_costs) }}
               </div>
             </template>
-            <template #range_charged="data">
-              <div class="td-end">
-                {{ formatRange(data.value.range_charged) }}
+            <template #data_power_source="data">
+              <div
+                v-if="data.value.data_power_source"
+                class="progress td-center"
+                :title="getProgressTitle(data.value.data_power_source)"
+              >
+                <div
+                  class="progress-bar bg-danger"
+                  role="progressbar"
+                  :style="{
+                    width: data.value.data_power_source.grid + '%',
+                  }"
+                  :aria-valuenow="data.value.data_power_source.grid"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                />
+                <div
+                  class="progress-bar bg-primary"
+                  role="progressbar"
+                  :style="{
+                    width: data.value.data_power_source.cp + '%',
+                  }"
+                  :aria-valuenow="data.value.data_power_source.cp"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                />
+                <div
+                  class="progress-bar bg-warning"
+                  role="progressbar"
+                  :style="{
+                    width: data.value.data_power_source.bat + '%',
+                  }"
+                  :aria-valuenow="data.value.data_power_source.bat"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                />
+                <div
+                  class="progress-bar bg-success"
+                  role="progressbar"
+                  :style="{
+                    width: data.value.data_power_source.pv + '%',
+                  }"
+                  :aria-valuenow="data.value.data_power_source.pv"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                />
+              </div>
+              <div
+                v-else
+                class="td-center"
+              >
+                -
               </div>
             </template>
-            <template #costs="data">
+            <template #vehicle_chargemode="data">
+              <div
+                class="td-center tag"
+                :class="getChargeModeClass(data.value.vehicle_chargemode)"
+              >
+                {{ data.value.vehicle_chargemode }}
+              </div>
+            </template>
+            <template #vehicle_prio="data">
+              <div
+                class="td-center tag"
+                :class="data.value.vehicle_prio ? 'bg-success' : 'bg-danger'"
+              >
+                {{ formatBool(data.value.vehicle_prio) }}
+              </div>
+            </template>
+            <template #vehicle_rfid="data">
+              {{ dashIfNotSet(data.value.vehicle_rfid) }}
+            </template>
+            <template #vehicle_soc_at_start="data">
               <div class="td-end">
-                {{ formatCosts(data.value.costs) }}
+                <span class="no-wrap">
+                  {{ formatSoc(data.value.vehicle_soc_at_start) }}
+                </span>
+                <span class="no-wrap"> ({{ formatRange(data.value.vehicle_range_at_start) }}) </span>
+              </div>
+            </template>
+            <template #vehicle_soc_at_end="data">
+              <div class="td-end">
+                <span class="no-wrap">
+                  {{ formatSoc(data.value.vehicle_soc_at_end) }}
+                </span>
+                <span class="no-wrap"> ({{ formatRange(data.value.vehicle_range_at_end) }}) </span>
+              </div>
+            </template>
+            <template #chargepoint_name="data">
+              {{ dashIfNotSet(data.value.chargepoint_name) }}
+            </template>
+            <template #chargepoint_serial_number="data">
+              {{ dashIfNotSet(data.value.chargepoint_serial_number) }}
+            </template>
+            <template #data_imported_since_mode_switch="data">
+              <div class="td-end">
+                <span class="no-wrap">
+                  {{ formatWh(data.value.data_imported_since_mode_switch) }}
+                </span>
+                <span class="no-wrap"> ({{ formatRange(data.value.data_range_charged) }}) </span>
+              </div>
+            </template>
+            <!-- <template #data_power="data">
+              <div class="td-end">
+                {{ formatW(data.value.data_power) }}
+              </div>
+            </template> -->
+            <template #chargepoint_imported_at_start="data">
+              <div class="td-end">
+                {{ formatWh(data.value.chargepoint_imported_at_start) }}
+              </div>
+            </template>
+            <template #chargepoint_imported_at_end="data">
+              <div class="td-end">
+                {{ formatWh(data.value.chargepoint_imported_at_end) }}
               </div>
             </template>
           </vue3-table-lite>
+          <div v-if="totalRecordCount > 0">
+            <div class="row justify-content-center">
+              <openwb-base-click-button
+                class="col-4 btn-success"
+                @button-clicked="downloadChargeLog()"
+              >
+                Als CSV exportieren
+                <font-awesome-icon
+                  fixed-width
+                  :icon="['fas', 'download']"
+                />
+              </openwb-base-click-button>
+              <a
+                ref="downloadChargeLogLink"
+                class="hide"
+              />
+            </div>
+            <div class="row">
+              <div class="col">
+                <h2>Summe</h2>
+              </div>
+            </div>
+            <!-- ToDo: build a table component -->
+            <vue3-table-lite
+              class="charge-log-totals"
+              :is-static-mode="true"
+              :is-hide-paging="true"
+              :columns="totals.columns"
+              :rows="chargeLogTotals"
+              :total="1"
+              :is-slot-mode="true"
+            >
+              <template #time_charged="data">
+                <div class="td-end">
+                  {{ data.value.time_charged }}
+                </div>
+              </template>
+              <template #imported_since_mode_switch="data">
+                <div class="td-end">
+                  {{ formatWh(data.value.imported_since_mode_switch) }}
+                </div>
+              </template>
+              <template #range_charged="data">
+                <div class="td-end">
+                  {{ formatRange(data.value.range_charged) }}
+                </div>
+              </template>
+              <template #costs="data">
+                <div class="td-end">
+                  {{ formatCosts(data.value.costs) }}
+                </div>
+              </template>
+            </vue3-table-lite>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </template>
 
