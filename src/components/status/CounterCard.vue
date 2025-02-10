@@ -148,6 +148,11 @@ export default {
   props: {
     counter: { type: Object, required: true },
   },
+  data() {
+    return {
+      mqttTopicsToSubscribe: [`openWB/counter/${this.counter.id}/get/+`],
+    };
+  },
   computed: {
     baseTopic: {
       get() {

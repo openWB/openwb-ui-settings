@@ -57,9 +57,13 @@ export default {
   },
   mixins: [ComponentState],
   props: {
-    vehicle: { type: Object, required: false, default: undefined },
     vehicleKey: { type: String, required: true },
     vehicleName: { type: String, default: "" },
+  },
+  data() {
+    return {
+      mqttTopicsToSubscribe: ["openWB/vehicle/+/get/+"],
+    };
   },
   computed: {
     vehicleIndex: {

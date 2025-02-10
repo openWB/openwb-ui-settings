@@ -81,30 +81,12 @@ export default {
         "openWB/general/extern",
         // components
         "openWB/system/device/+/component/+/config",
-        // counter
-        "openWB/counter/+/get/+",
-        // pv
-        "openWB/pv/get/+",
-        "openWB/pv/+/get/+",
-        // batteries
-        "openWB/bat/get/+",
-        "openWB/bat/+/get/+",
         // vehicles
         "openWB/vehicle/+/name",
-        "openWB/vehicle/+/get/+",
-        // charge points total
-        "openWB/chargepoint/get/power",
-        "openWB/chargepoint/get/imported",
-        "openWB/chargepoint/get/exported",
-        "openWB/chargepoint/get/daily_imported",
-        "openWB/chargepoint/get/daily_exported",
         // individual charge points
         // these topics must be subscribed at last to avoid a buffer overflow
+        // ToDo: fixed with latest refactoring of topic subscriptions???
         "openWB/chargepoint/+/config",
-        "openWB/chargepoint/+/get/+",
-        "openWB/chargepoint/+/get/connected_vehicle/info",
-        "openWB/chargepoint/+/set/+",
-        "openWB/internal_chargepoint/+/data/phases_to_use",
       ],
     };
   },

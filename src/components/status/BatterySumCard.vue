@@ -84,6 +84,11 @@ export default {
     FontAwesomeIcon,
   },
   mixins: [ComponentState],
+  data() {
+    return {
+      mqttTopicsToSubscribe: ["openWB/bat/get/+"],
+    };
+  },
   computed: {
     baseTopic: {
       get() {

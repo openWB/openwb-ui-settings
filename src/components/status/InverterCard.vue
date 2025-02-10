@@ -80,6 +80,11 @@ export default {
   props: {
     inverter: { type: Object, required: true },
   },
+  data() {
+    return {
+      mqttTopicsToSubscribe: [`openWB/pv/${this.inverter.id}/get/+`],
+    };
+  },
   computed: {
     baseTopic: {
       get() {

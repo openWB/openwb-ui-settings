@@ -218,10 +218,20 @@ export default {
     installedChargePointKey: { type: String, required: true },
     installedChargePoint: { type: Object, required: true },
   },
+  data() {
+    return {
+      mqttTopicsToSubscribe: [
+        `openWB/chargepoint/${this.installedChargePoint.id}/get/+`,
+        `"openWB/chargepoint/${this.installedChargePoint.id}/get/connected_vehicle/info`,
+        `"openWB/chargepoint/${this.installedChargePoint.id}/set/+`,
+        `"openWB/internal_chargepoint/${this.installedChargePoint.id}/data/phases_to_use`,
+      ],
+    };
+  },
   computed: {
     chargePointIndex: {
       get() {
-        return parseInt(this.installedChargePointKey.match(/(?:\/)(\d+)(?=\/)/)[1]);
+        return this.installedChargePoint.id;
       },
     },
     baseTopic: {
@@ -231,9 +241,8 @@ export default {
     },
     chargingStatus: {
       get() {
-        let ID = this.chargePointIndex;
-        let plugState = this.$store.state.mqtt["openWB/chargepoint/" + ID + "/get/plug_state"];
-        let chargeState = this.$store.state.mqtt["openWB/chargepoint/" + ID + "/get/charge_state"];
+        let plugState = this.$store.state.mqtt[this.baseTopic + "/get/plug_state"];
+        let chargeState = this.$store.state.mqtt[this.baseTopic + "/get/charge_state"];
 
         if (plugState == 1 && chargeState == 1) {
           return { icon: ["fas", "plug-circle-bolt"], text: "Fahrzeug angesteckt, Ladevorgang aktiv" };

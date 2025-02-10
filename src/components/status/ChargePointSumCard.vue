@@ -76,6 +76,17 @@ export default {
     FontAwesomeIcon,
   },
   mixins: [ComponentState],
+  data() {
+    return {
+      mqttTopicsToSubscribe: [
+        "openWB/chargepoint/get/power",
+        "openWB/chargepoint/get/imported",
+        "openWB/chargepoint/get/exported",
+        "openWB/chargepoint/get/daily_imported",
+        "openWB/chargepoint/get/daily_exported",
+      ],
+    };
+  },
   computed: {
     baseTopic: {
       get() {
