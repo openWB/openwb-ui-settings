@@ -149,6 +149,7 @@ export default {
   },
   data() {
     return {
+      mqttTopicsToSubscribe: [`openWB/io/states/${this.ioDevice.id}/get/+`],
       state: {
         true: {
           icon: ["fas", "square"],

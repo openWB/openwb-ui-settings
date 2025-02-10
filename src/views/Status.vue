@@ -48,8 +48,6 @@
     />
     <!-- electricity tariff -->
     <electricity-tariff-card v-if="$store.state.mqtt['openWB/general/extern'] === false" />
-    <!-- ripple-control-receiver -->
-    <ripple-control-receiver-card />
   </div>
 </template>
 
@@ -89,7 +87,6 @@ export default {
         "openWB/system/device/+/component/+/config",
         // io devices
         "openWB/system/io/+/config",
-        "openWB/io/states/+/get/+",
         // vehicles
         "openWB/vehicle/+/name",
         // individual charge points
