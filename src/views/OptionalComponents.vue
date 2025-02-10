@@ -2,6 +2,35 @@
   <div class="optionalComponents">
     <form name="optionalComponentsForm">
       <openwb-base-card title="Identifikation">
+        <openwb-base-button-group-input
+          title="Identifikation aktivieren"
+          :model-value="$store.state.mqtt['openWB/optional/rfid/active']"
+          :buttons="[
+            {
+              buttonValue: false,
+              text: 'Aus',
+              class: 'btn-outline-danger',
+            },
+            {
+              buttonValue: true,
+              text: 'An',
+              class: 'btn-outline-success',
+            },
+          ]"
+          @update:model-value="updateState('openWB/optional/rfid/active', $event)"
+        >
+          <template #help>
+            Die Identifikation kann zum Entsperren von Ladepunkten und/oder zur Zuordnung von Fahrzeugen genutzt werden
+            und kann auf mehreren Wegen erfolgen:
+            <ul>
+              <li>Über einen in der openWB verbauten RFID-Reader (optional, z.B. anhand des Lieferscheins prüfen).</li>
+              <li>
+                Durch die automatische Erkennung an einer openWB Pro (muss in den Einstellungen aktiviert werden).
+              </li>
+              <li>Durch manuelle Eingabe einer ID am Display einer openWB.</li>
+            </ul>
+          </template>
+        </openwb-base-button-group-input>
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
           <openwb-base-alert subtype="info">
             Weitere Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary"
@@ -9,37 +38,6 @@
           </openwb-base-alert>
         </div>
         <div v-else>
-          <openwb-base-button-group-input
-            title="Identifikation aktivieren"
-            :model-value="$store.state.mqtt['openWB/optional/rfid/active']"
-            :buttons="[
-              {
-                buttonValue: false,
-                text: 'Aus',
-                class: 'btn-outline-danger',
-              },
-              {
-                buttonValue: true,
-                text: 'An',
-                class: 'btn-outline-success',
-              },
-            ]"
-            @update:model-value="updateState('openWB/optional/rfid/active', $event)"
-          >
-            <template #help>
-              Die Identifikation kann zum Entsperren von Ladepunkten und/oder zur Zuordnung von Fahrzeugen genutzt
-              werden und kann auf mehreren Wegen erfolgen:
-              <ul>
-                <li>
-                  Über einen in der openWB verbauten RFID-Reader (optional, z.B. anhand des Lieferscheins prüfen).
-                </li>
-                <li>
-                  Durch die automatische Erkennung an einer openWB Pro (muss in den Einstellungen aktiviert werden).
-                </li>
-                <li>Durch manuelle Eingabe einer ID am Display einer openWB.</li>
-              </ul>
-            </template>
-          </openwb-base-button-group-input>
           <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true">
             <openwb-base-alert
               subtype="info"

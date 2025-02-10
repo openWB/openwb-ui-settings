@@ -177,91 +177,98 @@
               @update:configuration="updateConfiguration('openWB/optional/et/provider', $event)"
             />
           </div>
-        </div>
-        <hr />
-        <openwb-base-heading> Speicher-Entladung ins Fahrzeug steuern </openwb-base-heading>
-        <div v-if="$store.state.mqtt['openWB/bat/get/power_limit_controllable'] === true">
-          <openwb-base-button-group-input
-            title="Speicher-Entladung"
-            :buttons="[
-              {
-                buttonValue: 'no_limit',
-                text: 'immer',
-              },
-              {
-                buttonValue: 'limit_stop',
-                text: 'gesperrt, wenn Fahrzeug lädt',
-              },
-              {
-                buttonValue: 'limit_to_home_consumption',
-                text: 'für Hausverbrauch',
-              },
-            ]"
-            :model-value="$store.state.mqtt['openWB/bat/config/power_limit_mode']"
-            @update:model-value="updateState('openWB/bat/config/power_limit_mode', $event)"
-          >
-            <template #help>
-              Wenn das Entladen des Speichers immer erlaubt ist, wird das Fahrzeug aus dem Speicher geladen anstatt
-              Strom aus dem Netz zu beziehen. <br />
-              Im Modus "gesperrt, wenn Fahrzeug lädt", wird die Entladung nur zugelassen, wenn alle Fahrzeuge im Modus
-              PV-Laden ohne Mindeststrom oder Zielladen mit PV-Überschuss laden.<br />
-              Wenn das Entladen des Speichers auf den Hausverbrauch begrenzt ist und mindestens Fahrzeuge nicht im Modus
-              PV-Laden ohne Mindeststrom oder Zielladen lädt, wird die Entladung des Speichers in Höhe des
-              Hausverbrauchs zugelassen. Kann die Entladung am Speicher nur komplett gesperrt werden, verhält sich diese
-              Einstellung wie "gesperrt, wenn Fahrzeug lädt".<br />
-              Diese Einstellung übersteuert ggf die Einstellungen zur Speicher-Beachtung im Modus PV-Laden.
-            </template>
-          </openwb-base-button-group-input>
-        </div>
-        <div v-else>
-          <openwb-base-alert subtype="info">
-            Die Speicher-Entladung ins Fahrzeug kann nicht gesteuert werden, da die Entladeleistung nicht an den/die
-            konfigurierten Speicher übergeben werden kann.
-          </openwb-base-alert>
+          <hr />
+          <openwb-base-heading> Speicher-Entladung ins Fahrzeug steuern </openwb-base-heading>
+          <div v-if="$store.state.mqtt['openWB/bat/get/power_limit_controllable'] === true">
+            <openwb-base-button-group-input
+              title="Speicher-Entladung"
+              :buttons="[
+                {
+                  buttonValue: 'no_limit',
+                  text: 'immer',
+                },
+                {
+                  buttonValue: 'limit_stop',
+                  text: 'gesperrt, wenn Fahrzeug lädt',
+                },
+                {
+                  buttonValue: 'limit_to_home_consumption',
+                  text: 'für Hausverbrauch',
+                },
+              ]"
+              :model-value="$store.state.mqtt['openWB/bat/config/power_limit_mode']"
+              @update:model-value="updateState('openWB/bat/config/power_limit_mode', $event)"
+            >
+              <template #help>
+                Wenn das Entladen des Speichers immer erlaubt ist, wird das Fahrzeug aus dem Speicher geladen anstatt
+                Strom aus dem Netz zu beziehen. <br />
+                Im Modus "gesperrt, wenn Fahrzeug lädt", wird die Entladung nur zugelassen, wenn alle Fahrzeuge im Modus
+                PV-Laden ohne Mindeststrom oder Zielladen mit PV-Überschuss laden.<br />
+                Wenn das Entladen des Speichers auf den Hausverbrauch begrenzt ist und mindestens Fahrzeuge nicht im
+                Modus PV-Laden ohne Mindeststrom oder Zielladen lädt, wird die Entladung des Speichers in Höhe des
+                Hausverbrauchs zugelassen. Kann die Entladung am Speicher nur komplett gesperrt werden, verhält sich
+                diese Einstellung wie "gesperrt, wenn Fahrzeug lädt".<br />
+                Diese Einstellung übersteuert ggf die Einstellungen zur Speicher-Beachtung im Modus PV-Laden.
+              </template>
+            </openwb-base-button-group-input>
+          </div>
+          <div v-else>
+            <openwb-base-alert subtype="info">
+              Die Speicher-Entladung ins Fahrzeug kann nicht gesteuert werden, da die Entladeleistung nicht an den/die
+              konfigurierten Speicher übergeben werden kann.
+            </openwb-base-alert>
+          </div>
         </div>
       </openwb-base-card>
       <openwb-base-card title="OCPP Anbindung">
-        <openwb-base-button-group-input
-          title="OCPP aktivieren"
-          :buttons="[
-            {
-              buttonValue: false,
-              text: 'Nein',
-              class: 'btn-outline-danger',
-            },
-            {
-              buttonValue: true,
-              text: 'Ja',
-              class: 'btn-outline-success',
-            },
-          ]"
-          :model-value="$store.state.mqtt['openWB/optional/ocpp/config']?.active"
-          @update:model-value="updateState('openWB/optional/ocpp/config', $event, 'active')"
-        />
-        <div v-if="$store.state.mqtt['openWB/optional/ocpp/config']?.active === true">
+        <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
           <openwb-base-alert subtype="info">
-            Die Ladepunkte übermitteln den ID-Tag, Heartbeat und den Zählerstand zum Zeitpunkt des Ansteckens,
-            Absteckens und alle 5 Minuten. Eine Steuerung per OCPP ist nicht möglich.<br />
-            Alle Ladepunkte, die ihre Daten an das OCPP-Backend übermitteln sollen, müssen zunächst im OCPP-Backend
-            angelegt werden. Die dort eingetragene Chargebox ID muss in der openWB in den Einstellungen des Ladepunkts
-            eingetragen werden.
+            Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
           </openwb-base-alert>
-          <openwb-base-text-input
-            title="URL des OCPP-Backends"
-            subtype="host"
-            :model-value="$store.state.mqtt['openWB/optional/ocpp/config']?.url"
-            @update:model-value="updateState('openWB/optional/ocpp/config', $event, 'url')"
-          />
-          <openwb-base-select-input
-            title="Version"
-            not-selected="Bitte auswählen"
-            :options="[
-              { value: 'ocpp1.6', text: 'OCPP 1.6' },
-              { value: 'ocpp2.0.1', text: 'OCPP 2.0.1' },
+        </div>
+        <div v-else>
+          <openwb-base-button-group-input
+            title="OCPP aktivieren"
+            :buttons="[
+              {
+                buttonValue: false,
+                text: 'Nein',
+                class: 'btn-outline-danger',
+              },
+              {
+                buttonValue: true,
+                text: 'Ja',
+                class: 'btn-outline-success',
+              },
             ]"
-            :model-value="$store.state.mqtt['openWB/optional/ocpp/config']?.version"
-            @update:model-value="updateState('openWB/optional/ocpp/config', $event, 'version')"
+            :model-value="$store.state.mqtt['openWB/optional/ocpp/config']?.active"
+            @update:model-value="updateState('openWB/optional/ocpp/config', $event, 'active')"
           />
+          <div v-if="$store.state.mqtt['openWB/optional/ocpp/config']?.active === true">
+            <openwb-base-alert subtype="info">
+              Die Ladepunkte übermitteln den ID-Tag, Heartbeat und den Zählerstand zum Zeitpunkt des Ansteckens,
+              Absteckens und alle 5 Minuten. Eine Steuerung per OCPP ist nicht möglich.<br />
+              Alle Ladepunkte, die ihre Daten an das OCPP-Backend übermitteln sollen, müssen zunächst im OCPP-Backend
+              angelegt werden. Die dort eingetragene Chargebox ID muss in der openWB in den Einstellungen des Ladepunkts
+              eingetragen werden.
+            </openwb-base-alert>
+            <openwb-base-text-input
+              title="URL des OCPP-Backends"
+              subtype="host"
+              :model-value="$store.state.mqtt['openWB/optional/ocpp/config']?.url"
+              @update:model-value="updateState('openWB/optional/ocpp/config', $event, 'url')"
+            />
+            <openwb-base-select-input
+              title="Version"
+              not-selected="Bitte auswählen"
+              :options="[
+                { value: 'ocpp1.6', text: 'OCPP 1.6' },
+                { value: 'ocpp2.0.1', text: 'OCPP 2.0.1' },
+              ]"
+              :model-value="$store.state.mqtt['openWB/optional/ocpp/config']?.version"
+              @update:model-value="updateState('openWB/optional/ocpp/config', $event, 'version')"
+            />
+          </div>
         </div>
       </openwb-base-card>
       <openwb-base-submit-buttons

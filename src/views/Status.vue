@@ -41,7 +41,7 @@
       :vehicle-name="vehicleName"
     />
     <!-- electricity tariff -->
-    <electricity-tariff-card />
+    <electricity-tariff-card v-if="$store.state.mqtt['openWB/general/extern'] === false" />
     <!-- ripple-control-receiver -->
     <ripple-control-receiver-card />
   </div>
