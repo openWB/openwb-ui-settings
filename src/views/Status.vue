@@ -84,8 +84,6 @@ export default {
         // vehicles
         "openWB/vehicle/+/name",
         // individual charge points
-        // these topics must be subscribed at last to avoid a buffer overflow
-        // ToDo: fixed with latest refactoring of topic subscriptions???
         "openWB/chargepoint/+/config",
       ],
     };
