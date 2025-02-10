@@ -88,6 +88,11 @@ export default {
   props: {
     battery: { type: Object, required: true },
   },
+  data() {
+    return {
+      mqttTopicsToSubscribe: [`openWB/bat/${this.battery.id}/get/+`],
+    };
+  },
   computed: {
     baseTopic: {
       get() {
