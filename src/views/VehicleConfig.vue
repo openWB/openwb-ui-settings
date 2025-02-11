@@ -996,9 +996,8 @@
               @update:model-value="updateState(templateKey, $event, 'chargemode.pv_charging.limit.selected')"
             >
               <template #help>
-                Sofortladen kann ohne Fahrzeug-SoC-Begrenzung (Aus), mit Begrenzung des Fahrzeug-SoC (SoC) bei
-                konfiguriertem SoC-Auslesemodul oder mittels Vorgabe eine gewünschten Energiemenge in kWh (Energie)
-                genutzt werden.
+                PV kann ohne Fahrzeug-SoC-Begrenzung (Aus), mit Begrenzung des Fahrzeug-SoC (SoC) bei konfiguriertem
+                SoC-Auslesemodul oder mittels Vorgabe eine gewünschten Energiemenge in kWh (Energie) genutzt werden.
               </template>
             </openwb-base-button-group-input>
             <openwb-base-range-input
@@ -1404,18 +1403,16 @@
                 :model-value="plan.et_active"
                 @update:model-value="updateState(planKey, $event, 'et_active')"
               />
-              <div v-if="template.et_active == true">
-                <div
-                  v-if="
-                    !$store.state.mqtt['openWB/optional/et/provider'] ||
-                    !$store.state.mqtt['openWB/optional/et/provider'].type
-                  "
-                >
-                  <openwb-base-alert subtype="danger">
-                    Bitte in den übergreifenden Ladeeinstellungen einen Strompreis-Anbieter konfigurieren.
-                  </openwb-base-alert>
-                </div>
-              </div>
+              <openwb-base-alert
+                v-if="
+                  plan.et_active == true &&
+                  (!$store.state.mqtt['openWB/optional/et/provider'] ||
+                    !$store.state.mqtt['openWB/optional/et/provider'].type)
+                "
+                subtype="danger"
+              >
+                Bitte in den übergreifenden Ladeeinstellungen einen Strompreis-Anbieter konfigurieren.
+              </openwb-base-alert>
               <openwb-base-button-group-input
                 title="Anzahl Phasen Zielladen"
                 :buttons="[
@@ -1516,9 +1513,8 @@
               @update:model-value="updateState(templateKey, $event, 'chargemode.eco_charging.limit.selected')"
             >
               <template #help>
-                Sofortladen kann ohne Fahrzeug-SoC-Begrenzung (Aus), mit Begrenzung des Fahrzeug-SoC (SoC) bei
-                konfiguriertem SoC-Auslesemodul oder mittels Vorgabe eine gewünschten Energiemenge in kWh (Energie)
-                genutzt werden.
+                Eco kann ohne Fahrzeug-SoC-Begrenzung (Aus), mit Begrenzung des Fahrzeug-SoC (SoC) bei konfiguriertem
+                SoC-Auslesemodul oder mittels Vorgabe eine gewünschten Energiemenge in kWh (Energie) genutzt werden.
               </template>
             </openwb-base-button-group-input>
             <openwb-base-range-input
@@ -1545,17 +1541,16 @@
             >
               <template #help> Die geladene Energiemenge wird nach dem Anstecken neu gezählt. </template>
             </openwb-base-number-input>
-            <div
+            <openwb-base-alert
               v-if="
                 !$store.state.mqtt['openWB/optional/et/provider'] ||
                 !$store.state.mqtt['openWB/optional/et/provider'].type
               "
+              subtype="danger"
             >
-              <openwb-base-alert subtype="danger">
-                Bitte in den übergreifenden Ladeeinstellungen einen Strompreis-Anbieter konfigurieren. Ohne
-                Strompreis-Anbieter wird im Modus Eco nur geladen, wenn Überschuss vorhanden ist.
-              </openwb-base-alert>
-            </div>
+              Bitte in den übergreifenden Ladeeinstellungen einen Strompreis-Anbieter konfigurieren. Ohne
+              Strompreis-Anbieter wird im Modus Eco nur geladen, wenn Überschuss vorhanden ist.
+            </openwb-base-alert>
             <openwb-base-number-input
               title="Preisgrenze für strompreisbasiertes Laden"
               min="-80"
