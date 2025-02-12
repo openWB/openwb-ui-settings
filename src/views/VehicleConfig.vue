@@ -1146,7 +1146,7 @@
               </template>
             </openwb-base-heading>
             <openwb-base-range-input
-              :title="'Ladestrom unter der Preisgrenze' + (dcChargingEnabled ? ' (AC)' : '')"
+              :title="'Minimaler Dauerstrom unter der Preisgrenze' + (dcChargingEnabled ? ' (AC)' : '')"
               :min="6"
               :max="32"
               :step="1"
@@ -1156,7 +1156,7 @@
             />
             <openwb-base-number-input
               v-if="dcChargingEnabled === true"
-              title="Ladeleistung unter der Preisgrenze (DC)"
+              title="Minimale Dauerleistung unter der Preisgrenze (DC)"
               unit="kW"
               :min="0"
               :model-value="ac_current2dc_power(template.chargemode.eco_charging.dc_current)"
