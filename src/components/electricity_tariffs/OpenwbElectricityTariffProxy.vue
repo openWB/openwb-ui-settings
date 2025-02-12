@@ -19,7 +19,7 @@ export default {
   emits: ["update:configuration"],
   methods: {
     getTariffComponent() {
-      console.debug(`loading electricity tariff: ${this.electricityTariff.name} (${this.electricityTariff.type})`);
+      console.debug(`loading electricity tariff: ${this.electricityTariff.type}`);
       return defineAsyncComponent({
         loader: () => import(`./${this.electricityTariff.type}/electricity_tariff.vue`),
         errorComponent: OpenwbElectricityTariffFallback,

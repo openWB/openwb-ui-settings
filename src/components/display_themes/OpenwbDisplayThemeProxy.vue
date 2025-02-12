@@ -49,7 +49,7 @@ export default {
   emits: ["update:configuration"],
   methods: {
     getDisplayThemeComponent() {
-      console.debug(`loading display theme: ${this.displayTheme.name} (${this.displayTheme.type})`);
+      console.debug(`loading display theme: ${this.displayTheme.type}`);
       return defineAsyncComponent({
         loader: () => import(`./${this.displayTheme.type}/displayTheme.vue`),
         errorComponent: OpenwbDisplayThemeFallback,

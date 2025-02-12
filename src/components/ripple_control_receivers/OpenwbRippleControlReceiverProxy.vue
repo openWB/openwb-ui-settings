@@ -20,9 +20,7 @@ export default {
   emits: ["update:configuration", "sendCommand"],
   methods: {
     getRippleControlReceiverComponent() {
-      console.debug(
-        `loading ripple control receiver: ${this.rippleControlReceiver.name} (${this.rippleControlReceiver.type})`,
-      );
+      console.debug(`loading ripple control receiver: ${this.rippleControlReceiver.type}`);
       return defineAsyncComponent({
         loader: () => import(`./${this.rippleControlReceiver.type}/ripple_control_receiver.vue`),
         errorComponent: OpenwbRippleControlReceiverFallback,
