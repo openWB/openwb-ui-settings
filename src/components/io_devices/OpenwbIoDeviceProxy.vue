@@ -20,7 +20,7 @@ export default {
   emits: ["update:configuration", "sendCommand"],
   computed: {
     myComponent() {
-      console.debug(`loading io device: ${this.ioDevice.name} (${this.ioDevice.type})`);
+      console.debug(`loading io device: ${this.ioDevice.type}`);
       return defineAsyncComponent({
         loader: () => import(`./${this.ioDevice.type}/io_device.vue`),
         errorComponent: OpenwbIoDeviceConfigFallback,
