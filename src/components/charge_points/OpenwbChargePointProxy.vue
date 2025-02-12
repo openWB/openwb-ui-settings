@@ -26,14 +26,14 @@ export default {
   emits: ["update:configuration"],
   methods: {
     getChargePointSettingsComponent() {
-      console.debug(`loading charge point settings: ${this.chargePoint.name} (${this.chargePoint.type})`);
+      console.debug(`loading charge point settings: ${this.chargePoint.type}`);
       return defineAsyncComponent({
         loader: () => import(`./${this.chargePoint.type}/chargePoint.vue`),
         errorComponent: OpenwbChargePointConfigFallback,
       });
     },
     getChargePointCommandsComponent() {
-      console.debug(`loading charge point commands: ${this.chargePoint.name} (${this.chargePoint.type})`);
+      console.debug(`loading charge point commands: ${this.chargePoint.type}`);
       return defineAsyncComponent({
         loader: () => import(`./${this.chargePoint.type}/commands.vue`),
         errorComponent: OpenwbChargePointCommandsFallback,

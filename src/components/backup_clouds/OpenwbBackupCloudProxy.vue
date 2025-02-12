@@ -20,7 +20,7 @@ export default {
   emits: ["update:configuration", "sendCommand"],
   methods: {
     getBackupCloudComponent() {
-      console.debug(`loading backup cloud: ${this.backupCloud.name} (${this.backupCloud.type})`);
+      console.debug(`loading backup cloud: ${this.backupCloud.type}`);
       return defineAsyncComponent({
         loader: () => import(`./${this.backupCloud.type}/backup_cloud.vue`),
         errorComponent: OpenwbBackupCloudFallback,

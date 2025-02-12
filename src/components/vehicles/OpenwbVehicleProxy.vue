@@ -21,7 +21,7 @@ export default {
   emits: ["update:configuration"],
   methods: {
     getVehicleComponent() {
-      console.debug(`loading vehicle: ${this.vehicle.name} (${this.vehicle.type})`);
+      console.debug(`loading vehicle: ${this.vehicle.type}`);
       return defineAsyncComponent({
         loader: () => import(`./${this.vehicle.type}/vehicle.vue`),
         errorComponent: OpenwbVehicleFallback,
