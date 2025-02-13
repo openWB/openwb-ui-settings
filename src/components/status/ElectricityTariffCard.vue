@@ -1,33 +1,18 @@
 <template>
-  <openwb-base-card
+  <status-card
     v-if="electricityTariffConfigured"
     subtype="secondary"
-    :collapsible="true"
-    :collapsed="true"
-    class="pb-0"
+    :state="$store.state.mqtt[baseTopic + '/get/fault_state']"
+    :state-message="$store.state.mqtt[baseTopic + '/get/fault_str']"
   >
-    <template #header>
+    <template #header-left>
       <font-awesome-icon
         fixed-width
         :icon="['fas', 'ranking-star']"
       />
       Variabler Stromtarif
     </template>
-    <template #actions>
-      <div
-        v-if="getFaultStateSubtype(baseTopic) == 'success'"
-        class="text-right"
-      >
-        {{ currentPrice }}&nbsp;ct/kWh
-      </div>
-      <span
-        v-else
-        :class="'subheader pill bg-' + getFaultStateSubtype(baseTopic)"
-      >
-        <div v-if="getFaultStateSubtype(baseTopic) == 'warning'">Warnung</div>
-        <div v-else>Fehler</div>
-      </span>
-    </template>
+    <template #header-right>{{ currentPrice }}&nbsp;ct/kWh</template>
     <openwb-base-card
       :title="'Anbieter: ' + $store.state.mqtt[baseTopic + '/provider'].name"
       subtype="white"
@@ -43,33 +28,18 @@
         />
       </div>
     </openwb-base-card>
-
-    <template #footer>
-      <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
-        <font-awesome-icon
-          fixed-width
-          :icon="stateIcon"
-        />
-        Modulmeldung:
-        <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
-      </openwb-base-alert>
-    </template>
-  </openwb-base-card>
+  </status-card>
 </template>
 
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
+import StatusCard from "./StatusCard.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faCheckCircle as fasCheckCircle,
-  faExclamationTriangle as fasExclamationTriangle,
-  faTimesCircle as fasTimesCircle,
-  faRankingStar as fasRankingStar,
-} from "@fortawesome/free-solid-svg-icons";
+import { faRankingStar as fasRankingStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasCheckCircle, fasExclamationTriangle, fasTimesCircle, fasRankingStar);
+library.add(fasRankingStar);
 
 import { Line as ChartjsLine } from "vue-chartjs";
 import "chartjs-adapter-luxon";
@@ -91,8 +61,9 @@ Chart.register(Tooltip, Legend, LineController, LineElement, PointElement, Linea
 export default {
   name: "ElectricityTariffCard",
   components: {
-    ChartjsLine,
+    StatusCard,
     FontAwesomeIcon,
+    ChartjsLine,
   },
   mixins: [ComponentState],
   data() {
@@ -230,7 +201,7 @@ export default {
             price: value * 100000,
           });
         }
-        // repeat last dataset with 59min 95sec offset
+        // repeat last dataset with 59min 59sec offset
         const lastData = myData.slice(-1)[0];
         myData.push({
           timestamp: lastData.timestamp + (60 * 60 - 1) * 1000,
@@ -242,6 +213,9 @@ export default {
       return dataObject;
     },
     currentPrice() {
+      if (this.chartDataObject.datasets[0].data === undefined || this.chartDataObject.datasets[0].data.length === 0) {
+        return this.formatNumber(0, 2);
+      }
       return this.formatNumber(this.chartDataObject.datasets[0].data[0].price || 0, 2);
     },
     baseTopic: {

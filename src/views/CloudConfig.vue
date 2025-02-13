@@ -48,103 +48,7 @@
             </a>
             .
           </openwb-base-alert>
-          <openwb-base-text-input
-            v-model="newCloudData.username"
-            title="Benutzername"
-            required
-            subtype="user"
-            pattern="[a-zA-Z]+"
-            disabled
-          />
-          <openwb-base-text-input
-            v-model="newCloudData.email"
-            title="E-Mail"
-            required
-            subtype="email"
-            disabled
-          />
-          <openwb-base-button-group-input
-            v-model="newCloudData.partner"
-            disabled
-            title="Zugang für Partner"
-            :buttons="[
-              {
-                buttonValue: false,
-                text: 'Aus',
-                class: 'btn-outline-danger',
-              },
-              {
-                buttonValue: true,
-                text: 'An',
-                class: 'btn-outline-success',
-              },
-            ]"
-          >
-            <template #help>
-              Wenn diese openWB über einen Partner erworben wurde, kann hier ein Support-Zugang für diesen freigegeben
-              werden.
-            </template>
-          </openwb-base-button-group-input>
-          <openwb-base-array-input
-            v-if="newCloudData.partner"
-            title="Gültige Partner-IDs"
-            no-elements-message="Keine Partner-ID zugeordnet."
-            :model-value="$store.state.mqtt['openWB/system/mqtt/valid_partner_ids']"
-            @update:model-value="updateState('openWB/system/mqtt/valid_partner_ids', $event)"
-          >
-            <template #input-prefix>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'user-gear']"
-              />
-            </template>
-            <template #element-prefix>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'user-gear']"
-              />
-            </template>
-            <template #help>
-              Die Partner-ID erhältst Du von Deinem Installateur. Ist hier keine Partner-ID eingetragen, dann kann auch
-              niemand - trotz aktiviertem Zugang für Partner - über das Partner-Portal auf diese openWB zugreifen!
-            </template>
-          </openwb-base-array-input>
-          <template
-            v-if="
-              $store.state.mqtt['openWB/general/extern'] === false &&
-              $store.state.mqtt['openWB/system/dataprotection_acknowledged'] === true
-            "
-            #footer
-          >
-            <div class="row justify-content-center">
-              <!-- <openwb-base-click-button
-                class="col-4"
-                :class="
-                  enableNewCloudButton
-                    ? 'btn-success'
-                    : 'btn-outline-success'
-                "
-                :disabled="!enableNewCloudButton"
-                @buttonClicked="createCloud"
-              >
-                Zugang erstellen
-              </openwb-base-click-button> -->
-              <openwb-base-click-button
-                class="col-4 btn-outline-success"
-                disabled
-              >
-                Zugang erstellen
-              </openwb-base-click-button>
-            </div>
-          </template>
         </openwb-base-card>
-        <openwb-base-alert
-          v-if="!enableNewCloudButton"
-          subtype="info"
-          class="mb-2"
-        >
-          Der neue Zugang wird eingerichtet. Dieser Vorgang kann bis zu einer Minute dauern. Bitte warten.
-        </openwb-base-alert>
       </form>
       <form
         v-if="!cloudBridgeKey"
@@ -209,10 +113,7 @@
             </template>
           </openwb-base-array-input>
           <template
-            v-if="
-              $store.state.mqtt['openWB/general/extern'] === false &&
-              $store.state.mqtt['openWB/system/dataprotection_acknowledged'] === true
-            "
+            v-if="$store.state.mqtt['openWB/system/dataprotection_acknowledged'] === true"
             #footer
           >
             <div class="row justify-content-center">

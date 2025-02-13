@@ -1,38 +1,19 @@
 <template>
-  <openwb-base-card
+  <status-card
     subtype="primary"
-    :collapsible="true"
-    :collapsed="true"
-    class="pb-0"
+    :component-id="chargePointIndex"
+    :state="$store.state.mqtt[baseTopic + '/get/fault_state']"
+    :state-message="$store.state.mqtt[baseTopic + '/get/fault_str']"
   >
-    <template #header>
+    <template #header-left>
       <font-awesome-icon
         fixed-width
         :icon="['fas', 'charging-station']"
       />
       {{ installedChargePoint.name }}
     </template>
-    <template #actions>
-      <div
-        v-if="getFaultStateSubtype(baseTopic) == 'success'"
-        class="text-right"
-      >
-        {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW
-        <font-awesome-icon
-          fixed-width
-          :icon="chargingStatus.icon"
-          :title="chargingStatus.text"
-        />
-      </div>
-      <span
-        v-else
-        :class="'subheader pill bg-' + getFaultStateSubtype(baseTopic)"
-      >
-        <div v-if="getFaultStateSubtype(baseTopic) == 'warning'">Warnung</div>
-        <div v-else>Fehler</div>
-      </span>
-    </template>
-
+    <template #header-right>{{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW</template>
+    <!-- Status -->
     <openwb-base-card
       subtype="white"
       body-bg="white"
@@ -54,14 +35,16 @@
         Statusmeldung:
         <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/state_str"] }}</span>
       </openwb-base-alert>
-      max. Ladeleistung:
-      {{
-        (max_power = formatNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/max_evse_current", 0)) == "-"
-          ? max_power
-          : Math.floor((max_power * 3 * 230) / 1000)
-      }}&nbsp;kW
+      <div>
+        max. Ladeleistung:
+        {{
+          (max_power = formatNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/max_evse_current", 0)) == "-"
+            ? max_power
+            : Math.floor((max_power * 3 * 230) / 1000)
+        }}&nbsp;kW
+      </div>
     </openwb-base-card>
-
+    <!-- Ladevorgang -->
     <openwb-base-card
       subtype="white"
       body-bg="white"
@@ -101,7 +84,7 @@
         </div>
       </div>
     </openwb-base-card>
-
+    <!-- Zählerstände -->
     <openwb-base-card
       subtype="white"
       body-bg="white"
@@ -131,7 +114,7 @@
         </div>
       </div>
     </openwb-base-card>
-
+    <!-- Werte pro Phase -->
     <openwb-base-card
       subtype="white"
       body-bg="white"
@@ -193,36 +176,15 @@
         </div>
       </div>
     </openwb-base-card>
-    <template #footer>
-      <div class="container">
-        <div class="row">
-          <div class="col px-0">
-            <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
-              <font-awesome-icon
-                fixed-width
-                :icon="stateIcon"
-              />
-              Modulmeldung:
-              <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
-            </openwb-base-alert>
-          </div>
-          <div class="col col-auto pr-0">
-            <div class="text-right">ID: {{ chargePointIndex }}</div>
-          </div>
-        </div>
-      </div>
-    </template>
-  </openwb-base-card>
+  </status-card>
 </template>
 
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
+import StatusCard from "./StatusCard.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-  faCheckCircle as fasCheckCircle,
-  faExclamationTriangle as fasExclamationTriangle,
-  faTimesCircle as fasTimesCircle,
   faChargingStation as fasChargingStation,
   faPlug as fasPlug,
   faBolt as fasBolt,
@@ -235,9 +197,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(
-  fasCheckCircle,
-  fasExclamationTriangle,
-  fasTimesCircle,
   fasChargingStation,
   fasPlug,
   fasBolt,
@@ -251,6 +210,7 @@ library.add(
 export default {
   name: "ChargePointCard",
   components: {
+    StatusCard,
     FontAwesomeIcon,
   },
   mixins: [ComponentState],
@@ -258,10 +218,20 @@ export default {
     installedChargePointKey: { type: String, required: true },
     installedChargePoint: { type: Object, required: true },
   },
+  data() {
+    return {
+      mqttTopicsToSubscribe: [
+        `openWB/chargepoint/${this.installedChargePoint.id}/get/+`,
+        `"openWB/chargepoint/${this.installedChargePoint.id}/get/connected_vehicle/info`,
+        `"openWB/chargepoint/${this.installedChargePoint.id}/set/+`,
+        `"openWB/internal_chargepoint/${this.installedChargePoint.id}/data/phases_to_use`,
+      ],
+    };
+  },
   computed: {
     chargePointIndex: {
       get() {
-        return parseInt(this.installedChargePointKey.match(/(?:\/)(\d+)(?=\/)/)[1]);
+        return this.installedChargePoint.id;
       },
     },
     baseTopic: {
@@ -271,9 +241,8 @@ export default {
     },
     chargingStatus: {
       get() {
-        let ID = this.chargePointIndex;
-        let plugState = this.$store.state.mqtt["openWB/chargepoint/" + ID + "/get/plug_state"];
-        let chargeState = this.$store.state.mqtt["openWB/chargepoint/" + ID + "/get/charge_state"];
+        let plugState = this.$store.state.mqtt[this.baseTopic + "/get/plug_state"];
+        let chargeState = this.$store.state.mqtt[this.baseTopic + "/get/charge_state"];
 
         if (plugState == 1 && chargeState == 1) {
           return { icon: ["fas", "plug-circle-bolt"], text: "Fahrzeug angesteckt, Ladevorgang aktiv" };

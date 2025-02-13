@@ -41,7 +41,7 @@
       :vehicle-name="vehicleName"
     />
     <!-- electricity tariff -->
-    <electricity-tariff-card />
+    <electricity-tariff-card v-if="$store.state.mqtt['openWB/general/extern'] === false" />
     <!-- ripple-control-receiver -->
     <ripple-control-receiver-card />
   </div>
@@ -79,31 +79,12 @@ export default {
     return {
       mqttTopicsToSubscribe: [
         "openWB/general/extern",
-        // charge points total
-        "openWB/chargepoint/get/power",
-        "openWB/chargepoint/get/imported",
-        "openWB/chargepoint/get/exported",
-        "openWB/chargepoint/get/daily_imported",
-        "openWB/chargepoint/get/daily_exported",
-        // individual charge points
-        "openWB/chargepoint/+/config",
-        "openWB/chargepoint/+/get/+",
-        "openWB/chargepoint/+/get/connected_vehicle/info",
-        "openWB/chargepoint/+/set/+",
-        "openWB/internal_chargepoint/+/data/phases_to_use",
         // components
         "openWB/system/device/+/component/+/config",
-        // counter
-        "openWB/counter/+/get/+",
-        // pv
-        "openWB/pv/get/+",
-        "openWB/pv/+/get/+",
-        // batteries
-        "openWB/bat/get/+",
-        "openWB/bat/+/get/+",
         // vehicles
         "openWB/vehicle/+/name",
-        "openWB/vehicle/+/get/+",
+        // individual charge points
+        "openWB/chargepoint/+/config",
       ],
     };
   },
