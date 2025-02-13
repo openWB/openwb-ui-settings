@@ -221,9 +221,12 @@
       >
         <form name="dataMigrationForm">
           <openwb-base-alert subtype="info">
-            Hier kann die Sicherung einer älteren 1.9er Version hochgeladen werden, um vorhandene historische Daten
-            (Diagramme und Ladeprotokolle) sowie Cloud-Daten und Seriennummer in diese Installation zu importieren. Die
-            Zuordnung zwischen den alten und neuen Komponenten muss manuell durchgeführt werden.
+            Hier kann die Sicherung aus den älteren Software Versionen 1.9.303 oder 1.9.304 hochgeladen werden,
+            um vorhandene historische Daten (Diagramme und Ladeprotokolle) sowie Cloud-Daten und Seriennummer
+            in diese Installation zu importieren.<br />
+            Ein Import aus Versionen kleiner als 1.9.303 ist nicht möglich. Falls eine Datenübernahme aus 1.9 Versionen
+            gewünscht ist, muss erst ein Upgrade auf 1.9.303 oder 1.9.304 durchgeführt werden! Die Zuordnung zwischen
+            den alten und neuen Komponenten muss manuell durchgeführt werden.
           </openwb-base-alert>
           <openwb-base-alert subtype="danger">
             Die Portierung kann bei vielen historischen Daten von mehreren Jahren durchaus bis zu 30 Minuten dauern. Die
