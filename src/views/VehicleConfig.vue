@@ -742,10 +742,14 @@
                   <li>Zeit</li>
                   <li>Sofort mit Priorität</li>
                   <li>Sofort</li>
+                  <li>Eco (Min-Anteil) mit Priorität</li>
+                  <li>Eco (Min-Anteil)</li>
                   <li>PV (Min-Anteil) mit Priorität</li>
                   <li>PV (Min-Anteil)</li>
                   <li>Ziel (PV) mit Priorität</li>
                   <li>Ziel (PV)</li>
+                  <li>Eco (PV-Anteil) mit Priorität</li>
+                  <li>Eco (PV-Anteil)</li>
                   <li>PV (PV-Anteil) mit Priorität</li>
                   <li>PV (PV-Anteil)</li>
                 </ol>
