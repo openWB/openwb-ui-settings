@@ -49,7 +49,7 @@
           class: 'btn-outline-success',
         },
       ]"
-      @update:model-value="updateConfiguration($event, 'configuration.enable_dashboard_view')"
+      @update:model-value="toggleView('dashboard')"
     />
     <openwb-base-button-group-input
       title="Energiefluss anzeigen"
@@ -66,7 +66,7 @@
           class: 'btn-outline-success',
         },
       ]"
-      @update:model-value="updateConfiguration($event, 'configuration.enable_energy_flow_view')"
+      @update:model-value="toggleView('energy-flow')"
     />
     <openwb-base-button-group-input
       title="Ladepunkte anzeigen"
@@ -83,7 +83,7 @@
           class: 'btn-outline-success',
         },
       ]"
-      @update:model-value="updateConfiguration($event, 'configuration.enable_charge_points_view')"
+      @update:model-value="toggleView('charge-points')"
     />
     <openwb-base-button-group-input
       v-if="displayTheme.configuration.enable_charge_points_view == true"
@@ -118,8 +118,37 @@
           class: 'btn-outline-success',
         },
       ]"
-      @update:model-value="updateConfiguration($event, 'configuration.enable_status_view')"
+      @update:model-value="toggleView('status')"
     />
+    <openwb-base-select-input
+      title="Standardansicht"
+      not-selected="Bitte auswählen"
+      required
+      :model-value="displayTheme.configuration.default_view"
+      :options="enabledViews"
+      @update:model-value="updateConfiguration($event, 'configuration.default_view')"
+    >
+      <template #help> Die Standardansicht wird beim Start sowie nach einiger Zeit ohne Bedienung angezeigt. </template>
+    </openwb-base-select-input>
+    <openwb-base-range-input
+      title="Wechsel zur Standardansicht"
+      :min="0"
+      :max="6"
+      :step="1"
+      :model-value="displayTheme.configuration.default_view_timeout"
+      :labels="[
+        { value: 0, label: 'Aus' },
+        { value: 60, label: '1 Min' },
+        { value: 300, label: '5 Min' },
+        { value: 600, label: '10 Min' },
+        { value: 900, label: '15 Min' },
+        { value: 1800, label: '30 Min' },
+        { value: 3600, label: '60 Min' },
+      ]"
+      @update:model-value="updateConfiguration($event, 'configuration.default_view_timeout')"
+    >
+      <template #help> Nach dieser Zeit ohne Bedienung wird die Standardansicht angezeigt. </template>
+    </openwb-base-range-input>
     <openwb-base-heading>
       Datenauswahl
       <template #help>
@@ -234,8 +263,33 @@
 <script>
 import DisplayThemeConfigMixin from "../DisplayThemeConfigMixin.vue";
 
+const availableViews = [
+  { value: "dashboard", text: "Übersicht" },
+  { value: "energy-flow", text: "Energiefluss" },
+  { value: "charge-points", text: "Ladepunkte" },
+  { value: "status", text: "Status" },
+];
+
 export default {
   name: "DisplayThemeCards",
   mixins: [DisplayThemeConfigMixin],
+  computed: {
+    enabledViews() {
+      return availableViews.filter(
+        (view) => this.displayTheme.configuration[`enable_${view.value.replace("-", "_")}_view`],
+      );
+    },
+  },
+  methods: {
+    toggleView(view) {
+      if (this.displayTheme.configuration.default_view === view) {
+        this.updateConfiguration(undefined, "configuration.default_view");
+      }
+      this.updateConfiguration(
+        !this.displayTheme.configuration[`enable_${view}_view`],
+        `configuration.enable_${view}_view`,
+      );
+    },
+  },
 };
 </script>
