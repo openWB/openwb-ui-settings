@@ -67,7 +67,7 @@
           <hr />
           <openwb-base-alert :subtype="chargingSwitchRange < 1400 ? 'danger' : 'info'">
             Die Differenzleistung zw. Ein- und Abschaltschwelle sollte mind. 1,4 kW (230V x 6A) betragen. (Konfiguriert:
-            {{ (chargingSwitchRange / 1000).toLocaleString('de-DE') }}&nbsp;kW)
+            {{ (chargingSwitchRange / 1000).toLocaleString(undefined) }}&nbsp;kW)
           </openwb-base-alert>
           <openwb-base-number-input
             title="Einschaltschwelle"
