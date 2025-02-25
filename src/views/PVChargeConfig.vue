@@ -103,8 +103,15 @@
             </template>
           </openwb-base-number-input>
           <hr />
-          <openwb-base-alert :subtype="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/switch_off_threshold'] / 1000 > 0 ? 'danger' : 'info'">
-            Ist ein Speicher im System vorhanden, kann eine Abschaltschwelle größer Null zur Speicherentladung führen. (Siehe Fragezeichentext)
+          <openwb-base-alert
+            :subtype="
+              $store.state.mqtt['openWB/general/chargemode_config/pv_charging/switch_off_threshold'] / 1000 > 0
+                ? 'danger'
+                : 'info'
+            "
+          >
+            Ist ein Speicher im System vorhanden, kann eine Abschaltschwelle größer Null zur Speicherentladung führen.
+            (Siehe Fragezeichentext)
           </openwb-base-alert>
           <openwb-base-number-input
             title="Abschaltschwelle"
@@ -117,9 +124,10 @@
             "
           >
             <template #help>
-              Übersteigt der Netzbezug die Abschaltschwelle, wird die Ladung beendet. Eine Abschaltschaltschwelle, 
-              die Netzbezug erlaubt, führt in einem System ohne steuerbaren Speicher zur Entladung des Speichers.
-              Der Speicher wird dann auch über den eingestellten Mindest-SoC hinaus entladen (siehe Speicherbeachtung unten).
+              Übersteigt der Netzbezug die Abschaltschwelle, wird die Ladung beendet. Eine Abschaltschaltschwelle, die
+              Netzbezug erlaubt, führt in einem System ohne steuerbaren Speicher zur Entladung des Speichers. Der
+              Speicher wird dann auch über den eingestellten Mindest-SoC hinaus entladen (siehe Speicherbeachtung
+              unten).
             </template>
           </openwb-base-number-input>
           <openwb-base-number-input
