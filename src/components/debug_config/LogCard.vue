@@ -45,7 +45,7 @@
           <a
             href="#"
             @click.prevent="copyToClipboard(logData)"
-            >Kopiere Log in die Zwischenablage</a
+            ><font-awesome-icon icon="clipboard" /> Log in die Zwischenablage</a
           >
         </div>
         <div
@@ -63,14 +63,14 @@
           <a
             href="#"
             @click.prevent="postToPastebin"
-            >Poste Logs auf paste.openwb.de</a
+            ><font-awesome-icon :icon="['fas', 'share-nodes']" /> Logs auf paste.openwb.de teilen</a
           >
         </div>
         <div
           v-else
           class="copy-message text-right"
         >
-          Logs geposted.
+          Logs geteilt.
           <a
             :href="pastebinLink"
             target="_blank"
@@ -85,11 +85,16 @@
 
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faFileDownload as fasFileDownload, faSpinner as fasSpinner } from "@fortawesome/free-solid-svg-icons";
+import {
+  faClipboard as fasClipboard,
+  faFileDownload as fasFileDownload,
+  faSpinner as fasSpinner,
+  faShareNodes as fasShareNodes,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import axios from "axios";
 
-library.add(fasFileDownload, fasSpinner);
+library.add(fasFileDownload, fasSpinner, fasClipboard, fasShareNodes);
 
 export default {
   name: "OpenwbLogCard",
