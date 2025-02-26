@@ -1,6 +1,6 @@
 <template>
   <component
-    :is="myComponent"
+    :is="getComponent()"
     :device="device"
     :component="component"
     :configuration="component ? component.configuration : device.configuration"
@@ -24,11 +24,9 @@ export default {
     component: { type: Object, required: false, default: undefined },
   },
   emits: ["update:configuration"],
-  computed: {
-    myComponent() {
-      console.debug(
-        `loading component: ${this.device.name} (${this.device.type}) / ${this.component?.name} (${this.component?.type})`,
-      );
+  methods: {
+    getComponent() {
+      console.debug(`loading component: ${this.device.type} / ${this.component?.type}`);
       if (this.component !== undefined) {
         return defineAsyncComponent({
           loader: () => import(`./${this.device.vendor}/${this.device.type}/${this.component.type}.vue`),
@@ -41,8 +39,6 @@ export default {
         });
       }
     },
-  },
-  methods: {
     updateConfiguration(event) {
       this.$emit("update:configuration", event);
     },

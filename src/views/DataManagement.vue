@@ -213,7 +213,7 @@
         </form>
       </openwb-base-card>
       <openwb-base-card
-        v-if="!installAssistantActive"
+        v-if="!installAssistantActive && !$store.state.mqtt['openWB/general/extern']"
         title="Datenübernahme"
         subtype="success"
         :collapsible="true"
@@ -221,9 +221,12 @@
       >
         <form name="dataMigrationForm">
           <openwb-base-alert subtype="info">
-            Hier kann die Sicherung einer älteren 1.9er Version hochgeladen werden, um vorhandene historische Daten
-            (Diagramme und Ladeprotokolle) sowie Cloud-Daten und Seriennummer in diese Installation zu importieren. Die
-            Zuordnung zwischen den alten und neuen Komponenten muss manuell durchgeführt werden.
+            Hier kann die Sicherung aus den älteren Software Versionen 1.9.303 oder 1.9.304 hochgeladen werden, um
+            vorhandene historische Daten (Diagramme und Ladeprotokolle) sowie Cloud-Daten und Seriennummer in diese
+            Installation zu importieren.<br />
+            Ein Import aus Versionen kleiner als 1.9.303 ist nicht möglich. Falls eine Datenübernahme aus 1.9er
+            Versionen gewünscht ist, muss erst ein Upgrade auf 1.9.303 oder 1.9.304 durchgeführt werden! Die Zuordnung
+            zwischen den alten und neuen Komponenten muss manuell durchgeführt werden.
           </openwb-base-alert>
           <openwb-base-alert subtype="danger">
             Die Portierung kann bei vielen historischen Daten von mehreren Jahren durchaus bis zu 30 Minuten dauern. Die
@@ -354,7 +357,7 @@
       </form>
       <form
         v-if="!installAssistantActive"
-        name="zabbixConfigured"
+        name="monitoringConfigured"
       >
         <openwb-base-card
           title="Monitoring"
@@ -398,7 +401,7 @@
           </div>
           <template #footer>
             <openwb-base-submit-buttons
-              :form-name="zabbixConfigured"
+              :form-name="monitoringConfigured"
               :hide-defaults="true"
               @save="$emit('save')"
               @reset="$emit('reset')"
@@ -450,6 +453,7 @@ export default {
   data() {
     return {
       mqttTopicsToSubscribe: [
+        "openWB/general/extern",
         "openWB/system/configurable/backup_clouds",
         "openWB/system/configurable/monitoring",
         "openWB/system/backup_cloud/config",
