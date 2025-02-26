@@ -36,21 +36,48 @@
       />
     </openwb-base-alert>
 
-    <div
-      v-if="!copyMessage"
-      class="text-right"
-    >
-      <a
-        href="#"
-        @click.prevent="copyToClipboard"
-        >Kopiere Log in die Zwischenablage</a
-      >
-    </div>
-    <div
-      v-else
-      class="copy-message text-right"
-    >
-      Logs in die Zwischenablage kopiert.
+    <div class="row">
+      <div class="col-auto">
+        <div
+          v-if="!copyMessage"
+          class="text-right"
+        >
+          <a
+            href="#"
+            @click.prevent="copyToClipboard(logData)"
+            >Kopiere Log in die Zwischenablage</a
+          >
+        </div>
+        <div
+          v-else
+          class="copy-message text-right"
+        >
+          Logs in die Zwischenablage kopiert.
+        </div>
+      </div>
+      <div class="col-auto">
+        <div
+          v-if="!pastebinLink"
+          class="text-right"
+        >
+          <a
+            href="#"
+            @click.prevent="postToPastebin"
+            >Poste Logs auf paste.openwb.de</a
+          >
+        </div>
+        <div
+          v-else
+          class="copy-message text-right"
+        >
+          Logs geposted.
+          <a
+            :href="pastebinLink"
+            target="_blank"
+            >Link in die Zwischenablage kopiert.</a
+          >
+        </div>
+      </div>
     </div>
     <pre class="log-data mb-0">{{ logData }}</pre>
   </openwb-base-card>
@@ -60,6 +87,7 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faFileDownload as fasFileDownload, faSpinner as fasSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import axios from "axios";
 
 library.add(fasFileDownload, fasSpinner);
 
@@ -85,12 +113,13 @@ export default {
       foundFiles: [], // Array to store found files with title, suffix, and description
       selectedVariant: "", // Selected file variant
       copyMessage: false, // Flag to show copy message
+      pastebinLink: "", // Link to the pastebin entry
     };
   },
   methods: {
     async getFilePromise(myFile, ignore404 = false, handleError = true, useHead = false) {
       const requestMethod = useHead ? "head" : "get";
-      return this.axios[requestMethod](location.protocol + "//" + location.host + myFile)
+      return axios[requestMethod](location.protocol + "//" + location.host + myFile)
         .then((response) => {
           if (useHead) {
             // If the request is successful, the file exists
@@ -133,6 +162,7 @@ export default {
     async loadLog(fileName, fileNameVariant = "") {
       this.logData = "wird aktualisiert...";
       this.loading = true;
+      this.pastebinLink = ""; // Clear the pastebin link
       var logContents = "";
       if (fileNameVariant) {
         fileName = fileName.replace(".log", `.${fileNameVariant}.log`);
@@ -187,12 +217,14 @@ export default {
       await this.checkLatestLog(this.logFile);
       this.loadLog(this.logFile, this.selectedVariant);
     },
-    copyToClipboard() {
+    copyToClipboard(text = this.logData, showMessage = true) {
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard
-          .writeText(this.logData)
+          .writeText(text)
           .then(() => {
-            this.showCopyMessage();
+            if (showMessage) {
+              this.showCopyMessage();
+            }
           })
           .catch((err) => {
             console.error("Fehler beim Kopieren in die Zwischenablage: ", err);
@@ -200,12 +232,14 @@ export default {
       } else {
         // Fallback method for older browsers and non-HTTPS contexts
         const textArea = document.createElement("textarea");
-        textArea.value = this.logData;
+        textArea.value = text;
         document.body.appendChild(textArea);
         textArea.select();
         try {
           document.execCommand("copy");
-          this.showCopyMessage();
+          if (showMessage) {
+            this.showCopyMessage();
+          }
         } catch (err) {
           console.error("Fehler beim Kopieren in die Zwischenablage: ", err);
         }
@@ -217,6 +251,35 @@ export default {
       setTimeout(() => {
         this.copyMessage = false;
       }, 3000); // Message disappears after 3 seconds
+    },
+    async postToPastebin() {
+      try {
+        const response = await fetch("https://bytebin.openwb.de/post", {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/log",
+          },
+          body: this.logData,
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const responseData = await response.json();
+        const pastebinKey = responseData.key;
+        if (!pastebinKey) {
+          console.log(responseData);
+          throw new Error("Key is missing in the response");
+        }
+        console.log(responseData);
+
+        this.pastebinLink = `https://paste.openwb.de/${pastebinKey}`;
+        console.log("Pastebin link:", this.pastebinLink);
+        this.copyToClipboard(this.pastebinLink, false);
+      } catch (error) {
+        console.error("Fehler beim Posten auf paste.openwb.de: ", error);
+      }
     },
   },
 };
