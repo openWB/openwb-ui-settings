@@ -98,6 +98,7 @@
             type="text"
             class="form-control"
             v-bind="$attrs"
+            :pattern="hostPattern"
           />
           <input
             v-if="['email', 'url'].includes(subtype)"
@@ -307,6 +308,13 @@ export default {
       }
       // default to textInput
       return this.$refs.textInput;
+    },
+    hostPattern() {
+      const ipPattern = "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+      const hostOnlyPattern = "^(?=.*[a-zA-Z].*$)([a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])$";
+      const domainPattern =
+        "^((?=[^.]*[a-zA-Z][^.]*\\.)([a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9]\\.))+((?=[^.]*[a-zA-Z].*$)([a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9]))$";
+      return `(${ipPattern})|(${hostOnlyPattern})|(${domainPattern})`;
     },
   },
   methods: {
