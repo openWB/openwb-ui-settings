@@ -108,69 +108,17 @@
           >
             <template #help>
               <p>
-                Mit der HTTP-API kann man den Wert eines MQTT-Topics per HTTPs (Port 8443) abfragen oder neu setzen.
-                Topics können über GET oder POST abgefragt, neue Werte nur mit POST gesetzt werden.
+                Mit der HTTP-API kann man den Wert eines MQTT-Topics per HTTPs abfragen oder neu setzen. Die
+                Schnittstelle ist
+                <a
+                  href="https://openwb.de/main/wp-content/uploads/2025/02/HTTP-API-fuer-openWB-series1-und-series2.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  hier
+                </a>
+                dokumentiert.
               </p>
-              <p>Beispiel 1: Abfrage des aktuellen Systemzeitstempels</p>
-              <ul>
-                <li>
-                  GET-Request:<br />
-                  <openwb-base-copy-to-clipboard
-                    class="text-info"
-                    tooltip="URL kopieren"
-                  >
-                    https://{{ getIpAddress() }}:8443/v1/?topic=openWB/system/time
-                  </openwb-base-copy-to-clipboard>
-                </li>
-                <li>
-                  POST-Request über 'curl' mit privatem SSL-Zertifikat und Verarbeitung durch 'jq':<br />
-                  <openwb-base-copy-to-clipboard
-                    class="text-info"
-                    tooltip="Befehl kopieren"
-                  >
-                    curl -k -s -X POST --data '{"topic":"openWB/system/time"}' https://{{ getIpAddress() }}:8443/v1/ |
-                    jq .
-                  </openwb-base-copy-to-clipboard>
-                </li>
-              </ul>
-              <p>Die zurückgegebenen Daten sind im JSON-Format. Der Inhalt ist nach folgendem Schema aufgebaut:</p>
-              <pre class="border border-info w-100 p-1">{{
-                JSON.stringify(
-                  {
-                    status: "success",
-                    topic: "openWB/system/time",
-                    message: 1721287000.646975,
-                  },
-                  null,
-                  4,
-                )
-              }}</pre>
-              <p>Im Fehlerfall wird der Status auf "failed" gesetzt und eine Fehlermeldung zurückgegeben.</p>
-              <p>Beispiel 2: integriertes Display abschalten</p>
-              <ul>
-                <li>
-                  POST-Request über 'curl' mit privatem SSL-Zertifikat und Verarbeitung durch 'jq':<br />
-                  <openwb-base-copy-to-clipboard
-                    class="text-info"
-                    tooltip="Befehl kopieren"
-                  >
-                    curl -k -s -X POST --data '{"topic": "openWB/set/optional/int_display/active", "message": false}'
-                    https://{{ getIpAddress() }}:8443/v1/ | jq .
-                  </openwb-base-copy-to-clipboard>
-                </li>
-              </ul>
-              <p>Die zurückgegebenen Daten sind im JSON-Format. Der Inhalt ist nach folgendem Schema aufgebaut:</p>
-              <pre class="border border-info w-100 p-1">{{
-                JSON.stringify(
-                  {
-                    status: "success",
-                    topic: "openWB/set/optional/int_display/active",
-                    message: false,
-                  },
-                  null,
-                  4,
-                )
-              }}</pre>
             </template>
           </openwb-base-button-group-input>
         </div>
