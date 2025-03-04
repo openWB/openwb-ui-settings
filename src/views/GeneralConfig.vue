@@ -118,8 +118,8 @@
                   hier
                 </a>
                 dokumentiert.
-              </p></template
-            >
+              </p>
+            </template>
           </openwb-base-button-group-input>
         </div>
       </openwb-base-card>
