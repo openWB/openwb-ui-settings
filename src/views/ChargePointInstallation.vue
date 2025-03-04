@@ -400,9 +400,11 @@
             />
             <div v-if="!installAssistantActive">
               <hr />
-              <openwb-base-heading> Automatische Sperre </openwb-base-heading>
+              <openwb-base-heading>
+                Sperren nach Uhrzeit (Komplettsperrung - keine Freischaltung per ID-Tag möglich)
+              </openwb-base-heading>
               <openwb-base-button-group-input
-                title="Automatische Sperre aktiv"
+                title="Sperren nach Uhrzeit aktiv"
                 :buttons="[
                   { buttonValue: false, text: 'Nein' },
                   { buttonValue: true, text: 'Ja' },
@@ -411,9 +413,10 @@
                 @update:model-value="updateState(chargePointTemplateKey, $event, 'autolock.active')"
               >
                 <template #help>
-                  Wird die automatische Sperre aktiviert, können Fahrzeugladungen mittels Zeitplan auf gewünschte
+                  WirdSperren nach Uhrzeit aktiviert, können Fahrzeugladungen mittels Zeitplan auf gewünschte
                   Zeitbereiche eingeschränkt werden. Dies kann z.B. bei Zugänglichkeiten zu Ladepunkten in öffentlichen
-                  oder halb-öffentlichen Bereichen sinnvoll sein.
+                  oder halb-öffentlichen Bereichen sinnvoll sein. In dieser Zeit ist keine Freischaltung per RFID,
+                  Fahrzeugerkennung oder Pin möglich.
                 </template>
               </openwb-base-button-group-input>
               <openwb-base-button-group-input
@@ -426,14 +429,14 @@
                 @update:model-value="updateState(chargePointTemplateKey, $event, 'autolock.wait_for_charging_end')"
               >
                 <template #help>
-                  Wenn ein Zeitplan die automatische Sperre aktiviert, werden alle Ladepunkte direkt gesperrt und
-                  laufende Ladevorgänge beendet. Wird hier "Ja" ausgewählt, dann werden laufende Ladevorgänge NICHT
-                  beendet und diese Ladepunkte erst nach abgeschlossener Ladung gesperrt.
+                  Wenn ein Zeitplan Sperren nach Uhrzeit aktiviert, werden alle Ladepunkte direkt gesperrt und laufende
+                  Ladevorgänge beendet. Wird hier "Ja" ausgewählt, dann werden laufende Ladevorgänge NICHT beendet und
+                  diese Ladepunkte erst nach abgeschlossener Ladung gesperrt.
                 </template>
               </openwb-base-button-group-input>
 
               <openwb-base-heading>
-                Zeitpläne für die automatische Sperre
+                Zeitpläne für Sperren nach Uhrzeit
                 <template #actions>
                   <openwb-base-avatar
                     class="bg-success clickable"
