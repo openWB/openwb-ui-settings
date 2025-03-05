@@ -38,7 +38,7 @@
       <div>
         max. Ladeleistung:
         {{
-          (max_power = formatNumberTopic("openWB/chargepoint/" + chargePointIndex + "/get/max_evse_current", 0)) == "-"
+          (max_power = formatNumberTopic(baseTopic + "/get/max_evse_current", 0)) == "-"
             ? max_power
             : Math.floor((max_power * 3 * 230) / 1000)
         }}&nbsp;kW
@@ -222,9 +222,9 @@ export default {
     return {
       mqttTopicsToSubscribe: [
         `openWB/chargepoint/${this.installedChargePoint.id}/get/+`,
-        `"openWB/chargepoint/${this.installedChargePoint.id}/get/connected_vehicle/info`,
-        `"openWB/chargepoint/${this.installedChargePoint.id}/set/+`,
-        `"openWB/internal_chargepoint/${this.installedChargePoint.id}/data/phases_to_use`,
+        `openWB/chargepoint/${this.installedChargePoint.id}/get/connected_vehicle/info`,
+        `openWB/chargepoint/${this.installedChargePoint.id}/set/+`,
+        `openWB/internal_chargepoint/${this.installedChargePoint.id}/data/phases_to_use`,
       ],
     };
   },
