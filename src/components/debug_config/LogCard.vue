@@ -93,6 +93,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import axios from "axios";
+import pako from "pako";
 
 library.add(fasFileDownload, fasSpinner, fasClipboard, fasShareNodes);
 
@@ -259,26 +260,21 @@ export default {
     },
     async postToPastebin() {
       try {
-        const response = await fetch("https://bytebin.openwb.de/post", {
-          method: "POST",
+        // Compress the log data using gzip
+        const compressedData = pako.gzip(this.logData);
+
+        const response = await axios.post("https://bytebin.openwb.de/post", compressedData, {
           headers: {
-            "Content-Type": "text/log",
+            "Content-Type": "application/octet-stream",
+            "Content-Encoding": "gzip",
           },
-          body: this.logData,
         });
 
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        const responseData = await response.json();
-        const pastebinKey = responseData.key;
-        if (!pastebinKey) {
-          console.log(responseData);
+        if (!response.data.key) {
           throw new Error("Key is missing in the response");
         }
-        console.log(responseData);
 
+        const pastebinKey = response.data.key;
         this.pastebinLink = `https://paste.openwb.de/${pastebinKey}`;
         console.log("Pastebin link:", this.pastebinLink);
         this.copyToClipboard(this.pastebinLink, false);
