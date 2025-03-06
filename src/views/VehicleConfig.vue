@@ -1143,11 +1143,12 @@
               >Eco
               <template #help>
                 Im Eco-Modus wird eine Preisgrenze vorgegeben und wenn der Strompreis unter dieser Grenze liegt, wird
-                mit dem eingestellten minimalen Dauerstrom geladen. Falls vorhanden, wird mit Überschuss geladen.
+                mit dem eingestellten Ladestrom geladen und -falls vorhanden- zusätzlich mit dem Überschuss. Wenn die
+                Preisgrenze überschritten wird, wird nur mit Überschuss geladen, wenn dieser vorhanden ist.
               </template>
             </openwb-base-heading>
             <openwb-base-range-input
-              :title="'Minimaler Dauerstrom unter der Preisgrenze' + (dcChargingEnabled ? ' (AC)' : '')"
+              :title="'Ladestrom unter der Preisgrenze' + (dcChargingEnabled ? ' (AC)' : '')"
               :min="6"
               :max="32"
               :step="1"
@@ -1157,7 +1158,7 @@
             />
             <openwb-base-number-input
               v-if="dcChargingEnabled === true"
-              title="Minimale Dauerleistung unter der Preisgrenze (DC)"
+              title="Ladeleistung unter der Preisgrenze (DC)"
               unit="kW"
               :min="0"
               :model-value="ac_current2dc_power(template.chargemode.eco_charging.dc_current)"
