@@ -459,7 +459,7 @@
               <openwb-base-heading> Angaben zur Ladeleistung (DC) </openwb-base-heading>
               <openwb-base-number-input
                 title="Mindestleistung"
-                :min="5"
+                :min="0"
                 unit="kW"
                 :model-value="ac_current2dc_power(template.dc_min_current)"
                 @update:model-value="updateState(key, dc_power2ac_current($event), 'dc_min_current')"
