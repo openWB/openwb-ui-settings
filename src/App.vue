@@ -15,7 +15,6 @@
         @send-command="sendCommand"
       />
     </div>
-    <donation-banner />
   </div>
   <page-footer />
   <messages />
@@ -25,7 +24,6 @@
 <script>
 import NavBar from "./components/OpenwbPageNavbar.vue";
 import PageFooter from "./components/OpenwbPageFooter.vue";
-import DonationBanner from "./components/OpenwbPageDonationBanner.vue";
 import Messages from "./components/OpenwbPageMessages.vue";
 import Blocker from "./components/OpenwbPageBlocker.vue";
 import mqtt from "mqtt";
@@ -35,7 +33,6 @@ export default {
   components: {
     NavBar,
     PageFooter,
-    DonationBanner,
     Messages,
     Blocker,
   },
