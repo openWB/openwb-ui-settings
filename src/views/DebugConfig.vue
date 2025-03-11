@@ -88,6 +88,10 @@ export default {
           title: "Protokoll der Datenmigration",
           fileName: "/openWB/data/log/data_migration.log",
         },
+        {
+          title: "Protokoll über die Schaltvorgänge von steuerbaren Verbrauchseinrichtungen",
+          fileName: "/openWB/data/log/steuve_control_command.log",
+        },
       ],
     };
   },
