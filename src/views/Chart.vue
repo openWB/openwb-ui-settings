@@ -1234,6 +1234,14 @@ export default {
               case "exported":
               case "energy_exported":
                 return "Einspeisung/Erzeugung";
+              case "energy_imported_grid":
+                return "Ladung (Netz-Anteil)";
+              case "energy_imported_pv":
+                return "Ladung (PV-Anteil)";
+              case "energy_imported_bat":
+                return "Ladung (Speicher-Anteil)";
+              case "energy_imported_cp":
+                return "Ladung (Ladepunkt-Anteil)";
               default:
                 console.warn("unknown measurement key:", groupKey, measurementKey);
             }
