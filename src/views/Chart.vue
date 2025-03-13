@@ -929,19 +929,16 @@ export default {
     commandData() {
       var dataObject = {
         date: this.chartRequestDate.year + this.chartRequestDate.month + this.chartRequestDate.day,
-        day: this.chartRequestDate.year + this.chartRequestDate.month + this.chartRequestDate.day,
       };
       switch (this.chartRange) {
         case "month":
           dataObject = {
             date: this.chartRequestDate.year + this.chartRequestDate.month,
-            month: this.chartRequestDate.year + this.chartRequestDate.month,
           };
           break;
         case "year":
           dataObject = {
             date: this.chartRequestDate.year,
-            year: this.chartRequestDate.year,
           };
           break;
       }
