@@ -9,17 +9,17 @@
       max="255"
       @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
     />
-    <openwb-base-alert subtype="info">
-      Hierfür muss eine zweite Batterie an einem Wechselrichter angeschlossen sein. Im Normalfall immer 1 ansonsten 2 wenn es 
-      sich um die zweite Batterie handelt.
-    </openwb-base-alert>
     <openwb-base-number-input
       title="SolarEdge-Batterie-Index"
       :model-value="component.configuration.battery_index"
       min="1"
       max="2"
       @update:model-value="updateConfiguration($event, 'configuration.battery_index')"
-    />
+    >
+      <template #help>
+      Wenn eine zweite Batterie am Wechselrichter angeschlossen ist, hier den Index 2 eintagen. Im Normalfall immer 1 eintragen.
+      </template>
+    </openwb-base-number-input>
   </div>
 </template>
 
