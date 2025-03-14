@@ -1,6 +1,6 @@
 <template>
-  <div class="device-orno">
-    <openwb-base-heading>Einstellungen für Orno WE-514</openwb-base-heading>
+  <div class="device-nibe">
+    <openwb-base-heading>Einstellungen für Nibe</openwb-base-heading>
     <openwb-base-text-input
       title="IP oder Hostname"
       subtype="host"
@@ -23,7 +23,7 @@
 import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
 
 export default {
-  name: "DeviceOrno",
+  name: "DeviceNibe",
   mixins: [DeviceConfigMixin],
 };
 </script>
