@@ -29,8 +29,8 @@
     @update:model-value="updateConfiguration($event, 'configuration.devices')"
   >
     <template #help>
-      Bitte die Ladepunkte und/oder Komponenten auswählen, auf die das Verhalten angewendet werden soll. Es können
-      mehrere Einträge ausgewählt werden.
+      Bitte die Ladepunkte auswählen, auf die das Verhalten angewendet werden soll. Es können mehrere Einträge
+      ausgewählt werden.
     </template>
   </openwb-base-select-input>
 </template>
@@ -58,7 +58,7 @@ export default {
       return [
         {
           label: "Ladepunkte",
-          options: this.availableChargePoints.map((cp) => ({ value: [`cp${cp.value}`], text: cp.text })),
+          options: this.availableChargePoints.map((cp) => ({ value: { type: "cp", id: cp.value }, text: cp.text })),
         },
       ];
     },

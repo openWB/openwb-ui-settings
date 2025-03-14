@@ -50,7 +50,7 @@ export default {
           options: this.availableComponents
             .filter((component) => component.type === "inverter")
             .map((component) => {
-              return { value: component.value, text: component.text };
+              return { value: { type: component.type, id: component.value }, text: component.text };
             }),
         },
       ];

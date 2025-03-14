@@ -15,8 +15,8 @@
     v-model="definedNormalMode"
     title="Normaler Zustand"
     :buttons="[
-      { buttonValue: true, text: 'geschlossen (NC)' },
-      { buttonValue: false, text: 'geöffnet (NO)' },
+      { buttonValue: false, text: 'geschlossen (NC)' },
+      { buttonValue: true, text: 'geöffnet (NO)' },
     ]"
     :disabled="definedInput ? false : true"
     required

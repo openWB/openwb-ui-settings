@@ -22,6 +22,7 @@
       :io-device="ioDevices[`openWB/system/io/${ioAction.configuration.io_device}/config`]"
       :available-charge-points="availableChargePoints"
       :available-components="availableComponents"
+      :available-io-devices="availableIoDevices"
       @update:configuration="updateConfiguration($event)"
     />
   </div>
@@ -53,19 +54,18 @@ export default {
         return { value: this.ioDevices[key]?.id, text: this.ioDevices[key]?.name };
       });
     },
-    availableChargePoints: {
-      get() {
-        return Object.values(this.installedChargePoints).map((cp) => ({ value: cp?.id, text: cp?.name }));
-      },
+    availableIoDevices() {
+      return Object.values(this.ioDevices);
     },
-    availableComponents: {
-      get() {
-        return Object.values(this.installedComponents).map((component) => ({
-          value: component?.id,
-          text: component?.name,
-          type: component?.type,
-        }));
-      },
+    availableChargePoints() {
+      return Object.values(this.installedChargePoints).map((cp) => ({ value: cp?.id, text: cp?.name }));
+    },
+    availableComponents() {
+      return Object.values(this.installedComponents).map((component) => ({
+        value: component?.id,
+        text: component?.name,
+        type: component?.type,
+      }));
     },
   },
   methods: {

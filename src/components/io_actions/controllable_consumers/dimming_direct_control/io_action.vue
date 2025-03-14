@@ -17,8 +17,8 @@
     @update:model-value="updateConfiguration($event, 'configuration.devices')"
   >
     <template #help>
-      Bitte den Ladepunkt oder die Komponente auswählen, auf welche das Verhalten angewendet werden soll. Es können
-      mehrere Einträge ausgewählt werden.
+      Bitte die Ladepunkte und/oder digitalen Ausgänge auswählen, auf welche das Verhalten angewendet werden soll. Es
+      können mehrere Einträge ausgewählt werden.
     </template>
   </openwb-base-select-input>
 </template>
@@ -42,13 +42,32 @@ export default {
         this.updateConfiguration(newValue, "configuration.input_pattern");
       },
     },
+    ioDevicesOutputOptions() {
+      let deviceGroups = [];
+      this.availableIoDevices.forEach((device) => {
+        let options = [];
+        Object.keys(device?.output.digital).forEach((digitalOutput) => {
+          options.push({
+            text: `${digitalOutput}`,
+            value: { type: "io", id: device.id, digital_output: digitalOutput },
+          });
+        });
+        if (options.length > 0) {
+          deviceGroups.push({
+            label: device.name,
+            options: options,
+          });
+        }
+      });
+      return deviceGroups;
+    },
     availableDevices() {
       return [
         {
           label: "Ladepunkte",
-          options: this.availableChargePoints.map((cp) => ({ value: [`cp${cp.value}`], text: cp.text })),
+          options: this.availableChargePoints.map((cp) => ({ value: { type: "cp", id: cp.value }, text: cp.text })),
         },
-      ];
+      ].concat(this.ioDevicesOutputOptions);
     },
   },
 };
