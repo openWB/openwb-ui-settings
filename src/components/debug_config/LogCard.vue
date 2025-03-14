@@ -188,7 +188,7 @@ export default {
     async checkLatestLog(fileName) {
       // Define file name variations
       const fileVariations = [
-        { suffix: "latest", title: "Letzter Durchlauf", description: "Logs des Letzten Durchlauf laden" },
+        { suffix: "latest", title: "Letzten 3 Durchläufe", description: "Logs der Letzten 3 Durchläufe laden" },
         {
           suffix: "latest-warning",
           title: "Letzter Durchlauf mit Warnung oder Fehler",
@@ -265,7 +265,7 @@ export default {
 
         const response = await axios.post("https://bytebin.openwb.de/post", compressedData, {
           headers: {
-            "Content-Type": "application/octet-stream",
+            "Content-Type": "text/log",
             "Content-Encoding": "gzip",
           },
         });
