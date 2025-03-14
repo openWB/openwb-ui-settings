@@ -23,8 +23,8 @@
       v-if="foundFiles.length > 0"
       subtype="info"
     >
-      Im {{ title }} stehen unterschiedliche Logauszüge zur Verfügung. Standardmässig werden Logs des letzten Durchlaufs
-      geladen, für viele Fälle sollte dies ausreichen. Optional kann auch das gesamte Log geladen werden.<br />
+      Im {{ title }} stehen unterschiedliche Logauszüge zur Verfügung. Standardmässig werden Logs der letzten 3
+      Durchläufe geladen, für viele Fälle sollte dies ausreichen. Optional kann auch das gesamte Log geladen werden.<br />
       Wurde eine Warnung oder ein Fehler protokolliert steht zusätzlich der letzte Durchlauf mit Warnungen und Fehlern
       zur Verfügung.<br />
       <openwb-base-select-input
