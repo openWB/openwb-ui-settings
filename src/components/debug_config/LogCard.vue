@@ -189,6 +189,7 @@ export default {
       // Define file name variations
       const fileVariations = [
         { suffix: "latest", title: "Letzten 3 Durchläufe", description: "Logs der Letzten 3 Durchläufe laden" },
+        { suffix: "current", title: "Letzter Durchlauf", description: "Logs des letzen Durchlaufs laden" },
         {
           suffix: "latest-warning",
           title: "Letzter Durchlauf mit Warnung oder Fehler",
