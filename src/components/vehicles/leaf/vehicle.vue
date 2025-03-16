@@ -18,24 +18,22 @@
     >
       <template #help> Das Passwort für die Anmeldung an den Nissan-Servern. </template>
     </openwb-base-text-input>
-	<openwb-base-text-input
+	<openwb-base-select-input
       title="Region"
       required
+      not-selected="Bitte auswählen"
+      :options="[
+        { value: 'NE', text: 'Europa (getestet)' },
+        { value: 'NNA', text: 'USA (nicht getestet)' },
+        { value: 'NCI', text: 'Kanada (nicht getestet)' },
+        { value: 'NMA', text: 'Australien (nicht getestet)' },
+        { value: 'NML', text: 'Japan (nicht getestet)' }
+      ]"
       :model-value="vehicle.configuration.region"
       @update:model-value="updateConfiguration($event, 'configuration.region')"
     >
-      <template #help>
-		Das Regionskürzel für die Anmeldung an den Nissan-Servern. z.B. NE für Europa.<br />
-		Liste der Regionskürzel:<br />
-		<ol>
-			<li>NE : Europa, getestet,</li>
-			<li>NNA : USA, nicht getestet,</li>
-			<li>NCI : Kanada, nicht getestet,</li>
-			<li>NMA : Australien, nicht getestet,</li>
-			<li>NML : Japan, nicht getestet.</li>
-		</ol>
-	  </template>
-    </openwb-base-text-input>
+      <template #help> Die Region, in der das Fahrzeug betrieben wird. </template>
+    </openwb-base-select-input>
   </div>
 </template>
 
