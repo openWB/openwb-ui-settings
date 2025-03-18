@@ -17,7 +17,7 @@
       @update:model-value="updateConfiguration($event, 'configuration.battery_index')"
     >
       <template #help>
-      Wenn eine zweite Batterie am Wechselrichter angeschlossen ist, hier den Index 2 eintagen. Im Normalfall immer 1 eintragen.
+        Wenn eine zweite Batterie am Wechselrichter angeschlossen ist, hier den Index 2 eintagen. Im Normalfall immer 1 eintragen.
       </template>
     </openwb-base-number-input>
   </div>
