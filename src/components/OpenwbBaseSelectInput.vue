@@ -1,6 +1,9 @@
 <template>
   <openwb-base-setting-element>
-    <template #title>
+    <template
+      v-if="$slots.title || title"
+      #title
+    >
       <slot name="title">
         {{ title }}
       </slot>
@@ -29,7 +32,7 @@
           >
             <option
               v-if="notSelected !== undefined"
-              :value="undefined"
+              :value="emptyValue"
               disabled
             >
               -- {{ notSelected }} --
@@ -97,12 +100,13 @@ export default {
   },
   inheritAttrs: false,
   props: {
-    title: { type: String, required: false, default: "" },
+    title: { type: String, required: false, default: undefined },
     modelValue: {
       type: [String, Number, Array, null],
       required: false,
       default: undefined,
     },
+    emptyValue: { type: [String, Number, Array], required: false, default: undefined },
     groups: { type: Array, required: false, default: undefined },
     options: { type: Array, required: false, default: undefined },
     notSelected: { type: String, default: undefined },

@@ -1,7 +1,7 @@
 <script>
 export default {
   props: {
-    rippleControlReceiver: { type: Object, required: true },
+    ioDevice: { type: Object, required: true },
   },
   emits: ["update:configuration"],
   methods: {
