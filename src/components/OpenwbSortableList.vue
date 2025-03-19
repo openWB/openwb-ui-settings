@@ -43,7 +43,6 @@ export default {
         return this.modelValue;
       },
       set(newValue) {
-        console.debug("update in sortableList", newValue);
         this.$emit("update:modelValue", newValue);
       },
     },

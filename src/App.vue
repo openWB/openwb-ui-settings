@@ -15,7 +15,6 @@
         @send-command="sendCommand"
       />
     </div>
-    <donation-banner />
   </div>
   <page-footer />
   <messages />
@@ -25,7 +24,6 @@
 <script>
 import NavBar from "./components/OpenwbPageNavbar.vue";
 import PageFooter from "./components/OpenwbPageFooter.vue";
-import DonationBanner from "./components/OpenwbPageDonationBanner.vue";
 import Messages from "./components/OpenwbPageMessages.vue";
 import Blocker from "./components/OpenwbPageBlocker.vue";
 import mqtt from "mqtt";
@@ -35,7 +33,6 @@ export default {
   components: {
     NavBar,
     PageFooter,
-    DonationBanner,
     Messages,
     Blocker,
   },
@@ -86,7 +83,6 @@ export default {
         return new Promise((resolve) => setTimeout(resolve, milliseconds));
       }
 
-      console.debug("saving values...");
       this.$store.state.local.savingData = true;
       // collect data
       let topics = {};
@@ -102,7 +98,6 @@ export default {
           console.error("expected array, got ", typeof topicsToSave);
         }
       }
-      // console.debug("topics", topics);
       for (const [topic, payload] of Object.entries(topics)) {
         let setTopic = topic.replace("openWB/", "openWB/set/");
         console.debug("saving data:", setTopic, payload);
@@ -111,7 +106,6 @@ export default {
         // This may change with newer versions.
         await sleep(100);
       }
-      console.debug("done saving data");
       this.$store.state.local.savingData = false;
     },
     /**
@@ -167,9 +161,6 @@ export default {
         console.error("Connection failed", error);
       });
       this.client.on("message", (topic, message) => {
-        // console.debug(
-        //   `Received message "${message}" from topic "${topic}"`
-        // );
         if (message.toString().length > 0) {
           let myPayload = undefined;
           try {
@@ -192,7 +183,6 @@ export default {
       });
     },
     doSubscribe(topics) {
-      console.debug("doSubscribe", topics);
       topics.forEach((topic) => {
         this.$store.commit("addSubscription", topic);
         if (this.$store.getters.subscriptionCount(topic) == 1) {
@@ -216,7 +206,6 @@ export default {
       });
     },
     doUnsubscribe(topics) {
-      console.debug("doUnsubscribe", topics);
       topics.forEach((topic) => {
         this.$store.commit("removeSubscription", topic);
         if (this.$store.getters.subscriptionCount(topic) == 0) {

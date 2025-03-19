@@ -1,32 +1,18 @@
 <template>
-  <openwb-base-card
+  <status-card
     subtype="success"
-    :collapsible="true"
-    :collapsed="true"
-    class="pb-0"
+    :state="$store.state.mqtt[baseTopic + '/get/fault_state']"
+    :state-message="$store.state.mqtt[baseTopic + '/get/fault_str']"
   >
-    <template #header>
+    <template #header-left>
       <font-awesome-icon
         fixed-width
         :icon="['fas', 'solar-panel']"
       />
       Alle Wechselrichter
     </template>
-    <template #actions>
-      <div
-        v-if="getFaultStateSubtype(baseTopic) == 'success'"
-        class="text-right"
-      >
-        {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW
-      </div>
-      <span
-        v-else
-        :class="'subheader pill bg-' + getFaultStateSubtype(baseTopic)"
-      >
-        <div v-if="getFaultStateSubtype(baseTopic) == 'warning'">Warnung</div>
-        <div v-else>Fehler</div>
-      </span>
-    </template>
+    <template #header-right>{{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW</template>
+    <!-- Aktuelle Werte -->
     <openwb-base-card
       title="Aktuelle Werte"
       subtype="white"
@@ -46,6 +32,7 @@
         </div>
       </div>
     </openwb-base-card>
+    <!-- Erträge -->
     <openwb-base-card
       title="Erträge"
       subtype="white"
@@ -69,46 +56,31 @@
         </div>
       </div>
     </openwb-base-card>
-
-    <template #footer>
-      <div class="container">
-        <div class="row">
-          <div class="col px-0">
-            <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
-              <font-awesome-icon
-                fixed-width
-                :icon="stateIcon"
-              />
-              Modulmeldung:
-              <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
-            </openwb-base-alert>
-          </div>
-        </div>
-      </div>
-    </template>
-  </openwb-base-card>
+  </status-card>
 </template>
 
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
+import StatusCard from "./StatusCard.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faCheckCircle as fasCheckCircle,
-  faExclamationTriangle as fasExclamationTriangle,
-  faTimesCircle as fasTimesCircle,
-  faSolarPanel as fasSolarPanel,
-} from "@fortawesome/free-solid-svg-icons";
+import { faSolarPanel as fasSolarPanel } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasCheckCircle, fasExclamationTriangle, fasTimesCircle, fasSolarPanel);
+library.add(fasSolarPanel);
 
 export default {
   name: "InverterSumCard",
   components: {
+    StatusCard,
     FontAwesomeIcon,
   },
   mixins: [ComponentState],
+  data() {
+    return {
+      mqttTopicsToSubscribe: ["openWB/pv/get/+"],
+    };
+  },
   computed: {
     baseTopic: {
       get() {

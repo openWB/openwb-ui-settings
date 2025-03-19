@@ -73,6 +73,14 @@ if (import.meta.env.MODE !== "production") {
       4: "Batteriespeicher",
     },
     tags: ["1234", "2345", "3456"],
+    ioConfig: {
+      active: false,
+      pattern: [null, false, true],
+      action: {
+        value: "stop_all",
+        options: null,
+      },
+    },
   };
 }
 

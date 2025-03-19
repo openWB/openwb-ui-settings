@@ -1,8 +1,8 @@
 <template>
-  <openwb-base-heading> Einstellungen für RSE-Modul "{{ rippleControlReceiver.name }}" </openwb-base-heading>
+  <openwb-base-heading> Einstellungen für I/O-Modul "{{ ioDevice.name }}" </openwb-base-heading>
   <component
     :is="myComponent"
-    :ripple-control-receiver="rippleControlReceiver"
+    :io-device="ioDevice"
     @update:configuration="updateConfiguration($event)"
     @send-command="sendCommand($event)"
   />
@@ -10,20 +10,20 @@
 
 <script>
 import { defineAsyncComponent } from "vue";
-import OpenwbRippleControlReceiverFallback from "./OpenwbRippleControlReceiverConfigFallback.vue";
+import OpenwbIoDeviceConfigFallback from "./OpenwbIoDeviceConfigFallback.vue";
 
 export default {
-  name: "OpenwbRippleControlReceiverProxy",
+  name: "OpenwbIoDeviceProxy",
   props: {
-    rippleControlReceiver: { type: Object, required: true },
+    ioDevice: { type: Object, required: true },
   },
   emits: ["update:configuration", "sendCommand"],
   computed: {
     myComponent() {
-      console.debug(`loading backup cloud: ${this.rippleControlReceiver.type}`);
+      console.debug(`loading io device: ${this.ioDevice.type}`);
       return defineAsyncComponent({
-        loader: () => import(`./${this.rippleControlReceiver.type}/ripple_control_receiver.vue`),
-        errorComponent: OpenwbRippleControlReceiverFallback,
+        loader: () => import(`./${this.ioDevice.type}/io_device.vue`),
+        errorComponent: OpenwbIoDeviceConfigFallback,
       });
     },
   },

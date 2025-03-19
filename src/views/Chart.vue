@@ -1,107 +1,115 @@
 <template>
   <div class="chart">
-    <form name="chartForm">
-      <openwb-base-card
-        title="Filter"
-        :collapsible="true"
-        :collapsed="false"
-      >
-        <openwb-base-select-input
-          v-model="chartRange"
-          title="Zeitraum"
-          :options="[
-            { value: 'day', text: 'Tag' },
-            { value: 'month', text: 'Monat' },
-            { value: 'year', text: 'Jahr' },
-          ]"
-        />
-        <openwb-base-text-input
-          v-model="chartDate"
-          :title="dateInput.title"
-          :subtype="dateInput.type"
-          :min="dateInput.min"
-          :max="currentDate"
-          :show-quick-buttons="true"
-          @update:model-value="updateChart()"
-        />
-      </openwb-base-card>
-      <openwb-base-alert
-        v-if="!chartDataRead"
-        subtype="info"
-      >
-        Es wurden noch keine Daten abgerufen.
+    <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+      <openwb-base-alert subtype="info">
+        Die Auswertungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet. Du
+        findest alle Auswertungen in der openWB, welche sich im Steuerungsmodus "primary" befindet.
       </openwb-base-alert>
-      <div v-else>
+    </div>
+    <div v-else>
+      <form name="chartForm">
+        <openwb-base-card
+          title="Filter"
+          :collapsible="true"
+          :collapsed="false"
+        >
+          <openwb-base-select-input
+            v-model="chartRange"
+            title="Zeitraum"
+            :options="[
+              { value: 'day', text: 'Tag' },
+              { value: 'month', text: 'Monat' },
+              { value: 'year', text: 'Jahr' },
+            ]"
+          />
+          <openwb-base-text-input
+            v-model="chartDate"
+            :title="dateInput.title"
+            :subtype="dateInput.type"
+            :min="dateInput.min"
+            :max="currentDate"
+            :show-quick-buttons="true"
+            @update:model-value="updateChart()"
+          />
+        </openwb-base-card>
         <openwb-base-alert
-          v-if="!chartDataHasEntries"
+          v-if="!chartDataRead"
           subtype="info"
         >
-          Es konnten keine Daten für diesen Zeitraum gefunden werden.
+          Es wurden noch keine Daten abgerufen.
         </openwb-base-alert>
         <div v-else>
-          <openwb-base-card
-            title="Diagramm"
-            :collapsible="true"
-            :collapsed="false"
+          <openwb-base-alert
+            v-if="!chartDataHasEntries"
+            subtype="info"
           >
-            <div class="openwb-chart">
-              <chartjs-line
-                ref="myChart"
-                :data="chartData"
-                :options="chartOptions"
-                @click="handleChartClick"
-              />
-            </div>
-          </openwb-base-card>
-          <openwb-base-card
-            title="Summen"
-            :collapsible="true"
-            :collapsed="true"
-          >
-            <div
-              v-for="(group, groupKey) in chartTotals"
-              :key="groupKey"
+            Es konnten keine Daten für diesen Zeitraum gefunden werden.
+          </openwb-base-alert>
+          <div v-else>
+            <openwb-base-card
+              title="Diagramm"
+              :collapsible="true"
+              :collapsed="false"
             >
-              <openwb-base-card
-                v-if="Object.keys(group).length > 0"
-                :collapsible="true"
-                :collapsed="true"
-                :subtype="getCardSubtype(groupKey)"
+              <div class="openwb-chart">
+                <chartjs-line
+                  ref="myChart"
+                  :data="chartData"
+                  :options="chartOptions"
+                  @click="handleChartClick"
+                />
+              </div>
+            </openwb-base-card>
+            <openwb-base-card
+              title="Summen"
+              :collapsible="true"
+              :collapsed="true"
+            >
+              <div
+                v-for="(group, groupKey) in chartTotals"
+                :key="groupKey"
               >
-                <template #header>
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="getCardIcon(groupKey)"
-                  />
-                  {{ getTotalsLabel(groupKey) }}
-                </template>
-                <div
-                  v-for="(component, componentKey) in group"
-                  :key="componentKey"
+                <openwb-base-card
+                  v-if="Object.keys(group).length > 0"
+                  :collapsible="true"
+                  :collapsed="true"
+                  :subtype="getCardSubtype(groupKey)"
                 >
-                  <openwb-base-heading v-if="groupKey !== 'hc'">
-                    {{ getTotalsLabel(groupKey, componentKey) }}
-                  </openwb-base-heading>
-                  <div
-                    v-for="(measurement, measurementKey) in component"
-                    :key="measurementKey"
-                  >
-                    <openwb-base-text-input
-                      :title="getTotalsLabel(groupKey, componentKey, measurementKey)"
-                      readonly
-                      class="text-right"
-                      unit="kWh"
-                      :model-value="formatNumber(measurement / 1000, 3)"
+                  <template #header>
+                    <font-awesome-icon
+                      fixed-width
+                      :icon="getCardIcon(groupKey)"
                     />
+                    {{ getTotalsLabel(groupKey) }}
+                  </template>
+                  <div
+                    v-for="(component, componentKey) in group"
+                    :key="componentKey"
+                  >
+                    <openwb-base-heading v-if="groupKey !== 'hc'">
+                      {{ getTotalsLabel(groupKey, componentKey) }}
+                    </openwb-base-heading>
+                    <div
+                      v-for="(measurement, measurementKey) in component"
+                      :key="measurementKey"
+                    >
+                      <openwb-base-text-input
+                        :title="getTotalsLabel(groupKey, componentKey, measurementKey)"
+                        readonly
+                        class="text-right"
+                        unit="kWh"
+                        :model-value="formatNumber(measurement / 1000, 3)"
+                      />
+                    </div>
+                    <hr v-if="componentKey == 'all' && groupKey != 'hc'" />
                   </div>
-                  <hr v-if="componentKey == 'all' && groupKey != 'hc'" />
-                </div>
-              </openwb-base-card>
-            </div>
-          </openwb-base-card>
+                </openwb-base-card>
+              </div>
+            </openwb-base-card>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -1226,6 +1234,14 @@ export default {
               case "exported":
               case "energy_exported":
                 return "Einspeisung/Erzeugung";
+              case "energy_imported_grid":
+                return "Ladung (Netz-Anteil)";
+              case "energy_imported_pv":
+                return "Ladung (PV-Anteil)";
+              case "energy_imported_bat":
+                return "Ladung (Speicher-Anteil)";
+              case "energy_imported_cp":
+                return "Ladung (Ladepunkt-Anteil)";
               default:
                 console.warn("unknown measurement key:", groupKey, measurementKey);
             }

@@ -40,10 +40,14 @@
       :vehicle-key="vehicleKey"
       :vehicle-name="vehicleName"
     />
+    <!-- io devices -->
+    <io-device-card
+      v-for="ioDevice in ioDeviceConfigs"
+      :key="ioDevice.id"
+      :io-device="ioDevice"
+    />
     <!-- electricity tariff -->
-    <electricity-tariff-card />
-    <!-- ripple-control-receiver -->
-    <ripple-control-receiver-card />
+    <electricity-tariff-card v-if="$store.state.mqtt['openWB/general/extern'] === false" />
   </div>
 </template>
 
@@ -55,7 +59,7 @@ import InverterSumCard from "../components/status/InverterSumCard.vue";
 import InverterCard from "../components/status/InverterCard.vue";
 import BatterySumCard from "../components/status/BatterySumCard.vue";
 import BatteryCard from "../components/status/BatteryCard.vue";
-import RippleControlReceiverCard from "../components/status/RippleControlReceiver.vue";
+import IoDeviceCard from "../components/status/IoDeviceCard.vue";
 import VehicleCard from "../components/status/VehicleCard.vue";
 import ElectricityTariffCard from "../components/status/ElectricityTariffCard.vue";
 import ComponentState from "../components/mixins/ComponentState.vue";
@@ -70,7 +74,7 @@ export default {
     InverterCard,
     BatterySumCard,
     BatteryCard,
-    RippleControlReceiverCard,
+    IoDeviceCard,
     VehicleCard,
     ElectricityTariffCard,
   },
@@ -79,31 +83,14 @@ export default {
     return {
       mqttTopicsToSubscribe: [
         "openWB/general/extern",
-        // charge points total
-        "openWB/chargepoint/get/power",
-        "openWB/chargepoint/get/imported",
-        "openWB/chargepoint/get/exported",
-        "openWB/chargepoint/get/daily_imported",
-        "openWB/chargepoint/get/daily_exported",
-        // individual charge points
-        "openWB/chargepoint/+/config",
-        "openWB/chargepoint/+/get/+",
-        "openWB/chargepoint/+/get/connected_vehicle/info",
-        "openWB/chargepoint/+/set/+",
-        "openWB/internal_chargepoint/+/data/phases_to_use",
         // components
         "openWB/system/device/+/component/+/config",
-        // counter
-        "openWB/counter/+/get/+",
-        // pv
-        "openWB/pv/get/+",
-        "openWB/pv/+/get/+",
-        // batteries
-        "openWB/bat/get/+",
-        "openWB/bat/+/get/+",
+        // io devices
+        "openWB/system/io/+/config",
         // vehicles
         "openWB/vehicle/+/name",
-        "openWB/vehicle/+/get/+",
+        // individual charge points
+        "openWB/chargepoint/+/config",
       ],
     };
   },
@@ -134,6 +121,11 @@ export default {
           this.getWildcardTopics("openWB/system/device/+/component/+/config"),
           "counter",
         );
+      },
+    },
+    ioDeviceConfigs: {
+      get() {
+        return this.getWildcardTopics("openWB/system/io/+/config");
       },
     },
     numInvertersInstalled: {

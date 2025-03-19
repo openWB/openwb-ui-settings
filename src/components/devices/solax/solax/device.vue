@@ -34,6 +34,18 @@
         meist für Gen4 eine ID größer als 2 eingestellt. Bei Gen3 sogar (gegen jeglicher Modbus Standards) eine 0.
       </template>
     </openwb-base-number-input>
+    <openwb-base-select-input
+      title="Generation"
+      not-selected="Bitte auswählen"
+      :options="[
+        { value: 'g2', text: 'Gen 2' },
+        { value: 'g3', text: 'Gen 3' },
+        { value: 'g4', text: 'Gen 4' },
+      ]"
+      :model-value="device.configuration.version"
+      required
+      @update:model-value="updateConfiguration($event, 'configuration.version')"
+    />
   </div>
 </template>
 
