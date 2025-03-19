@@ -1,5 +1,14 @@
 <template>
   <div class="vehicle-soc-bmwbc">
+    <openwb-base-alert subtype="info">
+      Beschreibung der Konfiguration und weitere Hinweise im Wiki:
+      <a
+        href="https://github.com/openWB/core/wiki/SoC-BMW-Mini"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Wiki für SoC-Modul BMW & Mini</a
+      >
+    </openwb-base-alert>
     <openwb-base-text-input
       title="Benutzername"
       required
