@@ -32,8 +32,8 @@
       @update:model-value="updateConfiguration($event, 'configuration.zip')"
     >
       <template #help>
-        Die Postleitzahl wird zur Ermittlung der Abgaben und Umlagen benötigt. Ohne Angabe der Postleitzahl
-        wird durch die ostrom API lediglich der Börsenstrompreis einschließlich Mehrwertsteuer geliefert.
+        Die Postleitzahl wird zur Ermittlung der Abgaben und Umlagen benötigt. Ohne Angabe der Postleitzahl wird durch
+        die ostrom API lediglich der Börsenstrompreis einschließlich Mehrwertsteuer geliefert.
       </template>
     </openwb-base-text-input>
   </div>

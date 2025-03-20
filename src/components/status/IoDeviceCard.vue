@@ -13,6 +13,30 @@
       {{ ioDevice.name }}
     </template>
     <openwb-base-card
+      title="Zugehörige Aktionen"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <div
+        v-for="(value, key) in ioActionConfigs"
+        :key="key"
+        class="row"
+      >
+        <div class="col-auto">
+          <font-awesome-icon
+            :title="getActionTitle(![undefined, null].includes(ioActionState(value.id)))"
+            :icon="getIcon(![undefined, null].includes(ioActionState(value.id)))"
+            class="fa-fw"
+          />
+          {{ value.name }}
+        </div>
+        <div class="col text-right">
+          {{ ioActionState(value.id) }}
+        </div>
+      </div>
+    </openwb-base-card>
+    <openwb-base-card
       v-if="hasDigitalInputs"
       title="Digitale Eingänge"
       subtype="white"
@@ -149,24 +173,28 @@ export default {
   },
   data() {
     return {
-      mqttTopicsToSubscribe: [`openWB/io/states/${this.ioDevice.id}/get/+`],
+      mqttTopicsToSubscribe: [
+        `openWB/io/states/${this.ioDevice.id}/get/+`,
+        "openWB/io/action/+/config",
+        "openWB/io/action/+/timestamp",
+      ],
       state: {
         true: {
           icon: ["fas", "square"],
           title: "Geschlossen",
+          actionTitle: "Aktiv",
         },
         false: {
           icon: ["far", "square"],
           title: "Offen",
+          actionTitle: "Inaktiv",
         },
       },
     };
   },
   computed: {
-    baseTopic: {
-      get() {
-        return `openWB/io/states/${this.ioDevice.id}`;
-      },
+    baseTopic() {
+      return `openWB/io/states/${this.ioDevice.id}`;
     },
     faultState() {
       return this.$store.state.mqtt[`${this.baseTopic}/get/fault_state`];
@@ -198,6 +226,19 @@ export default {
     analogOutputStates() {
       return this.$store.state.mqtt[`${this.baseTopic}/get/analog_output`];
     },
+    ioActionConfigs() {
+      return Object.fromEntries(
+        Object.entries(this.getWildcardTopics("openWB/io/action/+/config")).filter(
+          ([, element]) => element.configuration.io_device === this.ioDevice.id,
+        ),
+      );
+    },
+    ioActionState() {
+      return (actionId) => {
+        const timestamp = this.$store.state.mqtt[`openWB/io/action/${actionId}/timestamp`];
+        return timestamp ? new Date(timestamp * 1000).toLocaleString() : timestamp;
+      };
+    },
   },
   methods: {
     getIcon(digitalState) {
@@ -205,6 +246,9 @@ export default {
     },
     getTitle(digitalState) {
       return this.state[digitalState].title;
+    },
+    getActionTitle(digitalState) {
+      return this.state[digitalState].actionTitle;
     },
   },
 };

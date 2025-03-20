@@ -55,9 +55,10 @@ export default {
       },
     },
     availableDevices() {
+      const label = this.availableChargePoints.length > 0 ? "Ladepunkte" : "Keine Ladepunkte verfügbar";
       return [
         {
-          label: "Ladepunkte",
+          label: label,
           options: this.availableChargePoints.map((cp) => ({ value: { type: "cp", id: cp.value }, text: cp.text })),
         },
       ];
