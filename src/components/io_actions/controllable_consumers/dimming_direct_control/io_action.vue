@@ -59,12 +59,19 @@ export default {
           });
         }
       });
+      if (deviceGroups.length === 0) {
+        deviceGroups.push({
+          label: "Keine digitalen Ausgänge verfügbar",
+          options: [],
+        });
+      }
       return deviceGroups;
     },
     availableDevices() {
+      let label = this.availableChargePoints.length > 0 ? "Ladepunkte" : "Keine Ladepunkte verfügbar";
       return [
         {
-          label: "Ladepunkte",
+          label: label,
           options: this.availableChargePoints.map((cp) => ({ value: { type: "cp", id: cp.value }, text: cp.text })),
         },
       ].concat(this.ioDevicesOutputOptions);

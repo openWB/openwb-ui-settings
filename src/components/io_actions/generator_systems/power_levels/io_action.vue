@@ -44,14 +44,16 @@ export default {
       },
     },
     availableDevices() {
+      let options = this.availableComponents
+        .filter((component) => component.type === "inverter")
+        .map((component) => {
+          return { value: { type: component.type, id: component.value }, text: component.text };
+        });
+      const label = options.length > 0 ? "Wechselrichter" : "Keine Wechselrichter verfügbar";
       return [
         {
-          label: "Wechselrichter",
-          options: this.availableComponents
-            .filter((component) => component.type === "inverter")
-            .map((component) => {
-              return { value: { type: component.type, id: component.value }, text: component.text };
-            }),
+          label: label,
+          options: options,
         },
       ];
     },
