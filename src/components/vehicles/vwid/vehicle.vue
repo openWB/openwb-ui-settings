@@ -1,5 +1,14 @@
 <template>
   <div class="vehicle-soc-vwid">
+    <openwb-base-alert subtype="info">
+      Beschreibung der Konfiguration und weitere Hinweise im Wiki:
+      <a
+        href="https://github.com/openWB/core/wiki/SoC-VWId"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Wiki für SoC-Modul VWId</a
+      >
+    </openwb-base-alert>
     <openwb-base-text-input
       title="Benutzername"
       required
