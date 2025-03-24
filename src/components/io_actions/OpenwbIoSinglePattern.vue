@@ -22,8 +22,8 @@
     required
   >
     <template #help>
-      Bitte Einstellen, ob der Eingang im normalen Zustand geschlossen (NC) oder geöffnet (NO) ist. Dieser Zustand wird
-      verwendet, um den Eingang zu überwachen.
+      Bitte Einstellen, ob der Eingang für den normalen Betrieb (nicht aktiv, nicht gedimmt etc.) geschlossen (NC) oder
+      geöffnet (NO) ist. Dieser Zustand wird verwendet, um den Eingang zu überwachen.
     </template>
   </openwb-base-button-group-input>
 </template>
