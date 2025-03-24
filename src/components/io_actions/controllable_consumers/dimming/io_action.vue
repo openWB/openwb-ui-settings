@@ -27,7 +27,8 @@
     <template #help>
       Bitte die Ladepunkte und/oder digitale Ausgänge auswählen, welche berücksichtigt werden sollen. Es können mehrere
       Einträge ausgewählt werden. Bei steuerbaren Verbrauchseinrichtungen, die über einen digitalen Ausgang angesteuert
-      werden, wird eine Leistung von 4,2 kW bei aktiver Dimmung angenommen.
+      werden, wird eine Leistung von 4,2 kW bei aktiver Dimmung angenommen. Ladepunkte werden so gesteuert, dass die
+      angegebene Leistung am EVU-Punkt nicht überschritten wird. Dadurch wird eigene PV-Erzeugung verrechnet.
     </template>
   </openwb-base-select-input>
 </template>

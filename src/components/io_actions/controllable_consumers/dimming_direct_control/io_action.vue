@@ -18,7 +18,8 @@
   >
     <template #help>
       Bitte die Ladepunkte und/oder digitalen Ausgänge auswählen, auf welche das Verhalten angewendet werden soll. Es
-      können mehrere Einträge ausgewählt werden.
+      können mehrere Einträge ausgewählt werden. Ladepunkte werden auf 4,2kW gedimmt, eine Verrechnung mit PV-Erzeugung
+      findet nicht statt.
     </template>
   </openwb-base-select-input>
 </template>
