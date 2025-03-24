@@ -1,5 +1,14 @@
 <template>
   <div class="vehicle-soc-bmwbc">
+    <openwb-base-alert subtype="info">
+      Beschreibung der Konfiguration und weitere Hinweise im Wiki:
+      <a
+        href="https://github.com/openWB/core/wiki/SoC-BMW-Mini"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Wiki für SoC-Modul BMW & Mini</a
+      >
+    </openwb-base-alert>
     <openwb-base-text-input
       title="Benutzername"
       required
@@ -33,8 +42,12 @@
       @update:model-value="updateConfiguration($event, 'configuration.captcha_token')"
     >
       <template #help>
-        Zum erstmaligen Login z.B. nach einem Neustart ist ein <b>aktuelles Captcha-Token</b> notwendig.<br />
-        Dazu bitte folgende Schritte durchführen:
+        Zum erstmaligen Login z.B. nach einem Neustart oder wenn die Abfrage nicht mehr funktioniert ist ein <b>aktuelles Captcha-Token</b> notwendig.<br />
+	Falls mehr als ein Fahrzeug in dem CD-Account vorhanden ist, sollte nur das mit der niedrigsten openWB id mit einem gültigen Captcha-Token konfiguriert werden (PRIMARY).<br>
+	Das SoC-Modul des Fahrzeuges mit <b>gültigem</b> Captcha-Token führt die SoC-Abfragen für alle Fahrzeuge im CD-Account aus.<br>
+	Die SECONDARY SoC-Module holen sich ihre Daten vom PRIMARY.<br>
+	Bei den weiteren Fahrzeugen ist daher als Captcha-Token der Wert "SECONDARY" (ohne Quotes) einzutragen.<br>
+	Um das Captcha-Token zu bekommen bitte folgende Schritte durchführen:
         <ol>
           <li>
             In einem neuen Browser-Tab auf diese Seite gehen:<br />
