@@ -1,5 +1,14 @@
 <template>
   <div class="vehicle-soc-vwid">
+    <openwb-base-alert subtype="info">
+      Beschreibung der Konfiguration und weitere Hinweise im Wiki:
+      <a
+        href="https://github.com/openWB/core/wiki/SoC-VWId"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Wiki für SoC-Modul VWId</a
+      >
+    </openwb-base-alert>
     <openwb-base-text-input
       title="Benutzername"
       required
@@ -7,7 +16,7 @@
       :model-value="vehicle.configuration.user_id"
       @update:model-value="updateConfiguration($event, 'configuration.user_id')"
     >
-      <template #help> Der Benutzername für die Anmeldung an den VW-Servern. </template>
+      <template #help> Der Benutzername(Email-Adresse) für die Anmeldung an den VW-Servern. </template>
     </openwb-base-text-input>
     <openwb-base-text-input
       title="Kennwort"
