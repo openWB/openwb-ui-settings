@@ -6,9 +6,35 @@
     :collapsed="true"
     @expanded="onCardExpand"
   >
-    <template #actions>
+    <template #actions="{ collapsed }">
       <openwb-base-avatar
-        class="bg-success clickable"
+        v-if="!collapsed"
+        class="clickable mr-1"
+        :class="pastebinLink ? 'bg-success' : 'bg-info'"
+        @click.stop="postToPastebin"
+      >
+        <font-awesome-icon
+          fixed-width
+          :icon="pastebinLink ? ['fas', 'check'] : ['fas', 'share-nodes']"
+          :title="pastebinLink ? 'Link in die Zwischenablage kopiert' : 'Log auf paste.openwb.de teilen'"
+        />
+      </openwb-base-avatar>
+      <openwb-base-avatar
+        v-if="!collapsed"
+        class="clickable mr-1"
+        :class="copyMessage ? 'bg-success' : 'bg-info'"
+        @click.stop="copyToClipboard(logData)"
+      >
+        <font-awesome-icon
+          fixed-width
+          :icon="copyMessage ? ['fas', 'check'] : ['fas', 'clipboard']"
+          :title="copyMessage ? 'Log in die Zwischenablage kopiert' : 'Log kopieren'"
+        />
+      </openwb-base-avatar>
+      <openwb-base-avatar
+        v-if="!collapsed"
+        class="clickable"
+        :class="loading ? 'bg-success' : 'bg-info'"
         @click.stop="loadLog(logFile, selectedVariant)"
       >
         <font-awesome-icon
@@ -35,50 +61,6 @@
         @change="loadLog(logFile, selectedVariant)"
       />
     </openwb-base-alert>
-
-    <div class="row">
-      <div class="col-auto">
-        <div
-          v-if="!copyMessage"
-          class="text-right"
-        >
-          <a
-            href="#"
-            @click.prevent="copyToClipboard(logData)"
-            ><font-awesome-icon icon="clipboard" /> Log in die Zwischenablage</a
-          >
-        </div>
-        <div
-          v-else
-          class="copy-message text-right"
-        >
-          Logs in die Zwischenablage kopiert.
-        </div>
-      </div>
-      <div class="col-auto">
-        <div
-          v-if="!pastebinLink"
-          class="text-right"
-        >
-          <a
-            href="#"
-            @click.prevent="postToPastebin"
-            ><font-awesome-icon :icon="['fas', 'share-nodes']" /> Logs auf paste.openwb.de teilen</a
-          >
-        </div>
-        <div
-          v-else
-          class="copy-message text-right"
-        >
-          Logs geteilt.
-          <a
-            :href="pastebinLink"
-            target="_blank"
-            >Link in die Zwischenablage kopiert.</a
-          >
-        </div>
-      </div>
-    </div>
     <pre class="log-data mb-0">{{ logData }}</pre>
   </openwb-base-card>
 </template>
@@ -90,12 +72,13 @@ import {
   faFileDownload as fasFileDownload,
   faSpinner as fasSpinner,
   faShareNodes as fasShareNodes,
+  faCheck as fasCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import axios from "axios";
 import pako from "pako";
 
-library.add(fasFileDownload, fasSpinner, fasClipboard, fasShareNodes);
+library.add(fasFileDownload, fasSpinner, fasClipboard, fasShareNodes, fasCheck);
 
 export default {
   name: "OpenwbLogCard",
@@ -189,7 +172,7 @@ export default {
       // Define file name variations
       const fileVariations = [
         { suffix: "latest", title: "Letzten 3 Durchläufe", description: "Logs der Letzten 3 Durchläufe laden" },
-        { suffix: "current", title: "Letzter Durchlauf", description: "Logs des letzen Durchlaufs laden" },
+        { suffix: "current", title: "Letzter Durchlauf", description: "Logs des letzten Durchlaufs laden" },
         {
           suffix: "latest-warning",
           title: "Letzter Durchlauf mit Warnung oder Fehler",
@@ -255,6 +238,7 @@ export default {
     },
     showCopyMessage() {
       this.copyMessage = true;
+      this.$root.postClientMessage("Log in die Zwischenablage kopiert.", "info");
       setTimeout(() => {
         this.copyMessage = false;
       }, 3000); // Message disappears after 3 seconds
@@ -279,6 +263,10 @@ export default {
         this.pastebinLink = `https://paste.openwb.de/${pastebinKey}`;
         console.log("Pastebin link:", this.pastebinLink);
         this.copyToClipboard(this.pastebinLink, false);
+        this.$root.postClientMessage(
+          `Log an Pastebin gesendet.<br>Key: <a href='${this.pastebinLink}' target='_blank' rel='noopener noreferrer'>${pastebinKey}</a><br>Der Link wurde in die Zwischenablage kopiert.`,
+          "info",
+        );
       } catch (error) {
         console.error("Fehler beim Posten auf paste.openwb.de: ", error);
       }

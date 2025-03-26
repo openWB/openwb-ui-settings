@@ -115,7 +115,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .card {
   margin-bottom: 1rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
