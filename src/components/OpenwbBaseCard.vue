@@ -97,15 +97,18 @@ export default {
     collapsible: { type: Boolean, default: false },
     collapsed: { type: Boolean, default: false },
   },
+  emits: ["collapsed", "expanded"],
   data() {
     return {
       isCollapsed: this.collapsible && this.collapsed,
     };
   },
+
   methods: {
     toggleBody() {
       if (this.collapsible === true) {
         this.isCollapsed = !this.isCollapsed;
+        this.$emit(this.isCollapsed ? "collapsed" : "expanded");
       }
     },
   },
