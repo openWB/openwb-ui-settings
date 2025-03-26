@@ -16,7 +16,7 @@
       :model-value="vehicle.configuration.user_id"
       @update:model-value="updateConfiguration($event, 'configuration.user_id')"
     >
-      <template #help> Der Benutzername für die Anmeldung an den VW-Servern. </template>
+      <template #help> Der Benutzername(Email-Adresse) für die Anmeldung an den VW-Servern. </template>
     </openwb-base-text-input>
     <openwb-base-text-input
       title="Kennwort"
