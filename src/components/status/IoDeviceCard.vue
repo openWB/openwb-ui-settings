@@ -73,7 +73,7 @@
         >
           {{ key }}:
           <font-awesome-icon
-            :title="getTitle(value)"
+            :title="getActionTitle(value)"
             :icon="getIcon(value)"
             class="fa-fw"
           />

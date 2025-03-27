@@ -8,7 +8,7 @@
     title="maximale Bezugsleistung"
     unit="kW"
     min="0"
-    step="0.1"
+    step="0.01"
     required
     :disabled="Object.keys(value[0].input_matrix).length > 0 ? false : true"
     :model-value="ioAction?.configuration.max_import_power / 1000"
@@ -28,7 +28,12 @@
       Bitte die Ladepunkte und/oder digitale Ausgänge auswählen, welche berücksichtigt werden sollen. Es können mehrere
       Einträge ausgewählt werden. Bei steuerbaren Verbrauchseinrichtungen, die über einen digitalen Ausgang angesteuert
       werden, wird eine Leistung von 4,2 kW bei aktiver Dimmung angenommen. Ladepunkte werden so gesteuert, dass die
-      angegebene Leistung am EVU-Punkt nicht überschritten wird. Dadurch wird eigene PV-Erzeugung verrechnet.
+      angegebene Leistung am EVU-Punkt nicht überschritten wird. Eigene PV-Erzeugung und vorhandene Speicher werden
+      berücksichtigt und zusätzlich genutzt.<br />
+      Zugeordnete digitale Ausgänge werden im nicht gedimmten Zustand aktiviert und im gedimmten Zustand deaktiviert. So
+      ist sichergestellt, dass bei einem Verbindungsabbruch oder einem Ausfall der Steuerung die Verbraucher nicht
+      ungewollt mit voller Leistung betrieben werden. Ein mit "NO" bezeichneter digitaler Ausgang ist also für den nicht
+      gedimmten Zustand geschlossen und bei aktivierter Dimmung geöffnet.
     </template>
   </openwb-base-select-input>
 </template>
