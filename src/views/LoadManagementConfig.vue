@@ -12,6 +12,10 @@
           </openwb-base-alert>
         </div>
         <div v-else>
+          <openwb-base-alert subtype="info">
+            Die Konfiguration für die externe Steuerung durch den Netzbetreiber (RSE, EMS, §14a) erfolgt in den
+            <router-link to="/IoConfiguration">Einstellungen der Ein-/Ausgänge</router-link> im Bereich der Aktionen.
+          </openwb-base-alert>
           <openwb-base-button-group-input
             title="Fahrzeuge, die nicht mit Sollstrom laden"
             :buttons="[
