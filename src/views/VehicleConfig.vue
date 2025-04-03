@@ -505,6 +505,8 @@
             <openwb-base-number-input
               title="Erlaubte Stromabweichung"
               :step="0.1"
+              :min="0"
+              :max="5"
               unit="A"
               :model-value="template.nominal_difference"
               @update:model-value="updateState(key, $event, 'nominal_difference')"
