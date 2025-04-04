@@ -108,8 +108,15 @@
             ältere Version gewechselt werden, jedoch ist nicht sichergestellt, dass es dabei keine Probleme gibt. Gerade
             wenn das Datenformat in der neuen Version angepasst wurde, wird eine ältere damit Fehler produzieren.
           </openwb-base-alert>
+          <openwb-base-alert
+            v-if="$store.state.mqtt['openWB/system/current_branch'] != 'Release'"
+            subtype="danger"
+          >
+            Die automatische Updatefunktion für Secondary openWBs ist nur in der Releaseversion verfügbar
+          </openwb-base-alert>
           <openwb-base-button-group-input
             title="Secondary openWBs automatisch mit der Primary updaten"
+            :disabled="$store.state.mqtt['openWB/system/current_branch'] != 'Release'"
             :buttons="[
               {
                 buttonValue: false,
@@ -167,12 +174,14 @@
                 </openwb-base-click-button>
               </div>
             </div>
-            <openwb-base-submit-buttons
-              :form-name="versionInfoForm"
-              :hide-defaults="true"
-              @save="$emit('save')"
-              @reset="$emit('reset')"
-            />
+            <div v-if="$store.state.mqtt['openWB/system/current_branch'] == 'Release'">
+              <openwb-base-submit-buttons 
+                :form-name="versionInfoForm"
+                :hide-defaults="true"
+                @save="$emit('save')"
+                @reset="$emit('reset')"
+              />
+            </div>
           </template>
         </openwb-base-card>
       </form>
