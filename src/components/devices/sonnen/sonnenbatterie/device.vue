@@ -71,7 +71,8 @@
     >
       <template #help>
         API-Token für JSON-API v2. Dieses Token wird benötigt, um detaillierte Daten auszulesen und den Speicher aktiv
-        zu steuern. Es kann in der Weboberfläche der SonnenBatterie unter "Software-Integration" erstellt werden.<br />
+        zu steuern (optional). Es kann in der Weboberfläche der SonnenBatterie unter "Software-Integration" erstellt
+        werden.<br />
         Für die aktive Steuerung durch openWB ist ebenfalls die "Write API" zu aktivieren!
       </template>
     </openwb-base-text-input>
