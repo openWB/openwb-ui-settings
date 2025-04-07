@@ -1,7 +1,7 @@
 <template>
   <div class="device-algodue-counter">
     <openwb-base-alert subtype="info">
-      ModbusTCP muss aktiviert sein. Ausgelesen wird ID 1 auf Port 502.
+      ModbusTCP muss aktiviert sein. Der Zähler ist auf Modbus-ID 1 und Port 502 vorkonfiguriert.
     </openwb-base-alert>
   </div>
 </template>
