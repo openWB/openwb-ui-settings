@@ -49,9 +49,12 @@
           Beispiel: <span class="text-info">95</span>
         </li>
       </ul>
-      Optional: Wenn der Speicher dies unterstützt, kann folgendes Topic abonniert werden, um die Entladeleistung im
-      Speicher zu setzen. Der Modus, um die Speicher-Entladung ins Fahrzeug zu steuern, kann in den übergreifenden
-      Ladeeinstellungen gesetzt werden.
+    </openwb-base-alert>
+    <openwb-base-heading> Optionale Einstellungen </openwb-base-heading>
+    <openwb-base-alert subtype="info">
+      Wenn der Speicher die aktive Steuerung durch openWB unterstützt, kann die Option "Speicherleistung steuerbar" auf
+      "Ja" gesetzt werden. Der Modus, um die Speicher-Entladung ins Fahrzeug zu steuern, kann in den übergreifenden
+      Ladeeinstellungen gesetzt werden. Über folgendes Topic wird dem Speicher die Entladeleistung mitgeteilt.
       <ul>
         <li>
           <openwb-base-copy-to-clipboard
@@ -65,6 +68,23 @@
         </li>
       </ul>
     </openwb-base-alert>
+    <openwb-base-button-group-input
+      title="Speicherleistung steuerbar"
+      :buttons="[
+        {
+          buttonValue: false,
+          text: 'Nein',
+          class: 'btn-outline-danger',
+        },
+        {
+          buttonValue: true,
+          text: 'Ja',
+          class: 'btn-outline-success',
+        },
+      ]"
+      :model-value="component.configuration.power_limit_controllable"
+      @update:model-value="updateConfiguration($event, 'configuration.power_limit_controllable')"
+    />
   </div>
 </template>
 
