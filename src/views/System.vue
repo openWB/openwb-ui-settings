@@ -258,14 +258,14 @@
           </openwb-base-alert>
           <openwb-base-select-input
             title="Entwicklungszweig"
-            :groups="getBranchGroups()"
+            :groups="branchGroups"
             :model-value="$store.state.mqtt['openWB/system/current_branch']"
             @update:model-value="updateState('openWB/system/current_branch', $event)"
           />
           <openwb-base-select-input
             v-model="selectedTag"
             title="Tag"
-            :options="getBranchTagOptions()"
+            :options="branchTagOptions"
           />
           <template #footer>
             <div class="row justify-content-center">
@@ -377,15 +377,7 @@ export default {
           ]["tags"]
       );
     },
-  },
-  methods: {
-    sendSystemCommand(command, data = {}) {
-      this.$emit("sendCommand", {
-        command: command,
-        data: data,
-      });
-    },
-    getBranchGroups() {
+    branchGroups() {
       const releaseBranch = "Release";
       const betaBranch = "Beta";
       const developmentBranch = "master";
@@ -430,7 +422,64 @@ export default {
       }
       return groups;
     },
-    getBranchTagOptions() {
+    branchTagOptions() {
+      const compareTags = (a, b) => {
+        const splitVersion = (version) => {
+          const versionParts = version.split("-");
+          const versionSemver = versionParts[0].split(".");
+          let versionSuffix = [];
+          if (versionParts.length > 1) {
+            versionSuffix = versionParts[1].split(".");
+          } else {
+            versionSuffix = ["release", "0"];
+          }
+          return {
+            semver: versionSemver,
+            suffix: versionSuffix,
+          };
+        };
+
+        const aVersion = splitVersion(a.value);
+        const bVersion = splitVersion(b.value);
+        if (aVersion.semver[0] == "*HEAD*") return -1;
+        if (bVersion.semver[0] == "*HEAD*") return 1;
+        if (aVersion.semver[0] > bVersion.semver[0]) return -1;
+        if (aVersion.semver[0] < bVersion.semver[0]) return 1;
+        if (aVersion.semver[1] > bVersion.semver[1]) return -1;
+        if (aVersion.semver[1] < bVersion.semver[1]) return 1;
+        if (aVersion.semver[2] > bVersion.semver[2]) return -1;
+        if (aVersion.semver[2] < bVersion.semver[2]) return 1;
+        switch (aVersion.suffix[0].toLowerCase()) {
+          case "alpha":
+            if (["beta", "rc", "release", "patch"].includes(bVersion.suffix[0].toLowerCase())) return -1;
+            if (aVersion.suffix[1] > bVersion.suffix[1]) return -1;
+            if (aVersion.suffix[1] < bVersion.suffix[1]) return 1;
+            break;
+          case "beta":
+            if (["alpha"].includes(bVersion.suffix[0].toLowerCase())) return -1;
+            if (["rc", "release", "patch"].includes(bVersion.suffix[0].toLowerCase())) return 1;
+            if (aVersion.suffix[1] > bVersion.suffix[1]) return -1;
+            if (aVersion.suffix[1] < bVersion.suffix[1]) return 1;
+            break;
+          case "rc":
+            if (["alpha", "beta"].includes(bVersion.suffix[0].toLowerCase())) return -1;
+            if (["release", "patch"].includes(bVersion.suffix[0].toLowerCase())) return 1;
+            if (aVersion.suffix[1] > bVersion.suffix[1]) return -1;
+            if (aVersion.suffix[1] < bVersion.suffix[1]) return 1;
+            break;
+          case "release":
+            if (["alpha", "beta", "rc"].includes(bVersion.suffix[0].toLowerCase())) return -1;
+            if (["patch"].includes(bVersion.suffix[0].toLowerCase())) return 1;
+            break;
+          case "patch":
+            if (["alpha", "beta", "rc", "release"].includes(bVersion.suffix[0].toLowerCase())) return -1;
+            if (aVersion.suffix[1] > bVersion.suffix[1]) return -1;
+            if (aVersion.suffix[1] < bVersion.suffix[1]) return 1;
+            break;
+        }
+        return 0;
+      };
+
       if (
         !(
           this.$store.state.mqtt["openWB/system/current_branch"] in
@@ -452,7 +501,15 @@ export default {
           });
         }
       }
-      return options;
+      return options.sort(compareTags);
+    },
+  },
+  methods: {
+    sendSystemCommand(command, data = {}) {
+      this.$emit("sendCommand", {
+        command: command,
+        data: data,
+      });
     },
     updateConfiguration(key, event) {
       console.debug("updateConfiguration", key, event);

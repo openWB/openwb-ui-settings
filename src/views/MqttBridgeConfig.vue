@@ -353,7 +353,6 @@ export default {
     removeMqttBridge(mqttBridgeIndex, event) {
       this.showMqttBridgeModal = false;
       if (event == "confirm") {
-        console.info("request removal of mqtt bridge '" + mqttBridgeIndex + "'");
         this.$emit("sendCommand", {
           command: "removeMqttBridge",
           data: { bridge: mqttBridgeIndex },

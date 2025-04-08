@@ -3,7 +3,7 @@
     <openwb-base-alert subtype="info">
       Mit dem Monitoring-Service von openWB kannst Du Dein System ganz einfach überwachen. Einfach
       <a
-        href="https://openwb.de/dummy"
+        href="https://wb-solution.de/produkt/aktives-monitoring-openwb-installation-2/"
         target="_blank"
         rel="noopener noreferrer"
       >

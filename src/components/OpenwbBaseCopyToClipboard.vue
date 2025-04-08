@@ -37,7 +37,6 @@ export default {
   methods: {
     click() {
       // event.target may be our icon, so we use a ref here
-      console.debug(this.$refs["slot-wrapper"].innerText);
       if (this.clipboardApiAvailable) {
         navigator.clipboard.writeText(this.$refs["slot-wrapper"].innerText).then(
           () => {
@@ -48,9 +47,8 @@ export default {
           },
         );
       } else {
-        console.debug("clipboard api not supported/enabled, fallback to select");
+        console.debug("clipboard api not supported/enabled, fallback to selection or text range");
         if (window.getSelection) {
-          console.debug("using 'window.getSelection'");
           const selection = window.getSelection();
           const range = document.createRange();
           range.selectNodeContents(this.$refs["slot-wrapper"]);
@@ -59,7 +57,6 @@ export default {
           return;
         }
         if (document.body.createTextRange) {
-          console.debug("using 'document.body.createTextRange'");
           const range = document.body.createTextRange();
           range.moveToElementText(this.$refs["slot-wrapper"]);
           range.select();

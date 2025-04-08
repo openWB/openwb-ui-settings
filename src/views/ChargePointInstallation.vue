@@ -208,7 +208,7 @@
                 steuert = primary oder ferngesteuert wird = secondary
               </li>
               <li>
-                Seconadry openWB - wenn diese openWB (primary) die Fernsteuerung von weiteren openWB (secondary)
+                Secondary openWB - wenn diese openWB (primary) die Fernsteuerung von weiteren openWB (secondary)
                 übernimmt
               </li>
               <li>MQTT-Ladepunkt - nur zur Nutzung des openWB-Simulators zugelassen</li>
@@ -398,12 +398,13 @@
               :model-value="ac_current2dc_power(chargePointTemplate.dc_max_current)"
               @update:model-value="updateState(chargePointTemplateKey, dc_power2ac_current($event), 'dc_max_current')"
             />
-            <hr />
             <div v-if="!installAssistantActive">
               <hr />
-              <openwb-base-heading> Automatische Sperre </openwb-base-heading>
+              <openwb-base-heading>
+                Sperren nach Uhrzeit (Komplettsperrung - keine Freischaltung per ID-Tag möglich)
+              </openwb-base-heading>
               <openwb-base-button-group-input
-                title="Automatische Sperre aktiv"
+                title="Sperren nach Uhrzeit aktiv"
                 :buttons="[
                   { buttonValue: false, text: 'Nein' },
                   { buttonValue: true, text: 'Ja' },
@@ -412,9 +413,10 @@
                 @update:model-value="updateState(chargePointTemplateKey, $event, 'autolock.active')"
               >
                 <template #help>
-                  Wird die automatische Sperre aktiviert, können Fahrzeugladungen mittels Zeitplan auf gewünschte
+                  WirdSperren nach Uhrzeit aktiviert, können Fahrzeugladungen mittels Zeitplan auf gewünschte
                   Zeitbereiche eingeschränkt werden. Dies kann z.B. bei Zugänglichkeiten zu Ladepunkten in öffentlichen
-                  oder halb-öffentlichen Bereichen sinnvoll sein.
+                  oder halb-öffentlichen Bereichen sinnvoll sein. In dieser Zeit ist keine Freischaltung per RFID,
+                  Fahrzeugerkennung oder Pin möglich.
                 </template>
               </openwb-base-button-group-input>
               <openwb-base-button-group-input
@@ -427,14 +429,14 @@
                 @update:model-value="updateState(chargePointTemplateKey, $event, 'autolock.wait_for_charging_end')"
               >
                 <template #help>
-                  Wenn ein Zeitplan die automatische Sperre aktiviert, werden alle Ladepunkte direkt gesperrt und
-                  laufende Ladevorgänge beendet. Wird hier "Ja" ausgewählt, dann werden laufende Ladevorgänge NICHT
-                  beendet und diese Ladepunkte erst nach abgeschlossener Ladung gesperrt.
+                  Wenn ein Zeitplan Sperren nach Uhrzeit aktiviert, werden alle Ladepunkte direkt gesperrt und laufende
+                  Ladevorgänge beendet. Wird hier "Ja" ausgewählt, dann werden laufende Ladevorgänge NICHT beendet und
+                  diese Ladepunkte erst nach abgeschlossener Ladung gesperrt.
                 </template>
               </openwb-base-button-group-input>
 
               <openwb-base-heading>
-                Zeitpläne für die automatische Sperre
+                Zeitpläne für Sperren nach Uhrzeit
                 <template #actions>
                   <openwb-base-avatar
                     class="bg-success clickable"
@@ -720,7 +722,6 @@ export default {
     removeChargePoint(chargePointIndex, event) {
       this.showChargePointModal = false;
       if (event == "confirm") {
-        console.debug("request removal of charge point '" + chargePointIndex + "'");
         this.$emit("sendCommand", {
           command: "removeChargepoint",
           data: { id: chargePointIndex },
@@ -765,7 +766,6 @@ export default {
     removeChargePointTemplate(chargePointTemplateIndex, event) {
       this.showChargePointTemplateModal = false;
       if (event == "confirm") {
-        console.debug("request removal of chargePoint template '" + chargePointTemplateIndex + "'");
         this.$emit("sendCommand", {
           command: "removeChargepointTemplate",
           data: { id: chargePointTemplateIndex },
@@ -775,7 +775,6 @@ export default {
     addChargePointTemplateAutolockPlan(chargePointTemplate, event) {
       // prevent further processing of the click event
       event.stopPropagation();
-      console.info("requesting new charge point template autolock plan...");
       let chargePointTemplateIndex = this.getChargePointTemplateIndex(chargePointTemplate);
       this.$emit("sendCommand", {
         command: "addAutolockPlan",
@@ -792,13 +791,6 @@ export default {
     removeChargePointTemplateAutolockPlan(chargePointTemplateIndex, autolockPlanIndex, event) {
       this.showChargePointTemplateAutolockPlanModal = false;
       if (event == "confirm") {
-        console.debug(
-          "request removal of chargePoint template '" +
-            chargePointTemplateIndex +
-            "' autolock plan '" +
-            autolockPlanIndex +
-            "'",
-        );
         this.$emit("sendCommand", {
           command: "removeAutolockPlan",
           data: {

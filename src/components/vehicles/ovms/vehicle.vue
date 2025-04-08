@@ -1,5 +1,14 @@
 <template>
   <div class="vehicle-soc-ovms">
+    <openwb-base-alert subtype="info">
+      Beschreibung der Konfiguration und weitere Hinweise im Wiki:
+      <a
+        href="https://github.com/openWB/core/wiki/SoC-OVMS"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Wiki für SoC-Modul OVMS</a
+      >
+    </openwb-base-alert>
     <openwb-base-text-input
       title="Server URL"
       required

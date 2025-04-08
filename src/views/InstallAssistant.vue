@@ -11,7 +11,7 @@
       Wollen Sie den Assistenten wirklich vorzeitig beenden?
     </openwb-base-modal-dialog>
     <component
-      :is="myStepComponent"
+      :is="getInstallAssistantStepComponent()"
       @send-command="$emit('sendCommand', $event)"
       @save="$emit('save')"
       @reset="$emit('reset')"
@@ -37,22 +37,22 @@ export default {
       showEndAssistantModal: false,
     };
   },
-  computed: {
+  methods: {
     /**
      * Returns a dynamic component based on the current page of the install assistant.
      * The component is loaded asynchronously using `defineAsyncComponent` and the appropriate
      * InstallAssistantStep component is imported based on the value of `this.currentPage`.
+     * This is not a computed property because the component is loaded dynamically and
+     * should always be recomputed when the page changes.
      *
      * @returns {Component} The dynamically loaded component for the current page of the install assistant.
      */
-    myStepComponent() {
+    getInstallAssistantStepComponent() {
       console.debug(`loading assistant page: ${this.currentPage}`);
       return defineAsyncComponent({
         loader: () => import(`../components/install_assistant/InstallAssistantStep${this.currentPage}.vue`),
       });
     },
-  },
-  methods: {
     /**
      * Switches the current page of the install assistant.
      *

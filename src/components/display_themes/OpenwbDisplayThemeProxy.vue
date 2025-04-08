@@ -22,7 +22,7 @@
   </openwb-base-alert>
   <openwb-base-heading> Einstellungen für Display Theme "{{ displayTheme.name }}" </openwb-base-heading>
   <component
-    :is="myComponent"
+    :is="getDisplayThemeComponent()"
     :display-theme="displayTheme"
     @update:configuration="updateConfiguration($event)"
   />
@@ -47,16 +47,14 @@ export default {
     displayTheme: { type: Object, required: true },
   },
   emits: ["update:configuration"],
-  computed: {
-    myComponent() {
+  methods: {
+    getDisplayThemeComponent() {
       console.debug(`loading display theme: ${this.displayTheme.type}`);
       return defineAsyncComponent({
         loader: () => import(`./${this.displayTheme.type}/displayTheme.vue`),
         errorComponent: OpenwbDisplayThemeFallback,
       });
     },
-  },
-  methods: {
     updateConfiguration(event) {
       this.$emit("update:configuration", event);
     },

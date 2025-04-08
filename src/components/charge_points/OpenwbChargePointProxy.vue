@@ -1,14 +1,14 @@
 <template>
   <openwb-base-heading> Einstellungen für Ladepunkt Typ "{{ chargePoint.type }}" </openwb-base-heading>
   <component
-    :is="myChargePointSettingsComponent"
+    :is="getChargePointSettingsComponent()"
     :charge-point="chargePoint"
     @update:configuration="updateConfiguration($event)"
   />
   <hr />
   <openwb-base-heading> Befehle für Ladepunkt Typ "{{ chargePoint.type }}" </openwb-base-heading>
   <component
-    :is="myChargePointCommandsComponent"
+    :is="getChargePointCommandsComponent()"
     :charge-point="chargePoint"
   />
 </template>
@@ -24,23 +24,21 @@ export default {
     chargePoint: { required: true, type: Object },
   },
   emits: ["update:configuration"],
-  computed: {
-    myChargePointSettingsComponent() {
+  methods: {
+    getChargePointSettingsComponent() {
       console.debug(`loading charge point settings: ${this.chargePoint.type}`);
       return defineAsyncComponent({
         loader: () => import(`./${this.chargePoint.type}/chargePoint.vue`),
         errorComponent: OpenwbChargePointConfigFallback,
       });
     },
-    myChargePointCommandsComponent() {
+    getChargePointCommandsComponent() {
       console.debug(`loading charge point commands: ${this.chargePoint.type}`);
       return defineAsyncComponent({
         loader: () => import(`./${this.chargePoint.type}/commands.vue`),
         errorComponent: OpenwbChargePointCommandsFallback,
       });
     },
-  },
-  methods: {
     updateConfiguration(event) {
       this.$emit("update:configuration", event);
     },

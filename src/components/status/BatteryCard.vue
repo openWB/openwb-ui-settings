@@ -1,33 +1,22 @@
 <template>
-  <openwb-base-card
+  <status-card
     subtype="warning"
-    :collapsible="true"
-    :collapsed="true"
-    class="pb-0"
+    :component-id="battery.id"
+    :state="$store.state.mqtt[baseTopic + '/get/fault_state']"
+    :state-message="$store.state.mqtt[baseTopic + '/get/fault_str']"
   >
-    <template #header>
+    <template #header-left>
       <font-awesome-icon
         fixed-width
         :icon="['fas', 'car-battery']"
       />
       {{ battery.name }}
     </template>
-    <template #actions>
-      <div
-        v-if="getFaultStateSubtype(baseTopic) == 'success'"
-        class="text-right"
-      >
-        {{ formatNumberTopic(baseTopic + "/get/power", 1, 1, 0.001) }}&nbsp;kW /
-        {{ $store.state.mqtt[baseTopic + "/get/soc"] }}&nbsp;%
-      </div>
-      <span
-        v-else
-        :class="'subheader pill bg-' + getFaultStateSubtype(baseTopic)"
-      >
-        <div v-if="getFaultStateSubtype(baseTopic) == 'warning'">Warnung</div>
-        <div v-else>Fehler</div>
-      </span>
+    <template #header-right>
+      {{ formatNumberTopic(baseTopic + "/get/power", 1, 1, 0.001) }}&nbsp;kW /
+      {{ $store.state.mqtt[baseTopic + "/get/soc"] }}&nbsp;%
     </template>
+    <!-- Aktuelle Werte -->
     <openwb-base-card
       title="Aktuelle Werte"
       subtype="white"
@@ -45,6 +34,7 @@
         <div class="col text-right text-monospace pl-0">{{ $store.state.mqtt[baseTopic + "/get/soc"] }}&nbsp;%</div>
       </div>
     </openwb-base-card>
+    <!-- Zählerstände -->
     <openwb-base-card
       title="Zählerstände"
       subtype="white"
@@ -75,50 +65,33 @@
         </div>
       </div>
     </openwb-base-card>
-    <template #footer>
-      <div class="container">
-        <div class="row">
-          <div class="col px-0">
-            <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
-              <font-awesome-icon
-                fixed-width
-                :icon="stateIcon"
-              />
-              Modulmeldung:
-              <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
-            </openwb-base-alert>
-          </div>
-          <div class="col col-auto pr-0">
-            <div class="text-right">ID: {{ battery.id }}</div>
-          </div>
-        </div>
-      </div>
-    </template>
-  </openwb-base-card>
+  </status-card>
 </template>
 
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
+import StatusCard from "./StatusCard.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faCheckCircle as fasCheckCircle,
-  faExclamationTriangle as fasExclamationTriangle,
-  faTimesCircle as fasTimesCircle,
-  faCarBattery as fasCarBattery,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCarBattery as fasCarBattery } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasCheckCircle, fasExclamationTriangle, fasTimesCircle, fasCarBattery);
+library.add(fasCarBattery);
 
 export default {
   name: "BatteryCard",
   components: {
+    StatusCard,
     FontAwesomeIcon,
   },
   mixins: [ComponentState],
   props: {
     battery: { type: Object, required: true },
+  },
+  data() {
+    return {
+      mqttTopicsToSubscribe: [`openWB/bat/${this.battery.id}/get/+`],
+    };
   },
   computed: {
     baseTopic: {
