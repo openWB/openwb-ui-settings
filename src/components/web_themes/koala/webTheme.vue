@@ -15,7 +15,7 @@
     </openwb-base-range-input>
     <openwb-base-number-input
       title="Kartenansicht Grenzwert"
-      :min="1"
+      :min="0"
       :step="1"
       :model-value="webTheme.configuration.card_view_breakpoint"
       @update:model-value="updateConfiguration($event, 'configuration.card_view_breakpoint')"
@@ -43,7 +43,8 @@
       @update:model-value="updateConfiguration($event, 'configuration.table_search_input_field')"
     >
       <template #help>
-        Legt fest, ob in der Tabellenansicht ein Suchfeld angezeigt wird, mit dem nach Ladepunkten gesucht werden kann.
+        Legt fest, ob in der Tabellenansicht ein Suchfeld angezeigt wird. Mit dem Suchfeld können alle Einträge in der
+        Ladepunkttabelle durchsucht werden.
       </template>
     </openwb-base-button-group-input>
   </div>
