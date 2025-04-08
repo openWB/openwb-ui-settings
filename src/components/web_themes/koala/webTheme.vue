@@ -43,8 +43,8 @@
       @update:model-value="updateConfiguration($event, 'configuration.table_search_input_field')"
     >
       <template #help>
-        Legt fest, ob in der Tabellenansicht ein Suchfeld angezeigt wird. Mit dem Suchfeld können alle Einträge in der
-        Ladepunkttabelle durchsucht werden.
+        Legt fest, ob in der Tabellenansicht ein Suchfeld angezeigt wird. Mit diesem Suchfeld können die Felder
+        „Ladepunkt“ und „Fahrzeug“ durchsucht werden.
       </template>
     </openwb-base-button-group-input>
   </div>
