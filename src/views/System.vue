@@ -138,8 +138,9 @@
             @update:model-value="updateState('openWB/system/secondary_auto_update', $event)"
           >
             <template #help>
-              Diese Option ist nur in der Release Version verfügbar. Ist diese Option aktiviert, dann werden Secondary openWBs 
-              gleichzeitig mit der Primary openWB aktualisiert.
+              Diese Option ist nur auf dem Entwicklungszweig "Release" verfügbar. Ist diese Option aktiviert, dann
+              werden Secondary openWBs, welche sich ebenfalls auf dem Entwicklungszweig "Release" befinden gleichzeitig
+              mit der Primary openWB aktualisiert.
             </template>
           </openwb-base-button-group-input>
           Secondary openWBs:
