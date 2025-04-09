@@ -68,7 +68,7 @@
             @update:model-value="updateState('openWB/general/chargemode_config/retry_failed_phase_switches', $event)"
           >
             <template #help>
-              Wenn diese Option aktiviert ist, werden bis zu drei Umschaltversuche vorgenommen, wenn die vorgegebene und
+              Wenn diese Option aktiviert ist, werden bis zu zwei Umschaltversuche vorgenommen, wenn die vorgegebene und
               genutzte Phasenzahl nicht übereinstimmen. Wird die Option deaktiviert, wird nur eine Umschaltung
               durchgeführt.<br />
               Die gezählten Fehlversuche werden mit dem Abstecken zurückgesetzt.
