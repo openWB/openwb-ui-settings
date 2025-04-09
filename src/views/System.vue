@@ -112,7 +112,12 @@
             v-if="$store.state.mqtt['openWB/system/current_branch'] != 'Release'"
             subtype="danger"
           >
-            Die automatische Updatefunktion für Secondary openWBs ist nur in der Releaseversion verfügbar
+            Die automatische Updatefunktion für Secondary openWBs ist nur verfügbar,
+            wenn sich die Primary openWB auf dem Entwicklungszweig "Release" befindet.
+            Das Update wird nur auf Secondary openWBs durchgeführt, welche sich ebenfalls
+            auf dem Entwicklungszweig "Release" befinden. Ist die dort installierte 
+            Releaseversion zu alt oder inkompatibel muss ein einmaliges Update auf 
+            die aktuelle Version manuell auf der betroffenen openWB durchgeführt werden.
           </openwb-base-alert>
           <openwb-base-button-group-input
             title="Secondary openWBs automatisch mit der Primary updaten"
