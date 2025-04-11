@@ -3,12 +3,13 @@
     <openwb-base-heading>Einstellungen für MQTT</openwb-base-heading>
     <openwb-base-alert subtype="info">
       Das MQTT Modul stellt keine aktive Verbindung her, sondern erwartet, dass die Daten an die angegebenen Topics im
-      Broker gesendet werden. Da die Daten direkt an den Broker gesendet werden, erfolgt keine Verrechnung bei
-      Hybrid-Systemen und auch keine Berechnung fehlender Werte, z.B. von Phasen-Leistung aus Spannung und Strömen. Beim
-      Logging und im Lastmanagement, z.B. bei verschachtelten Zählern, werden die MQTT-Zähler wie gewohnt
-      berücksichtigt.<br />
-      Alle Daten sind als gültiges JSON zu senden! Zahlen mit Nachkommastellen (Float) müssen einen Punkt als
-      Dezimaltrenner verwenden (internationales Format).
+      Broker gesendet werden. Alle Daten sind als gültiges JSON zu senden! Zahlen mit Nachkommastellen (Float) müssen
+      einen Punkt als Dezimaltrenner verwenden (internationales Format). <br />
+      Ab Version 2.1.8 wurden die Topics überarbeitet. Die bisherigen Topics openWB/set/bat/id/get/...,
+      openWB/set/counter/id/get/... und openWB/set/pv/id/get/... bleiben aus Gründen der Abwärtskompatibilität weiterhin
+      nutzbar, es wird jedoch empfohlen, auf die neuen Topics umzusteigen. Dies ermöglicht die Beseitigung von
+      Einschränkungen, wie z. B. die fehlende Verrechnung bei Hybrid-Systemen oder die Berechnung fehlender Werte, wie
+      der Phasen-Leistung aus Spannung und Stromstärken.
     </openwb-base-alert>
   </div>
 </template>
