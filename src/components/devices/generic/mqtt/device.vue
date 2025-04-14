@@ -7,9 +7,9 @@
       einen Punkt als Dezimaltrenner verwenden (internationales Format). <br />
       Ab Version 2.1.8 wurden die Topics überarbeitet. Die bisherigen Topics openWB/set/bat/id/get/...,
       openWB/set/counter/id/get/... und openWB/set/pv/id/get/... bleiben aus Gründen der Abwärtskompatibilität weiterhin
-      nutzbar, es wird jedoch empfohlen, auf die neuen Topics umzusteigen. Dies ermöglicht die Beseitigung von
-      Einschränkungen, wie z. B. die fehlende Verrechnung bei Hybrid-Systemen oder die Berechnung fehlender Werte, wie
-      der Phasen-Leistung aus Spannung und Stromstärken.
+      nutzbar. Es erscheint jedoch eine entsprechende Fehlermeldung. Wir empfehlen, auf die neuen Topics umzusteigen.
+      Dies ermöglicht die Beseitigung von Einschränkungen, wie z. B. die fehlende Verrechnung bei Hybrid-Systemen oder
+      die Berechnung fehlender Werte, wie der Phasen-Leistung aus Spannung und Stromstärken.
     </openwb-base-alert>
   </div>
 </template>
