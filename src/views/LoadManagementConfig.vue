@@ -112,7 +112,7 @@
             </openwb-base-number-input>
             <openwb-base-number-input
               title="Maximaler Strom L1"
-              :min="16"
+              :min="6"
               :step="1"
               unit="A"
               required
@@ -123,7 +123,7 @@
             </openwb-base-number-input>
             <openwb-base-number-input
               title="Maximaler Strom L2"
-              :min="16"
+              :min="6"
               :step="1"
               unit="A"
               required
@@ -134,7 +134,7 @@
             </openwb-base-number-input>
             <openwb-base-number-input
               title="Maximaler Strom L3"
-              :min="16"
+              :min="6"
               :step="1"
               unit="A"
               required
