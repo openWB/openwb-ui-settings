@@ -144,7 +144,7 @@
             </template>
           </openwb-base-button-group-input>
           Secondary openWBs:
-          <div v-for="(externalChargepoint, externalChargepointKey) in externalChargepoints">
+          <div v-for="(externalChargepoint) in externalChargepoints">
             LP ID: {{ externalChargepoint.id }},
             IP: {{ externalChargepoint.configuration.ip_address }},
             Software: {{ ($store.state.mqtt["openWB/chargepoint/"+externalChargepoint.id+"/get/current_branch"] != "Release") ?
@@ -538,8 +538,6 @@ export default {
         value: true,
       });
     },
-  },
-  methods: {
     filterComponentsByType(components, type) {
       return Object.keys(components)
         .filter((key) => {
