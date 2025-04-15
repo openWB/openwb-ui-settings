@@ -6,9 +6,12 @@
     </openwb-base-alert>
     <openwb-base-alert subtype="info">
       Das MQTT Modul stellt keine aktive Verbindung her, sondern erwartet, dass die Daten von speziellen Topics im
-      Broker gelesen bzw. geschrieben werden.<br />
-      Alle Daten werden als gültiges JSON gesendet und auch so erwartet! Zahlen mit Nachkommastellen (Float) verwenden
-      einen Punkt als Dezimaltrenner (internationales Format).
+      Broker gelesen bzw. geschrieben werden. Alle Daten werden als gültiges JSON gesendet und auch so erwartet! Zahlen
+      mit Nachkommastellen (Float) verwenden einen Punkt als Dezimaltrenner (internationales Format).<br />
+      Ab Version 2.1.8 wurden die Topics überarbeitet. Die bisherigen Topics openWB/set/chargepoint/id/get/... und openWB/chargepoint/set/... bleiben aus Gründen der Abwärtskompatibilität weiterhin
+      nutzbar. Wir empfehlen, auf die neuen Topics umzusteigen. Dies ermöglicht die Beseitigung von Einschränkungen, wie
+      z. B. die fehlende Verrechnung bei Hybrid-Systemen oder die Berechnung fehlender Werte, wie der Phasen-Leistung
+      aus Spannung und Stromstärken.
       <ol>
         <li>
           von openWB gesendete Topics
@@ -18,7 +21,7 @@
                 class="text-info"
                 tooltip="Topic kopieren"
               >
-                openWB/chargepoint/{{ chargePoint.id }}/set/current </openwb-base-copy-to-clipboard
+                openWB/set/mqtt/chargepoint/{{ chargePoint.id }}/set/current </openwb-base-copy-to-clipboard
               ><br />
               Sollwert des Ladestroms, mit Nachkommastellen (Float), positiv (laden) oder negativ (entladen, falls vom
               Ladepunkt unterstützt).<br />
@@ -29,7 +32,7 @@
                 class="text-info"
                 tooltip="Topic kopieren"
               >
-                openWB/chargepoint/{{ chargePoint.id }}/set/phases_to_use </openwb-base-copy-to-clipboard
+                openWB/set/mqtt/chargepoint/{{ chargePoint.id }}/set/phases_to_use </openwb-base-copy-to-clipboard
               ><br />
               Sollwert für die Anzahl Phasen als Ganzzahl (Integer). Mögliche Werte: 1 oder 3<br />
               Beispiel: <span class="text-info">1</span>
@@ -44,7 +47,7 @@
                 class="text-info"
                 tooltip="Topic kopieren"
               >
-                openWB/set/chargepoint/{{ chargePoint.id }}/get/currents </openwb-base-copy-to-clipboard
+                openWB/set/mqtt/chargepoint/{{ chargePoint.id }}/get/currents </openwb-base-copy-to-clipboard
               ><br />
               Aktuelle Phasenströme des Ladepunktes, Array mit drei Zahlen (Float), positiv (laden) oder negativ
               (entladen, falls vom Ladepunkt unterstützt).<br />
@@ -56,7 +59,7 @@
                 class="text-info"
                 tooltip="Topic kopieren"
               >
-                openWB/set/chargepoint/{{ chargePoint.id }}/get/power </openwb-base-copy-to-clipboard
+                openWB/set/mqtt/chargepoint/{{ chargePoint.id }}/get/power </openwb-base-copy-to-clipboard
               ><br />
               Leistung in Watt, mit Nachkommastellen (Float), positiv (laden) oder negativ (entladen, falls vom
               Ladepunkt unterstützt).<br />
@@ -67,7 +70,7 @@
                 class="text-info"
                 tooltip="Topic kopieren"
               >
-                openWB/set/chargepoint/{{ chargePoint.id }}/get/plug_state </openwb-base-copy-to-clipboard
+                openWB/set/mqtt/chargepoint/{{ chargePoint.id }}/get/plug_state </openwb-base-copy-to-clipboard
               ><br />
               Zeigt an, ob aktuell ein Fahrzeug angesteckt ist, Wahrheitswert (Bool).<br />
               Beispiel: <span class="text-info">true</span>
@@ -77,7 +80,7 @@
                 class="text-info"
                 tooltip="Topic kopieren"
               >
-                openWB/set/chargepoint/{{ chargePoint.id }}/get/charge_state </openwb-base-copy-to-clipboard
+                openWB/set/mqtt/chargepoint/{{ chargePoint.id }}/get/charge_state </openwb-base-copy-to-clipboard
               ><br />
               Zeigt an, ob ein Ladevorgang aktiv ist, Wahrheitswert (Bool).<br />
               Beispiel: <span class="text-info">true</span>
@@ -87,7 +90,7 @@
                 class="text-info"
                 tooltip="Topic kopieren"
               >
-                openWB/set/chargepoint/{{ chargePoint.id }}/get/phases_in_use </openwb-base-copy-to-clipboard
+                openWB/set/mqtt/chargepoint/{{ chargePoint.id }}/get/phases_in_use </openwb-base-copy-to-clipboard
               ><br />
               Anzahl der Phasen, mit denen geladen wird, Ganzzahl (Integer). Mögliche Werte: 0 bis 3<br />
               Beispiel: <span class="text-info">3</span>
@@ -102,7 +105,7 @@
                 class="text-info"
                 tooltip="Topic kopieren"
               >
-                openWB/set/chargepoint/{{ chargePoint.id }}/get/imported </openwb-base-copy-to-clipboard
+                openWB/set/mqtt/chargepoint/{{ chargePoint.id }}/get/imported </openwb-base-copy-to-clipboard
               ><br />
               Geladene Energie in Wh, mit Nachkommastellen (Float), nur positiv<br />
               Wird dieses Topic nicht vom Ladepunkt gesendet, so wird intern ein Zählerstand anhand der Leistung
@@ -115,7 +118,7 @@
                 class="text-info"
                 tooltip="Topic kopieren"
               >
-                openWB/set/chargepoint/{{ chargePoint.id }}/get/exported </openwb-base-copy-to-clipboard
+                openWB/set/mqtt/chargepoint/{{ chargePoint.id }}/get/exported </openwb-base-copy-to-clipboard
               ><br />
               Entladene Energie in Wh, mit Nachkommastellen (Float), nur positiv<br />
               Wird dieses Topic nicht vom Ladepunkt gesendet, so wird intern ein Zählerstand anhand der Leistung
@@ -127,7 +130,7 @@
                 class="text-info"
                 tooltip="Topic kopieren"
               >
-                openWB/set/chargepoint/{{ chargePoint.id }}/get/voltages </openwb-base-copy-to-clipboard
+                openWB/set/mqtt/chargepoint/{{ chargePoint.id }}/get/voltages </openwb-base-copy-to-clipboard
               ><br />
               Aktuelle Phasenspannungen des Ladepunktes, Array mit drei Zahlen (Float), nur positiv.<br />
               Die Spannungen werden nicht verarbeitet, sondern lediglich im Status angezeigt.<br />
@@ -139,7 +142,7 @@
                 class="text-info"
                 tooltip="Topic kopieren"
               >
-                openWB/set/chargepoint/{{ chargePoint.id }}/get/power_factors </openwb-base-copy-to-clipboard
+                openWB/set/mqtt/chargepoint/{{ chargePoint.id }}/get/power_factors </openwb-base-copy-to-clipboard
               ><br />
               Aktuelle Leistungsfaktoren des Ladepunktes, Array mit drei Zahlen (Float), Wertebereich von -1 bis 1.<br />
               Die Leistungsfaktoren werden nicht verarbeitet, sondern lediglich im Status angezeigt.<br />
@@ -151,7 +154,7 @@
                 class="text-info"
                 tooltip="Topic kopieren"
               >
-                openWB/set/chargepoint/{{ chargePoint.id }}/get/rfid_tag </openwb-base-copy-to-clipboard
+                openWB/set/mqtt/chargepoint/{{ chargePoint.id }}/get/rfid_tag </openwb-base-copy-to-clipboard
               ><br />
               Eine Zeichenfolge, die einen eingelesenen Tag für openWB repräsentiert.<br />
               Beispiel:
