@@ -5,7 +5,7 @@
       ein virtueller Zähler als EVU-Zähler zu konfigurieren, falls kein anderer Zähler vorhanden ist und ausgelesen
       werden kann.
     </openwb-base-alert>
-    <openwb-base-alert subtype="device.configuration.variant !== 3 ? 'danger' : 'info'">
+    <openwb-base-alert :subtype="device.configuration.variant !== 3 ? 'danger' : 'info'">
       Diese Komponente kann nur in Verbindung mit der JSON-API v2 verwendet werden, da die anderen Schnittstellen die
       Daten nicht zur Verfügung stellen.
     </openwb-base-alert>
