@@ -108,6 +108,52 @@
             ältere Version gewechselt werden, jedoch ist nicht sichergestellt, dass es dabei keine Probleme gibt. Gerade
             wenn das Datenformat in der neuen Version angepasst wurde, wird eine ältere damit Fehler produzieren.
           </openwb-base-alert>
+          <openwb-base-alert
+            v-if="$store.state.mqtt['openWB/system/current_branch'] != 'Release'"
+            subtype="danger"
+          >
+            Die automatische Updatefunktion für Secondary openWBs ist nur verfügbar,
+            wenn sich die Primary openWB auf dem Entwicklungszweig "Release" befindet.
+            Das Update wird nur auf Secondary openWBs durchgeführt, welche sich ebenfalls
+            auf dem Entwicklungszweig "Release" befinden. Ist die dort installierte 
+            Releaseversion zu alt oder inkompatibel muss ein einmaliges Update auf 
+            die aktuelle Version manuell auf der betroffenen openWB durchgeführt werden.
+          </openwb-base-alert>
+          <openwb-base-button-group-input
+            title="Secondary openWBs automatisch mit der Primary updaten"
+            :disabled="$store.state.mqtt['openWB/system/current_branch'] != 'Release'"
+            :buttons="[
+              {
+                buttonValue: false,
+                text: 'Nein',
+                class: 'btn-outline-danger',
+              },
+              {
+                buttonValue: true,
+                text: 'Ja',
+                class: 'btn-outline-success',
+              },
+            ]"
+            :model-value="$store.state.mqtt['openWB/system/secondary_auto_update']"
+            @update:model-value="updateState('openWB/system/secondary_auto_update', $event)"
+          >
+            <template #help>
+              Diese Option ist nur auf dem Entwicklungszweig "Release" verfügbar. Ist diese Option aktiviert, dann
+              werden Secondary openWBs, welche sich ebenfalls auf dem Entwicklungszweig "Release" befinden gleichzeitig
+              mit der Primary openWB aktualisiert.
+            </template>
+          </openwb-base-button-group-input>
+          Secondary openWBs:
+          <div v-for="externalChargepoint in externalChargepoints"
+            :key="externalChargepoint.id"
+          >
+            LP ID: {{ externalChargepoint.id }},
+            IP: {{ externalChargepoint.configuration.ip_address }},
+            Software: {{ ($store.state.mqtt["openWB/chargepoint/"+externalChargepoint.id+"/get/current_branch"] != "Release") ?
+            "Inkompatibel oder openWB ist nicht erreichbar. Bitte manuell updaten bzw. prüfen." : 
+            $store.state.mqtt["openWB/chargepoint/"+externalChargepoint.id+"/get/current_branch"] +
+            $store.state.mqtt["openWB/chargepoint/"+externalChargepoint.id+"/get/current_branch"]}}
+          </div>
           <template #footer>
             <div class="row justify-content-center">
               <div class="col-md-4 d-flex py-1 justify-content-center">
@@ -135,6 +181,14 @@
                   />
                 </openwb-base-click-button>
               </div>
+            </div>
+            <div v-if="$store.state.mqtt['openWB/system/current_branch'] == 'Release'">
+              <openwb-base-submit-buttons 
+                :form-name="versionInfoForm"
+                :hide-defaults="true"
+                @save="$emit('save')"
+                @reset="$emit('reset')"
+              />
             </div>
           </template>
         </openwb-base-card>
@@ -289,12 +343,27 @@ export default {
         "openWB/system/serial_number",
         "openWB/system/ip_address",
         "openWB/system/mac_address",
+        "openWB/chargepoint/+/get/version",
+        "openWB/chargepoint/+/get/current_branch",
+        "openWB/chargepoint/+/config",
       ],
       warningAcknowledged: false,
       selectedTag: "*HEAD*",
     };
   },
   computed: {
+    externalChargepoints: {
+      get() {
+        let chargePoints = this.getWildcardTopics("openWB/chargepoint/+/config");
+        let myObj = {};
+        for (const [key, element] of Object.entries(chargePoints)) {
+          if (element.type === "external_openwb") {
+            myObj[key] = element;
+          }
+        }
+        return myObj;
+      },
+    },
     updateAvailable() {
       return (
         this.$store.state.mqtt["openWB/system/current_branch_commit"] &&
@@ -470,6 +539,18 @@ export default {
         name: "reloadRequired",
         value: true,
       });
+    },
+    filterComponentsByType(components, type) {
+      return Object.keys(components)
+        .filter((key) => {
+          return components[key].type.includes(type);
+        })
+        .reduce((obj, key) => {
+          return {
+            ...obj,
+            [key]: components[key],
+          };
+        }, {});
     },
   },
 };
