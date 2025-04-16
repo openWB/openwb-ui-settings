@@ -8,10 +8,10 @@
       Das MQTT Modul stellt keine aktive Verbindung her, sondern erwartet, dass die Daten von speziellen Topics im
       Broker gelesen bzw. geschrieben werden. Alle Daten werden als gültiges JSON gesendet und auch so erwartet! Zahlen
       mit Nachkommastellen (Float) verwenden einen Punkt als Dezimaltrenner (internationales Format).<br />
-      Ab Version 2.1.8 wurden die Topics überarbeitet. Die bisherigen Topics openWB/set/chargepoint/id/get/... und openWB/chargepoint/set/... bleiben aus Gründen der Abwärtskompatibilität weiterhin
-      nutzbar. Wir empfehlen, auf die neuen Topics umzusteigen. Dies ermöglicht die Beseitigung von Einschränkungen, wie
-      z. B. die fehlende Verrechnung bei Hybrid-Systemen oder die Berechnung fehlender Werte, wie der Phasen-Leistung
-      aus Spannung und Stromstärken.
+      Ab Version 2.1.8 wurden die Topics überarbeitet. Die bisherigen Topics openWB/set/chargepoint/id/get/... und
+      openWB/chargepoint/set/... bleiben aus Gründen der Abwärtskompatibilität weiterhin nutzbar. Wir empfehlen, auf die
+      neuen Topics umzusteigen. Dies ermöglicht die Beseitigung von Einschränkungen, wie z. B. die fehlende Verrechnung
+      bei Hybrid-Systemen oder die Berechnung fehlender Werte, wie der Phasen-Leistung aus Spannung und Stromstärken.
       <ol>
         <li>
           von openWB gesendete Topics
