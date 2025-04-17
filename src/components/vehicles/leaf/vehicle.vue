@@ -18,7 +18,7 @@
     >
       <template #help> Das Passwort für die Anmeldung an den Nissan-Servern. </template>
     </openwb-base-text-input>
-	<openwb-base-select-input
+    <openwb-base-select-input
       title="Region"
       required
       not-selected="Bitte auswählen"
@@ -27,7 +27,7 @@
         { value: 'NNA', text: 'USA (nicht getestet)' },
         { value: 'NCI', text: 'Kanada (nicht getestet)' },
         { value: 'NMA', text: 'Australien (nicht getestet)' },
-        { value: 'NML', text: 'Japan (nicht getestet)' }
+        { value: 'NML', text: 'Japan (nicht getestet)' },
       ]"
       :model-value="vehicle.configuration.region"
       @update:model-value="updateConfiguration($event, 'configuration.region')"
