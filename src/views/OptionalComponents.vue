@@ -308,7 +308,7 @@ export default {
         { label: "openWB", options: [] },
         { label: "Community", options: [] },
       ];
-      this.displayThemeList.forEach((theme) => {
+      this.displayThemeList?.forEach((theme) => {
         if (theme.official === true) {
           groups[0].options.push(theme);
         } else {
