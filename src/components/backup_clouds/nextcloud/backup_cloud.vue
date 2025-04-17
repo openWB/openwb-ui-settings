@@ -2,7 +2,7 @@
   <div class="backup-cloud-next-cloud">
     <openwb-base-text-input
       title="Cloud-URL"
-      subtype="host"
+      subtype="url"
       required
       :model-value="backupCloud.configuration.ip_address"
       @update:model-value="updateConfiguration($event, 'configuration.ip_address')"
