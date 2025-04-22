@@ -9,8 +9,9 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/mqtt/bat/{{ component.id }}/get/power </openwb-base-copy-to-clipboard
-          ><br />
+            openWB/set/mqtt/bat/{{ component.id }}/get/power
+          </openwb-base-copy-to-clipboard>
+          <br />
           Speicherleistung in Watt, Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
           Dezimaltrennzeichen, positiv Ladung, negativ Entladung<br />
           Beispiel: <span class="text-info">-123</span>
@@ -20,8 +21,9 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/mqtt/bat/{{ component.id }}/get/imported </openwb-base-copy-to-clipboard
-          ><br />
+            openWB/set/mqtt/bat/{{ component.id }}/get/imported
+          </openwb-base-copy-to-clipboard>
+          <br />
           Geladene Energie in Wh, Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
           Dezimaltrennzeichen, nur positiv<br />
           Beispiel: <span class="text-info">123.45</span>
@@ -31,8 +33,9 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/mqtt/bat/{{ component.id }}/get/exported </openwb-base-copy-to-clipboard
-          ><br />
+            openWB/set/mqtt/bat/{{ component.id }}/get/exported
+          </openwb-base-copy-to-clipboard>
+          <br />
           Entladene Energie in Wh, Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
           Dezimaltrennzeichen, nur positiv<br />
           Beispiel: <span class="text-info">123.45</span>
@@ -42,8 +45,9 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/mqtt/bat/{{ component.id }}/get/soc </openwb-base-copy-to-clipboard
-          ><br />
+            openWB/set/mqtt/bat/{{ component.id }}/get/soc
+          </openwb-base-copy-to-clipboard>
+          <br />
           Ladestand des Speichers, Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
           Dezimaltrennzeichen, gültige Werte 0 bis 100<br />
           Beispiel: <span class="text-info">95</span>
@@ -61,8 +65,9 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/mqtt/bat/{{ component.id }}/set/power_limit </openwb-base-copy-to-clipboard
-          ><br />
+            openWB/set/mqtt/bat/{{ component.id }}/set/power_limit
+          </openwb-base-copy-to-clipboard>
+          <br />
           Entladeleistung in Watt (Float), die im Speicher gesetzt werden muss.<br />
           Beispiel: <span class="text-info">123.0</span>
         </li>
