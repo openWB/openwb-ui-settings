@@ -313,7 +313,10 @@
             <a href="test">Link</a>
           </template>
         </openwb-base-heading>
-        <openwb-base-alert> Meldung ohne speziellen Subtype. </openwb-base-alert>
+        <openwb-base-alert>
+          Meldung ohne speziellen Subtype.
+          <openwb-base-copy-to-clipboard>Kopiere mich!</openwb-base-copy-to-clipboard>
+        </openwb-base-alert>
         <openwb-base-alert subtype="info"> Infomeldung </openwb-base-alert>
         <openwb-base-alert subtype="warning"> Warnmeldung </openwb-base-alert>
         <openwb-base-alert subtype="danger"> Fehlermeldung </openwb-base-alert>
