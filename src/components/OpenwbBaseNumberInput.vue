@@ -35,6 +35,14 @@
             {{ unit }}
           </div>
         </div>
+        <div
+          v-if="$slots.append"
+          class="input-group-append"
+        >
+          <div class="input-group-text p-0">
+            <slot name="append" />
+          </div>
+        </div>
       </div>
     </template>
   </openwb-base-setting-element>

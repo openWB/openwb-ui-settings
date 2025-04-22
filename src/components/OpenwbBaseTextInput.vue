@@ -174,6 +174,14 @@
           >
             <div class="input-group-text">+</div>
           </div>
+          <div
+            v-if="$slots.append"
+            class="input-group-append"
+          >
+            <div class="input-group-text p-0">
+              <slot name="append" />
+            </div>
+          </div>
         </div>
       </div>
     </template>
