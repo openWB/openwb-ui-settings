@@ -9,8 +9,9 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/vehicle/{{ vehicleId }}/get/soc </openwb-base-copy-to-clipboard
-          ><br />
+            openWB/set/vehicle/{{ vehicleId }}/get/soc
+          </openwb-base-copy-to-clipboard>
+          <br />
           Fahrzeug-SoC mit Nachkommastellen (Float) oder Ganzzahl<br />
           Beispiel: <span class="text-info">89.5</span>
         </li>
@@ -19,8 +20,9 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/vehicle/{{ vehicleId }}/get/range </openwb-base-copy-to-clipboard
-          ><br />
+            openWB/set/vehicle/{{ vehicleId }}/get/range
+          </openwb-base-copy-to-clipboard>
+          <br />
           Reichweite des Fahrzeugs in km mit Nachkommastellen (Float) oder Ganzzahl<br />
           Diese Info ist optional.<br />
           Beispiel: <span class="text-info">356.5</span>

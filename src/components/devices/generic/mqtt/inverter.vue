@@ -9,8 +9,9 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/mqtt/pv/{{ component.id }}/get/power </openwb-base-copy-to-clipboard
-          ><br />
+            openWB/set/mqtt/pv/{{ component.id }}/get/power
+          </openwb-base-copy-to-clipboard>
+          <br />
           PV-Leistung in Watt als Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
           Dezimaltrennzeichen. Produzierte Leistung muss ein negatives Vorzeichen haben. (In bestimmten Konstellationen,
           z.B. wenn ein Hybridsystem über einen zweiten Wechselrichter geladen wird, hat die Leistung ein positives
@@ -22,8 +23,9 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/mqtt/pv/{{ component.id }}/get/exported </openwb-base-copy-to-clipboard
-          ><br />
+            openWB/set/mqtt/pv/{{ component.id }}/get/exported
+          </openwb-base-copy-to-clipboard>
+          <br />
           Erzeugte Energie in Wh, Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
           Dezimaltrennzeichen, nur positiv<br />
           Beispiel: <span class="text-info">123.45</span>
