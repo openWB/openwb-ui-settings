@@ -14,11 +14,11 @@
       </template>
     </openwb-base-range-input>
     <openwb-base-number-input
-      title="Kartenansicht Grenzwert"
+      title="Ladepunkt Kartenansicht Grenzwert"
       :min="0"
       :step="1"
-      :model-value="webTheme.configuration.card_view_breakpoint"
-      @update:model-value="updateConfiguration($event, 'configuration.card_view_breakpoint')"
+      :model-value="webTheme.configuration.chargePoint_card_view_breakpoint"
+      @update:model-value="updateConfiguration($event, 'configuration.chargePoint_card_view_breakpoint')"
     >
       <template #help>
         Legt fest, bis zu wie vielen Ladepunkten die Kartenansicht verwendet wird. Bei mehr Ladepunkten wird automatisch
@@ -39,12 +39,47 @@
           class: 'btn-outline-success',
         },
       ]"
-      :model-value="webTheme.configuration.table_search_input_field"
-      @update:model-value="updateConfiguration($event, 'configuration.table_search_input_field')"
+      :model-value="webTheme.configuration.chargePoint_table_search_input_field"
+      @update:model-value="updateConfiguration($event, 'configuration.chargePoint_table_search_input_field')"
     >
       <template #help>
         Legt fest, ob in der Tabellenansicht ein Suchfeld angezeigt wird. Mit diesem Suchfeld können die Felder
         „Ladepunkt“ und „Fahrzeug“ durchsucht werden.
+      </template>
+    </openwb-base-button-group-input>
+    <hr />
+    <openwb-base-number-input
+      title="Fahrzeug Kartenansicht Grenzwert"
+      :min="0"
+      :step="1"
+      :model-value="webTheme.configuration.vehicle_card_view_breakpoint"
+      @update:model-value="updateConfiguration($event, 'configuration.vehicle_card_view_breakpoint')"
+    >
+      <template #help>
+        Legt fest, bis zu wie vielen Fahrzeugen die Kartenansicht verwendet wird. Bei mehr Fahrzeugen wird automatisch
+        zur Tabellenansicht gewechselt.
+      </template>
+    </openwb-base-number-input>
+    <openwb-base-button-group-input
+      title="Suchfeld in Fahrzeug Tabellenansicht"
+      :buttons="[
+        {
+          buttonValue: false,
+          text: 'Nein',
+          class: 'btn-outline-danger',
+        },
+        {
+          buttonValue: true,
+          text: 'Ja',
+          class: 'btn-outline-success',
+        },
+      ]"
+      :model-value="webTheme.configuration.vehicle_table_search_input_field"
+      @update:model-value="updateConfiguration($event, 'configuration.vehicle_table_search_input_field')"
+    >
+      <template #help>
+        Legt fest, ob in der Tabellenansicht ein Suchfeld angezeigt wird. Mit diesem Suchfeld können die Felder
+        „Fahrzeug“, „Hersteller“ und „Modell“ durchsucht werden.
       </template>
     </openwb-base-button-group-input>
   </div>
