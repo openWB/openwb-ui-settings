@@ -55,28 +55,12 @@ const routes = [
     component: () => import("../views/GeneralChargeConfig.vue"),
   },
   {
-    path: "/InstantChargeConfig",
-    name: "InstantChargeConfig",
-    meta: {
-      heading: "Ladeeinstellungen - Sofortladen",
-    },
-    component: () => import("../views/InstantChargeConfig.vue"),
-  },
-  {
     path: "/PVChargeConfig",
     name: "PVChargeConfig",
     meta: {
       heading: "Ladeeinstellungen - PV-Laden",
     },
     component: () => import("../views/PVChargeConfig.vue"),
-  },
-  {
-    path: "/TimeChargeConfig",
-    name: "TimeChargeConfig",
-    meta: {
-      heading: "Ladeeinstellungen - Zeitladen",
-    },
-    component: () => import("../views/TimeChargeConfig.vue"),
   },
   {
     path: "/ScheduledChargeConfig",
