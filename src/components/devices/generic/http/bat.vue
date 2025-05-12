@@ -30,6 +30,20 @@
       </template>
     </openwb-base-text-input>
     <openwb-base-text-input
+      title="Pfad für Ströme"
+      subtype="text"
+      pattern="^/[-a-zA-Z0-9@:%_\+.~#?&/=]*"
+      :model-value="component.configuration.soc_path"
+      @update:model-value="updateConfiguration($event, 'configuration.soc_path')"
+    >
+      <template #help>
+        Diese Angabe wird an die Server-URL angehängt und muss mit einem Schrägstrich "/" beginnen.<br />
+        Es wird ein Array mit drei Zahlen mit oder ohne Nachkommastellen (Float, Integer), positiv (laden) oder negativ
+        (entladen)vom Server eine Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
+        Dezimaltrennzeichen erwartet.
+      </template>
+    </openwb-base-text-input>
+    <openwb-base-text-input
       title="Pfad für Zählerstand laden"
       subtype="text"
       pattern="^(/[-a-zA-Z0-9@:%_\+.~#?&/=]*)"

@@ -53,6 +53,21 @@
           Beispiel: <span class="text-info">95</span>
         </li>
       </ul>
+      Ströme je Phase sind für phasenbasiertes Lastmanagement unbedingt erforderlich, sonst erfolgt das Lastmanagement
+      ausschließlich auf Basis der Gesamtleistung am EVU-Punkt:
+      <ul>
+        <li>
+          <openwb-base-copy-to-clipboard
+            class="text-info"
+            tooltip="Topic kopieren"
+          >
+            openWB/set/mqtt/bat/{{ component.id }}/get/currents
+          </openwb-base-copy-to-clipboard>
+          <br />
+          Array mit den Strömen je Phase in Ampere, mit Nachkommastellen (Float), positiv Bezug, negativ Einspeisung<br />
+          Beispiel: <span class="text-info">[1.2,2.3,-2.1]</span>
+        </li>
+      </ul>
     </openwb-base-alert>
     <openwb-base-heading> Optionale Einstellungen </openwb-base-heading>
     <openwb-base-alert subtype="info">

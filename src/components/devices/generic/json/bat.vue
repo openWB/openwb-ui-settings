@@ -26,6 +26,12 @@
       @update:model-value="updateConfiguration($event, 'configuration.jq_soc')"
     />
     <openwb-base-text-input
+      title="Abfrage für Ströme"
+      subtype="text"
+      :model-value="component.configuration.jq_currents"
+      @update:model-value="updateConfiguration($event, 'configuration.jq_currents')"
+    />
+    <openwb-base-text-input
       title="Abfrage für Zählerstand Ladung"
       subtype="text"
       :model-value="component.configuration.jq_imported"
