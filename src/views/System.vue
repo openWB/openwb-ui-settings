@@ -203,7 +203,7 @@
                 </tbody>
               </table>
               <openwb-base-submit-buttons
-                :form-name="versionInfoForm"
+                form-name="versionInfoForm"
                 :hide-defaults="true"
                 @save="$emit('save')"
                 @reset="$emit('reset')"
