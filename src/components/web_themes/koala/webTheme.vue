@@ -3,7 +3,7 @@
     <openwb-base-range-input
       title="Zeitfenster Verlaufsdiagramm"
       :min="15"
-      :max="240"
+      :max="120"
       :step="15"
       unit="Min."
       :model-value="webTheme.configuration.history_chart_range / 60"
