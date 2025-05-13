@@ -26,6 +26,24 @@
       @update:model-value="updateConfiguration($event, 'configuration.jq_soc')"
     />
     <openwb-base-text-input
+      title="Abfrage für Strom auf Phase 1"
+      subtype="text"
+      :model-value="component.configuration.jq_current_l1"
+      @update:model-value="updateConfiguration($event, 'configuration.jq_current_l1')"
+    />
+    <openwb-base-text-input
+      title="Abfrage für Strom auf Phase 2"
+      subtype="text"
+      :model-value="component.configuration.jq_current_l2"
+      @update:model-value="updateConfiguration($event, 'configuration.jq_current_l2')"
+    />
+    <openwb-base-text-input
+      title="Abfrage für Strom auf Phase 3"
+      subtype="text"
+      :model-value="component.configuration.jq_current_l3"
+      @update:model-value="updateConfiguration($event, 'configuration.jq_current_l3')"
+    />
+    <openwb-base-text-input
       title="Abfrage für Zählerstand Ladung"
       subtype="text"
       :model-value="component.configuration.jq_imported"
