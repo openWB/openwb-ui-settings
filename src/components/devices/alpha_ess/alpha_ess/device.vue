@@ -23,7 +23,6 @@
     <openwb-base-number-input
       v-if="device.configuration.source == 1"
       title="Port"
-      subtype="host"
       required
       :min="1"
       :max="65535"
