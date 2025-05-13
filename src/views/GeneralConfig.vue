@@ -123,13 +123,13 @@
           </openwb-base-button-group-input>
         </div>
       </openwb-base-card>
-      <openwb-base-card title="Hardware">
-        <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-          <openwb-base-alert subtype="info">
-            Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
-          </openwb-base-alert>
-        </div>
-        <div v-if="!installAssistantActive">
+      <div v-if="!installAssistantActive">
+        <openwb-base-card title="Hardware">
+          <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+            <openwb-base-alert subtype="info">
+              Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
+            </openwb-base-alert>
+          </div>
           <div v-if="$store.state.mqtt['openWB/general/extern'] === false">
             <openwb-base-button-group-input
               title="Geschwindigkeit Regelintervall"
@@ -196,8 +196,8 @@
               </template>
             </openwb-base-button-group-input>
           </div>
-        </div>
-      </openwb-base-card>
+        </openwb-base-card>
+      </div>
       <openwb-base-card
         v-if="!installAssistantActive"
         title="Darstellung"
