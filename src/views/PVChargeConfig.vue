@@ -178,33 +178,6 @@
           </openwb-base-number-input>
         </div>
       </openwb-base-card>
-      <openwb-base-card title="Phasenumschaltung">
-        <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-          <openwb-base-alert subtype="info">
-            Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
-          </openwb-base-alert>
-        </div>
-        <div v-else>
-          <openwb-base-button-group-input
-            title="Anzahl Phasen"
-            :buttons="[
-              { buttonValue: 1, text: '1' },
-              { buttonValue: 3, text: 'Maximum' },
-              { buttonValue: 0, text: 'Automatik' },
-            ]"
-            :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/phases_to_use']"
-            @update:model-value="updateState('openWB/general/chargemode_config/pv_charging/phases_to_use', $event)"
-          >
-            <template #help>
-              Hier kann eingestellt werden, ob Ladevorgänge im Modus "PV-Laden" mit nur einer Phase oder dem möglichen
-              Maximum in Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Im Modus
-              "Automatik" entscheidet die Regelung, welche Einstellung genutzt wird, um den verfügbaren Überschuss in
-              die Fahrzeuge zu laden. Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen einer und mehreren
-              Phasen (sog. 1p3p).
-            </template>
-          </openwb-base-button-group-input>
-        </div>
-      </openwb-base-card>
       <openwb-base-card title="Speicher-Beachtung">
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
           <openwb-base-alert subtype="info">

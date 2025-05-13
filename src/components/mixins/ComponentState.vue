@@ -12,7 +12,7 @@ export default {
       return ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"];
     },
     chargeModes() {
-      return ["instant_charging", "pv_charging", "scheduled_charging", "time_charging", "standby", "stop"];
+      return ["instant_charging", "pv_charging", "scheduled_charging", "time_charging", "eco_charging", "stop"];
     },
     statusLevel() {
       return ["success", "warning", "danger"];
@@ -146,7 +146,9 @@ export default {
           return "Zielladen";
         case "time_charging":
           return "Zeitladen";
-        case "standby":
+        case "eco_charging":
+          return "Eco";
+        case "standby": // keep for backward compatibility!
           return "Standby";
         case "stop":
           return "Stop";
