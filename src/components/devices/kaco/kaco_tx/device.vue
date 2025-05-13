@@ -16,9 +16,7 @@
       :model-value="device.configuration.port"
       @update:model-value="updateConfiguration($event, 'configuration.port')"
     >
-      <template #help>
-        Der Standardport für Kaco ist 502.
-      </template>
+      <template #help> Der Standardport für Kaco ist 502. </template>
     </openwb-base-number-input>
   </div>
 </template>

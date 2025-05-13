@@ -262,7 +262,7 @@
             </openwb-base-alert>
             <openwb-base-text-input
               title="URL des OCPP-Backends"
-              subtype="host"
+              subtype="url"
               :model-value="$store.state.mqtt['openWB/optional/ocpp/config']?.url"
               @update:model-value="updateState('openWB/optional/ocpp/config', $event, 'url')"
             />
