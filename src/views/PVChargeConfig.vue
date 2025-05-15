@@ -87,7 +87,7 @@
             </template>
           </openwb-base-number-input>
           <openwb-base-number-input
-            title="Einschaltverzögerung"
+            title="Wartezeit Ladestart & Phasenzuschaltung"
             :min="0"
             :step="1"
             unit="s"
@@ -99,7 +99,11 @@
               Die Einschaltschwelle muss für die hier angegebene Zeit dauerhaft überschritten werden, bevor ein
               Ladevorgang gestartet wird.<br />
               Wenn ein Ladevorgang aktiv ist und auf PV-Laden umgeschaltet wird, wird weiter geladen, wenn die
-              Abschaltschwelle nicht unterschritten wird.
+              Abschaltschwelle nicht unterschritten wird.<br />
+              Wenn die Pufferzeit zwischen zwei automatischen Phasenumschaltungen abgelaufen ist, wird die hier
+              eingestellte Wartezeit abgewartet. Wenn die Pufferzeit zwischen zwei Umschaltungen noch nicht erreicht
+              ist, wird die längere der beiden Zeiten abgewartet: entweder die verbleibende Pufferzeit oder die
+              Wartezeit.
             </template>
           </openwb-base-number-input>
           <hr />
@@ -131,7 +135,7 @@
             </template>
           </openwb-base-number-input>
           <openwb-base-number-input
-            title="Abschaltverzögerung"
+            title="Wartezeit Ladeende & Phasenreduktion"
             :min="0"
             :step="1"
             unit="s"
@@ -143,7 +147,11 @@
               Die Abschaltschwelle muss für die hier angegebene Zeit dauerhaft unterschritten werden, bevor ein
               Ladevorgang beendet wird.<br />
               Wenn ein Ladevorgang aktiv ist und auf PV-Laden umgeschaltet wird, wird die Ladung sofort beendet, wenn
-              die Abschaltschwelle unterschritten wird.
+              die Abschaltschwelle unterschritten wird.<br />
+              Wenn die Pufferzeit zwischen zwei automatischen Phasenumschaltungen abgelaufen ist, wird die hier
+              eingestellte Wartezeit abgewartet. Wenn die Pufferzeit zwischen zwei Umschaltungen noch nicht erreicht
+              ist, wird die längere der beiden Zeiten abgewartet: entweder die verbleibende Pufferzeit oder die
+              Wartezeit.
             </template>
           </openwb-base-number-input>
           <hr />

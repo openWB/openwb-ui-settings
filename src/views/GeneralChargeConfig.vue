@@ -75,7 +75,7 @@
             </template>
           </openwb-base-button-group-input>
           <openwb-base-number-input
-            title="Verzögerung automat. Phasenumschaltung"
+            title="Pufferzeit zwischen automat. Phasenumschaltungen"
             unit="Min."
             :min="5"
             :max="20"
