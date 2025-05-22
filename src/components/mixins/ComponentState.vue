@@ -127,13 +127,11 @@ export default {
     },
     formatPhaseArrayNumberTopic(topic, minNumDigits = 0, maxNumDigits = minNumDigits, scale = 1) {
       if (this.$store.state.mqtt[topic]) {
-        return this.$store.state.mqtt[topic]
-          .map((element) => {
-            return this.formatNumber(element, minNumDigits, maxNumDigits, scale);
-          })
-          .join(" / ");
+        return this.$store.state.mqtt[topic].map((element) => {
+          return this.formatNumber(element, minNumDigits, maxNumDigits, scale);
+        });
       } else {
-        return "- / - / -";
+        return ["-", "-", "-"];
       }
     },
     translateChargeMode(value) {

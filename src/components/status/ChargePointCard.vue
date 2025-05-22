@@ -124,49 +124,49 @@
       <div class="row">
         <div class="col-md-4 pr-1 text-center text-md-right">Spannung [V]</div>
         <div class="col text-right text-monospace">
-          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[0] }}
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1)[0] }}
         </div>
         <div class="col text-right text-monospace">
-          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[1] }}
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1)[1] }}
         </div>
         <div class="col text-right text-monospace">
-          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1).split(" / ")[2] }}
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/voltages", 1)[2] }}
         </div>
       </div>
       <div class="row">
         <div class="col-md-4 pr-1 text-center text-md-right">Strom [A]</div>
         <div class="col text-right text-monospace">
-          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[0] }}
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2)[0] }}
         </div>
         <div class="col text-right text-monospace">
-          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[1] }}
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2)[1] }}
         </div>
         <div class="col text-right text-monospace">
-          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[2] }}
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2)[2] }}
         </div>
       </div>
       <div class="row">
         <div class="col-md-4 pr-1 text-center text-md-right">Wirkleistung [kW]</div>
         <div class="col text-right text-monospace">
-          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001).split(" / ")[0] }}
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001)[0] }}
         </div>
         <div class="col text-right text-monospace">
-          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001).split(" / ")[1] }}
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001)[1] }}
         </div>
         <div class="col text-right text-monospace">
-          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001).split(" / ")[2] }}
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/powers", 3, 3, 0.001)[2] }}
         </div>
       </div>
       <div class="row">
         <div class="col-md-4 pr-1 text-center text-md-right">Leistungsfaktor</div>
         <div class="col text-right text-monospace">
-          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/power_factors", 2).split(" / ")[0] }}
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/power_factors", 2)[0] }}
         </div>
         <div class="col text-right text-monospace">
-          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/power_factors", 2).split(" / ")[1] }}
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/power_factors", 2)[1] }}
         </div>
         <div class="col text-right text-monospace">
-          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/power_factors", 2).split(" / ")[2] }}
+          {{ formatPhaseArrayNumberTopic(baseTopic + "/get/power_factors", 2)[2] }}
         </div>
       </div>
       <div class="row">
