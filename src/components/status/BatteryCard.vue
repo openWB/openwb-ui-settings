@@ -76,13 +76,13 @@
         <div class="col">
           <div class="row">
             <div class="col text-right text-monospace pl-0">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[0] }}
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2)[0] }}
             </div>
             <div class="col text-right text-monospace pl-0">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[1] }}
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2)[1] }}
             </div>
             <div class="col text-right text-monospace pl-0">
-              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2).split(" / ")[2] }}
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2)[2] }}
             </div>
           </div>
         </div>
