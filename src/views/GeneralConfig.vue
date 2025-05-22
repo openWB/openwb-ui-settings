@@ -127,7 +127,8 @@
         <openwb-base-card title="Hardware">
           <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
             <openwb-base-alert subtype="info">
-              Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
+              Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary"
+              befindet.
             </openwb-base-alert>
           </div>
           <div v-if="$store.state.mqtt['openWB/general/extern'] === false">
