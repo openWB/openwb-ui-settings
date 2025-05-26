@@ -644,6 +644,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faPlus as fasPlus,
   faTrash as fasTrash,
+  faCopy as fasCopy,
   faCalendarDay as fasCalendarDay,
   faCalendarAlt as fasCalendarAlt,
   faCalendarWeek as fasCalendarWeek,
@@ -652,7 +653,7 @@ import {
 import { faFile as farFile } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon, FontAwesomeLayers } from "@fortawesome/vue-fontawesome";
 
-library.add(fasPlus, fasTrash, fasCalendarDay, fasCalendarAlt, fasCalendarWeek, fasChargingStation, farFile);
+library.add(fasPlus, fasTrash, fasCopy, fasCalendarDay, fasCalendarAlt, fasCalendarWeek, fasChargingStation, farFile);
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbChargePointProxy from "../components/charge_points/OpenwbChargePointProxy.vue";
