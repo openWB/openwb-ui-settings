@@ -5,7 +5,7 @@
     title="Fahrzeug löschen"
     subtype="danger"
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
-    @modal-result="removeVehicle(modalVehicleIndex, $event)"
+    @modal-result="removeVehicle($event, modalVehicleIndex)"
   >
     Wollen Sie das Fahrzeug "{{ getVehicleName(modalVehicleIndex) }}" wirklich entfernen? Dieser Vorgang kann nicht
     rückgängig gemacht werden!
@@ -15,7 +15,7 @@
     title="Fahrzeug-Profil löschen"
     subtype="danger"
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
-    @modal-result="removeEvTemplate(modalEvTemplateIndex, $event)"
+    @modal-result="removeEvTemplate($event, modalEvTemplateIndex)"
   >
     Wollen Sie das Fahrzeug-Profil "{{ getEvTemplateName(modalEvTemplateIndex) }}" wirklich entfernen? Dieser Vorgang
     kann nicht rückgängig gemacht werden!
@@ -25,7 +25,7 @@
     title="Lade-Profil löschen"
     subtype="danger"
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
-    @modal-result="removeChargeTemplate(modalChargeTemplateIndex, $event)"
+    @modal-result="removeChargeTemplate($event, modalChargeTemplateIndex)"
   >
     Wollen Sie das Lade-Profil "{{ getChargeTemplateName(modalChargeTemplateIndex) }}" wirklich entfernen? Dieser
     Vorgang kann nicht rückgängig gemacht werden!
@@ -36,7 +36,7 @@
     subtype="danger"
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="
-      removeChargeTemplateSchedulePlan(modalChargeTemplateIndex, modalChargeTemplateSchedulePlanIndex, $event)
+      removeChargeTemplateSchedulePlan($event, modalChargeTemplateIndex, modalChargeTemplateSchedulePlanIndex)
     "
   >
     Wollen Sie den Zielladen Zeitplan "{{
@@ -49,7 +49,7 @@
     subtype="danger"
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="
-      removeChargeTemplateTimeChargingPlan(modalChargeTemplateIndex, modalChargeTemplateTimeChargingPlanIndex, $event)
+      removeChargeTemplateTimeChargingPlan($event, modalChargeTemplateIndex, modalChargeTemplateTimeChargingPlanIndex)
     "
   >
     Wollen Sie den Zeitladen Zeitplan "{{
@@ -76,6 +76,7 @@
           <openwb-base-avatar
             v-if="$store.state.mqtt['openWB/general/extern'] === false"
             class="bg-success clickable"
+            title="Neues Fahrzeug hinzufügen"
             @click="addVehicle"
           >
             <font-awesome-icon
@@ -105,7 +106,8 @@
               <openwb-base-avatar
                 v-if="!slotProps.collapsed"
                 class="bg-danger clickable"
-                @click="removeVehicleModal(vehicleId, $event)"
+                title="Fahrzeug löschen"
+                @click="removeVehicleModal($event, vehicleId)"
               >
                 <font-awesome-icon
                   fixed-width
@@ -348,6 +350,7 @@
           <openwb-base-avatar
             v-if="$store.state.mqtt['openWB/general/extern'] === false"
             class="bg-success clickable"
+            title="Neues Fahrzeug-Profil hinzufügen"
             @click="addEvTemplate"
           >
             <font-awesome-icon
@@ -376,19 +379,32 @@
             :collapsed="true"
           >
             <template
-              v-if="!key.endsWith('/0')"
+              v-if="$store.state.mqtt['openWB/general/extern'] === false"
               #actions="slotProps"
             >
-              <openwb-base-avatar
-                v-if="$store.state.mqtt['openWB/general/extern'] === false && !slotProps.collapsed"
-                class="bg-danger clickable"
-                @click="removeEvTemplateModal(key, $event)"
-              >
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'trash']"
-                />
-              </openwb-base-avatar>
+              <span v-if="!slotProps.collapsed">
+                <openwb-base-avatar
+                  class="bg-success clickable"
+                  title="Fahrzeug-Profil duplizieren"
+                  @click="addEvTemplate($event, key)"
+                >
+                  <font-awesome-icon
+                    fixed-width
+                    :icon="['fas', 'copy']"
+                  />
+                </openwb-base-avatar>
+                <openwb-base-avatar
+                  v-if="!key.endsWith('/0')"
+                  class="bg-danger clickable ml-1"
+                  title="Fahrzeug-Profil löschen"
+                  @click="removeEvTemplateModal($event, key)"
+                >
+                  <font-awesome-icon
+                    fixed-width
+                    :icon="['fas', 'trash']"
+                  />
+                </openwb-base-avatar>
+              </span>
             </template>
             <openwb-base-text-input
               title="Bezeichnung"
@@ -645,6 +661,7 @@
           <openwb-base-avatar
             v-if="$store.state.mqtt['openWB/general/extern'] === false"
             class="bg-success clickable"
+            title="Neues Lade-Profil hinzufügen"
             @click="addChargeTemplate"
           >
             <font-awesome-icon
@@ -671,20 +688,30 @@
               )
             "
           >
-            <template
-              v-if="!templateKey.endsWith('/0')"
-              #actions="slotProps"
-            >
-              <openwb-base-avatar
-                v-if="!slotProps.collapsed"
-                class="bg-danger clickable"
-                @click="removeChargeTemplateModal(templateKey, $event)"
-              >
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'trash']"
-                />
-              </openwb-base-avatar>
+            <template #actions="slotProps">
+              <span v-if="!slotProps.collapsed">
+                <openwb-base-avatar
+                  class="bg-success clickable"
+                  title="Lade-Profil duplizieren"
+                  @click="addChargeTemplate($event, templateKey)"
+                >
+                  <font-awesome-icon
+                    fixed-width
+                    :icon="['fas', 'copy']"
+                  />
+                </openwb-base-avatar>
+                <openwb-base-avatar
+                  v-if="!templateKey.endsWith('/0')"
+                  class="bg-danger clickable ml-1"
+                  title="Lade-Profil löschen"
+                  @click="removeChargeTemplateModal($event, templateKey)"
+                >
+                  <font-awesome-icon
+                    fixed-width
+                    :icon="['fas', 'trash']"
+                  />
+                </openwb-base-avatar>
+              </span>
             </template>
             <openwb-base-text-input
               title="Bezeichnung"
@@ -833,7 +860,7 @@
             </div>
             <openwb-base-heading>Sofort</openwb-base-heading>
             <openwb-base-range-input
-              :title="'Soll-Ladestrom' + (dcChargingEnabled ? ' (AC)' : '')"
+              :title="`Soll-Ladestrom${dcChargingEnabled ? ' (AC)' : ''}`"
               :min="6"
               :max="32"
               :step="1"
@@ -918,7 +945,7 @@
             <hr />
             <openwb-base-heading>PV</openwb-base-heading>
             <openwb-base-range-input
-              :title="'Minimaler Dauerstrom' + (dcChargingEnabled ? ' (AC)' : '')"
+              :title="`Minimaler Dauerstrom${dcChargingEnabled ? ' (AC)' : ''}`"
               :min="0"
               :max="11"
               :step="1"
@@ -1072,7 +1099,7 @@
               </template>
             </openwb-base-range-input>
             <openwb-base-range-input
-              :title="'Mindest-SoC-Strom' + (dcChargingEnabled ? ' (AC)' : '')"
+              :title="`Mindest-SoC-Strom${dcChargingEnabled ? ' (AC)' : ''}`"
               :min="6"
               :max="32"
               :step="1"
@@ -1148,7 +1175,7 @@
               </template>
             </openwb-base-heading>
             <openwb-base-range-input
-              :title="'Minimaler Dauerstrom unter der Preisgrenze' + (dcChargingEnabled ? ' (AC)' : '')"
+              :title="`Minimaler Dauerstrom unter der Preisgrenze${dcChargingEnabled ? ' (AC)' : ''}`"
               :min="6"
               :max="32"
               :step="1"
@@ -1260,7 +1287,8 @@
               <template #actions>
                 <openwb-base-avatar
                   class="bg-success clickable"
-                  @click="addChargeTemplateSchedulePlan(templateKey, $event)"
+                  title="Neuen Zielladen-Plan hinzufügen"
+                  @click="addChargeTemplateSchedulePlan($event, templateKey)"
                 >
                   <font-awesome-icon
                     fixed-width
@@ -1276,7 +1304,7 @@
                 Erreichen des Ziel-SoCs wird mit Überschuss geladen, solange bis das "SoC-Limit für das Fahrzeug"
                 erreicht wird.<br />
                 Es wird nach den Vorgaben des Zeitplan geladen, dessen Zieltermin am nächsten liegt. Ist der
-                Zielzeitpunkt vorbei, wird solange weitergeladen bis, das Ziel erreicht oder das Auto abgesteckt wird.
+                Zielzeitpunkt vorbei, wird solange geladen bis, das Ziel erreicht oder das Auto abgesteckt wird.
               </template>
             </openwb-base-heading>
             <openwb-base-card
@@ -1289,7 +1317,7 @@
               <template #actions="slotProps">
                 <span
                   v-if="slotProps.collapsed == true"
-                  class="subheader pill clickable"
+                  class="pill clickable"
                   :class="plan.active ? 'bg-success' : 'bg-danger'"
                   @click.stop="updateState(planKey, !plan.active, 'active')"
                 >
@@ -1338,16 +1366,28 @@
                     />
                   </span>
                 </span>
-                <openwb-base-avatar
-                  v-if="slotProps.collapsed == false"
-                  class="bg-danger clickable"
-                  @click="removeChargeTemplateSchedulePlanModal(templateKey, planKey, $event)"
-                >
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="['fas', 'trash']"
-                  />
-                </openwb-base-avatar>
+                <span v-if="slotProps.collapsed == false">
+                  <openwb-base-avatar
+                    class="bg-success clickable ml-1"
+                    title="Zielladen-Plan duplizieren"
+                    @click="addChargeTemplateSchedulePlan($event, templateKey, planKey)"
+                  >
+                    <font-awesome-icon
+                      fixed-width
+                      :icon="['fas', 'copy']"
+                    />
+                  </openwb-base-avatar>
+                  <openwb-base-avatar
+                    class="bg-danger clickable ml-1"
+                    title="Zielladen-Plan löschen"
+                    @click="removeChargeTemplateSchedulePlanModal($event, templateKey, planKey)"
+                  >
+                    <font-awesome-icon
+                      fixed-width
+                      :icon="['fas', 'trash']"
+                    />
+                  </openwb-base-avatar>
+                </span>
               </template>
               <openwb-base-text-input
                 title="Bezeichnung"
@@ -1383,7 +1423,7 @@
                 </template>
               </openwb-base-text-input>
               <openwb-base-range-input
-                :title="'Ladestrom' + (dcChargingEnabled ? ' (AC)' : '')"
+                :title="`Ladestrom${dcChargingEnabled ? ' (AC)' : ''}`"
                 :min="6"
                 :max="32"
                 :step="1"
@@ -1584,7 +1624,8 @@
                 <template #actions>
                   <openwb-base-avatar
                     class="bg-success clickable"
-                    @click="addChargeTemplateTimeChargingPlan(templateKey, $event)"
+                    title="Neuen Zeitladen-Plan hinzufügen"
+                    @click="addChargeTemplateTimeChargingPlan($event, templateKey)"
                   >
                     <font-awesome-icon
                       fixed-width
@@ -1613,7 +1654,7 @@
               <template #actions="slotProps">
                 <span
                   v-if="slotProps.collapsed == true"
-                  class="subheader pill clickable"
+                  class="pill clickable"
                   :class="plan.active ? 'bg-success' : 'bg-danger'"
                   @click.stop="updateState(planKey, !plan.active, 'active')"
                 >
@@ -1660,16 +1701,28 @@
                     />
                   </span>
                 </span>
-                <openwb-base-avatar
-                  v-if="slotProps.collapsed == false"
-                  class="bg-danger clickable"
-                  @click="removeChargeTemplateTimeChargingPlanModal(templateKey, planKey, $event)"
-                >
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="['fas', 'trash']"
-                  />
-                </openwb-base-avatar>
+                <span v-if="slotProps.collapsed == false">
+                  <openwb-base-avatar
+                    class="bg-success clickable"
+                    title="Zeitladen-Plan duplizieren"
+                    @click="addChargeTemplateTimeChargingPlan($event, templateKey, planKey)"
+                  >
+                    <font-awesome-icon
+                      fixed-width
+                      :icon="['fas', 'copy']"
+                    />
+                  </openwb-base-avatar>
+                  <openwb-base-avatar
+                    class="bg-danger clickable ml-1"
+                    title="Zeitladen-Plan löschen"
+                    @click="removeChargeTemplateTimeChargingPlanModal($event, templateKey, planKey)"
+                  >
+                    <font-awesome-icon
+                      fixed-width
+                      :icon="['fas', 'trash']"
+                    />
+                  </openwb-base-avatar>
+                </span>
               </template>
               <openwb-base-text-input
                 title="Bezeichnung"
@@ -1694,7 +1747,7 @@
                 @update:model-value="updateState(planKey, $event, 'active')"
               />
               <openwb-base-range-input
-                :title="'Ladestrom' + (dcChargingEnabled ? ' (AC)' : '')"
+                :title="`Ladestrom${dcChargingEnabled ? ' (AC)' : ''}`"
                 :min="6"
                 :max="32"
                 :step="1"
@@ -1869,6 +1922,7 @@ import {
   faCar as fasCar,
   faPlug as fasPlug,
   faCoins as fasCoins,
+  faCopy as fasCopy,
 } from "@fortawesome/free-solid-svg-icons";
 import { faFile as farFile } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon, FontAwesomeLayers } from "@fortawesome/vue-fontawesome";
@@ -1886,6 +1940,7 @@ library.add(
   farFile,
   fasPlug,
   fasCoins,
+  fasCopy,
 );
 
 import ComponentState from "../components/mixins/ComponentState.vue";
@@ -2013,13 +2068,13 @@ export default {
         data: {},
       });
     },
-    removeVehicleModal(vehicleIndex, event) {
+    removeVehicleModal(event, vehicleIndex) {
       // prevent further processing of the click event
       event.stopPropagation();
       this.modalVehicleIndex = vehicleIndex;
       this.showVehicleModal = true;
     },
-    removeVehicle(vehicleIndex, event) {
+    removeVehicle(event, vehicleIndex) {
       this.showVehicleModal = false;
       if (event == "confirm") {
         this.$emit("sendCommand", {
@@ -2049,22 +2104,28 @@ export default {
       console.debug("updateConfiguration", key, event);
       this.updateState(key, event.value, event.object);
     },
-    addEvTemplate(event) {
+    addEvTemplate(event, keyToCopy) {
       // prevent further processing of the click event
       event.stopPropagation();
+      let data = {};
+      // if keyToCopy is set, parse the id from the key
+      if (keyToCopy && keyToCopy.match(/([^/]+)$/)) {
+        data.copy = parseInt(keyToCopy.match(/([^/]+)$/)[0]);
+      }
+      // emit the command to add an ev template
       this.$emit("sendCommand", {
         command: "addEvTemplate",
-        data: {},
+        data: data,
       });
     },
-    removeEvTemplateModal(evTemplate, event) {
+    removeEvTemplateModal(event, evTemplate) {
       // prevent further processing of the click event
       event.stopPropagation();
       // get trailing characters as index
       this.modalEvTemplateIndex = parseInt(evTemplate.match(/([^/]+)$/)[0]);
       this.showEvTemplateModal = true;
     },
-    removeEvTemplate(evTemplateIndex, event) {
+    removeEvTemplate(event, evTemplateIndex) {
       this.showEvTemplateModal = false;
       if (event == "confirm") {
         this.$emit("sendCommand", {
@@ -2078,25 +2139,31 @@ export default {
         ? this.$store.state.mqtt["openWB/vehicle/template/ev_template/" + id].name
         : "Fahrzeug-Profil " + id;
     },
-    addChargeTemplate(event) {
+    addChargeTemplate(event, keyToCopy) {
       // prevent further processing of the click event
       event.stopPropagation();
+      let data = {};
+      // if keyToCopy is set, parse the id from the key
+      if (keyToCopy && keyToCopy.match(/([^/]+)$/)) {
+        data.copy = parseInt(keyToCopy.match(/([^/]+)$/)[0]);
+      }
+      // emit the command to add a charge template
       this.$emit("sendCommand", {
         command: "addChargeTemplate",
-        data: {},
+        data: data,
       });
     },
     getChargeTemplateIndex(chargeTemplate) {
       return parseInt(chargeTemplate.match(/([^/]+)$/)[0]);
     },
-    removeChargeTemplateModal(chargeTemplate, event) {
+    removeChargeTemplateModal(event, chargeTemplate) {
       // prevent further processing of the click event
       event.stopPropagation();
       // get trailing characters as index
       this.modalChargeTemplateIndex = this.getChargeTemplateIndex(chargeTemplate);
       this.showChargeTemplateModal = true;
     },
-    removeChargeTemplate(chargeTemplateIndex, event) {
+    removeChargeTemplate(event, chargeTemplateIndex) {
       this.showChargeTemplateModal = false;
       if (event == "confirm") {
         this.$emit("sendCommand", {
@@ -2122,17 +2189,22 @@ export default {
           ].name
         : "Zielladen Zeitplan " + templateIndex + "/" + planIndex;
     },
-    addChargeTemplateSchedulePlan(template, event) {
+    addChargeTemplateSchedulePlan(event, template, keyToCopy) {
       // prevent further processing of the click event
       event.stopPropagation();
       // get trailing characters as index
       let templateIndex = parseInt(template.match(/([^/]+)$/)[0]);
+      let data = { template: templateIndex };
+      // if keyToCopy is set, parse the id from the key
+      if (keyToCopy && keyToCopy.match(/([^/]+)$/)) {
+        data.copy = parseInt(keyToCopy.match(/([^/]+)$/)[0]);
+      }
       this.$emit("sendCommand", {
         command: "addChargeTemplateSchedulePlan",
-        data: { template: templateIndex },
+        data: data,
       });
     },
-    removeChargeTemplateSchedulePlanModal(chargeTemplate, plan, event) {
+    removeChargeTemplateSchedulePlanModal(event, chargeTemplate, plan) {
       // prevent further processing of the click event
       event.stopPropagation();
       // get trailing characters as index
@@ -2140,7 +2212,7 @@ export default {
       this.modalChargeTemplateSchedulePlanIndex = parseInt(plan.match(/([^/]+)$/)[0]);
       this.showChargeTemplateSchedulePlanModal = true;
     },
-    removeChargeTemplateSchedulePlan(templateIndex, planIndex, event) {
+    removeChargeTemplateSchedulePlan(event, templateIndex, planIndex) {
       this.showChargeTemplateSchedulePlanModal = false;
       if (event == "confirm") {
         this.$emit("sendCommand", {
@@ -2158,17 +2230,23 @@ export default {
           ].name
         : "Zeitladen Zeitplan " + templateIndex + "/" + planIndex;
     },
-    addChargeTemplateTimeChargingPlan(template, event) {
+    addChargeTemplateTimeChargingPlan(event, template, keyToCopy) {
       // prevent further processing of the click event
       event.stopPropagation();
       // get trailing characters as index
       let templateIndex = parseInt(template.match(/([^/]+)$/)[0]);
+      let data = { template: templateIndex };
+      // if keyToCopy is set, parse the id from the key
+      if (keyToCopy && keyToCopy.match(/([^/]+)$/)) {
+        data.copy = parseInt(keyToCopy.match(/([^/]+)$/)[0]);
+      }
+      // emit the command to add a charge template time charging plan
       this.$emit("sendCommand", {
         command: "addChargeTemplateTimeChargingPlan",
-        data: { template: templateIndex },
+        data: data,
       });
     },
-    removeChargeTemplateTimeChargingPlanModal(chargeTemplate, plan, event) {
+    removeChargeTemplateTimeChargingPlanModal(event, chargeTemplate, plan) {
       // prevent further processing of the click event
       event.stopPropagation();
       // get trailing characters as index
@@ -2176,7 +2254,7 @@ export default {
       this.modalChargeTemplateTimeChargingPlanIndex = parseInt(plan.match(/([^/]+)$/)[0]);
       this.showChargeTemplateTimeChargingPlanModal = true;
     },
-    removeChargeTemplateTimeChargingPlan(templateIndex, planIndex, event) {
+    removeChargeTemplateTimeChargingPlan(event, templateIndex, planIndex) {
       this.showChargeTemplateTimeChargingPlanModal = false;
       if (event == "confirm") {
         this.$emit("sendCommand", {
