@@ -1,10 +1,10 @@
-<!-- <template>
+<template>
   <div class="charge-point-commands-fallback">
-    <openwb-base-alert subtype="secondary">
+    <!-- <openwb-base-alert subtype="secondary">
       Der Ladepunkt-Typ "{{ chargePoint.type }}" bietet keine Befehle an.
-    </openwb-base-alert>
+    </openwb-base-alert> -->
   </div>
-</template> -->
+</template>
 
 <script>
 import ChargePointCommandsMixin from "./ChargePointCommandsMixin.vue";

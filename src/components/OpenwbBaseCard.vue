@@ -24,7 +24,7 @@
       <span class="card-actions ml-4">
         <span
           v-if="$slots.actions"
-          class="card-actions mr-4"
+          class="card-actions mr-2"
         >
           <slot
             name="actions"
@@ -129,9 +129,9 @@ export default {
   border-bottom: none;
 }
 
-.card .card-header .subheader {
+.card-header > .card-actions > .card-actions {
+  font-size: 90%;
   font-weight: normal;
-  font-size: 75%;
 }
 
 .card-actions {
