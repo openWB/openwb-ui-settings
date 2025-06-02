@@ -190,15 +190,13 @@ export default {
   gap: 0 1em;
 }
 
-.status .card {
-  align-self: start;
-}
-
 @media (max-width: 991px) {
   .status {
-    display: grid;
     grid-template-columns: repeat(1, 1fr);
-    gap: 10px;
   }
+}
+
+.status .card {
+  align-self: start;
 }
 </style>
