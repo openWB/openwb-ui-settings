@@ -118,13 +118,6 @@
             >
               PV-Laden
             </router-link>
-            <router-link
-              to="/ScheduledChargeConfig"
-              class="dropdown-item"
-              active-class="active disabled"
-            >
-              Zielladen
-            </router-link>
           </div>
         </li>
         <li class="nav-item dropdown">

@@ -63,14 +63,6 @@ const routes = [
     component: () => import("../views/PVChargeConfig.vue"),
   },
   {
-    path: "/ScheduledChargeConfig",
-    name: "ScheduledChargeConfig",
-    meta: {
-      heading: "Ladeeinstellungen - Zielladen",
-    },
-    component: () => import("../views/ScheduledChargeConfig.vue"),
-  },
-  {
     path: "/HardwareInstallation",
     name: "HardwareInstallation",
     meta: {
