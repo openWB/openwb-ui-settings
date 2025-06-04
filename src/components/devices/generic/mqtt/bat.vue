@@ -53,8 +53,9 @@
           Beispiel: <span class="text-info">95</span>
         </li>
       </ul>
-      Ströme je Phase sind für phasenbasiertes Lastmanagement unbedingt erforderlich, sonst erfolgt das Lastmanagement
-      ausschließlich auf Basis der Gesamtleistung am EVU-Punkt:
+      Ströme je Phase sind optional, jedoch für phasenbasiertes Lastmanagement in Verbindung mit einem virtuellen Zähler
+      unbedingt erforderlich. Ansonsten erfolgt das Lastmanagement ausschließlich auf Basis der Gesamtleistung an diesem
+      Zähler:
       <ul>
         <li>
           <openwb-base-copy-to-clipboard
