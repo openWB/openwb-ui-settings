@@ -266,6 +266,72 @@ export default {
             yAxisKey: null,
           },
         },
+        "counter-energy_imported_grid": {
+          label: "Zähler (Netzanteil)",
+          unit: "kWh",
+          type: "bar",
+          jsonKey: null,
+          borderColor: "rgba(255, 0, 0, 0.7)",
+          backgroundColor: "rgba(255, 10, 13, 0.3)",
+          fill: true,
+          pointStyle: "circle",
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          cubicInterpolationMode: "monotone",
+          hidden: true,
+          borderWidth: 3,
+          data: null,
+          yAxisID: "y2",
+          stack: "#-energy-imported-source",
+          parsing: {
+            xAxisKey: "timestamp",
+            yAxisKey: null,
+          },
+        },
+        "counter-energy_imported_pv": {
+          label: "Zähler (PV-Anteil)",
+          unit: "kWh",
+          type: "bar",
+          jsonKey: null,
+          borderColor: "rgba(40, 167, 69, 0.7)",
+          backgroundColor: "rgba(255, 10, 13, 0.3)",
+          fill: true,
+          pointStyle: "circle",
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          cubicInterpolationMode: "monotone",
+          hidden: true,
+          borderWidth: 3,
+          data: null,
+          yAxisID: "y2",
+          stack: "#-energy-imported-source",
+          parsing: {
+            xAxisKey: "timestamp",
+            yAxisKey: null,
+          },
+        },
+        "counter-energy_imported_bat": {
+          label: "Zähler (PV-Anteil)",
+          unit: "kWh",
+          type: "bar",
+          jsonKey: null,
+          borderColor: "rgba(253, 126, 20, 0.7)",
+          backgroundColor: "rgba(255, 10, 13, 0.3)",
+          fill: true,
+          pointStyle: "circle",
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          cubicInterpolationMode: "monotone",
+          hidden: true,
+          borderWidth: 3,
+          data: null,
+          yAxisID: "y2",
+          stack: "#-energy-imported-source",
+          parsing: {
+            xAxisKey: "timestamp",
+            yAxisKey: null,
+          },
+        },
         "pv-power_exported": {
           label: "PV",
           unit: "kW",
@@ -1243,13 +1309,13 @@ export default {
               case "energy_exported":
                 return "Einspeisung/Erzeugung";
               case "energy_imported_grid":
-                return "Ladung (Netz-Anteil)";
+                return "Verbrauch (Netz-Anteil)";
               case "energy_imported_pv":
-                return "Ladung (PV-Anteil)";
+                return "Verbrauch (PV-Anteil)";
               case "energy_imported_bat":
-                return "Ladung (Speicher-Anteil)";
+                return "Verbrauch (Speicher-Anteil)";
               case "energy_imported_cp":
-                return "Ladung (Ladepunkt-Anteil)";
+                return "Verbrauch (Ladepunkt-Anteil)";
               default:
                 console.warn("unknown measurement key:", groupKey, measurementKey);
             }
@@ -1382,6 +1448,18 @@ export default {
             case "energy_exported":
               details.push("Einspeisung/Erzeugung");
               break;
+            case "energy_imported_grid":
+              details.push("Netz-Anteil");
+              break;
+            case "energy_imported_pv":
+              details.push("PV-Anteil");
+              break;
+            case "energy_imported_bat":
+              details.push("Speicher-Anteil");
+              break;
+            case "energy_imported_cp":
+              details.push("Ladepunkt-Anteil");
+              break;
           }
           break;
         case "sh":
@@ -1429,6 +1507,32 @@ export default {
       return;
     },
     /**
+     * Updates the stack of a dataset based on the provided stack, object key and element key.
+     *
+     * @param {string} stack - The current stack of the dataset.
+     * @param {string} objectKey - The key of the object to update the stack for.
+     * @param {string} elementKey - The key of the element to update the stack for.
+     * @returns {string} - The updated stack string.
+     */
+    updateDatasetStack(stack, objectKey, elementKey) {
+      // if stack is not defined, return undefined
+      if (!stack) {
+        return undefined;
+      }
+      // do not stack totals
+      if (objectKey == "all" && !["grid", "pv", "bat", "cp"].includes(elementKey.split("_").slice(-1)[0])) {
+        console.debug("not stacking totals for:", stack, objectKey, elementKey);
+        return undefined;
+      }
+      // if stack is a template, replace # with objectKey
+      if (stack.includes("#")) {
+        console.debug("updating stack template:", stack, objectKey, elementKey);
+        return stack.replace("#", objectKey);
+      }
+      // otherwise return the stack as is
+      return stack;
+    },
+    /**
      * Adds a dataset to the chart.
      *
      * @param {string} baseObject - The base object for the dataset.
@@ -1438,6 +1542,7 @@ export default {
      * @returns {number|undefined} - The index of the added dataset or undefined if no dataset was added.
      */
     addDataset(baseObject, objectKey, elementKey, datasetKey) {
+      console.debug("adding dataset:", baseObject, objectKey, elementKey, datasetKey);
       // do not add dataset if objectKey is not present in totals[baseObject]
       if (
         Object.prototype.hasOwnProperty.call(this.chartTotals, baseObject) &&
@@ -1457,12 +1562,7 @@ export default {
           newDataset.label = newDataset.label + newDataset.labelSuffix;
         }
         newDataset.hidden = this.hideDataset(baseObject, objectKey, elementKey);
-        if (objectKey == "all") {
-          if (!["grid", "pv", "bat", "cp"].includes(elementKey.split("_").slice(-1)[0])) {
-            // do not stack totals
-            delete newDataset.stack;
-          }
-        }
+        newDataset.stack = this.updateDatasetStack(newDataset.stack, objectKey, elementKey);
         return this.chartDatasets.datasets.push(newDataset) - 1;
       } else {
         console.warn("no matching template found for: " + datasetKey + " with template: " + datasetTemplate);
@@ -1490,7 +1590,13 @@ export default {
         };
       } else {
         elementKeysToAdd = {
-          counter: ["energy_imported", "energy_exported"],
+          counter: [
+            "energy_imported",
+            "energy_exported",
+            "energy_imported_grid",
+            "energy_imported_pv",
+            "energy_imported_bat",
+          ],
           pv: ["energy_exported"],
           bat: ["energy_imported", "energy_exported"],
           cp: ["energy_imported", "energy_imported_grid", "energy_imported_pv", "energy_imported_bat"],
