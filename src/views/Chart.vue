@@ -7,12 +7,12 @@
       </openwb-base-alert>
     </div>
     <div v-else>
-      <form name="chartForm">
-        <openwb-base-card
-          title="Filter"
-          :collapsible="true"
-          :collapsed="false"
-        >
+      <openwb-base-card
+        title="Filter"
+        :collapsible="true"
+        :collapsed="false"
+      >
+        <form name="chartFilterForm">
           <openwb-base-select-input
             v-model="chartRange"
             title="Zeitraum"
@@ -31,40 +31,42 @@
             :show-quick-buttons="true"
             @update:model-value="updateChart()"
           />
-        </openwb-base-card>
+        </form>
+      </openwb-base-card>
+      <openwb-base-alert
+        v-if="chartIsLoading"
+        subtype="info"
+      >
+        Daten werden geladen...
+      </openwb-base-alert>
+      <div v-else>
         <openwb-base-alert
-          v-if="!chartDataRead"
+          v-if="!chartDataHasEntries"
           subtype="info"
         >
-          Es wurden noch keine Daten abgerufen.
+          Es konnten keine Daten für diesen Zeitraum gefunden werden.
         </openwb-base-alert>
         <div v-else>
-          <openwb-base-alert
-            v-if="!chartDataHasEntries"
-            subtype="info"
+          <openwb-base-card
+            title="Diagramm"
+            :collapsible="true"
+            :collapsed="false"
           >
-            Es konnten keine Daten für diesen Zeitraum gefunden werden.
-          </openwb-base-alert>
-          <div v-else>
-            <openwb-base-card
-              title="Diagramm"
-              :collapsible="true"
-              :collapsed="false"
-            >
-              <div class="openwb-chart">
-                <chartjs-line
-                  ref="myChart"
-                  :data="chartData"
-                  :options="chartOptions"
-                  @click="handleChartClick"
-                />
-              </div>
-            </openwb-base-card>
-            <openwb-base-card
-              title="Summen"
-              :collapsible="true"
-              :collapsed="true"
-            >
+            <div class="openwb-chart">
+              <chartjs-line
+                ref="myChart"
+                :data="chartData"
+                :options="chartOptions"
+                @click="handleChartClick"
+              />
+            </div>
+          </openwb-base-card>
+          <openwb-base-card
+            title="Summen"
+            :collapsible="true"
+            :collapsed="true"
+          >
+            <form name="chartTotalsForm">
               <div
                 v-for="(group, groupKey) in chartTotals"
                 :key="groupKey"
@@ -105,10 +107,10 @@
                   </div>
                 </openwb-base-card>
               </div>
-            </openwb-base-card>
-          </div>
+            </form>
+          </openwb-base-card>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
@@ -197,6 +199,7 @@ export default {
       currentDate: "",
       chartRange: "day",
       blockChartInit: false,
+      chartIsLoading: false,
       chartRequestDate: {
         day: "",
         month: "",
@@ -1054,6 +1057,14 @@ export default {
     chartRange() {
       this.init();
     },
+    chartDataRead: {
+      handler(newValue) {
+        if (newValue) {
+          this.chartIsLoading = false;
+        }
+      },
+      immediate: true,
+    },
   },
   mounted() {
     this.init();
@@ -1513,11 +1524,12 @@ export default {
      * If the chart form is invalid, a warning is logged and the function returns.
      */
     requestChart() {
-      let myForm = document.forms["chartForm"];
+      let myForm = document.forms["chartFilterForm"];
       if (!myForm.reportValidity()) {
         console.warn("form invalid");
         return;
       } else {
+        this.chartIsLoading = true;
         this.setupScaleX();
         this.chartDatasets.datasets = [];
         var command = "";
