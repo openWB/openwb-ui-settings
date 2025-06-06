@@ -7,12 +7,6 @@ let states = {
     reloadRequired: false,
     savingData: false,
   },
-  text: {
-    rfidWiki:
-      "Bitte auch hiervon abhängige Einstellungen beachten. Eine Übersicht gibt es im " +
-      '<a href="https://github.com/openWB/core/wiki/Ladung-nur-nach-Freischaltung" ' +
-      'target="_blank" rel="noopener noreferrer">Wiki</a>.',
-  },
 };
 
 /* examples start here */
