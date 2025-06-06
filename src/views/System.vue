@@ -348,7 +348,8 @@ export default {
       default: false,
     },
   },
-  emits: ["sendCommand"],
+  // "save" and "reset" are already defined in ComponentState but check is failing if not defined here?
+  emits: ["save", "reset", "sendCommand"],
   data() {
     return {
       mqttTopicsToSubscribe: [

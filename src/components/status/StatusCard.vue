@@ -9,15 +9,17 @@
       <slot name="header-left"></slot>
     </template>
     <template #actions>
-      <div class="text-right">
-        <slot name="header-right"></slot>
-      </div>
-      <font-awesome-icon
-        :class="state === 0 ? `text-${subtype}` : ''"
-        class="ml-1"
-        fixed-width
-        :icon="stateIcon"
-      />
+      <slot name="header-right"></slot>
+      <openwb-base-avatar
+        class="ml-2"
+        :class="`bg-${stateClass}`"
+        :title="stateLabel"
+      >
+        <font-awesome-icon
+          fixed-width
+          :icon="stateIcon"
+        />
+      </openwb-base-avatar>
     </template>
     <slot></slot>
     <template
@@ -59,10 +61,11 @@ import {
   faCheckCircle as fasCheckCircle,
   faExclamationTriangle as fasExclamationTriangle,
   faTimesCircle as fasTimesCircle,
+  faQuestionCircle as fasQuestionCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasCheckCircle, fasExclamationTriangle, fasTimesCircle);
+library.add(fasCheckCircle, fasExclamationTriangle, fasTimesCircle, fasQuestionCircle);
 
 export default {
   name: "StatusCard",
@@ -112,7 +115,19 @@ export default {
         case 2:
           return ["fas", "times-circle"];
         default:
-          return ["fas", "check-circle"];
+          return ["fas", "question-circle"];
+      }
+    },
+    stateLabel() {
+      switch (this.state) {
+        case 0:
+          return "OK";
+        case 1:
+          return "Warnung";
+        case 2:
+          return "Fehler";
+        default:
+          return "Unbekannt";
       }
     },
   },

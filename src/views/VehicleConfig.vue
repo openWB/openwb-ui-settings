@@ -173,7 +173,7 @@
               />
               <openwb-base-alert subtype="info">
                 Die hier eingetragenen ID-Tags dienen ausschließlich der Fahrzeugzuordnung.<br />
-                <span v-html="$store.state.text.rfidWiki" />
+                <vehicle-id-wiki-hint />
               </openwb-base-alert>
               <hr />
             </div>
@@ -1945,6 +1945,7 @@ library.add(
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbVehicleProxy from "../components/vehicles/OpenwbVehicleProxy.vue";
+import VehicleIdWikiHint from "../components/snippets/VehicleIdWikiHint.vue";
 
 export default {
   name: "OpenwbVehicleConfigView",
@@ -1952,6 +1953,7 @@ export default {
     FontAwesomeIcon,
     FontAwesomeLayers,
     OpenwbVehicleProxy,
+    VehicleIdWikiHint,
   },
   mixins: [ComponentState],
   props: {
