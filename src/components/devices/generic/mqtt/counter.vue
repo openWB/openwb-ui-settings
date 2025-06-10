@@ -16,6 +16,9 @@
           Dezimaltrennzeichen, positiv Bezug, negativ Einspeisung<br />
           Beispiel: <span class="text-info">-123.45</span>
         </li>
+      </ul>
+      Falls keine Werte für die Zählerstände übermittelt werden, berechnet openWB die Zählerstände anhand der Leistung.
+      <ul>
         <li>
           <openwb-base-copy-to-clipboard
             class="text-info"
