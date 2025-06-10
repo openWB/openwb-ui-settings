@@ -18,6 +18,9 @@
           Vorzeichen.) Beispiel:
           <span class="text-info">-123</span>
         </li>
+      </ul>
+      Falls keine Wert für den Zählerstand übermittelt wird, berechnet openWB den Zählerstand anhand der Leistung.
+      <ul>
         <li>
           <openwb-base-copy-to-clipboard
             class="text-info"

@@ -21,6 +21,21 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
+            openWB/set/mqtt/bat/{{ component.id }}/get/soc
+          </openwb-base-copy-to-clipboard>
+          <br />
+          Ladestand des Speichers, Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
+          Dezimaltrennzeichen, gültige Werte 0 bis 100<br />
+          Beispiel: <span class="text-info">95</span>
+        </li>
+      </ul>
+      Falls keine Werte für die Zählerstände übermittelt werden, berechnet openWB die Zählerstände anhand der Leistung.
+      <ul>
+        <li>
+          <openwb-base-copy-to-clipboard
+            class="text-info"
+            tooltip="Topic kopieren"
+          >
             openWB/set/mqtt/bat/{{ component.id }}/get/imported
           </openwb-base-copy-to-clipboard>
           <br />
@@ -39,18 +54,6 @@
           Entladene Energie in Wh, Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
           Dezimaltrennzeichen, nur positiv<br />
           Beispiel: <span class="text-info">123.45</span>
-        </li>
-        <li>
-          <openwb-base-copy-to-clipboard
-            class="text-info"
-            tooltip="Topic kopieren"
-          >
-            openWB/set/mqtt/bat/{{ component.id }}/get/soc
-          </openwb-base-copy-to-clipboard>
-          <br />
-          Ladestand des Speichers, Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
-          Dezimaltrennzeichen, gültige Werte 0 bis 100<br />
-          Beispiel: <span class="text-info">95</span>
         </li>
       </ul>
       Ströme je Phase sind optional, jedoch für phasenbasiertes Lastmanagement in Verbindung mit einem virtuellen Zähler
