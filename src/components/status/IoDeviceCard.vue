@@ -1,11 +1,11 @@
 <template>
-  <openwb-base-card
+  <status-card
     subtype="secondary"
-    :collapsible="true"
-    :collapsed="true"
-    class="pb-0"
+    :state="$store.state.mqtt[`${baseTopic}/get/fault_state`]"
+    :state-message="$store.state.mqtt[`${baseTopic}/get/fault_str`]"
+    :component-id="ioDevice.id"
   >
-    <template #header>
+    <template #header-left>
       <font-awesome-icon
         fixed-width
         :icon="['fas', 'tower-broadcast']"
@@ -18,8 +18,16 @@
       body-bg="white"
       class="py-1 mb-2"
     >
+      <openwb-base-alert
+        v-if="Object.keys(ioActionConfigs).length === 0"
+        subtype="info"
+        class="mb-2"
+      >
+        Es wurden noch keine Aktionen erstellt, welche dieses IO-Gerät als Signalquelle verwenden.
+      </openwb-base-alert>
       <div
         v-for="(value, key) in ioActionConfigs"
+        v-else
         :key="key"
         class="row"
       >
@@ -114,36 +122,15 @@
         </div>
       </div>
     </openwb-base-card>
-    <template #footer>
-      <div class="container">
-        <div class="row">
-          <div class="col px-0">
-            <openwb-base-alert :subtype="getFaultStateSubtype(baseTopic)">
-              <font-awesome-icon
-                fixed-width
-                :icon="stateIcon"
-              />
-              Modulmeldung:
-              <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/fault_str"] }}</span>
-            </openwb-base-alert>
-          </div>
-          <div class="col col-auto pr-0">
-            <div class="text-right">ID: {{ ioDevice.id }}</div>
-          </div>
-        </div>
-      </div>
-    </template>
-  </openwb-base-card>
+  </status-card>
 </template>
 
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
+import StatusCard from "./StatusCard.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-  faCheckCircle as fasCheckCircle,
-  faExclamationTriangle as fasExclamationTriangle,
-  faTimesCircle as fasTimesCircle,
   faTowerBroadcast as fasTowerBroadcast,
   faSquare as fasSquare,
   faQuestion as fasQuestion,
@@ -151,20 +138,12 @@ import {
 import { faSquare as farSquare, faSquareMinus as farSquareMinus } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(
-  fasCheckCircle,
-  fasExclamationTriangle,
-  fasTimesCircle,
-  fasTowerBroadcast,
-  fasSquare,
-  fasQuestion,
-  farSquare,
-  farSquareMinus,
-);
+library.add(fasTowerBroadcast, fasSquare, fasQuestion, farSquare, farSquareMinus);
 
 export default {
   name: "IoDeviceCard",
   components: {
+    StatusCard,
     FontAwesomeIcon,
   },
   mixins: [ComponentState],
@@ -195,12 +174,6 @@ export default {
   computed: {
     baseTopic() {
       return `openWB/io/states/${this.ioDevice.id}`;
-    },
-    faultState() {
-      return this.$store.state.mqtt[`${this.baseTopic}/get/fault_state`];
-    },
-    faultStr() {
-      return this.$store.state.mqtt[`${this.baseTopic}/get/fault_str`];
     },
     hasDigitalInputs() {
       return Object.keys(this.$store.state.mqtt[`${this.baseTopic}/get/digital_input`] || {}).length > 0;
