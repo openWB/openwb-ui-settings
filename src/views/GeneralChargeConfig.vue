@@ -117,19 +117,19 @@
             "
             subtype="info"
           >
-            Für den Netzbezug wird der dynamische Strompreis des Anbieters für variable Stromtarife verwendet.
+            Für den Netzbezug wird der dynamische Strompreis des Anbieters für variable Stromtarife verwendet. Wenn
+            keine dynamischen Strompreise abgefragt werden können, wird der eingetragene Preis für den Netzbezug
+            verwendet.
           </openwb-base-alert>
-          <div v-else>
-            <openwb-base-number-input
-              title="Preis für Netzbezug"
-              :step="0.001"
-              :precision="3"
-              unit="ct/kWh"
-              required
-              :model-value="$store.state.mqtt['openWB/general/prices/grid'] * 100000"
-              @update:model-value="updateState('openWB/general/prices/grid', parseFloat(($event / 100000).toFixed(7)))"
-            />
-          </div>
+          <openwb-base-number-input
+            title="Preis für Netzbezug"
+            :step="0.001"
+            :precision="3"
+            unit="ct/kWh"
+            required
+            :model-value="$store.state.mqtt['openWB/general/prices/grid'] * 100000"
+            @update:model-value="updateState('openWB/general/prices/grid', parseFloat(($event / 100000).toFixed(7)))"
+          />
           <openwb-base-number-input
             title="Preis für Speicherentladung"
             :step="0.001"
