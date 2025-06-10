@@ -445,6 +445,28 @@
               :model-value="template.average_consump / 1000"
               @update:model-value="updateState(key, $event * 1000, 'average_consump')"
             />
+            <openwb-base-button-group-input
+              title="Bidirektionales Laden"
+              :buttons="[
+                {
+                  buttonValue: false,
+                  text: 'Nicht unterstützt',
+                  class: 'btn-outline-danger',
+                },
+                {
+                  buttonValue: true,
+                  text: 'AC nach ISO15118-20',
+                  class: 'btn-outline-success',
+                },
+              ]"
+              :model-value="template.control_pilot_interruption"
+              @update:model-value="updateState(key, $event, 'control_pilot_interruption')"
+            >
+              <template #help>
+                Für bidirektionales Laden wird eine openWB Pro benötigt. Die openWB Pro muss auf den Modus "Bidi"
+                gestellt werden.</template
+              >
+            </openwb-base-button-group-input>
             <div v-if="dcChargingEnabled === true">
               <openwb-base-heading> Angaben zur Ladeleistung (DC) </openwb-base-heading>
               <openwb-base-number-input
@@ -719,6 +741,11 @@
                 {
                   buttonValue: 'eco_charging',
                   text: 'Eco',
+                  class: 'btn-outline-secondary',
+                },
+                {
+                  buttonValue: 'bidi_charging',
+                  text: 'Bidi',
                   class: 'btn-outline-secondary',
                 },
                 {
@@ -1250,6 +1277,197 @@
               @update:model-value="
                 updateState(templateKey, parseFloat(($event / 100000).toFixed(7)), 'chargemode.eco_charging.max_price')
               "
+            >
+            </openwb-base-number-input>
+            <hr />
+            <openwb-base-heading
+              >Bidi
+              <template #help>
+                Wenn Ladepunkt und Fahrzeug bidirektionales Laden unterstützen, wird bis zum eingestellten SoC wie mit
+                einem Ziellade-Plan geladen. Ist der eingestellte SoC erreicht und es ist Überschuss vorhanden, wird
+                weiter geladen bis das SoC-Limit für das Fahrzeug erreicht ist. Wenn der eingestellte SoC erreicht wurde
+                und es würde Bezug entstehen, wird eine Nullpunktausregelung gemacht, dh das Auto wird so entladen, dass
+                möglichst weder Bezug noch Einspeisung entsteht. Unterstützen das Fahrzeug und/oder der Ladepunkt kein
+                bidirektionales Laden, verhält sich dieser Lademodus wie Zielladen.
+              </template>
+            </openwb-base-heading>
+            <openwb-base-range-input
+              title="Minimaler Entlade-SoC & SoC zur angegebenen Uhrzeit"
+              :min="5"
+              :max="100"
+              :step="5"
+              unit="%"
+              :model-value="template.chargemode.bidi_charging.plan.limit.soc_scheduled"
+              @update:model-value="
+                updateState(templateKey, $event, 'chargemode.bidi_charging.plan.limit.soc_scheduled')
+              "
+            >
+              <template #help>
+                Es muss ein SoC-Modul für das jeweilige Fahrzeug eingerichtet sein (siehe "Konfiguration" -> "Fahrzeuge"
+                -> "SoC-Modul").
+              </template>
+            </openwb-base-range-input>
+            <openwb-base-range-input
+              title="Fahrzeug-SoC mit Überschuss"
+              :min="5"
+              :max="100"
+              :step="5"
+              unit="%"
+              :model-value="template.chargemode.bidi_charging.plan.limit.soc_limit"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.bidi_charging.plan.limit.soc_limit')"
+            >
+              <template #help>
+                Nach Erreichen des Ziel-SoCs wird mit Überschuss weiter geladen, bis das SoC-Limit erreicht wird. Sobald
+                das SoC-Limit erreicht wurde, findet keine Ladung mehr mit Überschuss statt!
+              </template>
+            </openwb-base-range-input>
+            <openwb-base-text-input
+              title="Ziel-Uhrzeit"
+              subtype="time"
+              :model-value="template.chargemode.bidi_charging.plan.time"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.bidi_charging.plan.time')"
+            >
+              <template #help>
+                Hier ist die gewünschte Uhrzeit einzustellen, zu welcher das Fahrzeug den gewünschten SoC BEREITS
+                ERREICHT haben soll.
+              </template>
+            </openwb-base-text-input>
+            <openwb-base-button-group-input
+              title="Wiederholungen"
+              :buttons="[
+                {
+                  buttonValue: 'once',
+                  text: 'Einmalig',
+                  class: 'btn-outline-info',
+                },
+                {
+                  buttonValue: 'daily',
+                  text: 'Täglich',
+                  class: 'btn-outline-info',
+                },
+                {
+                  buttonValue: 'weekly',
+                  text: 'Wöchentlich',
+                  class: 'btn-outline-info',
+                },
+              ]"
+              :model-value="template.chargemode.bidi_charging.plan.frequency.selected"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.bidi_charging.plan.frequency.selected')"
+            />
+            <openwb-base-text-input
+              v-if="template.chargemode.bidi_charging.plan.frequency.selected == 'once'"
+              title="Datum"
+              subtype="date"
+              :model-value="template.chargemode.bidi_charging.plan.frequency.once"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.bidi_charging.plan.frequency.once')"
+            />
+            <div v-if="template.chargemode.bidi_charging.plan.frequency.selected == 'weekly'">
+              <openwb-base-button-group-input
+                v-for="(day, dayIndex) in weekdays"
+                :key="dayIndex"
+                :title="day"
+                :buttons="[
+                  {
+                    buttonValue: false,
+                    text: 'Aus',
+                    class: 'btn-outline-danger',
+                  },
+                  {
+                    buttonValue: true,
+                    text: 'An',
+                    class: 'btn-outline-success',
+                  },
+                ]"
+                :model-value="template.chargemode.bidi_charging.plan.frequency.weekly[dayIndex]"
+                @update:model-value="
+                  updateState(templateKey, $event, 'chargemode.bidi_charging.plan.frequency.weekly.' + dayIndex)
+                "
+              />
+            </div>
+            <openwb-base-button-group-input
+              title="Strompreisbasiert Laden"
+              :buttons="[
+                {
+                  buttonValue: false,
+                  text: 'Nein',
+                  class: 'btn-outline-danger',
+                },
+                {
+                  buttonValue: true,
+                  text: 'Ja',
+                  class: 'btn-outline-success',
+                },
+              ]"
+              :model-value="template.chargemode.bidi_charging.plan.et_active"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.bidi_charging.plan.et_active')"
+            />
+            <openwb-base-alert subtype="info">
+              Die Norm IEC 61851-1 und ISO 156118 benötigen als Parameter eine Stromstärke und die Phasenzahl. Die Norm
+              ISO 15118-20, die das bidirektionale Laden definiert, benötigt als Parameter eine Ladeleistung. Die
+              Phasenzahl legt das Fahrzeug fest. Wenn Fahrzeug und Ladepunkt bidirektionales Laden nach ISO 15118-20
+              unterstützen, wird die eingestellte Ladeleistung verwendet. Wenn mindestens einer von beiden die Norm
+              nicht unterstützt, wird derLadestrom und die vorgegebene Phasenzahl für die Regelung verwendet.
+            </openwb-base-alert>
+            <openwb-base-range-input
+              :title="'Ladestrom' + (dcChargingEnabled ? ' (AC)' : '')"
+              :min="6"
+              :max="32"
+              :step="1"
+              unit="A"
+              :model-value="template.chargemode.bidi_charging.plan.current"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.bidi_charging.plan.current')"
+            >
+              <template #help>
+                Mit dieser Stromstärke wird der Zeitpunkt berechnet, wann die Ladung mit Netzbezug gestartet werden
+                muss. Wird der Ziel-SoC nicht zum angegebenen Termin erreicht, weil z.B. das Auto erst später angesteckt
+                wurde, wird auch mit einer höheren Stromstärke geladen. Um etwas Puffer zu haben, empfiehlt es sich,
+                etwas weniger als die Maximalstromstärke des Fahrzeugs zu wählen.
+              </template>
+            </openwb-base-range-input>
+            <openwb-base-button-group-input
+              title="Anzahl Phasen Zielladen"
+              :buttons="[
+                { buttonValue: 1, text: '1' },
+                { buttonValue: 3, text: 'Maximum' },
+                { buttonValue: 0, text: 'Automatik' },
+              ]"
+              :model-value="template.chargemode.bidi_charging.plan.phases_to_use"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.bidi_charging.plan.phases_to_use')"
+            >
+              <template #help>
+                Hier kann eingestellt werden, ob Ladevorgänge im Modus "Zielladen" mit nur einer Phase oder dem
+                möglichen Maximum in Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Im
+                Modus "Automatik" entscheidet die Regelung, welche Einstellung genutzt wird, um das Ziel zu erreichen.
+                Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen 1- und 3-phasig (sog. 1p3p).
+              </template>
+            </openwb-base-button-group-input>
+            <openwb-base-button-group-input
+              title="Anzahl Phasen bei PV-Überschuss"
+              :buttons="[
+                { buttonValue: 1, text: '1' },
+                { buttonValue: 3, text: 'Maximum' },
+                { buttonValue: 0, text: 'Automatik' },
+              ]"
+              :model-value="template.chargemode.bidi_charging.plan.phases_to_use_pv"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.bidi_charging.plan.phases_to_use_pv')"
+            >
+              <template #help>
+                Hier kann eingestellt werden, ob Ladevorgänge im Modus "Zielladen" bei Laden mit PV-Überschuss mit nur
+                einer Phase oder dem möglichen Maximum in Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen
+                durchgeführt werden. Im Modus "Automatik" entscheidet die Regelung, welche Einstellung genutzt wird, um
+                das Ziel zu erreichen. Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen 1- und 3-phasig (sog.
+                1p3p).
+              </template>
+            </openwb-base-button-group-input>
+            <hr />
+            <openwb-base-number-input
+              title="Ladeleistung"
+              :min="0.1"
+              :max="22"
+              :step="0.1"
+              unit="kW"
+              :model-value="template.chargemode.bidi_charging.power / 1000"
+              @update:model-value="updateState(templateKey, $event * 1000, 'chargemode.bidi_charging.power')"
             >
             </openwb-base-number-input>
             <hr />
