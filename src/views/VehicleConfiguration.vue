@@ -92,6 +92,14 @@
               >
                 Das Standard-Fahrzeug kann nicht umbenannt werden.
               </template>
+              <template #append>
+                <openwb-base-color-picker
+                  class="p-1"
+                  :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/color']"
+                  default-color="#17a2b8"
+                  @update:model-value="updateState('openWB/vehicle/' + vehicleId + '/color', $event)"
+                />
+              </template>
             </openwb-base-text-input>
             <openwb-base-text-input
               v-if="vehicleId !== 0"
@@ -1447,6 +1455,7 @@ export default {
         { topic: "openWB/optional/rfid/active", writeable: false },
         { topic: "openWB/system/configurable/soc_modules", writeable: false },
         { topic: "openWB/vehicle/+/charge_template", writeable: true },
+        { topic: "openWB/vehicle/+/color", writeable: true },
         { topic: "openWB/vehicle/+/ev_template", writeable: true },
         { topic: "openWB/vehicle/+/info", writeable: true },
         { topic: "openWB/vehicle/+/name", writeable: true },
