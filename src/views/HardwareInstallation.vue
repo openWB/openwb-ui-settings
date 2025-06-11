@@ -121,7 +121,16 @@
                 subtype="text"
                 :model-value="installedComponent.name"
                 @update:model-value="updateState(installedComponentKey, $event, 'name')"
-              />
+              >
+                <template #append>
+                  <openwb-base-color-picker
+                    class="p-1"
+                    :model-value="installedComponent?.color"
+                    :default-color="getComponentDefaultColor(installedComponent?.type)"
+                    @update:model-value="updateState(installedComponent, $event, 'color')"
+                  />
+                </template>
+              </openwb-base-text-input>
               <openwb-base-text-input
                 title="Hersteller"
                 subtype="text"
@@ -345,6 +354,18 @@ export default {
         return "warning";
       }
       return "dark";
+    },
+    getComponentDefaultColor(type) {
+      if (type.match(/^(.+_)?counter(_.+)?$/)) {
+        return "#dc3545";
+      }
+      if (type.match(/^(.+_)?inverter(_.+)?$/)) {
+        return "#28a745";
+      }
+      if (type.match(/^(.+_)?bat(_.+)?$/)) {
+        return "#ffc107";
+      }
+      return undefined;
     },
     getComponentTypeIcon(type) {
       if (type.match(/^(.+_)?counter(_.+)?$/)) {
