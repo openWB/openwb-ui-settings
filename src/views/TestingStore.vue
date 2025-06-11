@@ -137,6 +137,7 @@
           <template #append>
             <openwb-base-color-picker
               class="p-1"
+              disabled
               :model-value="$store.state.examples.color2"
               @update:model-value="updateState('color2', $event)"
             />
