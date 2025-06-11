@@ -67,7 +67,16 @@
             subtype="text"
             :model-value="installedChargePoint.name"
             @update:model-value="updateState(installedChargePointKey, $event, 'name')"
-          />
+          >
+            <template #append>
+              <openwb-base-color-picker
+                class="p-1"
+                :model-value="installedChargePoint.color"
+                default-color="#17a2b8"
+                @update:model-value="updateState(installedChargePointKey, $event, 'color')"
+              />
+            </template>
+          </openwb-base-text-input>
           <openwb-base-text-input
             title="Modul"
             subtype="text"
