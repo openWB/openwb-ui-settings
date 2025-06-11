@@ -565,8 +565,8 @@ export default {
           label: "Fahrzeug SoC",
           unit: "%",
           jsonKey: null,
-          borderColor: "rgba(0, 0, 255, 0.7)",
-          backgroundColor: "rgba(0, 0, 255, 0.3)",
+          borderColor: "#17a2b8b2",
+          backgroundColor: "#17a2b84c",
           borderDash: [10, 5],
           hidden: true,
           fill: false,
@@ -1487,6 +1487,39 @@ export default {
       return `${label.join(" ")}${details.length ? " (" + details.join(", ") + ")" : ""}`;
     },
     /**
+     * Returns the color for a dataset based on the base object, object key, and element key.
+     * @param {String} baseObject
+     * @param {String} objectKey
+     * @param {String} elementKey
+     * @param {String} datasetKey
+     * @returns {Object|undefined} - An object containing borderColor and backgroundColor, or undefined if no color is found.
+     */
+    getDatasetColor(baseObject, objectKey, elementKey, datasetKey) {
+      const elementIsImported = elementKey.includes("imported");
+      let color,
+        negativeColor = undefined;
+      if (
+        Object.prototype.hasOwnProperty.call(
+          this.$store.state.mqtt[this.baseTopic + this.commandData.date],
+          "colors",
+        ) &&
+        Object.prototype.hasOwnProperty.call(
+          this.$store.state.mqtt[this.baseTopic + this.commandData.date].colors,
+          objectKey,
+        )
+      ) {
+        color = this.$store.state.mqtt[this.baseTopic + this.commandData.date].colors[objectKey].color;
+        negativeColor = this.$store.state.mqtt[this.baseTopic + this.commandData.date].colors[objectKey].negativeColor;
+      }
+      console.log("getDatasetColor:", baseObject, objectKey, elementKey, datasetKey, color, negativeColor);
+      return color
+        ? {
+            borderColor: `${elementIsImported && negativeColor ? negativeColor : color}b2`,
+            backgroundColor: `${elementIsImported && negativeColor ? negativeColor : color}4c`,
+          }
+        : undefined;
+    },
+    /**
      * Returns the index of the dataset with the specified dataset key.
      *
      * @param {string} datasetKey - The key of the dataset to find.
@@ -1558,6 +1591,12 @@ export default {
         }
         newDataset.hidden = this.hideDataset(baseObject, objectKey, elementKey);
         newDataset.stack = this.updateDatasetStack(newDataset.stack, objectKey, elementKey);
+        const colors = this.getDatasetColor(baseObject, objectKey, elementKey, datasetKey);
+        console.log("dataset color", colors);
+        if (colors) {
+          newDataset.borderColor = colors.borderColor;
+          newDataset.backgroundColor = colors.backgroundColor;
+        }
         return this.chartDatasets.datasets.push(newDataset) - 1;
       } else {
         console.warn("no matching template found for: " + datasetKey + " with template: " + datasetTemplate);
