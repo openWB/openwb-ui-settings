@@ -3,15 +3,19 @@
     <input
       type="color"
       class="custom-color-picker"
-      :value="modelValue"
-      :title="`Farbe: ${modelValue}`"
+      :class="{ disabled: disabled || readonly }"
+      :value="value"
+      :title="`Farbe: ${value}`"
+      :disabled="disabled"
+      :readonly="readonly"
       @input="changed($event.target.value)"
     />
     <font-awesome-icon
-      v-if="defaultColor"
+      v-if="defaultColor && !disabled && !readonly"
       class="ml-1 clickable"
       :icon="['fas', 'rotate-left']"
       :title="`Zurücksetzen auf Standardfarbe (${defaultColor})`"
+      :disabled="value == defaultColor"
       @click="changed(defaultColor)"
     />
   </div>
@@ -40,13 +44,29 @@ export default {
     modelValue: {
       type: String,
       required: false,
-      default: "#000000",
+      default: undefined,
       validator: (value) => {
         return /^#[0-9A-F]{6}$/i.test(value);
       },
     },
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    readonly: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   emits: ["update:model-value"],
+  computed: {
+    value() {
+      // return the modelValue if set, otherwise return the defaultColor or a fallback color
+      return this.modelValue || this.defaultColor || "#000000";
+    },
+  },
   methods: {
     changed(event) {
       this.$emit("update:model-value", event);
@@ -72,6 +92,11 @@ export default {
   padding: 0;
   cursor: pointer;
 }
+
+.custom-color-picker.disabled {
+  cursor: not-allowed;
+}
+
 .custom-color-picker::-webkit-color-swatch-wrapper {
   padding: 0;
   margin: 0;
