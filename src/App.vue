@@ -296,6 +296,13 @@ export default {
   cursor: pointer;
 }
 
+.clickable[disabled="true"] {
+  /* prevent pointer events on the icon when disabled */
+  pointer-events: none;
+  /* visually indicate that the icon is disabled */
+  opacity: 0.5;
+}
+
 .not-clickable {
   cursor: not-allowed;
 }
