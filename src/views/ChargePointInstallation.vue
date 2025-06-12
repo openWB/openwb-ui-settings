@@ -72,7 +72,7 @@
               <openwb-base-color-picker
                 class="p-1"
                 :model-value="installedChargePoint.color"
-                default-color="#17a2b8"
+                default-color="#0000ff"
                 @update:model-value="updateState(installedChargePointKey, $event, 'color')"
               />
             </template>
