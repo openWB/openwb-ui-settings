@@ -127,7 +127,7 @@
                     class="p-1"
                     :model-value="installedComponent?.color"
                     :default-color="getComponentDefaultColor(installedComponent?.type)"
-                    @update:model-value="updateState(installedComponent, $event, 'color')"
+                    @update:model-value="updateState(installedComponentKey, $event, 'color')"
                   />
                 </template>
               </openwb-base-text-input>
