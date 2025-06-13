@@ -459,8 +459,8 @@
                   class: 'btn-outline-success',
                 },
               ]"
-              :model-value="template.control_pilot_interruption"
-              @update:model-value="updateState(key, $event, 'control_pilot_interruption')"
+              :model-value="template.bidi"
+              @update:model-value="updateState(key, $event, 'bidi')"
             >
               <template #help>
                 Für bidirektionales Laden wird eine openWB Pro benötigt. Die openWB Pro muss auf den Modus "Bidi"
@@ -765,6 +765,8 @@
                 <ol>
                   <li>Ziel (Sofortladen) mit Priorität</li>
                   <li>Ziel (Sofortladen)</li>
+                  <li>Bidi (Sofortladen für Ziel) mit Priorität</li>
+                  <li>Bidi (Sofortladen für Ziel)</li>
                   <li>Zeit mit Priorität</li>
                   <li>Zeit</li>
                   <li>Sofort mit Priorität</li>
@@ -775,10 +777,14 @@
                   <li>PV (Min-Anteil)</li>
                   <li>Ziel (PV) mit Priorität</li>
                   <li>Ziel (PV)</li>
+                  <li>Bidi (PV-Anteil) mit Priorität</li>
+                  <li>Bidi (PV-Anteil)</li>
                   <li>Eco (PV-Anteil) mit Priorität</li>
                   <li>Eco (PV-Anteil)</li>
                   <li>PV (PV-Anteil) mit Priorität</li>
                   <li>PV (PV-Anteil)</li>
+                  <li>Bidi-Entladen ohne Priorität</li>
+                  <li>Bidi-Entladen mit Priorität</li>
                 </ol>
               </template>
             </openwb-base-button-group-input>
@@ -1406,7 +1412,7 @@
               ISO 15118-20, die das bidirektionale Laden definiert, benötigt als Parameter eine Ladeleistung. Die
               Phasenzahl legt das Fahrzeug fest. Wenn Fahrzeug und Ladepunkt bidirektionales Laden nach ISO 15118-20
               unterstützen, wird die eingestellte Ladeleistung verwendet. Wenn mindestens einer von beiden die Norm
-              nicht unterstützt, wird derLadestrom und die vorgegebene Phasenzahl für die Regelung verwendet.
+              nicht unterstützt, wird der Ladestrom und die vorgegebene Phasenzahl für die Regelung verwendet.
             </openwb-base-alert>
             <openwb-base-range-input
               :title="'Ladestrom' + (dcChargingEnabled ? ' (AC)' : '')"
