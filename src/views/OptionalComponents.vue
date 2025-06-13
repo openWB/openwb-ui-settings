@@ -129,10 +129,6 @@
             unit="Sek"
             :labels="[
               {
-                label: 'Immer an',
-                value: 0,
-              },
-              {
                 label: 5,
                 value: 5,
               },
@@ -179,6 +175,10 @@
               {
                 label: '10 Min',
                 value: 600,
+              },
+              {
+                label: 'Immer an',
+                value: 0,
               },
             ]"
             @update:model-value="updateState('openWB/optional/int_display/standby', $event)"
