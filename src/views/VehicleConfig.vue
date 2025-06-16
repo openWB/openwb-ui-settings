@@ -1281,7 +1281,7 @@
               </template>
             </openwb-base-heading>
             <charge-template-scheduled-charging-plan
-              v-for="(plan, planKey) in getChargeTemplateScheduledChargingPlans(template.id)"
+              v-for="(plan, planKey) in template.chargemode.scheduled_charging.plans"
               :key="planKey"
               :model-value="plan"
               :template-id="template.id"
@@ -1317,7 +1317,7 @@
               </openwb-base-heading>
             </div>
             <charge-template-time-charging-plan
-              v-for="(plan, planKey) in getChargeTemplateTimeChargingPlans(template.id)"
+              v-for="(plan, planKey) in template.chargemode.time_charging.plans ?? []"
               :key="planKey"
               :model-value="plan"
               :template-id="template.id"
@@ -1591,12 +1591,6 @@ export default {
         : "Lade-Profil " + id;
     },
     /* charge template schedule plan management */
-    getChargeTemplateScheduledChargingPlans(chargeTemplateId) {
-      let result = this.getWildcardTopics(
-        "openWB/vehicle/template/charge_template/" + chargeTemplateId + "/chargemode/scheduled_charging/plans/+",
-      );
-      return result;
-    },
     addChargeTemplateSchedulePlan(templateId) {
       this.$emit("sendCommand", {
         command: "addChargeTemplateSchedulePlan",
@@ -1604,12 +1598,6 @@ export default {
       });
     },
     /* charge template time charging plan management */
-    getChargeTemplateTimeChargingPlans(chargeTemplateId) {
-      let result = this.getWildcardTopics(
-        "openWB/vehicle/template/charge_template/" + chargeTemplateId + "/time_charging/plans/+",
-      );
-      return result;
-    },
     addChargeTemplateTimeChargingPlan(templateId) {
       this.$emit("sendCommand", {
         command: "addChargeTemplateTimeChargingPlan",
