@@ -1304,7 +1304,9 @@
                 Erreichen des Ziel-SoCs wird mit Überschuss geladen, solange bis das "SoC-Limit für das Fahrzeug"
                 erreicht wird.<br />
                 Es wird nach den Vorgaben des Zeitplan geladen, dessen Zieltermin am nächsten liegt. Ist der
-                Zielzeitpunkt vorbei, wird solange geladen bis, das Ziel erreicht oder das Auto abgesteckt wird.
+                Zielzeitpunkt vorbei, wird solange geladen bis, das Ziel erreicht oder das Auto abgesteckt wird. Wenn
+                vom aktuellen Plan Ziel-SoC und SoC-Limit für das Fahrzeug erreicht wurden oder wenn der nächste Plan
+                mit dem Ladestart beginnen muss, wird auf den nächsten Plan umgeschaltet.
               </template>
             </openwb-base-heading>
             <openwb-base-card
