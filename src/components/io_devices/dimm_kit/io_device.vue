@@ -1,14 +1,15 @@
 <template>
   <div class="io-device-dimm-kit">
     <openwb-base-alert subtype="info">
-      Die Ausgänge können über die folgenden Topics manuell per MQTT geschaltet werden:
+      Die Ausgänge können über die folgenden Topics manuell per MQTT geschaltet werden. Falls Ausgänge in Aktionen konfiguriert werden, überschreibt das manuelle Setzen den Status.
+      <ul>
       <ul>
         <li>
           <openwb-base-copy-to-clipboard
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/device//set/manual/DO1
+            openWB/set/system/io/{{ ioDevice.id }}/set/manual/digital_output/DO1
           </openwb-base-copy-to-clipboard>
           <br />
         </li>
@@ -17,7 +18,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/device//set/manual/DO2
+            openWB/set/system/io/{{ ioDevice.id }}/set/manual/digital_output/DO2
           </openwb-base-copy-to-clipboard>
           <br />
         </li>
@@ -26,7 +27,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/device//set/manual/DO3
+            openWB/set/system/io/{{ ioDevice.id }}/set/manual/digital_output/DO3
           </openwb-base-copy-to-clipboard>
           <br />
         </li>
@@ -35,7 +36,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/device//set/manual/DO4
+            openWB/set/system/io/{{ ioDevice.id }}/set/manual/digital_output/DO4
           </openwb-base-copy-to-clipboard>
           <br />
         </li>
@@ -44,7 +45,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/device//set/manual/DO5
+            openWB/set/system/io/{{ ioDevice.id }}/set/manual/digital_output/DO5
           </openwb-base-copy-to-clipboard>
           <br />
         </li>
@@ -53,7 +54,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/device//set/manual/DO6
+            openWB/set/system/io/{{ ioDevice.id }}/set/manual/digital_output/DO6
           </openwb-base-copy-to-clipboard>
           <br />
         </li>
@@ -62,7 +63,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/device//set/manual/DO7
+            openWB/set/system/io/{{ ioDevice.id }}/set/manual/digital_output/DO7
           </openwb-base-copy-to-clipboard>
           <br />
         </li>
@@ -71,7 +72,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/device//set/manual/DO8
+            openWB/set/system/io/{{ ioDevice.id }}/set/manual/digital_output/DO8
           </openwb-base-copy-to-clipboard>
           <br />
         </li>

@@ -11,14 +11,14 @@
       Es wird der Einsatz des Dimm- & Control-Kits empfohlen!
     </openwb-base-alert>
     <openwb-base-alert subtype="info">
-      Die Ausgänge können über die folgenden Topics manuell per MQTT geschaltet werden:
+      Die Ausgänge können über die folgenden Topics manuell per MQTT geschaltet werden. Falls Ausgänge in Aktionen konfiguriert werden, überschreibt das manuelle Setzen den Status.
       <ul>
         <li>
           <openwb-base-copy-to-clipboard
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/device/{{ component.id }}/set/manual/LED1
+            openWB/set/system/io/{{ ioDevice.id }}/set/manual/digital_output/LED1
           </openwb-base-copy-to-clipboard>
           <br />
         </li>
@@ -27,7 +27,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/device/{{ component.id }}/set/manual/LED2
+            openWB/set/system/io/{{ ioDevice.id }}/set/manual/digital_output/LED2
           </openwb-base-copy-to-clipboard>
           <br />
         </li>
@@ -36,7 +36,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/device/{{ component.id }}/set/manual/LED3
+            openWB/set/system/io/{{ ioDevice.id }}/set/manual/digital_output/LED3
           </openwb-base-copy-to-clipboard>
           <br />
         </li>
