@@ -76,7 +76,7 @@
           </openwb-base-copy-to-clipboard>
           <br />
         </li>
-        Als Wert wird ein boolean als json-String oder 0/1 akzeptiert.<br />
+        Als Wert wird ein boolean als json oder 0/1 akzeptiert.<br />
         Beispiel:
         <span class="text-info">false</span>
       </ul>
