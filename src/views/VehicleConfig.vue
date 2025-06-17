@@ -1286,7 +1286,7 @@
               :model-value="plan"
               :template-id="template.id"
               :dc-charging-enabled="dcChargingEnabled"
-              @update:model-value="updateState(planKey, $event)"
+              @update:model-value="updateState(templateKey, $event, `chargemode.scheduled_charging.plans.${planKey}`)"
               @send-command="$emit('sendCommand', $event)"
             />
             <div v-if="!installAssistantActive">
@@ -1322,7 +1322,7 @@
               :model-value="plan"
               :template-id="template.id"
               :dc-charging-enabled="dcChargingEnabled"
-              @update:model-value="updateState(planKey, $event)"
+              @update:model-value="updateState(templateKey, $event, `time_charging.plans.${planKey}`)"
               @send-command="$emit('sendCommand', $event)"
             />
           </openwb-base-card>

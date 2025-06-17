@@ -295,13 +295,16 @@ export default {
     };
   },
   computed: {
+    plan() {
+      return this.modelValue;
+    },
+  },
+  watch: {
     plan: {
-      get() {
-        return this.modelValue;
+      handler(newValue) {
+        this.$emit("update:modelValue", newValue);
       },
-      set(value) {
-        this.$emit("update:modelValue", value);
-      },
+      deep: true,
     },
   },
   methods: {
