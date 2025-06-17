@@ -1317,7 +1317,7 @@
               </openwb-base-heading>
             </div>
             <charge-template-time-charging-plan
-              v-for="(plan, planKey) in template.chargemode.time_charging.plans ?? []"
+              v-for="(plan, planKey) in template.time_charging.plans ?? []"
               :key="planKey"
               :model-value="plan"
               :template-id="template.id"
