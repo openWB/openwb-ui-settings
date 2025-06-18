@@ -55,7 +55,7 @@
         <openwb-base-avatar
           class="bg-success clickable"
           title="Autolock Zeitplan duplizieren"
-          @click="copyPlan()"
+          @click.stop="copyPlan()"
         >
           <font-awesome-icon
             fixed-width
@@ -65,7 +65,7 @@
         <openwb-base-avatar
           class="bg-danger clickable ml-1"
           title="Autolock Zeitplan löschen"
-          @click="removePlanModal()"
+          @click.stop="removePlanModal()"
         >
           <font-awesome-icon
             fixed-width
