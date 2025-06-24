@@ -10,41 +10,6 @@
       Bohrung im Gehäuse entstehen.<br />
       Es wird der Einsatz des Dimm- & Control-Kits empfohlen!
     </openwb-base-alert>
-    <openwb-base-alert subtype="info">
-      Die Ausgänge können über die folgenden Topics manuell per MQTT geschaltet werden. Falls Ausgänge in Aktionen konfiguriert werden, überschreibt das manuelle Setzen den Status.
-      <ul>
-        <li>
-          <openwb-base-copy-to-clipboard
-            class="text-info"
-            tooltip="Topic kopieren"
-          >
-            openWB/set/system/io/{{ ioDevice.id }}/set/manual/digital_output/LED1
-          </openwb-base-copy-to-clipboard>
-          <br />
-        </li>
-        <li>
-          <openwb-base-copy-to-clipboard
-            class="text-info"
-            tooltip="Topic kopieren"
-          >
-            openWB/set/system/io/{{ ioDevice.id }}/set/manual/digital_output/LED2
-          </openwb-base-copy-to-clipboard>
-          <br />
-        </li>
-        <li>
-          <openwb-base-copy-to-clipboard
-            class="text-info"
-            tooltip="Topic kopieren"
-          >
-            openWB/set/system/io/{{ ioDevice.id }}/set/manual/digital_output/LED3
-          </openwb-base-copy-to-clipboard>
-          <br />
-        </li>
-        Als Wert wird ein boolean als json oder 0/1 akzeptiert.<br />
-        Beispiel:
-        <span class="text-info">false</span>
-      </ul>
-    </openwb-base-alert>
     <openwb-base-select-input
       title="Installiert auf..."
       not-selected="Bitte auswählen"
