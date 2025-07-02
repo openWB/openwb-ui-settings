@@ -21,7 +21,8 @@
             <template #help>
               Die Ladeleistung kann nicht mit absoluter Genauigkeit eingestellt werden, sodass am EVU-Punkt nicht auf
               exakt 0W geregelt werden kann. Der Regelmodus legt fest, ob diese Differenz am EVU-Punkt (ca. 200-300W) zu
-              geringem Netzbezug oder geringer Netzeinspeisung führen soll.<br />
+              geringem Netzbezug oder geringer Netzeinspeisung führen soll. Liegt die Leistung am EVU-Punkt innerhalb
+              des Regelbereichs, wird nicht nachgeregelt.<br />
               Bei Speichervorrang erzeugt die Regelung bei Bedarf unabhängig vom eingestellten Regelmodus Einspeisung,
               damit der Speicher seine Ladeleistung erhöht.<br />
               Achtung: bei unlogischen Einstellungen kann die Regelung gestört werden! Im Zweifel bitte unsere
