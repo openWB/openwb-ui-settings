@@ -225,6 +225,11 @@
             Wenn die Ladestation ausgeschaltet wird, muss sie komplett spannungsfrei geschaltet werden. Erst beim
             erneuten Zuschalten der Spannung fährt das System wieder hoch.
           </openwb-base-alert>
+          <openwb-base-alert subtype="info">
+            Ein Neustart löscht wichtige Protokolle, die bei der Fehlersuche helfen können. <br />Tipp: Erstelle
+            stattdessen zuerst einen <router-link to="/Support"> Systembericht </router-link> – das hilft oft mehr und
+            bewahrt alle relevanten Logs.
+          </openwb-base-alert>
           <template #footer>
             <div class="row justify-content-center">
               <div class="col-md-4 d-flex py-1 justify-content-center">
