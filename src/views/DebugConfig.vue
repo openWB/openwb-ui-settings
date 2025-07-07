@@ -92,6 +92,10 @@ export default {
           title: "Protokoll über die Schaltvorgänge von steuerbaren Verbrauchseinrichtungen",
           fileName: "/openWB/data/log/steuve_control_command.log",
         },
+        {
+          title: "Thread-Erros",
+          fileName: "/openWB/ramdisk/thread_errors.log",
+        },
       ],
     };
   },
