@@ -8,18 +8,6 @@
       :model-value="device.configuration.ip_address"
       @update:model-value="updateConfiguration($event, 'configuration.ip_address')"
     />
-    <openwb-base-select-input
-      title="Phase"
-      not-selected="Bitte auswählen"
-      :options="[
-        { value: 1, text: '1' },
-        { value: 2, text: '2' },
-        { value: 3, text: '3' },
-      ]"
-      :model-value="device.configuration.phase"
-      required
-      @update:model-value="updateConfiguration($event, 'configuration.phase')"
-    />
   </div>
 </template>
 
