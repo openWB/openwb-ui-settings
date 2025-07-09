@@ -1,13 +1,9 @@
 <template>
-  <openwb-io-pattern
-    v-slot="slotProps"
-    :model-value="value"
-    :digital-inputs="ioDevice.input.digital"
-    :enable-add-delete="false"
-    class="text-center"
-  >
-    {{ slotProps.pattern.value * 100 }}&nbsp;%
-  </openwb-io-pattern>
+  <openwb-io-single-pattern
+    v-model="value"
+    :digital-inputs="ioDevice?.input?.digital"
+    :io-device="ioDevice"
+  />
   <hr />
   <openwb-base-select-input
     title="Verhalten anwenden auf..."
@@ -27,6 +23,7 @@
 <script>
 import OpenwbIoActionConfigMixin from "../../OpenwbIoActionConfigMixin.vue";
 import OpenwbIoPattern from "../../OpenwbIoPattern.vue";
+import OpenwbIoSinglePattern from "../../OpenwbIoSinglePattern.vue";
 
 export default {
   name: "IoActionPowerLevels",
