@@ -86,7 +86,14 @@
               class="dropdown-item"
               active-class="active disabled"
             >
-              Optionale Hardware
+              Display
+            </router-link>
+            <router-link
+              to="/RFIDConfig"
+              class="dropdown-item"
+              active-class="active disabled"
+            >
+              RFID
             </router-link>
           </div>
         </li>
