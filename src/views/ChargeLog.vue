@@ -817,7 +817,8 @@ export default {
           return "bg-primary";
         case "Zeitladen":
           return "bg-warning";
-        case "Standby":
+        case "Eco":
+        case "Standby": // keep for backward compatibility!
           return "bg-secondary";
         case "Stop":
           return "bg-dark";

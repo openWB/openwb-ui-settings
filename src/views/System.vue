@@ -108,35 +108,108 @@
             ältere Version gewechselt werden, jedoch ist nicht sichergestellt, dass es dabei keine Probleme gibt. Gerade
             wenn das Datenformat in der neuen Version angepasst wurde, wird eine ältere damit Fehler produzieren.
           </openwb-base-alert>
-          <template #footer>
-            <div class="row justify-content-center">
-              <div class="col-md-4 d-flex py-1 justify-content-center">
-                <openwb-base-click-button
-                  class="btn-info"
-                  @button-clicked="sendSystemCommand('systemFetchVersions')"
-                >
-                  Informationen aktualisieren
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="['fas', 'download']"
-                  />
-                </openwb-base-click-button>
-              </div>
-              <div class="col-md-4 d-flex py-1 justify-content-center">
-                <openwb-base-click-button
-                  :class="updateAvailable ? 'btn-success clickable' : 'btn-outline-success'"
-                  :disabled="!updateAvailable"
-                  @button-clicked="systemUpdate()"
-                >
-                  Update
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="['fas', 'arrow-alt-circle-up']"
-                  />
-                </openwb-base-click-button>
-              </div>
+          <div class="row justify-content-center">
+            <div class="col-md-4 d-flex py-1 justify-content-center">
+              <openwb-base-click-button
+                class="btn-info"
+                @button-clicked="sendSystemCommand('systemFetchVersions')"
+              >
+                Informationen aktualisieren
+                <font-awesome-icon
+                  fixed-width
+                  :icon="['fas', 'download']"
+                />
+              </openwb-base-click-button>
             </div>
-          </template>
+            <div class="col-md-4 d-flex py-1 justify-content-center">
+              <openwb-base-click-button
+                :class="updateAvailable ? 'btn-success clickable' : 'btn-outline-success'"
+                :disabled="!updateAvailable"
+                @button-clicked="systemUpdate()"
+              >
+                Update
+                <font-awesome-icon
+                  fixed-width
+                  :icon="['fas', 'arrow-alt-circle-up']"
+                />
+              </openwb-base-click-button>
+            </div>
+          </div>
+          <div v-if="$store.state.mqtt['openWB/general/extern'] != true">
+            <hr />
+            <openwb-base-heading>Automatisches Update von Secondary openWBs</openwb-base-heading>
+            <openwb-base-alert subtype="info">
+              Die automatische Updatefunktion für Secondary openWBs ist nur verfügbar, wenn sich die Primary openWB auf
+              dem Entwicklungszweig "Release" befindet. Das Update wird nur auf Secondary openWBs durchgeführt, welche
+              sich ebenfalls auf dem Entwicklungszweig "Release" befinden. Ist die dort installierte Releaseversion zu
+              alt, muss ein einmaliges Update auf die aktuelle Version manuell auf der betroffenen openWB durchgeführt
+              werden.
+            </openwb-base-alert>
+            <div v-if="$store.state.mqtt['openWB/system/current_branch'] == 'Release'">
+              <openwb-base-button-group-input
+                title="Secondary openWBs automatisch mit der Primary updaten"
+                :buttons="[
+                  {
+                    buttonValue: false,
+                    text: 'Nein',
+                    class: 'btn-outline-danger',
+                  },
+                  {
+                    buttonValue: true,
+                    text: 'Ja',
+                    class: 'btn-outline-success',
+                  },
+                ]"
+                :model-value="$store.state.mqtt['openWB/system/secondary_auto_update']"
+                @update:model-value="updateState('openWB/system/secondary_auto_update', $event)"
+              >
+                <template #help>
+                  Diese Option ist nur auf dem Entwicklungszweig "Release" verfügbar. Ist diese Option aktiviert, dann
+                  werden Secondary openWBs, welche sich ebenfalls auf dem Entwicklungszweig "Release" befinden
+                  gleichzeitig mit der Primary openWB aktualisiert.
+                </template>
+              </openwb-base-button-group-input>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Secondary</th>
+                    <th>Software-Status</th>
+                    <th>IP-Adresse</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="externalChargepoint in externalChargepoints"
+                    :key="externalChargepoint.id"
+                  >
+                    <td>{{ externalChargepoint.name }}</td>
+                    <td>
+                      {{
+                        $store.state.mqtt["openWB/chargepoint/" + externalChargepoint.id + "/get/current_branch"] ===
+                        undefined
+                          ? "Version zu alt oder openWB ist nicht erreichbar. Bitte manuell updaten bzw. prüfen."
+                          : $store.state.mqtt["openWB/chargepoint/" + externalChargepoint.id + "/get/current_branch"] !=
+                              "Release"
+                            ? "Secondary ist nicht auf dem Release-Zweig. Bitte manuell updaten."
+                            : $store.state.mqtt[
+                                "openWB/chargepoint/" + externalChargepoint.id + "/get/current_branch"
+                              ] +
+                              " " +
+                              $store.state.mqtt["openWB/chargepoint/" + externalChargepoint.id + "/get/version"]
+                      }}
+                    </td>
+                    <td>{{ externalChargepoint.configuration.ip_address }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <openwb-base-submit-buttons
+                form-name="versionInfoForm"
+                :hide-defaults="true"
+                @save="$emit('save')"
+                @reset="$emit('reset')"
+              />
+            </div>
+          </div>
         </openwb-base-card>
       </form>
       <form
@@ -151,6 +224,11 @@
           <openwb-base-alert subtype="danger">
             Wenn die Ladestation ausgeschaltet wird, muss sie komplett spannungsfrei geschaltet werden. Erst beim
             erneuten Zuschalten der Spannung fährt das System wieder hoch.
+          </openwb-base-alert>
+          <openwb-base-alert subtype="info">
+            Ein Neustart löscht wichtige Protokolle, die bei der Fehlersuche helfen können. <br />Tipp: Erstelle
+            stattdessen zuerst einen <router-link to="/Support"> Systembericht </router-link> – das hilft oft mehr und
+            bewahrt alle relevanten Logs.
           </openwb-base-alert>
           <template #footer>
             <div class="row justify-content-center">
@@ -275,11 +353,13 @@ export default {
       default: false,
     },
   },
-  emits: ["sendCommand"],
+  // "save" and "reset" are already defined in ComponentState but check is failing if not defined here?
+  emits: ["save", "reset", "sendCommand"],
   data() {
     return {
       mqttTopicsToSubscribe: [
         "openWB/system/optionBackup",
+        "openWB/system/secondary_auto_update",
         "openWB/system/current_commit",
         "openWB/system/current_branch_commit",
         "openWB/system/current_missing_commits",
@@ -289,12 +369,28 @@ export default {
         "openWB/system/serial_number",
         "openWB/system/ip_address",
         "openWB/system/mac_address",
+        "openWB/chargepoint/+/get/version",
+        "openWB/chargepoint/+/get/current_branch",
+        "openWB/chargepoint/+/config",
+        "openWB/general/extern",
       ],
       warningAcknowledged: false,
       selectedTag: "*HEAD*",
     };
   },
   computed: {
+    externalChargepoints: {
+      get() {
+        let chargePoints = this.getWildcardTopics("openWB/chargepoint/+/config");
+        let myObj = {};
+        for (const [key, element] of Object.entries(chargePoints)) {
+          if (element.type === "external_openwb") {
+            myObj[key] = element;
+          }
+        }
+        return myObj;
+      },
+    },
     updateAvailable() {
       return (
         this.$store.state.mqtt["openWB/system/current_branch_commit"] &&
@@ -471,6 +567,18 @@ export default {
         value: true,
       });
     },
+    filterComponentsByType(components, type) {
+      return Object.keys(components)
+        .filter((key) => {
+          return components[key].type.includes(type);
+        })
+        .reduce((obj, key) => {
+          return {
+            ...obj,
+            [key]: components[key],
+          };
+        }, {});
+    },
   },
 };
 </script>
@@ -479,5 +587,21 @@ export default {
 .missing-commits {
   overflow-y: scroll;
   max-height: 20rem;
+}
+.table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.table-striped tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
 }
 </style>

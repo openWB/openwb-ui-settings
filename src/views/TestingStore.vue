@@ -44,7 +44,20 @@
           :model-value="$store.state.examples.text1"
           @update:model-value="updateState('text1', $event)"
         >
-          <template #help> Einfacher Text </template>
+          <template #help>
+            Einfacher Text<br />
+            Diese Komponente hat einen Slot "append" für zusätzliche Elemente, die rechts vom Eingabefeld angezeigt
+            werden sollen. Das ist hier z.B. ein Farbauswahl-Element. Die Farbe kann zurückgesetzt werden, weil eine
+            Standardfarbe gesetzt ist. Das ist hier z.B. rot (#ff0000).
+          </template>
+          <template #append>
+            <openwb-base-color-picker
+              class="p-1"
+              :model-value="$store.state.examples.color1"
+              default-color="#ff0000"
+              @update:model-value="updateState('color1', $event)"
+            />
+          </template>
         </openwb-base-text-input>
         <openwb-base-text-input
           title="2. Text (E-Mail)"
@@ -104,7 +117,19 @@
           :model-value="$store.state.examples.number1"
           @update:model-value="updateState('number1', $event)"
         >
-          <template #help> Zahl mit Einheit </template>
+          <template #help>
+            Zahl mit Einheit.<br />
+            Diese Komponente hat einen Slot "append" für zusätzliche Elemente, die rechts vom Eingabefeld angezeigt
+            werden sollen. Das ist hier z.B. ein Farbauswahl-Element. Ohne Standardfarbe kann die Farbe nicht
+            zurückgesetzt werden.
+          </template>
+          <template #append>
+            <openwb-base-color-picker
+              class="p-1"
+              :model-value="$store.state.examples.color2"
+              @update:model-value="updateState('color2', $event)"
+            />
+          </template>
         </openwb-base-number-input>
         <openwb-base-number-input
           title="2. Zahl"
@@ -313,7 +338,10 @@
             <a href="test">Link</a>
           </template>
         </openwb-base-heading>
-        <openwb-base-alert> Meldung ohne speziellen Subtype. </openwb-base-alert>
+        <openwb-base-alert>
+          Meldung ohne speziellen Subtype.
+          <openwb-base-copy-to-clipboard>Kopiere mich!</openwb-base-copy-to-clipboard>
+        </openwb-base-alert>
         <openwb-base-alert subtype="info"> Infomeldung </openwb-base-alert>
         <openwb-base-alert subtype="warning"> Warnmeldung </openwb-base-alert>
         <openwb-base-alert subtype="danger"> Fehlermeldung </openwb-base-alert>

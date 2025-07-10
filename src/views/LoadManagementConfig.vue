@@ -182,7 +182,7 @@
               :model-value="$store.state.mqtt['openWB/pv/' + inverter.id + '/config/max_ac_out'] / 1000"
               @update:model-value="updateState('openWB/pv/' + inverter.id + '/config/max_ac_out', $event * 1000)"
             >
-              <template #help> Relevant bei Hybrid-Systemen mit DC-Speicher. </template>
+              <template #help> Bei 0 kW erfolgt keine Berücksichtigung der maximalen Ausgangsleistung. </template>
             </openwb-base-number-input>
           </openwb-base-card>
         </div>

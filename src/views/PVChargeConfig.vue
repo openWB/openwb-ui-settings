@@ -21,7 +21,8 @@
             <template #help>
               Die Ladeleistung kann nicht mit absoluter Genauigkeit eingestellt werden, sodass am EVU-Punkt nicht auf
               exakt 0W geregelt werden kann. Der Regelmodus legt fest, ob diese Differenz am EVU-Punkt (ca. 200-300W) zu
-              geringem Netzbezug oder geringer Netzeinspeisung führen soll.<br />
+              geringem Netzbezug oder geringer Netzeinspeisung führen soll. Liegt die Leistung am EVU-Punkt innerhalb
+              des Regelbereichs, wird nicht nachgeregelt.<br />
               Bei Speichervorrang erzeugt die Regelung bei Bedarf unabhängig vom eingestellten Regelmodus Einspeisung,
               damit der Speicher seine Ladeleistung erhöht.<br />
               Achtung: bei unlogischen Einstellungen kann die Regelung gestört werden! Im Zweifel bitte unsere
@@ -87,7 +88,7 @@
             </template>
           </openwb-base-number-input>
           <openwb-base-number-input
-            title="Einschaltverzögerung"
+            title="Wartezeit Ladestart & Phasenzuschaltung"
             :min="0"
             :step="1"
             unit="s"
@@ -99,7 +100,11 @@
               Die Einschaltschwelle muss für die hier angegebene Zeit dauerhaft überschritten werden, bevor ein
               Ladevorgang gestartet wird.<br />
               Wenn ein Ladevorgang aktiv ist und auf PV-Laden umgeschaltet wird, wird weiter geladen, wenn die
-              Abschaltschwelle nicht unterschritten wird.
+              Abschaltschwelle nicht unterschritten wird.<br />
+              Wenn die Pufferzeit zwischen zwei automatischen Phasenumschaltungen abgelaufen ist, wird die hier
+              eingestellte Wartezeit abgewartet. Wenn die Pufferzeit zwischen zwei Umschaltungen noch nicht erreicht
+              ist, wird die längere der beiden Zeiten abgewartet: entweder die verbleibende Pufferzeit oder die
+              Wartezeit.
             </template>
           </openwb-base-number-input>
           <hr />
@@ -131,7 +136,7 @@
             </template>
           </openwb-base-number-input>
           <openwb-base-number-input
-            title="Abschaltverzögerung"
+            title="Wartezeit Ladeende & Phasenreduktion"
             :min="0"
             :step="1"
             unit="s"
@@ -143,7 +148,11 @@
               Die Abschaltschwelle muss für die hier angegebene Zeit dauerhaft unterschritten werden, bevor ein
               Ladevorgang beendet wird.<br />
               Wenn ein Ladevorgang aktiv ist und auf PV-Laden umgeschaltet wird, wird die Ladung sofort beendet, wenn
-              die Abschaltschwelle unterschritten wird.
+              die Abschaltschwelle unterschritten wird.<br />
+              Wenn die Pufferzeit zwischen zwei automatischen Phasenumschaltungen abgelaufen ist, wird die hier
+              eingestellte Wartezeit abgewartet. Wenn die Pufferzeit zwischen zwei Umschaltungen noch nicht erreicht
+              ist, wird die längere der beiden Zeiten abgewartet: entweder die verbleibende Pufferzeit oder die
+              Wartezeit.
             </template>
           </openwb-base-number-input>
           <hr />
@@ -176,33 +185,6 @@
               Wechselrichter begrenzt wird.
             </template>
           </openwb-base-number-input>
-        </div>
-      </openwb-base-card>
-      <openwb-base-card title="Phasenumschaltung">
-        <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-          <openwb-base-alert subtype="info">
-            Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
-          </openwb-base-alert>
-        </div>
-        <div v-else>
-          <openwb-base-button-group-input
-            title="Anzahl Phasen"
-            :buttons="[
-              { buttonValue: 1, text: '1' },
-              { buttonValue: 3, text: 'Maximum' },
-              { buttonValue: 0, text: 'Automatik' },
-            ]"
-            :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/phases_to_use']"
-            @update:model-value="updateState('openWB/general/chargemode_config/pv_charging/phases_to_use', $event)"
-          >
-            <template #help>
-              Hier kann eingestellt werden, ob Ladevorgänge im Modus "PV-Laden" mit nur einer Phase oder dem möglichen
-              Maximum in Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Im Modus
-              "Automatik" entscheidet die Regelung, welche Einstellung genutzt wird, um den verfügbaren Überschuss in
-              die Fahrzeuge zu laden. Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen einer und mehreren
-              Phasen (sog. 1p3p).
-            </template>
-          </openwb-base-button-group-input>
         </div>
       </openwb-base-card>
       <openwb-base-card title="Speicher-Beachtung">

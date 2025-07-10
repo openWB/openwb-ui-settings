@@ -13,7 +13,7 @@
     </openwb-base-text-input>
     <openwb-base-text-input
       title="Benutzername"
-      subtype="text"
+      subtype="user"
       required
       :model-value="vehicle.configuration.user_id"
       @update:model-value="updateConfiguration($event, 'configuration.user_id')"

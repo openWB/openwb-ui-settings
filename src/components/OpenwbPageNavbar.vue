@@ -119,32 +119,11 @@
               Übergreifendes
             </router-link>
             <router-link
-              to="/InstantChargeConfig"
-              class="dropdown-item"
-              active-class="active disabled"
-            >
-              Sofortladen
-            </router-link>
-            <router-link
               to="/PVChargeConfig"
               class="dropdown-item"
               active-class="active disabled"
             >
               PV-Laden
-            </router-link>
-            <router-link
-              to="/TimeChargeConfig"
-              class="dropdown-item"
-              active-class="active disabled"
-            >
-              Zeitladen
-            </router-link>
-            <router-link
-              to="/ScheduledChargeConfig"
-              class="dropdown-item"
-              active-class="active disabled"
-            >
-              Zielladen
             </router-link>
           </div>
         </li>

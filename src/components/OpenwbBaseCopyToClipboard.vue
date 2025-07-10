@@ -1,11 +1,12 @@
 <template>
   <span
-    ref="slot-wrapper"
-    :title="tooltip"
-    class="copy-me"
-    @click="click"
+    :title="isCopied ? '' : tooltip"
+    :class="isCopied ? '' : 'copy-me'"
+    @click.stop="click"
   >
-    <slot />
+    <span ref="content">
+      <slot />
+    </span>
     <font-awesome-icon
       fixed-width
       :icon="isCopied ? ['fas', 'clipboard-check'] : ['fas', 'clipboard']"
@@ -38,9 +39,12 @@ export default {
     click() {
       // event.target may be our icon, so we use a ref here
       if (this.clipboardApiAvailable) {
-        navigator.clipboard.writeText(this.$refs["slot-wrapper"].innerText).then(
+        navigator.clipboard.writeText(this.$refs["content"].innerText.trim()).then(
           () => {
             this.isCopied = true;
+            setTimeout(() => {
+              this.isCopied = false;
+            }, 3000); // Nach 3 Sekunden zurücksetzen
           },
           () => {
             console.error("copy to clipboard failed");
@@ -51,14 +55,14 @@ export default {
         if (window.getSelection) {
           const selection = window.getSelection();
           const range = document.createRange();
-          range.selectNodeContents(this.$refs["slot-wrapper"]);
+          range.selectNodeContents(this.$refs["content"]);
           selection.removeAllRanges();
           selection.addRange(range);
           return;
         }
         if (document.body.createTextRange) {
           const range = document.body.createTextRange();
-          range.moveToElementText(this.$refs["slot-wrapper"]);
+          range.moveToElementText(this.$refs["content"]);
           range.select();
         } else {
           console.warn("could not select text, unsupported browser");

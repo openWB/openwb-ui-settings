@@ -5,7 +5,7 @@
     title="Fahrzeug löschen"
     subtype="danger"
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
-    @modal-result="removeVehicle(modalVehicleIndex, $event)"
+    @modal-result="removeVehicle($event, modalVehicleIndex)"
   >
     Wollen Sie das Fahrzeug "{{ getVehicleName(modalVehicleIndex) }}" wirklich entfernen? Dieser Vorgang kann nicht
     rückgängig gemacht werden!
@@ -15,7 +15,7 @@
     title="Fahrzeug-Profil löschen"
     subtype="danger"
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
-    @modal-result="removeEvTemplate(modalEvTemplateIndex, $event)"
+    @modal-result="removeEvTemplate($event, modalEvTemplateIndex)"
   >
     Wollen Sie das Fahrzeug-Profil "{{ getEvTemplateName(modalEvTemplateIndex) }}" wirklich entfernen? Dieser Vorgang
     kann nicht rückgängig gemacht werden!
@@ -25,36 +25,10 @@
     title="Lade-Profil löschen"
     subtype="danger"
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
-    @modal-result="removeChargeTemplate(modalChargeTemplateIndex, $event)"
+    @modal-result="removeChargeTemplate($event, modalChargeTemplateIndex)"
   >
     Wollen Sie das Lade-Profil "{{ getChargeTemplateName(modalChargeTemplateIndex) }}" wirklich entfernen? Dieser
     Vorgang kann nicht rückgängig gemacht werden!
-  </openwb-base-modal-dialog>
-  <openwb-base-modal-dialog
-    :show="showChargeTemplateSchedulePlanModal"
-    title="Zielladen Zeitplan löschen"
-    subtype="danger"
-    :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
-    @modal-result="
-      removeChargeTemplateSchedulePlan(modalChargeTemplateIndex, modalChargeTemplateSchedulePlanIndex, $event)
-    "
-  >
-    Wollen Sie den Zielladen Zeitplan "{{
-      getChargeTemplateSchedulePlanName(modalChargeTemplateIndex, modalChargeTemplateSchedulePlanIndex)
-    }}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht werden!
-  </openwb-base-modal-dialog>
-  <openwb-base-modal-dialog
-    :show="showChargeTemplateTimeChargingPlanModal"
-    title="Zeitladen Zeitplan löschen"
-    subtype="danger"
-    :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
-    @modal-result="
-      removeChargeTemplateTimeChargingPlan(modalChargeTemplateIndex, modalChargeTemplateTimeChargingPlanIndex, $event)
-    "
-  >
-    Wollen Sie den Zeitladen Zeitplan "{{
-      getChargeTemplateTimeChargingPlanName(modalChargeTemplateIndex, modalChargeTemplateTimeChargingPlanIndex)
-    }}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht werden!
   </openwb-base-modal-dialog>
   <!-- main content -->
   <div class="vehicleConfig">
@@ -76,6 +50,7 @@
           <openwb-base-avatar
             v-if="$store.state.mqtt['openWB/general/extern'] === false"
             class="bg-success clickable"
+            title="Neues Fahrzeug hinzufügen"
             @click="addVehicle"
           >
             <font-awesome-icon
@@ -105,7 +80,8 @@
               <openwb-base-avatar
                 v-if="!slotProps.collapsed"
                 class="bg-danger clickable"
-                @click="removeVehicleModal(vehicleId, $event)"
+                title="Fahrzeug löschen"
+                @click="removeVehicleModal($event, vehicleId)"
               >
                 <font-awesome-icon
                   fixed-width
@@ -171,7 +147,7 @@
               />
               <openwb-base-alert subtype="info">
                 Die hier eingetragenen ID-Tags dienen ausschließlich der Fahrzeugzuordnung.<br />
-                <span v-html="$store.state.text.rfidWiki" />
+                <vehicle-id-wiki-hint />
               </openwb-base-alert>
               <hr />
             </div>
@@ -348,6 +324,7 @@
           <openwb-base-avatar
             v-if="$store.state.mqtt['openWB/general/extern'] === false"
             class="bg-success clickable"
+            title="Neues Fahrzeug-Profil hinzufügen"
             @click="addEvTemplate"
           >
             <font-awesome-icon
@@ -376,19 +353,32 @@
             :collapsed="true"
           >
             <template
-              v-if="!key.endsWith('/0')"
+              v-if="$store.state.mqtt['openWB/general/extern'] === false"
               #actions="slotProps"
             >
-              <openwb-base-avatar
-                v-if="$store.state.mqtt['openWB/general/extern'] === false && !slotProps.collapsed"
-                class="bg-danger clickable"
-                @click="removeEvTemplateModal(key, $event)"
-              >
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'trash']"
-                />
-              </openwb-base-avatar>
+              <span v-if="!slotProps.collapsed">
+                <openwb-base-avatar
+                  class="bg-success clickable"
+                  title="Fahrzeug-Profil duplizieren"
+                  @click="addEvTemplate($event, key)"
+                >
+                  <font-awesome-icon
+                    fixed-width
+                    :icon="['fas', 'copy']"
+                  />
+                </openwb-base-avatar>
+                <openwb-base-avatar
+                  v-if="!key.endsWith('/0')"
+                  class="bg-danger clickable ml-1"
+                  title="Fahrzeug-Profil löschen"
+                  @click="removeEvTemplateModal($event, key)"
+                >
+                  <font-awesome-icon
+                    fixed-width
+                    :icon="['fas', 'trash']"
+                  />
+                </openwb-base-avatar>
+              </span>
             </template>
             <openwb-base-text-input
               title="Bezeichnung"
@@ -522,21 +512,6 @@
               <span v-if="dcChargingEnabled === true"> (AC) </span>
             </openwb-base-heading>
             <openwb-base-button-group-input
-              title="Unterstützte Phasen"
-              :buttons="[
-                { buttonValue: 1, text: '1' },
-                { buttonValue: 2, text: '2' },
-                { buttonValue: 3, text: '3' },
-              ]"
-              :model-value="template.max_phases"
-              @update:model-value="updateState(key, $event, 'max_phases')"
-            >
-              <template #help>
-                Anzahl der Phasen, die der Fahrzeuglader (s.g. OBC - OnboardCharger) bereitstellt. Plugin-Hybride haben
-                meist nur eine Phase, reine E-Autos meist 2 bis 3 Phasen.
-              </template>
-            </openwb-base-button-group-input>
-            <openwb-base-button-group-input
               title="CP-Unterbrechung"
               :buttons="[
                 {
@@ -660,6 +635,7 @@
           <openwb-base-avatar
             v-if="$store.state.mqtt['openWB/general/extern'] === false"
             class="bg-success clickable"
+            title="Neues Lade-Profil hinzufügen"
             @click="addChargeTemplate"
           >
             <font-awesome-icon
@@ -680,26 +656,33 @@
             :title="template.name ? template.name : templateKey"
             :collapsible="true"
             :collapsed="
-              !(
-                $route.params.section == 'charge_template' &&
-                parseInt($route.params.section_index) == getChargeTemplateIndex(templateKey)
-              )
+              !($route.params.section == 'charge_template' && parseInt($route.params.section_index) == template.id)
             "
           >
-            <template
-              v-if="!templateKey.endsWith('/0')"
-              #actions="slotProps"
-            >
-              <openwb-base-avatar
-                v-if="!slotProps.collapsed"
-                class="bg-danger clickable"
-                @click="removeChargeTemplateModal(templateKey, $event)"
-              >
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'trash']"
-                />
-              </openwb-base-avatar>
+            <template #actions="slotProps">
+              <span v-if="!slotProps.collapsed">
+                <openwb-base-avatar
+                  class="bg-success clickable"
+                  title="Lade-Profil duplizieren"
+                  @click="addChargeTemplate($event, templateKey)"
+                >
+                  <font-awesome-icon
+                    fixed-width
+                    :icon="['fas', 'copy']"
+                  />
+                </openwb-base-avatar>
+                <openwb-base-avatar
+                  v-if="!templateKey.endsWith('/0')"
+                  class="bg-danger clickable ml-1"
+                  title="Lade-Profil löschen"
+                  @click.stop="removeChargeTemplateModal($event, template.id)"
+                >
+                  <font-awesome-icon
+                    fixed-width
+                    :icon="['fas', 'trash']"
+                  />
+                </openwb-base-avatar>
+              </span>
             </template>
             <openwb-base-text-input
               title="Bezeichnung"
@@ -720,7 +703,7 @@
               :buttons="[
                 {
                   buttonValue: 'instant_charging',
-                  text: 'Sofortladen',
+                  text: 'Sofort',
                   class: 'btn-outline-danger',
                 },
                 {
@@ -730,12 +713,12 @@
                 },
                 {
                   buttonValue: 'scheduled_charging',
-                  text: 'Zielladen',
+                  text: 'Ziel',
                   class: 'btn-outline-primary',
                 },
                 {
-                  buttonValue: 'standby',
-                  text: 'Standby',
+                  buttonValue: 'eco_charging',
+                  text: 'Eco',
                   class: 'btn-outline-secondary',
                 },
                 {
@@ -753,16 +736,20 @@
                 Die zur Verfügung stehende Leistung wird intern anhand folgender Prioritätenliste auf die Fahrzeuge bzw.
                 Ladepunkte verteilt:<br />
                 <ol>
-                  <li>Zielladen (Sofortladen) mit Priorität</li>
-                  <li>Zielladen (Sofortladen)</li>
-                  <li>Zeitladen mit Priorität</li>
-                  <li>Zeitladen</li>
-                  <li>Sofortladen mit Priorität</li>
-                  <li>Sofortladen</li>
+                  <li>Ziel (Sofortladen) mit Priorität</li>
+                  <li>Ziel (Sofortladen)</li>
+                  <li>Zeit mit Priorität</li>
+                  <li>Zeit</li>
+                  <li>Sofort mit Priorität</li>
+                  <li>Sofort</li>
+                  <li>Eco (Min-Anteil) mit Priorität</li>
+                  <li>Eco (Min-Anteil)</li>
                   <li>PV (Min-Anteil) mit Priorität</li>
                   <li>PV (Min-Anteil)</li>
-                  <li>Zielladen (PV) mit Priorität</li>
-                  <li>Zielladen (PV)</li>
+                  <li>Ziel (PV) mit Priorität</li>
+                  <li>Ziel (PV)</li>
+                  <li>Eco (PV-Anteil) mit Priorität</li>
+                  <li>Eco (PV-Anteil)</li>
                   <li>PV (PV-Anteil) mit Priorität</li>
                   <li>PV (PV-Anteil)</li>
                 </ol>
@@ -812,7 +799,7 @@
                 @update:model-value="updateState(templateKey, $event, 'time_charging.active')"
               >
                 <template #help>
-                  Der Lademodus Zeitladen kann parallel zu einem der anderen Lademodi aktiviert werden. Die Auswahl des
+                  Der Lademodus Zeit kann parallel zu einem der anderen Lademodi aktiviert werden. Die Auswahl des
                   Lademodus, der in der Regelung genutzt wird, erfolgt anhand der Übersicht in der Hilfe bei "Aktiver
                   Lademodus". Wenn kein Zeitplan aktiv ist oder das Limit des Zeitplans erreicht wurde, wird der
                   Lademodus verwendet, der bei "Aktiver Lademodus" ausgewählt ist.
@@ -840,54 +827,11 @@
                   Fahrzeug zurückgesetzt.
                 </template>
               </openwb-base-button-group-input>
-              <openwb-base-button-group-input
-                title="Strompreisbasiert Laden"
-                :buttons="[
-                  {
-                    buttonValue: false,
-                    text: 'Nein',
-                    class: 'btn-outline-danger',
-                  },
-                  {
-                    buttonValue: true,
-                    text: 'Ja',
-                    class: 'btn-outline-success',
-                  },
-                ]"
-                :model-value="template.et.active"
-                @update:model-value="updateState(templateKey, $event, 'et.active')"
-              />
-              <div v-if="template.et.active == true">
-                <div
-                  v-if="
-                    !$store.state.mqtt['openWB/optional/et/provider'] ||
-                    !$store.state.mqtt['openWB/optional/et/provider'].type
-                  "
-                >
-                  <openwb-base-alert subtype="danger">
-                    Bitte in den übergreifenden Ladeeinstellungen einen Strompreis-Anbieter konfigurieren.
-                  </openwb-base-alert>
-                </div>
-                <openwb-base-number-input
-                  title="Preisgrenze für Zeit- & Sofortladen"
-                  min="-80"
-                  max="80"
-                  step="0.01"
-                  :precision="2"
-                  unit="ct/kWh"
-                  :model-value="template.et.max_price * 100000"
-                  @update:model-value="
-                    updateState(templateKey, parseFloat(($event / 100000).toFixed(7)), 'et.max_price')
-                  "
-                >
-                  <template #help> Für Zielladen werden die günstigsten Stunden ermittelt. </template>
-                </openwb-base-number-input>
-              </div>
               <hr />
             </div>
-            <openwb-base-heading>Sofortladen</openwb-base-heading>
+            <openwb-base-heading>Sofort</openwb-base-heading>
             <openwb-base-range-input
-              :title="'Soll-Ladestrom' + (dcChargingEnabled ? ' (AC)' : '')"
+              :title="`Soll-Ladestrom${dcChargingEnabled ? ' (AC)' : ''}`"
               :min="6"
               :max="32"
               :step="1"
@@ -905,6 +849,21 @@
                 updateState(templateKey, dc_power2ac_current($event), 'chargemode.instant_charging.dc_current')
               "
             />
+            <openwb-base-button-group-input
+              title="Anzahl Phasen"
+              :buttons="[
+                { buttonValue: 1, text: '1' },
+                { buttonValue: 3, text: 'Maximum' },
+              ]"
+              :model-value="template.chargemode.instant_charging.phases_to_use"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.instant_charging.phases_to_use')"
+            >
+              <template #help>
+                Hier kann eingestellt werden, ob Ladevorgänge mit einer Phase oder dem möglichen Maximum in Abhängigkeit
+                der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Voraussetzung ist die verbaute
+                Umschaltmöglichkeit zwischen 1- und 3-phasig (s.g. 1p3p).
+              </template>
+            </openwb-base-button-group-input>
             <openwb-base-button-group-input
               title="Begrenzung"
               :buttons="[
@@ -952,15 +911,12 @@
               :model-value="template.chargemode.instant_charging.limit.amount / 1000"
               @update:model-value="updateState(templateKey, $event * 1000, 'chargemode.instant_charging.limit.amount')"
             >
-              <template #help>
-                Die geladene Energiemenge wird beim Wechsel des Lademodus oder nach dem Anstecken, wenn Sofortladen
-                schon ausgewählt ist, neu gezählt.
-              </template>
+              <template #help> Die geladene Energiemenge wird nach dem Anstecken neu gezählt. </template>
             </openwb-base-number-input>
             <hr />
-            <openwb-base-heading>PV-Laden</openwb-base-heading>
+            <openwb-base-heading>PV</openwb-base-heading>
             <openwb-base-range-input
-              :title="'Minimaler Dauerstrom' + (dcChargingEnabled ? ' (AC)' : '')"
+              :title="`Minimaler Dauerstrom${dcChargingEnabled ? ' (AC)' : ''}`"
               :min="0"
               :max="11"
               :step="1"
@@ -1007,47 +963,71 @@
                 weshalb der niedrigste Leistungswert empfohlen wird.
               </template>
             </openwb-base-number-input>
-            <openwb-base-range-input
-              title="SoC-Limit für das Fahrzeug"
-              :min="0"
-              :max="20"
-              :step="1"
-              unit="%"
-              :labels="[
-                { label: 5, value: 5 },
-                { label: 10, value: 10 },
-                { label: 15, value: 15 },
-                { label: 20, value: 20 },
-                { label: 25, value: 25 },
-                { label: 30, value: 30 },
-                { label: 35, value: 35 },
-                { label: 40, value: 40 },
-                { label: 45, value: 45 },
-                { label: 50, value: 50 },
-                { label: 55, value: 55 },
-                { label: 60, value: 60 },
-                { label: 65, value: 65 },
-                { label: 70, value: 70 },
-                { label: 75, value: 75 },
-                { label: 80, value: 80 },
-                { label: 85, value: 85 },
-                { label: 90, value: 90 },
-                { label: 95, value: 95 },
-                { label: 100, value: 100 },
-                { label: 'Aus', value: 101 },
+            <openwb-base-button-group-input
+              title="Anzahl Phasen"
+              :buttons="[
+                { buttonValue: 1, text: '1' },
+                { buttonValue: 3, text: 'Maximum' },
+                { buttonValue: 0, text: 'Automatik' },
               ]"
-              :model-value="template.chargemode.pv_charging.max_soc"
-              @update:model-value="updateState(templateKey, $event, 'chargemode.pv_charging.max_soc')"
+              :model-value="template.chargemode.pv_charging.phases_to_use"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.pv_charging.phases_to_use')"
             >
               <template #help>
-                Bei der Einstellung "100%" wird die Ladung sofort mit Erreichen der 100% beendet. Dadurch erfolgt KEIN
-                Balancing der Batteriezellen. Ist dies gewünscht (sollte ab und an durchgeführt werden), muss hier "Aus"
-                gewählt werden (Schieberegler ganz nach rechts stellen), um die Ladung MIT Balancing bis zur Beendigung
-                durch das Fahrzeug weiterlaufen zu lassen.<br />
+                Hier kann eingestellt werden, ob Ladevorgänge mit einer Phase oder dem möglichen Maximum in Abhängigkeit
+                der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Im Modus "Automatik" entscheidet die
+                Regelung, welche Einstellung genutzt wird, um den verfügbaren Überschuss in die Fahrzeuge zu laden.
+                Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen einer und mehreren Phasen (sog. 1p3p).
+              </template>
+            </openwb-base-button-group-input>
+            <openwb-base-button-group-input
+              title="Begrenzung"
+              :buttons="[
+                {
+                  buttonValue: 'none',
+                  text: 'Aus',
+                },
+                {
+                  buttonValue: 'soc',
+                  text: 'Fahrzeug-SoC',
+                },
+                {
+                  buttonValue: 'amount',
+                  text: 'Energie',
+                },
+              ]"
+              :model-value="template.chargemode.pv_charging.limit.selected"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.pv_charging.limit.selected')"
+            >
+              <template #help>
+                PV kann ohne Fahrzeug-SoC-Begrenzung (Aus), mit Begrenzung des Fahrzeug-SoC (SoC) bei konfiguriertem
+                SoC-Auslesemodul oder mittels Vorgabe eine gewünschten Energiemenge in kWh (Energie) genutzt werden.
+              </template>
+            </openwb-base-button-group-input>
+            <openwb-base-range-input
+              title="SoC-Limit für das Fahrzeug"
+              :min="5"
+              :max="100"
+              :step="5"
+              unit="%"
+              :model-value="template.chargemode.pv_charging.limit.soc"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.pv_charging.limit.soc')"
+            >
+              <template #help>
                 Um die Fahrzeug-SoC-Begrenzung nutzen zu können, muss ein SoC-Modul für das jeweilige Fahrzeug
                 eingerichtet sein (siehe "Konfiguration" -> "Fahrzeuge" -> "SoC-Modul").
               </template>
             </openwb-base-range-input>
+            <openwb-base-number-input
+              title="Energie-Limit"
+              unit="kWh"
+              :min="1"
+              :step="1"
+              :model-value="template.chargemode.pv_charging.limit.amount / 1000"
+              @update:model-value="updateState(templateKey, $event * 1000, 'chargemode.pv_charging.limit.amount')"
+            >
+              <template #help> Die geladene Energiemenge wird nach dem Anstecken neu gezählt. </template>
+            </openwb-base-number-input>
             <openwb-base-range-input
               title="Mindest-SoC für das Fahrzeug"
               :min="0"
@@ -1090,7 +1070,7 @@
               </template>
             </openwb-base-range-input>
             <openwb-base-range-input
-              :title="'Mindest-SoC-Strom' + (dcChargingEnabled ? ' (AC)' : '')"
+              :title="`Mindest-SoC-Strom${dcChargingEnabled ? ' (AC)' : ''}`"
               :min="6"
               :max="32"
               :step="1"
@@ -1121,6 +1101,21 @@
               </template>
             </openwb-base-number-input>
             <openwb-base-button-group-input
+              title="Anzahl Phasen Mindest-SoC"
+              :buttons="[
+                { buttonValue: 1, text: '1' },
+                { buttonValue: 3, text: 'Maximum' },
+              ]"
+              :model-value="template.chargemode.pv_charging.phases_to_use_min_soc"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.pv_charging.phases_to_use_min_soc')"
+            >
+              <template #help>
+                Hier kann eingestellt werden, ob Ladevorgänge mit einer Phase oder dem möglichen Maximum in Abhängigkeit
+                der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Voraussetzung ist die verbaute
+                Umschaltmöglichkeit zwischen einer und mehreren Phasen (sog. 1p3p).
+              </template>
+            </openwb-base-button-group-input>
+            <openwb-base-button-group-input
               title="Einspeisegrenze beachten"
               :buttons="[
                 {
@@ -1142,12 +1137,129 @@
               </template>
             </openwb-base-button-group-input>
             <hr />
+            <openwb-base-heading
+              >Eco
+              <template #help>
+                Im Eco-Modus wird eine Preisgrenze vorgegeben und wenn der Strompreis unter dieser Grenze liegt, wird
+                mit dem eingestellten Ladestrom geladen und -falls vorhanden- zusätzlich mit dem Überschuss. Wenn die
+                Preisgrenze überschritten wird, wird nur mit Überschuss geladen, wenn dieser vorhanden ist.
+              </template>
+            </openwb-base-heading>
+            <openwb-base-range-input
+              :title="`Minimaler Dauerstrom unter der Preisgrenze${dcChargingEnabled ? ' (AC)' : ''}`"
+              :min="6"
+              :max="32"
+              :step="1"
+              unit="A"
+              :model-value="template.chargemode.eco_charging.current"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.eco_charging.current')"
+            />
+            <openwb-base-number-input
+              v-if="dcChargingEnabled === true"
+              title="Minimale Dauerleistung unter der Preisgrenze (DC)"
+              unit="kW"
+              :min="0"
+              :model-value="ac_current2dc_power(template.chargemode.eco_charging.dc_current)"
+              @update:model-value="
+                updateState(templateKey, dc_power2ac_current($event), 'chargemode.eco_charging.dc_current')
+              "
+            />
+            <openwb-base-button-group-input
+              title="Anzahl Phasen"
+              :buttons="[
+                { buttonValue: 1, text: '1' },
+                { buttonValue: 3, text: 'Maximum' },
+                { buttonValue: 0, text: 'Automatik' },
+              ]"
+              :model-value="template.chargemode.eco_charging.phases_to_use"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.eco_charging.phases_to_use')"
+            >
+              <template #help>
+                Hier kann eingestellt werden, ob Ladevorgänge mit einer Phase oder dem möglichen Maximum in Abhängigkeit
+                der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Im Modus "Automatik" entscheidet die
+                Regelung, welche Einstellung genutzt wird, um den verfügbaren Überschuss in die Fahrzeuge zu laden.
+                Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen einer und mehreren Phasen (sog. 1p3p).
+              </template>
+            </openwb-base-button-group-input>
+            <openwb-base-button-group-input
+              title="Begrenzung"
+              :buttons="[
+                {
+                  buttonValue: 'none',
+                  text: 'Aus',
+                },
+                {
+                  buttonValue: 'soc',
+                  text: 'Fahrzeug-SoC',
+                },
+                {
+                  buttonValue: 'amount',
+                  text: 'Energie',
+                },
+              ]"
+              :model-value="template.chargemode.eco_charging.limit.selected"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.eco_charging.limit.selected')"
+            >
+              <template #help>
+                Eco kann ohne Fahrzeug-SoC-Begrenzung (Aus), mit Begrenzung des Fahrzeug-SoC (SoC) bei konfiguriertem
+                SoC-Auslesemodul oder mittels Vorgabe eine gewünschten Energiemenge in kWh (Energie) genutzt werden.
+              </template>
+            </openwb-base-button-group-input>
+            <openwb-base-range-input
+              title="SoC-Limit für das Fahrzeug"
+              :min="5"
+              :max="100"
+              :step="5"
+              unit="%"
+              :model-value="template.chargemode.eco_charging.limit.soc"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.eco_charging.limit.soc')"
+            >
+              <template #help>
+                Um die Fahrzeug-SoC-Begrenzung nutzen zu können, muss ein SoC-Modul für das jeweilige Fahrzeug
+                eingerichtet sein (siehe "Konfiguration" -> "Fahrzeuge" -> "SoC-Modul").
+              </template>
+            </openwb-base-range-input>
+            <openwb-base-number-input
+              title="Energie-Limit"
+              unit="kWh"
+              :min="1"
+              :step="1"
+              :model-value="template.chargemode.eco_charging.limit.amount / 1000"
+              @update:model-value="updateState(templateKey, $event * 1000, 'chargemode.eco_charging.limit.amount')"
+            >
+              <template #help> Die geladene Energiemenge wird nach dem Anstecken neu gezählt. </template>
+            </openwb-base-number-input>
+            <openwb-base-alert
+              v-if="
+                !$store.state.mqtt['openWB/optional/et/provider'] ||
+                !$store.state.mqtt['openWB/optional/et/provider'].type
+              "
+              subtype="warning"
+            >
+              Bitte in den übergreifenden Ladeeinstellungen einen Strompreis-Anbieter konfigurieren. Ohne
+              Strompreis-Anbieter wird im Modus Eco nur geladen, wenn Überschuss vorhanden ist.
+            </openwb-base-alert>
+            <openwb-base-number-input
+              title="Preisgrenze für strompreisbasiertes Laden"
+              min="-80"
+              max="80"
+              step="0.01"
+              :precision="2"
+              unit="ct/kWh"
+              :model-value="template.chargemode.eco_charging.max_price * 100000"
+              @update:model-value="
+                updateState(templateKey, parseFloat(($event / 100000).toFixed(7)), 'chargemode.eco_charging.max_price')
+              "
+            >
+            </openwb-base-number-input>
+            <hr />
             <openwb-base-heading>
-              Zielladen
+              Ziel
               <template #actions>
                 <openwb-base-avatar
                   class="bg-success clickable"
-                  @click="addChargeTemplateSchedulePlan(templateKey, $event)"
+                  title="Neuen Zielladen-Plan hinzufügen"
+                  @click.stop="addChargeTemplateSchedulePlan(template.id)"
                 >
                   <font-awesome-icon
                     fixed-width
@@ -1162,249 +1274,30 @@
                 Ist der berechnete Zeitpunkt des Ladestarts noch nicht erreicht, wird mit Überschuss geladen. Auch nach
                 Erreichen des Ziel-SoCs wird mit Überschuss geladen, solange bis das "SoC-Limit für das Fahrzeug"
                 erreicht wird.<br />
-                Kann der Ziel-SoC bzw. die Energiemenge NICHT erreicht werden, z.B. weil das Auto zu spät angesteckt
-                wurde oder das Lastmanagement eingegriffen hat, wird bis 20 Minuten nach dem angegebenen Termin mit der
-                Maximalstromstärke geladen. Danach wird der Termin verworfen und mit Überschuss geladen.
+                Es wird nach den Vorgaben des Zeitplan geladen, dessen Zieltermin am nächsten liegt. Ist der
+                Zielzeitpunkt vorbei, wird solange geladen bis, das Ziel erreicht oder das Auto abgesteckt wird. Wenn
+                vom aktuellen Plan Ziel-SoC und SoC-Limit für das Fahrzeug erreicht wurden oder wenn der nächste Plan
+                mit dem Ladestart beginnen muss, wird auf den nächsten Plan umgeschaltet.
               </template>
             </openwb-base-heading>
-            <openwb-base-card
-              v-for="(plan, planKey) in getChargeTemplateScheduledChargingPlans(templateKey)"
+            <charge-template-scheduled-charging-plan
+              v-for="(plan, planKey) in template.chargemode.scheduled_charging.plans"
               :key="planKey"
-              :title="plan.name"
-              :collapsible="true"
-              :collapsed="true"
-            >
-              <template #actions="slotProps">
-                <span
-                  v-if="slotProps.collapsed == true"
-                  class="subheader pill clickable"
-                  :class="plan.active ? 'bg-success' : 'bg-danger'"
-                  @click.stop="updateState(planKey, !plan.active, 'active')"
-                >
-                  <span v-if="plan.limit.selected == 'soc'">
-                    <font-awesome-icon
-                      fixed-width
-                      :icon="['fas', 'car-battery']"
-                    />
-                    {{ plan.limit.soc_scheduled }}%
-                  </span>
-                  <span v-if="plan.limit.selected == 'amount'">
-                    <font-awesome-icon
-                      fixed-width
-                      :icon="['fas', 'bolt']"
-                    />
-                    {{ plan.limit.amount / 1000 }}kWh
-                  </span>
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="['fas', 'clock']"
-                  />
-                  {{ plan.time }}
-                  <span v-if="plan.frequency.selected == 'once'">
-                    <font-awesome-icon
-                      fixed-width
-                      :icon="['fas', 'calendar-day']"
-                    />
-                    {{ formatDate(plan.frequency.once) }}
-                  </span>
-                  <span v-if="plan.frequency.selected == 'daily'">
-                    <font-awesome-icon
-                      fixed-width
-                      :icon="['fas', 'calendar-week']"
-                    />
-                  </span>
-                  <span v-if="plan.frequency.selected == 'weekly'">
-                    <font-awesome-icon
-                      fixed-width
-                      :icon="['fas', 'calendar-alt']"
-                    />
-                  </span>
-                </span>
-                <openwb-base-avatar
-                  v-if="slotProps.collapsed == false"
-                  class="bg-danger clickable"
-                  @click="removeChargeTemplateSchedulePlanModal(templateKey, planKey, $event)"
-                >
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="['fas', 'trash']"
-                  />
-                </openwb-base-avatar>
-              </template>
-              <openwb-base-text-input
-                title="Bezeichnung"
-                :model-value="plan.name"
-                @update:model-value="updateState(planKey, $event, 'name')"
-              />
-              <openwb-base-button-group-input
-                title="Zeitpunkt aktiv"
-                :buttons="[
-                  {
-                    buttonValue: false,
-                    text: 'Nein',
-                    class: 'btn-outline-danger',
-                  },
-                  {
-                    buttonValue: true,
-                    text: 'Ja',
-                    class: 'btn-outline-success',
-                  },
-                ]"
-                :model-value="plan.active"
-                @update:model-value="updateState(planKey, $event, 'active')"
-              />
-              <openwb-base-text-input
-                title="Ziel-Uhrzeit"
-                subtype="time"
-                :model-value="plan.time"
-                @update:model-value="updateState(planKey, $event, 'time')"
-              >
-                <template #help>
-                  Hier ist die gewünschte Uhrzeit einzustellen, zu welcher das Fahrzeug den gewünschten SoC bzw. die zu
-                  ladende Energiemenge BEREITS ERREICHT haben soll.
-                </template>
-              </openwb-base-text-input>
-              <openwb-base-range-input
-                :title="'Ladestrom' + (dcChargingEnabled ? ' (AC)' : '')"
-                :min="6"
-                :max="32"
-                :step="1"
-                unit="A"
-                :model-value="plan.current"
-                @update:model-value="updateState(planKey, $event, 'current')"
-              >
-                <template #help>
-                  Mit dieser Stromstärke wird der Zeitpunkt berechnet, wann die Ladung mit Netzbezug gestartet werden
-                  muss. Wird der Ziel-SoC nicht zum angegebenen Termin erreicht, weil z.B. das Auto erst später
-                  angesteckt wurde, wird auch mit einer höheren Stromstärke geladen. Um etwas Puffer zu haben, empfiehlt
-                  es sich, etwas weniger als die Maximalstromstärke des Fahrzeugs zu wählen.
-                </template>
-              </openwb-base-range-input>
-              <openwb-base-number-input
-                v-if="dcChargingEnabled === true"
-                title="Ladeleistung (DC)"
-                unit="kW"
-                :min="0"
-                :model-value="ac_current2dc_power(plan.dc_current)"
-                @update:model-value="updateState(planKey, dc_power2ac_current($event), 'dc_current')"
-              />
-              <openwb-base-button-group-input
-                title="Ziel"
-                :buttons="[
-                  {
-                    buttonValue: 'soc',
-                    text: 'Fahrzeug-SoC',
-                  },
-                  {
-                    buttonValue: 'amount',
-                    text: 'Energie',
-                  },
-                ]"
-                :model-value="plan.limit.selected"
-                @update:model-value="updateState(planKey, $event, 'limit.selected')"
-              >
-                <template #help> Bestimmt die Art der Grenze für den Ladevorgang. </template>
-              </openwb-base-button-group-input>
-              <openwb-base-range-input
-                v-if="plan.limit.selected == 'soc'"
-                title="Fahrzeug-SoC zum Zielzeitpunkt"
-                :min="5"
-                :max="100"
-                :step="5"
-                unit="%"
-                :model-value="plan.limit.soc_scheduled"
-                @update:model-value="updateState(planKey, $event, 'limit.soc_scheduled')"
-              >
-                <template #help> SoC, der zum angegebenen Zeitpunkt erreicht werden soll (Ziel-SoC). </template>
-              </openwb-base-range-input>
-              <openwb-base-range-input
-                v-if="plan.limit.selected == 'soc'"
-                title="Fahrzeug-SoC mit Überschuss"
-                :min="5"
-                :max="100"
-                :step="5"
-                unit="%"
-                :model-value="plan.limit.soc_limit"
-                @update:model-value="updateState(planKey, $event, 'limit.soc_limit')"
-              >
-                <template #help>
-                  Nach Erreichen des Ziel-SoCs wird mit Überschuss weiter geladen, bis das SoC-Limit erreicht wird.
-                  Sobald das SoC-Limit erreicht wurde, findet keine Ladung mehr mit Überschuss statt!
-                </template>
-              </openwb-base-range-input>
-              <openwb-base-number-input
-                v-if="plan.limit.selected == 'amount'"
-                title="Ziel-Energie"
-                unit="kWh"
-                :min="1"
-                :step="0.5"
-                :model-value="plan.limit.amount / 1000"
-                @update:model-value="updateState(planKey, $event * 1000, 'limit.amount')"
-              >
-                <template #help>
-                  Die geladene Energiemenge wird beim Wechsel des Lademodus, Wechsel des Plans oder nach dem Anstecken,
-                  wenn Zielladen schon ausgewählt ist, neu gezählt.
-                </template>
-              </openwb-base-number-input>
-              <openwb-base-button-group-input
-                title="Wiederholungen"
-                :buttons="[
-                  {
-                    buttonValue: 'once',
-                    text: 'Einmalig',
-                    class: 'btn-outline-info',
-                  },
-                  {
-                    buttonValue: 'daily',
-                    text: 'Täglich',
-                    class: 'btn-outline-info',
-                  },
-                  {
-                    buttonValue: 'weekly',
-                    text: 'Wöchentlich',
-                    class: 'btn-outline-info',
-                  },
-                ]"
-                :model-value="plan.frequency.selected"
-                @update:model-value="updateState(planKey, $event, 'frequency.selected')"
-              />
-              <openwb-base-text-input
-                v-if="plan.frequency.selected == 'once'"
-                title="Datum"
-                subtype="date"
-                :model-value="plan.frequency.once"
-                @update:model-value="updateState(planKey, $event, 'frequency.once')"
-              />
-              <div v-if="plan.frequency.selected == 'weekly'">
-                <openwb-base-button-group-input
-                  v-for="(day, dayIndex) in weekdays"
-                  :key="dayIndex"
-                  :title="day"
-                  :buttons="[
-                    {
-                      buttonValue: false,
-                      text: 'Aus',
-                      class: 'btn-outline-danger',
-                    },
-                    {
-                      buttonValue: true,
-                      text: 'An',
-                      class: 'btn-outline-success',
-                    },
-                  ]"
-                  :model-value="plan.frequency.weekly[dayIndex]"
-                  @update:model-value="updateState(planKey, $event, 'frequency.weekly.' + dayIndex)"
-                />
-              </div>
-            </openwb-base-card>
+              :model-value="plan"
+              :template-id="template.id"
+              :dc-charging-enabled="dcChargingEnabled"
+              @update:model-value="updateState(templateKey, $event, `chargemode.scheduled_charging.plans.${planKey}`)"
+              @send-command="$emit('sendCommand', $event)"
+            />
             <div v-if="!installAssistantActive">
               <hr />
               <openwb-base-heading>
-                Laden nach Zeitplan
+                Zeit
                 <template #actions>
                   <openwb-base-avatar
                     class="bg-success clickable"
-                    @click="addChargeTemplateTimeChargingPlan(templateKey, $event)"
+                    title="Neuen Zeitladen-Plan hinzufügen"
+                    @click.stop="addChargeTemplateTimeChargingPlan(template.id)"
                   >
                     <font-awesome-icon
                       fixed-width
@@ -1423,232 +1316,15 @@
                 </template>
               </openwb-base-heading>
             </div>
-            <openwb-base-card
-              v-for="(plan, planKey) in getChargeTemplateTimeChargingPlans(templateKey)"
+            <charge-template-time-charging-plan
+              v-for="(plan, planKey) in template.time_charging.plans ?? []"
               :key="planKey"
-              :title="plan.name"
-              :collapsible="true"
-              :collapsed="true"
-            >
-              <template #actions="slotProps">
-                <span
-                  v-if="slotProps.collapsed == true"
-                  class="subheader pill clickable"
-                  :class="plan.active ? 'bg-success' : 'bg-danger'"
-                  @click.stop="updateState(planKey, !plan.active, 'active')"
-                >
-                  <span v-if="plan.limit.selected == 'soc'">
-                    <font-awesome-icon
-                      fixed-width
-                      :icon="['fas', 'car-battery']"
-                    />
-                    {{ plan.limit.soc }}%
-                  </span>
-                  <span v-if="plan.limit.selected == 'amount'">
-                    <font-awesome-icon
-                      fixed-width
-                      :icon="['fas', 'bolt']"
-                    />
-                    {{ plan.limit.amount / 1000 }}kWh
-                  </span>
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="['fas', 'clock']"
-                  />
-                  {{ plan.time[0] }} - {{ plan.time[1] }}
-                  <span v-if="plan.frequency.selected == 'once'">
-                    <font-awesome-icon
-                      fixed-width
-                      :icon="['fas', 'calendar-day']"
-                    />
-                    {{
-                      formatDate(plan.frequency.once[0]) == formatDate(plan.frequency.once[1])
-                        ? formatDate(plan.frequency.once[0])
-                        : formatDate(plan.frequency.once[0]) + " - " + formatDate(plan.frequency.once[1])
-                    }}
-                  </span>
-                  <span v-if="plan.frequency.selected == 'daily'">
-                    <font-awesome-icon
-                      fixed-width
-                      :icon="['fas', 'calendar-week']"
-                    />
-                  </span>
-                  <span v-if="plan.frequency.selected == 'weekly'">
-                    <font-awesome-icon
-                      fixed-width
-                      :icon="['fas', 'calendar-alt']"
-                    />
-                  </span>
-                </span>
-                <openwb-base-avatar
-                  v-if="slotProps.collapsed == false"
-                  class="bg-danger clickable"
-                  @click="removeChargeTemplateTimeChargingPlanModal(templateKey, planKey, $event)"
-                >
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="['fas', 'trash']"
-                  />
-                </openwb-base-avatar>
-              </template>
-              <openwb-base-text-input
-                title="Bezeichnung"
-                :model-value="plan.name"
-                @update:model-value="updateState(planKey, $event, 'name')"
-              />
-              <openwb-base-button-group-input
-                title="Zeitplan aktiv"
-                :buttons="[
-                  {
-                    buttonValue: false,
-                    text: 'Nein',
-                    class: 'btn-outline-danger',
-                  },
-                  {
-                    buttonValue: true,
-                    text: 'Ja',
-                    class: 'btn-outline-success',
-                  },
-                ]"
-                :model-value="plan.active"
-                @update:model-value="updateState(planKey, $event, 'active')"
-              />
-              <openwb-base-range-input
-                :title="'Ladestrom' + (dcChargingEnabled ? ' (AC)' : '')"
-                :min="6"
-                :max="32"
-                :step="1"
-                unit="A"
-                :model-value="plan.current"
-                @update:model-value="updateState(planKey, $event, 'current')"
-              />
-              <openwb-base-number-input
-                v-if="dcChargingEnabled === true"
-                title="Ladeleistung (DC)"
-                unit="kW"
-                :min="0"
-                :model-value="ac_current2dc_power(plan.dc_current)"
-                @update:model-value="updateState(planKey, dc_power2ac_current($event), 'dc_current')"
-              />
-              <openwb-base-button-group-input
-                title="Ziel"
-                :buttons="[
-                  { buttonValue: 'none', text: 'Aus' },
-                  {
-                    buttonValue: 'soc',
-                    text: 'Fahrzeug-SoC',
-                  },
-                  {
-                    buttonValue: 'amount',
-                    text: 'Energie',
-                  },
-                ]"
-                :model-value="plan.limit.selected"
-                @update:model-value="updateState(planKey, $event, 'limit.selected')"
-              >
-                <template #help> Bestimmt die Art der Grenze für den Ladevorgang. </template>
-              </openwb-base-button-group-input>
-              <openwb-base-range-input
-                v-if="plan.limit.selected == 'soc'"
-                title="Ziel-SoC für das Fahrzeug"
-                :min="5"
-                :max="100"
-                :step="5"
-                unit="%"
-                :model-value="plan.limit.soc"
-                @update:model-value="updateState(planKey, $event, 'limit.soc')"
-              >
-                <template #help>
-                  Ladestand des Akku (State of Charge, SoC), bis zu welchem maximal geladen werden soll.
-                </template>
-              </openwb-base-range-input>
-              <openwb-base-number-input
-                v-if="plan.limit.selected == 'amount'"
-                title="Ziel-Energie"
-                unit="kWh"
-                :min="1"
-                :step="0.5"
-                :model-value="plan.limit.amount / 1000"
-                @update:model-value="updateState(planKey, $event * 1000, 'limit.amount')"
-              >
-                <template #help>
-                  Maximal zu ladende Energie innerhalb des Zeitfensters. Eignet sich immer dann wenn kein SoC zur
-                  Verfügung steht. Die geladene Energiemenge wird beim Wechsel des Lademodus, Wechsel des Plans oder
-                  nach dem Anstecken, wenn Zeitladen schon aktiv ist, neu gezählt.
-                </template>
-              </openwb-base-number-input>
-
-              <openwb-base-text-input
-                title="Zeitpunkt des Ladebeginns"
-                subtype="time"
-                :model-value="plan.time[0]"
-                @update:model-value="updateState(planKey, $event, 'time.0')"
-              />
-              <openwb-base-text-input
-                title="Zeitpunkt des Ladeendes"
-                subtype="time"
-                :model-value="plan.time[1]"
-                @update:model-value="updateState(planKey, $event, 'time.1')"
-              />
-              <openwb-base-button-group-input
-                title="Wiederholungen"
-                :buttons="[
-                  {
-                    buttonValue: 'once',
-                    text: 'Einmalig',
-                    class: 'btn-outline-info',
-                  },
-                  {
-                    buttonValue: 'daily',
-                    text: 'Täglich',
-                    class: 'btn-outline-info',
-                  },
-                  {
-                    buttonValue: 'weekly',
-                    text: 'Wöchentlich',
-                    class: 'btn-outline-info',
-                  },
-                ]"
-                :model-value="plan.frequency.selected"
-                @update:model-value="updateState(planKey, $event, 'frequency.selected')"
-              />
-              <openwb-base-text-input
-                v-if="plan.frequency.selected == 'once'"
-                title="Gültig ab"
-                subtype="date"
-                :model-value="plan.frequency.once[0]"
-                @update:model-value="updateState(planKey, $event, 'frequency.once.0')"
-              />
-              <openwb-base-text-input
-                v-if="plan.frequency.selected == 'once'"
-                title="Gültig bis"
-                subtype="date"
-                :min="plan.frequency.once[0]"
-                :model-value="plan.frequency.once[1]"
-                @update:model-value="updateState(planKey, $event, 'frequency.once.1')"
-              />
-              <div v-if="plan.frequency.selected == 'weekly'">
-                <openwb-base-button-group-input
-                  v-for="(day, dayIndex) in weekdays"
-                  :key="dayIndex"
-                  :title="day"
-                  :buttons="[
-                    {
-                      buttonValue: false,
-                      text: 'Aus',
-                      class: 'btn-outline-danger',
-                    },
-                    {
-                      buttonValue: true,
-                      text: 'An',
-                      class: 'btn-outline-success',
-                    },
-                  ]"
-                  :model-value="plan.frequency.weekly[dayIndex]"
-                  @update:model-value="updateState(planKey, $event, 'frequency.weekly.' + dayIndex)"
-                />
-              </div>
-            </openwb-base-card>
+              :model-value="plan"
+              :template-id="template.id"
+              :dc-charging-enabled="dcChargingEnabled"
+              @update:model-value="updateState(templateKey, $event, `time_charging.plans.${planKey}`)"
+              @send-command="$emit('sendCommand', $event)"
+            />
           </openwb-base-card>
         </div>
       </openwb-base-card>
@@ -1675,6 +1351,8 @@ import {
   faBolt as fasBolt,
   faCar as fasCar,
   faPlug as fasPlug,
+  faCoins as fasCoins,
+  faCopy as fasCopy,
 } from "@fortawesome/free-solid-svg-icons";
 import { faFile as farFile } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon, FontAwesomeLayers } from "@fortawesome/vue-fontawesome";
@@ -1691,10 +1369,15 @@ library.add(
   fasCar,
   farFile,
   fasPlug,
+  fasCoins,
+  fasCopy,
 );
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbVehicleProxy from "../components/vehicles/OpenwbVehicleProxy.vue";
+import ChargeTemplateScheduledChargingPlan from "../components/vehicles/ChargeTemplateScheduledChargingPlan.vue";
+import ChargeTemplateTimeChargingPlan from "../components/vehicles/ChargeTemplateTimeChargingPlan.vue";
+import VehicleIdWikiHint from "../components/snippets/VehicleIdWikiHint.vue";
 
 export default {
   name: "OpenwbVehicleConfigView",
@@ -1702,6 +1385,9 @@ export default {
     FontAwesomeIcon,
     FontAwesomeLayers,
     OpenwbVehicleProxy,
+    ChargeTemplateScheduledChargingPlan,
+    ChargeTemplateTimeChargingPlan,
+    VehicleIdWikiHint,
   },
   mixins: [ComponentState],
   props: {
@@ -1738,10 +1424,6 @@ export default {
       modalEvTemplateIndex: undefined,
       showChargeTemplateModal: false,
       modalChargeTemplateIndex: undefined,
-      showChargeTemplateSchedulePlanModal: false,
-      modalChargeTemplateSchedulePlanIndex: undefined,
-      showChargeTemplateTimeChargingPlanModal: false,
-      modalChargeTemplateTimeChargingPlanIndex: undefined,
     };
   },
   computed: {
@@ -1794,22 +1476,11 @@ export default {
     },
   },
   methods: {
-    getChargeTemplateScheduledChargingPlans(chargeTemplate) {
-      // get trailing characters as index
-      let index = chargeTemplate.match(/([^/]+)$/)[0];
-      let result = this.getWildcardTopics(
-        "openWB/vehicle/template/charge_template/" + index + "/chargemode/scheduled_charging/plans/+",
-      );
-      return result;
+    updateConfiguration(key, event) {
+      console.debug("updateConfiguration", key, event);
+      this.updateState(key, event.value, event.object);
     },
-    getChargeTemplateTimeChargingPlans(chargeTemplate) {
-      // get trailing characters as index
-      let index = chargeTemplate.match(/([^/]+)$/)[0];
-      let result = this.getWildcardTopics(
-        "openWB/vehicle/template/charge_template/" + index + "/time_charging/plans/+",
-      );
-      return result;
-    },
+    /* vehicle management */
     addVehicle(event) {
       // prevent further processing of the click event
       event.stopPropagation();
@@ -1818,13 +1489,13 @@ export default {
         data: {},
       });
     },
-    removeVehicleModal(vehicleIndex, event) {
+    removeVehicleModal(event, vehicleIndex) {
       // prevent further processing of the click event
       event.stopPropagation();
       this.modalVehicleIndex = vehicleIndex;
       this.showVehicleModal = true;
     },
-    removeVehicle(vehicleIndex, event) {
+    removeVehicle(event, vehicleIndex) {
       this.showVehicleModal = false;
       if (event == "confirm") {
         this.$emit("sendCommand", {
@@ -1850,26 +1521,29 @@ export default {
       this.updateState("openWB/vehicle/" + vehicleId + "/soc_module/config", $event, "type");
       this.updateState("openWB/vehicle/" + vehicleId + "/soc_module/config", this.getSocDefaultConfiguration($event));
     },
-    updateConfiguration(key, event) {
-      console.debug("updateConfiguration", key, event);
-      this.updateState(key, event.value, event.object);
-    },
-    addEvTemplate(event) {
+    /* ev template management */
+    addEvTemplate(event, keyToCopy) {
       // prevent further processing of the click event
       event.stopPropagation();
+      let data = {};
+      // if keyToCopy is set, parse the id from the key
+      if (keyToCopy && keyToCopy.match(/([^/]+)$/)) {
+        data.copy = parseInt(keyToCopy.match(/([^/]+)$/)[0]);
+      }
+      // emit the command to add an ev template
       this.$emit("sendCommand", {
         command: "addEvTemplate",
-        data: {},
+        data: data,
       });
     },
-    removeEvTemplateModal(evTemplate, event) {
+    removeEvTemplateModal(event, evTemplate) {
       // prevent further processing of the click event
       event.stopPropagation();
       // get trailing characters as index
       this.modalEvTemplateIndex = parseInt(evTemplate.match(/([^/]+)$/)[0]);
       this.showEvTemplateModal = true;
     },
-    removeEvTemplate(evTemplateIndex, event) {
+    removeEvTemplate(event, evTemplateIndex) {
       this.showEvTemplateModal = false;
       if (event == "confirm") {
         this.$emit("sendCommand", {
@@ -1883,25 +1557,26 @@ export default {
         ? this.$store.state.mqtt["openWB/vehicle/template/ev_template/" + id].name
         : "Fahrzeug-Profil " + id;
     },
-    addChargeTemplate(event) {
+    /* charge template management */
+    addChargeTemplate(event, keyToCopy) {
       // prevent further processing of the click event
       event.stopPropagation();
+      let data = {};
+      // if keyToCopy is set, parse the id from the key
+      if (keyToCopy && keyToCopy.match(/([^/]+)$/)) {
+        data.copy = parseInt(keyToCopy.match(/([^/]+)$/)[0]);
+      }
+      // emit the command to add a charge template
       this.$emit("sendCommand", {
         command: "addChargeTemplate",
-        data: {},
+        data: data,
       });
     },
-    getChargeTemplateIndex(chargeTemplate) {
-      return parseInt(chargeTemplate.match(/([^/]+)$/)[0]);
-    },
-    removeChargeTemplateModal(chargeTemplate, event) {
-      // prevent further processing of the click event
-      event.stopPropagation();
-      // get trailing characters as index
-      this.modalChargeTemplateIndex = this.getChargeTemplateIndex(chargeTemplate);
+    removeChargeTemplateModal(event, chargeTemplateId) {
+      this.modalChargeTemplateIndex = chargeTemplateId;
       this.showChargeTemplateModal = true;
     },
-    removeChargeTemplate(chargeTemplateIndex, event) {
+    removeChargeTemplate(event, chargeTemplateIndex) {
       this.showChargeTemplateModal = false;
       if (event == "confirm") {
         this.$emit("sendCommand", {
@@ -1915,80 +1590,19 @@ export default {
         ? this.$store.state.mqtt["openWB/vehicle/template/charge_template/" + id].name
         : "Lade-Profil " + id;
     },
-    getChargeTemplateSchedulePlanName(templateIndex, planIndex) {
-      return this.$store.state.mqtt[
-        "openWB/vehicle/template/charge_template/" + templateIndex + "/chargemode/scheduled_charging/plans/" + planIndex
-      ]
-        ? this.$store.state.mqtt[
-            "openWB/vehicle/template/charge_template/" +
-              templateIndex +
-              "/chargemode/scheduled_charging/plans/" +
-              planIndex
-          ].name
-        : "Zielladen Zeitplan " + templateIndex + "/" + planIndex;
-    },
-    addChargeTemplateSchedulePlan(template, event) {
-      // prevent further processing of the click event
-      event.stopPropagation();
-      // get trailing characters as index
-      let templateIndex = parseInt(template.match(/([^/]+)$/)[0]);
+    /* charge template schedule plan management */
+    addChargeTemplateSchedulePlan(templateId) {
       this.$emit("sendCommand", {
         command: "addChargeTemplateSchedulePlan",
-        data: { template: templateIndex },
+        data: { template: templateId },
       });
     },
-    removeChargeTemplateSchedulePlanModal(chargeTemplate, plan, event) {
-      // prevent further processing of the click event
-      event.stopPropagation();
-      // get trailing characters as index
-      this.modalChargeTemplateIndex = parseInt(chargeTemplate.match(/([^/]+)$/)[0]);
-      this.modalChargeTemplateSchedulePlanIndex = parseInt(plan.match(/([^/]+)$/)[0]);
-      this.showChargeTemplateSchedulePlanModal = true;
-    },
-    removeChargeTemplateSchedulePlan(templateIndex, planIndex, event) {
-      this.showChargeTemplateSchedulePlanModal = false;
-      if (event == "confirm") {
-        this.$emit("sendCommand", {
-          command: "removeChargeTemplateSchedulePlan",
-          data: { template: templateIndex, plan: planIndex },
-        });
-      }
-    },
-    getChargeTemplateTimeChargingPlanName(templateIndex, planIndex) {
-      return this.$store.state.mqtt[
-        "openWB/vehicle/template/charge_template/" + templateIndex + "/time_charging/plans/" + planIndex
-      ]
-        ? this.$store.state.mqtt[
-            "openWB/vehicle/template/charge_template/" + templateIndex + "/time_charging/plans/" + planIndex
-          ].name
-        : "Zeitladen Zeitplan " + templateIndex + "/" + planIndex;
-    },
-    addChargeTemplateTimeChargingPlan(template, event) {
-      // prevent further processing of the click event
-      event.stopPropagation();
-      // get trailing characters as index
-      let templateIndex = parseInt(template.match(/([^/]+)$/)[0]);
+    /* charge template time charging plan management */
+    addChargeTemplateTimeChargingPlan(templateId) {
       this.$emit("sendCommand", {
         command: "addChargeTemplateTimeChargingPlan",
-        data: { template: templateIndex },
+        data: { template: templateId },
       });
-    },
-    removeChargeTemplateTimeChargingPlanModal(chargeTemplate, plan, event) {
-      // prevent further processing of the click event
-      event.stopPropagation();
-      // get trailing characters as index
-      this.modalChargeTemplateIndex = parseInt(chargeTemplate.match(/([^/]+)$/)[0]);
-      this.modalChargeTemplateTimeChargingPlanIndex = parseInt(plan.match(/([^/]+)$/)[0]);
-      this.showChargeTemplateTimeChargingPlanModal = true;
-    },
-    removeChargeTemplateTimeChargingPlan(templateIndex, planIndex, event) {
-      this.showChargeTemplateTimeChargingPlanModal = false;
-      if (event == "confirm") {
-        this.$emit("sendCommand", {
-          command: "removeChargeTemplateTimeChargingPlan",
-          data: { template: templateIndex, plan: planIndex },
-        });
-      }
     },
   },
 };

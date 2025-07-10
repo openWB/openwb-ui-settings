@@ -65,6 +65,29 @@
         </div>
       </div>
     </openwb-base-card>
+    <openwb-base-card
+      title="Werte pro Phase"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <div class="row">
+        <div class="col-md-4 pr-0 text-center text-md-right">Strom [A]</div>
+        <div class="col">
+          <div class="row">
+            <div class="col text-right text-monospace pl-0">
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2)[0] }}
+            </div>
+            <div class="col text-right text-monospace pl-0">
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2)[1] }}
+            </div>
+            <div class="col text-right text-monospace pl-0">
+              {{ formatPhaseArrayNumberTopic(baseTopic + "/get/currents", 2)[2] }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </openwb-base-card>
   </status-card>
 </template>
 

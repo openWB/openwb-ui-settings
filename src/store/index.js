@@ -7,12 +7,6 @@ let states = {
     reloadRequired: false,
     savingData: false,
   },
-  text: {
-    rfidWiki:
-      "Bitte auch hiervon abhängige Einstellungen beachten. Eine Übersicht gibt es im " +
-      '<a href="https://github.com/openWB/core/wiki/Ladung-nur-nach-Freischaltung" ' +
-      'target="_blank" rel="noopener noreferrer">Wiki</a>.',
-  },
 };
 
 /* examples start here */
@@ -25,6 +19,8 @@ if (import.meta.env.MODE !== "production") {
     text5: "Benutzername",
     text6: "12:34",
     text7: "2021-10-31",
+    color1: "#ff0000",
+    color2: "#0000ff",
     number1: 5,
     number2: 10,
     number3: 0.00028,
