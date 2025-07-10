@@ -147,9 +147,6 @@ export default {
         "openWB/optional/rfid/active",
         "openWB/chargepoint/+/config",
         "openWB/chargepoint/template/+",
-        "openWB/chargepoint/template/+/autolock/+",
-        "openWB/system/configurable/chargepoints",
-        "openWB/system/configurable/chargepoints_internal",
       ],
       tempIdTagList: {},
     };
@@ -158,33 +155,9 @@ export default {
     idTagList() {
       return Object.values(this.updateIdTagList());
     },
-    installedChargePoints: {
-      get() {
-        // only show internal chargepoint(s) when configured as external chargepoint
-        let chargePoints = this.getWildcardTopics("openWB/chargepoint/+/config");
-        let myObj = {};
-        for (const [key, element] of Object.entries(chargePoints)) {
-          if (element.type === "internal_openwb" || this.$store.state.mqtt["openWB/general/extern"] === false) {
-            myObj[key] = element;
-          }
-        }
-        return myObj;
-      },
-    },
     chargePointTemplates: {
       get() {
         return this.getWildcardTopics("openWB/chargepoint/template/+");
-      },
-    },
-    chargePointTemplateList: {
-      get() {
-        let myList = [];
-        Object.keys(this.chargePointTemplates).forEach((key) => {
-          let index = parseInt(key.match(/([0-9]+)/g)[0]);
-          let name = this.$store.state.mqtt["openWB/chargepoint/template/" + index].name;
-          myList.push({ value: index, text: name });
-        });
-        return myList;
       },
     },
   },
@@ -210,108 +183,9 @@ export default {
         ? this.$store.state.mqtt["openWB/chargepoint/" + chargePointIndex + "/config"].name
         : "Ladepunkt " + chargePointIndex;
     },
-    addChargePoint() {
-      this.$emit("sendCommand", {
-        command: "addChargepoint",
-        data: { type: this.chargePointToAdd },
-      });
-    },
-    removeChargePointModal(chargePoint, event) {
-      // prevent further processing of the click event
-      event.stopPropagation();
-      this.modalChargePointIndex = parseInt(chargePoint.match(/(?:\/)(\d+)(?=\/)/)[1]);
-      this.showChargePointModal = true;
-    },
-    removeChargePoint(chargePointIndex, event) {
-      this.showChargePointModal = false;
-      if (event == "confirm") {
-        this.$emit("sendCommand", {
-          command: "removeChargepoint",
-          data: { id: chargePointIndex },
-        });
-      }
-    },
-    getChargePointList() {
-      if (this.$store.state.mqtt["openWB/general/extern"] === false) {
-        return this.$store.state.mqtt["openWB/system/configurable/chargepoints"];
-      } else {
-        return this.$store.state.mqtt["openWB/system/configurable/chargepoints_internal"];
-      }
-    },
-    getChargePointName(chargePointIndex) {
-      return this.$store.state.mqtt["openWB/chargepoint/" + chargePointIndex + "/config"]
-        ? this.$store.state.mqtt["openWB/chargepoint/" + chargePointIndex + "/config"].name
-        : "Ladepunkt " + chargePointIndex;
-    },
-    getChargePointTemplateName(chargePointTemplateIndex) {
-      return this.$store.state.mqtt["openWB/chargepoint/template/" + chargePointTemplateIndex]
-        ? this.$store.state.mqtt["openWB/chargepoint/template/" + chargePointTemplateIndex].name
-        : "Profil " + chargePointTemplateIndex;
-    },
-    addChargePointTemplate(event) {
-      // prevent further processing of the click event
-      event.stopPropagation();
-      this.$emit("sendCommand", {
-        command: "addChargepointTemplate",
-        data: {},
-      });
-    },
     getChargePointTemplateIndex(chargePointTemplate) {
       // get trailing characters as index
       return parseInt(chargePointTemplate.match(/([^/]+)$/)[0]);
-    },
-    removeChargePointTemplateModal(chargePointTemplate, event) {
-      // prevent further processing of the click event
-      event.stopPropagation();
-      this.modalChargePointTemplateIndex = this.getChargePointTemplateIndex(chargePointTemplate);
-      this.showChargePointTemplateModal = true;
-    },
-    removeChargePointTemplate(chargePointTemplateIndex, event) {
-      this.showChargePointTemplateModal = false;
-      if (event == "confirm") {
-        this.$emit("sendCommand", {
-          command: "removeChargepointTemplate",
-          data: { id: chargePointTemplateIndex },
-        });
-      }
-    },
-    addChargePointTemplateAutolockPlan(chargePointTemplate, event) {
-      // prevent further processing of the click event
-      event.stopPropagation();
-      let chargePointTemplateIndex = this.getChargePointTemplateIndex(chargePointTemplate);
-      this.$emit("sendCommand", {
-        command: "addAutolockPlan",
-        data: { template: chargePointTemplateIndex },
-      });
-    },
-    removeChargePointTemplateAutolockPlanModal(chargePointTemplate, autolockPlan, event) {
-      // prevent further processing of the click event
-      event.stopPropagation();
-      this.modalChargePointTemplateIndex = this.getChargePointTemplateIndex(chargePointTemplate);
-      this.modalChargePointTemplateAutolockPlanIndex = parseInt(autolockPlan.match(/([^/]+)$/)[0]);
-      this.showChargePointTemplateAutolockPlanModal = true;
-    },
-    removeChargePointTemplateAutolockPlan(chargePointTemplateIndex, autolockPlanIndex, event) {
-      this.showChargePointTemplateAutolockPlanModal = false;
-      if (event == "confirm") {
-        this.$emit("sendCommand", {
-          command: "removeAutolockPlan",
-          data: {
-            template: chargePointTemplateIndex,
-            plan: autolockPlanIndex,
-          },
-        });
-      }
-    },
-    getChargePointTemplateAutolockPlanName(templateIndex, planIndex) {
-      return this.$store.state.mqtt["openWB/chargepoint/template/" + templateIndex + "/autolock/" + planIndex]
-        ? this.$store.state.mqtt["openWB/chargepoint/template/" + templateIndex + "/autolock/" + planIndex].name
-        : "Autolock Zeitplan " + templateIndex + "/" + planIndex;
-    },
-    getChargePointTemplateAutolockPlans(chargePointTemplate) {
-      let chargePointTemplateIndex = this.getChargePointTemplateIndex(chargePointTemplate);
-      let result = this.getWildcardTopics("openWB/chargepoint/template/" + chargePointTemplateIndex + "/autolock/+");
-      return result;
     },
     updateConfiguration(key, event) {
       console.debug("updateConfiguration", key, event);
