@@ -46,7 +46,7 @@
               Die ID-Tags müssen in den Einstellungen der Fahrzeuge diesen zugeordnet werden.<br />
               Es kann zuerst das Fahrzeug angesteckt und dann der ID-Tag erfasst werden oder andersherum. Im letzten
               Fall muss innerhalb von 5 Minuten ein Fahrzeug angesteckt werden, sonst wird der ID-Tag verworfen.<br />
-              <span v-html="$store.state.text.rfidWiki" />
+              <vehicle-id-wiki-hint />
             </openwb-base-alert>
             <openwb-base-textarea
               title="Erkannte ID-Tags"
