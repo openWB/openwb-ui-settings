@@ -43,7 +43,7 @@
               subtype="info"
               class="mb-1"
             >
-              Es kann zuerst das Fahrzeug angesteckt und dann der ID-Tag erfasst werden oder andersherum. Wird der ID-Tag
+              Es kann zuerst das Fahrzeug angesteckt und dann der ID-Tag erfasst werden oder umgekehrt. Wird der ID-Tag
               zuerst gescannt, muss innerhalb von 5 Minuten ein Fahrzeug angesteckt werden, sonst wird der ID-Tag verworfen.
             </openwb-base-alert>
             <openwb-base-textarea
@@ -73,6 +73,12 @@
             </openwb-base-alert>
           </div>
           <div v-else>
+            <openwb-base-alert subtype="info">
+              Sobald RFID-Tags zum Entsperren des Ladepunktes festgelegt wurden, wird dieser nach
+              Abstecken eines Fahrzeugs auch automatisch gesperrt. <br>
+              Die hier eingetragenen ID-Tags dienen ausschließlich zum Entsperren aller Ladepunkte,
+              denen das jeweilige Ladepunkt-Profil zugeordnet wurde.
+            </openwb-base-alert>
             <div
               v-for="(chargePointTemplate, chargePointTemplateKey) in chargePointTemplates"
               :key="chargePointTemplateKey"
@@ -80,37 +86,20 @@
               <openwb-base-heading>
               {{chargePointTemplate.name + ' (ID: ' + getChargePointTemplateIndex(chargePointTemplateKey) + ')'}}
               </openwb-base-heading>
-              <openwb-base-button-group-input
-                title="Identifikation aktivieren"
-                :buttons="[
-                  {
-                    buttonValue: false,
-                    text: 'Nein',
-                    class: 'btn-outline-danger',
-                  },
-                  {
-                    buttonValue: true,
-                    text: 'Ja',
-                    class: 'btn-outline-success',
-                  },
-                ]"
-                :model-value="chargePointTemplate.disable_after_unplug"
-                @update:model-value="updateState(chargePointTemplateKey, $event, 'disable_after_unplug')"
-              >
-                <template #help> Sperrt den Ladepunkt nach Abstecken eines Fahrzeuges. </template>
-              </openwb-base-button-group-input>
+              <div>
+                {{'Anzahl Tags: ' + chargePointTemplate.valid_tags.length}} <br>
+                {{'Identifikation aktiviert: ' + chargePointTemplate.disable_after_unplug}}
+              </div>
               <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true && !installAssistantActive">
                 <openwb-base-array-input
-                  v-if="chargePointTemplate.disable_after_unplug"
                   title="Zugeordnete ID-Tags"
-                  no-elements-message="Keine ID-Tags zugeordnet."
+                  no-elements-message="Keine ID-Tags zugeordnet, Ladepunkt nicht gesperrt."
                   :model-value="chargePointTemplate.valid_tags"
-                  @update:model-value="updateState(chargePointTemplateKey, $event, 'valid_tags')"
-                >
-                  <template #help>
-                    Die hier eingetragenen ID-Tags dienen ausschließlich zum Entsperren des Ladepunktes.
-                  </template>
-                </openwb-base-array-input>
+                  @update:model-value="
+                    updateState(chargePointTemplateKey, $event, 'valid_tags'),
+                    updateState(chargePointTemplateKey, chargePointTemplate.valid_tags.length != 0, 'disable_after_unplug')
+                  "
+                />
               </div>
             </div>
           </div>
@@ -138,7 +127,9 @@
             </openwb-base-alert>
           </div>
           <div v-else>
-          
+            <openwb-base-alert subtype="info">
+              Die hier eingetragenen RFID-Tags dienen ausschließlich der Fahrzeugzuordnung.
+            </openwb-base-alert>
             <div
               v-for="vehicleId in vehicleIndexes"
               :key="vehicleId"
@@ -153,13 +144,10 @@
               <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true && !installAssistantActive">
                 <openwb-base-array-input
                   title="Zugeordnete ID-Tags"
+                  no-elements-message="Keine ID-Tags zugeordnet."
                   :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id']"
                   @update:model-value="updateState('openWB/vehicle/' + vehicleId + '/tag_id', $event)"
-                >
-                  <template #help>
-                    Die hier eingetragenen ID-Tags dienen ausschließlich der Fahrzeugzuordnung.
-                  </template>
-                </openwb-base-array-input>
+                />
               </div>
             </div>
           </div>
@@ -228,52 +216,9 @@ export default {
         return this.getWildcardTopics("openWB/chargepoint/template/+");
       },
     },
-    
-    dcChargingEnabled: {
-      get() {
-        return this.$store.state.mqtt["openWB/optional/dc_charging"];
-      },
-    },
     vehicleIndexes: {
       get() {
         return this.getWildcardIndexList("openWB/vehicle/+/name");
-      },
-    },
-    evTemplates: {
-      get() {
-        return this.getWildcardTopics("openWB/vehicle/template/ev_template/+");
-      },
-    },
-    evTemplateList: {
-      get() {
-        let myList = [];
-        Object.keys(this.evTemplates).forEach((key) => {
-          let index = parseInt(key.match(/([0-9]+)$/g)[0]);
-          let name = this.$store.state.mqtt["openWB/vehicle/template/ev_template/" + index].name;
-          myList.push({ value: index, text: name });
-        });
-        return myList;
-      },
-    },
-    chargeTemplates: {
-      get() {
-        return this.getWildcardTopics("openWB/vehicle/template/charge_template/+");
-      },
-    },
-    chargeTemplateList: {
-      get() {
-        let myList = [];
-        Object.keys(this.chargeTemplates).forEach((key) => {
-          let index = parseInt(key.match(/([0-9]+)$/g)[0]);
-          let name = this.$store.state.mqtt["openWB/vehicle/template/charge_template/" + index].name;
-          myList.push({ value: index, text: name });
-        });
-        return myList;
-      },
-    },
-    socModuleList: {
-      get() {
-        return this.$store.state.mqtt["openWB/system/configurable/soc_modules"];
       },
     },
   },
@@ -303,138 +248,11 @@ export default {
       // get trailing characters as index
       return parseInt(chargePointTemplate.match(/([^/]+)$/)[0]);
     },
-    updateConfiguration(key, event) {
-      console.debug("updateConfiguration", key, event);
-      this.updateState(key, event.value, event.object);
-    },
-
-    updateConfiguration(key, event) {
-      console.debug("updateConfiguration", key, event);
-      this.updateState(key, event.value, event.object);
-    },
     /* vehicle management */
-    addVehicle(event) {
-      // prevent further processing of the click event
-      event.stopPropagation();
-      this.$emit("sendCommand", {
-        command: "addVehicle",
-        data: {},
-      });
-    },
-    removeVehicleModal(event, vehicleIndex) {
-      // prevent further processing of the click event
-      event.stopPropagation();
-      this.modalVehicleIndex = vehicleIndex;
-      this.showVehicleModal = true;
-    },
-    removeVehicle(event, vehicleIndex) {
-      this.showVehicleModal = false;
-      if (event == "confirm") {
-        this.$emit("sendCommand", {
-          command: "removeVehicle",
-          data: { id: vehicleIndex },
-        });
-      }
-    },
     getVehicleName(id) {
       return this.$store.state.mqtt["openWB/vehicle/" + id + "/name"]
         ? this.$store.state.mqtt["openWB/vehicle/" + id + "/name"]
         : "Fahrzeug " + id;
-    },
-    getSocDefaultConfiguration(socType) {
-      const socDefaults = this.socModuleList.find((element) => element.value == socType);
-      if (Object.prototype.hasOwnProperty.call(socDefaults, "defaults")) {
-        return { ...JSON.parse(JSON.stringify(socDefaults.defaults)) };
-      }
-      console.warn("no default configuration found for soc type!", socType);
-      return {};
-    },
-    updateSelectedSocModule(vehicleId, $event) {
-      this.updateState("openWB/vehicle/" + vehicleId + "/soc_module/config", $event, "type");
-      this.updateState("openWB/vehicle/" + vehicleId + "/soc_module/config", this.getSocDefaultConfiguration($event));
-    },
-    /* ev template management */
-    addEvTemplate(event, keyToCopy) {
-      // prevent further processing of the click event
-      event.stopPropagation();
-      let data = {};
-      // if keyToCopy is set, parse the id from the key
-      if (keyToCopy && keyToCopy.match(/([^/]+)$/)) {
-        data.copy = parseInt(keyToCopy.match(/([^/]+)$/)[0]);
-      }
-      // emit the command to add an ev template
-      this.$emit("sendCommand", {
-        command: "addEvTemplate",
-        data: data,
-      });
-    },
-    removeEvTemplateModal(event, evTemplate) {
-      // prevent further processing of the click event
-      event.stopPropagation();
-      // get trailing characters as index
-      this.modalEvTemplateIndex = parseInt(evTemplate.match(/([^/]+)$/)[0]);
-      this.showEvTemplateModal = true;
-    },
-    removeEvTemplate(event, evTemplateIndex) {
-      this.showEvTemplateModal = false;
-      if (event == "confirm") {
-        this.$emit("sendCommand", {
-          command: "removeEvTemplate",
-          data: { id: evTemplateIndex },
-        });
-      }
-    },
-    getEvTemplateName(id) {
-      return this.$store.state.mqtt["openWB/vehicle/template/ev_template/" + id]
-        ? this.$store.state.mqtt["openWB/vehicle/template/ev_template/" + id].name
-        : "Fahrzeug-Profil " + id;
-    },
-    /* charge template management */
-    addChargeTemplate(event, keyToCopy) {
-      // prevent further processing of the click event
-      event.stopPropagation();
-      let data = {};
-      // if keyToCopy is set, parse the id from the key
-      if (keyToCopy && keyToCopy.match(/([^/]+)$/)) {
-        data.copy = parseInt(keyToCopy.match(/([^/]+)$/)[0]);
-      }
-      // emit the command to add a charge template
-      this.$emit("sendCommand", {
-        command: "addChargeTemplate",
-        data: data,
-      });
-    },
-    removeChargeTemplateModal(event, chargeTemplateId) {
-      this.modalChargeTemplateIndex = chargeTemplateId;
-      this.showChargeTemplateModal = true;
-    },
-    removeChargeTemplate(event, chargeTemplateIndex) {
-      this.showChargeTemplateModal = false;
-      if (event == "confirm") {
-        this.$emit("sendCommand", {
-          command: "removeChargeTemplate",
-          data: { id: chargeTemplateIndex },
-        });
-      }
-    },
-    getChargeTemplateName(id) {
-      return this.$store.state.mqtt["openWB/vehicle/template/charge_template/" + id]
-        ? this.$store.state.mqtt["openWB/vehicle/template/charge_template/" + id].name
-        : "Lade-Profil " + id;
-    },
-    /* charge template schedule plan management */
-    addChargeTemplateSchedulePlan(templateId) {
-      this.$emit("sendCommand", {
-        command: "addChargeTemplateSchedulePlan",
-        data: { template: templateId },
-      });
-    },
-    /* charge template time charging plan management */
-    addChargeTemplateTimeChargingPlan(templateId) {
-      this.$emit("sendCommand", {
-        command: "addChargeTemplateTimeChargingPlan",
-        data: { template: templateId },
-      });
     },
   },
 };
