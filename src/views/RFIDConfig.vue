@@ -74,26 +74,26 @@
           </div>
           <div v-else>
             <openwb-base-alert subtype="info">
-              Sobald RFID-Tags zum Entsperren des Ladepunktes festgelegt wurden, wird dieser nach
-              Abstecken eines Fahrzeugs auch automatisch gesperrt. <br>
-              Die hier eingetragenen ID-Tags dienen ausschließlich zum Entsperren aller Ladepunkte,
-              denen das jeweilige Ladepunkt-Profil zugeordnet wurde.
+              Hier zugeordnete RFID-Tags entsperren beim Scannen das jeweilige Ladepunkt-Profil. 
+              Der ID-Tag kann an jedem Ladepunkt genutzt werden, dem das entsprechende Ladepunkt-Profil 
+              zugeordnet wurde.
+              Sobald RFID-Tags zum Entsperren des Ladepunkt-Profils festgelegt wurden, wird der zugehörige
+              Ladepunkt nach Abstecken eines Fahrzeugs automatisch gesperrt.
             </openwb-base-alert>
             <div
               v-for="(chargePointTemplate, chargePointTemplateKey) in chargePointTemplates"
               :key="chargePointTemplateKey"
-            >            
-              <openwb-base-heading>
-              {{chargePointTemplate.name + ' (ID: ' + getChargePointTemplateIndex(chargePointTemplateKey) + ')'}}
-              </openwb-base-heading>
+            >
               <div>
-                {{'Anzahl Tags: ' + chargePointTemplate.valid_tags.length}} <br>
                 {{'Identifikation aktiviert: ' + chargePointTemplate.disable_after_unplug}}
               </div>
               <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true && !installAssistantActive">
                 <openwb-base-array-input
-                  title="Zugeordnete ID-Tags"
-                  no-elements-message="Keine ID-Tags zugeordnet, Ladepunkt nicht gesperrt."
+                  :title="chargePointTemplate.name + ' (ID: ' + getChargePointTemplateIndex(chargePointTemplateKey) + ')'"
+                  :no-elements-message="
+                    '&quot'+chargePointTemplate.name+
+                    '&quot sind keine ID-Tags zugeordnet.'
+                  "
                   :model-value="chargePointTemplate.valid_tags"
                   @update:model-value="
                     updateState(chargePointTemplateKey, $event, 'valid_tags'),
@@ -128,7 +128,7 @@
           </div>
           <div v-else>
             <openwb-base-alert subtype="info">
-              Die hier eingetragenen RFID-Tags dienen ausschließlich der Fahrzeugzuordnung.
+              Hier zugeordnete RFID-Tags weisen dem Ladepunkt beim Scannen automatisch das jeweilige Fahrzeug zu.
             </openwb-base-alert>
             <div
               v-for="vehicleId in vehicleIndexes"
@@ -138,13 +138,12 @@
               :collapsed="!($route.params.section == 'vehicle' && parseInt($route.params.section_index) == vehicleId)"
               subtype="info"
             >
-              <openwb-base-heading>
-                {{$store.state.mqtt['openWB/vehicle/' + vehicleId + '/name']}}
-              </openwb-base-heading>
+              <br>
               <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true && !installAssistantActive">
                 <openwb-base-array-input
-                  title="Zugeordnete ID-Tags"
-                  no-elements-message="Keine ID-Tags zugeordnet."
+                  :title="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/name']"
+                  :no-elements-message="
+                    '&quot' +$store.state.mqtt['openWB/vehicle/' + vehicleId + '/name'] + '&quot sind keine ID-Tags zugeordnet.'"
                   :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id']"
                   @update:model-value="updateState('openWB/vehicle/' + vehicleId + '/tag_id', $event)"
                 />
