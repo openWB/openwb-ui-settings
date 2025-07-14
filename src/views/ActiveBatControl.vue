@@ -87,9 +87,9 @@
               "
             >
               <template #help>
-                ACHTUNG: Der hier eingestellte Wert darf die maximale Ladeleistung des Speichers nicht überschreiten.<br />
-                Wird der Mindest-SoC des Speichers nicht erreicht, wird der Speicher mit der hier eingestellten Leistung
-                geladen. Mit dem verbleibenden Überschuss werden die Fahrzeuge geladen.
+                ACHTUNG: Der hier eingestellte Wert darf die maximale Ladeleistung des Speichers nicht überschreiten!<br />
+                Befindet sich der Speicher unterhalb des Mindest-SoC, wird er mit der hier eingestellten Leistung
+                geladen. Verbleibender Überschuss wird in die Fahrzeuge geladen.
               </template>
             </openwb-base-button-group-input>
             <openwb-base-number-input
@@ -127,8 +127,8 @@
               "
             >
               <template #help>
-                Wird der Mindest-SoC überschritten, wird der Überschuss ins Fahrzeug geladen und der Speicher mit der
-                hier eingestellten Leistung in die Fahrzeuge entladen. Die Entladeleistung des Speichers wird dem
+                Wird der Mindest-SoC überschritten, wird PV-Überschuss plus hier eingestellte Speicherleistung
+                ins Fahrzeug geladen. Die erlaubte Entladeleistung des Speichers wird dem
                 Überschuss zum Erreichen der Einschaltschwelle hinzugerechnet.
               </template>
             </openwb-base-button-group-input>
@@ -200,18 +200,16 @@
                     Der Speicher regelt eigenständig und wird nicht gesteuert. Es greift nur die konfigurierte Speicherbeachtung.
                   </div>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'limit_stop'">
-                    Die Entladung des Speichers wird nur zugelassen, wenn sich alle Fahrzeuge im Modus
-                    PV-Laden (ohne Mindeststrom oder Zielladen) befinden. Dies kann dann zB bei Wolkendecken auftreten.
-                    Die volle Entladesperre übersteuert ggf. die erlaubte Entladeleistung des Speichers (Speicherbeachtung PV).
+                    Die Entladung des Speichers wird gesperrt, sobald ein Fahrzeug lädt.<br>
+                    Die erlaubte Entladeleistung des Speichers (Speicherbeachtung PV) wird ignoriert,
+                    da der Speicher nicht entladen darf.
                   </div>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'limit_to_home_consumption'">
-                    Fahrzeugladung erzeugt Netzbezug, lediglich weitere Verbraucher (bspw. Hausverbrauch) werden durch
-                    den Speicher ausgeglichen.
-                    Speicherentladung ins Fahrzeug kann auftreten wenn sich alle Fahrzeuge im Modus
-                    PV-Laden (ohne Mindeststrom oder Zielladen) befinden. Dies kann dann zB bei Wolkendecken auftreten.
-                    Die Einstellung übersteuert ggf. die erlaubte Entladeleistung des Speichers (Speicherbeachtung PV).<br />  
-                    Kann die Entladung am Speicher nur komplett gesperrt werden, verhält sich
-                    diese Einstellung wie "gesperrt, wenn Fahrzeug lädt".                 
+                    Fahrzeugladung erzeugt Netzbezug statt Speicherentladung. Weitere Verbraucher (bspw. Hausverbrauch)
+                    werden durch den Speicher ausgeglichen. Kann die Entladung am Speicher nur komplett gesperrt werden,
+                    verhält sich diese Einstellung wie "gesperrt, wenn Fahrzeug lädt". <br>
+                    Die erlaubte Entladeleistung des Speichers (Speicherbeachtung PV) wird ignoriert,
+                    da der Speicher nicht in Fahrzeuge entladen darf.             
                   </div>
                 </template>
               </openwb-base-button-group-input>
