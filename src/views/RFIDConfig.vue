@@ -2,6 +2,17 @@
   <div class="optionalComponents">
     <form name="optionalComponentsForm">
       <openwb-base-card title="Identifikation">
+        <openwb-base-alert subtype="info">
+            Die Identifikation kann zum Entsperren von Ladepunkten und/oder zur Zuordnung von Fahrzeugen genutzt werden
+            und kann auf mehreren Wegen erfolgen:
+            <ul>
+              <li>Über einen in der openWB verbauten RFID-Reader (optional, z.B. anhand des Lieferscheins prüfen).</li>
+              <li>
+                Durch die automatische Erkennung der openWB Pro (muss in den Einstellungen aktiviert werden).
+              </li>
+              <li>Durch manuelle Eingabe einer ID am Display der openWB.</li>
+            </ul>
+        </openwb-base-alert>
         <openwb-base-button-group-input
           title="Identifikation aktivieren"
           :model-value="$store.state.mqtt['openWB/optional/rfid/active']"
@@ -18,19 +29,7 @@
             },
           ]"
           @update:model-value="updateState('openWB/optional/rfid/active', $event)"
-        >
-          <template #help>
-            Die Identifikation kann zum Entsperren von Ladepunkten und/oder zur Zuordnung von Fahrzeugen genutzt werden
-            und kann auf mehreren Wegen erfolgen:
-            <ul>
-              <li>Über einen in der openWB verbauten RFID-Reader (optional, z.B. anhand des Lieferscheins prüfen).</li>
-              <li>
-                Durch die automatische Erkennung an einer openWB Pro (muss in den Einstellungen aktiviert werden).
-              </li>
-              <li>Durch manuelle Eingabe einer ID am Display einer openWB.</li>
-            </ul>
-          </template>
-        </openwb-base-button-group-input>
+        />
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
           <openwb-base-alert subtype="info">
             Weitere Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary"
@@ -39,13 +38,6 @@
         </div>
         <div v-else>
           <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true">
-            <openwb-base-alert
-              subtype="info"
-              class="mb-1"
-            >
-              Es kann zuerst das Fahrzeug angesteckt und dann der ID-Tag erfasst werden oder umgekehrt. Wird der ID-Tag
-              zuerst gescannt, muss innerhalb von 5 Minuten ein Fahrzeug angesteckt werden, sonst wird der ID-Tag verworfen.
-            </openwb-base-alert>
             <openwb-base-textarea
               title="Erkannte ID-Tags"
               readonly
@@ -53,8 +45,7 @@
               :model-value="idTagList.join('\n')"
             >
               <template #help>
-                Solange diese Seite geöffnet ist, werden alle erfassten ID-Tags in dieser Liste aufgeführt. Bei der
-                openWB Pro/Pro+ nur bei angestecktem Fahrzeug.
+                Bei openWB Pro/Pro+ werden RFID-Tags nur bei angestecktem Fahrzeug erfasst.
               </template>
             </openwb-base-textarea>
           </div>
@@ -84,9 +75,6 @@
               v-for="(chargePointTemplate, chargePointTemplateKey) in chargePointTemplates"
               :key="chargePointTemplateKey"
             >
-              <div>
-                {{'Identifikation aktiviert: ' + chargePointTemplate.disable_after_unplug}}
-              </div>
               <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true && !installAssistantActive">
                 <openwb-base-array-input
                   :title="chargePointTemplate.name + ' (ID: ' + getChargePointTemplateIndex(chargePointTemplateKey) + ')'"
@@ -95,12 +83,29 @@
                     '&quot sind keine ID-Tags zugeordnet.'
                   "
                   :model-value="chargePointTemplate.valid_tags"
-                  @update:model-value="
-                    updateState(chargePointTemplateKey, $event, 'valid_tags'),
-                    updateState(chargePointTemplateKey, chargePointTemplate.valid_tags.length != 0, 'disable_after_unplug')
-                  "
+                  @update:model-value="updateState(chargePointTemplateKey, $event, 'valid_tags')"
                 />
               </div>
+              <openwb-base-button-group-input
+              title="Nach Abstecken sperren"
+              :buttons="[
+                {
+                  buttonValue: false,
+                  text: 'Nein',
+                  class: 'btn-outline-danger',
+                },
+                {
+                  buttonValue: true,
+                  text: 'Ja',
+                  class: 'btn-outline-success',
+                },
+              ]"
+              :model-value="chargePointTemplate.disable_after_unplug"
+              @update:model-value="updateState(chargePointTemplateKey, $event, 'disable_after_unplug')"
+            >
+              <template #help> Sperrt den Ladepunkt nach Abstecken eines Fahrzeuges. </template>
+            </openwb-base-button-group-input>
+            <br>
             </div>
           </div>
         </openwb-base-card>
@@ -129,6 +134,8 @@
           <div v-else>
             <openwb-base-alert subtype="info">
               Hier zugeordnete RFID-Tags weisen dem Ladepunkt beim Scannen automatisch das jeweilige Fahrzeug zu.
+              Ist bei Scannen des ID-Tags noch kein Fahrzeug angeschlossen muss dies zeitnah erfolgen, da der
+              ID-Tag nach 5min verworfen wird.
             </openwb-base-alert>
             <div
               v-for="vehicleId in vehicleIndexes"
