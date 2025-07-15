@@ -87,7 +87,7 @@
                 />
               </div>
               <openwb-base-button-group-input
-              title="Nach Abstecken sperren"
+              title="Identifikation aktivieren"
               :buttons="[
                 {
                   buttonValue: false,
@@ -103,7 +103,11 @@
               :model-value="chargePointTemplate.disable_after_unplug"
               @update:model-value="updateState(chargePointTemplateKey, $event, 'disable_after_unplug')"
             >
-              <template #help> Sperrt den Ladepunkt nach Abstecken eines Fahrzeuges. </template>
+              <template #help>
+                {{'Die Identifikation an Ladepunkten mit Ladepunkt-Profil &quot'+
+                chargePointTemplate.name+
+                '&quot aktivieren oder deaktivieren.'}}
+              </template>
             </openwb-base-button-group-input>
             <br>
             </div>
