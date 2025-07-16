@@ -204,11 +204,6 @@ export default {
     return {
       mqttTopicsToSubscribe: [
         "openWB/general/extern",
-        "openWB/chargepoint/+/config",
-        "openWB/chargepoint/+/get/rfid",
-        "openWB/chargepoint/+/get/rfid_timestamp",
-        "openWB/chargepoint/+/set/rfid",
-        "openWB/optional/rfid/active",
         "openWB/optional/led/active",
         "ToDo/optional/led/instant_blocked",
         "ToDo/optional/led/pv_blocked",
@@ -233,13 +228,9 @@ export default {
         "openWB/optional/et/config/provider",
         "openWB/optional/et/config/max_price",
       ],
-      tempIdTagList: {},
     };
   },
   computed: {
-    idTagList() {
-      return Object.values(this.updateIdTagList());
-    },
     displayThemeList() {
       return this.$store.state.mqtt["openWB/system/configurable/display_themes"];
     },
@@ -259,27 +250,6 @@ export default {
     },
   },
   methods: {
-    getIdFromTopic(topic) {
-      return topic.match(/(?:\/)([0-9]+)(?=\/)*/g)[0].replace(/[^0-9]+/g, "");
-    },
-    updateIdTagList() {
-      Object.entries(
-        // get all id-tag topics/values
-        this.getWildcardTopics("^openWB/chargepoint/[^+/]+/[gs]et/rfid$", true),
-      ).forEach((entry) => {
-        if (entry[1] !== null) {
-          this.tempIdTagList[entry[1]] = `${entry[1]} (${
-            entry[0].includes("/set/") ? "zugewiesen" : "erfasst"
-          } an ${this.getChargePointName(this.getIdFromTopic(entry[0]))})`;
-        }
-      });
-      return this.tempIdTagList;
-    },
-    getChargePointName(chargePointIndex) {
-      return this.$store.state.mqtt["openWB/chargepoint/" + chargePointIndex + "/config"]
-        ? this.$store.state.mqtt["openWB/chargepoint/" + chargePointIndex + "/config"].name
-        : "Ladepunkt " + chargePointIndex;
-    },
     getDisplayThemeDefaults(displayThemeType) {
       const displayThemeDefaults = this.displayThemeList.find((element) => element.value == displayThemeType);
       if (Object.prototype.hasOwnProperty.call(displayThemeDefaults, "defaults")) {

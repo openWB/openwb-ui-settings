@@ -139,16 +139,36 @@
               @update:model-value="updateState('openWB/vehicle/' + vehicleId + '/charge_template', $event)"
             />
             <hr />
-            <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true && !installAssistantActive">
-              <openwb-base-array-input
-                title="Zugeordnete ID-Tags"
-                :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id']"
-                @update:model-value="updateState('openWB/vehicle/' + vehicleId + '/tag_id', $event)"
-              />
-              <openwb-base-alert subtype="info">
-                Die hier eingetragenen ID-Tags dienen ausschließlich der Fahrzeugzuordnung.<br />
-                <vehicle-id-wiki-hint />
-              </openwb-base-alert>
+            <div v-if="!installAssistantActive">
+
+            <openwb-base-heading> Fahrzeugzuordnung per ID-Tags </openwb-base-heading>
+              <div v-if="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id'].length > 0">
+                <openwb-base-alert subtype="info">
+                  Einstellungen zur Fahrzeugzuordnung finden sich unter
+                  <router-link to="/RFIDConfig"> Einstellungen - RFID </router-link>.
+                  <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === false">
+                    Aktuell ist die Option in den Einstellungen deaktiviert.
+                  </div>
+                  <div v-else>
+                    Die Option ist aktiv. Das Fahrzeug lässt sich per ID-Tag automatisch
+                    einem Ladepunkt zuordnen.
+                  </div>
+                  Dem Fahrzeug sind folgende ID-Tags zugeordnet:
+                </openwb-base-alert>
+                <openwb-base-textarea
+                  title="Zugeordnete ID-Tags"
+                  readonly
+                  disabled
+                  :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id']"
+                />
+              </div>
+              <div v-else>
+                <openwb-base-alert subtype="info">
+                  Einstellungen zur Fahrzeugzuordnung finden sich unter
+                  <router-link to="/RFIDConfig"> Einstellungen - RFID </router-link>.<br>
+                  Dem Fahrzeug sind aktuell keine ID-Tags zum Entsperren zugeordnet.
+                </openwb-base-alert>
+              </div>
               <hr />
             </div>
             <openwb-base-select-input
