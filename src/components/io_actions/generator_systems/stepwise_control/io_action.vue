@@ -29,7 +29,7 @@ import OpenwbIoActionConfigMixin from "../../OpenwbIoActionConfigMixin.vue";
 import OpenwbIoPattern from "../../OpenwbIoPattern.vue";
 
 export default {
-  name: "IoActionPowerLevels",
+  name: "IoActionStepwiseControl",
   components: {
     OpenwbIoPattern,
   },
