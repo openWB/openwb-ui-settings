@@ -3,16 +3,17 @@
     <form name="optionalComponentsForm">
       <openwb-base-card title="Identifikation">
         <openwb-base-alert subtype="info">
-            Die Identifikation kann zum Entsperren von Ladepunkten und/oder zur Zuordnung von Fahrzeugen genutzt werden
-            und kann auf mehreren Wegen erfolgen:
-            <ul>
-              <li>Über einen RFID-Reader (optional in der openWB verbaut, z.B. anhand des Lieferscheins prüfen).</li>
-              <li>
-                Durch die automatische Fahrzeugerkennung der openWB Pro/ Pro+ (in den Einstellungen der openWB Pro aktivieren).
-              </li>
-              <li>Durch manuelle Eingabe einer ID an einer openWB mit Display.</li>
-            </ul>
-            Bei openWB Pro/Pro+ werden RFID-Tags nur bei angestecktem Fahrzeug erfasst!
+          Die Identifikation kann zum Entsperren von Ladepunkten und/oder zur Zuordnung von Fahrzeugen genutzt werden
+          und kann auf mehreren Wegen erfolgen:
+          <ul>
+            <li>Über einen RFID-Reader (optional in der openWB verbaut, z.B. anhand des Lieferscheins prüfen).</li>
+            <li>
+              Durch die automatische Fahrzeugerkennung der openWB Pro/ Pro+ (in den Einstellungen der openWB Pro
+              aktivieren).
+            </li>
+            <li>Durch manuelle Eingabe einer ID an einer openWB mit Display.</li>
+          </ul>
+          Bei openWB Pro/Pro+ werden RFID-Tags nur bei angestecktem Fahrzeug erfasst!
         </openwb-base-alert>
         <openwb-base-button-group-input
           title="Identifikation aktivieren"
@@ -48,7 +49,9 @@
           </div>
         </div>
       </openwb-base-card>
-      <openwb-base-heading class="mt-0"> Entsperren von Ladepunkten (gekoppelt an Ladepunkt-Profil) </openwb-base-heading>
+      <openwb-base-heading class="mt-0">
+        Entsperren von Ladepunkten (gekoppelt an Ladepunkt-Profil)
+      </openwb-base-heading>
       <div>
         <openwb-base-card
           title="Ladepunkt-Profile"
@@ -57,7 +60,8 @@
         >
           <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
             <openwb-base-alert subtype="info">
-              Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.<br>
+              Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary"
+              befindet.<br />
               Die Konfiguration zum Entsperren von Ladepunkten bitte auf der "primary" openWB durchführen.
             </openwb-base-alert>
           </div>
@@ -68,55 +72,52 @@
           </div>
           <div v-else>
             <openwb-base-alert subtype="info">
-              Hier zugeordnete ID-Tags entsperren beim Scannen das jeweilige Ladepunkt-Profil. 
-              Der ID-Tag kann an jedem Ladepunkt genutzt werden, dem das entsprechende Ladepunkt-Profil 
-              zugeordnet wurde.
-              Sobald ID-Tags zum Entsperren des Ladepunkt-Profils festgelegt wurden, wird der zugehörige
-              Ladepunkt nach Abstecken eines Fahrzeugs automatisch gesperrt.
+              Hier zugeordnete ID-Tags entsperren beim Scannen das jeweilige Ladepunkt-Profil. Der ID-Tag kann an jedem
+              Ladepunkt genutzt werden, dem das entsprechende Ladepunkt-Profil zugeordnet wurde. Sobald ID-Tags zum
+              Entsperren des Ladepunkt-Profils festgelegt wurden, wird der zugehörige Ladepunkt nach Abstecken eines
+              Fahrzeugs automatisch gesperrt.
             </openwb-base-alert>
             <div
               v-for="(chargePointTemplate, chargePointTemplateKey) in chargePointTemplates"
               :key="chargePointTemplateKey"
             >
               <openwb-base-heading class="mt-0">
-                {{chargePointTemplate.name + ' (ID: ' + getChargePointTemplateIndex(chargePointTemplateKey) + ')'}}
+                {{ chargePointTemplate.name + " (ID: " + getChargePointTemplateIndex(chargePointTemplateKey) + ")" }}
               </openwb-base-heading>
               <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true && !installAssistantActive">
                 <openwb-base-array-input
                   title="Zugeordnete ID-Tags"
-                  :no-elements-message="
-                    '&quot;'+chargePointTemplate.name+
-                    '&quot; sind keine ID-Tags zugeordnet.'
-                  "
+                  :no-elements-message="'&quot;' + chargePointTemplate.name + '&quot; sind keine ID-Tags zugeordnet.'"
                   :model-value="chargePointTemplate.valid_tags"
                   @update:model-value="updateState(chargePointTemplateKey, $event, 'valid_tags')"
                 />
               </div>
               <openwb-base-button-group-input
-              title="Identifikation aktivieren"
-              :buttons="[
-                {
-                  buttonValue: false,
-                  text: 'Nein',
-                  class: 'btn-outline-danger',
-                },
-                {
-                  buttonValue: true,
-                  text: 'Ja',
-                  class: 'btn-outline-success',
-                },
-              ]"
-              :model-value="chargePointTemplate.disable_after_unplug"
-              @update:model-value="updateState(chargePointTemplateKey, $event, 'disable_after_unplug')"
-            >
-              <template #help>
-                {{
-                  'Die Identifikation an Ladepunkten mit Ladepunkt-Profil &quot;' + chargePointTemplate.name +
-                  '&quot; aktivieren oder deaktivieren.'
-                }}
-              </template>
-            </openwb-base-button-group-input>
-            <br>
+                title="Identifikation aktivieren"
+                :buttons="[
+                  {
+                    buttonValue: false,
+                    text: 'Nein',
+                    class: 'btn-outline-danger',
+                  },
+                  {
+                    buttonValue: true,
+                    text: 'Ja',
+                    class: 'btn-outline-success',
+                  },
+                ]"
+                :model-value="chargePointTemplate.disable_after_unplug"
+                @update:model-value="updateState(chargePointTemplateKey, $event, 'disable_after_unplug')"
+              >
+                <template #help>
+                  {{
+                    'Die Identifikation an Ladepunkten mit Ladepunkt-Profil "' +
+                    chargePointTemplate.name +
+                    '" aktivieren oder deaktivieren.'
+                  }}
+                </template>
+              </openwb-base-button-group-input>
+              <br />
             </div>
           </div>
         </openwb-base-card>
@@ -128,12 +129,11 @@
           :collapsible="true"
           :collapsed="$route.params.section != 'vehicle'"
         >
-          <template #header>
-            Fahrzeuge
-          </template>
+          <template #header> Fahrzeuge </template>
           <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
             <openwb-base-alert subtype="info">
-              Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.<br>
+              Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary"
+              befindet.<br />
               Die Konfiguration zur Fahrzeugzuordnung bitte auf der "primary" openWB durchführen.
             </openwb-base-alert>
           </div>
@@ -144,9 +144,9 @@
           </div>
           <div v-else>
             <openwb-base-alert subtype="info">
-              Hier zugeordnete ID-Tags weisen dem Ladepunkt beim Scannen automatisch das jeweilige Fahrzeug zu.
-              Ist bei Scannen des ID-Tags noch kein Fahrzeug angeschlossen muss dies zeitnah erfolgen, da der
-              ID-Tag nach 5min verworfen wird.
+              Hier zugeordnete ID-Tags weisen dem Ladepunkt beim Scannen automatisch das jeweilige Fahrzeug zu. Ist bei
+              Scannen des ID-Tags noch kein Fahrzeug angeschlossen muss dies zeitnah erfolgen, da der ID-Tag nach 5min
+              verworfen wird.
             </openwb-base-alert>
             <div
               v-for="vehicleId in vehicleIndexes"
@@ -156,61 +156,78 @@
               :collapsed="!($route.params.section == 'vehicle' && parseInt($route.params.section_index) == vehicleId)"
               subtype="info"
             >
-              <br>
+              <br />
               <openwb-base-heading class="mt-0">
-                {{$store.state.mqtt['openWB/vehicle/' + vehicleId + '/name']+' (ID: '+vehicleId+')'}}
+                {{ $store.state.mqtt["openWB/vehicle/" + vehicleId + "/name"] + " (ID: " + vehicleId + ")" }}
               </openwb-base-heading>
               <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true && !installAssistantActive">
                 <openwb-base-array-input
                   title="Zugeordnete ID-Tags"
                   :no-elements-message="
-                    '&quot;' +$store.state.mqtt['openWB/vehicle/' + vehicleId + '/name'] + '&quot; sind keine ID-Tags zugeordnet.'"
+                    '&quot;' +
+                    $store.state.mqtt['openWB/vehicle/' + vehicleId + '/name'] +
+                    '&quot; sind keine ID-Tags zugeordnet.'
+                  "
                   :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id']"
                   @update:model-value="updateState('openWB/vehicle/' + vehicleId + '/tag_id', $event)"
                 />
               </div>
               <openwb-base-button-group-input
-              title="Standard-Fahrzeug nach Abstecken zuordnen"
-              :buttons="[
-                {
-                  buttonValue: false,
-                  text: 'Nein',
-                  class: 'btn-outline-danger',
-                },
-                {
-                  buttonValue: true,
-                  text: 'Ja',
-                  class: 'btn-outline-success',
-                },
-              ]"
-              :model-value="
-                $store.state.mqtt['openWB/vehicle/template/charge_template/' + 
-                $store.state.mqtt['openWB/vehicle/' + vehicleId + '/charge_template']].load_default
-              "
-              @update:model-value="updateState('openWB/vehicle/template/charge_template/' + 
-              $store.state.mqtt['openWB/vehicle/' + vehicleId + '/charge_template'], $event, 'load_default')"
-            >
-              <template #help>
-                {{
-                  'Ist diese Option aktiviert, wird am Ladepunkt nach Abstecken auf das '+
-                  'Standard-Fahrzeug zurückgesetzt. Die Option ist im Lade-Profil &quot;'+
-                  $store.state.mqtt['openWB/vehicle/template/charge_template/' + 
-                  $store.state.mqtt['openWB/vehicle/' + vehicleId + '/charge_template']].name +
-                  '&quot; gespeichert.'
-                }}
-                <div v-if="
-                  $store.state.mqtt['openWB/vehicle/template/charge_template/' + 
-                  $store.state.mqtt['openWB/vehicle/' + vehicleId + '/charge_template']].load_default === true"
-                >
-                  '&quot;Standard-Fahrzeug nach Abstecken&quot; ist für alle Fahrzeuge aktiviert, '+
-                  'denen dieses Lade-Profil zugeordnet wurde.'
-                </div>
-                <div v-else>
-                  '&quot;Standard-Fahrzeug nach Abstecken&quot; ist für alle Fahrzeuge deaktiviert, '+
-                  'denen dieses Lade-Profil zugeordnet wurde.'
-                </div>
-              </template>
-            </openwb-base-button-group-input>
+                title="Standard-Fahrzeug nach Abstecken zuordnen"
+                :buttons="[
+                  {
+                    buttonValue: false,
+                    text: 'Nein',
+                    class: 'btn-outline-danger',
+                  },
+                  {
+                    buttonValue: true,
+                    text: 'Ja',
+                    class: 'btn-outline-success',
+                  },
+                ]"
+                :model-value="
+                  $store.state.mqtt[
+                    'openWB/vehicle/template/charge_template/' +
+                      $store.state.mqtt['openWB/vehicle/' + vehicleId + '/charge_template']
+                  ].load_default
+                "
+                @update:model-value="
+                  updateState(
+                    'openWB/vehicle/template/charge_template/' +
+                      $store.state.mqtt['openWB/vehicle/' + vehicleId + '/charge_template'],
+                    $event,
+                    'load_default',
+                  )
+                "
+              >
+                <template #help>
+                  {{
+                    "Ist diese Option aktiviert, wird am Ladepunkt nach Abstecken auf das " +
+                    'Standard-Fahrzeug zurückgesetzt. Die Option ist im Lade-Profil "' +
+                    $store.state.mqtt[
+                      "openWB/vehicle/template/charge_template/" +
+                        $store.state.mqtt["openWB/vehicle/" + vehicleId + "/charge_template"]
+                    ].name +
+                    '" gespeichert.'
+                  }}
+                  <div
+                    v-if="
+                      $store.state.mqtt[
+                        'openWB/vehicle/template/charge_template/' +
+                          $store.state.mqtt['openWB/vehicle/' + vehicleId + '/charge_template']
+                      ].load_default === true
+                    "
+                  >
+                    "Standard-Fahrzeug nach Abstecken" ist für alle Fahrzeuge aktiviert, denen dieses Lade-Profil
+                    zugeordnet wurde.
+                  </div>
+                  <div v-else>
+                    "Standard-Fahrzeug nach Abstecken" ist für alle Fahrzeuge deaktiviert, denen dieses Lade-Profil
+                    zugeordnet wurde.
+                  </div>
+                </template>
+              </openwb-base-button-group-input>
             </div>
           </div>
         </openwb-base-card>
