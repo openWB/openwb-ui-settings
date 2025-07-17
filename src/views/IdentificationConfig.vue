@@ -6,12 +6,13 @@
             Die Identifikation kann zum Entsperren von Ladepunkten und/oder zur Zuordnung von Fahrzeugen genutzt werden
             und kann auf mehreren Wegen erfolgen:
             <ul>
-              <li>Über einen in der openWB verbauten RFID-Reader (optional, z.B. anhand des Lieferscheins prüfen).</li>
+              <li>Über einen RFID-Reader (optional in der openWB verbaut, z.B. anhand des Lieferscheins prüfen).</li>
               <li>
-                Durch die automatische Erkennung der openWB Pro (muss in den Einstellungen aktiviert werden).
+                Durch die automatische Fahrzeugerkennung der openWB Pro/ Pro+ (in den Einstellungen der openWB Pro aktivieren).
               </li>
-              <li>Durch manuelle Eingabe einer ID am Display der openWB.</li>
+              <li>Durch manuelle Eingabe einer ID an einer openWB mit Display.</li>
             </ul>
+            Bei openWB Pro/Pro+ werden RFID-Tags nur bei angestecktem Fahrzeug erfasst!
         </openwb-base-alert>
         <openwb-base-button-group-input
           title="Identifikation aktivieren"
@@ -43,11 +44,7 @@
               readonly
               disabled
               :model-value="idTagList.join('\n')"
-            >
-              <template #help>
-                Bei openWB Pro/Pro+ werden RFID-Tags nur bei angestecktem Fahrzeug erfasst.
-              </template>
-            </openwb-base-textarea>
+            />
           </div>
         </div>
       </openwb-base-card>
@@ -71,10 +68,10 @@
           </div>
           <div v-else>
             <openwb-base-alert subtype="info">
-              Hier zugeordnete RFID-Tags entsperren beim Scannen das jeweilige Ladepunkt-Profil. 
+              Hier zugeordnete ID-Tags entsperren beim Scannen das jeweilige Ladepunkt-Profil. 
               Der ID-Tag kann an jedem Ladepunkt genutzt werden, dem das entsprechende Ladepunkt-Profil 
               zugeordnet wurde.
-              Sobald RFID-Tags zum Entsperren des Ladepunkt-Profils festgelegt wurden, wird der zugehörige
+              Sobald ID-Tags zum Entsperren des Ladepunkt-Profils festgelegt wurden, wird der zugehörige
               Ladepunkt nach Abstecken eines Fahrzeugs automatisch gesperrt.
             </openwb-base-alert>
             <div
@@ -232,7 +229,7 @@
 import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
-  name: "RFIDConfigView",
+  name: "IdentificationConfigView",
   mixins: [ComponentState],
   emits: ["save", "reset", "defaults"],
   data() {

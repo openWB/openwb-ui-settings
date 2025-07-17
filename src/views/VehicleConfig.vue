@@ -145,7 +145,7 @@
               <div v-if="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id'].length > 0">
                 <openwb-base-alert subtype="info">
                   Einstellungen zur Fahrzeugzuordnung finden sich unter
-                  <router-link to="/RFIDConfig"> Einstellungen - RFID </router-link>.
+                  <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.
                   <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === false">
                     Aktuell ist die Option in den Einstellungen deaktiviert.
                   </div>
@@ -155,17 +155,16 @@
                   </div>
                   Dem Fahrzeug sind folgende ID-Tags zugeordnet:
                 </openwb-base-alert>
-                <openwb-base-textarea
+                <openwb-base-array
                   title="Zugeordnete ID-Tags"
-                  readonly
-                  disabled
+                  no-elements-message="Keine keine ID-Tags zugeordnet."
                   :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id']"
                 />
               </div>
               <div v-else>
                 <openwb-base-alert subtype="info">
                   Einstellungen zur Fahrzeugzuordnung finden sich unter
-                  <router-link to="/RFIDConfig"> Einstellungen - RFID </router-link>.<br>
+                  <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.<br>
                   Dem Fahrzeug sind aktuell keine ID-Tags zum Entsperren zugeordnet.
                 </openwb-base-alert>
               </div>

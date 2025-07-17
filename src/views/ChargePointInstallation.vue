@@ -312,7 +312,7 @@
             <div v-if="chargePointTemplate.valid_tags.length > 0">
               <openwb-base-alert subtype="info">
                 Einstellungen zur Zugangskontrolle finden sich unter
-                <router-link to="/RFIDConfig"> Einstellungen - RFID </router-link>.
+                <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.
                 <div v-if="
                   $store.state.mqtt['openWB/optional/rfid/active'] === true &&
                   chargePointTemplate.disable_after_unplug
@@ -326,17 +326,16 @@
                 </div>
                 Dem Ladepunkt-Profil sind folgende ID-Tags zum Entsperren zugeordnet:
               </openwb-base-alert>
-              <openwb-base-textarea
-                title="Zugeordnete ID-Tags"
-                readonly
-                disabled
-                :model-value="chargePointTemplate.valid_tags"
-              />
+              <openwb-base-array
+                  title="Zugeordnete ID-Tags"
+                  no-elements-message="Keine keine ID-Tags zugeordnet."
+                  :model-value="chargePointTemplate.valid_tags"
+                />
             </div>
             <div v-else>
               <openwb-base-alert subtype="info">
                 Einstellungen zur Zugangskontrolle finden sich unter
-                <router-link to="/RFIDConfig"> Einstellungen - RFID </router-link>.<br>
+                <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.<br>
                 Dem Ladepunkt-Profil sind aktuell keine ID-Tags zum Entsperren zugeordnet.
               </openwb-base-alert>
             </div>

@@ -89,11 +89,11 @@
               Display
             </router-link>
             <router-link
-              to="/RFIDConfig"
+              to="/IdentificationConfig"
               class="dropdown-item"
               active-class="active disabled"
             >
-              RFID
+              Identifikation
             </router-link>
           </div>
         </li>

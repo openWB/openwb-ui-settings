@@ -39,12 +39,12 @@ const routes = [
     component: () => import("../views/GeneralConfig.vue"),
   },
   {
-    path: "/RFIDConfig",
-    name: "RFIDConfig",
+    path: "/IdentificationConfig",
+    name: "IdentificationConfig",
     meta: {
-      heading: "Einstellungen - RFID",
+      heading: "Einstellungen - Identifikation",
     },
-    component: () => import("../views/RFIDConfig.vue"),
+    component: () => import("../views/IdentificationConfig.vue"),
   },
   {
     path: "/OptionalComponents",
