@@ -85,8 +85,8 @@
                 <openwb-base-array-input
                   title="Zugeordnete ID-Tags"
                   :no-elements-message="
-                    '&quot'+chargePointTemplate.name+
-                    '&quot sind keine ID-Tags zugeordnet.'
+                    '&quot;'+chargePointTemplate.name+
+                    '&quot; sind keine ID-Tags zugeordnet.'
                   "
                   :model-value="chargePointTemplate.valid_tags"
                   @update:model-value="updateState(chargePointTemplateKey, $event, 'valid_tags')"
@@ -110,9 +110,9 @@
               @update:model-value="updateState(chargePointTemplateKey, $event, 'disable_after_unplug')"
             >
               <template #help>
-                {{'Die Identifikation an Ladepunkten mit Ladepunkt-Profil &quot'+
+                {{'Die Identifikation an Ladepunkten mit Ladepunkt-Profil &quot;'+
                 chargePointTemplate.name+
-                '&quot aktivieren oder deaktivieren.'}}
+                '&quot; aktivieren oder deaktivieren.'}}
               </template>
             </openwb-base-button-group-input>
             <br>
@@ -163,7 +163,7 @@
                 <openwb-base-array-input
                   title="Zugeordnete ID-Tags"
                   :no-elements-message="
-                    '&quot' +$store.state.mqtt['openWB/vehicle/' + vehicleId + '/name'] + '&quot sind keine ID-Tags zugeordnet.'"
+                    '&quot;' +$store.state.mqtt['openWB/vehicle/' + vehicleId + '/name'] + '&quot; sind keine ID-Tags zugeordnet.'"
                   :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id']"
                   @update:model-value="updateState('openWB/vehicle/' + vehicleId + '/tag_id', $event)"
                 />
@@ -192,20 +192,20 @@
               <template #help>
                 {{
                   'Ist diese Option aktiviert, wird am Ladepunkt nach Abstecken auf das '+
-                  'Standard-Fahrzeug zurückgesetzt. Die Option ist im Lade-Profil &quot'+
+                  'Standard-Fahrzeug zurückgesetzt. Die Option ist im Lade-Profil &quot;'+
                     $store.state.mqtt['openWB/vehicle/template/charge_template/' + 
                     $store.state.mqtt['openWB/vehicle/' + vehicleId + '/charge_template']].name +
-                    '&quot gespeichert.'
+                    '&quot; gespeichert.'
                 }}
                 <div v-if="
                   $store.state.mqtt['openWB/vehicle/template/charge_template/' + 
                   $store.state.mqtt['openWB/vehicle/' + vehicleId + '/charge_template']].load_default === true"
                 >
-                  &quotStandard-Fahrzeug nach Abstecken&quot ist für alle Fahrzeuge aktiviert,
+                  &quot;Standard-Fahrzeug nach Abstecken&quot; ist für alle Fahrzeuge aktiviert,
                   denen dieses Lade-Profil zugeordnet wurde.
                 </div>
                 <div v-else>
-                  &quotStandard-Fahrzeug nach Abstecken&quot ist für alle Fahrzeuge deaktiviert,
+                  &quot;Standard-Fahrzeug nach Abstecken&quot; ist für alle Fahrzeuge deaktiviert,
                   denen dieses Lade-Profil zugeordnet wurde.
                 </div>
               </template>

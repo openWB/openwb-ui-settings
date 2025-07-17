@@ -193,11 +193,10 @@
 <script>
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbDisplayThemeProxy from "../components/display_themes/OpenwbDisplayThemeProxy.vue";
-import VehicleIdWikiHint from "../components/snippets/VehicleIdWikiHint.vue";
 
 export default {
   name: "OpenwbOptionalComponentsView",
-  components: { OpenwbDisplayThemeProxy, VehicleIdWikiHint },
+  components: { OpenwbDisplayThemeProxy },
   mixins: [ComponentState],
   emits: ["save", "reset", "defaults"],
   data() {

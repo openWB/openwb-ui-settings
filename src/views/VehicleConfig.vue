@@ -1396,7 +1396,6 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbVehicleProxy from "../components/vehicles/OpenwbVehicleProxy.vue";
 import ChargeTemplateScheduledChargingPlan from "../components/vehicles/ChargeTemplateScheduledChargingPlan.vue";
 import ChargeTemplateTimeChargingPlan from "../components/vehicles/ChargeTemplateTimeChargingPlan.vue";
-import VehicleIdWikiHint from "../components/snippets/VehicleIdWikiHint.vue";
 
 export default {
   name: "OpenwbVehicleConfigView",
@@ -1406,7 +1405,6 @@ export default {
     OpenwbVehicleProxy,
     ChargeTemplateScheduledChargingPlan,
     ChargeTemplateTimeChargingPlan,
-    VehicleIdWikiHint,
   },
   mixins: [ComponentState],
   props: {
