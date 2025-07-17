@@ -6,20 +6,22 @@
     :enable-add-delete="false"
     class="text-center"
   >
-    {{ slotProps.pattern.value * 100 }}&nbsp;%
+    {{ valueLabels[slotProps.pattern.value] || slotProps.pattern.value * 100 + "%" }}
   </openwb-io-pattern>
   <hr />
   <openwb-base-select-input
-    title="Verhalten anwenden auf..."
+    title="Zugeordnete Erzeugungsanlagen..."
     not-selected="Bitte auswählen"
-    :empty-value="null"
+    :empty-value="[]"
     :groups="availableDevices"
-    :model-value="ioAction?.configuration.component_id"
-    @update:model-value="updateConfiguration($event, 'configuration.component_id')"
+    required
+    multiple
+    :model-value="ioAction?.configuration.devices"
+    @update:model-value="updateConfiguration($event, 'configuration.devices')"
   >
     <template #help>
-      Bitte die Erzeugungsanlage auswählen, auf welche das Verhalten angewendet werden soll. Es kann nur eine
-      Erzeugungsanlage ausgewählt werden.
+      Bitte die Erzeugungsanlagen auswählen, welche mit dieser Aktion gekoppelt sind. Es können mehrere
+      Erzeugungsanlagen ausgewählt werden.
     </template>
   </openwb-base-select-input>
 </template>
@@ -34,6 +36,15 @@ export default {
     OpenwbIoPattern,
   },
   mixins: [OpenwbIoActionConfigMixin],
+  data() {
+    return {
+      valueLabels: {
+        0.6: "60% (S1)",
+        0.3: "30% (S2)",
+        0.0: "0% (W3)",
+      },
+    };
+  },
   computed: {
     value: {
       get() {
