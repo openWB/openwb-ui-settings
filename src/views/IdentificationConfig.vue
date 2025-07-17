@@ -110,9 +110,9 @@
               @update:model-value="updateState(chargePointTemplateKey, $event, 'disable_after_unplug')"
             >
               <template #help>
-                {{'Die Identifikation an Ladepunkten mit Ladepunkt-Profil &quot;'+
+                {{"Die Identifikation an Ladepunkten mit Ladepunkt-Profil &quot;"+
                 chargePointTemplate.name+
-                '&quot; aktivieren oder deaktivieren.'}}
+                "&quot; aktivieren oder deaktivieren."}}
               </template>
             </openwb-base-button-group-input>
             <br>
