@@ -90,6 +90,7 @@
         </div>
         <div v-if="!installAssistantActive">
           <openwb-base-button-group-input
+            v-if="$store.state.mqtt['openWB/general/extern'] === true"
             title="HTTP-API"
             :buttons="[
               {
