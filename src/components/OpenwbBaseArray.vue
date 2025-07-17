@@ -50,7 +50,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasTag, fasTimesCircle, fasPlus, fasInfoCircle);
 
 export default {
-  name: "OpenwbArrayInput",
+  name: "OpenwbArray",
   components: {
     FontAwesomeIcon,
     OpenwbBaseSettingElement,
