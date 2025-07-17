@@ -110,9 +110,10 @@
               @update:model-value="updateState(chargePointTemplateKey, $event, 'disable_after_unplug')"
             >
               <template #help>
-                {{"Die Identifikation an Ladepunkten mit Ladepunkt-Profil &quot;"+
-                chargePointTemplate.name+
-                "&quot; aktivieren oder deaktivieren."}}
+                {{
+                  'Die Identifikation an Ladepunkten mit Ladepunkt-Profil &quot;' + chargePointTemplate.name +
+                  '&quot; aktivieren oder deaktivieren.'
+                }}
               </template>
             </openwb-base-button-group-input>
             <br>
@@ -193,24 +194,23 @@
                 {{
                   'Ist diese Option aktiviert, wird am Ladepunkt nach Abstecken auf das '+
                   'Standard-Fahrzeug zurückgesetzt. Die Option ist im Lade-Profil &quot;'+
-                    $store.state.mqtt['openWB/vehicle/template/charge_template/' + 
-                    $store.state.mqtt['openWB/vehicle/' + vehicleId + '/charge_template']].name +
-                    '&quot; gespeichert.'
+                  $store.state.mqtt['openWB/vehicle/template/charge_template/' + 
+                  $store.state.mqtt['openWB/vehicle/' + vehicleId + '/charge_template']].name +
+                  '&quot; gespeichert.'
                 }}
                 <div v-if="
                   $store.state.mqtt['openWB/vehicle/template/charge_template/' + 
                   $store.state.mqtt['openWB/vehicle/' + vehicleId + '/charge_template']].load_default === true"
                 >
-                  &quot;Standard-Fahrzeug nach Abstecken&quot; ist für alle Fahrzeuge aktiviert,
-                  denen dieses Lade-Profil zugeordnet wurde.
+                  '&quot;Standard-Fahrzeug nach Abstecken&quot; ist für alle Fahrzeuge aktiviert, '+
+                  'denen dieses Lade-Profil zugeordnet wurde.'
                 </div>
                 <div v-else>
-                  &quot;Standard-Fahrzeug nach Abstecken&quot; ist für alle Fahrzeuge deaktiviert,
-                  denen dieses Lade-Profil zugeordnet wurde.
+                  '&quot;Standard-Fahrzeug nach Abstecken&quot; ist für alle Fahrzeuge deaktiviert, '+
+                  'denen dieses Lade-Profil zugeordnet wurde.'
                 </div>
               </template>
             </openwb-base-button-group-input>
-              {{}}
             </div>
           </div>
         </openwb-base-card>
