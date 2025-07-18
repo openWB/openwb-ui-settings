@@ -1408,7 +1408,7 @@
               @update:model-value="updateState(templateKey, $event, 'chargemode.bidi_charging.plan.et_active')"
             />
             <openwb-base-alert subtype="info">
-              Die Norm IEC 61851-1 und ISO 156118 benötigen als Parameter eine Stromstärke und die Phasenzahl. Die Norm
+              Die Norm IEC 61851-1 und ISO 15118 benötigen als Parameter eine Stromstärke und die Phasenzahl. Die Norm
               ISO 15118-20, die das bidirektionale Laden definiert, benötigt als Parameter eine Ladeleistung. Die
               Phasenzahl legt das Fahrzeug fest. Wenn Fahrzeug und Ladepunkt bidirektionales Laden nach ISO 15118-20
               unterstützen, wird die eingestellte Ladeleistung verwendet. Wenn mindestens einer von beiden die Norm
