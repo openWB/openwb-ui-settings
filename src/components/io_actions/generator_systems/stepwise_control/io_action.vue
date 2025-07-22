@@ -1,29 +1,60 @@
 <template>
   <openwb-io-pattern
     v-slot="slotProps"
-    :model-value="value"
-    :digital-inputs="ioDevice.input.digital"
+    v-model="ioAction.configuration.input_pattern"
+    :contacts="ioDevice.input.digital"
+    action-title="Begrenzung"
     :enable-add-delete="false"
     class="text-center"
   >
-    {{ valueLabels[slotProps.pattern.value] || slotProps.pattern.value * 100 + "%" }}
+    {{ slotProps.pattern.value * 100 + "%" }}
   </openwb-io-pattern>
   <hr />
   <openwb-base-select-input
+    v-model="ioAction.configuration.devices"
     title="Zugeordnete Erzeugungsanlagen..."
     not-selected="Bitte auswählen"
     :empty-value="[]"
     :groups="availableDevices"
     required
     multiple
-    :model-value="ioAction?.configuration.devices"
-    @update:model-value="updateConfiguration($event, 'configuration.devices')"
   >
     <template #help>
       Bitte die Erzeugungsanlagen auswählen, welche mit dieser Aktion gekoppelt sind. Es können mehrere
-      Erzeugungsanlagen ausgewählt werden.
+      Erzeugungsanlagen ausgewählt werden.<br />
+      Diese Zuordnung ist rein informativ und hat noch keine Auswirkungen auf die Funktionalität. Die Begrenzung der
+      zugeordneten Erzeugungsanlagen wird im Status angezeigt.
     </template>
   </openwb-base-select-input>
+  <hr />
+  <openwb-base-button-group-input
+    v-model="ioAction.configuration.passthrough_enabled"
+    title="Ausgänge aktivieren"
+    :buttons="[
+      { buttonValue: false, text: 'Nein' },
+      { buttonValue: true, text: 'Ja' },
+    ]"
+    class="mb-2"
+    required
+  >
+    <template #help>
+      Optional kann das Signal der konfigurierten Eingänge an Ausgänge durchgereicht ("durchgeschliffen") werden. Wird
+      z.B. das Muster für 60% als aktiv erkannt, dann wird auch das hier festgelegte Ausgangsmuster für 60% aktiviert.
+    </template>
+  </openwb-base-button-group-input>
+  <openwb-io-pattern
+    v-if="ioAction.configuration.passthrough_enabled"
+    v-slot="slotProps"
+    v-model="ioAction.configuration.output_pattern"
+    :contacts="ioDevice.output.digital"
+    title="Ausgangsmuster"
+    action-title="Begrenzung"
+    :enable-add-delete="false"
+    class="text-center"
+    :show-check-pattern="false"
+  >
+    {{ slotProps.pattern.value * 100 + "%" }}
+  </openwb-io-pattern>
 </template>
 
 <script>
@@ -36,24 +67,7 @@ export default {
     OpenwbIoPattern,
   },
   mixins: [OpenwbIoActionConfigMixin],
-  data() {
-    return {
-      valueLabels: {
-        0.6: "60% (S1)",
-        0.3: "30% (S2)",
-        0.0: "0% (W3)",
-      },
-    };
-  },
   computed: {
-    value: {
-      get() {
-        return this.ioAction.configuration.input_pattern;
-      },
-      set(newValue) {
-        this.updateConfiguration(newValue, "configuration.input_pattern");
-      },
-    },
     availableDevices() {
       let options = this.availableComponents
         .filter((component) => component.type === "inverter")

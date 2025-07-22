@@ -1,8 +1,7 @@
 <template>
   <openwb-io-single-pattern
     v-model="value"
-    :digital-inputs="ioDevice?.input?.digital"
-    :io-device="ioDevice"
+    :contacts="ioDevice?.input?.digital"
   />
   <hr />
   <openwb-base-select-input
@@ -12,7 +11,7 @@
     :groups="availableDevices"
     multiple
     required
-    :disabled="Object.keys(value[0].input_matrix).length > 0 ? false : true"
+    :disabled="Object.keys(value[0].matrix).length > 0 ? false : true"
     :model-value="ioAction?.configuration.devices"
     @update:model-value="updateConfiguration($event, 'configuration.devices')"
   >

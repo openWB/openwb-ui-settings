@@ -1,12 +1,13 @@
 <template>
   <openwb-io-pattern
     v-slot="slotProps"
-    :model-value="value"
-    :digital-inputs="ioDevice.input.digital"
+    v-model="value"
+    :contacts="ioDevice.input.digital"
     :enable-add-delete="true"
     :min-patterns="2"
   >
     <openwb-base-select-input
+      v-model="slotProps.pattern.value"
       required
       not-selected="Bitte auswählen"
       :empty-value="null"
@@ -14,8 +15,6 @@
         { value: 0, text: 'sperren' },
         { value: 1, text: 'freigeben' },
       ]"
-      :model-value="slotProps.pattern.value"
-      @update:model-value="slotProps.pattern.value = $event"
     />
   </openwb-io-pattern>
   <hr />

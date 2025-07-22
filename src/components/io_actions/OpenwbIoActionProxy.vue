@@ -81,7 +81,7 @@ export default {
       // clear input configuration
       if (Array.isArray(this.ioAction.configuration?.input_pattern)) {
         let clearedInputPattern = this.ioAction.configuration.input_pattern.map((input) => {
-          return { value: input.value, input_matrix: {} };
+          return { value: input.value, matrix: {} };
         });
         this.updateConfiguration(clearedInputPattern, "configuration.input_pattern");
       }
