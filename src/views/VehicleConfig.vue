@@ -711,8 +711,8 @@
                 { buttonValue: 'stop', text: 'Stop', class: 'btn-outline-dark' },
               ]"
               :model-value="template.chargemode.selected"
-              @update:model-value="setActiveChargeMode(templateKey, $event)"
-              @button-click="setActiveChargeMode(templateKey, $event)"
+              @update:model-value="updateState(templateKey, $event, 'chargemode.selected')"
+              @button-click="openActiveChargeModeCard(templateKey, $event)"
             >
               <template #help>
                 Diese Einstellung entspricht dem gewählten Lademodus auf der Hauptseite und ist aktiv, wenn ein
@@ -812,6 +812,7 @@
                 </template>
               </openwb-base-button-group-input>
               <hr />
+              <openwb-base-heading>Einstellungen der Lademodi</openwb-base-heading>
             </div>
             <openwb-base-card
               :ref="`card-${templateKey}-instant_charging`"
@@ -821,7 +822,6 @@
               class="mb-3"
             >
               <template #header> Sofort </template>
-              <openwb-base-heading>Sofort</openwb-base-heading>
               <openwb-base-range-input
                 :title="`Soll-Ladestrom${dcChargingEnabled ? ' (AC)' : ''}`"
                 :min="6"
@@ -917,7 +917,6 @@
               class="mb-3"
             >
               <template #header> PV </template>
-              <openwb-base-heading>PV</openwb-base-heading>
               <openwb-base-range-input
                 :title="`Minimaler Dauerstrom${dcChargingEnabled ? ' (AC)' : ''}`"
                 :min="0"
@@ -1632,8 +1631,7 @@ export default {
         data: { template: templateId },
       });
     },
-    setActiveChargeMode(templateKey, activeMode) {
-      this.updateState(templateKey, activeMode, "chargemode.selected");
+    openActiveChargeModeCard(templateKey, activeMode) {
       // Only open the active card
       this.$nextTick(() => {
         const modes = ["instant_charging", "pv_charging", "eco_charging", "scheduled_charging"];
@@ -1645,13 +1643,6 @@ export default {
             card.isCollapsed = mode !== activeMode;
           }
         });
-        // Scroll to active card
-        const refName = `card-${templateKey}-${activeMode}`;
-        const cardRef = this.$refs[refName];
-        const element = Array.isArray(cardRef) ? cardRef[0]?.$el : cardRef?.$el;
-        if (element && typeof element.scrollIntoView === "function") {
-          element.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
       });
     },
   },
