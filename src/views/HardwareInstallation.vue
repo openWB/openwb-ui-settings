@@ -29,7 +29,9 @@
       >
         Wenn neue Komponenten - insbesondere Zähler - konfiguriert wurden, ist auch das
         <router-link to="/LoadManagementConfiguration"> Lastmanagement </router-link>
-        zu prüfen!
+        zu prüfen!<br />
+        Je nach Hersteller muss eventuell die Kommunikation im Wechselrichter freigegeben werden
+        (z.B. Aktivierung Modbus TCP, Portfreigaben o.Ä.)
       </openwb-base-alert>
       <openwb-base-card title="Geräte und Komponenten">
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
