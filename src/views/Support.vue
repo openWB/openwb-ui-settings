@@ -18,7 +18,7 @@
         <openwb-base-card title="Systembericht">
           <div v-if="$store.state.mqtt['openWB/system/dataprotection_acknowledged'] === true">
             <openwb-base-alert subtype="danger">
-              Vergewissere Dich , dass mindestens die aktuelle "Release" Version installiert ist.
+              Vergewissere Dich, dass mindestens die aktuelle "Release" Version installiert ist.
             </openwb-base-alert>
             <openwb-base-alert subtype="info">
               <ul>
