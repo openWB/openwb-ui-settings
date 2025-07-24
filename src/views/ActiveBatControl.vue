@@ -37,7 +37,7 @@
                 fixed-width
                 :icon="['fas', 'fa-battery-half']"
               />
-              Mindest-SoC des Speichers
+              Nach SoC des Speichers
             </template>
             <template #help>
               <div v-if="batMode === 'ev_mode'">
@@ -64,8 +64,40 @@
               :step="1"
               unit="%"
               required
-              :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/min_bat_soc']"
-              @update:model-value="updateState('openWB/general/chargemode_config/pv_charging/min_bat_soc', $event)"
+              :model-value="
+                $store.state.mqtt['openWB/general/chargemode_config/pv_charging/min_bat_soc'] >
+                $store.state.mqtt['openWB/general/chargemode_config/pv_charging/max_bat_soc'] ?
+                  $store.state.mqtt['openWB/general/chargemode_config/pv_charging/max_bat_soc'] :
+                  $store.state.mqtt['openWB/general/chargemode_config/pv_charging/min_bat_soc']
+              "
+              @update:model-value="
+                updateState('openWB/general/chargemode_config/pv_charging/min_bat_soc', $event),
+                $store.state.mqtt['openWB/general/chargemode_config/pv_charging/min_bat_soc'] >
+                $store.state.mqtt['openWB/general/chargemode_config/pv_charging/max_bat_soc'] ?
+                  updateState('openWB/general/chargemode_config/pv_charging/max_bat_soc', $event) :
+                  updateState('openWB/general/chargemode_config/pv_charging/min_bat_soc', $event)
+              "
+            />
+            <openwb-base-range-input
+              title="Maximum-SoC des Speichers"
+              :min="0"
+              :max="100"
+              :step="1"
+              unit="%"
+              required
+              :model-value="
+                $store.state.mqtt['openWB/general/chargemode_config/pv_charging/max_bat_soc'] <
+                $store.state.mqtt['openWB/general/chargemode_config/pv_charging/min_bat_soc'] ?
+                  $store.state.mqtt['openWB/general/chargemode_config/pv_charging/min_bat_soc'] :
+                  $store.state.mqtt['openWB/general/chargemode_config/pv_charging/max_bat_soc']
+              "
+              @update:model-value="
+                updateState('openWB/general/chargemode_config/pv_charging/max_bat_soc', $event),
+                $store.state.mqtt['openWB/general/chargemode_config/pv_charging/max_bat_soc'] <
+                $store.state.mqtt['openWB/general/chargemode_config/pv_charging/min_bat_soc'] ?
+                  updateState('openWB/general/chargemode_config/pv_charging/min_bat_soc', $event) :
+                  updateState('openWB/general/chargemode_config/pv_charging/max_bat_soc', $event)
+              "
             />
             <openwb-base-heading> Speicher-SoC unterhalb Mindest-SoC </openwb-base-heading>
             <openwb-base-button-group-input
