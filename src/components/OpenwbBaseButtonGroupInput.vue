@@ -30,7 +30,6 @@
             {{ button.text }}
           </slot>
           <font-awesome-icon
-            fixed-width
             :icon="['fas', 'check']"
             :style="[value == button.buttonValue ? 'visibility: visible' : 'visibility: hidden']"
           />

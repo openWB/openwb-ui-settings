@@ -6,10 +6,7 @@
     :component-id="ioDevice.id"
   >
     <template #header-left>
-      <font-awesome-icon
-        fixed-width
-        :icon="['fas', 'tower-broadcast']"
-      />
+      <font-awesome-icon :icon="['fas', 'tower-broadcast']" />
       {{ ioDevice.name }}
     </template>
     <openwb-base-card

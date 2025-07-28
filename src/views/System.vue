@@ -115,10 +115,7 @@
                 @button-clicked="sendSystemCommand('systemFetchVersions')"
               >
                 Informationen aktualisieren
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'download']"
-                />
+                <font-awesome-icon :icon="['fas', 'download']" />
               </openwb-base-click-button>
             </div>
             <div class="col-md-4 d-flex py-1 justify-content-center">
@@ -128,10 +125,7 @@
                 @button-clicked="systemUpdate()"
               >
                 Update
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'arrow-alt-circle-up']"
-                />
+                <font-awesome-icon :icon="['fas', 'arrow-alt-circle-up']" />
               </openwb-base-click-button>
             </div>
           </div>
@@ -238,10 +232,7 @@
                   @button-clicked="sendSystemCommand('systemReboot')"
                 >
                   Neustart
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="['fas', 'undo']"
-                  />
+                  <font-awesome-icon :icon="['fas', 'undo']" />
                 </openwb-base-click-button>
               </div>
               <div class="col-md-4 d-flex py-1 justify-content-center">
@@ -250,10 +241,7 @@
                   @button-clicked="sendSystemCommand('systemShutdown')"
                 >
                   Ausschalten
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="['fas', 'power-off']"
-                  />
+                  <font-awesome-icon :icon="['fas', 'power-off']" />
                 </openwb-base-click-button>
               </div>
             </div>
@@ -307,15 +295,9 @@
                   :disabled="!releaseChangeValid"
                   @button-clicked="switchBranch()"
                 >
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="['fas', 'skull-crossbones']"
-                  />
+                  <font-awesome-icon :icon="['fas', 'skull-crossbones']" />
                   Branch und Tag wechseln
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="['fas', 'skull-crossbones']"
-                  />
+                  <font-awesome-icon :icon="['fas', 'skull-crossbones']" />
                 </openwb-base-click-button>
               </div>
             </div>

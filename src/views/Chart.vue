@@ -78,10 +78,7 @@
                   :subtype="getCardSubtype(groupKey)"
                 >
                   <template #header>
-                    <font-awesome-icon
-                      fixed-width
-                      :icon="getCardIcon(groupKey)"
-                    />
+                    <font-awesome-icon :icon="getCardIcon(groupKey)" />
                     {{ getTotalsLabel(groupKey) }}
                   </template>
                   <div

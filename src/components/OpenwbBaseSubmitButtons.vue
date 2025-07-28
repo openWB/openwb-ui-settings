@@ -34,10 +34,7 @@
         @click="saveSettings"
       >
         Speichern
-        <font-awesome-icon
-          fixed-width
-          :icon="['fas', 'check']"
-        />
+        <font-awesome-icon :icon="['fas', 'check']" />
       </button>
     </div>
     <div
@@ -51,10 +48,7 @@
         @click="showResetModal"
       >
         Änderungen verwerfen
-        <font-awesome-icon
-          fixed-width
-          :icon="['fas', 'undo']"
-        />
+        <font-awesome-icon :icon="['fas', 'undo']" />
       </button>
     </div>
     <div
@@ -68,10 +62,7 @@
         @click="showDefaultsModal"
       >
         Werkseinstellungen
-        <font-awesome-icon
-          fixed-width
-          :icon="['fas', 'times']"
-        />
+        <font-awesome-icon :icon="['fas', 'times']" />
       </button>
     </div>
   </div>

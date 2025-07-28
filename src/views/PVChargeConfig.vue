@@ -200,24 +200,15 @@
             :buttons="[{ buttonValue: 'ev_mode' }, { buttonValue: 'bat_mode' }, { buttonValue: 'min_soc_bat_mode' }]"
           >
             <template #label-ev_mode>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'car-side']"
-              />
+              <font-awesome-icon :icon="['fas', 'car-side']" />
               Fahrzeuge
             </template>
             <template #label-bat_mode>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'fa-car-battery']"
-              />
+              <font-awesome-icon :icon="['fas', 'fa-car-battery']" />
               Speicher
             </template>
             <template #label-min_soc_bat_mode>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'fa-battery-half']"
-              />
+              <font-awesome-icon :icon="['fas', 'fa-battery-half']" />
               Mindest-SoC des Speichers
             </template>
             <template #help>
@@ -229,29 +220,20 @@
               </p>
               <p>
                 Bei Auswahl "
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'car-side']"
-                />
+                <font-awesome-icon :icon="['fas', 'car-side']" />
                 Fahrzeuge" wird der gesamte Überschuss in das EV geladen. Ist die maximale Ladeleistung der Fahrzeuge
                 erreicht und es wird eingespeist, wird dieser Überschuss in den Speicher geladen.
               </p>
               <p>
                 Bei Auswahl "
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'fa-car-battery']"
-                />
+                <font-awesome-icon :icon="['fas', 'fa-car-battery']" />
                 Speicher" wird der gesamte Überschuss in den Speicher geladen. Ist die maximale Ladeleistung des
                 Speichers erreicht und es wird eingespeist, wird dieser Überschuss unter Beachtung der Einschaltschwelle
                 in die Fahrzeuge geladen.
               </p>
               <p>
                 Bei Auswahl "
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'fa-battery-half']"
-                />
+                <font-awesome-icon :icon="['fas', 'fa-battery-half']" />
                 Mindest-SoC des Speichers" wird der Überschuss bis zum Mindest-SoC in den Speicher geladen. Ist die
                 maximale Ladeleistung des Speichers erreicht und es wird eingespeist, wird dieser Überschuss in die
                 Fahrzeuge geladen. Wird der Mindest-SoC überschritten, wird der Überschuss ins Fahrzeug geladen.
