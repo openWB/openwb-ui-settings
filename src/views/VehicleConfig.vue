@@ -725,30 +725,6 @@
                 </template>
               </openwb-base-button-group-input>
               <openwb-base-button-group-input
-                title="Zeitladen"
-                :buttons="[
-                  {
-                    buttonValue: false,
-                    text: 'Nein',
-                    class: 'btn-outline-danger',
-                  },
-                  {
-                    buttonValue: true,
-                    text: 'Ja',
-                    class: 'btn-outline-success',
-                  },
-                ]"
-                :model-value="template.time_charging.active"
-                @update:model-value="updateState(templateKey, $event, 'time_charging.active')"
-              >
-                <template #help>
-                  Der Lademodus Zeit kann parallel zu einem der anderen Lademodi aktiviert werden. Die Auswahl des
-                  Lademodus, der in der Regelung genutzt wird, erfolgt anhand der Übersicht in der Hilfe bei "Aktiver
-                  Lademodus". Wenn kein Zeitplan aktiv ist oder das Limit des Zeitplans erreicht wurde, wird der
-                  Lademodus verwendet, der bei "Aktiver Lademodus" ausgewählt ist.
-                </template>
-              </openwb-base-button-group-input>
-              <openwb-base-button-group-input
                 title="Standard nach Abstecken"
                 :buttons="[
                   {
@@ -778,7 +754,6 @@
               :collapsible="true"
               :collapsed="true"
               subtype="secondary"
-              class="mb-3"
             >
               <template #header> Sofort </template>
               <openwb-base-range-input
@@ -873,7 +848,6 @@
               :collapsible="true"
               :collapsed="true"
               subtype="secondary"
-              class="mb-3"
             >
               <template #header> PV </template>
               <openwb-base-range-input
@@ -1105,7 +1079,6 @@
               :collapsible="true"
               :collapsed="true"
               subtype="secondary"
-              class="mb-3"
             >
               <template #header> Eco </template>
               <openwb-base-heading
@@ -1234,7 +1207,6 @@
               :collapsible="true"
               :collapsed="true"
               subtype="secondary"
-              class="mb-3"
             >
               <template #header> Ziel </template>
               <openwb-base-heading>
@@ -1265,7 +1237,7 @@
                 v-if="template.chargemode.scheduled_charging.plans.length == 0"
                 subtype="info"
               >
-                Es wurden noch keine Zeitpläne für das Zielladen angelegt.
+                Es wurden noch keine Pläne für das Zielladen angelegt.
               </openwb-base-alert>
               <charge-template-scheduled-charging-plan
                 v-for="(plan, planKey) in template.chargemode.scheduled_charging.plans"
@@ -1279,8 +1251,48 @@
             </openwb-base-card>
             <div v-if="!installAssistantActive">
               <hr />
-              <openwb-base-heading>
-                Zeit
+              <openwb-base-button-group-input
+                title="Zeitladen"
+                :buttons="[
+                  {
+                    buttonValue: false,
+                    text: 'Nein',
+                    class: 'btn-outline-danger',
+                  },
+                  {
+                    buttonValue: true,
+                    text: 'Ja',
+                    class: 'btn-outline-success',
+                  },
+                ]"
+                :model-value="template.time_charging.active"
+                @update:model-value="updateState(templateKey, $event, 'time_charging.active')"
+              >
+                <template #help>
+                  <p>
+                    Der Lademodus Zeit kann parallel zu einem der anderen Lademodi aktiviert werden. Die Auswahl des
+                    Lademodus, der in der Regelung genutzt wird, erfolgt anhand der Übersicht in der Hilfe bei "Aktiver
+                    Lademodus". Wenn kein Zeitplan aktiv ist oder das Limit des Zeitplans erreicht wurde, wird der
+                    Lademodus verwendet, der bei "Aktiver Lademodus" ausgewählt ist.
+                  </p>
+                  <p>
+                    Mit einem Zeitplan kann ein klar abgegrenzter Zeitbereich zum Fahrzeugladen definiert werden. Dies
+                    wird häufig genutzt, um einem Fahrzeug kurz vor der Abfahrt Strom anzubieten, damit dessen
+                    Vorklimatisierung nicht aus dem Fahrzeugakku, sondern aus der openWB bezogen wird (Enteisung,
+                    Vorwärmung, Abkühlung). Nicht von der Vorklimatisierung benötigter Strom erhöht dabei den
+                    Fahrzeug-SoC. Um das Stromnetz am Morgen nicht unnötig zu strapazieren, sollte eine moderate
+                    Stromvorgabe und ein beschränkter Zeitbereich vorgegeben werden (z.B. max. 10A; 30min - in
+                    Übereinstimmung mit den Fahrzeug-App-Vorklimatisierungsvorgaben).
+                  </p>
+                </template>
+              </openwb-base-button-group-input>
+              <openwb-base-card
+                :ref="`card-${templateKey}-scheduled_charging`"
+                :collapsible="true"
+                :collapsed="true"
+                subtype="secondary"
+              >
+                <template #header> Zeitladen-Pläne </template>
                 <template #actions>
                   <openwb-base-avatar
                     class="bg-success clickable"
@@ -1290,26 +1302,23 @@
                     <font-awesome-icon :icon="['fas', 'plus']" />
                   </openwb-base-avatar>
                 </template>
-                <template #help>
-                  Mit einem Zeitplan kann ein klar abgegrenzter Zeitbereich zum Fahrzeugladen definiert werden. Dies
-                  wird häufig genutzt, um einem Fahrzeug kurz vor der Abfahrt Strom anzubieten, damit dessen
-                  Vorklimatisierung nicht aus dem Fahrzeugakku, sondern aus der openWB bezogen wird (Enteisung,
-                  Vorwärmung, Abkühlung). Nicht von der Vorklimatisierung benötigter Strom erhöht dabei den
-                  Fahrzeug-SoC. Um das Stromnetz am Morgen nicht unnötig zu strapazieren, sollte eine moderate
-                  Stromvorgabe und ein beschränkter Zeitbereich vorgegeben werden (z.B. max. 10A; 30min - in
-                  Übereinstimmung mit den Fahrzeug-App-Vorklimatisierungsvorgaben).
-                </template>
-              </openwb-base-heading>
+                <openwb-base-alert
+                  v-if="(template.time_charging.plans ?? []).length == 0"
+                  subtype="info"
+                >
+                  Es wurden noch keine Pläne für das Zeitladen angelegt.
+                </openwb-base-alert>
+                <charge-template-time-charging-plan
+                  v-for="(plan, planKey) in template.time_charging.plans ?? []"
+                  :key="planKey"
+                  :model-value="plan"
+                  :template-id="template.id"
+                  :dc-charging-enabled="dcChargingEnabled"
+                  @update:model-value="updateState(templateKey, $event, `time_charging.plans.${planKey}`)"
+                  @send-command="$emit('sendCommand', $event)"
+                />
+              </openwb-base-card>
             </div>
-            <charge-template-time-charging-plan
-              v-for="(plan, planKey) in template.time_charging.plans ?? []"
-              :key="planKey"
-              :model-value="plan"
-              :template-id="template.id"
-              :dc-charging-enabled="dcChargingEnabled"
-              @update:model-value="updateState(templateKey, $event, `time_charging.plans.${planKey}`)"
-              @send-command="$emit('sendCommand', $event)"
-            />
           </openwb-base-card>
         </div>
       </openwb-base-card>
