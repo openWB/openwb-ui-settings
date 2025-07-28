@@ -73,9 +73,7 @@
           <div v-else>
             <openwb-base-alert subtype="info">
               Hier zugeordnete ID-Tags entsperren beim Scannen das jeweilige Ladepunkt-Profil. Der ID-Tag kann an jedem
-              Ladepunkt genutzt werden, dem das entsprechende Ladepunkt-Profil zugeordnet wurde. Sobald ID-Tags zum
-              Entsperren des Ladepunkt-Profils festgelegt wurden, wird der zugehörige Ladepunkt nach Abstecken eines
-              Fahrzeugs automatisch gesperrt.
+              Ladepunkt genutzt werden, dem das entsprechende Ladepunkt-Profil zugeordnet wurde.
             </openwb-base-alert>
             <div
               v-for="(chargePointTemplate, chargePointTemplateKey) in chargePointTemplates"
@@ -93,7 +91,7 @@
                 />
               </div>
               <openwb-base-button-group-input
-                title="Identifikation aktivieren"
+                title="Sperre nach Abstecken"
                 :buttons="[
                   {
                     buttonValue: false,
@@ -111,9 +109,10 @@
               >
                 <template #help>
                   {{
-                    'Die Identifikation an Ladepunkten mit Ladepunkt-Profil "' +
+                    'Ist "Sperre nach Abstecken" aktiviert, wird der Ladepunkt mit Ladepunkt-Profil "' +
                     chargePointTemplate.name +
-                    '" aktivieren oder deaktivieren.'
+                    '" nach Abstecken eines Fahrzeugs automatisch gesperrt. ' +
+                    "Ist die Funktion deaktiviert, bleibt der Ladepunkt entsperrt."
                   }}
                 </template>
               </openwb-base-button-group-input>
