@@ -698,8 +698,8 @@
               </template>
             </openwb-base-text-input>
             <openwb-base-heading> Allgemeine Optionen </openwb-base-heading>
-            <!-- @button-click added below in oder for setActiveChargeMode to be called even when the mode does not change
-            (case: the same charge mode button is pressed twice in oder to only open the corresponding mode charge mode card if
+            <!-- @button-click added below in oder for openActiveChargeMode to be called even when the mode does not change
+            (case: the same charge mode button is pressed twice in oder to only open the corresponding charge mode card if
             other charge mode cards have been manually opened with toggle in <openwb-base-button-group-input>)  -->
             <openwb-base-button-group-input
               title="Aktiver Lademodus"
@@ -1150,9 +1150,9 @@
             >
               <template #header> Eco </template>
               <openwb-base-heading
-                >Eco
+                >Arbeitsweise von Eco
                 <template #help>
-                  Im Eco-Modus wird eine Preisgrenze vorgegeben und wenn der Strompreis unter dieser Grenze liegt, wird
+                  Im Eco-Modus wird eine Preisgrenze vorgegeben. Wenn der Strompreis unter dieser Grenze liegt, wird
                   mit dem eingestellten Ladestrom geladen und -falls vorhanden- zusätzlich mit dem Überschuss. Wenn die
                   Preisgrenze überschritten wird, wird nur mit Überschuss geladen, wenn dieser vorhanden ist.
                 </template>
@@ -1279,7 +1279,7 @@
             >
               <template #header> Ziel </template>
               <openwb-base-heading>
-                Ziel
+                Zielladepläne
                 <template #actions>
                   <openwb-base-avatar
                     class="bg-success clickable"
@@ -1299,12 +1299,18 @@
                   Ist der berechnete Zeitpunkt des Ladestarts noch nicht erreicht, wird mit Überschuss geladen. Auch
                   nach Erreichen des Ziel-SoCs wird mit Überschuss geladen, solange bis das "SoC-Limit für das Fahrzeug"
                   erreicht wird.<br />
-                  Es wird nach den Vorgaben des Zeitplan geladen, dessen Zieltermin am nächsten liegt. Ist der
+                  Es wird nach den Vorgaben des Zeitplans geladen, dessen Zieltermin am nächsten liegt. Ist der
                   Zielzeitpunkt vorbei, wird solange geladen bis, das Ziel erreicht oder das Auto abgesteckt wird. Wenn
                   vom aktuellen Plan Ziel-SoC und SoC-Limit für das Fahrzeug erreicht wurden oder wenn der nächste Plan
                   mit dem Ladestart beginnen muss, wird auf den nächsten Plan umgeschaltet.
                 </template>
               </openwb-base-heading>
+              <openwb-base-alert
+                v-if="template.chargemode.scheduled_charging.plans.length == 0"
+                subtype="info"
+              >
+                Es wurden noch keine Zeitpläne für das Zielladen angelegt.
+              </openwb-base-alert>
               <charge-template-scheduled-charging-plan
                 v-for="(plan, planKey) in template.chargemode.scheduled_charging.plans"
                 :key="planKey"
