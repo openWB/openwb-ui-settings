@@ -299,4 +299,28 @@ export default {
 .not-clickable {
   cursor: not-allowed;
 }
+
+.bg-primary,
+.bg-secondary,
+.bg-info,
+.bg-danger,
+.bg-success,
+.bg-dark {
+  color: white;
+}
+
+.bg-warning,
+.bg-pink,
+.bg-light,
+.bg-white {
+  color: #212529;
+}
+
+.border-pink {
+  border-color: var(--pink) !important;
+}
+
+.bg-pink {
+  background-color: var(--pink) !important;
+}
 </style>
