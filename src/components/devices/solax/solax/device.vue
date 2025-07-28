@@ -39,8 +39,8 @@
       not-selected="Bitte auswählen"
       :options="[
         { value: 'g2', text: 'Gen 2' },
-        { value: 'g3', text: 'Gen 3' },
-        { value: 'g4', text: 'Gen 4' },
+        { value: 'g3', text: 'Gen 3 & Gen4' },
+        { value: 'g4', text: 'Gen 4 Boost & Gen 4 Mini' },
       ]"
       :model-value="device.configuration.version"
       required

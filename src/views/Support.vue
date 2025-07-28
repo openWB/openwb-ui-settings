@@ -17,6 +17,9 @@
         </openwb-base-alert>
         <openwb-base-card title="Systembericht">
           <div v-if="$store.state.mqtt['openWB/system/dataprotection_acknowledged'] === true">
+            <openwb-base-alert subtype="danger">
+              Vergewissere Dich, dass mindestens die aktuelle "Release" Version installiert ist.
+            </openwb-base-alert>
             <openwb-base-alert subtype="info">
               <ul>
                 <li>
@@ -24,14 +27,13 @@
                   <FontAwesomeIcon :icon="['far', 'question-circle']" />
                   angezeigt wird. Nimm das Wiki zur Hilfe.
                 </li>
-                <li>Vergewissere Dich , dass mindestens die aktuelle "Release" Version installiert ist.</li>
                 <li>
                   Stelle beim Absenden des Berichtes die Fehlerkonditionen her. Lädt ein Fahrzeug nicht, sollte es
                   angeschlossen und nicht voll geladen sein. Ist PV laden betroffen, sollte die Sonne auch scheinen. Der
                   Systembericht muss dann versendet werden, wenn der Fehler aktuell vorliegt.
                 </li>
                 <li>
-                  Stelle sicher, dass der Lademodus gewählt ist und im Falle von nicht ladenden ladenden Fahrzeugen,
+                  Stelle sicher, dass der richtige Lademodus gewählt ist und im Falle von nicht ladenden Fahrzeugen,
                   dass der Ladepunkt auch entsperrt wurde.
                 </li>
                 <li>
@@ -124,10 +126,7 @@
           subtype="success"
         >
           Die Daten für den Fehlerbericht werden im Hintergrund zusammengestellt. Du kannst diese Seite jetzt verlassen.
-          <font-awesome-icon
-            fixed-width
-            :icon="['fas', 'check']"
-          />
+          <font-awesome-icon :icon="['fas', 'check']" />
         </openwb-base-alert>
       </div>
     </form>

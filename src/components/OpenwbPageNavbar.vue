@@ -281,10 +281,7 @@
             target="_blank"
           >
             Wiki
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'external-link-alt']"
-            />
+            <font-awesome-icon :icon="['fas', 'external-link-alt']" />
           </a>
         </li>
       </ul>

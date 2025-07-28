@@ -91,10 +91,7 @@
             subtype="danger"
           >
             <template #header>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'gauge-high']"
-              />
+              <font-awesome-icon :icon="['fas', 'gauge-high']" />
               {{ counter.name }}
             </template>
             <openwb-base-number-input
@@ -167,10 +164,7 @@
             subtype="success"
           >
             <template #header>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'solar-panel']"
-              />
+              <font-awesome-icon :icon="['fas', 'solar-panel']" />
               {{ inverter.name }}
             </template>
             <openwb-base-number-input

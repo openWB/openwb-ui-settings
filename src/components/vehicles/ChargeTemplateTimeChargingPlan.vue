@@ -22,29 +22,17 @@
         @click.stop="plan.active = !plan.active"
       >
         <span v-if="plan.limit.selected == 'soc'">
-          <font-awesome-icon
-            fixed-width
-            :icon="['fas', 'car-battery']"
-          />
+          <font-awesome-icon :icon="['fas', 'car-battery']" />
           {{ plan.limit.soc }}%
         </span>
         <span v-if="plan.limit.selected == 'amount'">
-          <font-awesome-icon
-            fixed-width
-            :icon="['fas', 'bolt']"
-          />
+          <font-awesome-icon :icon="['fas', 'bolt']" />
           {{ plan.limit.amount / 1000 }}kWh
         </span>
-        <font-awesome-icon
-          fixed-width
-          :icon="['fas', 'clock']"
-        />
+        <font-awesome-icon :icon="['fas', 'clock']" />
         {{ plan.time[0] }} - {{ plan.time[1] }}
         <span v-if="plan.frequency.selected == 'once'">
-          <font-awesome-icon
-            fixed-width
-            :icon="['fas', 'calendar-day']"
-          />
+          <font-awesome-icon :icon="['fas', 'calendar-day']" />
           {{
             formatDate(plan.frequency.once[0]) == formatDate(plan.frequency.once[1])
               ? formatDate(plan.frequency.once[0])
@@ -52,16 +40,10 @@
           }}
         </span>
         <span v-if="plan.frequency.selected == 'daily'">
-          <font-awesome-icon
-            fixed-width
-            :icon="['fas', 'calendar-week']"
-          />
+          <font-awesome-icon :icon="['fas', 'calendar-week']" />
         </span>
         <span v-if="plan.frequency.selected == 'weekly'">
-          <font-awesome-icon
-            fixed-width
-            :icon="['fas', 'calendar-alt']"
-          />
+          <font-awesome-icon :icon="['fas', 'calendar-alt']" />
         </span>
       </span>
       <span v-if="slotProps.collapsed == false">
@@ -70,20 +52,14 @@
           title="Zeitladen-Plan duplizieren"
           @click.stop="copyPlan()"
         >
-          <font-awesome-icon
-            fixed-width
-            :icon="['fas', 'copy']"
-          />
+          <font-awesome-icon :icon="['fas', 'copy']" />
         </openwb-base-avatar>
         <openwb-base-avatar
           class="bg-danger clickable ml-1"
           title="Zeitladen-Plan löschen"
           @click.stop="removePlanModal()"
         >
-          <font-awesome-icon
-            fixed-width
-            :icon="['fas', 'trash']"
-          />
+          <font-awesome-icon :icon="['fas', 'trash']" />
         </openwb-base-avatar>
       </span>
     </template>

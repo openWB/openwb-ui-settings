@@ -39,10 +39,7 @@
               class="bg-danger clickable"
               @click="removeIoDeviceModal(installedIoDeviceKey, $event)"
             >
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'trash']"
-              />
+              <font-awesome-icon :icon="['fas', 'trash']" />
             </openwb-base-avatar>
           </template>
           <openwb-base-text-input
@@ -93,10 +90,7 @@
               class="bg-danger clickable"
               @click="removeIoActionModal(installedIoActionKey, $event)"
             >
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'trash']"
-              />
+              <font-awesome-icon :icon="['fas', 'trash']" />
             </openwb-base-avatar>
           </template>
           <openwb-base-text-input

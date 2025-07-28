@@ -59,10 +59,7 @@
               target="_blank"
             >
               Captcha Lösen
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'external-link-alt']"
-              />
+              <font-awesome-icon :icon="['fas', 'external-link-alt']" />
             </a>
             (https://bimmer-connected.readthedocs.io/en/latest/captcha/rest_of_world.html)
           </li>
