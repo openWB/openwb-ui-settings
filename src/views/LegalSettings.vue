@@ -39,10 +39,7 @@
                 @button-clicked="sendSystemCommand('systemShutdown')"
               >
                 Nicht akzeptieren und ausschalten
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'power-off']"
-                />
+                <font-awesome-icon :icon="['fas', 'power-off']" />
               </openwb-base-click-button>
             </div>
           </div>

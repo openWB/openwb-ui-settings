@@ -17,10 +17,7 @@
           <div class="input-group-prepend">
             <div class="input-group-text">
               <slot name="input-prefix">
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'tag']"
-                />
+                <font-awesome-icon :icon="['fas', 'tag']" />
               </slot>
             </div>
           </div>
@@ -39,10 +36,7 @@
               @click="addTag"
             >
               <slot name="input-add">
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'plus']"
-                />
+                <font-awesome-icon :icon="['fas', 'plus']" />
               </slot>
             </div>
           </div>

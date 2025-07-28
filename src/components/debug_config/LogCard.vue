@@ -14,7 +14,6 @@
         @click.stop="postToPastebin"
       >
         <font-awesome-icon
-          fixed-width
           :icon="pastebinLink ? ['fas', 'check'] : ['fas', 'share-nodes']"
           :title="pastebinLink ? 'Link in die Zwischenablage kopiert' : 'Log auf paste.openwb.de teilen'"
         />
@@ -26,7 +25,6 @@
         @click.stop="copyToClipboard(logData)"
       >
         <font-awesome-icon
-          fixed-width
           :icon="copyMessage ? ['fas', 'check'] : ['fas', 'clipboard']"
           :title="copyMessage ? 'Log in die Zwischenablage kopiert' : 'Log kopieren'"
         />
@@ -38,7 +36,6 @@
         @click.stop="loadLog(logFile, selectedVariant)"
       >
         <font-awesome-icon
-          fixed-width
           :class="loading ? 'fa-spin-pulse' : ''"
           :icon="loading ? ['fas', 'spinner'] : ['fas', 'file-download']"
           title="Log laden/aktualisieren"

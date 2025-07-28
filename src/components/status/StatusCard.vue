@@ -15,10 +15,7 @@
         :class="`bg-${stateClass}`"
         :title="stateLabel"
       >
-        <font-awesome-icon
-          fixed-width
-          :icon="stateIcon"
-        />
+        <font-awesome-icon :icon="stateIcon" />
       </openwb-base-avatar>
     </template>
     <slot></slot>
@@ -33,10 +30,7 @@
             class="col px-0"
           >
             <openwb-base-alert :subtype="stateClass">
-              <font-awesome-icon
-                fixed-width
-                :icon="stateIcon"
-              />
+              <font-awesome-icon :icon="stateIcon" />
               Modulmeldung:
               <span style="white-space: pre-wrap">
                 {{ stateMessage }}

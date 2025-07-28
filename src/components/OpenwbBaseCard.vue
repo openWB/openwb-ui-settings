@@ -33,7 +33,6 @@
         </span>
         <font-awesome-icon
           v-if="collapsible"
-          fixed-width
           :icon="isCollapsed ? ['fas', 'chevron-right'] : ['fas', 'chevron-down']"
         />
       </span>

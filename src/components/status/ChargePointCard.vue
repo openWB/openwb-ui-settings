@@ -6,10 +6,7 @@
     :state-message="$store.state.mqtt[baseTopic + '/get/fault_str']"
   >
     <template #header-left>
-      <font-awesome-icon
-        fixed-width
-        :icon="['fas', 'charging-station']"
-      />
+      <font-awesome-icon :icon="['fas', 'charging-station']" />
       {{ installedChargePoint.name }}
     </template>
     <template #header-right>{{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW</template>
@@ -23,7 +20,6 @@
         <div class="col col-auto font-weight-bold">Status</div>
         <div class="col text-right">
           <font-awesome-icon
-            fixed-width
             :icon="chargingStatus.icon"
             :title="chargingStatus.text"
           />

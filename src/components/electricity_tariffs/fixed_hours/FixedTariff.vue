@@ -11,10 +11,7 @@
         class="bg-danger clickable"
         @click="$emit('delete')"
       >
-        <font-awesome-icon
-          fixed-width
-          :icon="['fas', 'trash']"
-        />
+        <font-awesome-icon :icon="['fas', 'trash']" />
       </openwb-base-avatar>
     </template>
     <openwb-base-text-input

@@ -40,10 +40,7 @@
         :collapsed="$route.params.section != 'vehicle'"
       >
         <template #header>
-          <font-awesome-icon
-            fixed-width
-            :icon="['fas', 'car']"
-          />
+          <font-awesome-icon :icon="['fas', 'car']" />
           Fahrzeuge
         </template>
         <template #actions>
@@ -53,10 +50,7 @@
             title="Neues Fahrzeug hinzufügen"
             @click="addVehicle"
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'plus']"
-            />
+            <font-awesome-icon :icon="['fas', 'plus']" />
           </openwb-base-avatar>
         </template>
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
@@ -83,10 +77,7 @@
                 title="Fahrzeug löschen"
                 @click="removeVehicleModal($event, vehicleId)"
               >
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'trash']"
-                />
+                <font-awesome-icon :icon="['fas', 'trash']" />
               </openwb-base-avatar>
             </template>
             <openwb-base-text-input
@@ -304,16 +295,9 @@
         :collapsed="true"
       >
         <template #header>
-          <font-awesome-layers
-            fixed-width
-            class="fa-lg"
-          >
+          <font-awesome-layers class="fa-lg">
+            <font-awesome-icon :icon="['far', 'file']" />
             <font-awesome-icon
-              fixed-width
-              :icon="['far', 'file']"
-            />
-            <font-awesome-icon
-              fixed-width
               :icon="['fas', 'car']"
               transform="shrink-8"
             />
@@ -327,10 +311,7 @@
             title="Neues Fahrzeug-Profil hinzufügen"
             @click="addEvTemplate"
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'plus']"
-            />
+            <font-awesome-icon :icon="['fas', 'plus']" />
           </openwb-base-avatar>
         </template>
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
@@ -362,10 +343,7 @@
                   title="Fahrzeug-Profil duplizieren"
                   @click="addEvTemplate($event, key)"
                 >
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="['fas', 'copy']"
-                  />
+                  <font-awesome-icon :icon="['fas', 'copy']" />
                 </openwb-base-avatar>
                 <openwb-base-avatar
                   v-if="!key.endsWith('/0')"
@@ -373,10 +351,7 @@
                   title="Fahrzeug-Profil löschen"
                   @click="removeEvTemplateModal($event, key)"
                 >
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="['fas', 'trash']"
-                  />
+                  <font-awesome-icon :icon="['fas', 'trash']" />
                 </openwb-base-avatar>
               </span>
             </template>
@@ -615,16 +590,9 @@
         :collapsed="$route.params.section != 'charge_template'"
       >
         <template #header>
-          <font-awesome-layers
-            fixed-width
-            class="fa-lg"
-          >
+          <font-awesome-layers class="fa-lg">
+            <font-awesome-icon :icon="['far', 'file']" />
             <font-awesome-icon
-              fixed-width
-              :icon="['far', 'file']"
-            />
-            <font-awesome-icon
-              fixed-width
               :icon="['fas', 'plug']"
               transform="shrink-8"
             />
@@ -638,10 +606,7 @@
             title="Neues Lade-Profil hinzufügen"
             @click="addChargeTemplate"
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'plus']"
-            />
+            <font-awesome-icon :icon="['fas', 'plus']" />
           </openwb-base-avatar>
         </template>
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
@@ -666,10 +631,7 @@
                   title="Lade-Profil duplizieren"
                   @click="addChargeTemplate($event, templateKey)"
                 >
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="['fas', 'copy']"
-                  />
+                  <font-awesome-icon :icon="['fas', 'copy']" />
                 </openwb-base-avatar>
                 <openwb-base-avatar
                   v-if="!templateKey.endsWith('/0')"
@@ -677,10 +639,7 @@
                   title="Lade-Profil löschen"
                   @click.stop="removeChargeTemplateModal($event, template.id)"
                 >
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="['fas', 'trash']"
-                  />
+                  <font-awesome-icon :icon="['fas', 'trash']" />
                 </openwb-base-avatar>
               </span>
             </template>
@@ -1286,10 +1245,7 @@
                     title="Neuen Zielladen-Plan hinzufügen"
                     @click.stop="addChargeTemplateSchedulePlan(template.id)"
                   >
-                    <font-awesome-icon
-                      fixed-width
-                      :icon="['fas', 'plus']"
-                    />
+                    <font-awesome-icon :icon="['fas', 'plus']" />
                   </openwb-base-avatar>
                 </template>
                 <template #help>
@@ -1331,10 +1287,7 @@
                     title="Neuen Zeitladen-Plan hinzufügen"
                     @click.stop="addChargeTemplateTimeChargingPlan(template.id)"
                   >
-                    <font-awesome-icon
-                      fixed-width
-                      :icon="['fas', 'plus']"
-                    />
+                    <font-awesome-icon :icon="['fas', 'plus']" />
                   </openwb-base-avatar>
                 </template>
                 <template #help>

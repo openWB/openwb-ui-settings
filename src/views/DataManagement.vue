@@ -60,10 +60,7 @@
                 "
               >
                 Sicherung erstellen
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'archive']"
-                />
+                <font-awesome-icon :icon="['fas', 'archive']" />
               </openwb-base-click-button>
             </div>
           </div>
@@ -82,10 +79,7 @@
           <div class="input-group">
             <div class="input-group-prepend">
               <div class="input-group-text">
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'file-archive']"
-                />
+                <font-awesome-icon :icon="['fas', 'file-archive']" />
               </div>
             </div>
             <div class="custom-file">
@@ -114,10 +108,7 @@
                 @click="uploadRestoreFile()"
               >
                 Hochladen
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'upload']"
-                />
+                <font-awesome-icon :icon="['fas', 'upload']" />
               </button>
             </div>
           </div>
@@ -129,10 +120,7 @@
                 @button-clicked="restoreBackup()"
               >
                 Wiederherstellung starten
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'box-open']"
-                />
+                <font-awesome-icon :icon="['fas', 'box-open']" />
               </openwb-base-click-button>
             </div>
           </div>
@@ -238,10 +226,7 @@
           <div class="input-group">
             <div class="input-group-prepend">
               <div class="input-group-text">
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'file-archive']"
-                />
+                <font-awesome-icon :icon="['fas', 'file-archive']" />
               </div>
             </div>
             <div class="custom-file">
@@ -270,10 +255,7 @@
                 @click="uploadDataMigrationFile()"
               >
                 Hochladen
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'upload']"
-                />
+                <font-awesome-icon :icon="['fas', 'upload']" />
               </button>
             </div>
           </div>
@@ -308,10 +290,7 @@
                 @button-clicked="dataMigration()"
               >
                 Datenübernahme starten
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'box-open']"
-                />
+                <font-awesome-icon :icon="['fas', 'box-open']" />
               </openwb-base-click-button>
             </div>
           </div>
@@ -340,15 +319,9 @@
                   class="btn-danger clickable"
                   @button-clicked="factoryReset()"
                 >
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="['fas', 'skull-crossbones']"
-                  />
+                  <font-awesome-icon :icon="['fas', 'skull-crossbones']" />
                   Zurücksetzen
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="['fas', 'skull-crossbones']"
-                  />
+                  <font-awesome-icon :icon="['fas', 'skull-crossbones']" />
                 </openwb-base-click-button>
               </div>
             </div>

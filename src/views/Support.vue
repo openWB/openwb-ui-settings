@@ -126,10 +126,7 @@
           subtype="success"
         >
           Die Daten für den Fehlerbericht werden im Hintergrund zusammengestellt. Du kannst diese Seite jetzt verlassen.
-          <font-awesome-icon
-            fixed-width
-            :icon="['fas', 'check']"
-          />
+          <font-awesome-icon :icon="['fas', 'check']" />
         </openwb-base-alert>
       </div>
     </form>

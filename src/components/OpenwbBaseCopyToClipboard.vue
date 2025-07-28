@@ -9,7 +9,6 @@
     </span>
     <font-awesome-icon
       v-if="copySupported"
-      fixed-width
       :icon="isCopied ? ['fas', 'clipboard-check'] : ['fas', 'clipboard']"
     />
   </span>
