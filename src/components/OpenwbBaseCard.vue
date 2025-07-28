@@ -142,35 +142,11 @@ export default {
   align-items: center;
 }
 
-.card-actions .pill {
+.card-actions :deep(.pill) {
   border-radius: 10px;
   padding: 5px;
   border-width: 2px;
   border-style: solid;
-}
-
-.border-pink {
-  border-color: var(--pink) !important;
-}
-
-.bg-pink {
-  background-color: var(--pink) !important;
-}
-
-.bg-primary,
-.bg-secondary,
-.bg-info,
-.bg-danger,
-.bg-success,
-.bg-dark {
-  color: white;
-}
-
-.bg-warning,
-.bg-pink,
-.bg-light,
-.bg-white {
-  color: #212529;
 }
 
 .card-header.bg-secondary .btn-outline-info:not(.active):not(:hover),
@@ -192,7 +168,7 @@ export default {
   background-color: bg-border-white; /* Ensure this matches the background color of other elements */
 }
 
-.card-header .card.border-white {
+.card-header :deep(.card.border-white) {
   background-color: inherit; /* Change this to match the background color of the card body */
 }
 
