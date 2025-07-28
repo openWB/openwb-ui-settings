@@ -33,7 +33,7 @@
                   Systembericht muss dann versendet werden, wenn der Fehler aktuell vorliegt.
                 </li>
                 <li>
-                  Stelle sicher, dass der Lademodus gewählt ist und im Falle von nicht ladenden Fahrzeugen,
+                  Stelle sicher, dass der richtige Lademodus gewählt ist und im Falle von nicht ladenden Fahrzeugen,
                   dass der Ladepunkt auch entsperrt wurde.
                 </li>
                 <li>
