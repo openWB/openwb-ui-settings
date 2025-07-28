@@ -1,6 +1,9 @@
 <template>
-  <div class="device-carlogavazzi">
+  <div class="device-algodue">
     <openwb-base-heading> Einstellungen für Algodue</openwb-base-heading>
+    <openwb-base-alert subtype="info">
+      ModbusTCP muss aktiviert sein. Der Zähler ist auf Modbus-ID 1 und Port 502 vorkonfiguriert.
+    </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
       subtype="host"
