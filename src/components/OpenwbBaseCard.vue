@@ -115,10 +115,14 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .card {
   margin-bottom: 1rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.card :deep(.card:last-of-type) {
+  margin-bottom: 0;
 }
 
 .card .card-header {
