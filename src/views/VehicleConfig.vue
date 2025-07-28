@@ -1152,8 +1152,8 @@
               <openwb-base-heading
                 >Arbeitsweise von Eco
                 <template #help>
-                  Im Eco-Modus wird eine Preisgrenze vorgegeben. Wenn der Strompreis unter dieser Grenze liegt, wird
-                  mit dem eingestellten Ladestrom geladen und -falls vorhanden- zusätzlich mit dem Überschuss. Wenn die
+                  Im Eco-Modus wird eine Preisgrenze vorgegeben. Wenn der Strompreis unter dieser Grenze liegt, wird mit
+                  dem eingestellten Ladestrom geladen und -falls vorhanden- zusätzlich mit dem Überschuss. Wenn die
                   Preisgrenze überschritten wird, wird nur mit Überschuss geladen, wenn dieser vorhanden ist.
                 </template>
               </openwb-base-heading>

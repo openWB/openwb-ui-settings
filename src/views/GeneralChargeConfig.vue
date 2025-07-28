@@ -186,22 +186,29 @@
           </openwb-base-alert>
         </div>
         <div v-else>
-          <openwb-base-alert subtype="info" class="mb-3">
-          <p>
-            Die aktive Speichersteuerung durch openWB basiert auf öffentlich zugänglichen Informationen zu den verschiedenen Speichersystemen. Diese können auch nicht herstellerseitig freigegebene Informationen beinhalten.<br />
-            Fragen bezüglich der Gewährleistung und Hardwarekompatibilität sind vor der Nutzung mit dem Hersteller zu klären. openWB übernimmt keine Haftung für Schäden, welche aus der Nutzung der "aktiven Speichersteuerung" entstehen.
+          <openwb-base-alert
+            subtype="info"
+            class="mb-3"
+          >
+            <p>
+              Die aktive Speichersteuerung durch openWB basiert auf öffentlich zugänglichen Informationen zu den
+              verschiedenen Speichersystemen. Diese können auch nicht herstellerseitig freigegebene Informationen
+              beinhalten.<br />
+              Fragen bezüglich der Gewährleistung und Hardwarekompatibilität sind vor der Nutzung mit dem Hersteller zu
+              klären. openWB übernimmt keine Haftung für Schäden, welche aus der Nutzung der "aktiven Speichersteuerung"
+              entstehen.
             </p>
             <openwb-base-button-group-input
-            title="Hinweise zur aktiven Speichersteuerung gelesen und akzeptiert"
-            :buttons="[
-              { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
-              { buttonValue: true, text: 'Ja', class: 'btn-outline-success' },
-            ]"
-            :model-value="$store.state.mqtt['openWB/bat/config/bat_control_permitted']"
-            @update:model-value="updateState('openWB/bat/config/bat_control_permitted', $event)"
-          />
+              title="Hinweise zur aktiven Speichersteuerung gelesen und akzeptiert"
+              :buttons="[
+                { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
+                { buttonValue: true, text: 'Ja', class: 'btn-outline-success' },
+              ]"
+              :model-value="$store.state.mqtt['openWB/bat/config/bat_control_permitted']"
+              @update:model-value="updateState('openWB/bat/config/bat_control_permitted', $event)"
+            />
           </openwb-base-alert>
-          
+
           <div v-if="$store.state.mqtt['openWB/bat/config/bat_control_permitted'] === true">
             <openwb-base-heading class="mt-0"> Speicher-Entladung ins Fahrzeug steuern </openwb-base-heading>
             <div v-if="$store.state.mqtt['openWB/bat/get/power_limit_controllable'] === true">
@@ -227,8 +234,8 @@
                 <template #help>
                   Wenn das Entladen des Speichers immer erlaubt ist, wird das Fahrzeug aus dem Speicher geladen anstatt
                   Strom aus dem Netz zu beziehen. <br />
-                  Im Modus "gesperrt, wenn Fahrzeug lädt", wird die Entladung nur zugelassen, wenn alle Fahrzeuge im Modus
-                  PV-Laden ohne Mindeststrom oder Zielladen mit PV-Überschuss laden.<br />
+                  Im Modus "gesperrt, wenn Fahrzeug lädt", wird die Entladung nur zugelassen, wenn alle Fahrzeuge im
+                  Modus PV-Laden ohne Mindeststrom oder Zielladen mit PV-Überschuss laden.<br />
                   Wenn das Entladen des Speichers auf den Hausverbrauch begrenzt ist und mindestens Fahrzeuge nicht im
                   Modus PV-Laden ohne Mindeststrom oder Zielladen lädt, wird die Entladung des Speichers in Höhe des
                   Hausverbrauchs zugelassen. Kann die Entladung am Speicher nur komplett gesperrt werden, verhält sich
