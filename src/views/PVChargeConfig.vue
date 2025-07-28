@@ -206,15 +206,12 @@ import {
   faCarSide as fasCarSide,
   faBatteryHalf as fasBatteryHalf,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasCarBattery, fasCarSide, fasBatteryHalf);
 
 export default {
   name: "OpenwbPVChargeConfigView",
-  components: {
-    FontAwesomeIcon,
-  },
+  components: {},
   mixins: [ComponentState],
   emits: ["save", "reset", "defaults"],
   data() {
