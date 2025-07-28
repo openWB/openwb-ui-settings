@@ -819,7 +819,6 @@
               :collapsible="true"
               :collapsed="true"
               subtype="secondary"
-              class="mb-3"
             >
               <template #header> Sofort </template>
               <openwb-base-range-input
@@ -914,7 +913,6 @@
               :collapsible="true"
               :collapsed="true"
               subtype="secondary"
-              class="mb-3"
             >
               <template #header> PV </template>
               <openwb-base-range-input
@@ -1146,7 +1144,6 @@
               :collapsible="true"
               :collapsed="true"
               subtype="secondary"
-              class="mb-3"
             >
               <template #header> Eco </template>
               <openwb-base-heading
@@ -1275,7 +1272,6 @@
               :collapsible="true"
               :collapsed="true"
               subtype="secondary"
-              class="mb-3"
             >
               <template #header> Ziel </template>
               <openwb-base-heading>
@@ -1309,7 +1305,7 @@
                 v-if="template.chargemode.scheduled_charging.plans.length == 0"
                 subtype="info"
               >
-                Es wurden noch keine Zeitpläne für das Zielladen angelegt.
+                Es wurden noch keine Pläne für das Zielladen angelegt.
               </openwb-base-alert>
               <charge-template-scheduled-charging-plan
                 v-for="(plan, planKey) in template.chargemode.scheduled_charging.plans"
