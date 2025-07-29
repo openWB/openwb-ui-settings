@@ -1,5 +1,27 @@
 <template>
   <div class="web-theme-koala">
+    <openwb-base-button-group-input
+      title="Standard-Fahrzeug ausblenden"
+      :buttons="[
+        {
+          buttonValue: false,
+          text: 'Nein',
+          class: 'btn-outline-danger',
+        },
+        {
+          buttonValue: true,
+          text: 'Ja',
+          class: 'btn-outline-success',
+        },
+      ]"
+      :model-value="webTheme.configuration.hide_standard_vehicle"
+      @update:model-value="updateConfiguration($event, 'configuration.hide_standard_vehicle')"
+    >
+      <template #help>
+        Legt fest, ob das Standardfahrzeug im Fahrzeugkarten- bzw. Ladepunkt-Fahrzeugauswahlmenü ausgeblendet wird.
+      </template>
+    </openwb-base-button-group-input>
+    <hr />
     <openwb-base-range-input
       title="Zeitfenster Verlaufsdiagramm"
       :min="15"
@@ -13,6 +35,7 @@
         Das Zeitfenster für das Verlaufsdiagramm wird auf die hier eingestellte Anzahl Minuten beschränkt.
       </template>
     </openwb-base-range-input>
+    <hr />
     <openwb-base-number-input
       title="Ladepunkt Kartenansicht Grenzwert"
       :min="0"
