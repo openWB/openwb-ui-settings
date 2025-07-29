@@ -1,8 +1,7 @@
 <template>
   <openwb-io-single-pattern
     v-model="value"
-    :digital-inputs="ioDevice?.input?.digital"
-    :io-device="ioDevice"
+    :contacts="ioDevice?.input?.digital"
   />
   <openwb-base-number-input
     title="maximale Bezugsleistung"
@@ -10,7 +9,7 @@
     min="0"
     step="0.01"
     required
-    :disabled="Object.keys(value[0].input_matrix).length > 0 ? false : true"
+    :disabled="Object.keys(value[0].matrix).length > 0 ? false : true"
     :model-value="ioAction?.configuration.max_import_power / 1000"
     @update:model-value="updateConfiguration($event * 1000, 'configuration.max_import_power')"
   />
@@ -20,7 +19,7 @@
     :groups="availableDevices"
     required
     multiple
-    :disabled="Object.keys(value[0].input_matrix).length > 0 ? false : true"
+    :disabled="Object.keys(value[0].matrix).length > 0 ? false : true"
     :model-value="ioAction?.configuration.devices"
     @update:model-value="updateConfiguration($event, 'configuration.devices')"
   >
