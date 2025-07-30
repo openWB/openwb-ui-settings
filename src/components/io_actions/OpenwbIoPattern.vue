@@ -2,18 +2,18 @@
   <table class="w-100 mb-2">
     <colgroup>
       <col
-        :span="numInputs"
+        :span="numContacts"
         class="bg-white"
         style="border: 1px solid #dee2e6"
       />
     </colgroup>
     <thead>
       <tr>
-        <th :colspan="numInputs">Eingangsmuster</th>
+        <th :colspan="numContacts">{{ title }}</th>
         <th
           v-if="showTestPattern"
           rowspan="2"
-          class="input-header"
+          class="contact-header"
         >
           <div>Prüfergebnis</div>
         </th>
@@ -21,13 +21,13 @@
       </tr>
       <tr>
         <th
-          v-for="key in Object.keys(digitalInputs)"
+          v-for="key in Object.keys(contacts)"
           :key="key"
-          class="input-header"
+          class="contact-header"
         >
           <div>{{ key }}</div>
         </th>
-        <th>Verhalten</th>
+        <th>{{ actionTitle }}</th>
         <th v-if="enableAddDelete">
           <openwb-base-click-button
             class="bg-success text-white"
@@ -46,19 +46,19 @@
         :key="patternKey"
       >
         <td
-          v-for="deviceInputKey in Object.keys(digitalInputs)"
-          :key="deviceInputKey"
+          v-for="deviceContactKey in Object.keys(contacts)"
+          :key="deviceContactKey"
           class="text-center"
         >
           <font-awesome-icon
-            :title="getTitle(pattern.input_matrix[deviceInputKey])"
-            :icon="getIcon(pattern.input_matrix[deviceInputKey])"
-            :class="getIconClass(pattern.input_matrix[deviceInputKey])"
+            :title="getTitle(pattern.matrix[deviceContactKey])"
+            :icon="getIcon(pattern.matrix[deviceContactKey])"
+            :class="getIconClass(pattern.matrix[deviceContactKey])"
             class="fa-fw clickable"
             size="2x"
-            :transform="pattern.input_matrix[deviceInputKey] == undefined ? 'shrink-6' : null"
-            :mask="pattern.input_matrix[deviceInputKey] == undefined ? ['fas', 'square'] : null"
-            @click.stop.prevent="toggleInput(patternKey, deviceInputKey)"
+            :transform="pattern.matrix[deviceContactKey] == undefined ? 'shrink-6' : null"
+            :mask="pattern.matrix[deviceContactKey] == undefined ? ['fas', 'square'] : null"
+            @click.stop.prevent="toggleContact(patternKey, deviceContactKey)"
             @mousedown.stop.prevent
             @mouseup.stop.prevent
           />
@@ -90,8 +90,8 @@
       </tr>
       <tr v-if="showTestPattern">
         <td
-          v-for="deviceInputKey in Object.keys(digitalInputs)"
-          :key="deviceInputKey"
+          v-for="deviceContactKey in Object.keys(contacts)"
+          :key="deviceContactKey"
           class="pt-4"
         >
           &nbsp;
@@ -103,19 +103,19 @@
         class="bg-info"
       >
         <td
-          v-for="deviceInputKey in Object.keys(digitalInputs)"
-          :key="deviceInputKey"
+          v-for="deviceContactKey in Object.keys(contacts)"
+          :key="deviceContactKey"
           class="text-center text-body"
         >
           <font-awesome-icon
-            :title="getTitle(testPattern[deviceInputKey])"
-            :icon="getIcon(testPattern[deviceInputKey])"
-            :class="getIconClass(testPattern[deviceInputKey])"
+            :title="getTitle(testPattern[deviceContactKey])"
+            :icon="getIcon(testPattern[deviceContactKey])"
+            :class="getIconClass(testPattern[deviceContactKey])"
             class="fa-fw clickable"
             size="2x"
-            :transform="testPattern[deviceInputKey] == undefined ? 'shrink-6' : null"
-            :mask="testPattern[deviceInputKey] == undefined ? ['fas', 'square'] : null"
-            @click.stop.prevent="toggleTestPattern(deviceInputKey)"
+            :transform="testPattern[deviceContactKey] == undefined ? 'shrink-6' : null"
+            :mask="testPattern[deviceContactKey] == undefined ? ['fas', 'square'] : null"
+            @click.stop.prevent="toggleTestPattern(deviceContactKey)"
             @mousedown.stop.prevent
             @mouseup.stop.prevent
           />
@@ -130,6 +130,7 @@
     </tbody>
   </table>
   <openwb-base-button-group-input
+    v-if="showCheckPattern"
     v-model="showTestPattern"
     title="Prüfmuster"
     :buttons="[
@@ -198,23 +199,26 @@ const states = {
 };
 
 export default {
-  name: "IoActionInputPattern",
+  name: "IoActionContactPattern",
   components: {
     FontAwesomeIcon,
   },
   inheritAttrs: false,
   props: {
-    digitalInputs: { type: Object, required: true },
+    contacts: { type: Object, required: true },
     modelValue: { type: Array, required: true },
+    title: { type: String, required: false, default: "Eingangsmuster" },
+    actionTitle: { type: String, required: false, default: "Verhalten" },
     enableAddDelete: { type: Boolean, default: true },
     minPatterns: { type: Number, default: 1 },
     maxPatterns: { type: Number, default: 10 },
+    showCheckPattern: { type: Boolean, required: false, default: true },
   },
   emits: ["update:modelValue"],
   data() {
     return {
       showTestPattern: false,
-      testPattern: { ...this.digitalInputs },
+      testPattern: { ...this.contacts },
     };
   },
   computed: {
@@ -226,8 +230,8 @@ export default {
         this.$emit("update:modelValue", newValue);
       },
     },
-    numInputs() {
-      return Object.keys(this.digitalInputs).length;
+    numContacts() {
+      return Object.keys(this.contacts).length;
     },
     addPatternDisabled() {
       return this.value.length >= this.maxPatterns;
@@ -255,8 +259,8 @@ export default {
     },
   },
   watch: {
-    digitalInputs() {
-      this.testPattern = { ...this.digitalInputs };
+    contacts() {
+      this.testPattern = { ...this.contacts };
     },
   },
   mounted() {
@@ -268,32 +272,32 @@ export default {
     toggleHelp() {
       this.showHelp = !this.showHelp;
     },
-    getIcon(input) {
-      return states[input].icon;
+    getIcon(contact) {
+      return states[contact].icon;
     },
-    getIconClass(input) {
-      return states[input].iconClass;
+    getIconClass(contact) {
+      return states[contact].iconClass;
     },
-    getTitle(input) {
-      return states[input].title;
+    getTitle(contact) {
+      return states[contact].title;
     },
-    toggleInput(patternKey, deviceInputKey) {
-      const nextValue = states[this.value[patternKey].input_matrix[deviceInputKey]].nextValue;
+    toggleContact(patternKey, deviceContactKey) {
+      const nextValue = states[this.value[patternKey].matrix[deviceContactKey]].nextValue;
       if (nextValue !== undefined) {
-        this.value[patternKey].input_matrix[deviceInputKey] = nextValue;
+        this.value[patternKey].matrix[deviceContactKey] = nextValue;
       } else {
-        delete this.value[patternKey].input_matrix[deviceInputKey];
+        delete this.value[patternKey].matrix[deviceContactKey];
       }
     },
-    toggleTestPattern(deviceInputKey) {
-      this.testPattern[deviceInputKey] = !this.testPattern[deviceInputKey];
+    toggleTestPattern(deviceContactKey) {
+      this.testPattern[deviceContactKey] = !this.testPattern[deviceContactKey];
     },
     patternMatch(patternKey) {
-      return Object.keys(this.value[patternKey].input_matrix).every((deviceInputKey) => {
-        if (this.testPattern[deviceInputKey] === undefined) {
+      return Object.keys(this.value[patternKey].matrix).every((deviceContactKey) => {
+        if (this.testPattern[deviceContactKey] === undefined) {
           return true;
         }
-        return this.value[patternKey].input_matrix[deviceInputKey] === this.testPattern[deviceInputKey];
+        return this.value[patternKey].matrix[deviceContactKey] === this.testPattern[deviceContactKey];
       });
     },
     deletePattern(patternKey) {
@@ -301,7 +305,7 @@ export default {
     },
     addPattern() {
       this.value.push({
-        input_matrix: {},
+        matrix: {},
         value: null,
       });
     },
@@ -315,12 +319,12 @@ th {
   vertical-align: bottom;
 }
 
-.input-header {
+.contact-header {
   position: relative;
   height: 6em;
 }
 
-.input-header div {
+.contact-header div {
   position: absolute;
   bottom: 0;
   left: 50%;

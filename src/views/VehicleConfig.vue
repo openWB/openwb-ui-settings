@@ -509,6 +509,21 @@
               <span v-if="dcChargingEnabled === true"> (AC) </span>
             </openwb-base-heading>
             <openwb-base-button-group-input
+              title="Unterstützte Phasen"
+              :buttons="[
+                { buttonValue: 1, text: '1' },
+                { buttonValue: 2, text: '2' },
+                { buttonValue: 3, text: '3' },
+              ]"
+              :model-value="template.max_phases"
+              @update:model-value="updateState(key, $event, 'max_phases')"
+            >
+              <template #help>
+                Anzahl der Phasen, die der Fahrzeuglader (s.g. OBC - OnboardCharger) verwendet. Plugin-Hybride nutzen
+                meist nur eine Phase, reine E-Autos meist 3, manche nur 2 Phasen.
+              </template>
+            </openwb-base-button-group-input>
+            <openwb-base-button-group-input
               title="CP-Unterbrechung"
               :buttons="[
                 {
