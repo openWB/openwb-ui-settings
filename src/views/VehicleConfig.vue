@@ -1244,8 +1244,8 @@
                   erreicht wird.<br />
                   Es wird nach den Vorgaben des Zeitplans geladen, dessen Zieltermin am nächsten liegt. Ist der
                   Zielzeitpunkt vorbei, wird solange geladen bis, das Ziel erreicht oder das Auto abgesteckt wird. Wenn
-                  vom aktuellen Plan Ziel-SoC und SoC-Limit für das Fahrzeug erreicht wurden oder wenn der nächste Plan
-                  mit dem Ladestart beginnen muss, wird auf den nächsten Plan umgeschaltet.
+                  der Ziel-Termin des nächsten Plans innerhalb der nächsten 12 Stunden liegt, wird auf den nächsten Plan
+                  umgeschaltet.
                 </template>
               </openwb-base-heading>
               <openwb-base-alert
