@@ -1844,7 +1844,7 @@ export default {
     openActiveChargeModeCard(templateKey, activeMode) {
       // Only open the active card
       this.$nextTick(() => {
-        const modes = ["instant_charging", "pv_charging", "eco_charging", "scheduled_charging"];
+        const modes = ["instant_charging", "pv_charging", "eco_charging", "bidi_charging", "scheduled_charging"];
         modes.forEach((mode) => {
           const refName = `card-${templateKey}-${mode}`;
           const cardRef = this.$refs[refName];
