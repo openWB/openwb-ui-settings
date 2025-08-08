@@ -1258,10 +1258,10 @@
                 <template #help>
                   Wenn Ladepunkt und Fahrzeug bidirektionales Laden unterstützen, wird bis zum eingestellten SoC wie mit
                   einem Ziellade-Plan geladen. Ist der eingestellte SoC erreicht und es ist Überschuss vorhanden, wird
-                  weiter geladen bis das SoC-Limit für das Fahrzeug erreicht ist. Wenn der eingestellte SoC erreicht wurde
-                  und es würde Bezug entstehen, wird eine Nullpunktausregelung gemacht, dh das Auto wird so entladen, dass
-                  möglichst weder Bezug noch Einspeisung entsteht. Unterstützen das Fahrzeug und/oder der Ladepunkt kein
-                  bidirektionales Laden, verhält sich dieser Lademodus wie Zielladen.
+                  weiter geladen bis das SoC-Limit für das Fahrzeug erreicht ist. Wenn der eingestellte SoC erreicht
+                  wurde und es würde Bezug entstehen, wird eine Nullpunktausregelung gemacht, dh das Auto wird so
+                  entladen, dass möglichst weder Bezug noch Einspeisung entsteht. Unterstützen das Fahrzeug und/oder der
+                  Ladepunkt kein bidirektionales Laden, verhält sich dieser Lademodus wie Zielladen.
                 </template>
               </openwb-base-heading>
               <openwb-base-range-input
@@ -1276,8 +1276,8 @@
                 "
               >
                 <template #help>
-                  Es muss ein SoC-Modul für das jeweilige Fahrzeug eingerichtet sein (siehe "Konfiguration" -> "Fahrzeuge"
-                  -> "SoC-Modul").
+                  Es muss ein SoC-Modul für das jeweilige Fahrzeug eingerichtet sein (siehe "Konfiguration" ->
+                  "Fahrzeuge" -> "SoC-Modul").
                 </template>
               </openwb-base-range-input>
               <openwb-base-range-input
@@ -1290,8 +1290,8 @@
                 @update:model-value="updateState(templateKey, $event, 'chargemode.bidi_charging.plan.limit.soc_limit')"
               >
                 <template #help>
-                  Nach Erreichen des Ziel-SoCs wird mit Überschuss weiter geladen, bis das SoC-Limit erreicht wird. Sobald
-                  das SoC-Limit erreicht wurde, findet keine Ladung mehr mit Überschuss statt!
+                  Nach Erreichen des Ziel-SoCs wird mit Überschuss weiter geladen, bis das SoC-Limit erreicht wird.
+                  Sobald das SoC-Limit erreicht wurde, findet keine Ladung mehr mit Überschuss statt!
                 </template>
               </openwb-base-range-input>
               <openwb-base-text-input
@@ -1325,7 +1325,9 @@
                   },
                 ]"
                 :model-value="template.chargemode.bidi_charging.plan.frequency.selected"
-                @update:model-value="updateState(templateKey, $event, 'chargemode.bidi_charging.plan.frequency.selected')"
+                @update:model-value="
+                  updateState(templateKey, $event, 'chargemode.bidi_charging.plan.frequency.selected')
+                "
               />
               <openwb-base-text-input
                 v-if="template.chargemode.bidi_charging.plan.frequency.selected == 'once'"
@@ -1392,9 +1394,9 @@
               >
                 <template #help>
                   Mit dieser Stromstärke wird der Zeitpunkt berechnet, wann die Ladung mit Netzbezug gestartet werden
-                  muss. Wird der Ziel-SoC nicht zum angegebenen Termin erreicht, weil z.B. das Auto erst später angesteckt
-                  wurde, wird auch mit einer höheren Stromstärke geladen. Um etwas Puffer zu haben, empfiehlt es sich,
-                  etwas weniger als die Maximalstromstärke des Fahrzeugs zu wählen.
+                  muss. Wird der Ziel-SoC nicht zum angegebenen Termin erreicht, weil z.B. das Auto erst später
+                  angesteckt wurde, wird auch mit einer höheren Stromstärke geladen. Um etwas Puffer zu haben, empfiehlt
+                  es sich, etwas weniger als die Maximalstromstärke des Fahrzeugs zu wählen.
                 </template>
               </openwb-base-range-input>
               <openwb-base-button-group-input
@@ -1409,9 +1411,9 @@
               >
                 <template #help>
                   Hier kann eingestellt werden, ob Ladevorgänge im Modus "Zielladen" mit nur einer Phase oder dem
-                  möglichen Maximum in Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Im
-                  Modus "Automatik" entscheidet die Regelung, welche Einstellung genutzt wird, um das Ziel zu erreichen.
-                  Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen 1- und 3-phasig (sog. 1p3p).
+                  möglichen Maximum in Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden.
+                  Im Modus "Automatik" entscheidet die Regelung, welche Einstellung genutzt wird, um das Ziel zu
+                  erreichen. Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen 1- und 3-phasig (sog. 1p3p).
                 </template>
               </openwb-base-button-group-input>
               <openwb-base-button-group-input
@@ -1427,9 +1429,9 @@
                 <template #help>
                   Hier kann eingestellt werden, ob Ladevorgänge im Modus "Zielladen" bei Laden mit PV-Überschuss mit nur
                   einer Phase oder dem möglichen Maximum in Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen
-                  durchgeführt werden. Im Modus "Automatik" entscheidet die Regelung, welche Einstellung genutzt wird, um
-                  das Ziel zu erreichen. Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen 1- und 3-phasig (sog.
-                  1p3p).
+                  durchgeführt werden. Im Modus "Automatik" entscheidet die Regelung, welche Einstellung genutzt wird,
+                  um das Ziel zu erreichen. Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen 1- und 3-phasig
+                  (sog. 1p3p).
                 </template>
               </openwb-base-button-group-input>
               <hr />
@@ -1844,7 +1846,7 @@ export default {
     openActiveChargeModeCard(templateKey, activeMode) {
       // Only open the active card
       this.$nextTick(() => {
-        const modes = ["instant_charging", "pv_charging", "eco_charging", "scheduled_charging"];
+        const modes = ["instant_charging", "pv_charging", "eco_charging", "bidi_charging", "scheduled_charging"];
         modes.forEach((mode) => {
           const refName = `card-${templateKey}-${mode}`;
           const cardRef = this.$refs[refName];
