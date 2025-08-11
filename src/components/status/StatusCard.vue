@@ -3,7 +3,6 @@
     :subtype="subtype"
     :collapsible="true"
     :collapsed="true"
-    class="pb-0"
   >
     <template #header>
       <slot name="header-left"></slot>
