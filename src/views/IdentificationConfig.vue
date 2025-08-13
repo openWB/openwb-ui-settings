@@ -80,7 +80,7 @@
               :key="chargePointTemplateKey"
             >
               <openwb-base-heading class="mt-0">
-                {{ chargePointTemplate.name + " (ID: " + getChargePointTemplateIndex(chargePointTemplateKey) + ")" }}
+                {{ chargePointTemplate.name }}
               </openwb-base-heading>
               <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true && !installAssistantActive">
                 <openwb-base-array-input
@@ -157,7 +157,7 @@
             >
               <br />
               <openwb-base-heading class="mt-0">
-                {{ $store.state.mqtt["openWB/vehicle/" + vehicleId + "/name"] + " (ID: " + vehicleId + ")" }}
+                {{ $store.state.mqtt["openWB/vehicle/" + vehicleId + "/name"] }}
               </openwb-base-heading>
               <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true && !installAssistantActive">
                 <openwb-base-array-input

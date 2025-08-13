@@ -824,6 +824,8 @@
                   Lademodus verwendet, der bei "Aktiver Lademodus" ausgewählt ist.
                 </template>
               </openwb-base-button-group-input>
+              <!-- Standard nach Abstecken kann auch ohne RFID genutzt werden.
+               Die Option ist zusätzlich im Lade-Profil verfügbar -->
               <openwb-base-button-group-input
                 title="Standard nach Abstecken"
                 :buttons="[
