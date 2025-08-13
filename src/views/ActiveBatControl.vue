@@ -159,8 +159,12 @@
         <div v-else>
           <openwb-base-alert subtype="info" class="mb-3">
             <p>
-              Die aktive Speichersteuerung durch openWB basiert auf öffentlich zugänglichen Informationen zu den verschiedenen Speichersystemen. Diese können auch nicht herstellerseitig freigegebene Informationen beinhalten.<br />
-              Fragen bezüglich der Gewährleistung und Hardwarekompatibilität sind vor der Nutzung mit dem Hersteller zu klären. openWB übernimmt keine Haftung für Schäden, welche aus der Nutzung der "aktiven Speichersteuerung" entstehen.
+              Die aktive Speichersteuerung durch openWB basiert auf öffentlich zugänglichen Informationen zu den
+              verschiedenen Speichersystemen. Diese können auch nicht herstellerseitig freigegebene Informationen
+              beinhalten.<br />
+              Fragen bezüglich der Gewährleistung und Hardwarekompatibilität sind vor der Nutzung mit dem Hersteller zu
+              klären. openWB übernimmt keine Haftung für Schäden, welche aus der Nutzung der "aktiven Speichersteuerung"
+              entstehen.
             </p>
             <openwb-base-button-group-input
             title="Hinweise zur aktiven Speichersteuerung gelesen und akzeptiert"
