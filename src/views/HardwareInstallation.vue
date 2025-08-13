@@ -29,7 +29,9 @@
       >
         Wenn neue Komponenten - insbesondere Zähler - konfiguriert wurden, ist auch das
         <router-link to="/LoadManagementConfiguration"> Lastmanagement </router-link>
-        zu prüfen!
+        zu prüfen!<br />
+        Je nach Hersteller muss eventuell die Kommunikation im Wechselrichter freigegeben werden (z.B. Aktivierung
+        Modbus TCP, Portfreigaben o.Ä.)
       </openwb-base-alert>
       <openwb-base-card title="Geräte und Komponenten">
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
@@ -46,10 +48,7 @@
             subtype="dark"
           >
             <template #header>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'network-wired']"
-              />
+              <font-awesome-icon :icon="['fas', 'network-wired']" />
               {{ installedDevice?.name }}
             </template>
             <template #actions="slotProps">
@@ -58,10 +57,7 @@
                 class="bg-danger clickable"
                 @click="removeDeviceModal(installedDevice?.id, installedDevice?.name, $event)"
               >
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'trash']"
-                />
+                <font-awesome-icon :icon="['fas', 'trash']" />
               </openwb-base-avatar>
               <div v-else>
                 <openwb-base-avatar
@@ -69,10 +65,7 @@
                   :key="installedComponent.id"
                   :class="'ml-1 bg-' + getComponentTypeClass(installedComponent.type)"
                 >
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="getComponentTypeIcon(installedComponent.type)"
-                  />
+                  <font-awesome-icon :icon="getComponentTypeIcon(installedComponent.type)" />
                 </openwb-base-avatar>
               </div>
             </template>
@@ -103,10 +96,7 @@
               :subtype="getComponentTypeClass(installedComponent.type)"
             >
               <template #header>
-                <font-awesome-icon
-                  fixed-width
-                  :icon="getComponentTypeIcon(installedComponent.type)"
-                />
+                <font-awesome-icon :icon="getComponentTypeIcon(installedComponent.type)" />
                 {{ installedComponent.name }}
               </template>
               <template #actions="slotProps">
@@ -123,10 +113,7 @@
                     )
                   "
                 >
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="['fas', 'trash']"
-                  />
+                  <font-awesome-icon :icon="['fas', 'trash']" />
                 </openwb-base-avatar>
               </template>
               <openwb-base-text-input

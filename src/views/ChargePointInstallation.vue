@@ -31,10 +31,7 @@
         :collapsed="!installAssistantActive"
       >
         <template #header>
-          <font-awesome-icon
-            fixed-width
-            :icon="['fas', 'charging-station']"
-          />
+          <font-awesome-icon :icon="['fas', 'charging-station']" />
           Ladepunkte
         </template>
         <openwb-base-card
@@ -52,10 +49,7 @@
               title="Ladepunkt löschen"
               @click="removeChargePointModal($event, installedChargePointKey)"
             >
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'trash']"
-              />
+              <font-awesome-icon :icon="['fas', 'trash']" />
             </openwb-base-avatar>
           </template>
           <openwb-base-text-input
@@ -216,16 +210,9 @@
         :collapsed="true"
       >
         <template #header>
-          <font-awesome-layers
-            fixed-width
-            class="fa-lg"
-          >
+          <font-awesome-layers class="fa-lg">
+            <font-awesome-icon :icon="['far', 'file']" />
             <font-awesome-icon
-              fixed-width
-              :icon="['far', 'file']"
-            />
-            <font-awesome-icon
-              fixed-width
               :icon="['fas', 'charging-station']"
               transform="shrink-8"
             />
@@ -239,10 +226,7 @@
             title="Neues Ladepunkt-Profil anlegen"
             @click="addChargePointTemplate"
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'plus']"
-            />
+            <font-awesome-icon :icon="['fas', 'plus']" />
           </openwb-base-avatar>
         </template>
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
@@ -265,10 +249,7 @@
                   title="Ladepunkt-Profil duplizieren"
                   @click="addChargePointTemplate($event, chargePointTemplateKey)"
                 >
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="['fas', 'copy']"
-                  />
+                  <font-awesome-icon :icon="['fas', 'copy']" />
                 </openwb-base-avatar>
                 <openwb-base-avatar
                   v-if="!chargePointTemplateKey.endsWith('/0')"
@@ -276,10 +257,7 @@
                   title="Ladepunkt-Profil löschen"
                   @click="removeChargePointTemplateModal($event, chargePointTemplateKey)"
                 >
-                  <font-awesome-icon
-                    fixed-width
-                    :icon="['fas', 'trash']"
-                  />
+                  <font-awesome-icon :icon="['fas', 'trash']" />
                 </openwb-base-avatar>
               </span>
             </template>
@@ -435,10 +413,7 @@
                     title="Neuen Autolock Zeitplan anlegen"
                     @click.stop="addChargePointTemplateAutolockPlan(chargePointTemplateKey)"
                   >
-                    <font-awesome-icon
-                      fixed-width
-                      :icon="['fas', 'plus']"
-                    />
+                    <font-awesome-icon :icon="['fas', 'plus']" />
                   </openwb-base-avatar>
                 </template>
               </openwb-base-heading>

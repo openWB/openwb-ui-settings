@@ -16,19 +16,17 @@
           <span>
             <font-awesome-icon
               class="handle"
-              fixed-width
               :icon="['fas', 'arrows-alt']"
             />
             <font-awesome-icon
               v-if="getElementIcon(element)"
-              fixed-width
               :icon="getElementIcon(element)"
             />
             {{ getElementLabel(element.id) }}
           </span>
           <!-- <span class="element-actions">
             <font-awesome-icon
-              fixed-width
+
               :icon="['fas', 'edit']"
               @click="elementEdit(element.id)"
             />

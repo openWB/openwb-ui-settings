@@ -5,10 +5,7 @@
     :state-message="$store.state.mqtt[baseTopic + '/get/fault_str']"
   >
     <template #header-left>
-      <font-awesome-icon
-        fixed-width
-        :icon="['fas', 'solar-panel']"
-      />
+      <font-awesome-icon :icon="['fas', 'solar-panel']" />
       Alle Wechselrichter
     </template>
     <template #header-right>{{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW</template>

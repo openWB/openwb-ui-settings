@@ -21,10 +21,7 @@
             title="Zeitbereich hinzufügen"
             @click.stop="addTime"
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'plus']"
-            />
+            <font-awesome-icon :icon="['fas', 'plus']" />
           </openwb-base-avatar>
         </template>
       </time-row>
@@ -88,10 +85,7 @@
             title="Zeitbereich entfernen"
             @click.stop="removeTime(index)"
           >
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'trash']"
-            />
+            <font-awesome-icon :icon="['fas', 'trash']" />
           </openwb-base-avatar>
         </template>
       </time-row>

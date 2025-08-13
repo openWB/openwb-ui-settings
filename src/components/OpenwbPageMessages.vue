@@ -11,7 +11,6 @@
         style="font-size: 175%"
       >
         <font-awesome-icon
-          fixed-width
           :icon="showAllMessages ? ['fas', 'bell'] : ['far', 'bell']"
           :class="messageIndicatorClass"
         />

@@ -1,10 +1,7 @@
 <template>
   <status-card subtype="primary">
     <template #header-left>
-      <font-awesome-icon
-        fixed-width
-        :icon="['fas', 'charging-station']"
-      />
+      <font-awesome-icon :icon="['fas', 'charging-station']" />
       Alle Ladepunkte
     </template>
     <template #header-right>

@@ -1,9 +1,6 @@
 <template>
-  <div class="device-algodue">
-    <openwb-base-heading> Einstellungen für Algodue</openwb-base-heading>
-    <openwb-base-alert subtype="info">
-      ModbusTCP muss aktiviert sein. Der Zähler ist auf Modbus-ID 1 und Port 502 vorkonfiguriert.
-    </openwb-base-alert>
+  <div class="device-huawei-emma">
+    <openwb-base-heading> Einstellungen für Huawei EMMA </openwb-base-heading>
     <openwb-base-text-input
       title="IP oder Hostname"
       subtype="host"
@@ -23,10 +20,14 @@
       title="Modbus ID"
       required
       :model-value="device.configuration.modbus_id"
-      min="1"
+      min="0"
       max="255"
       @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
-    />
+    >
+      <template #help>
+        Huawei Emma nutzt entgegen der Modbus-Spezifikation standardmäßig die Modbus ID 0.
+      </template>
+    </openwb-base-number-input>
   </div>
 </template>
 
@@ -34,7 +35,7 @@
 import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
 
 export default {
-  name: "DeviceAlgodue",
+  name: "DeviceHuaweiEmma",
   mixins: [DeviceConfigMixin],
 };
 </script>

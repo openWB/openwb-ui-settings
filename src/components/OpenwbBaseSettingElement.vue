@@ -58,8 +58,12 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .form-text.alert {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.form-text.alert :deep(p:last-of-type) {
+  margin-bottom: 0;
 }
 </style>

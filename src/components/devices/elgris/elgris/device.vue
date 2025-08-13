@@ -1,8 +1,8 @@
 <template>
-  <div class="device-algodue">
-    <openwb-base-heading> Einstellungen für Algodue</openwb-base-heading>
+  <div class="device-elgris">
+    <openwb-base-heading> Einstellungen für Elgris</openwb-base-heading>
     <openwb-base-alert subtype="info">
-      ModbusTCP muss aktiviert sein. Der Zähler ist auf Modbus-ID 1 und Port 502 vorkonfiguriert.
+      Der Zähler ist auf Modbus-ID 1 und Port 502 vorkonfiguriert.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
@@ -34,7 +34,7 @@
 import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
 
 export default {
-  name: "DeviceAlgodue",
+  name: "DeviceElgris",
   mixins: [DeviceConfigMixin],
 };
 </script>

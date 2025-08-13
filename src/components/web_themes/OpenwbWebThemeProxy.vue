@@ -3,20 +3,14 @@
     v-if="webTheme.official"
     subtype="success"
   >
-    <font-awesome-icon
-      fixed-width
-      :icon="['fas', 'certificate']"
-    />
+    <font-awesome-icon :icon="['fas', 'certificate']" />
     Das ausgewählte Web Theme "{{ webTheme.name }}" wird von openWB gepflegt.
   </openwb-base-alert>
   <openwb-base-alert
     v-else
     subtype="info"
   >
-    <font-awesome-icon
-      fixed-width
-      :icon="['fas', 'people-group']"
-    />
+    <font-awesome-icon :icon="['fas', 'people-group']" />
     Das ausgewählte Theme wird in unserer Community gepflegt. Rückfragen oder Probleme bitte im Forum diskutieren.
   </openwb-base-alert>
   <openwb-base-heading> Einstellungen für Web Theme "{{ webTheme.name }}" </openwb-base-heading>

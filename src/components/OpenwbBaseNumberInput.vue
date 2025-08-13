@@ -15,10 +15,7 @@
       <div class="input-group">
         <div class="input-group-prepend">
           <div class="input-group-text">
-            <font-awesome-icon
-              fixed-width
-              :icon="['fas', 'calculator']"
-            />
+            <font-awesome-icon :icon="['fas', 'calculator']" />
           </div>
         </div>
         <input

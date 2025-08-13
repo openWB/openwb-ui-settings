@@ -15,10 +15,7 @@
               class="btn-block btn-warning"
               @button-clicked="previousPage()"
             >
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'caret-left']"
-              />
+              <font-awesome-icon :icon="['fas', 'caret-left']" />
               Zurück
             </openwb-base-click-button>
           </div>
@@ -31,10 +28,7 @@
               @button-clicked="nextPage()"
             >
               Weiter
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'caret-right']"
-              />
+              <font-awesome-icon :icon="['fas', 'caret-right']" />
             </openwb-base-click-button>
           </div>
           <div
