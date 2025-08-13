@@ -1,41 +1,53 @@
 <template>
   <openwb-base-select-input
-    v-model="definedInput"
-    title="Eingang"
+    v-model="definedContact"
+    :title="contactTitle"
     required
     not-selected="Bitte auswählen"
     :empty-value="null"
-    :options="inputOptions"
+    :options="contactOptions"
   >
     <template #help>
-      Bitte den Eingang auswählen, auf welchen reagiert werden soll. Es kann nur ein Eingang ausgewählt werden.
+      {{ contactHelpText }}
     </template>
   </openwb-base-select-input>
   <openwb-base-button-group-input
+    v-if="contactType === 'input'"
     v-model="definedNormalMode"
     title="Normaler Zustand"
     :buttons="[
       { buttonValue: false, text: 'geschlossen (NC)' },
       { buttonValue: true, text: 'geöffnet (NO)' },
     ]"
-    :disabled="definedInput ? false : true"
+    :disabled="definedContact ? false : true"
     required
   >
     <template #help>
-      Bitte Einstellen, ob der Eingang für den normalen Betrieb (nicht aktiv, nicht gedimmt etc.) geschlossen (NC) oder
-      geöffnet (NO) ist. Dieser Zustand wird verwendet, um den Eingang zu überwachen.
+      {{ normalModeHelpText }}
     </template>
   </openwb-base-button-group-input>
 </template>
 
 <script>
 export default {
-  name: "IoActionSingleInputPattern",
+  name: "IoActionSinglePattern",
   inheritAttrs: false,
   props: {
-    digitalInputs: { type: Object, required: true },
     modelValue: { type: Array, required: true },
-    ioDevice: { type: Object, required: true },
+    contacts: { type: Object, required: true },
+    contactType: {
+      type: String,
+      required: false,
+      default: "input",
+      validator: (value) => {
+        return ["input", "output"].includes(value);
+      },
+    },
+    title: {
+      type: String,
+      required: false,
+      default: undefined,
+    },
   },
   emits: ["update:modelValue"],
   computed: {
@@ -47,63 +59,61 @@ export default {
         this.$emit("update:modelValue", newValue);
       },
     },
-    definedInput: {
+    contactTitle() {
+      if (this.title !== undefined) {
+        return this.title;
+      }
+      return this.contactType === "input" ? "Eingang" : "Ausgang";
+    },
+    contactHelpText() {
+      return this.contactType === "input"
+        ? "Bitte den Eingang auswählen, auf welchen reagiert werden soll. Es kann nur ein Eingang ausgewählt werden."
+        : "Bitte den Ausgang auswählen, welcher geschaltet werden soll. Es kann nur ein Ausgang ausgewählt werden.";
+    },
+    normalModeHelpText() {
+      return this.contactType === "input"
+        ? "Bitte Einstellen, ob der Eingang für den normalen Betrieb (nicht aktiv, nicht gedimmt etc.) geschlossen (NC) oder geöffnet (NO) ist."
+        : "Bitte Einstellen, ob der Ausgang für den normalen Betrieb (nicht aktiv, nicht gedimmt etc.) geschlossen (NC) oder geöffnet (NO) ist.";
+    },
+    definedContact: {
       get() {
-        if (Object.keys(this.value[0].input_matrix).length !== 0) {
-          return Object.keys(this.value[0].input_matrix)[0];
+        if (this.value !== undefined && Object.keys(this.value["0"].matrix).length !== 0) {
+          return Object.keys(this.value["0"].matrix)[0];
         }
         return null;
       },
       set(newValue) {
-        if (Object.keys(this.value[0].input_matrix).length === 0) {
+        if (Object.keys(this.value["0"].matrix).length === 0) {
           this.value = [
-            { value: true, input_matrix: { [newValue]: true } },
-            { value: false, input_matrix: { [newValue]: false } },
+            { value: true, matrix: { [newValue]: true } },
+            { value: false, matrix: { [newValue]: false } },
           ];
           return;
         }
         this.value = [
-          { value: true, input_matrix: { [newValue]: this.definedNormalMode } },
-          { value: false, input_matrix: { [newValue]: !this.definedNormalMode } },
+          { value: true, matrix: { [newValue]: this.definedNormalMode } },
+          { value: false, matrix: { [newValue]: !this.definedNormalMode } },
         ];
       },
     },
     definedNormalMode: {
       get() {
-        return Object.values(this.value[0].input_matrix)[0];
+        return Object.values(this.value[0].matrix)[0];
       },
       set(newValue) {
         this.value = [
-          { value: true, input_matrix: { [this.definedInput]: newValue } },
-          { value: false, input_matrix: { [this.definedInput]: !newValue } },
+          { value: true, matrix: { [this.definedContact]: newValue } },
+          { value: false, matrix: { [this.definedContact]: !newValue } },
         ];
       },
     },
-    inputOptions() {
-      return Object.keys(this.ioDevice?.input?.digital).map((input) => {
-        return { value: input, text: input };
+    contactOptions() {
+      return Object.keys(this.contacts).map((contact) => {
+        return { value: contact, text: contact };
       });
     },
   },
 };
 </script>
 
-<style scoped>
-th {
-  text-align: center;
-  vertical-align: bottom;
-}
-
-.input-header {
-  position: relative;
-  height: 6em;
-}
-
-.input-header div {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: rotate(-90deg);
-  transform-origin: left center;
-}
-</style>
+<style scoped></style>

@@ -18,47 +18,38 @@
             <div class="input-group-text">
               <font-awesome-icon
                 v-if="subtype == 'text'"
-                fixed-width
                 :icon="['fas', 'keyboard']"
               />
               <font-awesome-icon
                 v-if="subtype == 'email'"
-                fixed-width
                 :icon="['fas', 'envelope']"
               />
               <font-awesome-icon
                 v-if="subtype == 'host'"
-                fixed-width
                 :icon="['fas', 'network-wired']"
               />
               <font-awesome-icon
                 v-if="subtype == 'url'"
-                fixed-width
                 :icon="['fas', 'globe']"
               />
               <font-awesome-icon
                 v-if="subtype == 'user'"
-                fixed-width
                 :icon="['fas', 'user']"
               />
               <font-awesome-icon
                 v-if="subtype == 'json'"
-                fixed-width
                 :icon="['fas', 'code']"
               />
               <font-awesome-icon
                 v-if="subtype == 'password'"
-                fixed-width
                 :icon="showPassword ? ['fas', 'unlock'] : ['fas', 'lock']"
               />
               <font-awesome-icon
                 v-if="subtype == 'time'"
-                fixed-width
                 :icon="['fas', 'clock']"
               />
               <font-awesome-icon
                 v-if="subtype == 'date' || subtype == 'month' || subtype == 'year'"
-                fixed-width
                 :icon="['fas', 'calendar-day']"
               />
             </div>
@@ -154,10 +145,7 @@
             @click="togglePassword"
           >
             <div class="input-group-text">
-              <font-awesome-icon
-                fixed-width
-                :icon="showPassword ? ['far', 'eye'] : ['far', 'eye-slash']"
-              />
+              <font-awesome-icon :icon="showPassword ? ['far', 'eye'] : ['far', 'eye-slash']" />
             </div>
           </div>
           <div

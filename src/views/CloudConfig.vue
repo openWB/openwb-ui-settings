@@ -96,16 +96,10 @@
             @update:model-value="updateState('openWB/system/mqtt/valid_partner_ids', $event)"
           >
             <template #input-prefix>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'user-gear']"
-              />
+              <font-awesome-icon :icon="['fas', 'user-gear']" />
             </template>
             <template #element-prefix>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'user-gear']"
-              />
+              <font-awesome-icon :icon="['fas', 'user-gear']" />
             </template>
             <template #help>
               Die Partner-ID erhältst Du von Deinem Installateur. Ist hier keine Partner-ID eingetragen, dann kann auch
@@ -198,16 +192,10 @@
             @update:model-value="updateState('openWB/system/mqtt/valid_partner_ids', $event)"
           >
             <template #input-prefix>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'user-gear']"
-              />
+              <font-awesome-icon :icon="['fas', 'user-gear']" />
             </template>
             <template #element-prefix>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'user-gear']"
-              />
+              <font-awesome-icon :icon="['fas', 'user-gear']" />
             </template>
             <template #help>
               Die Partner-ID erhältst Du von Deinem Installateur. Ist hier keine Partner-ID eingetragen, dann kann auch

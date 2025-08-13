@@ -24,10 +24,7 @@
             :collapsed="true"
           >
             <template #header>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'filter']"
-              />
+              <font-awesome-icon :icon="['fas', 'filter']" />
               Erweiterte Optionen
             </template>
             <openwb-base-button-group-input
@@ -254,10 +251,7 @@
                 @button-clicked="downloadChargeLog()"
               >
                 Als CSV exportieren
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'download']"
-                />
+                <font-awesome-icon :icon="['fas', 'download']" />
               </openwb-base-click-button>
               <a
                 ref="downloadChargeLogLink"

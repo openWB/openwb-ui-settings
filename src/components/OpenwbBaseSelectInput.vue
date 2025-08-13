@@ -70,10 +70,7 @@
               @click="addClicked()"
             >
               <slot name="inputAdd">
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'plus']"
-                />
+                <font-awesome-icon :icon="['fas', 'plus']" />
               </slot>
             </div>
           </div>

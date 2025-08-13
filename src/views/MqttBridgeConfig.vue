@@ -26,10 +26,7 @@
           class="bg-success clickable"
           @click="addMqttBridge"
         >
-          <font-awesome-icon
-            fixed-width
-            :icon="['fas', 'plus']"
-          />
+          <font-awesome-icon :icon="['fas', 'plus']" />
         </openwb-base-avatar>
       </template>
       <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
@@ -60,10 +57,7 @@
                 class="bg-danger clickable"
                 @click="removeMqttBridgeModal(mqttBridgeKey, $event)"
               >
-                <font-awesome-icon
-                  fixed-width
-                  :icon="['fas', 'trash']"
-                />
+                <font-awesome-icon :icon="['fas', 'trash']" />
               </openwb-base-avatar>
             </template>
             <openwb-base-text-input

@@ -129,7 +129,7 @@
             "
           >
             <template #help>
-              Übersteigt der Netzbezug die Abschaltschwelle, wird die Ladung beendet. Eine Abschaltschaltschwelle, die
+              Übersteigt der Netzbezug die Abschaltschwelle, wird die Ladung beendet. Eine Abschaltschwelle, die
               Netzbezug erlaubt, führt in einem System ohne steuerbaren Speicher zur Entladung des Speichers. Der
               Speicher wird dann auch über den eingestellten Mindest-SoC hinaus entladen (siehe Speicherbeachtung
               unten).

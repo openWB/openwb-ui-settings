@@ -263,10 +263,7 @@
             @update:model-value="updateState('openWB/general/charge_log_data_config', $event, 'time_begin')"
           >
             <template #title>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'calendar']"
-              />
+              <font-awesome-icon :icon="['fas', 'calendar']" />
               Beginn
             </template>
           </openwb-base-button-group-input>
@@ -287,10 +284,7 @@
             @update:model-value="updateState('openWB/general/charge_log_data_config', $event, 'time_end')"
           >
             <template #title>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'calendar']"
-              />
+              <font-awesome-icon :icon="['fas', 'calendar']" />
               Ende
             </template>
           </openwb-base-button-group-input>
@@ -311,10 +305,7 @@
             @update:model-value="updateState('openWB/general/charge_log_data_config', $event, 'time_time_charged')"
           >
             <template #title>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'clock']"
-              />
+              <font-awesome-icon :icon="['fas', 'clock']" />
               Dauer
             </template>
           </openwb-base-button-group-input>
@@ -335,10 +326,7 @@
             @update:model-value="updateState('openWB/general/charge_log_data_config', $event, 'data_costs')"
           >
             <template #title>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'coins']"
-              />
+              <font-awesome-icon :icon="['fas', 'coins']" />
               Kosten
             </template>
           </openwb-base-button-group-input>
@@ -359,10 +347,7 @@
             @update:model-value="updateState('openWB/general/charge_log_data_config', $event, 'data_power_source')"
           >
             <template #title>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'pie-chart']"
-              />
+              <font-awesome-icon :icon="['fas', 'pie-chart']" />
               Energieaufteilung
             </template>
           </openwb-base-button-group-input>
@@ -383,10 +368,7 @@
             @update:model-value="updateState('openWB/general/charge_log_data_config', $event, 'vehicle_name')"
           >
             <template #title>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'car']"
-              />
+              <font-awesome-icon :icon="['fas', 'car']" />
               Name
             </template>
           </openwb-base-button-group-input>
@@ -407,10 +389,7 @@
             @update:model-value="updateState('openWB/general/charge_log_data_config', $event, 'vehicle_chargemode')"
           >
             <template #title>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'car']"
-              />
+              <font-awesome-icon :icon="['fas', 'car']" />
               Lademodus
             </template>
           </openwb-base-button-group-input>
@@ -431,10 +410,7 @@
             @update:model-value="updateState('openWB/general/charge_log_data_config', $event, 'vehicle_prio')"
           >
             <template #title>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'car']"
-              />
+              <font-awesome-icon :icon="['fas', 'car']" />
               Priorität
             </template>
           </openwb-base-button-group-input>
@@ -455,10 +431,7 @@
             @update:model-value="updateState('openWB/general/charge_log_data_config', $event, 'vehicle_rfid')"
           >
             <template #title>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'car']"
-              />
+              <font-awesome-icon :icon="['fas', 'car']" />
               ID-Tag
             </template>
           </openwb-base-button-group-input>
@@ -479,10 +452,7 @@
             @update:model-value="updateState('openWB/general/charge_log_data_config', $event, 'vehicle_soc_at_start')"
           >
             <template #title>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'car']"
-              />
+              <font-awesome-icon :icon="['fas', 'car']" />
               SoC bei Ladebeginn
             </template>
           </openwb-base-button-group-input>
@@ -503,10 +473,7 @@
             @update:model-value="updateState('openWB/general/charge_log_data_config', $event, 'vehicle_soc_at_end')"
           >
             <template #title>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'car']"
-              />
+              <font-awesome-icon :icon="['fas', 'car']" />
               SoC bei Ladende
             </template>
           </openwb-base-button-group-input>
@@ -527,10 +494,7 @@
             @update:model-value="updateState('openWB/general/charge_log_data_config', $event, 'chargepoint_name')"
           >
             <template #title>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'charging-station']"
-              />
+              <font-awesome-icon :icon="['fas', 'charging-station']" />
               Name
             </template>
           </openwb-base-button-group-input>
@@ -553,10 +517,7 @@
             "
           >
             <template #title>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'charging-station']"
-              />
+              <font-awesome-icon :icon="['fas', 'charging-station']" />
               Seriennummer
             </template>
           </openwb-base-button-group-input>
@@ -579,10 +540,7 @@
             "
           >
             <template #title>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'charging-station']"
-              />
+              <font-awesome-icon :icon="['fas', 'charging-station']" />
               Geladene Energie
             </template>
           </openwb-base-button-group-input>
@@ -605,10 +563,7 @@
             "
           >
             <template #title>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'charging-station']"
-              />
+              <font-awesome-icon :icon="['fas', 'charging-station']" />
               Zählerstand bei Ladebeginn
             </template>
           </openwb-base-button-group-input>
@@ -631,10 +586,7 @@
             "
           >
             <template #title>
-              <font-awesome-icon
-                fixed-width
-                :icon="['fas', 'charging-station']"
-              />
+              <font-awesome-icon :icon="['fas', 'charging-station']" />
               Zählerstand bei Ladeende
             </template>
           </openwb-base-button-group-input>
@@ -666,7 +618,7 @@
           >
             <template #title>
               <font-awesome-icon
-                fixed-width
+
                 :icon="['fas', 'charging-station']"
               />
               Durchschnittliche Leistung

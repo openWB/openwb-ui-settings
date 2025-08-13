@@ -18,12 +18,10 @@
             <div class="input-group-text">
               <font-awesome-icon
                 v-if="subtype == 'text'"
-                fixed-width
                 :icon="['fas', 'keyboard']"
               />
               <font-awesome-icon
                 v-if="subtype == 'json'"
-                fixed-width
                 :icon="['fas', 'code']"
               />
             </div>

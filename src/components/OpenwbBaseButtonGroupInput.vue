@@ -24,12 +24,12 @@
             type="radio"
             :value="button.buttonValue"
             v-bind="$attrs"
+            @click="$emit('button-click', button.buttonValue)"
           />
           <slot :name="'label-' + button.buttonValue">
             {{ button.text }}
           </slot>
           <font-awesome-icon
-            fixed-width
             :icon="['fas', 'check']"
             :style="[value == button.buttonValue ? 'visibility: visible' : 'visibility: hidden']"
           />
@@ -60,7 +60,7 @@ export default {
     modelValue: { type: [String, Number, Boolean], default: undefined },
     buttons: { type: Array, required: true },
   },
-  emits: ["update:modelValue"],
+  emits: ["update:modelValue", "button-click"],
   computed: {
     value: {
       get() {

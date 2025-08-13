@@ -10,7 +10,6 @@
     <font-awesome-icon
       v-if="defaultColor"
       class="ml-1 clickable"
-      fixed-width
       :icon="['fas', 'rotate-left']"
       :title="`Zurücksetzen auf Standardfarbe (${defaultColor})`"
       @click="changed(defaultColor)"

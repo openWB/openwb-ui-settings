@@ -23,10 +23,7 @@
           class="bg-success clickable"
           @click.stop="addTariff"
         >
-          <font-awesome-icon
-            fixed-width
-            :icon="['fas', 'plus']"
-          />
+          <font-awesome-icon :icon="['fas', 'plus']" />
         </openwb-base-avatar>
       </template>
     </openwb-base-heading>
