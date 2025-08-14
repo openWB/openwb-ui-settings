@@ -420,6 +420,28 @@
               :model-value="template.average_consump / 1000"
               @update:model-value="updateState(key, $event * 1000, 'average_consump')"
             />
+            <openwb-base-button-group-input
+              title="Bidirektionales Laden"
+              :buttons="[
+                {
+                  buttonValue: false,
+                  text: 'Nicht unterstützt',
+                  class: 'btn-outline-danger',
+                },
+                {
+                  buttonValue: true,
+                  text: 'AC nach ISO15118-20',
+                  class: 'btn-outline-success',
+                },
+              ]"
+              :model-value="template.bidi"
+              @update:model-value="updateState(key, $event, 'bidi')"
+            >
+              <template #help>
+                Für bidirektionales Laden wird eine openWB Pro benötigt. Die openWB Pro muss auf den Modus "Bidi"
+                gestellt werden.</template
+              >
+            </openwb-base-button-group-input>
             <div v-if="dcChargingEnabled === true">
               <openwb-base-heading> Angaben zur Ladeleistung (DC) </openwb-base-heading>
               <openwb-base-number-input
@@ -710,6 +732,8 @@
                   <li>Eco (PV-Anteil)</li>
                   <li>PV (PV-Anteil) mit Priorität</li>
                   <li>PV (PV-Anteil)</li>
+                  <li>Bidi-Entladen ohne Priorität</li>
+                  <li>Bidi-Entladen mit Priorität</li>
                 </ol>
               </template>
             </openwb-base-button-group-input>
