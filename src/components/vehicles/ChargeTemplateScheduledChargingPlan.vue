@@ -299,7 +299,8 @@
           gewohnt mit Zielladen geladen. Ist der eingestellte SoC erreicht, wird eine Nullpunktausregelung gemacht, dh
           das Auto wird so ge- und entladen, dass möglichst weder Bezug noch Einspeisung entsteht. Der SoC wird dabei
           immer zwischen Fahrzeug-SoC zum Zielzeitpunkt und Fahrzeug-SoC mit Überschuss gehalten. <br />
-          Unterstützen das Fahrzeug und/oder der Ladepunkt kein bidirektionales Laden, hat diese Einstellung keine Auswirkung.
+          Unterstützen das Fahrzeug und/oder der Ladepunkt kein bidirektionales Laden, hat diese Einstellung keine
+          Auswirkung.
         </template>
       </openwb-base-button-group-input>
       <openwb-base-alert
