@@ -704,7 +704,6 @@
                 { buttonValue: 'pv_charging', text: 'PV', class: 'btn-outline-success' },
                 { buttonValue: 'scheduled_charging', text: 'Ziel', class: 'btn-outline-primary' },
                 { buttonValue: 'eco_charging', text: 'Eco', class: 'btn-outline-secondary' },
-                { buttonValue: 'bidi_charging', text: 'Bidi', class: 'btn-outline-secondary' },
                 { buttonValue: 'stop', text: 'Stop', class: 'btn-outline-dark' },
               ]"
               :model-value="template.chargemode.selected"
@@ -719,8 +718,6 @@
                 <ol>
                   <li>Ziel (Sofortladen) mit Priorität</li>
                   <li>Ziel (Sofortladen)</li>
-                  <li>Bidi (Sofortladen für Ziel) mit Priorität</li>
-                  <li>Bidi (Sofortladen für Ziel)</li>
                   <li>Zeit mit Priorität</li>
                   <li>Zeit</li>
                   <li>Sofort mit Priorität</li>
@@ -731,8 +728,6 @@
                   <li>PV (Min-Anteil)</li>
                   <li>Ziel (PV) mit Priorität</li>
                   <li>Ziel (PV)</li>
-                  <li>Bidi (PV-Anteil) mit Priorität</li>
-                  <li>Bidi (PV-Anteil)</li>
                   <li>Eco (PV-Anteil) mit Priorität</li>
                   <li>Eco (PV-Anteil)</li>
                   <li>PV (PV-Anteil) mit Priorität</li>
@@ -1646,7 +1641,7 @@ export default {
     openActiveChargeModeCard(templateKey, activeMode) {
       // Only open the active card
       this.$nextTick(() => {
-        const modes = ["instant_charging", "pv_charging", "eco_charging", "bidi_charging", "scheduled_charging"];
+        const modes = ["instant_charging", "pv_charging", "eco_charging", "scheduled_charging"];
         modes.forEach((mode) => {
           const refName = `card-${templateKey}-${mode}`;
           const cardRef = this.$refs[refName];
