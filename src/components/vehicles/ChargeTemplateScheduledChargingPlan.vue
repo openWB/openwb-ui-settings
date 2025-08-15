@@ -279,7 +279,7 @@
     <div v-if="plan.limit.selected == 'soc'">
       <hr />
       <openwb-base-button-group-input
-        v-model="plan.bidi"
+        v-model="plan.bidi_charging_enabled"
         title="Bidirektionales Überschussladen bei kompatiblem Ladepunkt&Fahrzeug"
         :buttons="[
           {
@@ -304,7 +304,7 @@
         </template>
       </openwb-base-button-group-input>
       <openwb-base-alert
-        v-if="plan.bidi === true"
+        v-if="plan.bidi_charging_enabled === true"
         subtype="info"
       >
         Die Norm IEC 61851-1 und ISO 15118 benötigen als Parameter eine Stromstärke und die Phasenzahl. Die Norm ISO
@@ -314,7 +314,7 @@
         Ladestrom und die vorgegebene Phasenzahl angewendet.
       </openwb-base-alert>
       <openwb-base-number-input
-        v-if="plan.bidi === true"
+        v-if="plan.bidi_charging_enabled === true"
         title="Ladeleistung"
         :min="1"
         :max="22"
