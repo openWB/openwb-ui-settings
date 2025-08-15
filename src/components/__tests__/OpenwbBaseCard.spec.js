@@ -83,7 +83,7 @@ describe("Card.vue", () => {
         actions: slotContent,
       },
     });
-    const cardHeaderActions = wrapper.find("span.card-actions");
+    const cardHeaderActions = wrapper.find("div.card-actions");
     expect(cardHeaderActions.html()).toContain(slotContent);
   });
   it("render footer slot when passed", () => {

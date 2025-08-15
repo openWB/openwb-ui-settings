@@ -440,6 +440,28 @@
               :model-value="template.average_consump / 1000"
               @update:model-value="updateState(key, $event * 1000, 'average_consump')"
             />
+            <openwb-base-button-group-input
+              title="Bidirektionales Laden"
+              :buttons="[
+                {
+                  buttonValue: false,
+                  text: 'Nicht unterstützt',
+                  class: 'btn-outline-danger',
+                },
+                {
+                  buttonValue: true,
+                  text: 'AC nach ISO15118-20',
+                  class: 'btn-outline-success',
+                },
+              ]"
+              :model-value="template.bidi"
+              @update:model-value="updateState(key, $event, 'bidi')"
+            >
+              <template #help>
+                Für bidirektionales Laden wird eine openWB Pro benötigt. Die openWB Pro muss auf den Modus "Bidi"
+                gestellt werden.</template
+              >
+            </openwb-base-button-group-input>
             <div v-if="dcChargingEnabled === true">
               <openwb-base-heading> Angaben zur Ladeleistung (DC) </openwb-base-heading>
               <openwb-base-number-input
@@ -730,6 +752,8 @@
                   <li>Eco (PV-Anteil)</li>
                   <li>PV (PV-Anteil) mit Priorität</li>
                   <li>PV (PV-Anteil)</li>
+                  <li>Bidi-Entladen ohne Priorität</li>
+                  <li>Bidi-Entladen mit Priorität</li>
                 </ol>
               </template>
             </openwb-base-button-group-input>
@@ -1113,6 +1137,53 @@
               </openwb-base-button-group-input>
             </openwb-base-card>
             <openwb-base-card
+              :ref="`card-${templateKey}-scheduled_charging`"
+              :collapsible="true"
+              :collapsed="true"
+              subtype="secondary"
+            >
+              <template #header> Ziel </template>
+              <openwb-base-heading>
+                Zielladepläne
+                <template #actions>
+                  <openwb-base-avatar
+                    class="bg-success clickable"
+                    title="Neuen Zielladen-Plan hinzufügen"
+                    @click.stop="addChargeTemplateSchedulePlan(template.id)"
+                  >
+                    <font-awesome-icon :icon="['fas', 'plus']" />
+                  </openwb-base-avatar>
+                </template>
+                <template #help>
+                  Im Lademodus "Zielladen" wird der Ladestrom so angepasst, dass das Fahrzeug zum angegebenen Zeitpunkt
+                  den eingestellten SoC bzw. die einzuladende Energiemenge erreicht. Anhand des vorgegebenen Ladestroms
+                  wird der Zeitpunkt berechnet, an dem die Ladung spätestens starten muss.<br />
+                  Ist der berechnete Zeitpunkt des Ladestarts noch nicht erreicht, wird mit Überschuss geladen. Auch
+                  nach Erreichen des Ziel-SoCs wird mit Überschuss geladen, solange bis das "SoC-Limit für das Fahrzeug"
+                  erreicht wird.<br />
+                  Es wird nach den Vorgaben des Zeitplans geladen, dessen Zieltermin am nächsten liegt. Ist der
+                  Zielzeitpunkt vorbei, wird solange geladen bis, das Ziel erreicht oder das Auto abgesteckt wird. Wenn
+                  der Ziel-Termin des nächsten Plans innerhalb der nächsten 12 Stunden liegt, wird auf den nächsten Plan
+                  umgeschaltet.
+                </template>
+              </openwb-base-heading>
+              <openwb-base-alert
+                v-if="template.chargemode.scheduled_charging.plans.length == 0"
+                subtype="info"
+              >
+                Es wurden noch keine Pläne für das Zielladen angelegt.
+              </openwb-base-alert>
+              <charge-template-scheduled-charging-plan
+                v-for="(plan, planKey) in template.chargemode.scheduled_charging.plans"
+                :key="planKey"
+                :model-value="plan"
+                :template-id="template.id"
+                :dc-charging-enabled="dcChargingEnabled"
+                @update:model-value="updateState(templateKey, $event, `chargemode.scheduled_charging.plans.${planKey}`)"
+                @send-command="$emit('sendCommand', $event)"
+              />
+            </openwb-base-card>
+            <openwb-base-card
               :ref="`card-${templateKey}-eco_charging`"
               :collapsible="true"
               :collapsed="true"
@@ -1239,53 +1310,6 @@
                 "
               >
               </openwb-base-number-input>
-            </openwb-base-card>
-            <openwb-base-card
-              :ref="`card-${templateKey}-scheduled_charging`"
-              :collapsible="true"
-              :collapsed="true"
-              subtype="secondary"
-            >
-              <template #header> Ziel </template>
-              <openwb-base-heading>
-                Zielladepläne
-                <template #actions>
-                  <openwb-base-avatar
-                    class="bg-success clickable"
-                    title="Neuen Zielladen-Plan hinzufügen"
-                    @click.stop="addChargeTemplateSchedulePlan(template.id)"
-                  >
-                    <font-awesome-icon :icon="['fas', 'plus']" />
-                  </openwb-base-avatar>
-                </template>
-                <template #help>
-                  Im Lademodus "Zielladen" wird der Ladestrom so angepasst, dass das Fahrzeug zum angegebenen Zeitpunkt
-                  den eingestellten SoC bzw. die einzuladende Energiemenge erreicht. Anhand des vorgegebenen Ladestroms
-                  wird der Zeitpunkt berechnet, an dem die Ladung spätestens starten muss.<br />
-                  Ist der berechnete Zeitpunkt des Ladestarts noch nicht erreicht, wird mit Überschuss geladen. Auch
-                  nach Erreichen des Ziel-SoCs wird mit Überschuss geladen, solange bis das "SoC-Limit für das Fahrzeug"
-                  erreicht wird.<br />
-                  Es wird nach den Vorgaben des Zeitplans geladen, dessen Zieltermin am nächsten liegt. Ist der
-                  Zielzeitpunkt vorbei, wird solange geladen bis, das Ziel erreicht oder das Auto abgesteckt wird. Wenn
-                  der Ziel-Termin des nächsten Plans innerhalb der nächsten 12 Stunden liegt, wird auf den nächsten Plan
-                  umgeschaltet.
-                </template>
-              </openwb-base-heading>
-              <openwb-base-alert
-                v-if="template.chargemode.scheduled_charging.plans.length == 0"
-                subtype="info"
-              >
-                Es wurden noch keine Pläne für das Zielladen angelegt.
-              </openwb-base-alert>
-              <charge-template-scheduled-charging-plan
-                v-for="(plan, planKey) in template.chargemode.scheduled_charging.plans"
-                :key="planKey"
-                :model-value="plan"
-                :template-id="template.id"
-                :dc-charging-enabled="dcChargingEnabled"
-                @update:model-value="updateState(templateKey, $event, `chargemode.scheduled_charging.plans.${planKey}`)"
-                @send-command="$emit('sendCommand', $event)"
-              />
             </openwb-base-card>
             <div v-if="!installAssistantActive">
               <hr />
