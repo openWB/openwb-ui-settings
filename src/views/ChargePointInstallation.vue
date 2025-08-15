@@ -287,37 +287,35 @@
             />
             <hr />
             <openwb-base-heading> Zugangskontrolle </openwb-base-heading>
-            <openwb-base-button-group-input
-              title="Sperre nach Abstecken"
-              :buttons="[
-                {
-                  buttonValue: false,
-                  text: 'Nein',
-                  class: 'btn-outline-danger',
-                },
-                {
-                  buttonValue: true,
-                  text: 'Ja',
-                  class: 'btn-outline-success',
-                },
-              ]"
-              :model-value="chargePointTemplate.disable_after_unplug"
-              @update:model-value="updateState(chargePointTemplateKey, $event, 'disable_after_unplug')"
-            >
-              <template #help> Sperrt den Ladepunkt nach Abstecken eines Fahrzeuges. </template>
-            </openwb-base-button-group-input>
-            <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true && !installAssistantActive">
+            <div v-if="chargePointTemplate.valid_tags.length > 0">
+              <openwb-base-alert subtype="info">
+                Einstellungen zur Zugangskontrolle finden sich unter
+                <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.
+                <div
+                  v-if="
+                    $store.state.mqtt['openWB/optional/rfid/active'] === true &&
+                    chargePointTemplate.disable_after_unplug
+                  "
+                >
+                  Die Option ist aktiv. Ladepunkte denen dieses Ladepunkt-Profil zugeordnet ist müssen per ID-Tag
+                  entsperrt werden.
+                </div>
+                <div v-else>Aktuell ist die Option in den Einstellungen deaktiviert.</div>
+                Dem Ladepunkt-Profil sind folgende ID-Tags zum Entsperren zugeordnet:
+              </openwb-base-alert>
               <openwb-base-array-input
-                v-if="chargePointTemplate.disable_after_unplug"
                 title="Zugeordnete ID-Tags"
-                no-elements-message="Keine ID-Tags zugeordnet."
+                no-elements-message="Keine keine ID-Tags zugeordnet."
+                no-input="true"
                 :model-value="chargePointTemplate.valid_tags"
-                @update:model-value="updateState(chargePointTemplateKey, $event, 'valid_tags')"
-              >
-                <template #help>
-                  Die hier eingetragenen ID-Tags dienen ausschließlich zum Entsperren des Ladepunktes.
-                </template>
-              </openwb-base-array-input>
+              />
+            </div>
+            <div v-else>
+              <openwb-base-alert subtype="info">
+                Einstellungen zur Zugangskontrolle finden sich unter
+                <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.<br />
+                Dem Ladepunkt-Profil sind aktuell keine ID-Tags zum Entsperren zugeordnet.
+              </openwb-base-alert>
             </div>
             <hr />
             <openwb-base-heading> Angaben zum konfigurierten Ladestrom der openWB </openwb-base-heading>
