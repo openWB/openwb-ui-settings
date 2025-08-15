@@ -24,6 +24,8 @@
         <span v-if="plan.limit.selected == 'soc'">
           <font-awesome-icon :icon="['fas', 'car-battery']" />
           {{ plan.limit.soc_scheduled }}%
+          <font-awesome-icon :icon="['fas', plan.bidi ? 'right-left' : 'right-long']" />
+          {{ plan.limit.soc_limit }}%
         </span>
         <span v-if="plan.limit.selected == 'amount'">
           <font-awesome-icon :icon="['fas', 'bolt']" />
@@ -338,6 +340,8 @@ import {
   faCalendarWeek as fasCalendarWeek,
   faCalendarAlt as fasCalendarAlt,
   faCoins as fasCoins,
+  faRightLong as fasRightLong,
+  faRightLeft as fasRightLeft,
   faCopy as fasCopy,
   faTrash as fasTrash,
 } from "@fortawesome/free-solid-svg-icons";
@@ -350,6 +354,8 @@ library.add(
   fasCalendarDay,
   fasCalendarWeek,
   fasCalendarAlt,
+  fasRightLong,
+  fasRightLeft,
   fasCoins,
   fasCopy,
   fasTrash,

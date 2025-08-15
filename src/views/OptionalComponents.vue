@@ -264,35 +264,22 @@ export default {
   data() {
     return {
       mqttTopicsToSubscribe: [
-        "openWB/general/extern",
         "openWB/chargepoint/+/config",
         "openWB/chargepoint/+/get/rfid",
         "openWB/chargepoint/+/get/rfid_timestamp",
+        "openWB/chargepoint/+/get/vehicle_id",
         "openWB/chargepoint/+/set/rfid",
-        "openWB/optional/rfid/active",
-        "openWB/optional/led/active",
-        "ToDo/optional/led/instant_blocked",
-        "ToDo/optional/led/pv_blocked",
-        "ToDo/optional/led/scheduled_blocked",
-        "ToDo/optional/led/standby_blocked",
-        "ToDo/optional/led/stop_blocked",
-        "ToDo/optional/led/instant",
-        "ToDo/optional/led/pv",
-        "ToDo/optional/led/scheduled",
-        "ToDo/optional/led/standby",
-        "ToDo/optional/led/stop",
+        "openWB/general/extern",
         "openWB/optional/int_display/active",
-        "openWB/optional/int_display/standby",
-        "openWB/optional/int_display/rotation",
         "openWB/optional/int_display/on_if_plugged_in",
+        "openWB/optional/int_display/only_local_charge_points",
         "openWB/optional/int_display/pin_active",
         "openWB/optional/int_display/pin_code",
+        "openWB/optional/int_display/rotation",
+        "openWB/optional/int_display/standby",
         "openWB/optional/int_display/theme",
-        "openWB/optional/int_display/only_local_charge_points",
+        "openWB/optional/rfid/active",
         "openWB/system/configurable/display_themes",
-        "openWB/optional/et/active",
-        "openWB/optional/et/config/provider",
-        "openWB/optional/et/config/max_price",
       ],
       tempIdTagList: {},
     };
@@ -326,7 +313,7 @@ export default {
     updateIdTagList() {
       Object.entries(
         // get all id-tag topics/values
-        this.getWildcardTopics("^openWB/chargepoint/[^+/]+/[gs]et/rfid$", true),
+        this.getWildcardTopics("^openWB/chargepoint/[^+/]+/[gs]et/(rfid|vehicle_id)$", true),
       ).forEach((entry) => {
         if (entry[1] !== null) {
           this.tempIdTagList[entry[1]] = `${entry[1]} (${
