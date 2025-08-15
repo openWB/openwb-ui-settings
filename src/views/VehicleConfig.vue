@@ -146,9 +146,10 @@
                   </div>
                   Dem Fahrzeug sind folgende ID-Tags zugeordnet:
                 </openwb-base-alert>
-                <openwb-base-array
+                <openwb-base-array-input
                   title="Zugeordnete ID-Tags"
                   no-elements-message="Keine keine ID-Tags zugeordnet."
+                  :no-input="true"
                   :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id']"
                 />
               </div>

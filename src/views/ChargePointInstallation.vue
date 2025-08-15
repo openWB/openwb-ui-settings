@@ -303,9 +303,10 @@
                 <div v-else>Aktuell ist die Option in den Einstellungen deaktiviert.</div>
                 Dem Ladepunkt-Profil sind folgende ID-Tags zum Entsperren zugeordnet:
               </openwb-base-alert>
-              <openwb-base-array
+              <openwb-base-array-input
                 title="Zugeordnete ID-Tags"
                 no-elements-message="Keine keine ID-Tags zugeordnet."
+                no-input="true"
                 :model-value="chargePointTemplate.valid_tags"
               />
             </div>
