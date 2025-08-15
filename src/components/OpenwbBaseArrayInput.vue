@@ -85,7 +85,6 @@ import {
   faInfoCircle as fasInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { isReadonly } from "vue";
 
 library.add(fasTag, fasTimesCircle, fasPlus, fasInfoCircle);
 
