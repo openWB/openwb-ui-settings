@@ -254,6 +254,7 @@ export default {
         "openWB/general/extern",
         "openWB/chargepoint/+/config",
         "openWB/chargepoint/+/get/rfid",
+        "openWB/chargepoint/+/get/vehicle_id",
         "openWB/chargepoint/+/get/rfid_timestamp",
         "openWB/chargepoint/+/set/rfid",
         "openWB/optional/rfid/active",
@@ -289,7 +290,7 @@ export default {
     updateIdTagList() {
       Object.entries(
         // get all id-tag topics/values
-        this.getWildcardTopics("^openWB/chargepoint/[^+/]+/[gs]et/rfid$", true),
+        this.getWildcardTopics("^openWB/chargepoint/[^+/]+/[gs]et/(rfid|vehicle_id)$", true),
       ).forEach((entry) => {
         if (entry[1] !== null) {
           this.tempIdTagList[entry[1]] = `${entry[1]} (${
