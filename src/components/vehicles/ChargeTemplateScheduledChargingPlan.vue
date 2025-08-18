@@ -24,7 +24,7 @@
         <span v-if="plan.limit.selected == 'soc'">
           <font-awesome-icon :icon="['fas', 'car-battery']" />
           {{ plan.limit.soc_scheduled }}%
-          <font-awesome-icon :icon="['fas', plan.bidi ? 'right-left' : 'right-long']" />
+          <font-awesome-icon :icon="['fas', plan.bidi_charging_enabled ? 'right-left' : 'right-long']" />
           {{ plan.limit.soc_limit }}%
         </span>
         <span v-if="plan.limit.selected == 'amount'">
