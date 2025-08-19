@@ -94,12 +94,15 @@
               </li>
             </ul>
           </openwb-base-card>
-          <openwb-base-alert subtype="danger">
+          <openwb-base-alert 
+            v-if="!installAssistantActive"
+            subtype="danger"
+          >
             Nach einem Update wird die Ladestation direkt neu gestartet! Es werden alle eventuell vorhandenen lokalen
             Änderungen am Programmcode mit dem Update verworfen!
           </openwb-base-alert>
           <openwb-base-alert
-            v-if="$store.state.mqtt['openWB/system/current_branch'] != 'Release'"
+            v-if="$store.state.mqtt['openWB/system/current_branch'] != 'Release' && !installAssistantActive"
             subtype="danger"
           >
             Du bist nicht auf dem für den normalen Gebrauch empfohlenen Entwicklungszweig "Release". Wir empfehlen, auf
@@ -129,7 +132,7 @@
               </openwb-base-click-button>
             </div>
           </div>
-          <div v-if="$store.state.mqtt['openWB/general/extern'] != true">
+          <div v-if="$store.state.mqtt['openWB/general/extern'] != true && !installAssistantActive">
             <hr />
             <openwb-base-heading>Automatisches Update von Secondary openWBs</openwb-base-heading>
             <openwb-base-alert subtype="info">

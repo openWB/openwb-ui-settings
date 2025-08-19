@@ -1,26 +1,22 @@
 <template>
   <InstallAssistantStepTemplate
-    title="3. Auswahl des Steuerungsmodus"
+    title="4. Ein- und Ausgänge konfigurieren"
     @next-page="nextPage"
     @previous-page="previousPage"
     @end-assistant="endAssistant"
   >
     <template #help>
       <p>
-        Hier festlegen, ob die openWB als "steuernd" (primary) oder als ferngesteuert
-        (secondary) arbeiten soll. Die Einstellung gilt für genau die WB, auf der aktuell konfiguriert wird (korrekte
-        IP-Adresse beachten).
+        Diese openWB ist als "primary" konfiguriert und übernimmt die Regelung des Systems.
       </p>
       <p>
-        Eine openWB standalone hat keinen Ladepunkt und arbeitet nur als Steuerteil (primary). Eine openWB Standard(+),
-        custom, Duo (2 Ladepunkte) und Buchse können sowohl als steuernde primary oder als ferngesteuerte
-        secondarybetrieben werden. Eine openWB Pro und Satellit können nur als s.g. Ladepunkt genutzt werden und
-        benötigen zwingend einen separaten primary als Steuerteil.
+        Sofern openWB als Energiemanagementsystem für steuerbare Verbrauchseinrichtungen (SteuVE) gemäß §14a EnWG
+        verwendet werden soll, so ist für die VNB-Signaleingänge die entsprechende Hardware auszuwählen.
       </p>
       <p class="font-weight-bold">Änderungen werden nur durch Klicken auf Speichern wirksam!</p>
     </template>
     <template #content>
-      <GeneralConfigView
+      <IoConfigView
         :install-assistant-active="true"
         @send-command="$emit('sendCommand', $event)"
         @save="$emit('save')"
@@ -34,25 +30,25 @@
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
 import InstallAssistantStepTemplate from "./InstallAssistantStepTemplate.vue";
-import GeneralConfigView from "../../views/GeneralConfig.vue";
+import IoConfigView from "../../views/IoConfig.vue";
 
 export default {
-  name: "InstallAssistantStep3",
+  name: "InstallAssistantStep4.1",
   components: {
     InstallAssistantStepTemplate,
-    GeneralConfigView,
+    IoConfigView,
   },
   mixins: [ComponentState],
   emits: ["save", "reset", "defaults", "sendCommand", "switchPage", "endAssistant"],
   data: () => ({
-    mqttTopicsToSubscribe: ["openWB/general/extern"],
+    mqttTopicsToSubscribe: [],
   }),
   methods: {
     nextPage() {
-      this.$emit("switchPage", this.$store.state.mqtt["openWB/general/extern"] ? 4 : 4.1);
+      this.$emit("switchPage", 5);
     },
     previousPage() {
-      this.$emit("switchPage", 2);
+      this.$emit("switchPage", 3);
     },
     endAssistant() {
       this.$emit("endAssistant");

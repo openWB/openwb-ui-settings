@@ -1,6 +1,6 @@
 <template>
   <InstallAssistantStepTemplate
-    title="6. Konfiguration des Lastmanagements"
+    title="7. Konfiguration des Lastmanagements"
     @next-page="nextPage"
     @previous-page="previousPage"
     @end-assistant="endAssistant"
