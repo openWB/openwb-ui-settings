@@ -1,4 +1,29 @@
 <template>
+  <!-- modal dialogs -->
+  <openwb-base-modal-dialog
+    :show="showDeprecatedFirmwareModal"
+    title="Achtung: Veraltete Software!"
+    subtype="danger"
+    :buttons="[{ text: 'Trotzdem versenden', event: 'confirm', subtype: 'danger' }]"
+    @modal-result="verifyModalInput($event)"
+  >
+    Der Systembericht wurde noch nicht abgesendet.<br />
+    Die Software auf Ihrer openWB ist veraltet.<br />
+    Möglicherweise wurde das Problem bereits behoben.<br />
+    Bitte führen Sie vor dem Absenden ein
+    <router-link to="/System/SystemConfiguration"> Update </router-link>
+    durch.<br />
+    Falls ein Update nicht möglich ist, kann der Systembericht dennoch versendet werden.
+    Falls kein Update gewünscht ist, bieten wir auch über unseren Partner WB Solution GmbH
+    <a
+      href="https://wb-solution.de/produkt/support-token-aeltere-version/"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Support für ältere Softwareversionen</a
+    >
+    an.
+  </openwb-base-modal-dialog>
+  <!-- main content -->
   <div class="support">
     <form name="supportForm">
       <openwb-base-alert
@@ -114,7 +139,7 @@
                 class="col-4"
                 :class="enableSendDebugButton ? 'btn-success' : 'btn-outline-success'"
                 :disabled="!enableSendDebugButton"
-                @button-clicked="sendDebugMessage"
+                @button-clicked="checkFirmware"
               >
                 Absenden
               </openwb-base-click-button>
@@ -159,7 +184,11 @@ export default {
         "openWB/system/device/+/component/+/config",
         "openWB/vehicle/+/name",
         "openWB/vehicle/+/info",
+
+        "openWB/system/current_commit",
+        "openWB/system/current_branch_commit",
       ],
+      showDeprecatedFirmwareModal: false,
       email: undefined,
       components: undefined,
       vehicles: undefined,
@@ -207,6 +236,13 @@ export default {
       }
       return vehicleText.trim();
     },
+    updateAvailable() {
+      return (
+        this.$store.state.mqtt["openWB/system/current_branch_commit"] &&
+        this.$store.state.mqtt["openWB/system/current_branch_commit"] !=
+          this.$store.state.mqtt["openWB/system/current_commit"]
+      );
+    },
   },
   methods: {
     sendDebugMessage() {
@@ -220,6 +256,19 @@ export default {
           data: this.debugData,
         });
         this.enableSendDebugButton = false;
+      }
+    },
+    checkFirmware() {
+      if(this.updateAvailable) {
+        this.showDeprecatedFirmwareModal = true;
+      }else {
+        this.sendDebugMessage()
+      }
+    },
+    verifyModalInput(event) {
+      this.showDeprecatedFirmwareModal = false;
+      if (event == "confirm") {
+        this.sendDebugMessage()
       }
     },
   },
