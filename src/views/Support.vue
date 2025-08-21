@@ -4,11 +4,10 @@
     :show="showDeprecatedFirmwareModal"
     title="Achtung: Veraltete Software!"
     subtype="danger"
-    :buttons="[{ text: 'Trotzdem versenden', event: 'confirm', subtype: 'danger' }]"
+    :preventClose=true
+    :buttons="[{ text: 'Trotzdem versenden', event: 'confirm', subtype: 'danger' }, { text: 'Nicht versenden', event: 'closeDialog'}]"
     @modal-result="verifyModalInput($event)"
   >
-    Der Systembericht wurde noch nicht abgesendet.<br />
-    Die Software auf Ihrer openWB ist veraltet.<br />
     Möglicherweise wurde das Problem bereits behoben.<br />
     Bitte führen Sie vor dem Absenden ein
     <router-link to="/System/SystemConfiguration"> Update </router-link>
