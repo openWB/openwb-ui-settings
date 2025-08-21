@@ -78,7 +78,7 @@
             title="Pufferzeit zwischen automat. Phasenumschaltungen"
             unit="Min."
             :min="5"
-            :max="20"
+            :max="60"
             :step="1"
             :model-value="$store.state.mqtt['openWB/general/chargemode_config/phase_switch_delay']"
             @update:model-value="updateState('openWB/general/chargemode_config/phase_switch_delay', $event)"
