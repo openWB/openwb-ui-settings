@@ -10,7 +10,7 @@
         Bitte ein System-Update durchführen, um die Software auf den neuesten Stand zu bringen.
       </p>
       <p>
-        Hierzu "Informationen aktualisieren" klicken. Falls ein Update verfügbar ist, wird der Update-Button grün
+        Hierzu warten während auf neue Versionen geprüft wird. Falls ein Update verfügbar ist, wird der Update-Button grün
         (zum Update bereit).
       </p>
       <p>
@@ -56,6 +56,15 @@ export default {
     endAssistant() {
       this.$emit("endAssistant");
     },
+    sendSystemCommand(command, data = {}) {
+      this.$emit("sendCommand", {
+        command: command,
+        data: data,
+      });
+    },
+  },
+  beforeMount() {
+    this.sendSystemCommand('systemFetchVersions')
   },
 };
 </script>
