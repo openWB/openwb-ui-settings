@@ -271,6 +271,15 @@ export default {
         this.sendDebugMessage()
       }
     },
+    sendSystemCommand(command, data = {}) {
+      this.$emit("sendCommand", {
+        command: command,
+        data: data,
+      });
+    },
+  },
+  beforeMount() {
+    this.sendSystemCommand('systemFetchVersions')
   },
 };
 </script>
