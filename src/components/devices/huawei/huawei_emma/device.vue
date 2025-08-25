@@ -24,9 +24,7 @@
       max="255"
       @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
     >
-      <template #help>
-        Huawei Emma nutzt entgegen der Modbus-Spezifikation standardmäßig die Modbus ID 0.
-      </template>
+      <template #help> Huawei Emma nutzt entgegen der Modbus-Spezifikation standardmäßig die Modbus ID 0. </template>
     </openwb-base-number-input>
   </div>
 </template>

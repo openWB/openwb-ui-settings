@@ -321,7 +321,7 @@ export default {
   emits: ["sendCommand"],
   data() {
     return {
-      dateTimeFormat: new Intl.DateTimeFormat("de-DE", {
+      dateTimeFormat: new Intl.DateTimeFormat(undefined, {
         year: "numeric",
         month: "2-digit",
         day: "2-digit",
