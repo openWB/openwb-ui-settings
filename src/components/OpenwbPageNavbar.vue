@@ -86,7 +86,14 @@
               class="dropdown-item"
               active-class="active disabled"
             >
-              Optionale Hardware
+              Display
+            </router-link>
+            <router-link
+              to="/IdentificationConfig"
+              class="dropdown-item"
+              active-class="active disabled"
+            >
+              Identifikation
             </router-link>
           </div>
         </li>

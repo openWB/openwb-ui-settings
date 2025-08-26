@@ -20,7 +20,7 @@
       </openwb-base-modal-dialog>
       <!-- main content -->
       <h2>Vielen Dank, dass Du Dich für openWB entschieden hast.</h2>
-      <p>Dieser Assistent führt Dich durch die Konfiguration der einzelnen Module:</p>
+      <p>Dieser Assistent führt durch die Konfiguration der einzelnen Module:</p>
       <ol>
         <li>Datensicherung der bestehenden Konfiguration</li>
         <li>Aktualisierung des openWB-Systems</li>
@@ -31,6 +31,7 @@
         primary werden die folgenden zusätzlichen Schritte durchlaufen:
       </p>
       <ol start="4">
+        <li>Ein- und Ausgänge konfigurieren</li>
         <li>Energiesystem - Geräte und Komponenten einrichten</li>
         <li>Einrichten der Ladepunkte (openWB als primary)</li>
         <li>Konfiguration des Lastmanagements</li>
@@ -38,6 +39,11 @@
         <li>Datensicherung der neuen Konfiguration</li>
       </ol>
       <p>Danach ist die Grundkonfiguration abgeschlossen.</p>
+      <p class="font-weight-bold">
+        Bitte während der Einrichtung auch die jeweiligen Hilfstexte lesen, welche durch Klick auf
+        <FontAwesomeIcon :icon="['far', 'question-circle']" /> erscheinen.
+        Hier sind weiterführende Informationen zu den Eingabefeldern zu finden.
+      </p>
     </template>
   </InstallAssistantStepTemplate>
 </template>
@@ -45,11 +51,13 @@
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
 import InstallAssistantStepTemplate from "./InstallAssistantStepTemplate.vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 export default {
   name: "InstallAssistantStep0",
   components: {
     InstallAssistantStepTemplate,
+    FontAwesomeIcon,
   },
   mixins: [ComponentState],
   emits: ["switchPage", "endAssistant"],

@@ -125,80 +125,82 @@
             </div>
           </div>
         </form>
-        <form
-          v-if="showBackupCloudSection"
-          name="cloudBackupForm"
-        >
-          <hr />
-          <openwb-base-heading> Automatische Sicherung in einen Cloud-Dienst </openwb-base-heading>
-          <openwb-base-alert subtype="info">
-            Ist die openWB als primary konfiguriert, wird zwischen Mitternacht und 5:00 Uhr automatisch eine Sicherung
-            erstellt und in den angegebenen Cloud-Dienst (nicht openWB Cloud!) hochgeladen. Ist kein Cloud-Dienst
-            konfiguriert, wird keine automatische Sicherung erstellt. Die automatische Sicherung kann unabhängig von der
-            openWB Cloud genutzt werden.<br />
-            Die manuelle Cloud-Sicherung und -falls aktiviert- die Sicherung vor einem Update werden sowohl von einer
-            primary als auch von einer secondary durchgeführt.<br />
-            Die Anleitung zur Konfiguration des Cloud-Dienstes findest Du
-            <a
-              href="https://github.com/openWB/core/wiki/Cloud-Sicherung"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              hier
-            </a>
-            .
-          </openwb-base-alert>
-          <openwb-base-select-input
-            class="mb-2"
-            title="Backup-Cloud"
-            :options="backupCloudList"
-            :model-value="$store.state.mqtt['openWB/system/backup_cloud/config']?.type"
-            @update:model-value="updateSelectedBackupCloud($event)"
-          />
-          <div v-if="$store.state.mqtt['openWB/system/backup_cloud/config']?.type">
-            <openwb-base-button-group-input
-              title="Sicherung vor System-Update"
-              :buttons="[
-                {
-                  buttonValue: false,
-                  text: 'Nein',
-                  class: 'btn-outline-danger',
-                },
-                {
-                  buttonValue: true,
-                  text: 'Ja',
-                  class: 'btn-outline-success',
-                },
-              ]"
-              :model-value="$store.state.mqtt['openWB/system/backup_cloud/backup_before_update']"
-              @update:model-value="updateState('openWB/system/backup_cloud/backup_before_update', $event)"
-            >
-              <template #help>
-                Ist diese Option aktiviert, dann wird vor jedem System-Update automatisch eine Sicherung erstellt und
-                diese in die Backup-Cloud hochgeladen.
-              </template>
-            </openwb-base-button-group-input>
-            <openwb-base-button-input
-              title="Manuelle Cloud-Sicherung"
-              button-text="Sicherung erstellen und hochladen"
-              subtype="success"
-              @button-clicked="sendSystemCommand('createCloudBackup', {})"
+        <div v-if="!installAssistantActive">
+          <form
+            v-if="showBackupCloudSection"
+            name="cloudBackupForm"
+          >
+            <hr />
+            <openwb-base-heading> Automatische Sicherung in einen Cloud-Dienst </openwb-base-heading>
+            <openwb-base-alert subtype="info">
+              Ist die openWB als primary konfiguriert, wird zwischen Mitternacht und 5:00 Uhr automatisch eine Sicherung
+              erstellt und in den angegebenen Cloud-Dienst (nicht openWB Cloud!) hochgeladen. Ist kein Cloud-Dienst
+              konfiguriert, wird keine automatische Sicherung erstellt. Die automatische Sicherung kann unabhängig von der
+              openWB Cloud genutzt werden.<br />
+              Die manuelle Cloud-Sicherung und -falls aktiviert- die Sicherung vor einem Update werden sowohl von einer
+              primary als auch von einer secondary durchgeführt.<br />
+              Die Anleitung zur Konfiguration des Cloud-Dienstes findest Du
+              <a
+                href="https://github.com/openWB/core/wiki/Cloud-Sicherung"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                hier
+              </a>
+              .
+            </openwb-base-alert>
+            <openwb-base-select-input
+              class="mb-2"
+              title="Backup-Cloud"
+              :options="backupCloudList"
+              :model-value="$store.state.mqtt['openWB/system/backup_cloud/config']?.type"
+              @update:model-value="updateSelectedBackupCloud($event)"
             />
-            <openwb-backup-cloud-proxy
-              :backup-cloud="$store.state.mqtt['openWB/system/backup_cloud/config']"
-              @update:configuration="updateConfiguration('openWB/system/backup_cloud/config', $event)"
-              @send-command="sendSystemCommand($event.command, $event.args)"
+            <div v-if="$store.state.mqtt['openWB/system/backup_cloud/config']?.type">
+              <openwb-base-button-group-input
+                title="Sicherung vor System-Update"
+                :buttons="[
+                  {
+                    buttonValue: false,
+                    text: 'Nein',
+                    class: 'btn-outline-danger',
+                  },
+                  {
+                    buttonValue: true,
+                    text: 'Ja',
+                    class: 'btn-outline-success',
+                  },
+                ]"
+                :model-value="$store.state.mqtt['openWB/system/backup_cloud/backup_before_update']"
+                @update:model-value="updateState('openWB/system/backup_cloud/backup_before_update', $event)"
+              >
+                <template #help>
+                  Ist diese Option aktiviert, dann wird vor jedem System-Update automatisch eine Sicherung erstellt und
+                  diese in die Backup-Cloud hochgeladen.
+                </template>
+              </openwb-base-button-group-input>
+              <openwb-base-button-input
+                title="Manuelle Cloud-Sicherung"
+                button-text="Sicherung erstellen und hochladen"
+                subtype="success"
+                @button-clicked="sendSystemCommand('createCloudBackup', {})"
+              />
+              <openwb-backup-cloud-proxy
+                :backup-cloud="$store.state.mqtt['openWB/system/backup_cloud/config']"
+                @update:configuration="updateConfiguration('openWB/system/backup_cloud/config', $event)"
+                @send-command="sendSystemCommand($event.command, $event.args)"
+              />
+            </div>
+            <openwb-base-submit-buttons
+              form-name="cloudBackupForm"
+              :hide-reset="true"
+              :hide-defaults="true"
+              @save="$emit('save')"
+              @reset="$emit('reset')"
+              @defaults="$emit('defaults')"
             />
-          </div>
-          <openwb-base-submit-buttons
-            form-name="cloudBackupForm"
-            :hide-reset="true"
-            :hide-defaults="true"
-            @save="$emit('save')"
-            @reset="$emit('reset')"
-            @defaults="$emit('defaults')"
-          />
-        </form>
+          </form>
+        </div>
       </openwb-base-card>
       <openwb-base-card
         v-if="!installAssistantActive && !$store.state.mqtt['openWB/general/extern']"

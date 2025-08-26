@@ -21,8 +21,8 @@
           </div>
         </div>
       </div>
-      <span class="card-actions ml-4">
-        <span
+      <div class="card-actions ml-4">
+        <div
           v-if="$slots.actions"
           class="card-actions mr-2"
         >
@@ -30,12 +30,12 @@
             name="actions"
             :collapsed="isCollapsed"
           />
-        </span>
+        </div>
         <font-awesome-icon
           v-if="collapsible"
           :icon="isCollapsed ? ['fas', 'chevron-right'] : ['fas', 'chevron-down']"
         />
-      </span>
+      </div>
     </div>
     <div
       v-if="isCollapsed === false"
@@ -140,6 +140,7 @@ export default {
 .card-actions {
   display: flex;
   align-items: center;
+  flex-wrap: nowrap;
 }
 
 .card-actions :deep(.pill) {

@@ -1,6 +1,6 @@
 <template>
   <InstallAssistantStepTemplate
-    title="5. Einrichten der Ladepunkte (openWB als primary)"
+    title="6. Einrichten der Ladepunkte (openWB als primary)"
     @next-page="nextPage"
     @previous-page="previousPage"
     @end-assistant="endAssistant"
