@@ -616,15 +616,6 @@
                 nach einer Ladungsunterbrechung keine Ladung mehr starten.
               </template>
             </openwb-base-button-group-input>
-            <openwb-base-number-input
-              title="Pause bei Phasenumschaltung"
-              unit="s"
-              :min="2"
-              :step="1"
-              required
-              :model-value="template.phase_switch_pause"
-              @update:model-value="updateState(key, $event, 'phase_switch_pause')"
-            />
             <div v-if="!installAssistantActive">
               <openwb-base-number-input
                 title="Mindestzeit zwischen Umschaltungen"
