@@ -37,7 +37,7 @@
                 fixed-width
                 :icon="['fas', 'fa-battery-half']"
               />
-              Mindest-SoC des Speichers
+              Nach SoC des Speichers
             </template>
             <template #help>
               <div v-if="batMode === 'ev_mode'">
@@ -52,7 +52,7 @@
               <div v-if="batMode === 'min_soc_bat_mode'">
                 Verhält sich bis zum Erreichen des Mindest-SoC wie "Ladepriorität Speicher" und oberhalb 
                 des Mindest-SoC wie "Ladepriorität Fahrzeuge".
-                Die maximale Leistung der Speicherbe- und entladung lässt sich hierfestlegen.
+                Die maximale Leistung der Speicherbe- und entladung lässt sich hier festlegen.
               </div>
             </template>
           </openwb-base-button-group-input>
@@ -73,9 +73,14 @@
                 $store.state.mqtt['openWB/general/chargemode_config/pv_charging/max_bat_soc'] :
                 $event)
               "
-            />
+            >
+              <template #help>
+                Unterhalb des Mindest SoC wird vorhandener PV-Überschuss bevorzugt in den Speicher geladen.
+                Oberhalb des Mindest-SoC hat die Fahrzeugladung Priorität.
+              </template>
+            </openwb-base-range-input>
             <openwb-base-range-input
-              title="Max-SoC des Speichers"
+              title="Maximal-SoC des Speichers"
               :min="0"
               :max="100"
               :step="1"
@@ -90,10 +95,24 @@
                 $store.state.mqtt['openWB/general/chargemode_config/pv_charging/min_bat_soc'] :
                 $event)
               "
-            />
-            <openwb-base-heading> Speicher-SoC unterhalb Mindest-SoC </openwb-base-heading>
+            >
+              <template #help>
+                Wird der Maximal-SoC überschritten, darf der Speicher bis zum Erreichen des Mindest-SoC
+                zur Fahrzeugladung mitbenutzt werden.
+              </template>
+            </openwb-base-range-input>
+            <openwb-base-alert
+              v-if="
+                $store.state.mqtt['openWB/general/chargemode_config/pv_charging/min_bat_soc'] ==
+                $store.state.mqtt['openWB/general/chargemode_config/pv_charging/max_bat_soc']
+              "
+              subtype="info"
+            >
+              Bei identischen SoC Angaben findet keine Speicherhysterese statt.
+            </openwb-base-alert>
+            <openwb-base-heading> Speicher-Ladeleistung unterhalb Mindest-SoC </openwb-base-heading>
             <openwb-base-button-group-input
-              title="Ladeleistung für Speicher reservieren"
+              title="Nur eine bestimmte Ladeleistung reservieren"
               :buttons="[
                 {
                   buttonValue: false,
@@ -111,15 +130,20 @@
                 updateState('openWB/general/chargemode_config/pv_charging/bat_power_reserve_active', $event)
               "
             >
-              <template #help>
+              <template #help
+                v-if="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/bat_power_reserve_active']"
+              >
                 ACHTUNG: Der hier eingestellte Wert darf die maximale Ladeleistung des Speichers nicht überschreiten!<br />
                 Befindet sich der Speicher unterhalb des Mindest-SoC, wird er mit der hier eingestellten 
-                Speicherentladeleistung geladen. Verbleibender Überschuss wird in die Fahrzeuge geladen.
+                Speicherladeleistung geladen. Verbleibender Überschuss wird in die Fahrzeuge geladen.
+              </template>
+              <template #help v-else >
+                Befindet sich der Speicher unterhalb des Mindest-SoC, wird er priorisiert geladen.
               </template>
             </openwb-base-button-group-input>
             <openwb-base-number-input
               v-if="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/bat_power_reserve_active']"
-              title="Reserve Ladeleistung"
+              title="Reservierte Ladeleistung"
               :min="0.1"
               :step="0.1"
               unit="kW"
@@ -129,7 +153,7 @@
                 updateState('openWB/general/chargemode_config/pv_charging/bat_power_reserve', $event * 1000)
               "
             />
-            <openwb-base-heading> Speicher-SoC oberhalb Mindest-SoC </openwb-base-heading>
+            <openwb-base-heading> Speicher-SoC oberhalb Maximal-SoC </openwb-base-heading>
             <openwb-base-button-group-input
               title="Entladung des Speichers erlauben"
               :buttons="[
@@ -151,10 +175,15 @@
                 updateState('openWB/general/chargemode_config/pv_charging/bat_power_discharge_active', $event)
               "
             >
-              <template #help>
-                Wird der Mindest-SoC überschritten, wird PV-Überschuss plus hier eingestellte Speicherentladeleistung 
-                ins Fahrzeug geladen. Die erlaubte Entladeleistung des Speichers wird dem Überschuss zum Erreichen 
-                der Einschaltschwelle hinzugerechnet.
+              <template #help
+                v-if="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/bat_power_discharge_active']"
+              >
+                Wird der Maximal-SoC überschritten, wird die PV-Ladung mit der hier eingestellten Speicherentladeleistung 
+                unterstützt. Der Speicher darf bis zum Mindest-SoC entladen werden. Die erlaubte Entladeleistung des Speichers
+                wird dem Überschuss zum Erreichen der Einschaltschwelle hinzugerechnet.
+              </template>
+              <template #help v-else>
+                Oberhalb des Maximal-SoC wird der Speicher nicht für die Fahrzeugladung mitgenutzt.
               </template>
             </openwb-base-button-group-input>
             <openwb-base-number-input
@@ -294,6 +323,7 @@ export default {
         "openWB/general/chargemode_config/pv_charging/bat_power_discharge",
         "openWB/general/chargemode_config/pv_charging/bat_power_discharge_active",
         "openWB/general/chargemode_config/pv_charging/min_bat_soc",
+        "openWB/general/chargemode_config/pv_charging/max_bat_soc",
         "openWB/bat/config/bat_control_permitted",
         "openWB/bat/get/power_limit_controllable",
         "openWB/bat/config/power_limit_mode",
