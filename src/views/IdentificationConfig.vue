@@ -13,7 +13,14 @@
             </li>
             <li>Durch manuelle Eingabe einer ID an einer openWB mit Display.</li>
           </ul>
-          Bei openWB Pro/Pro+ werden RFID-Tags nur bei angestecktem Fahrzeug erfasst!
+          <p>Bei openWB Pro/Pro+ werden RFID-Tags nur bei angestecktem Fahrzeug erfasst!</p>
+          <p>
+            Für die Erkennung kann auch ein Muster (mittels Wildcards) hinterlegt werden. Ein ? entspricht dabei
+            einem Zeichen, ein * beliebig vielen Zeichen. So ist bspw. die Erkennung von Fahrzeugen mit wechselnder ID
+            (u.a. Fahrzeuge der VW Gruppe) möglich.<br />
+            Es wird davon abgeraten die Funktion für die Entsperrung von öffentlich zugänglichen Ladepunkten zu nutzen,
+            um unbefugten Zugriff zu vermeiden.
+          </p>
         </openwb-base-alert>
         <openwb-base-button-group-input
           title="Identifikation aktivieren"
