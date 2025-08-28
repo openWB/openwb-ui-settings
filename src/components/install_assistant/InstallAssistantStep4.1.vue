@@ -1,23 +1,22 @@
 <template>
   <InstallAssistantStepTemplate
-    title="2. Aktualisierung des openWB-Systems"
+    title="4. Ein- und Ausgänge konfigurieren"
     @next-page="nextPage"
     @previous-page="previousPage"
     @end-assistant="endAssistant"
   >
     <template #help>
-      <p>Bitte ein System-Update durchführen, um die Software auf den neuesten Stand zu bringen.</p>
       <p>
-        Hierzu "Informationen aktualisieren" klicken. Falls ein Update verfügbar ist, wird der Update-Button grün (zum
-        Update bereit).
+        Diese openWB ist als "primary" konfiguriert und übernimmt die Regelung des Systems.
       </p>
       <p>
-        Ein Klick auf "Update" startet die Aktualisierung, welche auch einen automatischen Reboot initiiert (bitte ca. 5
-        Minuten warten). Danach muss der Assistent neu gestartet werden.
+        Sofern openWB als Energiemanagementsystem für steuerbare Verbrauchseinrichtungen (SteuVE) gemäß §14a EnWG
+        verwendet werden soll, so ist für die VNB-Signaleingänge die entsprechende Hardware auszuwählen.
       </p>
+      <p class="font-weight-bold">Änderungen werden nur durch Klicken auf Speichern wirksam!</p>
     </template>
     <template #content>
-      <SystemView
+      <IoConfigView
         :install-assistant-active="true"
         @send-command="$emit('sendCommand', $event)"
         @save="$emit('save')"
@@ -31,13 +30,13 @@
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
 import InstallAssistantStepTemplate from "./InstallAssistantStepTemplate.vue";
-import SystemView from "../../views/System.vue";
+import IoConfigView from "../../views/IoConfig.vue";
 
 export default {
-  name: "InstallAssistantStep2",
+  name: "InstallAssistantStep4.1",
   components: {
     InstallAssistantStepTemplate,
-    SystemView,
+    IoConfigView,
   },
   mixins: [ComponentState],
   emits: ["save", "reset", "defaults", "sendCommand", "switchPage", "endAssistant"],
@@ -46,10 +45,10 @@ export default {
   }),
   methods: {
     nextPage() {
-      this.$emit("switchPage", 3);
+      this.$emit("switchPage", 5);
     },
     previousPage() {
-      this.$emit("switchPage", 1);
+      this.$emit("switchPage", 3);
     },
     endAssistant() {
       this.$emit("endAssistant");

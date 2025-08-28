@@ -39,10 +39,18 @@ const routes = [
     component: () => import("../views/GeneralConfig.vue"),
   },
   {
+    path: "/IdentificationConfig",
+    name: "IdentificationConfig",
+    meta: {
+      heading: "Einstellungen - Identifikation",
+    },
+    component: () => import("../views/IdentificationConfig.vue"),
+  },
+  {
     path: "/OptionalComponents",
     name: "OptionalComponents",
     meta: {
-      heading: "Einstellungen - Optionale Hardware",
+      heading: "Einstellungen - Display",
     },
     component: () => import("../views/OptionalComponents.vue"),
   },

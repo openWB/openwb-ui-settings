@@ -7,26 +7,17 @@
   >
     <template #help>
       <p>
-        Diese hier vorzukonfigurierende openWB wurde als "secondary" eingestellt und wird von einer anderen openWB oder
-        standalone ferngesteuert.
+        Diese openWB wurde als "secondary" eingestellt und wird von einer anderen openWB oder standalone ferngesteuert.
       </p>
       <p>
-        Bei vorkonfigurierten openWBs ist ab Werk bereits ein (zwei bei einer DUO) interner Ladepunkt eingetragen, es
+        Bei vorkonfigurierten openWBs ist ab Werk bereits ein (zwei bei einer Duo) interner Ladepunkt eingetragen. Es
         müssen keine weiteren Ladepunkte hinzugefügt werden.
       </p>
       <p>
         Tragen Sie unter Ladepunkte bei verfügbare Ladepunkte "Interne openWB" ein und wählen Sie die Bauart der openWB
-        (z.B. openWB series 1/2 custom, Standard (+) oder Buchse) aus.
+        (z.B. openWB series 1/2 custom, Standard (+), Buchse oder Pro+) aus.
       </p>
-      <p>
-        Wenn eine openWB Duo gewählt wird, so sind zwei Ladepunkte mit Ladepunkt-Nummer 1 und 2 zu konfigurieren. Bei
-        der openWB Pro und Satellit sind keine Einstellungen notwendig.
-      </p>
-      <p>Weitere Einstellungen sind bei der Vorkonfiguration einer secondary nicht notwendig.</p>
-      <p>
-        Bitte lesen Sie auch die Hinweistexte, welche durch Klicken auf das Fragezeichensymbol erscheinen. Hier sind
-        weiterführende Informationen zu den Eingabefeldern zu finden.
-      </p>
+      <p>Wenn eine openWB Duo gewählt wird, so sind zwei Ladepunkte mit Ladepunkt-Nummer 1 und 2 zu konfigurieren.</p>
       <p class="font-weight-bold">Änderungen werden nur durch Klicken auf Speichern wirksam!</p>
     </template>
     <template #content>

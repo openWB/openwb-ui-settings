@@ -13,15 +13,7 @@
             anderen primary openWB ferngesteuert werden. Wichtig ist, dass in der secondary-openWB eine "interne openWB"
             mit der korrekten Bauart (= openWB-Hardwarevariante z.B. "Custom, Standard, Standard+, Duo, Buchse")
             konfiguriert ist. Bei einer Duo sind zwei "interne openWB" zu konfigurieren. Im "secondary"-Modus bleiben
-            alle ausgeblendeten Einstellungen unbeachtet.<br />
-            Eine bebilderte Anleitung zur Konfiguration der Ladepunkte findest Du auf der
-            <a
-              href="https://openwb.de/main/?page_id=1025"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Homepage </a
-            >.
+            alle ausgeblendeten Einstellungen unbeachtet.
           </p>
         </openwb-base-alert>
 

@@ -130,16 +130,34 @@
               @update:model-value="updateState('openWB/vehicle/' + vehicleId + '/charge_template', $event)"
             />
             <hr />
-            <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true && !installAssistantActive">
-              <openwb-base-array-input
-                title="Zugeordnete ID-Tags"
-                :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id']"
-                @update:model-value="updateState('openWB/vehicle/' + vehicleId + '/tag_id', $event)"
-              />
-              <openwb-base-alert subtype="info">
-                Die hier eingetragenen ID-Tags dienen ausschließlich der Fahrzeugzuordnung.<br />
-                <vehicle-id-wiki-hint />
-              </openwb-base-alert>
+            <div v-if="!installAssistantActive">
+              <openwb-base-heading> Fahrzeugzuordnung per ID-Tags </openwb-base-heading>
+              <div v-if="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id'].length > 0">
+                <openwb-base-alert subtype="info">
+                  Einstellungen zur Fahrzeugzuordnung finden sich unter
+                  <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.
+                  <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === false">
+                    Aktuell ist die Option in den Einstellungen deaktiviert.
+                  </div>
+                  <div v-else>
+                    Die Option ist aktiv. Das Fahrzeug lässt sich per ID-Tag automatisch einem Ladepunkt zuordnen.
+                  </div>
+                  Dem Fahrzeug sind folgende ID-Tags zugeordnet:
+                </openwb-base-alert>
+                <openwb-base-array-input
+                  title="Zugeordnete ID-Tags"
+                  no-elements-message="Keine keine ID-Tags zugeordnet."
+                  :no-input="true"
+                  :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id']"
+                />
+              </div>
+              <div v-else>
+                <openwb-base-alert subtype="info">
+                  Einstellungen zur Fahrzeugzuordnung finden sich unter
+                  <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.<br />
+                  Dem Fahrzeug sind aktuell keine ID-Tags zum Entsperren zugeordnet.
+                </openwb-base-alert>
+              </div>
               <hr />
             </div>
             <openwb-base-select-input
@@ -337,23 +355,22 @@
               v-if="$store.state.mqtt['openWB/general/extern'] === false"
               #actions="slotProps"
             >
-              <span v-if="!slotProps.collapsed">
-                <openwb-base-avatar
-                  class="bg-success clickable"
-                  title="Fahrzeug-Profil duplizieren"
-                  @click="addEvTemplate($event, key)"
-                >
-                  <font-awesome-icon :icon="['fas', 'copy']" />
-                </openwb-base-avatar>
-                <openwb-base-avatar
-                  v-if="!key.endsWith('/0')"
-                  class="bg-danger clickable ml-1"
-                  title="Fahrzeug-Profil löschen"
-                  @click="removeEvTemplateModal($event, key)"
-                >
-                  <font-awesome-icon :icon="['fas', 'trash']" />
-                </openwb-base-avatar>
-              </span>
+              <openwb-base-avatar
+                v-if="!slotProps.collapsed"
+                class="bg-success clickable"
+                title="Fahrzeug-Profil duplizieren"
+                @click="addEvTemplate($event, key)"
+              >
+                <font-awesome-icon :icon="['fas', 'copy']" />
+              </openwb-base-avatar>
+              <openwb-base-avatar
+                v-if="!slotProps.collapsed && !key.endsWith('/0')"
+                class="bg-danger clickable ml-1"
+                title="Fahrzeug-Profil löschen"
+                @click="removeEvTemplateModal($event, key)"
+              >
+                <font-awesome-icon :icon="['fas', 'trash']" />
+              </openwb-base-avatar>
             </template>
             <openwb-base-text-input
               title="Bezeichnung"
@@ -420,6 +437,28 @@
               :model-value="template.average_consump / 1000"
               @update:model-value="updateState(key, $event * 1000, 'average_consump')"
             />
+            <openwb-base-button-group-input
+              title="Bidirektionales Laden"
+              :buttons="[
+                {
+                  buttonValue: false,
+                  text: 'Nicht unterstützt',
+                  class: 'btn-outline-danger',
+                },
+                {
+                  buttonValue: true,
+                  text: 'AC nach ISO15118-20',
+                  class: 'btn-outline-success',
+                },
+              ]"
+              :model-value="template.bidi"
+              @update:model-value="updateState(key, $event, 'bidi')"
+            >
+              <template #help>
+                Für bidirektionales Laden wird eine openWB Pro benötigt. Die openWB Pro muss auf den Modus "Bidi"
+                gestellt werden.</template
+              >
+            </openwb-base-button-group-input>
             <div v-if="dcChargingEnabled === true">
               <openwb-base-heading> Angaben zur Ladeleistung (DC) </openwb-base-heading>
               <openwb-base-number-input
@@ -640,23 +679,22 @@
             "
           >
             <template #actions="slotProps">
-              <span v-if="!slotProps.collapsed">
-                <openwb-base-avatar
-                  class="bg-success clickable"
-                  title="Lade-Profil duplizieren"
-                  @click="addChargeTemplate($event, templateKey)"
-                >
-                  <font-awesome-icon :icon="['fas', 'copy']" />
-                </openwb-base-avatar>
-                <openwb-base-avatar
-                  v-if="!templateKey.endsWith('/0')"
-                  class="bg-danger clickable ml-1"
-                  title="Lade-Profil löschen"
-                  @click.stop="removeChargeTemplateModal($event, template.id)"
-                >
-                  <font-awesome-icon :icon="['fas', 'trash']" />
-                </openwb-base-avatar>
-              </span>
+              <openwb-base-avatar
+                v-if="!slotProps.collapsed"
+                class="bg-success clickable"
+                title="Lade-Profil duplizieren"
+                @click="addChargeTemplate($event, templateKey)"
+              >
+                <font-awesome-icon :icon="['fas', 'copy']" />
+              </openwb-base-avatar>
+              <openwb-base-avatar
+                v-if="!slotProps.collapsed && !templateKey.endsWith('/0')"
+                class="bg-danger clickable ml-1"
+                title="Lade-Profil löschen"
+                @click.stop="removeChargeTemplateModal($event, template.id)"
+              >
+                <font-awesome-icon :icon="['fas', 'trash']" />
+              </openwb-base-avatar>
             </template>
             <openwb-base-text-input
               title="Bezeichnung"
@@ -710,6 +748,8 @@
                   <li>Eco (PV-Anteil)</li>
                   <li>PV (PV-Anteil) mit Priorität</li>
                   <li>PV (PV-Anteil)</li>
+                  <li>Bidi-Entladen ohne Priorität</li>
+                  <li>Bidi-Entladen mit Priorität</li>
                 </ol>
               </template>
             </openwb-base-button-group-input>
@@ -739,6 +779,9 @@
                   freigegeben.
                 </template>
               </openwb-base-button-group-input>
+              <!-- Standard nach Abstecken kann auch ohne RFID genutzt werden.
+                Die Option ist zusätzlich im Lade-Profil verfügbar
+              -->
               <openwb-base-button-group-input
                 title="Standard nach Abstecken"
                 :buttons="[
@@ -1090,6 +1133,53 @@
               </openwb-base-button-group-input>
             </openwb-base-card>
             <openwb-base-card
+              :ref="`card-${templateKey}-scheduled_charging`"
+              :collapsible="true"
+              :collapsed="true"
+              subtype="secondary"
+            >
+              <template #header> Ziel </template>
+              <openwb-base-heading>
+                Zielladepläne
+                <template #actions>
+                  <openwb-base-avatar
+                    class="bg-success clickable"
+                    title="Neuen Zielladen-Plan hinzufügen"
+                    @click.stop="addChargeTemplateSchedulePlan(template.id)"
+                  >
+                    <font-awesome-icon :icon="['fas', 'plus']" />
+                  </openwb-base-avatar>
+                </template>
+                <template #help>
+                  Im Lademodus "Zielladen" wird der Ladestrom so angepasst, dass das Fahrzeug zum angegebenen Zeitpunkt
+                  den eingestellten SoC bzw. die einzuladende Energiemenge erreicht. Anhand des vorgegebenen Ladestroms
+                  wird der Zeitpunkt berechnet, an dem die Ladung spätestens starten muss.<br />
+                  Ist der berechnete Zeitpunkt des Ladestarts noch nicht erreicht, wird mit Überschuss geladen. Auch
+                  nach Erreichen des Ziel-SoCs wird mit Überschuss geladen, solange bis das "SoC-Limit für das Fahrzeug"
+                  erreicht wird.<br />
+                  Es wird nach den Vorgaben des Zeitplans geladen, dessen Zieltermin am nächsten liegt. Ist der
+                  Zielzeitpunkt vorbei, wird solange geladen bis, das Ziel erreicht oder das Auto abgesteckt wird. Wenn
+                  der Ziel-Termin des nächsten Plans innerhalb der nächsten 12 Stunden liegt, wird auf den nächsten Plan
+                  umgeschaltet.
+                </template>
+              </openwb-base-heading>
+              <openwb-base-alert
+                v-if="template.chargemode.scheduled_charging.plans.length == 0"
+                subtype="info"
+              >
+                Es wurden noch keine Pläne für das Zielladen angelegt.
+              </openwb-base-alert>
+              <charge-template-scheduled-charging-plan
+                v-for="(plan, planKey) in template.chargemode.scheduled_charging.plans"
+                :key="planKey"
+                :model-value="plan"
+                :template-id="template.id"
+                :dc-charging-enabled="dcChargingEnabled"
+                @update:model-value="updateState(templateKey, $event, `chargemode.scheduled_charging.plans.${planKey}`)"
+                @send-command="$emit('sendCommand', $event)"
+              />
+            </openwb-base-card>
+            <openwb-base-card
               :ref="`card-${templateKey}-eco_charging`"
               :collapsible="true"
               :collapsed="true"
@@ -1217,53 +1307,6 @@
               >
               </openwb-base-number-input>
             </openwb-base-card>
-            <openwb-base-card
-              :ref="`card-${templateKey}-scheduled_charging`"
-              :collapsible="true"
-              :collapsed="true"
-              subtype="secondary"
-            >
-              <template #header> Ziel </template>
-              <openwb-base-heading>
-                Zielladepläne
-                <template #actions>
-                  <openwb-base-avatar
-                    class="bg-success clickable"
-                    title="Neuen Zielladen-Plan hinzufügen"
-                    @click.stop="addChargeTemplateSchedulePlan(template.id)"
-                  >
-                    <font-awesome-icon :icon="['fas', 'plus']" />
-                  </openwb-base-avatar>
-                </template>
-                <template #help>
-                  Im Lademodus "Zielladen" wird der Ladestrom so angepasst, dass das Fahrzeug zum angegebenen Zeitpunkt
-                  den eingestellten SoC bzw. die einzuladende Energiemenge erreicht. Anhand des vorgegebenen Ladestroms
-                  wird der Zeitpunkt berechnet, an dem die Ladung spätestens starten muss.<br />
-                  Ist der berechnete Zeitpunkt des Ladestarts noch nicht erreicht, wird mit Überschuss geladen. Auch
-                  nach Erreichen des Ziel-SoCs wird mit Überschuss geladen, solange bis das "SoC-Limit für das Fahrzeug"
-                  erreicht wird.<br />
-                  Es wird nach den Vorgaben des Zeitplans geladen, dessen Zieltermin am nächsten liegt. Ist der
-                  Zielzeitpunkt vorbei, wird solange geladen bis, das Ziel erreicht oder das Auto abgesteckt wird. Wenn
-                  der Ziel-Termin des nächsten Plans innerhalb der nächsten 12 Stunden liegt, wird auf den nächsten Plan
-                  umgeschaltet.
-                </template>
-              </openwb-base-heading>
-              <openwb-base-alert
-                v-if="template.chargemode.scheduled_charging.plans.length == 0"
-                subtype="info"
-              >
-                Es wurden noch keine Pläne für das Zielladen angelegt.
-              </openwb-base-alert>
-              <charge-template-scheduled-charging-plan
-                v-for="(plan, planKey) in template.chargemode.scheduled_charging.plans"
-                :key="planKey"
-                :model-value="plan"
-                :template-id="template.id"
-                :dc-charging-enabled="dcChargingEnabled"
-                @update:model-value="updateState(templateKey, $event, `chargemode.scheduled_charging.plans.${planKey}`)"
-                @send-command="$emit('sendCommand', $event)"
-              />
-            </openwb-base-card>
             <div v-if="!installAssistantActive">
               <hr />
               <openwb-base-button-group-input
@@ -1387,7 +1430,6 @@ import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbVehicleProxy from "../components/vehicles/OpenwbVehicleProxy.vue";
 import ChargeTemplateScheduledChargingPlan from "../components/vehicles/ChargeTemplateScheduledChargingPlan.vue";
 import ChargeTemplateTimeChargingPlan from "../components/vehicles/ChargeTemplateTimeChargingPlan.vue";
-import VehicleIdWikiHint from "../components/snippets/VehicleIdWikiHint.vue";
 
 export default {
   name: "OpenwbVehicleConfigView",
@@ -1397,7 +1439,6 @@ export default {
     OpenwbVehicleProxy,
     ChargeTemplateScheduledChargingPlan,
     ChargeTemplateTimeChargingPlan,
-    VehicleIdWikiHint,
   },
   mixins: [ComponentState],
   props: {

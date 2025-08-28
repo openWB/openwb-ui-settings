@@ -12,7 +12,10 @@
       <slot name="help" />
     </template>
     <template #default>
-      <div class="w-100">
+      <div
+        v-if="!noInput"
+        class="w-100"
+      >
         <div class="input-group">
           <div class="input-group-prepend">
             <div class="input-group-text">
@@ -60,6 +63,7 @@
           </slot>
           {{ tag }}
           <font-awesome-icon
+            v-if="!noInput"
             class="clickable remove-element"
             :icon="['fas', 'times-circle']"
             @click="removeTag(index)"
@@ -103,6 +107,12 @@ export default {
       type: String,
       default: () => {
         return "Keine Elemente zugeordnet.";
+      },
+    },
+    noInput: {
+      type: Boolean,
+      default: () => {
+        return false;
       },
     },
   },

@@ -13,10 +13,6 @@
         Dieser Vorgang sollte im Betrieb regelmäßig wiederholt werden (mindestens vor Updates), um sowohl die
         individuellen Log-Daten als auch auf ältere Konfigurationen zurückgreifen zu können (Backups).
       </p>
-      <p>
-        Die Sicherung kann auch automatisiert auf einem Cloud-Dienst durchgeführt werden. Hierzu bitte im unteren
-        Bereich "Backup-Cloud" die entsprechenden Einstellungen vornehmen.
-      </p>
     </template>
     <template #content>
       <DataManagement
@@ -48,7 +44,7 @@ export default {
   }),
   computed: {
     stepNumber() {
-      return this.$store.state.mqtt["openWB/general/extern"] ? 5 : 8;
+      return this.$store.state.mqtt["openWB/general/extern"] ? 5 : 9;
     },
   },
   methods: {
