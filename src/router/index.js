@@ -71,6 +71,14 @@ const routes = [
     component: () => import("../views/PVChargeConfig.vue"),
   },
   {
+    path: "/ActiveBatControl",
+    name: "ActiveBatControl",
+    meta: {
+      heading: "Ladeeinstellungen - Speichersteuerung",
+    },
+    component: () => import("../views/ActiveBatControl.vue"),
+  },
+  {
     path: "/HardwareInstallation",
     name: "HardwareInstallation",
     meta: {

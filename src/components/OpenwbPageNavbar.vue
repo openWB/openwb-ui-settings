@@ -125,6 +125,13 @@
             >
               PV-Laden
             </router-link>
+            <router-link
+              to="/ActiveBatControl"
+              class="dropdown-item"
+              active-class="active disabled"
+            >
+              Speichersteuerung
+            </router-link>
           </div>
         </li>
         <li class="nav-item dropdown">
