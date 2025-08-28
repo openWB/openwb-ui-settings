@@ -355,23 +355,22 @@
               v-if="$store.state.mqtt['openWB/general/extern'] === false"
               #actions="slotProps"
             >
-              <span v-if="!slotProps.collapsed">
-                <openwb-base-avatar
-                  class="bg-success clickable"
-                  title="Fahrzeug-Profil duplizieren"
-                  @click="addEvTemplate($event, key)"
-                >
-                  <font-awesome-icon :icon="['fas', 'copy']" />
-                </openwb-base-avatar>
-                <openwb-base-avatar
-                  v-if="!key.endsWith('/0')"
-                  class="bg-danger clickable ml-1"
-                  title="Fahrzeug-Profil löschen"
-                  @click="removeEvTemplateModal($event, key)"
-                >
-                  <font-awesome-icon :icon="['fas', 'trash']" />
-                </openwb-base-avatar>
-              </span>
+              <openwb-base-avatar
+                v-if="!slotProps.collapsed"
+                class="bg-success clickable"
+                title="Fahrzeug-Profil duplizieren"
+                @click="addEvTemplate($event, key)"
+              >
+                <font-awesome-icon :icon="['fas', 'copy']" />
+              </openwb-base-avatar>
+              <openwb-base-avatar
+                v-if="!slotProps.collapsed && !key.endsWith('/0')"
+                class="bg-danger clickable ml-1"
+                title="Fahrzeug-Profil löschen"
+                @click="removeEvTemplateModal($event, key)"
+              >
+                <font-awesome-icon :icon="['fas', 'trash']" />
+              </openwb-base-avatar>
             </template>
             <openwb-base-text-input
               title="Bezeichnung"
@@ -680,23 +679,22 @@
             "
           >
             <template #actions="slotProps">
-              <span v-if="!slotProps.collapsed">
-                <openwb-base-avatar
-                  class="bg-success clickable"
-                  title="Lade-Profil duplizieren"
-                  @click="addChargeTemplate($event, templateKey)"
-                >
-                  <font-awesome-icon :icon="['fas', 'copy']" />
-                </openwb-base-avatar>
-                <openwb-base-avatar
-                  v-if="!templateKey.endsWith('/0')"
-                  class="bg-danger clickable ml-1"
-                  title="Lade-Profil löschen"
-                  @click.stop="removeChargeTemplateModal($event, template.id)"
-                >
-                  <font-awesome-icon :icon="['fas', 'trash']" />
-                </openwb-base-avatar>
-              </span>
+              <openwb-base-avatar
+                v-if="!slotProps.collapsed"
+                class="bg-success clickable"
+                title="Lade-Profil duplizieren"
+                @click="addChargeTemplate($event, templateKey)"
+              >
+                <font-awesome-icon :icon="['fas', 'copy']" />
+              </openwb-base-avatar>
+              <openwb-base-avatar
+                v-if="!slotProps.collapsed && !templateKey.endsWith('/0')"
+                class="bg-danger clickable ml-1"
+                title="Lade-Profil löschen"
+                @click.stop="removeChargeTemplateModal($event, template.id)"
+              >
+                <font-awesome-icon :icon="['fas', 'trash']" />
+              </openwb-base-avatar>
             </template>
             <openwb-base-text-input
               title="Bezeichnung"
