@@ -212,9 +212,9 @@
           </template>
         </openwb-base-select-input>
       </openwb-base-card>
-      <hr 
+      <hr
         v-if="$store.state.mqtt['openWB/general/extern'] == false || !installAssistantActive"
-        class="border-secondary" 
+        class="border-secondary"
       />
       <!-- charge point template card -->
       <openwb-base-card
@@ -257,23 +257,22 @@
             :collapsed="true"
           >
             <template #actions="slotProps">
-              <span v-if="slotProps.collapsed == false">
-                <openwb-base-avatar
-                  class="bg-success clickable"
-                  title="Ladepunkt-Profil duplizieren"
-                  @click="addChargePointTemplate($event, chargePointTemplateKey)"
-                >
-                  <font-awesome-icon :icon="['fas', 'copy']" />
-                </openwb-base-avatar>
-                <openwb-base-avatar
-                  v-if="!chargePointTemplateKey.endsWith('/0')"
-                  class="bg-danger clickable ml-1"
-                  title="Ladepunkt-Profil löschen"
-                  @click="removeChargePointTemplateModal($event, chargePointTemplateKey)"
-                >
-                  <font-awesome-icon :icon="['fas', 'trash']" />
-                </openwb-base-avatar>
-              </span>
+              <openwb-base-avatar
+                v-if="slotProps.collapsed == false"
+                class="bg-success clickable"
+                title="Ladepunkt-Profil duplizieren"
+                @click="addChargePointTemplate($event, chargePointTemplateKey)"
+              >
+                <font-awesome-icon :icon="['fas', 'copy']" />
+              </openwb-base-avatar>
+              <openwb-base-avatar
+                v-if="slotProps.collapsed == false && !chargePointTemplateKey.endsWith('/0')"
+                class="bg-danger clickable ml-1"
+                title="Ladepunkt-Profil löschen"
+                @click="removeChargePointTemplateModal($event, chargePointTemplateKey)"
+              >
+                <font-awesome-icon :icon="['fas', 'trash']" />
+              </openwb-base-avatar>
             </template>
             <openwb-base-text-input
               title="Bezeichnung"
@@ -343,8 +342,8 @@
               <span v-if="chargePointTemplate.charging_type === 'AC'">
                 Bei einer openWB mit 22kW Maximalleistung sind hier jeweils 32A einzustellen. Ist die openWB
                 beispielsweise auf 11kW begrenzt (KfW-Förderung oder die Zuleitung ist mit 16A abgesichert), dann sind
-                hier jeweils 16A einzustellen. </span
-              >
+                hier jeweils 16A einzustellen.
+              </span>
             </openwb-base-alert>
             <div v-if="chargePointTemplate.charging_type === 'AC' || dcChargingEnabled !== true">
               <openwb-base-range-input

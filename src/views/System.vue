@@ -50,13 +50,13 @@
           readonly
         />
       </openwb-base-card>
-      <form name="versionInfoForm">
-        <openwb-base-card
-          title="Versions-Informationen / Aktualisierung"
-          subtype="success"
-          :collapsible="true"
-          :collapsed="!installAssistantActive"
-        >
+      <openwb-base-card
+        title="Versions-Informationen / Aktualisierung"
+        subtype="success"
+        :collapsible="true"
+        :collapsed="!installAssistantActive"
+      >
+        <form name="versionInfoForm">
           <openwb-base-text-input
             v-model="$store.state.mqtt['openWB/system/current_branch']"
             title="Entwicklungszweig"
@@ -94,7 +94,7 @@
               </li>
             </ul>
           </openwb-base-card>
-          <openwb-base-alert 
+          <openwb-base-alert
             v-if="!installAssistantActive"
             subtype="danger"
           >
@@ -207,8 +207,8 @@
               />
             </div>
           </div>
-        </openwb-base-card>
-      </form>
+        </form>
+      </openwb-base-card>
       <form
         v-if="!installAssistantActive"
         name="powerForm"
