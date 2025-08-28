@@ -6,9 +6,7 @@
     @end-assistant="endAssistant"
   >
     <template #help>
-      <p>
-        Diese openWB ist als "primary" konfiguriert und übernimmt die Regelung des Systems.
-      </p>
+      <p>Diese openWB ist als "primary" konfiguriert und übernimmt die Regelung des Systems.</p>
       <p>
         Sofern openWB als Energiemanagementsystem für steuerbare Verbrauchseinrichtungen (SteuVE) gemäß §14a EnWG
         verwendet werden soll, so ist für die VNB-Signaleingänge die entsprechende Hardware auszuwählen.

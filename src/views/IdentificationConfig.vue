@@ -15,9 +15,9 @@
           </ul>
           <p>Bei openWB Pro/Pro+ werden RFID-Tags nur bei angestecktem Fahrzeug erfasst!</p>
           <p>
-            Für die Erkennung kann auch ein Muster (mittels Wildcards) hinterlegt werden. Ein ? entspricht dabei
-            einem Zeichen, ein * beliebig vielen Zeichen. So ist bspw. die Erkennung von Fahrzeugen mit wechselnder ID
-            (u.a. Fahrzeuge der VW Gruppe) möglich.<br />
+            Für die Erkennung kann auch ein Muster (mittels Wildcards) hinterlegt werden. Ein ? entspricht dabei einem
+            Zeichen, ein * beliebig vielen Zeichen. So ist bspw. die Erkennung von Fahrzeugen mit wechselnder ID (u.a.
+            Fahrzeuge der VW Gruppe) möglich.<br />
             Es wird davon abgeraten die Funktion für die Entsperrung von öffentlich zugänglichen Ladepunkten zu nutzen,
             um unbefugten Zugriff zu vermeiden.
           </p>
@@ -93,6 +93,7 @@
                 <openwb-base-array-input
                   title="Zugeordnete ID-Tags"
                   :no-elements-message="'&quot;' + chargePointTemplate.name + '&quot; sind keine ID-Tags zugeordnet.'"
+                  pattern="^[^\s].*[^\s]$"
                   :model-value="chargePointTemplate.valid_tags"
                   @update:model-value="updateState(chargePointTemplateKey, $event, 'valid_tags')"
                 />
@@ -174,6 +175,7 @@
                     $store.state.mqtt['openWB/vehicle/' + vehicleId + '/name'] +
                     '&quot; sind keine ID-Tags zugeordnet.'
                   "
+                  pattern="^[^\s].*[^\s]$"
                   :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id']"
                   @update:model-value="updateState('openWB/vehicle/' + vehicleId + '/tag_id', $event)"
                 />
