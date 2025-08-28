@@ -6,16 +6,14 @@
     @end-assistant="endAssistant"
   >
     <template #help>
+      <p>Bitte ein System-Update durchführen, um die Software auf den neuesten Stand zu bringen.</p>
       <p>
-        Bitte ein System-Update durchführen, um die Software auf den neuesten Stand zu bringen.
+        Hierzu "Informationen aktualisieren" klicken. Falls ein Update verfügbar ist, wird der Update-Button grün (zum
+        Update bereit).
       </p>
       <p>
-        Hierzu "Informationen aktualisieren" klicken. Falls ein Update verfügbar ist, wird der Update-Button grün
-        (zum Update bereit).
-      </p>
-      <p>
-        Ein Klick auf "Update" startet die Aktualisierung, welche auch einen automatischen Reboot initiiert
-        (bitte ca. 5 Minuten warten). Danach muss der Assistent neu gestartet werden.
+        Ein Klick auf "Update" startet die Aktualisierung, welche auch einen automatischen Reboot initiiert (bitte ca. 5
+        Minuten warten). Danach muss der Assistent neu gestartet werden.
       </p>
     </template>
     <template #content>

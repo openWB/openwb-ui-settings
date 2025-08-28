@@ -41,8 +41,8 @@
       <p>Danach ist die Grundkonfiguration abgeschlossen.</p>
       <p class="font-weight-bold">
         Bitte während der Einrichtung auch die jeweiligen Hilfstexte lesen, welche durch Klick auf
-        <FontAwesomeIcon :icon="['far', 'question-circle']" /> erscheinen.
-        Hier sind weiterführende Informationen zu den Eingabefeldern zu finden.
+        <FontAwesomeIcon :icon="['far', 'question-circle']" /> erscheinen. Hier sind weiterführende Informationen zu den
+        Eingabefeldern zu finden.
       </p>
     </template>
   </InstallAssistantStepTemplate>
