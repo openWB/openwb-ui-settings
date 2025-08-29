@@ -45,25 +45,6 @@
         zusätzlich ins Heimnetz (per LAN oder WLAN) einbinden, um iSolarCloud nutzen zu können.
       </template>
     </openwb-base-select-input>
-    <openwb-base-select-input
-      v-if="device.configuration.version === 0"
-      title="Firmware"
-      :options="[
-        { value: 'v1', text: 'bis November 2024' },
-        { value: 'v2', text: 'ab November 2024' },
-      ]"
-      :model-value="device.configuration.firmware"
-      required
-      @update:model-value="updateConfiguration($event, 'configuration.firmware')"
-    >
-      <template #help>
-        Mit einem Firmwareupdate hat Sungrow ab November 2024 die Auslesung der Speicherleistung verändert. Sollte ab
-        November 2024 selbst oder vom Installateur ein Firmwareupdate gemacht worden sein bitte "ab November 2024" als
-        Firmware wählen. Ohne dieses Update ist "bis November 2024" die richtige Auswahl (Standard).<br />
-        Für Benutzer mit Installateur-Account: Dies entspricht einer Version des MDSP Moduls größer gleich
-        "SAPPHIRE-H_03011.95.03"
-      </template>
-    </openwb-base-select-input>
   </div>
 </template>
 
