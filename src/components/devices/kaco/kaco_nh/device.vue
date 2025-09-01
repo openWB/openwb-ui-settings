@@ -1,9 +1,6 @@
 <template>
   <div class="device-kaco-nh">
     <openwb-base-heading> Einstellungen für Kaco NH </openwb-base-heading>
-    <openwb-base-alert subtype="info">
-
-    </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
       subtype="host"

@@ -1,6 +1,7 @@
 <template>
   <div class="device-kaco-nh-counter">
-    <openwb-base-heading> Einstellungen für Kaco NH SmartMeter </openwb-base-heading><openwb-base-alert subtype="info">
+    <openwb-base-heading> Einstellungen für Kaco NH SmartMeter </openwb-base-heading>
+    <openwb-base-alert subtype="info">
       Mit diesem Modul ist kein phasenbasiertes Lastmanagement möglich, da keine Ströme der einzelnen Phasen gemessen
       werden.
     </openwb-base-alert>
