@@ -93,7 +93,7 @@ export default {
           fileName: "/openWB/data/log/steuve_control_command.log",
         },
         {
-          title: "Thread-Erros",
+          title: "Thread-Errors",
           fileName: "/openWB/ramdisk/thread_errors.log",
         },
       ],
