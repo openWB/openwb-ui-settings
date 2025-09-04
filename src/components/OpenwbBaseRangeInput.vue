@@ -16,7 +16,7 @@
         <div class="vaRow mb-1 w-100">
           <label
             v-if="label"
-            class="col-2 col-form-label valueLabel"
+            class="col-2 pl-0 col-form-label valueLabel"
           >
             {{ label }}
           </label>
