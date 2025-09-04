@@ -71,7 +71,7 @@
               Wenn diese Option aktiviert ist, werden bis zu zwei Umschaltversuche vorgenommen, wenn die vorgegebene und
               genutzte Phasenzahl nicht übereinstimmen. Wird die Option deaktiviert, wird nur eine Umschaltung
               durchgeführt.<br />
-              Die gezählten Fehlversuche werden mit dem Abstecken zurückgesetzt.
+              Die gezählten Fehlversuche werden bei der nächsten Ladeunterbrechung oder mit dem Abstecken zurückgesetzt.
             </template>
           </openwb-base-button-group-input>
           <openwb-base-number-input
