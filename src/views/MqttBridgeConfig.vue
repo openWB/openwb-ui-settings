@@ -235,7 +235,10 @@
               :model-value="mqttBridge.data_transfer.status"
               @update:model-value="updateState(mqttBridgeKey, $event, 'data_transfer.status')"
             >
-              <template #help> ToDo... </template>
+              <template #help>
+                Wenn aktiviert, werden alle Statusdaten (z.B. Ladezustand, Leistung, Spannungen, Ströme, etc.) der
+                angeschlossenen Komponenten und Ladepunkte übertragen.
+              </template>
             </openwb-base-button-group-input>
             <openwb-base-button-group-input
               title="Datenserien für Diagramme"
@@ -254,7 +257,13 @@
               :model-value="mqttBridge.data_transfer.graph"
               @update:model-value="updateState(mqttBridgeKey, $event, 'data_transfer.graph')"
             >
-              <template #help> ToDo... </template>
+              <template #help>
+                Wenn aktiviert, werden alle Datenserien für die Diagramme (z.B. Leistung über Zeit) der angeschlossenen
+                Komponenten und Ladepunkte übertragen. Dies sind deutlich mehr Daten als bei den Statusdaten allein.<br />
+                Diese Einstellung sollte nur aktiviert werden, wenn die Daten auch tatsächlich benötigt und
+                interpretiert werden können. In der Regel werden die Daten nur für die Web- und Display-Themes benötigt
+                und können daher bei einer MQTT-Brücke deaktiviert bleiben.
+              </template>
             </openwb-base-button-group-input>
             <openwb-base-button-group-input
               title="Fernkonfiguration ermöglichen"
@@ -273,7 +282,13 @@
               :model-value="mqttBridge.data_transfer.configuration"
               @update:model-value="updateState(mqttBridgeKey, $event, 'data_transfer.configuration')"
             >
-              <template #help> ToDo... </template>
+              <template #help>
+                Wenn aktiviert, können über die MQTT-Brücke auch Konfigurationsänderungen (z.B. Ladeleistung,
+                Zeitsteuerungen, etc.) an die openWB über die Topics "openWB/set/*" gesendet werden. Dies sollte nur
+                aktiviert werden, wenn der entfernte MQTT-Server und alle Nutzer, welche darauf Zugriff haben, absolut
+                vertrauenswürdig sind. Ansonsten besteht die Gefahr, dass unbefugte Nutzer die Konfiguration der openWB
+                verändern und z.B. den Ladevorgang manipulieren.
+              </template>
             </openwb-base-button-group-input>
             <template #footer>
               <openwb-base-submit-buttons

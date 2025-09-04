@@ -89,7 +89,7 @@
               <openwb-base-heading class="mt-0">
                 {{ chargePointTemplate.name }}
               </openwb-base-heading>
-              <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true && !installAssistantActive">
+              <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true">
                 <openwb-base-array-input
                   title="Zugeordnete ID-Tags"
                   :no-elements-message="'&quot;' + chargePointTemplate.name + '&quot; sind keine ID-Tags zugeordnet.'"
@@ -167,7 +167,7 @@
               <openwb-base-heading class="mt-0">
                 {{ $store.state.mqtt["openWB/vehicle/" + vehicleId + "/name"] }}
               </openwb-base-heading>
-              <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true && !installAssistantActive">
+              <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true">
                 <openwb-base-array-input
                   title="Zugeordnete ID-Tags"
                   :no-elements-message="
