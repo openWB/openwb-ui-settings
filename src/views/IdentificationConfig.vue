@@ -181,6 +181,7 @@
                 />
               </div>
               <openwb-base-button-group-input
+                v-if="vehicleId != 0"
                 title="Standard-Fahrzeug nach Abstecken zuordnen"
                 :buttons="[
                   {
@@ -267,7 +268,6 @@ export default {
         "openWB/chargepoint/+/get/rfid_timestamp",
         "openWB/chargepoint/+/set/rfid",
         "openWB/optional/rfid/active",
-        "openWB/chargepoint/+/config",
         "openWB/chargepoint/template/+",
         "openWB/vehicle/template/charge_template/+",
         "openWB/vehicle/+/name",
