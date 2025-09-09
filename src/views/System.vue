@@ -224,8 +224,8 @@
           </openwb-base-alert>
           <openwb-base-alert subtype="info">
             Ein Neustart löscht wichtige Protokolle, die bei der Fehlersuche helfen können. <br />Tipp: Erstelle
-            stattdessen zuerst einen <router-link to="/Support"> Systembericht </router-link> – das hilft oft mehr und
-            bewahrt alle relevanten Logs.
+            stattdessen zuerst einen <router-link to="/System/Support"> Systembericht </router-link> – das hilft oft
+            mehr und bewahrt alle relevanten Logs.
           </openwb-base-alert>
           <template #footer>
             <div class="row justify-content-center">
