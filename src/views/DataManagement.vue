@@ -332,7 +332,7 @@
       </form>
       <form
         v-if="!installAssistantActive"
-        name="monitoringConfigured"
+        name="monitoringForm"
       >
         <openwb-base-card
           title="Monitoring"
@@ -376,7 +376,7 @@
           </div>
           <template #footer>
             <openwb-base-submit-buttons
-              :form-name="monitoringConfigured"
+              form-name="monitoringForm"
               :hide-defaults="true"
               @save="$emit('save')"
               @reset="$emit('reset')"

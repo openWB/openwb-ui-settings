@@ -89,7 +89,7 @@
               <openwb-base-heading class="mt-0">
                 {{ chargePointTemplate.name }}
               </openwb-base-heading>
-              <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true && !installAssistantActive">
+              <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true">
                 <openwb-base-array-input
                   title="Zugeordnete ID-Tags"
                   :no-elements-message="'&quot;' + chargePointTemplate.name + '&quot; sind keine ID-Tags zugeordnet.'"
@@ -167,7 +167,7 @@
               <openwb-base-heading class="mt-0">
                 {{ $store.state.mqtt["openWB/vehicle/" + vehicleId + "/name"] }}
               </openwb-base-heading>
-              <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true && !installAssistantActive">
+              <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true">
                 <openwb-base-array-input
                   title="Zugeordnete ID-Tags"
                   :no-elements-message="
@@ -181,6 +181,7 @@
                 />
               </div>
               <openwb-base-button-group-input
+                v-if="vehicleId != 0"
                 title="Standard-Fahrzeug nach Abstecken zuordnen"
                 :buttons="[
                   {
@@ -267,7 +268,6 @@ export default {
         "openWB/chargepoint/+/get/rfid_timestamp",
         "openWB/chargepoint/+/set/rfid",
         "openWB/optional/rfid/active",
-        "openWB/chargepoint/+/config",
         "openWB/chargepoint/template/+",
         "openWB/vehicle/template/charge_template/+",
         "openWB/vehicle/+/name",
