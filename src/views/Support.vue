@@ -65,17 +65,17 @@
                 Du kannst hier einen kurzen Titel für dein Problem angeben.
               </template>
             </openwb-base-text-input>
-            <openwb-base-number-input
+            <openwb-base-text-input
               v-model="ticketnumber"
               title="Bestehende Ticketnummer"
-              :min="1"
-              :max="99999999"
+              maxlength="8"
+              pattern="[1-9][0-9]{7}"
             >
               <template #help>
                 Hier kann eine bereits bestehende Ticketnummer eingegeben werden,
                 damit das Ticket schneller zugeordnet werden kann.
               </template>
-            </openwb-base-number-input>
+            </openwb-base-text-input>
             <openwb-base-text-input
               title="openWB Seriennummer"
               required
