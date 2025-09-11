@@ -56,15 +56,6 @@ export default {
     endAssistant() {
       this.$emit("endAssistant");
     },
-    sendSystemCommand(command, data = {}) {
-      this.$emit("sendCommand", {
-        command: command,
-        data: data,
-      });
-    },
-  },
-  beforeMount() {
-    this.sendSystemCommand('systemFetchVersions')
   },
 };
 </script>
