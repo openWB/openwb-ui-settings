@@ -66,7 +66,7 @@
               </template>
             </openwb-base-text-input>
             <openwb-base-text-input
-              v-model="ticketnumber"
+              v-model="ticketNumber"
               title="Bestehende Ticketnummer"
               maxlength="8"
               pattern="[1-9][0-9]{7}"
@@ -194,7 +194,7 @@ export default {
       return {
         email: this.email,
         subject: this.subject,
-        ticketnumber: this.ticketnumber,
+        ticketNumber: this.ticketNumber,
         serialNumber: this.$store.state.mqtt["openWB/system/serial_number"],
         installedComponents: this.installedComponents,
         vehicles: this.vehicleInfo,
