@@ -13,7 +13,14 @@
             </li>
             <li>Durch manuelle Eingabe einer ID an einer openWB mit Display.</li>
           </ul>
-          Bei openWB Pro/Pro+ werden RFID-Tags nur bei angestecktem Fahrzeug erfasst!
+          <p>Bei openWB Pro/Pro+ werden RFID-Tags nur bei angestecktem Fahrzeug erfasst!</p>
+          <p>
+            Für die Erkennung kann auch ein Muster (mittels Wildcards) hinterlegt werden. Ein ? entspricht dabei einem
+            Zeichen, ein * beliebig vielen Zeichen. So ist bspw. die Erkennung von Fahrzeugen mit wechselnder ID (u.a.
+            Fahrzeuge der VW Gruppe) möglich.<br />
+            Es wird davon abgeraten die Funktion für die Entsperrung von öffentlich zugänglichen Ladepunkten zu nutzen,
+            um unbefugten Zugriff zu vermeiden.
+          </p>
         </openwb-base-alert>
         <openwb-base-button-group-input
           title="Identifikation aktivieren"
@@ -82,10 +89,11 @@
               <openwb-base-heading class="mt-0">
                 {{ chargePointTemplate.name }}
               </openwb-base-heading>
-              <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true && !installAssistantActive">
+              <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true">
                 <openwb-base-array-input
                   title="Zugeordnete ID-Tags"
                   :no-elements-message="'&quot;' + chargePointTemplate.name + '&quot; sind keine ID-Tags zugeordnet.'"
+                  pattern="^[^\s].*[^\s]$"
                   :model-value="chargePointTemplate.valid_tags"
                   @update:model-value="updateState(chargePointTemplateKey, $event, 'valid_tags')"
                 />
@@ -159,7 +167,7 @@
               <openwb-base-heading class="mt-0">
                 {{ $store.state.mqtt["openWB/vehicle/" + vehicleId + "/name"] }}
               </openwb-base-heading>
-              <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true && !installAssistantActive">
+              <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === true">
                 <openwb-base-array-input
                   title="Zugeordnete ID-Tags"
                   :no-elements-message="
@@ -167,11 +175,13 @@
                     $store.state.mqtt['openWB/vehicle/' + vehicleId + '/name'] +
                     '&quot; sind keine ID-Tags zugeordnet.'
                   "
+                  pattern="^[^\s].*[^\s]$"
                   :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id']"
                   @update:model-value="updateState('openWB/vehicle/' + vehicleId + '/tag_id', $event)"
                 />
               </div>
               <openwb-base-button-group-input
+                v-if="vehicleId != 0"
                 title="Standard-Fahrzeug nach Abstecken zuordnen"
                 :buttons="[
                   {
@@ -258,7 +268,6 @@ export default {
         "openWB/chargepoint/+/get/rfid_timestamp",
         "openWB/chargepoint/+/set/rfid",
         "openWB/optional/rfid/active",
-        "openWB/chargepoint/+/config",
         "openWB/chargepoint/template/+",
         "openWB/vehicle/template/charge_template/+",
         "openWB/vehicle/+/name",

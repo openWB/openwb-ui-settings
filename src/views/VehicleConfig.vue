@@ -131,8 +131,7 @@
             />
             <hr />
             <div v-if="!installAssistantActive">
-
-            <openwb-base-heading> Fahrzeugzuordnung per ID-Tags </openwb-base-heading>
+              <openwb-base-heading> Fahrzeugzuordnung per ID-Tags </openwb-base-heading>
               <div v-if="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id'].length > 0">
                 <openwb-base-alert subtype="info">
                   Einstellungen zur Fahrzeugzuordnung finden sich unter
@@ -141,8 +140,7 @@
                     Aktuell ist die Option in den Einstellungen deaktiviert.
                   </div>
                   <div v-else>
-                    Die Option ist aktiv. Das Fahrzeug lässt sich per ID-Tag automatisch
-                    einem Ladepunkt zuordnen.
+                    Die Option ist aktiv. Das Fahrzeug lässt sich per ID-Tag automatisch einem Ladepunkt zuordnen.
                   </div>
                   Dem Fahrzeug sind folgende ID-Tags zugeordnet:
                 </openwb-base-alert>
@@ -156,7 +154,7 @@
               <div v-else>
                 <openwb-base-alert subtype="info">
                   Einstellungen zur Fahrzeugzuordnung finden sich unter
-                  <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.<br>
+                  <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.<br />
                   Dem Fahrzeug sind aktuell keine ID-Tags zum Entsperren zugeordnet.
                 </openwb-base-alert>
               </div>
@@ -226,6 +224,7 @@
                 title="Während der Ladung"
                 unit="Min."
                 :min="1"
+                :max="30"
                 required
                 :model-value="
                   $store.state.mqtt['openWB/vehicle/' + vehicleId + '/soc_module/general_config']
@@ -247,7 +246,7 @@
               <openwb-base-number-input
                 title="Ohne laufende Ladung"
                 unit="Min."
-                :min="1"
+                :min="5"
                 required
                 :model-value="
                   $store.state.mqtt['openWB/vehicle/' + vehicleId + '/soc_module/general_config']
@@ -357,23 +356,22 @@
               v-if="$store.state.mqtt['openWB/general/extern'] === false"
               #actions="slotProps"
             >
-              <span v-if="!slotProps.collapsed">
-                <openwb-base-avatar
-                  class="bg-success clickable"
-                  title="Fahrzeug-Profil duplizieren"
-                  @click="addEvTemplate($event, key)"
-                >
-                  <font-awesome-icon :icon="['fas', 'copy']" />
-                </openwb-base-avatar>
-                <openwb-base-avatar
-                  v-if="!key.endsWith('/0')"
-                  class="bg-danger clickable ml-1"
-                  title="Fahrzeug-Profil löschen"
-                  @click="removeEvTemplateModal($event, key)"
-                >
-                  <font-awesome-icon :icon="['fas', 'trash']" />
-                </openwb-base-avatar>
-              </span>
+              <openwb-base-avatar
+                v-if="!slotProps.collapsed"
+                class="bg-success clickable"
+                title="Fahrzeug-Profil duplizieren"
+                @click="addEvTemplate($event, key)"
+              >
+                <font-awesome-icon :icon="['fas', 'copy']" />
+              </openwb-base-avatar>
+              <openwb-base-avatar
+                v-if="!slotProps.collapsed && !key.endsWith('/0')"
+                class="bg-danger clickable ml-1"
+                title="Fahrzeug-Profil löschen"
+                @click="removeEvTemplateModal($event, key)"
+              >
+                <font-awesome-icon :icon="['fas', 'trash']" />
+              </openwb-base-avatar>
             </template>
             <openwb-base-text-input
               title="Bezeichnung"
@@ -682,23 +680,22 @@
             "
           >
             <template #actions="slotProps">
-              <span v-if="!slotProps.collapsed">
-                <openwb-base-avatar
-                  class="bg-success clickable"
-                  title="Lade-Profil duplizieren"
-                  @click="addChargeTemplate($event, templateKey)"
-                >
-                  <font-awesome-icon :icon="['fas', 'copy']" />
-                </openwb-base-avatar>
-                <openwb-base-avatar
-                  v-if="!templateKey.endsWith('/0')"
-                  class="bg-danger clickable ml-1"
-                  title="Lade-Profil löschen"
-                  @click.stop="removeChargeTemplateModal($event, template.id)"
-                >
-                  <font-awesome-icon :icon="['fas', 'trash']" />
-                </openwb-base-avatar>
-              </span>
+              <openwb-base-avatar
+                v-if="!slotProps.collapsed"
+                class="bg-success clickable"
+                title="Lade-Profil duplizieren"
+                @click="addChargeTemplate($event, templateKey)"
+              >
+                <font-awesome-icon :icon="['fas', 'copy']" />
+              </openwb-base-avatar>
+              <openwb-base-avatar
+                v-if="!slotProps.collapsed && !templateKey.endsWith('/0')"
+                class="bg-danger clickable ml-1"
+                title="Lade-Profil löschen"
+                @click.stop="removeChargeTemplateModal($event, template.id)"
+              >
+                <font-awesome-icon :icon="['fas', 'trash']" />
+              </openwb-base-avatar>
             </template>
             <openwb-base-text-input
               title="Bezeichnung"

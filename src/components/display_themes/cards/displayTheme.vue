@@ -66,7 +66,7 @@
           class: 'btn-outline-success',
         },
       ]"
-      @update:model-value="toggleView('energy-flow')"
+      @update:model-value="toggleView('energy_flow')"
     />
     <openwb-base-button-group-input
       title="Ladepunkte anzeigen"
@@ -83,7 +83,7 @@
           class: 'btn-outline-success',
         },
       ]"
-      @update:model-value="toggleView('charge-points')"
+      @update:model-value="toggleView('charge_points')"
     />
     <openwb-base-button-group-input
       v-if="displayTheme.configuration.enable_charge_points_view == true"

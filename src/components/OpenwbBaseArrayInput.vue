@@ -134,7 +134,7 @@ export default {
     },
     newTagValid: {
       get() {
-        return this.newTag.length > 0 && !this.value.includes(this.newTag);
+        return this.newTag.length > 0 && !this.value.includes(this.newTag) && this.$refs.tagInput?.checkValidity();
       },
     },
   },
@@ -163,7 +163,7 @@ export default {
 
 input.invalid,
 input:invalid {
-  border: 2px solid var(--danger);
+  background-color: pink;
 }
 
 .tagList {

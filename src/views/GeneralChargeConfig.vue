@@ -71,14 +71,14 @@
               Wenn diese Option aktiviert ist, werden bis zu zwei Umschaltversuche vorgenommen, wenn die vorgegebene und
               genutzte Phasenzahl nicht übereinstimmen. Wird die Option deaktiviert, wird nur eine Umschaltung
               durchgeführt.<br />
-              Die gezählten Fehlversuche werden mit dem Abstecken zurückgesetzt.
+              Die gezählten Fehlversuche werden beim nächsten Wechsel des Lademodus oder mit dem Abstecken zurückgesetzt.
             </template>
           </openwb-base-button-group-input>
           <openwb-base-number-input
             title="Pufferzeit zwischen automat. Phasenumschaltungen"
             unit="Min."
             :min="5"
-            :max="20"
+            :max="180"
             :step="1"
             :model-value="$store.state.mqtt['openWB/general/chargemode_config/phase_switch_delay']"
             @update:model-value="updateState('openWB/general/chargemode_config/phase_switch_delay', $event)"
@@ -233,11 +233,11 @@
               >
                 <template #help>
                   Wenn das Entladen des Speichers immer erlaubt ist, wird das Fahrzeug aus dem Speicher geladen anstatt
-                  Strom aus dem Netz zu beziehen. <br />
+                  Strom aus dem Netz zu beziehen.<br />
                   Im Modus "gesperrt, wenn Fahrzeug lädt", wird die Entladung nur zugelassen, wenn alle Fahrzeuge im
                   Modus PV-Laden ohne Mindeststrom oder Zielladen mit PV-Überschuss laden.<br />
-                  Wenn das Entladen des Speichers auf den Hausverbrauch begrenzt ist und mindestens Fahrzeuge nicht im
-                  Modus PV-Laden ohne Mindeststrom oder Zielladen lädt, wird die Entladung des Speichers in Höhe des
+                  Wenn das Entladen des Speichers auf den Hausverbrauch begrenzt ist und mindestens ein Fahrzeug nicht
+                  im Modus PV-Laden ohne Mindeststrom oder Zielladen lädt, wird die Entladung des Speichers in Höhe des
                   Hausverbrauchs zugelassen. Kann die Entladung am Speicher nur komplett gesperrt werden, verhält sich
                   diese Einstellung wie "gesperrt, wenn Fahrzeug lädt".<br />
                   Diese Einstellung übersteuert ggf die Einstellungen zur Speicher-Beachtung im Modus PV-Laden.
