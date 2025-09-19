@@ -170,8 +170,10 @@
                 class: 'btn-outline-success',
               },
             ]"
-            :model-value="$store.state.mqtt['openWB/general/chargemode_config/retry_failed_phase_switches']"
-            @update:model-value="updateState('openWB/general/chargemode_config/retry_failed_phase_switches', $event)"
+            :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/retry_failed_phase_switches']"
+            @update:model-value="
+              updateState('openWB/general/chargemode_config/pv_charging/retry_failed_phase_switches', $event)
+            "
           >
             <template #help>
               Wenn diese Option aktiviert ist, werden bis zu zwei Umschaltversuche vorgenommen, wenn die vorgegebene und
