@@ -190,17 +190,17 @@
               >
                 <template #help>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'no_limit'">
-                    Der Speicher regelt eigenständig und wird nicht gesteuert. Es greift nur die konfigurierte Speicherbeachtung
-                    (Modus-PV).
+                    Der Speicher regelt eigenständig und wird nicht gesteuert. Es greift nur die konfigurierte
+                    Speicherbeachtung (Modus-PV).
                   </div>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'limit_stop'">
-                    Die Speicherentladung wird komplett gesperrt, sobald ein Fahrzeug lädt! Alle Verbraucher
-                    (Fahrzeuge, Hausverbrauch) werden durch Netzstrom versorgt.
+                    Die Speicherentladung wird komplett gesperrt, sobald ein Fahrzeug lädt! Alle Verbraucher (Fahrzeuge,
+                    Hausverbrauch) werden durch Netzstrom versorgt.
                   </div>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'limit_to_home_consumption'">
-                    Fahrzeugladung erzeugt Netzbezug statt Speicherentladung. Weitere Verbraucher (bspw. Hausverbrauch) werden durch
-                    den Speicher ausgeglichen. Kann die Entladung am Speicher nur komplett gesperrt werden, verhält sich diese
-                    Einstellung wie "volle Entladesperre".            
+                    Fahrzeugladung erzeugt Netzbezug statt Speicherentladung. Weitere Verbraucher (bspw. Hausverbrauch)
+                    werden durch den Speicher ausgeglichen. Kann die Entladung am Speicher nur komplett gesperrt werden,
+                    verhält sich diese Einstellung wie "volle Entladesperre".
                   </div>
                 </template>
               </openwb-base-button-group-input>

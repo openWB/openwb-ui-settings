@@ -171,13 +171,16 @@
               },
             ]"
             :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/retry_failed_phase_switches']"
-            @update:model-value="updateState('openWB/general/chargemode_config/pv_charging/retry_failed_phase_switches', $event)"
+            @update:model-value="
+              updateState('openWB/general/chargemode_config/pv_charging/retry_failed_phase_switches', $event)
+            "
           >
             <template #help>
               Wenn diese Option aktiviert ist, werden bis zu zwei Umschaltversuche vorgenommen, wenn die vorgegebene und
               genutzte Phasenzahl nicht übereinstimmen. Wird die Option deaktiviert, wird nur eine Umschaltung
               durchgeführt.<br />
-              Die gezählten Fehlversuche werden beim nächsten Wechsel des Lademodus oder mit dem Abstecken zurückgesetzt.
+              Die gezählten Fehlversuche werden beim nächsten Wechsel des Lademodus oder mit dem Abstecken
+              zurückgesetzt.
             </template>
           </openwb-base-button-group-input>
           <openwb-base-number-input
