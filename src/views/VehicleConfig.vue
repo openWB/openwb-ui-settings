@@ -1133,7 +1133,7 @@
                 @update:model-value="updateState(templateKey, $event, 'chargemode.pv_charging.feed_in_limit')"
               >
                 <template #help>
-                  Erläuterung siehe "Ladeeinstellungen" -> "PV-Laden" -> "Regelparameter" -> "Regelpunkt
+                  Erläuterung siehe "Ladeeinstellungen" -> "Überschuss-Laden" -> "Regelparameter" -> "Regelpunkt
                   Einspeisegrenze"
                 </template>
               </openwb-base-button-group-input>
