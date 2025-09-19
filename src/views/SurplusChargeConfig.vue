@@ -156,6 +156,50 @@
             </template>
           </openwb-base-number-input>
           <hr />
+          <openwb-base-button-group-input
+            title="Phasenumschaltung wiederholt anstoßen"
+            :buttons="[
+              {
+                buttonValue: false,
+                text: 'Nein',
+                class: 'btn-outline-danger',
+              },
+              {
+                buttonValue: true,
+                text: 'Ja',
+                class: 'btn-outline-success',
+              },
+            ]"
+            :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/retry_failed_phase_switches']"
+            @update:model-value="updateState('openWB/general/chargemode_config/pv_charging/retry_failed_phase_switches', $event)"
+          >
+            <template #help>
+              Wenn diese Option aktiviert ist, werden bis zu zwei Umschaltversuche vorgenommen, wenn die vorgegebene und
+              genutzte Phasenzahl nicht übereinstimmen. Wird die Option deaktiviert, wird nur eine Umschaltung
+              durchgeführt.<br />
+              Die gezählten Fehlversuche werden beim nächsten Wechsel des Lademodus oder mit dem Abstecken zurückgesetzt.
+            </template>
+          </openwb-base-button-group-input>
+          <openwb-base-number-input
+            title="Pufferzeit zwischen automat. Phasenumschaltungen"
+            unit="Min."
+            :min="5"
+            :max="180"
+            :step="1"
+            :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/phase_switch_delay']"
+            @update:model-value="updateState('openWB/general/chargemode_config/pv_charging/phase_switch_delay', $event)"
+          >
+            <template #help>
+              Um zu viele Umschaltungen zu vermeiden, wird mindestens die hier eingestellte Zeit zwischen zwei
+              Umschaltungen abgewartet. Das Umschalten auf mehrphasiges Laden erfolgt nur, wenn mit der maximalen
+              Stromstärke geladen wird und genug Leistung für mehrphasiges Laden zur Verfügung steht. Auf einphasiges
+              Laden wird zurückgeschaltet, wenn auf die minimale Stromstärke heruntergeregelt wurde. Die Verzögerung
+              wird nur bei der automatischen Phasenumschaltung bei Überschuss-Laden abgewartet.<br />
+              Ist ausreichend Überschuss vorhanden, wird beim Ladestart die Umschaltverzögerung nicht abgewartet,
+              sondern direkt mit mehrphasiger Ladung begonnen.
+            </template>
+          </openwb-base-number-input>
+          <hr />
           <openwb-base-number-input
             title="Regelpunkt Einspeisegrenze"
             :min="0"
@@ -358,7 +402,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasCarBattery, fasCarSide, fasBatteryHalf);
 
 export default {
-  name: "OpenwbPVChargeConfigView",
+  name: "OpenwbSurplusChargeConfigView",
   components: {
     FontAwesomeIcon,
   },
@@ -381,6 +425,8 @@ export default {
         "openWB/general/chargemode_config/pv_charging/bat_power_discharge",
         "openWB/general/chargemode_config/pv_charging/bat_power_discharge_active",
         "openWB/general/chargemode_config/pv_charging/min_bat_soc",
+        "openWB/general/chargemode_config/retry_failed_phase_switches",
+        "openWB/general/chargemode_config/phase_switch_delay",
       ],
       calculatedControlMode: undefined,
     };
