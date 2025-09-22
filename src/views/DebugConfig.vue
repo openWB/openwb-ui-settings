@@ -85,6 +85,14 @@ export default {
           fileName: "/openWB/ramdisk/smarthome.log",
         },
         {
+          title: "Protokoll der Sicherung",
+          fileName: "/openWB/data/log/backup.log",
+        },
+        {
+          title: "Protokoll der Wiederherstellung",
+          fileName: "/openWB/data/log/restore.log",
+        },
+        {
           title: "Protokoll der Datenmigration",
           fileName: "/openWB/data/log/data_migration.log",
         },
