@@ -9,6 +9,7 @@
     </span>
     <font-awesome-icon
       v-if="copySupported"
+      class="ml-1"
       :icon="isCopied ? ['fas', 'clipboard-check'] : ['fas', 'clipboard']"
     />
   </span>
@@ -40,7 +41,7 @@ export default {
       return this.$refs["content"] ? this.$refs["content"].innerText.trim() : "";
     },
     isCopied() {
-      return copied.value;
+      return copied.value && text.value === this.contentText;
     },
     copySupported() {
       return isSupported.value;
