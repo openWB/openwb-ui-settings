@@ -3,6 +3,16 @@
     <form name="optionalComponentsForm">
       <openwb-base-card title="Identifikation">
         <openwb-base-alert subtype="info">
+        <p>
+          Eine ausführliche Anleitung findest Du hier:
+          <a
+            href="https://wiki.openwb.de/doku.php?id=openwb:software:identifikation"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Wiki-Beitrag zur Identifikation
+          </a>
+          </p>
           Die Identifikation kann zum Entsperren von Ladepunkten und/oder zur Zuordnung von Fahrzeugen genutzt werden
           und kann auf mehreren Wegen erfolgen:
           <ul>

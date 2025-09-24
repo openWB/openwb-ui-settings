@@ -284,7 +284,7 @@
         <li class="nav-item nav-separator-before">
           <a
             class="nav-link"
-            href="https://github.com/openWB/core/wiki"
+            href="https://wiki.openwb.de/"
             target="_blank"
           >
             Wiki
