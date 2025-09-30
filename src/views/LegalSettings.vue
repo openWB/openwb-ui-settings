@@ -73,7 +73,7 @@
             form-name="dataProtectionForm"
             :hide-reset="true"
             :hide-defaults="true"
-            @save="$emit('save')"
+            @save="onSave"
           />
         </template>
       </openwb-base-card>
@@ -110,6 +110,10 @@ export default {
         command: command,
         data: data,
       });
+    },
+    onSave() {
+      this.$emit("save");
+      this.$router.push({ name: "InstallAssistant" });
     },
   },
 };
