@@ -311,18 +311,28 @@
                       chargePointTemplate.disable_after_unplug
                     "
                   >
-                    Die Option ist aktiv. Ladepunkte denen dieses Ladepunkt-Profil zugeordnet ist müssen per ID-Tag
-                    entsperrt werden.
+                    Ladepunkte mit diesem Profil werden automatisch beim Abstecken eines Fahrzeugs gesperrt und müssen
+                    für den nächsten Ladevorgang mit einem ID-Tag entsperrt werden.
                   </div>
-                  <div v-else>Aktuell ist die Option in den Einstellungen deaktiviert.</div>
-                  Dem Ladepunkt-Profil sind folgende ID-Tags zum Entsperren zugeordnet:
+                  <div v-else-if="$store.state.mqtt['openWB/optional/rfid/active'] === false">
+                    Die Zugangskontrolle ist aktuell deaktiviert.
+                  </div>
+                  <div v-else>
+                    Die Zugangskontrolle ist aktiviert, jedoch werden Ladepunkte mit diesem Profil nicht automatisch
+                    nach dem Abstecken eines Fahrzeugs gesperrt.
+                  </div>
                 </openwb-base-alert>
                 <openwb-base-array-input
                   title="Zugeordnete ID-Tags"
                   no-elements-message="Keine keine ID-Tags zugeordnet."
-                  no-input="true"
+                  :readonly="true"
                   :model-value="chargePointTemplate.valid_tags"
-                />
+                >
+                  <template #help>
+                    Hier werden die ID-Tags aufgelistet, welche diesem Ladepunkt-Profil zugeordnet sind. Nur mit diesen
+                    ID-Tags können Ladepunkte, denen dieses Profil zugeordnet ist, entsperrt werden.
+                  </template>
+                </openwb-base-array-input>
               </div>
               <div v-else>
                 <openwb-base-alert subtype="info">

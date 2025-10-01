@@ -137,19 +137,24 @@
                   Einstellungen zur Fahrzeugzuordnung finden sich unter
                   <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.
                   <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === false">
-                    Aktuell ist die Option in den Einstellungen deaktiviert.
+                    Aktuell ist die Identifikation in den Einstellungen deaktiviert.
                   </div>
                   <div v-else>
-                    Die Option ist aktiv. Das Fahrzeug lässt sich per ID-Tag automatisch einem Ladepunkt zuordnen.
+                    Die Identifikation ist aktiv. Das Fahrzeug lässt sich per ID-Tag automatisch einem Ladepunkt
+                    zuordnen.
                   </div>
-                  Dem Fahrzeug sind folgende ID-Tags zugeordnet:
                 </openwb-base-alert>
                 <openwb-base-array-input
                   title="Zugeordnete ID-Tags"
                   no-elements-message="Keine keine ID-Tags zugeordnet."
-                  :no-input="true"
+                  :readonly="true"
                   :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id']"
-                />
+                >
+                  <template #help>
+                    Hier werden die ID-Tags aufgelistet, welche diesem Fahrzeug zugeordnet sind. Mit diesen ID-Tags kann
+                    dieses Fahrzeug an Ladepunkten automatisch zugeordnet werden.
+                  </template>
+                </openwb-base-array-input>
               </div>
               <div v-else>
                 <openwb-base-alert subtype="info">
