@@ -87,7 +87,7 @@
                 id="input-file"
                 type="file"
                 class="custom-file-input"
-                accept=".tar.gz,application/gzip,application/tar+gzip,.tar.gz.gpg,application/gzip+gpg,application/tar+gzip+gpg"
+                accept=".tar.gz,.openwb-backup,application/gzip,application/tar+gzip,.openwb-backup.gpg,application/gzip+gpg,application/tar+gzip+gpg"
                 @change="updateSelectedRestoreFile($event)"
               />
               <label
