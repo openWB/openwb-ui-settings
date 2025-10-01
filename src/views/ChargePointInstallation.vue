@@ -320,7 +320,7 @@
                 <openwb-base-array-input
                   title="Zugeordnete ID-Tags"
                   no-elements-message="Keine keine ID-Tags zugeordnet."
-                  no-input="true"
+                  :readonly="true"
                   :model-value="chargePointTemplate.valid_tags"
                 />
               </div>
