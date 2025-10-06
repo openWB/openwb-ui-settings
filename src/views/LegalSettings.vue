@@ -73,7 +73,7 @@
             form-name="dataProtectionForm"
             :hide-reset="true"
             :hide-defaults="true"
-            @save="$emit('save')"
+            @save="onSaveLegal"
           />
         </template>
       </openwb-base-card>
@@ -95,6 +95,12 @@ export default {
     FontAwesomeIcon,
   },
   mixins: [ComponentState],
+  props: {
+    saveValues: {
+      type: Function,
+      default: null,
+    },
+  },
   emits: ["sendCommand", "save"],
   data() {
     return {
@@ -110,6 +116,28 @@ export default {
         command: command,
         data: data,
       });
+    },
+    async onSaveLegal() {
+      if (this.saveValues) {
+        await this.saveValues();
+      }
+      if (!this.$store.state.mqtt["openWB/system/usage_terms_acknowledged"]) {
+        await new Promise((resolve) => {
+          const stopWatching = this.$watch(
+            () => this.$store.state.mqtt["openWB/system/usage_terms_acknowledged"],
+            (val) => {
+              if (val) {
+                stopWatching();
+                resolve();
+              }
+            },
+          );
+        });
+      }
+      const installAssistantDone = await this.$store.getters.installAssistantDone;
+      if (!installAssistantDone) {
+        this.$router.push({ name: "InstallAssistant" });
+      }
     },
   },
 };
