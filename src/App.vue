@@ -9,6 +9,7 @@
     <div id="content">
       <h1>{{ $route.meta.heading }}</h1>
       <router-view
+        :save-values="saveValues"
         @save="saveValues"
         @reset="resetValues"
         @defaults="setDefaultValues"
