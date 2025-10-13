@@ -95,12 +95,6 @@ export default {
     FontAwesomeIcon,
   },
   mixins: [ComponentState],
-  props: {
-    saveValues: {
-      type: Function,
-      default: null,
-    },
-  },
   emits: ["sendCommand", "save"],
   data() {
     return {
@@ -118,9 +112,18 @@ export default {
       });
     },
     async onSaveLegal() {
-      if (this.saveValues) {
-        await this.saveValues();
-      }
+      this.$emit("save");
+      await new Promise((resolve) => {
+        const stopWatching = this.$watch(
+          () => this.$store.state.local.savingData,
+          (val) => {
+            if (val === false) {
+              stopWatching();
+              resolve();
+            }
+          },
+        );
+      });
       if (!this.$store.state.mqtt["openWB/system/usage_terms_acknowledged"]) {
         await new Promise((resolve) => {
           const stopWatching = this.$watch(
