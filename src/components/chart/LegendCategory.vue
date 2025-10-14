@@ -53,12 +53,6 @@ export default {
     },
   },
   emits: ["toggle"],
-  mounted() {
-    // Initialise bootstrap Dropdown after Render
-    if (window.$) {
-      window.$(this.$el).find(".dropdown-toggle").dropdown();
-    }
-  },
 };
 </script>
 
