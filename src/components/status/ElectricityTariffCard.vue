@@ -198,10 +198,12 @@ export default {
             price: value * 100000,
           });
         }
-        // repeat last dataset with 59min 59sec offset
+        // repeat last dataset until midnight
         const lastData = myData.slice(-1)[0];
+        const lastTimestamp = new Date(lastData.timestamp);
+        lastTimestamp.setHours(23, 59, 59, 0);
         myData.push({
-          timestamp: lastData.timestamp + (60 * 60 - 1) * 1000,
+          timestamp: lastTimestamp.getTime(),
           price: lastData.price,
         });
       }
