@@ -1,5 +1,5 @@
 <template>
-  <div class="device-fronius-inverter-production-counter">
+  <div class="device-fronius-inverter-production-count">
     <openwb-base-heading> Einstellungen für Fronius Erzeugerzähler </openwb-base-heading>
     <openwb-base-alert subtype="info">
       Zusätzlicher, externer Erzeuger, welcher über einen Smartmeter erfasst wird.
@@ -52,7 +52,7 @@
 import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
 
 export default {
-  name: "DeviceFroniusInverterProductionCounter",
+  name: "DeviceFroniusInverterProductionCount",
   mixins: [ComponentConfigMixin],
   computed: {
     meterRealtimeUrl: {
