@@ -198,11 +198,18 @@ export default {
             price: value * 100000,
           });
         }
-        // repeat last dataset with 59min 59sec offset
+        // repeat last dataset until midnight
         const lastData = myData.slice(-1)[0];
+        if (myData.length >= 2) {
+          // repeat last dataset with same offset as the last one
+          const previousData = myData.slice(-2, -1)[0];
+          lastData.timestamp += lastData.timestamp - previousData.timestamp;
+        } else {
+          // fallback to midnight
+          lastData.timestamp = new Date(lastData.timestamp).setHours(23, 59, 59, 999).getTime();
+        }
         myData.push({
-          timestamp: lastData.timestamp + (60 * 60 - 1) * 1000,
-          price: lastData.price,
+          timestamp: lastData.timestamp,          price: lastData.price,
         });
       }
       const dataObject = this.chartDatasets;
