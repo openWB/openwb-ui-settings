@@ -1220,7 +1220,7 @@
                 "
               />
               <openwb-base-button-group-input
-                title="Anzahl Phasen bei PV-Überschuss"
+                title="Anzahl Phasen bei Überschuss"
                 :buttons="[
                   { buttonValue: 1, text: '1' },
                   { buttonValue: 3, text: 'Maximum' },
