@@ -1220,7 +1220,7 @@
                 "
               />
               <openwb-base-button-group-input
-                title="Anzahl Phasen"
+                title="Anzahl Phasen bei PV-Überschuss"
                 :buttons="[
                   { buttonValue: 1, text: '1' },
                   { buttonValue: 3, text: 'Maximum' },
@@ -1234,7 +1234,8 @@
                   Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Im Modus "Automatik"
                   entscheidet die Regelung, welche Einstellung genutzt wird, um den verfügbaren Überschuss in die
                   Fahrzeuge zu laden. Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen einer und mehreren
-                  Phasen (sog. 1p3p).
+                  Phasen (sog. 1p3p).<br />
+                  Wird die eingestellte Preisgrenze unterschritten, wird immer mit der maximalen Anzahl Phasen geladen.
                 </template>
               </openwb-base-button-group-input>
               <openwb-base-button-group-input
