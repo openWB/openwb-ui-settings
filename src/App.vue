@@ -92,6 +92,7 @@ export default {
       } else {
         if (Array.isArray(topicsToSave)) {
           topicsToSave.forEach((topicToSave) => {
+            console.debug("adding topic to save:", topicToSave);
             topics[topicToSave] = this.$store.state.mqtt[topicToSave];
           });
         } else {
