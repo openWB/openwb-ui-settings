@@ -1551,9 +1551,7 @@ export default {
      * @returns {Object|undefined} - An object containing borderColor and backgroundColor, or undefined if no color is found.
      */
     getDatasetColor(baseObject, objectKey, elementKey, datasetKey) {
-      const elementIsImported = elementKey.includes("imported");
-      let color,
-        negativeColor = undefined;
+      let color = undefined;
       if (
         Object.prototype.hasOwnProperty.call(
           this.$store.state.mqtt[this.baseTopic + this.commandData.date],
@@ -1564,14 +1562,14 @@ export default {
           objectKey,
         )
       ) {
-        color = this.$store.state.mqtt[this.baseTopic + this.commandData.date].colors[objectKey].color;
-        negativeColor = this.$store.state.mqtt[this.baseTopic + this.commandData.date].colors[objectKey].negativeColor;
+        color = this.$store.state.mqtt[this.baseTopic + this.commandData.date].colors[objectKey];
       }
-      console.log("getDatasetColor:", baseObject, objectKey, elementKey, datasetKey, color, negativeColor);
+      console.debug("getDatasetColor:", baseObject, objectKey, elementKey, datasetKey, color);
+      // mix colors with some opacity
       return color
         ? {
-            borderColor: `${elementIsImported && negativeColor ? negativeColor : color}b2`,
-            backgroundColor: `${elementIsImported && negativeColor ? negativeColor : color}4c`,
+            borderColor: `${color}b2`,
+            backgroundColor: `${color}${elementKey == "soc" ? "00" : "4c"}`,
           }
         : undefined;
     },
