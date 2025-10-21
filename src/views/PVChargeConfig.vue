@@ -169,15 +169,18 @@
           >
             <template #help>
               Ein Wert größer 0kW bewirkt, dass weniger PV-Leistung zum Laden benutzt wird.<br />
-              Die Nutzung dieser Option ergibt nur Sinn, wenn ein Wechselrichter in irgendeiner Form abgeregelt wird Weitere Infos dazu im
-             <a
-              href="https://wiki.openwb.de/doku.php?id=openwb:software:ladeeinstellungen:pv-laden#regelpunkt_einspeisegrenze"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Wiki-Beitrag zur Beachtung der Einspeisegrenze
-            </a>.<br />
-              Bei Erreichen dieses Werts wird die PV-Ladung nacheinander für jedes Fahrzeug im PV-Modus gestartet, bei welchem "Einspeisegrenze beachten" im Ladeprofil aktiviert ist, dies setzt die Einschaltschwelle außer kraft!<br />
+              Die Nutzung dieser Option ergibt nur Sinn, wenn ein Wechselrichter in irgendeiner Form abgeregelt wird
+              Weitere Infos dazu im
+              <a
+                href="https://wiki.openwb.de/doku.php?id=openwb:software:ladeeinstellungen:pv-laden#regelpunkt_einspeisegrenze"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Wiki-Beitrag zur Beachtung der Einspeisegrenze </a
+              >.<br />
+              Bei Erreichen dieses Werts wird die PV-Ladung nacheinander für jedes Fahrzeug im PV-Modus gestartet, bei
+              welchem "Einspeisegrenze beachten" im Ladeprofil aktiviert ist, dies setzt die Einschaltschwelle außer
+              kraft!<br />
               Zur optimalen Eigenverbrauchssteuerung sollte der Wert einige hundert Watt UNTER der im Wechselrichter
               hinterlegten EVU-Einspeiseleistungsgrenze liegen, damit openWB die Ladung freigibt, BEVOR der
               Wechselrichter begrenzt wird.
