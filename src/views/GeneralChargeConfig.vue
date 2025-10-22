@@ -154,8 +154,9 @@
           <openwb-base-alert subtype="info">
             Ist in den Lademodi Eco und Zeitladen "Preisbasiertes Laden" gewählt wird nur geladen, 
             wenn der Strompreis unter dem angegebenen maximalen Strompreis liegt. 
-            Für Zielladen wird die Ladedauer ermittelt und dann zu den günstigsten Stunden geladen.<br/>
-            Wenn keine Preise abgefragt werden können oder "Preisbasiertes Laden" abgewählt wurde, wird in Modus Eco immer geladen und bei Zielladen zunächst mit PV-Überschuss 
+            Für Zielladen wird die Ladedauer ermittelt und dann zu den günstigsten Zeiten geladen.<br/>
+            Wenn keine Preise abgefragt werden können oder "Preisbasiertes Laden" abgewählt wurde, 
+            wird in Modus Eco immer geladen und bei Zielladen zunächst mit PV-Überschuss 
             und zum Erreichen des Zieltermins mit Netzstrom.
           </openwb-base-alert>
           <openwb-base-select-input
