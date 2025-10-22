@@ -52,7 +52,7 @@
           </openwb-base-range-input>
         </div>
       </openwb-base-card>
-      <openwb-base-card title="Ladekosten">
+      <openwb-base-card title="Energiekosten">
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
           <openwb-base-alert subtype="info">
             Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
@@ -70,7 +70,7 @@
           </openwb-base-heading>
           <openwb-base-alert
             v-if="
-              $store.state.mqtt['openWB/optional/et/provider'] && $store.state.mqtt['openWB/optional/et/provider'].type
+              $store.state.mqtt['openWB/optional/ep/tariff/provider'] && $store.state.mqtt['openWB/optional/ep/tariff/provider'].type
             "
             subtype="info"
           >
@@ -119,20 +119,20 @@
             title="Anbieter"
             :options="electricityTariffList"
             :model-value="
-              $store.state.mqtt['openWB/optional/et/provider']
-                ? $store.state.mqtt['openWB/optional/et/provider'].type
+              $store.state.mqtt['openWB/optional/ep/tariff/provider']
+                ? $store.state.mqtt['openWB/optional/ep/tariff/provider'].type
                 : ''
             "
             @update:model-value="updateSelectedElectricityTariff($event)"
           />
           <div
             v-if="
-              $store.state.mqtt['openWB/optional/et/provider'] && $store.state.mqtt['openWB/optional/et/provider'].type
+              $store.state.mqtt['openWB/optional/ep/tariff/provider'] && $store.state.mqtt['openWB/optional/ep/tariff/provider'].type
             "
           >
             <openwb-electricity-tariff-proxy
-              :electricity-tariff="$store.state.mqtt['openWB/optional/et/provider']"
-              @update:configuration="updateConfiguration('openWB/optional/et/provider', $event)"
+              :electricity-tariff="$store.state.mqtt['openWB/optional/ep/tariff/provider']"
+              @update:configuration="updateConfiguration('openWB/optional/ep/tariff/provider', $event)"
             />
           </div>
         </div>
@@ -218,15 +218,15 @@ export default {
         "openWB/general/prices/bat",
         "openWB/general/prices/grid",
         "openWB/general/prices/pv",
-        "openWB/optional/et/provider",
+        "openWB/optional/ep/tariff/provider",
         "openWB/optional/ocpp/config",
-        "openWB/system/configurable/electricity_tariffs",
+        "openWB/system/configurable/tariffs",
       ],
     };
   },
   computed: {
     electricityTariffList() {
-      return this.$store.state.mqtt["openWB/system/configurable/electricity_tariffs"];
+      return this.$store.state.mqtt["openWB/system/configurable/tariffs"];
     },
   },
   methods: {
@@ -241,8 +241,8 @@ export default {
       return {};
     },
     updateSelectedElectricityTariff($event) {
-      this.updateState("openWB/optional/et/provider", $event, "type");
-      this.updateState("openWB/optional/et/provider", this.getElectricityTariffDefaultConfiguration($event));
+      this.updateState("openWB/optional/ep/tariff/provider", $event, "type");
+      this.updateState("openWB/optional/ep/tariff/provider", this.getElectricityTariffDefaultConfiguration($event));
     },
     updateConfiguration(key, event) {
       console.debug("updateConfiguration", key, event);

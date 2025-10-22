@@ -66,10 +66,10 @@ export default {
   data() {
     return {
       mqttTopicsToSubscribe: [
-        "openWB/optional/et/provider",
-        "openWB/optional/et/get/fault_state",
-        "openWB/optional/et/get/fault_str",
-        "openWB/optional/et/get/prices",
+        "openWB/optional/ep/tariff/provider",
+        "openWB/optional/ep/tariff/get/fault_state",
+        "openWB/optional/ep/tariff/get/fault_str",
+        "openWB/optional/ep/tariff/get/prices",
       ],
       chartDatasets: {
         datasets: [
@@ -177,7 +177,7 @@ export default {
   },
   computed: {
     electricityTariffConfigured() {
-      const provider = this.$store.state.mqtt["openWB/optional/et/provider"];
+      const provider = this.$store.state.mqtt["openWB/optional/ep/tariff/provider"];
       if (provider !== undefined) {
         return provider.type !== null;
       }
@@ -187,8 +187,8 @@ export default {
       return this.chartDataObject.datasets[0].data != undefined;
     },
     chartDataObject() {
-      if (this.$store.state.mqtt["openWB/optional/et/get/prices"]) {
-        var chartEntries = this.$store.state.mqtt["openWB/optional/et/get/prices"];
+      if (this.$store.state.mqtt["openWB/optional/ep/tariff/get/prices"]) {
+        var chartEntries = this.$store.state.mqtt["openWB/optional/ep/tariff/get/prices"];
         var myData = [];
         // proper scaling:
         // timestamp: seconds -> milliseconds
@@ -228,7 +228,7 @@ export default {
     },
     baseTopic: {
       get() {
-        return "openWB/optional/et";
+        return "openWB/optional/ep/tariff";
       },
     },
   },
