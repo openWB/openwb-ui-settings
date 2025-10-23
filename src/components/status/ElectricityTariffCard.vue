@@ -137,6 +137,19 @@ export default {
               font: {
                 size: 12,
               },
+              callback: function(value, index, values) {
+                const date = new Date(value);
+                const currentDate = new Date();
+                
+                // Prüfe ob das Datum zum nächsten Tag gehört
+                const isTomorrow = 
+                  date.getDate() === currentDate.getDate() + 1 && 
+                  date.getMonth() === currentDate.getMonth() &&
+                  date.getFullYear() === currentDate.getFullYear();
+                  
+                // Zeige nur den Zeitwert, wenn es nicht morgen ist
+                return "${isTomorrow ? 'morgen ' : ''}${this.getLabelForValue(value)}";
+              }
               // color: tickColor,
               maxTicksLimit: 0,
             },
