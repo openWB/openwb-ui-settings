@@ -149,7 +149,7 @@ export default {
                   
                 // Zeige nur den Zeitwert, wenn es nicht morgen ist
                 return "${isTomorrow ? 'morgen ' : ''}${this.getLabelForValue(value)}";
-              }
+              },
               // color: tickColor,
               maxTicksLimit: 0,
             },
