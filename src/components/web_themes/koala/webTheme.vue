@@ -36,6 +36,15 @@
       </template>
     </openwb-base-range-input>
     <hr />
+    <sortable-list
+      v-model="slideOrderList"
+      title="Reihenfolge der Slides im Karussell"
+      :labels="slideLabels"
+      :nesting="false"
+    >
+      <template #help> Legt die Reihenfolge der Slides im oberen Karussell fest. </template>
+    </sortable-list>
+    <hr />
     <openwb-base-number-input
       title="Ladepunkt Kartenansicht Grenzwert"
       :min="0"
@@ -110,9 +119,36 @@
 
 <script>
 import WebThemeConfigMixin from "../WebThemeConfigMixin.vue";
+import SortableList from "../../OpenwbSortableList.vue";
 
 export default {
   name: "WebThemeKoala",
+  components: {
+    SortableList,
+  },
   mixins: [WebThemeConfigMixin],
+  computed: {
+    slideOrderList: {
+      get() {
+        const slideOrder = this.webTheme.configuration.top_carousel_slide_order || [
+          "flow_diagram",
+          "history_chart",
+          "daily_totals",
+        ];
+        return slideOrder.map((id) => ({ id }));
+      },
+      set(newList) {
+        const updatedSlideOrder = newList.map((item) => item.id);
+        this.updateConfiguration(updatedSlideOrder, "configuration.top_carousel_slide_order");
+      },
+    },
+    slideLabels() {
+      return {
+        daily_totals: "Tageswerte",
+        history_chart: "Verlaufsdiagramm",
+        flow_diagram: "Energieflussdiagramm",
+      };
+    },
+  },
 };
 </script>
