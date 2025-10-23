@@ -79,6 +79,28 @@
               <template #help> Deine E-Mail-Adresse, an die der Support Dir antwortet. </template>
             </openwb-base-text-input>
             <openwb-base-text-input
+              v-model="subject"
+              title="Betreff"
+              required
+              minlength="15"
+              maxlength="100"
+            >
+              <template #help>
+                Du kannst hier einen kurzen Titel für dein Problem angeben.
+              </template>
+            </openwb-base-text-input>
+            <openwb-base-text-input
+              v-model="ticketNumber"
+              title="Bestehende Ticketnummer"
+              maxlength="8"
+              pattern="[1-9][0-9]{7}"
+            >
+              <template #help>
+                Hier kann eine bereits bestehende Ticketnummer eingegeben werden,
+                damit das Ticket schneller zugeordnet werden kann.
+              </template>
+            </openwb-base-text-input>
+            <openwb-base-text-input
               title="openWB Seriennummer"
               required
               :model-value="$store.state.mqtt['openWB/system/serial_number']"
@@ -190,6 +212,8 @@ export default {
       showDeprecatedFirmwareModal: false,
       email: undefined,
       components: undefined,
+      subject: undefined,
+      ticketNumber: undefined,
       vehicles: undefined,
       message: undefined,
       enableSendDebugButton: true,
@@ -199,6 +223,8 @@ export default {
     debugData() {
       return {
         email: this.email,
+        subject: this.subject,
+        ticketNumber: this.ticketNumber,
         serialNumber: this.$store.state.mqtt["openWB/system/serial_number"],
         installedComponents: this.installedComponents,
         vehicles: this.vehicleInfo,
