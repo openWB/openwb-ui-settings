@@ -114,15 +114,6 @@
           <div class="row justify-content-center">
             <div class="col-md-4 d-flex py-1 justify-content-center">
               <openwb-base-click-button
-                class="btn-info"
-                @button-clicked="sendSystemCommand('systemFetchVersions')"
-              >
-                Informationen aktualisieren
-                <font-awesome-icon :icon="['fas', 'download']" />
-              </openwb-base-click-button>
-            </div>
-            <div class="col-md-4 d-flex py-1 justify-content-center">
-              <openwb-base-click-button
                 :class="updateAvailable ? 'btn-success clickable' : 'btn-outline-success'"
                 :disabled="!updateAvailable"
                 @button-clicked="systemUpdate()"
@@ -564,6 +555,9 @@ export default {
           };
         }, {});
     },
+  },
+  beforeMount() {
+    this.sendSystemCommand('systemFetchVersions')
   },
 };
 </script>

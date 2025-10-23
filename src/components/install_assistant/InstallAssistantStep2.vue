@@ -8,8 +8,8 @@
     <template #help>
       <p>Bitte ein System-Update durchführen, um die Software auf den neuesten Stand zu bringen.</p>
       <p>
-        Hierzu "Informationen aktualisieren" klicken. Falls ein Update verfügbar ist, wird der Update-Button grün (zum
-        Update bereit).
+        Bitte warten, bis die Versionsliste aktualisiert wurde. Falls ein Update verfügbar ist, wird der Update-Button grün
+        (zum Update bereit).
       </p>
       <p>
         Ein Klick auf "Update" startet die Aktualisierung, welche auch einen automatischen Reboot initiiert (bitte ca. 5
