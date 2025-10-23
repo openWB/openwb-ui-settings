@@ -184,6 +184,8 @@ export default {
       ],
       email: undefined,
       components: undefined,
+      subject: undefined,
+      ticketNumber: undefined,
       vehicles: undefined,
       message: undefined,
       enableSendDebugButton: true,
