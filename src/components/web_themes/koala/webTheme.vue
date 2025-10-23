@@ -39,7 +39,7 @@
     <sortable-list
       v-model="slideOrderList"
       title="Reihenfolge der Slides im Karussell"
-      :labels="slideLabels"
+      :labels="numberedSlideLabels"
       :nesting="false"
     >
       <template #help> Legt die Reihenfolge der Slides im oberen Karussell fest. </template>
@@ -127,6 +127,15 @@ export default {
     SortableList,
   },
   mixins: [WebThemeConfigMixin],
+  data() {
+    return {
+      slideLabels: {
+        daily_totals: "Tageswerte",
+        history_chart: "Verlaufsdiagramm",
+        flow_diagram: "Energieflussdiagramm",
+      },
+    };
+  },
   computed: {
     slideOrderList: {
       get() {
@@ -142,12 +151,11 @@ export default {
         this.updateConfiguration(updatedSlideOrder, "configuration.top_carousel_slide_order");
       },
     },
-    slideLabels() {
-      return {
-        daily_totals: "Tageswerte",
-        history_chart: "Verlaufsdiagramm",
-        flow_diagram: "Energieflussdiagramm",
-      };
+    numberedSlideLabels() {
+      return this.slideOrderList.reduce((result, item, index) => {
+        result[item.id] = `${index + 1}. ${this.slideLabels[item.id] || item.id}`;
+        return result;
+      }, {});
     },
   },
 };
