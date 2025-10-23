@@ -148,7 +148,7 @@ export default {
                   date.getFullYear() === currentDate.getFullYear();
                   
                 // Zeige nur den Zeitwert, wenn es nicht morgen ist
-                return "${isTomorrow ? 'morgen ' : ''}${this.getLabelForValue(value)}";
+                return `${isTomorrow ? 'morgen ' : ''}${this.getLabelForValue(value)}`;
               },
               // color: tickColor,
               maxTicksLimit: 0,
