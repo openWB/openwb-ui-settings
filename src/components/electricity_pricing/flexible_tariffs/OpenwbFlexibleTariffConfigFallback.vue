@@ -1,36 +1,36 @@
 <template>
-  <div class="backup-cloud-fallback">
+  <div class="flexible-tariff-fallback">
     <openwb-base-alert
-      v-if="Object.keys(electricityTariff.configuration).length == 0"
+      v-if="Object.keys(flexibleTariff.configuration).length == 0"
       subtype="info"
     >
-      Der Anbieter "{{ electricityTariff.name }}" bietet keine Einstellungen.
+      Der Anbieter "{{ flexibleTariff.name }}" bietet keine Einstellungen.
     </openwb-base-alert>
     <div v-else>
       <openwb-base-alert subtype="warning">
-        Es wurde keine Konfigurationsseite für den Anbieter "{{ electricityTariff.name }}" gefunden. Die Einstellungen
+        Es wurde keine Konfigurationsseite für den Anbieter "{{ flexibleTariff.name }}" gefunden. Die Einstellungen
         können als JSON direkt bearbeitet werden.
       </openwb-base-alert>
       <openwb-base-textarea
         title="Konfiguration"
         subtype="json"
-        :model-value="electricityTariff.configuration"
+        :model-value="flexibleTariff.configuration"
         @update:model-value="updateConfiguration($event, 'configuration')"
       >
         <template #help> Bitte prüfen Sie, ob die Eingaben richtig interpretiert werden. </template>
       </openwb-base-textarea>
       <openwb-base-alert subtype="info">
-        <pre>{{ JSON.stringify(electricityTariff.configuration, undefined, 2) }}</pre>
+        <pre>{{ JSON.stringify(flexibleTariff.configuration, undefined, 2) }}</pre>
       </openwb-base-alert>
     </div>
   </div>
 </template>
 
 <script>
-import ElectricityTariffConfigMixin from "./ElectricityTariffConfigMixin.vue";
+import FlexibleTariffConfigMixin from "./FlexibleTariffConfigMixin.vue";
 
 export default {
-  name: "ElectricityTariffConfigFallback",
-  mixins: [ElectricityTariffConfigMixin],
+  name: "FlexibleTariffConfigFallback",
+  mixins: [FlexibleTariffConfigMixin],
 };
 </script>

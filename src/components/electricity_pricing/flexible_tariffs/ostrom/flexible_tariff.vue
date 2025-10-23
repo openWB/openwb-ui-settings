@@ -1,5 +1,5 @@
 <template>
-  <div class="electricity-tariff-ostrom">
+  <div class="flexible-tariff-ostrom">
     <openwb-base-alert subtype="info">
       Ihre persönlichen Zugangsdaten (Client-ID und Client-Secret) erhalten Sie über das
       <a
@@ -16,19 +16,19 @@
       title="Client-ID"
       subtype="user"
       required
-      :model-value="electricityTariff.configuration.client_id"
+      :model-value="flexibleTariff.configuration.client_id"
       @update:model-value="updateConfiguration($event, 'configuration.client_id')"
     />
     <openwb-base-text-input
       title="Client-Secret"
       subtype="password"
       required
-      :model-value="electricityTariff.configuration.client_secret"
+      :model-value="flexibleTariff.configuration.client_secret"
       @update:model-value="updateConfiguration($event, 'configuration.client_secret')"
     />
     <openwb-base-text-input
       title="Postleitzahl"
-      :model-value="electricityTariff.configuration.zip"
+      :model-value="flexibleTariff.configuration.zip"
       @update:model-value="updateConfiguration($event, 'configuration.zip')"
     >
       <template #help>
@@ -40,10 +40,10 @@
 </template>
 
 <script>
-import ElectricityTariffConfigMixin from "../ElectricityTariffConfigMixin.vue";
+import FlexibleTariffConfigMixin from "../FlexibleTariffConfigMixin.vue";
 
 export default {
-  name: "ElectricityTariffOstrom",
-  mixins: [ElectricityTariffConfigMixin],
+  name: "FlexibleTariffOstrom",
+  mixins: [FlexibleTariffConfigMixin],
 };
 </script>

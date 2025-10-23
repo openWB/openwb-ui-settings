@@ -1,5 +1,5 @@
 <template>
-  <div class="electricity-tariff-fixed-hours">
+  <div class="grid-fee-fixed-hours">
     <openwb-base-alert subtype="info">
       Konfiguriert feste Tarifzeiten, z.b. HT, NT und Standardpreis.
     </openwb-base-alert>
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import ElectricityTariffConfigMixin from "../ElectricityTariffConfigMixin.vue";
+import GridFeeConfigMixin from "../GridFeeConfigMixin.vue";
 import FixedTariff from "./FixedTariff.vue";
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -55,16 +55,16 @@ library.add(fasPlus);
 library.add(fasTrash);
 
 export default {
-  name: "ElectricityTariffFixedHours",
+  name: "GridFeeFixedHours",
   components: {
     FontAwesomeIcon,
     FixedTariff,
   },
-  mixins: [ElectricityTariffConfigMixin],
+  mixins: [GridFeeConfigMixin],
   computed: {
     value: {
       get() {
-        return this.electricityTariff;
+        return this.gridFee;
       },
       set(newValue) {
         console.log("set", newValue);

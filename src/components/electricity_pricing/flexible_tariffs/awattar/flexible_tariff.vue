@@ -1,5 +1,5 @@
 <template>
-  <div class="electricity-tariff-awattar">
+  <div class="flexible-tariff-awattar">
     <openwb-base-select-input
       title="Land"
       not-selected="Bitte auswählen"
@@ -7,7 +7,7 @@
         { value: 'de', text: 'Deutschland' },
         { value: 'at', text: 'Österreich' },
       ]"
-      :model-value="electricityTariff.configuration.country"
+      :model-value="flexibleTariff.configuration.country"
       @update:model-value="updateConfiguration($event, 'configuration.country')"
     >
       <template #help>
@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import ElectricityTariffConfigMixin from "../ElectricityTariffConfigMixin.vue";
+import FlexibleTariffConfigMixin from "../FlexibleTariffConfigMixin.vue";
 
 export default {
-  name: "ElectricityTariffAwattar",
-  mixins: [ElectricityTariffConfigMixin],
+  name: "FlexibleTariffAwattar",
+  mixins: [FlexibleTariffConfigMixin],
 };
 </script>

@@ -47,7 +47,7 @@
       :io-device="ioDevice"
     />
     <!-- electricity tariff -->
-    <electricity-tariff-card v-if="$store.state.mqtt['openWB/general/extern'] === false" />
+    <electricity-pricing-card v-if="$store.state.mqtt['openWB/general/extern'] === false" />
   </div>
 </template>
 
@@ -61,7 +61,7 @@ import BatterySumCard from "../components/status/BatterySumCard.vue";
 import BatteryCard from "../components/status/BatteryCard.vue";
 import IoDeviceCard from "../components/status/IoDeviceCard.vue";
 import VehicleCard from "../components/status/VehicleCard.vue";
-import ElectricityTariffCard from "../components/status/ElectricityTariffCard.vue";
+import FlexibleTariffCard from "../components/status/ElectricityPricingCard.vue";
 import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
@@ -76,7 +76,7 @@ export default {
     BatteryCard,
     IoDeviceCard,
     VehicleCard,
-    ElectricityTariffCard,
+    FlexibleTariffCard,
   },
   mixins: [ComponentState],
   data() {

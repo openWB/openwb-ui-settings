@@ -1,5 +1,5 @@
 <template>
-  <div class="electricity-tariff-energy-charts">
+  <div class="flexible-tariff-energy-charts">
     <openwb-base-alert subtype="info">
       Börsenstrompreise von Energy Charts (energy-charts.info)<br />
       Die Rohdaten werden von Wissenschaftlern des Fraunhofer-Instituts für Solare Energiesysteme ISE aus zahlreichen
@@ -13,7 +13,7 @@
         { value: 'AT', text: 'Österreich' },
         { value: 'CH', text: 'Schweiz' },
       ]"
-      :model-value="electricityTariff.configuration.country"
+      :model-value="flexibleTariff.configuration.country"
       @update:model-value="updateConfiguration($event, 'configuration.country')"
     />
     <openwb-base-number-input
@@ -23,7 +23,7 @@
       :precision="3"
       required
       unit="ct/kWh"
-      :model-value="electricityTariff.configuration.surcharge"
+      :model-value="flexibleTariff.configuration.surcharge"
       @update:model-value="updateConfiguration(parseFloat($event.toFixed(3)), 'configuration.surcharge')"
     >
       <template #help>
@@ -37,10 +37,10 @@
 </template>
 
 <script>
-import ElectricityTariffConfigMixin from "../ElectricityTariffConfigMixin.vue";
+import FlexibleTariffConfigMixin from "../FlexibleTariffConfigMixin.vue";
 
 export default {
-  name: "ElectricityTariffEnergyCharts",
-  mixins: [ElectricityTariffConfigMixin],
+  name: "FlexibleTariffEnergyCharts",
+  mixins: [FlexibleTariffConfigMixin],
 };
 </script>

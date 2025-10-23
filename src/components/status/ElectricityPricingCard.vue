@@ -1,6 +1,6 @@
 <template>
   <status-card
-    v-if="electricityTariffConfigured"
+    v-if="electricityPricingConfigured"
     subtype="secondary"
     :state="$store.state.mqtt[baseTopic + '/get/fault_state']"
     :state-message="$store.state.mqtt[baseTopic + '/get/fault_str']"
@@ -56,7 +56,7 @@ import {
 Chart.register(Tooltip, Legend, LineController, LineElement, PointElement, LinearScale, TimeScale, Filler, ZoomPlugin);
 
 export default {
-  name: "ElectricityTariffCard",
+  name: "ElectricityPricingCard",
   components: {
     StatusCard,
     FontAwesomeIcon,
@@ -66,10 +66,13 @@ export default {
   data() {
     return {
       mqttTopicsToSubscribe: [
-        "openWB/optional/ep/tariff/provider",
-        "openWB/optional/ep/tariff/get/fault_state",
-        "openWB/optional/ep/tariff/get/fault_str",
-        "openWB/optional/ep/tariff/get/prices",
+        "openWB/optional/ep/flexible_tariff/provider",
+        "openWB/optional/ep/flexible_tariff/get/fault_state",
+        "openWB/optional/ep/flexible_tariff/get/fault_str",
+        "openWB/optional/ep/grid_fee/provider",
+        "openWB/optional/ep/grid_fee/get/fault_state",
+        "openWB/optional/ep/grid_fee/get/fault_str",
+        "openWB/optional/ep/get/prices",
       ],
       chartDatasets: {
         datasets: [
@@ -176,10 +179,12 @@ export default {
     };
   },
   computed: {
-    electricityTariffConfigured() {
-      const provider = this.$store.state.mqtt["openWB/optional/ep/tariff/provider"];
-      if (provider !== undefined) {
-        return provider.type !== null;
+    electricityPricingConfigured() {
+      const flexible_tariff_provider = this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/provider"];
+      const grid_fee_provider = this.$store.state.mqtt["openWB/optional/ep/grid_fee/provider"];
+
+      if (flexible_tariff_provider !== undefined || grid_fee_provider !== undefined) {
+        return (flexible_tariff_provider && flexible_tariff_provider.type) || (grid_fee_provider && grid_fee_provider.type);
       }
       return false;
     },
@@ -187,8 +192,8 @@ export default {
       return this.chartDataObject.datasets[0].data != undefined;
     },
     chartDataObject() {
-      if (this.$store.state.mqtt["openWB/optional/ep/tariff/get/prices"]) {
-        var chartEntries = this.$store.state.mqtt["openWB/optional/ep/tariff/get/prices"];
+      if (this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/get/prices"]) {
+        var chartEntries = this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/get/prices"];
         var myData = [];
         // proper scaling:
         // timestamp: seconds -> milliseconds
@@ -228,7 +233,7 @@ export default {
     },
     baseTopic: {
       get() {
-        return "openWB/optional/ep/tariff";
+        return "openWB/optional/ep/flexible_tariff";
       },
     },
   },
