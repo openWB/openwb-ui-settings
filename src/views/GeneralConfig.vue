@@ -193,7 +193,7 @@
       </div>
       <openwb-base-card
         v-if="!installAssistantActive"
-        title="Darstellung"
+        title="Darstellung & Bedienung"
       >
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
           <openwb-base-alert subtype="info">
@@ -201,6 +201,39 @@
           </openwb-base-alert>
         </div>
         <div v-else>
+          <openwb-base-button-group-input
+            title="Temporäre Ladeeinstellungen"
+            :buttons="[
+              {
+                buttonValue: false,
+                text: 'Nein',
+                class: 'btn-outline-danger',
+              },
+              {
+                buttonValue: true,
+                text: 'Ja',
+                class: 'btn-outline-success',
+              },
+            ]"
+            :model-value="$store.state.mqtt['openWB/general/temporary_charge_templates_active']"
+            @update:model-value="updateState('openWB/general/temporary_charge_templates_active', $event)"
+          >
+            <template #help>
+              <p>
+                Alle Einstellungen die unter Einstellungen → Konfiguration → Fahrzeuge → Lade-Profil für das jeweilige
+                Fahrzeug konfiguriert sind, gelten bei aktiver Einstellung als persistent. Das heißt, diese werden bei
+                jedem Abstecken des jeweiligen Fahrzeugs neu geladen. <br />
+                Änderungen an den Ladeeinstellungen, die direkt am Ladepunkt (erste Seite des Webinterfaces oder
+                7-Zoll-Bildschirm der openWB, wenn vorhanden) vorgenommen werden gelten als temporär. Das heißt, diese
+                bleiben nur bis zum nächsten Abstecken erhalten.
+              </p>
+              <p>
+                Bei deaktivierter Einstellung sind sowhl die Einstellungen unter unter Einstellungen → Konfiguration →
+                Fahrzeuge → Lade-Profil als direkt am Ladepunkt persistent.
+              </p>
+              <p>Eine ausführliche Erläuterung mit Beispielen findet Ihr im Wiki:</p>
+            </template>
+          </openwb-base-button-group-input>
           <openwb-base-heading class="mt-0"> Hauptseite </openwb-base-heading>
           <div v-if="$store.state.mqtt['openWB/general/web_theme'] !== undefined">
             <openwb-base-select-input
@@ -677,6 +710,7 @@ export default {
         "openWB/general/notifications/stop_charging",
         "openWB/general/price_kwh",
         "openWB/general/range_unit",
+        "openWB/general/temporary_charge_templates_active",
         "openWB/general/web_theme",
         "openWB/system/configurable/web_themes",
         "openWB/system/ip_address",
