@@ -139,14 +139,11 @@ export default {
               },
               callback: function(value, index, values) {
                 const date = new Date(value);
-                const currentDate = new Date();
+                const midnight = new Date().setHours(23, 59, 59, 999);
                 
                 // Prüfe ob das Datum zum nächsten Tag gehört
-                const isTomorrow = 
-                  date.getDate() === currentDate.getDate() + 1 && 
-                  date.getMonth() === currentDate.getMonth() &&
-                  date.getFullYear() === currentDate.getFullYear();
-                  
+                const isTomorrow = midnight < date;
+              
                 // Zeige nur den Zeitwert, wenn es nicht morgen ist
                 return `${isTomorrow ? 'morgen ' : ''}${this.getLabelForValue(value)}`;
               },
