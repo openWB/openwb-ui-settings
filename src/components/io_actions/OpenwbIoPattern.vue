@@ -124,7 +124,7 @@
           class="pl-2"
           :colspan="enableAddDelete ? 3 : 2"
         >
-          Prüfmuster
+          Simulierter Eingang
         </td>
       </tr>
     </tbody>
@@ -132,16 +132,17 @@
   <openwb-base-button-group-input
     v-if="showCheckPattern"
     v-model="showTestPattern"
-    title="Prüfmuster"
+    title="Simulierter Eingang"
     :buttons="[
       { buttonValue: false, text: 'Verbergen' },
       { buttonValue: true, text: 'Anzeigen' },
     ]"
   >
     <template #help>
-      Das Prüfmuster ist eine Hilfe um zu testen, ob die Eingangsmuster zum gewünschten Verhalten passen. Ein grüner
-      Haken in der Spalte "Prüfergebnis" zeigt an, dass das Eingangsmuster zu dem Prüfmuster passt. Eingangsmuster mit
-      unterschiedlichem Verhalten dürfen nicht gleichzeitig passen, da sonst das Verhalten nicht eindeutig ist.
+      Der Simulierter Eingang ist eine Hilfe um zu testen, ob die Eingangsmuster zum gewünschten Verhalten passen. Ein
+      grüner Haken in der Spalte "Prüfergebnis" zeigt an, dass das Eingangsmuster zum Simulierter Eingang passt.
+      Eingangsmuster mit unterschiedlichem Verhalten dürfen nicht gleichzeitig passen, da sonst das Verhalten nicht
+      eindeutig ist.
     </template>
   </openwb-base-button-group-input>
 </template>
