@@ -389,7 +389,7 @@
             <div v-if="!installAssistantActive">
               <hr />
               <openwb-base-heading>
-                Sperren nach Uhrzeit (Komplettsperrung - keine Freischaltung per ID-Tag möglich)
+                Sperren nach Uhrzeit (Komplettsperrung - Freischaltung per Identifikation möglich)
               </openwb-base-heading>
               <openwb-base-button-group-input
                 title="Sperren nach Uhrzeit aktiv"
