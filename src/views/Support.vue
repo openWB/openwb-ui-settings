@@ -4,16 +4,19 @@
     :show="showDeprecatedFirmwareModal"
     title="Achtung: Veraltete Software!"
     subtype="danger"
-    :preventClose=true
-    :buttons="[{ text: 'Trotzdem versenden', event: 'confirm', subtype: 'danger' }, { text: 'Nicht versenden', event: 'closeDialog'}]"
+    :prevent-close="true"
+    :buttons="[
+      { text: 'Trotzdem versenden', event: 'confirm', subtype: 'danger' },
+      { text: 'Nicht versenden', event: 'closeDialog' },
+    ]"
     @modal-result="verifyModalInput($event)"
   >
     Möglicherweise wurde das Problem bereits behoben.<br />
     Bitte führen Sie vor dem Absenden ein
     <router-link to="/System/SystemConfiguration"> Update </router-link>
     durch.<br />
-    Falls ein Update nicht möglich ist, kann der Systembericht dennoch versendet werden.
-    Falls kein Update gewünscht ist, bieten wir auch über unseren Partner WB Solution GmbH
+    Falls ein Update nicht möglich ist, kann der Systembericht dennoch versendet werden. Falls kein Update gewünscht
+    ist, bieten wir auch über unseren Partner WB Solution GmbH
     <a
       href="https://wb-solution.de/produkt/support-token-aeltere-version/"
       target="_blank"
@@ -85,9 +88,7 @@
               minlength="15"
               maxlength="100"
             >
-              <template #help>
-                Du kannst hier einen kurzen Titel für dein Problem angeben.
-              </template>
+              <template #help> Du kannst hier einen kurzen Titel für dein Problem angeben. </template>
             </openwb-base-text-input>
             <openwb-base-text-input
               v-model="ticketNumber"
@@ -96,8 +97,8 @@
               pattern="[1-9][0-9]{7}"
             >
               <template #help>
-                Hier kann eine bereits bestehende Ticketnummer eingegeben werden,
-                damit das Ticket schneller zugeordnet werden kann.
+                Hier kann eine bereits bestehende Ticketnummer eingegeben werden, damit das Ticket schneller zugeordnet
+                werden kann.
               </template>
             </openwb-base-text-input>
             <openwb-base-text-input
@@ -269,6 +270,9 @@ export default {
       );
     },
   },
+  beforeMount() {
+    this.sendSystemCommand("systemFetchVersions");
+  },
   methods: {
     sendDebugMessage() {
       let myForm = document.forms["supportForm"];
@@ -284,16 +288,16 @@ export default {
       }
     },
     checkFirmware() {
-      if(this.updateAvailable) {
+      if (this.updateAvailable) {
         this.showDeprecatedFirmwareModal = true;
-      }else {
-        this.sendDebugMessage()
+      } else {
+        this.sendDebugMessage();
       }
     },
     verifyModalInput(event) {
       this.showDeprecatedFirmwareModal = false;
       if (event == "confirm") {
-        this.sendDebugMessage()
+        this.sendDebugMessage();
       }
     },
     sendSystemCommand(command, data = {}) {
@@ -302,9 +306,6 @@ export default {
         data: data,
       });
     },
-  },
-  beforeMount() {
-    this.sendSystemCommand('systemFetchVersions')
   },
 };
 </script>
