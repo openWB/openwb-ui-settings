@@ -515,6 +515,9 @@ export default {
       return options.sort(compareTags);
     },
   },
+  beforeMount() {
+    this.sendSystemCommand("systemFetchVersions");
+  },
   methods: {
     sendSystemCommand(command, data = {}) {
       this.$emit("sendCommand", {
@@ -555,9 +558,6 @@ export default {
           };
         }, {});
     },
-  },
-  beforeMount() {
-    this.sendSystemCommand('systemFetchVersions')
   },
 };
 </script>
