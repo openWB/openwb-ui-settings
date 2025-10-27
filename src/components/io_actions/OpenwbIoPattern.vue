@@ -139,8 +139,8 @@
     ]"
   >
     <template #help>
-      Der Simulierter Eingang ist eine Hilfe um zu testen, ob die Eingangsmuster zum gewünschten Verhalten passen. Ein
-      grüner Haken in der Spalte "Prüfergebnis" zeigt an, dass das Eingangsmuster zum Simulierter Eingang passt.
+      Der simulierte Eingang ist eine Hilfe um zu testen, ob die Eingangsmuster zum gewünschten Verhalten passen. Ein
+      grüner Haken in der Spalte "Prüfergebnis" zeigt an, dass das Eingangsmuster zum simulierten Eingang passt.
       Eingangsmuster mit unterschiedlichem Verhalten dürfen nicht gleichzeitig passen, da sonst das Verhalten nicht
       eindeutig ist.
     </template>
