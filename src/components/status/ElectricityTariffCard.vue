@@ -208,7 +208,7 @@ export default {
             price: value * 100000,
           });
         }
-        // repeat last dataset until midnight
+        // repeat last dataset
         const lastData = myData.slice(-1)[0];
         if (myData.length >= 2) {
           // repeat last dataset with same offset as the last one
