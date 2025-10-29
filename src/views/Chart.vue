@@ -1002,8 +1002,8 @@ export default {
     },
     chartScaleX() {
       var scaleObject = {
-        unit: "hour",
-        tooltipFormat: "HH:mm",
+        unit: "minute",
+        tooltipFormat: "DD T",
         text: "Zeit",
         maxTicksLimit: 24,
       };
