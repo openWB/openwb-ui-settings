@@ -180,84 +180,6 @@
           </div>
         </div>
       </openwb-base-card>
-      <openwb-base-card title="Optional">
-        <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-          <openwb-base-alert subtype="info">
-            Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
-          </openwb-base-alert>
-        </div>
-        <div v-else>
-          <openwb-base-alert
-            subtype="info"
-            class="mb-3"
-          >
-            <p>
-              Die aktive Speichersteuerung durch openWB basiert auf öffentlich zugänglichen Informationen zu den
-              verschiedenen Speichersystemen. Diese können auch nicht herstellerseitig freigegebene Informationen
-              beinhalten.<br />
-              Fragen bezüglich der Gewährleistung und Hardwarekompatibilität sind vor der Nutzung mit dem Hersteller zu
-              klären. openWB übernimmt keine Haftung für Schäden, welche aus der Nutzung der "aktiven Speichersteuerung"
-              entstehen.
-            </p>
-            <openwb-base-button-group-input
-              title="Hinweise zur aktiven Speichersteuerung gelesen und akzeptiert"
-              :buttons="[
-                { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
-                { buttonValue: true, text: 'Ja', class: 'btn-outline-success' },
-              ]"
-              :model-value="$store.state.mqtt['openWB/bat/config/bat_control_permitted']"
-              @update:model-value="updateState('openWB/bat/config/bat_control_permitted', $event)"
-            />
-          </openwb-base-alert>
-
-          <div v-if="$store.state.mqtt['openWB/bat/config/bat_control_permitted'] === true">
-            <openwb-base-heading class="mt-0"> Speicher-Entladung ins Fahrzeug steuern </openwb-base-heading>
-            <div v-if="$store.state.mqtt['openWB/bat/get/power_limit_controllable'] === true">
-              <openwb-base-button-group-input
-                title="Speichersteuerung"
-                :buttons="[
-                  {
-                    buttonValue: 'no_limit',
-                    text: 'Aus',
-                  },
-                  {
-                    buttonValue: 'limit_stop',
-                    text: 'volle Entladesperre',
-                  },
-                  {
-                    buttonValue: 'limit_to_home_consumption',
-                    text: 'Entladung in Fahrzeuge sperren',
-                  },
-                ]"
-                :model-value="$store.state.mqtt['openWB/bat/config/power_limit_mode']"
-                @update:model-value="updateState('openWB/bat/config/power_limit_mode', $event)"
-              >
-                <template #help>
-                  <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'no_limit'">
-                    Der Speicher regelt eigenständig und wird nicht gesteuert. Es greift nur die konfigurierte
-                    Speicherbeachtung (Modus-PV).
-                  </div>
-                  <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'limit_stop'">
-                    Die Speicherentladung wird komplett gesperrt, sobald ein Fahrzeug lädt! Alle Verbraucher (Fahrzeuge,
-                    Hausverbrauch) werden durch Netzstrom versorgt.
-                  </div>
-                  <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'limit_to_home_consumption'">
-                    Fahrzeugladung erzeugt Netzbezug statt Speicherentladung. Weitere Verbraucher (bspw. Hausverbrauch)
-                    werden durch den Speicher ausgeglichen. Kann die Entladung am Speicher nur komplett gesperrt werden,
-                    verhält sich diese Einstellung wie "volle Entladesperre".
-                  </div>
-                </template>
-              </openwb-base-button-group-input>
-            </div>
-            <div v-else>
-              <openwb-base-alert subtype="info">
-                Die Speicher-Entladung ins Fahrzeug kann nicht gesteuert werden, da die Entladeleistung nicht an den/die
-                konfigurierten Speicher übergeben werden kann.
-              </openwb-base-alert>
-            </div>
-          </div>
-        </div>
-      </openwb-base-card>
       <openwb-base-card title="OCPP Anbindung">
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
           <openwb-base-alert subtype="info">
@@ -333,9 +255,6 @@ export default {
   data() {
     return {
       mqttTopicsToSubscribe: [
-        "openWB/bat/config/power_limit_mode",
-        "openWB/bat/config/bat_control_permitted",
-        "openWB/bat/get/power_limit_controllable",
         "openWB/general/extern",
         "openWB/general/chargemode_config/phase_switch_delay",
         "openWB/general/chargemode_config/retry_failed_phase_switches",
