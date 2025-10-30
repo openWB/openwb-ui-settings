@@ -13,7 +13,7 @@
     </template>
     <template #default>
       <div
-        v-if="!noInput"
+        v-if="!readonly"
         class="w-100"
       >
         <div class="input-group">
@@ -63,7 +63,7 @@
           </slot>
           {{ tag }}
           <font-awesome-icon
-            v-if="!noInput"
+            v-if="!readonly"
             class="clickable remove-element"
             :icon="['fas', 'times-circle']"
             @click="removeTag(index)"
@@ -109,7 +109,7 @@ export default {
         return "Keine Elemente zugeordnet.";
       },
     },
-    noInput: {
+    readonly: {
       type: Boolean,
       default: () => {
         return false;
@@ -134,7 +134,7 @@ export default {
     },
     newTagValid: {
       get() {
-        return this.newTag.length > 0 && !this.value.includes(this.newTag);
+        return this.newTag.length > 0 && !this.value.includes(this.newTag) && this.$refs.tagInput?.checkValidity();
       },
     },
   },
@@ -163,7 +163,7 @@ export default {
 
 input.invalid,
 input:invalid {
-  border: 2px solid var(--danger);
+  background-color: pink;
 }
 
 .tagList {

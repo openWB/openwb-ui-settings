@@ -50,13 +50,13 @@
           readonly
         />
       </openwb-base-card>
-      <form name="versionInfoForm">
-        <openwb-base-card
-          title="Versions-Informationen / Aktualisierung"
-          subtype="success"
-          :collapsible="true"
-          :collapsed="!installAssistantActive"
-        >
+      <openwb-base-card
+        title="Versions-Informationen / Aktualisierung"
+        subtype="success"
+        :collapsible="true"
+        :collapsed="!installAssistantActive"
+      >
+        <form name="versionInfoForm">
           <openwb-base-text-input
             v-model="$store.state.mqtt['openWB/system/current_branch']"
             title="Entwicklungszweig"
@@ -94,7 +94,7 @@
               </li>
             </ul>
           </openwb-base-card>
-          <openwb-base-alert 
+          <openwb-base-alert
             v-if="!installAssistantActive"
             subtype="danger"
           >
@@ -112,15 +112,6 @@
             wenn das Datenformat in der neuen Version angepasst wurde, wird eine ältere damit Fehler produzieren.
           </openwb-base-alert>
           <div class="row justify-content-center">
-            <div class="col-md-4 d-flex py-1 justify-content-center">
-              <openwb-base-click-button
-                class="btn-info"
-                @button-clicked="sendSystemCommand('systemFetchVersions')"
-              >
-                Informationen aktualisieren
-                <font-awesome-icon :icon="['fas', 'download']" />
-              </openwb-base-click-button>
-            </div>
             <div class="col-md-4 d-flex py-1 justify-content-center">
               <openwb-base-click-button
                 :class="updateAvailable ? 'btn-success clickable' : 'btn-outline-success'"
@@ -207,8 +198,8 @@
               />
             </div>
           </div>
-        </openwb-base-card>
-      </form>
+        </form>
+      </openwb-base-card>
       <form
         v-if="!installAssistantActive"
         name="powerForm"
@@ -224,8 +215,8 @@
           </openwb-base-alert>
           <openwb-base-alert subtype="info">
             Ein Neustart löscht wichtige Protokolle, die bei der Fehlersuche helfen können. <br />Tipp: Erstelle
-            stattdessen zuerst einen <router-link to="/Support"> Systembericht </router-link> – das hilft oft mehr und
-            bewahrt alle relevanten Logs.
+            stattdessen zuerst einen <router-link to="/System/Support"> Systembericht </router-link> – das hilft oft
+            mehr und bewahrt alle relevanten Logs.
           </openwb-base-alert>
           <template #footer>
             <div class="row justify-content-center">
@@ -523,6 +514,9 @@ export default {
       }
       return options.sort(compareTags);
     },
+  },
+  beforeMount() {
+    this.sendSystemCommand("systemFetchVersions");
   },
   methods: {
     sendSystemCommand(command, data = {}) {

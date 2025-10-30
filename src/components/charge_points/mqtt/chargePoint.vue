@@ -21,7 +21,7 @@
                 class="text-info"
                 tooltip="Topic kopieren"
               >
-                openWB/set/mqtt/chargepoint/{{ chargePoint.id }}/set/current
+                openWB/mqtt/chargepoint/{{ chargePoint.id }}/set/current
               </openwb-base-copy-to-clipboard>
               <br />
               Sollwert des Ladestroms, mit Nachkommastellen (Float), positiv (laden) oder negativ (entladen, falls vom
@@ -33,7 +33,7 @@
                 class="text-info"
                 tooltip="Topic kopieren"
               >
-                openWB/set/mqtt/chargepoint/{{ chargePoint.id }}/set/phases_to_use
+                openWB/mqtt/chargepoint/{{ chargePoint.id }}/set/phases_to_use
               </openwb-base-copy-to-clipboard>
               <br />
               Sollwert für die Anzahl Phasen als Ganzzahl (Integer). Mögliche Werte: 1 oder 3<br />

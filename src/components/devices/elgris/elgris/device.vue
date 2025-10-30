@@ -1,9 +1,7 @@
 <template>
   <div class="device-elgris">
     <openwb-base-heading> Einstellungen für Elgris</openwb-base-heading>
-    <openwb-base-alert subtype="info">
-      Der Zähler ist auf Modbus-ID 1 und Port 502 vorkonfiguriert.
-    </openwb-base-alert>
+    <openwb-base-alert subtype="info"> Der Zähler ist auf Modbus-ID 1 und Port 502 vorkonfiguriert. </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
       subtype="host"

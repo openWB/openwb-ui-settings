@@ -7,11 +7,11 @@
   >
     <template #help>
       <p>
-        Enthält die steuernde openWB (primary) Ladetechnik, wird bei "Verfügbare Ladepunkte" Interne openWB ausgewählt.
-        Weitere LP werden im primary als secondary konfigurierte openWB oder andere WB-Typen wie Pro, Satellit
-        eingebunden.
+        Enthält die steuernde openWB (primary) Ladetechnik, wird bei "Verfügbare Ladepunkte" "Interne openWB"
+        ausgewählt. Weitere LP werden im primary als "Secondary openWB" oder andere WB-Typen wie "openWB Pro", "openwB
+        Satellit" eingebunden.
       </p>
-      <p>Bei openWBs ab Werk kann hier bereits ein Ladepunkt eingetragen sein.</p>
+      <p>Bei openWBs ab Werk ist hier bereits ein Ladepunkt eingetragen.</p>
       <p>
         Nachfolgend werden die Eigenschaften des Ladepunktes wie IP-Adresse und elektrischer Anschluss definiert. Die
         meisten openWB werden 3-phasig angeschlossen! Bei mehreren Ladepunkten ist auf phasenrotierten Anschluss der
@@ -26,10 +26,10 @@
         erhöhte Werte anzeigt, ist die auszuwählende EVU-Phase.
       </p>
       <p>
-        Im grauen Menü Ladepunkt-Profile können neben dem Standard-Ladepunkt-Profil auch weitere Ladepunkt-Profile, die
-        andere WB-Typen abbilden, erstellt werden. Dort sind Eintragungen bzgl. des Ladepunkt-Maximalstroms bei einer
-        Phase bzw. mehreren Phasen vorzunehmen. Die Profile werden abschließend im jeweiligen blauen Ladepunkt mittels
-        Auswahlmenü zugeordnet.
+        Im grauen Abschnitt "Ladepunkt-Profile" können neben dem Standard-Ladepunkt-Profil auch weitere
+        Ladepunkt-Profile, die andere WB-Typen abbilden, erstellt werden. Dort sind Eintragungen bzgl. des
+        Ladepunkt-Maximalstroms bei einer Phase bzw. mehreren Phasen vorzunehmen. Die Profile werden abschließend im
+        jeweiligen blauen Ladepunkt mittels Auswahlmenü zugeordnet.
       </p>
       <p class="font-weight-bold">Änderungen werden nur durch Klicken auf Speichern wirksam!</p>
     </template>

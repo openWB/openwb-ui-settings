@@ -135,8 +135,8 @@
             <openwb-base-alert subtype="info">
               Ist die openWB als primary konfiguriert, wird zwischen Mitternacht und 5:00 Uhr automatisch eine Sicherung
               erstellt und in den angegebenen Cloud-Dienst (nicht openWB Cloud!) hochgeladen. Ist kein Cloud-Dienst
-              konfiguriert, wird keine automatische Sicherung erstellt. Die automatische Sicherung kann unabhängig von der
-              openWB Cloud genutzt werden.<br />
+              konfiguriert, wird keine automatische Sicherung erstellt. Die automatische Sicherung kann unabhängig von
+              der openWB Cloud genutzt werden.<br />
               Die manuelle Cloud-Sicherung und -falls aktiviert- die Sicherung vor einem Update werden sowohl von einer
               primary als auch von einer secondary durchgeführt.<br />
               Die Anleitung zur Konfiguration des Cloud-Dienstes findest Du
@@ -332,7 +332,7 @@
       </form>
       <form
         v-if="!installAssistantActive"
-        name="monitoringConfigured"
+        name="monitoringForm"
       >
         <openwb-base-card
           title="Monitoring"
@@ -376,7 +376,7 @@
           </div>
           <template #footer>
             <openwb-base-submit-buttons
-              :form-name="monitoringConfigured"
+              form-name="monitoringForm"
               :hide-defaults="true"
               @save="$emit('save')"
               @reset="$emit('reset')"

@@ -16,23 +16,26 @@
         <label
           v-for="button in buttons"
           :key="button.value"
-          class="btn"
+          class="btn btn-same-size btn-centered"
           :class="[value == button.buttonValue ? 'active' : '', button.class ? button.class : 'btn-outline-info']"
         >
-          <input
-            v-model="value"
-            type="radio"
-            :value="button.buttonValue"
-            v-bind="$attrs"
-            @click="$emit('button-click', button.buttonValue)"
-          />
-          <slot :name="'label-' + button.buttonValue">
-            {{ button.text }}
-          </slot>
-          <font-awesome-icon
-            :icon="['fas', 'check']"
-            :style="[value == button.buttonValue ? 'visibility: visible' : 'visibility: hidden']"
-          />
+          <span>
+            <input
+              v-model="value"
+              type="radio"
+              :value="button.buttonValue"
+              v-bind="$attrs"
+              @click="$emit('button-click', button.buttonValue)"
+            />
+            <slot :name="'label-' + button.buttonValue">
+              {{ button.text }}
+            </slot>
+            <span>&nbsp;</span>
+            <font-awesome-icon
+              :icon="['fas', 'check']"
+              :style="[value == button.buttonValue ? 'visibility: visible' : 'visibility: hidden']"
+            />
+          </span>
         </label>
       </div>
     </template>
@@ -73,3 +76,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.btn.btn-centered {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.btn.btn-same-size {
+  flex-basis: 10px !important; /* make buttons the same size */
+}
+</style>

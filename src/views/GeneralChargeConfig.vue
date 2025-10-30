@@ -71,14 +71,15 @@
               Wenn diese Option aktiviert ist, werden bis zu zwei Umschaltversuche vorgenommen, wenn die vorgegebene und
               genutzte Phasenzahl nicht übereinstimmen. Wird die Option deaktiviert, wird nur eine Umschaltung
               durchgeführt.<br />
-              Die gezählten Fehlversuche werden mit dem Abstecken zurückgesetzt.
+              Die gezählten Fehlversuche werden beim nächsten Wechsel des Lademodus oder mit dem Abstecken
+              zurückgesetzt.
             </template>
           </openwb-base-button-group-input>
           <openwb-base-number-input
             title="Pufferzeit zwischen automat. Phasenumschaltungen"
             unit="Min."
             :min="5"
-            :max="60"
+            :max="180"
             :step="1"
             :model-value="$store.state.mqtt['openWB/general/chargemode_config/phase_switch_delay']"
             @update:model-value="updateState('openWB/general/chargemode_config/phase_switch_delay', $event)"
