@@ -33,8 +33,10 @@
           </span> -->
         </div>
         <openwb-nested-list
+          v-if="nesting && element.children"
           v-model="element.children"
           :labels="labels"
+          :nesting="nesting"
         />
       </li>
     </template>
@@ -65,6 +67,7 @@ export default {
   props: {
     list: { type: Object, required: false, default: undefined },
     labels: { type: Object, required: false, default: undefined },
+    nesting: { type: Boolean, default: true },
   },
   methods: {
     classes(element) {

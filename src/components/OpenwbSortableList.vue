@@ -15,6 +15,7 @@
       v-if="value !== undefined"
       v-model="value"
       :labels="labels"
+      :nesting="nesting"
     />
     <div v-else>Warte auf Daten...</div>
   </openwb-base-setting-element>
@@ -35,6 +36,7 @@ export default {
     title: { type: String, required: false, default: "" },
     modelValue: { type: Array, required: false, default: undefined },
     labels: { type: Object, default: undefined },
+    nesting: { type: Boolean, default: true },
   },
   emits: ["update:modelValue"],
   computed: {
