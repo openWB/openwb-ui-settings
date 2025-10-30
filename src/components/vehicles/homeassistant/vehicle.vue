@@ -9,7 +9,7 @@
     >
       <template #help>
         Es wird eine komplette URL erwartet mit Angaben zum Protokoll, IP oder Hostnamen und idealerweise Port.
-        Beispiel: http://192.168.1.1:8080
+        Beispiel: http://192.168.1.1:8123
       </template>
     </openwb-base-text-input>
     <openwb-base-text-input
