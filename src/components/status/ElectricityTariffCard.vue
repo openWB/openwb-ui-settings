@@ -137,16 +137,7 @@ export default {
               font: {
                 size: 12,
               },
-              callback: function(value, index, values) {
-                const date = new Date(value);
-                const midnight = new Date().setHours(23, 59, 59, 999);
-                
-                // Prüfe ob das Datum zum nächsten Tag gehört
-                const isTomorrow = midnight < date;
-              
-                // Zeige nur den Zeitwert, wenn es nicht morgen ist
-                return `${isTomorrow ? 'morgen ' : ''}${this.getLabelForValue(value)}`;
-              },
+              callback: this.formatTickLabel,
               // color: tickColor,
               maxTicksLimit: 0,
             },
@@ -210,16 +201,16 @@ export default {
         }
         // repeat last dataset
         const lastData = myData.slice(-1)[0];
-        if (myData.length >= 2) {
-          // repeat last dataset with same offset as the last one
+        // midnight as default
+        let nextTimestamp = this.endOfToday;
+        if (myData.length > 1) {
+          // same offset minus 1ms as the last one
           const previousData = myData.slice(-2, -1)[0];
-          lastData.timestamp += lastData.timestamp - previousData.timestamp;
-        } else {
-          // fallback to midnight
-          lastData.timestamp = new Date(lastData.timestamp).setHours(23, 59, 59, 999).getTime();
+          nextTimestamp = lastData.timestamp + lastData.timestamp - previousData.timestamp - 1;
         }
         myData.push({
-          timestamp: lastData.timestamp,          price: lastData.price,
+          timestamp: nextTimestamp,
+          price: lastData.price,
         });
       }
       const dataObject = this.chartDatasets;
@@ -232,10 +223,22 @@ export default {
       }
       return this.formatNumber(this.chartDataObject.datasets[0].data[0].price || 0, 2);
     },
+    endOfToday() {
+      return new Date().setHours(23, 59, 59, 999).valueOf();
+    },
     baseTopic: {
       get() {
         return "openWB/optional/et";
       },
+    },
+  },
+  methods: {
+    formatTickLabel(timeValue) {
+      const date = new Date(timeValue);
+      // Prüfe ob das Datum zum nächsten Tag gehört
+      const isTomorrow = this.endOfToday < date;
+      // Zeige nur den Zeitwert, wenn es nicht morgen ist
+      return `${isTomorrow ? date.toLocaleDateString(undefined, { day: "2-digit", month: "2-digit" }) + " " : ""}${date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
     },
   },
 };
