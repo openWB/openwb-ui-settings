@@ -158,7 +158,7 @@
           <hr />
           <openwb-base-number-input
             title="Regelpunkt Einspeisegrenze"
-            :min="0"
+            :min="-1000"
             :step="0.05"
             unit="kW"
             required
