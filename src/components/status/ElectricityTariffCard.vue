@@ -137,6 +137,7 @@ export default {
               font: {
                 size: 12,
               },
+              callback: this.formatTickLabel,
               // color: tickColor,
               maxTicksLimit: 0,
             },
@@ -198,10 +199,17 @@ export default {
             price: value * 100000,
           });
         }
-        // repeat last dataset with 59min 59sec offset
+        // repeat last dataset
         const lastData = myData.slice(-1)[0];
+        // midnight as default
+        let nextTimestamp = this.endOfToday;
+        if (myData.length > 1) {
+          // same offset minus 1ms as the last one
+          const previousData = myData.slice(-2, -1)[0];
+          nextTimestamp = lastData.timestamp + lastData.timestamp - previousData.timestamp - 1;
+        }
         myData.push({
-          timestamp: lastData.timestamp + (60 * 60 - 1) * 1000,
+          timestamp: nextTimestamp,
           price: lastData.price,
         });
       }
@@ -215,10 +223,22 @@ export default {
       }
       return this.formatNumber(this.chartDataObject.datasets[0].data[0].price || 0, 2);
     },
+    endOfToday() {
+      return new Date().setHours(23, 59, 59, 999).valueOf();
+    },
     baseTopic: {
       get() {
         return "openWB/optional/et";
       },
+    },
+  },
+  methods: {
+    formatTickLabel(timeValue) {
+      const date = new Date(timeValue);
+      // Prüfe ob das Datum zum nächsten Tag gehört
+      const isTomorrow = this.endOfToday < date;
+      // Zeige nur den Zeitwert, wenn es nicht morgen ist
+      return `${isTomorrow ? date.toLocaleDateString(undefined, { day: "2-digit", month: "2-digit" }) + " " : ""}${date.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}`;
     },
   },
 };
