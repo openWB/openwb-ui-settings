@@ -407,7 +407,7 @@ export default {
     copyPlan() {
       this.$emit("sendCommand", {
         command: "addChargeTemplateSchedulePlan",
-        data: { template: this.templateId, copy: this.modelValue.id },
+        data: { template: this.templateId, changed_in_theme: false, copy: this.modelValue.id },
       });
     },
     removePlanModal() {
@@ -418,7 +418,7 @@ export default {
       if (event == "confirm") {
         this.$emit("sendCommand", {
           command: "removeChargeTemplateSchedulePlan",
-          data: { template: this.templateId, plan: this.modelValue.id },
+          data: { template: this.templateId, plan: this.modelValue.id, changed_in_theme: false },
         });
       }
     },
