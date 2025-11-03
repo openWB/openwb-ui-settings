@@ -1652,14 +1652,14 @@ export default {
     addChargeTemplateSchedulePlan(templateId) {
       this.$emit("sendCommand", {
         command: "addChargeTemplateSchedulePlan",
-        data: { template: templateId },
+        data: { template: templateId, changed_in_theme: false },
       });
     },
     /* charge template time charging plan management */
     addChargeTemplateTimeChargingPlan(templateId) {
       this.$emit("sendCommand", {
         command: "addChargeTemplateTimeChargingPlan",
-        data: { template: templateId },
+        data: { template: templateId, changed_in_theme: false },
       });
     },
     openActiveChargeModeCard(templateKey, activeMode) {
