@@ -167,6 +167,14 @@ const routes = [
     component: () => import("../views/System.vue"),
   },
   {
+    path: "/System/NetworkConfiguration",
+    name: "NetworkConfig",
+    meta: {
+      heading: "System - Netzwerk",
+    },
+    component: () => import("../views/Network.vue"),
+  },
+  {
     path: "/System/DataManagement",
     name: "DataManagement",
     meta: {
