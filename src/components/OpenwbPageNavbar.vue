@@ -250,6 +250,13 @@
               Datenverwaltung
             </router-link>
             <router-link
+              to="/System/NetworkConfiguration"
+              class="dropdown-item"
+              active-class="active disabled"
+            >
+              Netzwerk
+            </router-link>
+            <router-link
               to="/System/SystemConfiguration"
               class="dropdown-item"
               active-class="active disabled"
