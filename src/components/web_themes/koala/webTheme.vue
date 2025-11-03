@@ -38,11 +38,11 @@
     <hr />
     <sortable-list
       v-model="slideOrderList"
-      title="Reihenfolge der Slides im Karussell"
+      title="Oberer Infobereich"
       :labels="numberedSlideLabels"
       :nesting="false"
     >
-      <template #help> Legt die Reihenfolge der Slides im oberen Karussell fest. </template>
+      <template #help> Anordnung/Reihenfolge des oberen Informationsbereiches. </template>
     </sortable-list>
     <hr />
     <openwb-base-number-input
