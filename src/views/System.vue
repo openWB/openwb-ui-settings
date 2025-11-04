@@ -157,39 +157,41 @@
                   gleichzeitig mit der Primary openWB aktualisiert.
                 </template>
               </openwb-base-button-group-input>
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th>Secondary</th>
-                    <th>Software-Status</th>
-                    <th>IP-Adresse</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    v-for="externalChargepoint in externalChargepoints"
-                    :key="externalChargepoint.id"
-                  >
-                    <td>{{ externalChargepoint.name }}</td>
-                    <td>
-                      {{
-                        $store.state.mqtt["openWB/chargepoint/" + externalChargepoint.id + "/get/current_branch"] ===
-                        undefined
-                          ? "Version zu alt oder openWB ist nicht erreichbar. Bitte manuell updaten bzw. prüfen."
-                          : $store.state.mqtt["openWB/chargepoint/" + externalChargepoint.id + "/get/current_branch"] !=
-                              "Release"
-                            ? "Secondary ist nicht auf dem Release-Zweig. Bitte manuell updaten."
-                            : $store.state.mqtt[
-                                "openWB/chargepoint/" + externalChargepoint.id + "/get/current_branch"
-                              ] +
-                              " " +
-                              $store.state.mqtt["openWB/chargepoint/" + externalChargepoint.id + "/get/version"]
-                      }}
-                    </td>
-                    <td>{{ externalChargepoint.configuration.ip_address }}</td>
-                  </tr>
-                </tbody>
-              </table>
+            </div>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Secondary</th>
+                  <th>Software-Status</th>
+                  <th>IP-Adresse</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="externalChargepoint in externalChargepoints"
+                  :key="externalChargepoint.id"
+                >
+                  <td>{{ externalChargepoint.name }}</td>
+                  <td>
+                    {{
+                      $store.state.mqtt["openWB/chargepoint/" + externalChargepoint.id + "/get/current_branch"] ===
+                      undefined
+                        ? "Version zu alt oder openWB ist nicht erreichbar. Bitte manuell updaten bzw. prüfen."
+                        : $store.state.mqtt["openWB/chargepoint/" + externalChargepoint.id + "/get/current_branch"] !=
+                            "Release"
+                          ? "Secondary ist nicht auf dem Release-Zweig. Bitte manuell updaten."
+                          : $store.state.mqtt[
+                              "openWB/chargepoint/" + externalChargepoint.id + "/get/current_branch"
+                            ] +
+                            " " +
+                            $store.state.mqtt["openWB/chargepoint/" + externalChargepoint.id + "/get/version"]
+                    }}
+                  </td>
+                  <td>{{ externalChargepoint.configuration.ip_address }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div v-if="$store.state.mqtt['openWB/system/current_branch'] == 'Release'">
               <openwb-base-submit-buttons
                 form-name="versionInfoForm"
                 :hide-defaults="true"
