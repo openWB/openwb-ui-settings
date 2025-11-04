@@ -36,6 +36,15 @@
       </template>
     </openwb-base-range-input>
     <hr />
+    <sortable-list
+      v-model="slideOrderList"
+      title="Oberer Infobereich"
+      :labels="numberedSlideLabels"
+      :nesting="false"
+    >
+      <template #help> Anordnung/Reihenfolge des oberen Informationsbereiches. </template>
+    </sortable-list>
+    <hr />
     <openwb-base-number-input
       title="Ladepunkt Kartenansicht Grenzwert"
       :min="0"
@@ -110,9 +119,44 @@
 
 <script>
 import WebThemeConfigMixin from "../WebThemeConfigMixin.vue";
+import SortableList from "../../OpenwbSortableList.vue";
 
 export default {
   name: "WebThemeKoala",
+  components: {
+    SortableList,
+  },
   mixins: [WebThemeConfigMixin],
+  data() {
+    return {
+      slideLabels: {
+        daily_totals: "Tageswerte",
+        history_chart: "Verlaufsdiagramm",
+        flow_diagram: "Energieflussdiagramm",
+      },
+    };
+  },
+  computed: {
+    slideOrderList: {
+      get() {
+        const slideOrder = this.webTheme.configuration.top_carousel_slide_order || [
+          "flow_diagram",
+          "history_chart",
+          "daily_totals",
+        ];
+        return slideOrder.map((id) => ({ id }));
+      },
+      set(newList) {
+        const updatedSlideOrder = newList.map((item) => item.id);
+        this.updateConfiguration(updatedSlideOrder, "configuration.top_carousel_slide_order");
+      },
+    },
+    numberedSlideLabels() {
+      return this.slideOrderList.reduce((result, item, index) => {
+        result[item.id] = `${index + 1}. ${this.slideLabels[item.id] || item.id}`;
+        return result;
+      }, {});
+    },
+  },
 };
 </script>
