@@ -9,9 +9,9 @@
         </div>
         <div v-else>
           <openwb-base-alert subtype="info">
-            Die Regelmodi der Speicherbeachtung erfolgen "passiv" durch Anpassung der Fahrzeug-Ladeleistung. PV-Überschuss
-            wird, je nach Konfiguration, entweder dem Fahrzeug zugeteilt oder dem Speicher überlassen. Netz- und 
-            Speicherbezug wird, sofern nicht anders konfiguriert, vermieden.
+            Die Regelmodi der Speicherbeachtung erfolgen "passiv" durch Anpassung der Fahrzeug-Ladeleistung.
+            PV-Überschuss wird, je nach Konfiguration, entweder dem Fahrzeug zugeteilt oder dem Speicher überlassen.
+            Netz- und Speicherbezug wird, sofern nicht anders konfiguriert, vermieden.
           </openwb-base-alert>
           <openwb-base-button-group-input
             v-model="batMode"
@@ -41,18 +41,18 @@
             </template>
             <template #help>
               <div v-if="batMode === 'ev_mode'">
-                Der gesamte Überschuss wird in das EV geladen. Wird mehr Überschuss erzeugt 
-                als die Fahrzeuge abnehmen, findet auch eine Speicherladung statt.
+                Der gesamte Überschuss wird in das EV geladen. Wird mehr Überschuss erzeugt als die Fahrzeuge abnehmen,
+                findet auch eine Speicherladung statt.
               </div>
               <div v-if="batMode === 'bat_mode'">
-                Der gesamte Überschuss wird in den Speicher geladen. Ist die maximale Ladeleistung des
-                Speichers erreicht und es wird eingespeist, wird dieser Überschuss unter Beachtung der Einschaltschwelle
-                in die Fahrzeuge geladen.
+                Der gesamte Überschuss wird in den Speicher geladen. Ist die maximale Ladeleistung des Speichers
+                erreicht und es wird eingespeist, wird dieser Überschuss unter Beachtung der Einschaltschwelle in die
+                Fahrzeuge geladen.
               </div>
               <div v-if="batMode === 'min_soc_bat_mode'">
-                Verhält sich bis zum Erreichen des Mindest-SoC wie "Ladepriorität Speicher" und oberhalb 
-                des Mindest-SoC wie "Ladepriorität Fahrzeuge".
-                Die maximale Leistung der Speicherbe- und entladung lässt sich hier festlegen.
+                Verhält sich bis zum Erreichen des Mindest-SoC wie "Ladepriorität Speicher" und oberhalb des Mindest-SoC
+                wie "Ladepriorität Fahrzeuge". Die maximale Leistung der Speicherbe- und entladung lässt sich hier
+                festlegen.
               </div>
             </template>
           </openwb-base-button-group-input>
@@ -66,17 +66,19 @@
               required
               :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/min_bat_soc']"
               @update:model-value="
-                updateState('openWB/general/chargemode_config/pv_charging/min_bat_soc', $event),
-                updateState('openWB/general/chargemode_config/pv_charging/max_bat_soc',
-                ($store.state.mqtt['openWB/general/chargemode_config/pv_charging/min_bat_soc'] <
-                $store.state.mqtt['openWB/general/chargemode_config/pv_charging/max_bat_soc']) ?
-                $store.state.mqtt['openWB/general/chargemode_config/pv_charging/max_bat_soc'] :
-                $event)
+                (updateState('openWB/general/chargemode_config/pv_charging/min_bat_soc', $event),
+                updateState(
+                  'openWB/general/chargemode_config/pv_charging/max_bat_soc',
+                  $store.state.mqtt['openWB/general/chargemode_config/pv_charging/min_bat_soc'] <
+                    $store.state.mqtt['openWB/general/chargemode_config/pv_charging/max_bat_soc']
+                    ? $store.state.mqtt['openWB/general/chargemode_config/pv_charging/max_bat_soc']
+                    : $event,
+                ))
               "
             >
               <template #help>
-                Unterhalb des Mindest SoC wird vorhandener PV-Überschuss bevorzugt in den Speicher geladen.
-                Oberhalb des Mindest-SoC hat die Fahrzeugladung Priorität.
+                Unterhalb des Mindest-SoC wird vorhandener PV-Überschuss bevorzugt in den Speicher geladen. Oberhalb des
+                Mindest-SoC hat die Fahrzeugladung Priorität.
               </template>
             </openwb-base-range-input>
             <openwb-base-range-input
@@ -88,17 +90,19 @@
               required
               :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/max_bat_soc']"
               @update:model-value="
-                updateState('openWB/general/chargemode_config/pv_charging/max_bat_soc', $event),
-                updateState('openWB/general/chargemode_config/pv_charging/min_bat_soc',
-                ($store.state.mqtt['openWB/general/chargemode_config/pv_charging/max_bat_soc'] >
-                $store.state.mqtt['openWB/general/chargemode_config/pv_charging/min_bat_soc']) ?
-                $store.state.mqtt['openWB/general/chargemode_config/pv_charging/min_bat_soc'] :
-                $event)
+                (updateState('openWB/general/chargemode_config/pv_charging/max_bat_soc', $event),
+                updateState(
+                  'openWB/general/chargemode_config/pv_charging/min_bat_soc',
+                  $store.state.mqtt['openWB/general/chargemode_config/pv_charging/max_bat_soc'] >
+                    $store.state.mqtt['openWB/general/chargemode_config/pv_charging/min_bat_soc']
+                    ? $store.state.mqtt['openWB/general/chargemode_config/pv_charging/min_bat_soc']
+                    : $event,
+                ))
               "
             >
               <template #help>
-                Wird der Maximal-SoC überschritten, darf der Speicher bis zum Erreichen des Mindest-SoC
-                zur Fahrzeugladung mitbenutzt werden.
+                Wird der Maximal-SoC überschritten, darf der Speicher bis zum Erreichen des Mindest-SoC zur
+                Fahrzeugladung mitbenutzt werden.
               </template>
             </openwb-base-range-input>
             <openwb-base-alert
@@ -130,14 +134,18 @@
                 updateState('openWB/general/chargemode_config/pv_charging/bat_power_reserve_active', $event)
               "
             >
-              <template #help
+              <template
                 v-if="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/bat_power_reserve_active']"
+                #help
               >
                 ACHTUNG: Der hier eingestellte Wert darf die maximale Ladeleistung des Speichers nicht überschreiten!<br />
-                Befindet sich der Speicher unterhalb des Mindest-SoC, wird er mit der hier eingestellten 
+                Befindet sich der Speicher unterhalb des Mindest-SoC, wird er mit der hier eingestellten
                 Speicherladeleistung geladen. Verbleibender Überschuss wird in die Fahrzeuge geladen.
               </template>
-              <template #help v-else >
+              <template
+                v-else
+                #help
+              >
                 Befindet sich der Speicher unterhalb des Mindest-SoC, wird er priorisiert geladen.
               </template>
             </openwb-base-button-group-input>
@@ -175,15 +183,19 @@
                 updateState('openWB/general/chargemode_config/pv_charging/bat_power_discharge_active', $event)
               "
             >
-              <template #help
+              <template
                 v-if="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/bat_power_discharge_active']"
+                #help
               >
                 ACHTUNG: Der hier eingestellte Wert darf die maximale Entadeleistung des Speichers nicht überschreiten!
-                Wird der Maximal-SoC überschritten, wird die PV-Ladung mit der hier eingestellten Speicherentladeleistung 
-                unterstützt. Der Speicher darf bis zum Mindest-SoC entladen werden. Die erlaubte Entladeleistung des Speichers
-                wird dem Überschuss zum Erreichen der Einschaltschwelle hinzugerechnet.
+                Wird der Maximal-SoC überschritten, wird die PV-Ladung mit der hier eingestellten
+                Speicherentladeleistung unterstützt. Der Speicher darf bis zum Mindest-SoC entladen werden. Die erlaubte
+                Entladeleistung des Speichers wird dem Überschuss zum Erreichen der Einschaltschwelle hinzugerechnet.
               </template>
-              <template #help v-else>
+              <template
+                v-else
+                #help
+              >
                 Oberhalb des Maximal-SoC wird der Speicher nicht für die Fahrzeugladung mitgenutzt.
               </template>
             </openwb-base-button-group-input>
@@ -211,7 +223,10 @@
           </openwb-base-alert>
         </div>
         <div v-else>
-          <openwb-base-alert subtype="info" class="mb-3">
+          <openwb-base-alert
+            subtype="info"
+            class="mb-3"
+          >
             <p>
               Die aktive Speichersteuerung durch openWB basiert auf öffentlich zugänglichen Informationen zu den
               verschiedenen Speichersystemen. Diese können auch nicht herstellerseitig freigegebene Informationen
@@ -221,22 +236,22 @@
               entstehen.
             </p>
             <openwb-base-button-group-input
-            title="Hinweise zur aktiven Speichersteuerung gelesen und akzeptiert"
-            :buttons="[
-              { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
-              { buttonValue: true, text: 'Ja', class: 'btn-outline-success' },
-            ]"
-            :model-value="$store.state.mqtt['openWB/bat/config/bat_control_permitted']"
-            @update:model-value="updateState('openWB/bat/config/bat_control_permitted', $event)"
-          />
+              title="Hinweise zur aktiven Speichersteuerung gelesen und akzeptiert"
+              :buttons="[
+                { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
+                { buttonValue: true, text: 'Ja', class: 'btn-outline-success' },
+              ]"
+              :model-value="$store.state.mqtt['openWB/bat/config/bat_control_permitted']"
+              @update:model-value="updateState('openWB/bat/config/bat_control_permitted', $event)"
+            />
           </openwb-base-alert>
-          
+
           <div v-if="$store.state.mqtt['openWB/bat/config/bat_control_permitted'] === true">
             <openwb-base-heading class="mt-0"> Regelmodi der aktiven Speichersteuerung </openwb-base-heading>
             <openwb-base-alert subtype="info">
-              Die aktive Speichersteuerung kann Speicherentladung in allen Lademodi begrenzen - z.B. Vermeidung
-              von Netzbezug bei Sofortladen. Die erlaubte Entladeleistung des Speichers (Speicherbeachtung PV)
-              wird bei aktiver Speichersteuerung überschrieben, da Speicherentladung aktiv begrenzt wird.
+              Die aktive Speichersteuerung kann Speicherentladung in allen Lademodi begrenzen - z.B. Vermeidung von
+              Netzbezug bei Sofortladen. Die erlaubte Entladeleistung des Speichers (Speicherbeachtung PV) wird bei
+              aktiver Speichersteuerung überschrieben, da Speicherentladung aktiv begrenzt wird.
             </openwb-base-alert>
             <div v-if="$store.state.mqtt['openWB/bat/get/power_limit_controllable'] === true">
               <openwb-base-button-group-input
@@ -261,16 +276,17 @@
               >
                 <template #help>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'no_limit'">
-                    Der Speicher regelt eigenständig und wird nicht gesteuert. Es greift nur die konfigurierte Speicherbeachtung.
+                    Der Speicher regelt eigenständig und wird nicht gesteuert. Es greift nur die konfigurierte
+                    Speicherbeachtung.
                   </div>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'limit_stop'">
-                    Die Speicherentladung wird komplett gesperrt, sobald ein Fahrzeug lädt! Alle Verbraucher
-                    (Fahrzeuge, Hausverbrauch) werden durch Netzstrom versorgt.
+                    Die Speicherentladung wird komplett gesperrt, sobald ein Fahrzeug lädt! Alle Verbraucher (Fahrzeuge,
+                    Hausverbrauch) werden durch Netzstrom versorgt.
                   </div>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'limit_to_home_consumption'">
-                    Fahrzeugladung erzeugt Netzbezug statt Speicherentladung. Weitere Verbraucher (bspw. Hausverbrauch) werden durch
-                    den Speicher ausgeglichen. Kann die Entladung am Speicher nur komplett gesperrt werden, verhält sich diese
-                    Einstellung wie "volle Entladesperre".            
+                    Fahrzeugladung erzeugt Netzbezug statt Speicherentladung. Weitere Verbraucher (bspw. Hausverbrauch)
+                    werden durch den Speicher ausgeglichen. Kann die Entladung am Speicher nur komplett gesperrt werden,
+                    verhält sich diese Einstellung wie "volle Entladesperre".
                   </div>
                 </template>
               </openwb-base-button-group-input>
