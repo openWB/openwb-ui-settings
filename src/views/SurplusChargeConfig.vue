@@ -189,8 +189,8 @@
             :min="5"
             :max="180"
             :step="1"
-            :model-value="$store.state.mqtt['openWB/general/chargemode_config/phase_switch_delay']"
-            @update:model-value="updateState('openWB/general/chargemode_config/phase_switch_delay', $event)"
+            :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/phase_switch_delay']"
+            @update:model-value="updateState('openWB/general/chargemode_config/pv_charging/phase_switch_delay', $event)"
           >
             <template #help>
               Um zu viele Umschaltungen zu vermeiden, wird mindestens die hier eingestellte Zeit zwischen zwei
@@ -268,7 +268,9 @@ export default {
         "openWB/general/extern",
         "openWB/general/chargemode_config/pv_charging/control_range",
         "openWB/general/chargemode_config/pv_charging/feed_in_yield",
+        "openWB/general/chargemode_config/pv_charging/phase_switch_delay",
         "openWB/general/chargemode_config/pv_charging/switch_on_threshold",
+        "openWB/general/chargemode_config/pv_charging/retry_failed_phase_switches",
         "openWB/general/chargemode_config/pv_charging/switch_on_delay",
         "openWB/general/chargemode_config/pv_charging/switch_off_threshold",
         "openWB/general/chargemode_config/pv_charging/switch_off_delay",
