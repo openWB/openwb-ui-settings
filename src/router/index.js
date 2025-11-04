@@ -63,12 +63,12 @@ const routes = [
     component: () => import("../views/GeneralChargeConfig.vue"),
   },
   {
-    path: "/PVChargeConfig",
-    name: "PVChargeConfig",
+    path: "/SurplusChargeConfig",
+    name: "SurplusChargeConfig",
     meta: {
-      heading: "Ladeeinstellungen - PV-Laden",
+      heading: "Ladeeinstellungen - Überschuss-Laden",
     },
-    component: () => import("../views/PVChargeConfig.vue"),
+    component: () => import("../views/SurplusChargeConfig.vue"),
   },
   {
     path: "/ActiveBatControl",
