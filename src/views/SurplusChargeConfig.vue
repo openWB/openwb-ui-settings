@@ -156,7 +156,7 @@
             </template>
           </openwb-base-number-input>
           <hr />
-                    <openwb-base-button-group-input
+          <openwb-base-button-group-input
             title="Phasenumschaltung wiederholt anstoßen"
             :buttons="[
               {
