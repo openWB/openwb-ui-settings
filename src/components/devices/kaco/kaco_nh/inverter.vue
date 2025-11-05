@@ -7,7 +7,7 @@
       min="0"
       max="65535"
       :model-value="component.configuration.id"
-      @update:model-value="updateConfiguration($event, 'id')"
+      @update:model-value="updateConfiguration($event, 'configuration.id')"
     />
   </div>
 </template>
