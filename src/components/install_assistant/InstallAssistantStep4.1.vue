@@ -7,9 +7,15 @@
   >
     <template #help>
       <p>Diese openWB ist als "primary" konfiguriert und übernimmt die Regelung des Systems.</p>
+      <p class="font-weight-bold">Optional:</p>
+      <p> 
+        Wird die openWB nicht als Energiemanagementsystem für
+        steuerbare Verbrauchseinrichtungen (SteuVE) gemäß §14a EnWG verwendet,
+        <span class="font-weight-bold">kann dieser Schritt übersprungen werden.</span>
+      </p>
       <p>
-        Sofern openWB als Energiemanagementsystem für steuerbare Verbrauchseinrichtungen (SteuVE) gemäß §14a EnWG
-        verwendet werden soll, so ist für die VNB-Signaleingänge die entsprechende Hardware auszuwählen.
+        Soll die openWB als Energiemanagementsystem für steuerbare Verbrauchseinrichtungen (SteuVE) gemäß §14a EnWG
+        verwendet werden, so ist für die VNB-Signaleingänge die entsprechende Hardware auszuwählen.
       </p>
       <p class="font-weight-bold">Änderungen werden nur durch Klicken auf Speichern wirksam!</p>
     </template>
