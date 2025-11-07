@@ -220,18 +220,20 @@
           >
             <template #help>
               <p>
-                Alle Einstellungen die unter Einstellungen → Konfiguration → Fahrzeuge → Lade-Profil für das jeweilige
-                Fahrzeug konfiguriert sind, gelten bei aktiver Einstellung als persistent. Das heißt, diese werden bei
-                jedem Abstecken des jeweiligen Fahrzeugs neu geladen. <br />
-                Änderungen an den Ladeeinstellungen, die direkt am Ladepunkt (erste Seite des Webinterfaces oder
-                7-Zoll-Bildschirm der openWB, wenn vorhanden) vorgenommen werden gelten als temporär. Das heißt, diese
-                bleiben nur bis zum nächsten Abstecken erhalten.
+                Bei Auswahl "An" werden Änderungen am Ladepunkt über die Hauptbedienseite oder den Touchscreen der
+                openWB als "temporäre" Eingaben behandelt. Dies erlaubt z.B. das schnelle, temporäre Umschalten des
+                Lademodus oder deren Detaileinstellungen für eine unplanmäßige Ladeanforderung (Bsp. Voreinstellung ->
+                PV-Laden / unplanmäßig -> Sofort-Laden für Laden wegen unplanmäßigen Termins).
+                <br />
+                Alle Einstellungen, die unter Einstellungen → Konfiguration → Fahrzeuge → Lade-Profil für das jeweilige
+                Fahrzeug konfiguriert sind, gelten als persistent (dauerhaft). Diese werden bei jedem Abstecken des
+                jeweiligen Fahrzeugs neu geladen - sind also Voreinstellungen (default).
               </p>
               <p>
-                Bei deaktivierter Einstellung sind sowhl die Einstellungen unter unter Einstellungen → Konfiguration →
-                Fahrzeuge → Lade-Profil als direkt am Ladepunkt persistent.
+                Bei Auswahl "Aus" werden Änderungen am Ladepunkt über die Hauptbedienseite oder den Touchscreen der
+                openWB direkt als "persistente" (dauerhafte) Eingaben behandelt.
               </p>
-              <p>Eine ausführliche Erläuterung mit Beispielen findet Ihr im Wiki:</p>
+              <p>Eine ausführliche Erläuterung mit Beispielen findet Ihr im openWB-DokuWiki.</p>
             </template>
           </openwb-base-button-group-input>
           <openwb-base-heading class="mt-0"> Hauptseite </openwb-base-heading>
