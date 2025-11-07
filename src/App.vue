@@ -4,10 +4,10 @@
   </header>
   <div
     role="main"
-    :class="['container', $route.name === 'ChargeLog' ? 'charge-log-container' : '']"
+    class="container"
   >
     <div id="content">
-      <h1 v-if="$route.name !== 'ChargeLog'">{{ $route.meta.heading }}</h1>
+      <h1>{{ $route.meta.heading }}</h1>
       <router-view
         @save="saveValues"
         @reset="resetValues"
@@ -325,23 +325,12 @@ export default {
 }
 
 @media (min-width: 1600px) {
-  .charge-log-container {
-    max-width: 1600px !important;
-  }
-}
-@media (min-width: 2000px) {
-  .charge-log-container {
-    max-width: 2000px !important;
-  }
-}
-@media (min-width: 2500px) {
-  .charge-log-container {
-    max-width: 2500px !important;
-  }
-}
-@media (min-width: 3000px) {
-  .charge-log-container {
-    max-width: 3000px !important;
+  .container,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container-xl {
+    max-width: 1500px !important;
   }
 }
 </style>
