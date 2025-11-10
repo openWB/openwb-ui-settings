@@ -52,7 +52,7 @@ export default {
       this.$emit("switchPage", 10);
     },
     previousPage() {
-      this.$emit("switchPage", this.$store.state.mqtt["openWB/general/extern"] ? 4 : 8);
+      this.$emit("switchPage", this.$store.state.mqtt["openWB/general/extern"] ? 20 : 8);
     },
     endAssistant() {
       this.$emit("endAssistant");
