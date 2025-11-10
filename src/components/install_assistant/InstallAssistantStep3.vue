@@ -48,7 +48,7 @@ export default {
   }),
   methods: {
     nextPage() {
-      this.$emit("switchPage", this.$store.state.mqtt["openWB/general/extern"] ? 4 : 4.1);
+      this.$emit("switchPage", this.$store.state.mqtt["openWB/general/extern"] ? 20 : 4);
     },
     previousPage() {
       this.$emit("switchPage", 2);
