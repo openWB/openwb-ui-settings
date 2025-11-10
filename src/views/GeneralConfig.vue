@@ -193,7 +193,7 @@
       </div>
       <openwb-base-card
         v-if="!installAssistantActive"
-        title="Darstellung & Bedienung"
+        title="Bedienung & Darstellung"
       >
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
           <openwb-base-alert subtype="info">

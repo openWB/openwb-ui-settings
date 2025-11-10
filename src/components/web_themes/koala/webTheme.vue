@@ -132,7 +132,7 @@ export default {
       slideLabels: {
         daily_totals: "Tageswerte",
         history_chart: "Verlaufsdiagramm",
-        flow_diagram: "Energieflussdiagramm",
+        flow_diagram: "Energiefluss",
       },
     };
   },
