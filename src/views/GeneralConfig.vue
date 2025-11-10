@@ -233,7 +233,14 @@
                 Bei Auswahl "Aus" werden Änderungen am Ladepunkt über die Hauptseite oder den Touchscreen der
                 openWB direkt als "persistente" (dauerhafte) Eingaben behandelt.
               </p>
-              <p>Eine ausführliche Erläuterung mit Beispielen findet Ihr im openWB-DokuWiki.</p>
+              <p>Eine ausführliche Erläuterung mit Beispielen findet Ihr im
+              <a
+                  href="https://wiki.openwb.de/doku.php?id=openwb:software:bedienung:temporaere-persistente-ladeprofile"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  openWB-DokuWiki
+                </a></p>
             </template>
           </openwb-base-button-group-input>
           <openwb-base-heading class="mt-0"> Hauptseite </openwb-base-heading>
