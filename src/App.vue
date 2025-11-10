@@ -323,4 +323,14 @@ export default {
 .bg-pink {
   background-color: var(--pink) !important;
 }
+
+@media (min-width: 1600px) {
+  .container,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container-xl {
+    max-width: 1500px !important;
+  }
+}
 </style>
