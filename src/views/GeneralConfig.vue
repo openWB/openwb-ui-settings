@@ -220,7 +220,7 @@
           >
             <template #help>
               <p>
-                Bei Auswahl "An" werden Änderungen am Ladepunkt über die Hauptbedienseite oder den Touchscreen der
+                Bei Auswahl "An" werden Änderungen am Ladepunkt über die Hauptseite oder den Touchscreen der
                 openWB als "temporäre" Eingaben behandelt. Dies erlaubt z.B. das schnelle, temporäre Umschalten des
                 Lademodus oder deren Detaileinstellungen für eine unplanmäßige Ladeanforderung (Bsp. Voreinstellung ->
                 PV-Laden / unplanmäßig -> Sofort-Laden für Laden wegen unplanmäßigen Termins).
@@ -230,7 +230,7 @@
                 jeweiligen Fahrzeugs neu geladen - sind also Voreinstellungen (default).
               </p>
               <p>
-                Bei Auswahl "Aus" werden Änderungen am Ladepunkt über die Hauptbedienseite oder den Touchscreen der
+                Bei Auswahl "Aus" werden Änderungen am Ladepunkt über die Hauptseite oder den Touchscreen der
                 openWB direkt als "persistente" (dauerhafte) Eingaben behandelt.
               </p>
               <p>Eine ausführliche Erläuterung mit Beispielen findet Ihr im openWB-DokuWiki.</p>
