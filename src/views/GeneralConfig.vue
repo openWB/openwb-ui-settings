@@ -220,27 +220,29 @@
           >
             <template #help>
               <p>
-                Bei Auswahl "An" werden Änderungen am Ladepunkt über die Hauptseite oder den Touchscreen der
-                openWB als "temporäre" Eingaben behandelt. Dies erlaubt z.B. das schnelle, temporäre Umschalten des
-                Lademodus oder deren Detaileinstellungen für eine unplanmäßige Ladeanforderung (Bsp. Voreinstellung ->
-                PV-Laden / unplanmäßig -> Sofort-Laden für Laden wegen unplanmäßigen Termins).
+                Bei Auswahl "Ja" werden Änderungen am Ladepunkt über die Hauptseite oder den Touchscreen der openWB als
+                "temporäre" Eingaben behandelt. Dies erlaubt z.B. das schnelle, temporäre Umschalten des Lademodus oder
+                deren Detaileinstellungen für eine unplanmäßige Ladeanforderung (Bsp. Voreinstellung -> PV-Laden /
+                unplanmäßig -> Sofort-Laden für Laden wegen unplanmäßigen Termins).
                 <br />
                 Alle Einstellungen, die unter Einstellungen → Konfiguration → Fahrzeuge → Lade-Profil für das jeweilige
                 Fahrzeug konfiguriert sind, gelten als persistent (dauerhaft). Diese werden bei jedem Abstecken des
                 jeweiligen Fahrzeugs neu geladen - sind also Voreinstellungen (default).
               </p>
               <p>
-                Bei Auswahl "Aus" werden Änderungen am Ladepunkt über die Hauptseite oder den Touchscreen der
-                openWB direkt als "persistente" (dauerhafte) Eingaben behandelt.
+                Bei Auswahl "Nein" werden Änderungen am Ladepunkt über die Hauptseite oder den Touchscreen der openWB
+                direkt als "persistente" (dauerhafte) Eingaben behandelt.
               </p>
-              <p>Eine ausführliche Erläuterung mit Beispielen findet Ihr im
-              <a
+              <p>
+                Eine ausführliche Erläuterung mit Beispielen findet Ihr im
+                <a
                   href="https://wiki.openwb.de/doku.php?id=openwb:software:bedienung:temporaere-persistente-ladeprofile"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   openWB-DokuWiki
-                </a></p>
+                </a>
+              </p>
             </template>
           </openwb-base-button-group-input>
           <openwb-base-heading class="mt-0"> Hauptseite </openwb-base-heading>
