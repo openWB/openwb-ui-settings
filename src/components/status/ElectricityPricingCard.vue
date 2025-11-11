@@ -75,16 +75,60 @@ export default {
         "openWB/optional/ep/grid_fee/get/fault_state",
         "openWB/optional/ep/grid_fee/get/fault_str",
         "openWB/optional/ep/get/prices",
+        "openWB/optional/ep/flexible_tariff/get/prices",
+        "openWB/optional/ep/grid_fee/get/prices",
       ],
       chartDatasets: {
         datasets: [
+          {
+            label: "Gesamtpreis",
+            unit: "ct/kWh",
+            type: "line",
+            stepped: true,
+            borderColor: "rgba(255, 0, 0, 0.9)",
+            backgroundColor: "rgba(255, 10, 13, 0.3)",
+            fill: false,
+            pointStyle: "circle",
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            cubicInterpolationMode: "monotone",
+            hidden: false,
+            borderWidth: 1,
+            data: undefined,
+            yAxisID: "y",
+            parsing: {
+              xAxisKey: "timestamp",
+              yAxisKey: "price",
+            },
+          },
           {
             label: "Stromtarif",
             unit: "ct/kWh",
             type: "line",
             stepped: true,
-            borderColor: "rgba(255, 0, 0, 0.7)",
-            backgroundColor: "rgba(255, 10, 13, 0.3)",
+            borderColor: "rgba(255, 0, 0, 0.4)",
+            backgroundColor: "rgba(255, 10, 13, 0.15)",
+            fill: false,
+            pointStyle: "circle",
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            cubicInterpolationMode: "monotone",
+            hidden: false,
+            borderWidth: 1,
+            data: undefined,
+            yAxisID: "y",
+            parsing: {
+              xAxisKey: "timestamp",
+              yAxisKey: "price",
+            },
+          },
+          {
+            label: "Netzentgelt",
+            unit: "ct/kWh",
+            type: "line",
+            stepped: true,
+            borderColor: "rgba(255, 0, 0, 0.4)",
+            backgroundColor: "rgba(255, 10, 13, 0.15)",
             fill: false,
             pointStyle: "circle",
             pointRadius: 0,
@@ -110,7 +154,14 @@ export default {
             enabled: true,
           },
           legend: {
-            display: false,
+            display: true,
+            position: 'top',
+            labels: {
+              filter: function(legendItem, chartData) {
+                // Nur sichtbare Datasets in der Legende anzeigen
+                return !chartData.datasets[legendItem.datasetIndex].hidden;
+              }
+            }
           },
         },
         elements: {
@@ -194,6 +245,9 @@ export default {
       return this.chartDataObject.datasets[0].data != undefined;
     },
     chartDataObject() {
+      const dataObject = JSON.parse(JSON.stringify(this.chartDatasets)); // Deep copy
+      
+      // Hauptpreis-Feed (Gesamtpreis)
       if (this.$store.state.mqtt["openWB/optional/ep/get/prices"]) {
         var chartEntries = this.$store.state.mqtt["openWB/optional/ep/get/prices"];
         var myData = [];
@@ -219,9 +273,67 @@ export default {
           timestamp: nextTimestamp,
           price: lastData.price,
         });
+        dataObject.datasets[0].data = myData;
       }
-      const dataObject = this.chartDatasets;
-      dataObject.datasets[0].data = myData;
+
+      // Stromtarif-Preise
+      if (this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/provider"]?.type && 
+          this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/get/prices"]) {
+        var flexibleTariffEntries = this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/get/prices"];
+        var flexibleTariffData = [];
+        for (const [key, value] of Object.entries(flexibleTariffEntries)) {
+          flexibleTariffData.push({
+            timestamp: key * 1000,
+            price: value * 100000,
+          });
+        }
+        // repeat last dataset
+        if (flexibleTariffData.length > 0) {
+          const lastData = flexibleTariffData.slice(-1)[0];
+          let nextTimestamp = this.endOfToday;
+          if (flexibleTariffData.length > 1) {
+            const previousData = flexibleTariffData.slice(-2, -1)[0];
+            nextTimestamp = lastData.timestamp + lastData.timestamp - previousData.timestamp - 1;
+          }
+          flexibleTariffData.push({
+            timestamp: nextTimestamp,
+            price: lastData.price,
+          });
+        }
+        dataObject.datasets[1].data = flexibleTariffData;
+      } else {
+        dataObject.datasets[1].hidden = true;
+      }
+
+      // Netzentgelt-Preise
+      if (this.$store.state.mqtt["openWB/optional/ep/grid_fee/provider"]?.type && 
+          this.$store.state.mqtt["openWB/optional/ep/grid_fee/get/prices"]) {
+        var gridFeeEntries = this.$store.state.mqtt["openWB/optional/ep/grid_fee/get/prices"];
+        var gridFeeData = [];
+        for (const [key, value] of Object.entries(gridFeeEntries)) {
+          gridFeeData.push({
+            timestamp: key * 1000,
+            price: value * 100000,
+          });
+        }
+        // repeat last dataset
+        if (gridFeeData.length > 0) {
+          const lastData = gridFeeData.slice(-1)[0];
+          let nextTimestamp = this.endOfToday;
+          if (gridFeeData.length > 1) {
+            const previousData = gridFeeData.slice(-2, -1)[0];
+            nextTimestamp = lastData.timestamp + lastData.timestamp - previousData.timestamp - 1;
+          }
+          gridFeeData.push({
+            timestamp: nextTimestamp,
+            price: lastData.price,
+          });
+        }
+        dataObject.datasets[2].data = gridFeeData;
+      } else {
+        dataObject.datasets[2].hidden = true;
+      }
+
       return dataObject;
     },
     currentPrice() {
