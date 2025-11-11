@@ -23,7 +23,7 @@
           v-if="chartDataRead"
           ref="myChart"
           :data="chartDataObject"
-          :options="chartOptions"
+          :options="dynamicChartOptions"
         />
       </div>
     </openwb-base-card>
@@ -236,13 +236,14 @@ export default {
       const flexible_tariff_provider = this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/provider"];
       const grid_fee_provider = this.$store.state.mqtt["openWB/optional/ep/grid_fee/provider"];
 
-      if (flexible_tariff_provider !== undefined || grid_fee_provider !== undefined) {
-        return (flexible_tariff_provider && flexible_tariff_provider.type) || (grid_fee_provider && grid_fee_provider.type);
-      }
-      return false;
+      // Zeige die Karte an, wenn mindestens ein Provider konfiguriert ist (auch mit Fehlern)
+      return (flexible_tariff_provider && flexible_tariff_provider.type) || 
+             (grid_fee_provider && grid_fee_provider.type);
     },
     chartDataRead() {
-      return this.chartDataObject.datasets[0].data != undefined;
+      const datasets = this.chartDataObject.datasets;
+      // Prüfe, ob mindestens ein Dataset Daten hat
+      return datasets.some(dataset => dataset.data !== undefined && !dataset.hidden);
     },
     chartDataObject() {
       const dataObject = JSON.parse(JSON.stringify(this.chartDatasets)); // Deep copy
@@ -388,6 +389,16 @@ export default {
       }
       
       return providers.join('<br>') || 'Variable Preise';
+    },
+    showLegend() {
+      const flexibleTariffConfigured = this.$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider']?.type;
+      const gridFeeConfigured = this.$store.state.mqtt['openWB/optional/ep/grid_fee/provider']?.type;
+      return flexibleTariffConfigured && gridFeeConfigured;
+    },
+    dynamicChartOptions() {
+      const options = JSON.parse(JSON.stringify(this.chartOptions)); // Deep copy
+      options.plugins.legend.display = this.showLegend;
+      return options;
     },
 
   },
