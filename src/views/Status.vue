@@ -61,7 +61,7 @@ import BatterySumCard from "../components/status/BatterySumCard.vue";
 import BatteryCard from "../components/status/BatteryCard.vue";
 import IoDeviceCard from "../components/status/IoDeviceCard.vue";
 import VehicleCard from "../components/status/VehicleCard.vue";
-import FlexibleTariffCard from "../components/status/ElectricityPricingCard.vue";
+import ElectricityPricingCard from "../components/status/ElectricityPricingCard.vue";
 import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
@@ -76,7 +76,7 @@ export default {
     BatteryCard,
     IoDeviceCard,
     VehicleCard,
-    FlexibleTariffCard,
+    ElectricityPricingCard,
   },
   mixins: [ComponentState],
   data() {

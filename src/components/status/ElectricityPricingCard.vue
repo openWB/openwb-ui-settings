@@ -2,20 +2,22 @@
   <status-card
     v-if="electricityPricingConfigured"
     subtype="secondary"
-    :state="$store.state.mqtt[baseTopic + '/get/fault_state']"
-    :state-message="$store.state.mqtt[baseTopic + '/get/fault_str']"
+    :state="combinedState"
+    :state-message="combinedStateMessage"
   >
     <template #header-left>
       <font-awesome-icon :icon="['fas', 'ranking-star']" />
-      Variabler Stromtarif
+      Variable Strompreise
     </template>
     <template #header-right>{{ currentPrice }}&nbsp;ct/kWh</template>
     <openwb-base-card
-      :title="'Anbieter: ' + $store.state.mqtt[baseTopic + '/provider'].name"
       subtype="white"
       body-bg="white"
       class="py-1 mb-2"
     >
+      <template #header>
+        <span v-html="providersTitle"></span>
+      </template>
       <div class="openwb-chart">
         <chartjs-line
           v-if="chartDataRead"
@@ -192,8 +194,8 @@ export default {
       return this.chartDataObject.datasets[0].data != undefined;
     },
     chartDataObject() {
-      if (this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/get/prices"]) {
-        var chartEntries = this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/get/prices"];
+      if (this.$store.state.mqtt["openWB/optional/ep/get/prices"]) {
+        var chartEntries = this.$store.state.mqtt["openWB/optional/ep/get/prices"];
         var myData = [];
         // proper scaling:
         // timestamp: seconds -> milliseconds
@@ -236,6 +238,46 @@ export default {
         return "openWB/optional/ep/flexible_tariff";
       },
     },
+    combinedState() {
+      const flexibleTariffState = this.$store.state.mqtt['openWB/optional/ep/flexible_tariff/get/fault_state'] || 0;
+      const gridFeeState = this.$store.state.mqtt['openWB/optional/ep/grid_fee/get/fault_state'] || 0;
+      return Math.max(flexibleTariffState, gridFeeState);
+    },
+    combinedStateMessage() {
+      const messages = [];
+      
+      // Flexible Tariff
+      if (this.$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider']?.type) {
+        const providerName = this.$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'].name || 'Stromtarif';
+        const state = this.$store.state.mqtt['openWB/optional/ep/flexible_tariff/get/fault_state'] || 0;
+        const message = state > 0 ? this.$store.state.mqtt['openWB/optional/ep/flexible_tariff/get/fault_str'] : 'Kein Fehler.';
+        messages.push(`Stromtarif: ${message}`);
+      }
+      
+      // Grid Fee
+      if (this.$store.state.mqtt['openWB/optional/ep/grid_fee/provider']?.type) {
+        const providerName = this.$store.state.mqtt['openWB/optional/ep/grid_fee/provider'].name || 'Netzentgelt';
+        const state = this.$store.state.mqtt['openWB/optional/ep/grid_fee/get/fault_state'] || 0;
+        const message = state > 0 ? this.$store.state.mqtt['openWB/optional/ep/grid_fee/get/fault_str'] : 'Kein Fehler.';
+        messages.push(`Netzentgelt: ${message}`);
+      }
+      
+      return messages.length > 0 ? messages.join('\n') : undefined;
+    },
+    providersTitle() {
+      const providers = [];
+      
+      if (this.$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider']?.type) {
+        providers.push(`Stromtarif: ${this.$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'].name}`);
+      }
+      
+      if (this.$store.state.mqtt['openWB/optional/ep/grid_fee/provider']?.type) {
+        providers.push(`Netzentgelt: ${this.$store.state.mqtt['openWB/optional/ep/grid_fee/provider'].name}`);
+      }
+      
+      return providers.join('<br>') || 'Variable Preise';
+    },
+
   },
   methods: {
     formatTickLabel(timeValue) {
