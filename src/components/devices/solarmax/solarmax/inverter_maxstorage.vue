@@ -1,6 +1,8 @@
 <template>
   <div class="device-solarmax-inverter-maxstorage">
-    <openwb-base-heading> Einstellungen für Solarmax MAX.STORAGE / MAX.STORAGE Ultimate Wechselrichter </openwb-base-heading>
+    <openwb-base-heading>
+      Einstellungen für Solarmax MAX.STORAGE / MAX.STORAGE Ultimate Wechselrichter
+    </openwb-base-heading>
     <openwb-base-number-input
       title="Modbus ID"
       required
