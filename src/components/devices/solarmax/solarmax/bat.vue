@@ -3,9 +3,8 @@
     <openwb-base-alert subtype="info">
       Solarmax MAX.STORAGE / MAX.STORAGE Ultimate Batteriespeicher sind Teil eines Hybridsystems. Daher muss auch eine
       Komponente Wechselrichter angelegt werden.<br />
-      Die aktive Speichersteuerung ist ab Solarmax Software Version 3.4.4 verfügbar.
-      Zur Nutzung muss die Funktion "Connectivity+" durch den Solarmax Support (nicht openWB Support)
-      freigeschaltet werden.
+      Die aktive Speichersteuerung ist ab Solarmax Software Version 3.4.4 verfügbar. Zur Nutzung muss die Funktion
+      "Connectivity+" durch den Solarmax Support (nicht openWB Support) freigeschaltet werden.
     </openwb-base-alert>
     <openwb-base-number-input
       title="Modbus ID"
