@@ -1112,17 +1112,8 @@ export default {
         }
         let myData = {};
         JSON.parse(JSON.stringify(chartEntries)).forEach((row) => {
-          let roundedTimestamp = row.timestamp * 1000 - ((row.timestamp * 1000) % (60 * 60 * 1000));
-          if (this.chartRange === "day") {
-            // Only store the first value per hour for daily charts
-            if (!myData[roundedTimestamp]) {
-              let newRow = { ...row, timestamp: roundedTimestamp };
-              myData[roundedTimestamp] = newRow;
-            }
-          } else {
-            row.timestamp = row.timestamp * 1000;
-            myData[row.timestamp] = row;
-          }
+          row.timestamp = row.timestamp * 1000;
+          myData[row.timestamp] = row;
         });
         return Object.values(myData);
       }
