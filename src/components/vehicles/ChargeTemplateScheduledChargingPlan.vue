@@ -217,7 +217,8 @@
     <openwb-base-alert
       v-if="
         plan.et_active == true &&
-        (!$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'] || !$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'].type)
+        (!$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'] ||
+          !$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'].type)
       "
       subtype="danger"
     >
