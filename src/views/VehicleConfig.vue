@@ -1279,8 +1279,8 @@
               </openwb-base-number-input>
               <openwb-base-alert
                 v-if="
-                  !$store.state.mqtt['openWB/optional/et/provider'] ||
-                  !$store.state.mqtt['openWB/optional/et/provider'].type
+                  !$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'] ||
+                  !$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'].type
                 "
                 subtype="warning"
               >
@@ -1452,7 +1452,7 @@ export default {
       mqttTopicsToSubscribe: [
         "openWB/general/extern",
         "openWB/optional/dc_charging",
-        "openWB/optional/et/provider",
+        "openWB/optional/ep/flexible_tariff/provider",
         "openWB/optional/rfid/active",
         "openWB/vehicle/template/ev_template/+",
         "openWB/vehicle/template/charge_template/+",

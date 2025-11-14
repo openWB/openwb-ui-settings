@@ -217,7 +217,7 @@
     <openwb-base-alert
       v-if="
         plan.et_active == true &&
-        (!$store.state.mqtt['openWB/optional/et/provider'] || !$store.state.mqtt['openWB/optional/et/provider'].type)
+        (!$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'] || !$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'].type)
       "
       subtype="danger"
     >
@@ -386,7 +386,7 @@ export default {
   emits: ["update:modelValue", "sendCommand"],
   data() {
     return {
-      mqttTopicsToSubscribe: ["openWB/optional/et/provider"],
+      mqttTopicsToSubscribe: ["openWB/optional/ep/flexible_tariff/provider"],
       showRemoveModal: false,
     };
   },

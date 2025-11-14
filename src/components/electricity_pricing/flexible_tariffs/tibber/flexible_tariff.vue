@@ -1,5 +1,5 @@
 <template>
-  <div class="electricity-tariff-tibber">
+  <div class="flexible-tariff-tibber">
     <openwb-base-alert subtype="info">
       Ihren persönlichen Tibber-Token erhalten Sie über die
       <a
@@ -18,37 +18,37 @@
       ref="tokenInput"
       title="Token"
       required
-      :model-value="electricityTariff.configuration.token"
+      :model-value="flexibleTariff.configuration.token"
       @update:model-value="updateConfiguration($event, 'configuration.token')"
     />
     <openwb-base-button-input
       title="Home-IDs abrufen"
       button-text="Jetzt abrufen"
       subtype="success"
-      :disabled="!electricityTariff.configuration.token?.length"
+      :disabled="!flexibleTariff.configuration.token?.length"
       @button-clicked="getTibberHomeList"
     />
     <openwb-base-select-input
       title="Verfügbare Home-IDs"
       :options="tibberHomeList"
-      :model-value="electricityTariff.configuration.home_id"
+      :model-value="flexibleTariff.configuration.home_id"
       @update:model-value="updateConfiguration($event, 'configuration.home_id')"
     />
     <openwb-base-text-input
       title="Home-ID"
       required
-      :model-value="electricityTariff.configuration.home_id"
+      :model-value="flexibleTariff.configuration.home_id"
       @update:model-value="updateConfiguration($event, 'configuration.home_id')"
     />
   </div>
 </template>
 
 <script>
-import ElectricityTariffConfigMixin from "../ElectricityTariffConfigMixin.vue";
+import FlexibleTariffConfigMixin from "../FlexibleTariffConfigMixin.vue";
 
 export default {
-  name: "ElectricityTariffTibber",
-  mixins: [ElectricityTariffConfigMixin],
+  name: "FlexibleTariffTibber",
+  mixins: [FlexibleTariffConfigMixin],
   data() {
     return {
       tibberAPI: "https://api.tibber.com/v1-beta/gql",
@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     async getTibberHomeList() {
-      if (this.electricityTariff.configuration.token === null) {
+      if (this.flexibleTariff.configuration.token === null) {
         return;
       }
       const homeQuery =
@@ -65,7 +65,7 @@ export default {
       try {
         const response = await this.axios.post(this.tibberAPI, homeQuery, {
           headers: {
-            Authorization: "Bearer " + this.electricityTariff.configuration.token,
+            Authorization: "Bearer " + this.flexibleTariff.configuration.token,
             "Content-Type": "application/json",
           },
         });
@@ -80,7 +80,7 @@ export default {
           text = text + `, ${home.address.postalCode} ${home.address.city}, ${home.address.country}`;
           return { value: home.id, text: text };
         });
-        if (!this.electricityTariff.configuration.home_id) {
+        if (!this.flexibleTariff.configuration.home_id) {
           this.updateConfiguration(this.tibberHomeList[0].value, "configuration.home_id");
         }
         this.$root.postClientMessage("Home IDs erfolgreich abgerufen.", "success");

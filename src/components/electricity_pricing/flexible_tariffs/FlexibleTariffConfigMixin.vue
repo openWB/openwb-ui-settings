@@ -1,7 +1,7 @@
 <script>
 export default {
   props: {
-    electricityTariff: { type: Object, required: true },
+    flexibleTariff: { type: Object, required: true },
   },
   emits: ["update:configuration"],
   methods: {
