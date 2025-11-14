@@ -11,8 +11,8 @@
     subtype="info"
   >
     <font-awesome-icon :icon="['fas', 'people-group']" />
-    Das ausgewählte Modul "{{ flexibleTariff.name }}" wird in unserer Community gepflegt. Rückfragen oder Probleme
-    bitte im Forum diskutieren.
+    Das ausgewählte Modul "{{ flexibleTariff.name }}" wird in unserer Community gepflegt. Rückfragen oder Probleme bitte
+    im Forum diskutieren.
   </openwb-base-alert>
   <openwb-base-heading> Einstellungen für Modul "{{ flexibleTariff.name }}" </openwb-base-heading>
   <component

@@ -70,7 +70,8 @@
           </openwb-base-heading>
           <openwb-base-alert
             v-if="
-              $store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'] && $store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'].type
+              $store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'] &&
+              $store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'].type
             "
             subtype="info"
           >
@@ -113,8 +114,9 @@
             günstigsten Zeiten geladen.<br />
             Wenn keine Preise abgefragt werden können oder "Preisbasiertes Laden" abgewählt wurde, wird in Modus Eco
             immer geladen und bei Zielladen zunächst mit PV-Überschuss und zum Erreichen des Zieltermins mit Netzstrom.
-  Wenn sowohl dynamische Stromtarife als auch dynamische Netzentgelte konfiguriert sind, werden beide zum Gesamt-Strompreis addiert. Ist nur eines von beiden konfiguriert, wird dieses als Gesamtpreis verwendet.<br />
-</openwb-base-alert>
+            Wenn sowohl dynamische Stromtarife als auch dynamische Netzentgelte konfiguriert sind, werden beide zum
+            Gesamt-Strompreis addiert. Ist nur eines von beiden konfiguriert, wird dieses als Gesamtpreis verwendet.<br />
+          </openwb-base-alert>
           <openwb-base-heading> Dynamische Stromtarife </openwb-base-heading>
           <openwb-base-select-input
             class="mb-2"
@@ -129,7 +131,8 @@
           />
           <div
             v-if="
-              $store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'] && $store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'].type
+              $store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'] &&
+              $store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'].type
             "
           >
             <openwb-flexible-tariff-proxy
@@ -151,7 +154,8 @@
           />
           <div
             v-if="
-              $store.state.mqtt['openWB/optional/ep/grid_fee/provider'] && $store.state.mqtt['openWB/optional/ep/grid_fee/provider'].type
+              $store.state.mqtt['openWB/optional/ep/grid_fee/provider'] &&
+              $store.state.mqtt['openWB/optional/ep/grid_fee/provider'].type
             "
           >
             <openwb-grid-fee-proxy
@@ -262,9 +266,7 @@ export default {
   },
   methods: {
     getFlexibleTariffDefaultConfiguration(flexibleTariffType) {
-      const flexibleTariffDefaults = this.flexibleTariffList.find(
-        (element) => element.value == flexibleTariffType,
-      );
+      const flexibleTariffDefaults = this.flexibleTariffList.find((element) => element.value == flexibleTariffType);
       if (Object.prototype.hasOwnProperty.call(flexibleTariffDefaults, "defaults")) {
         return { ...flexibleTariffDefaults.defaults };
       }
@@ -273,12 +275,13 @@ export default {
     },
     updateSelectedFlexibleTariff($event) {
       this.updateState("openWB/optional/ep/flexible_tariff/provider", $event, "type");
-      this.updateState("openWB/optional/ep/flexible_tariff/provider", this.getFlexibleTariffDefaultConfiguration($event));
+      this.updateState(
+        "openWB/optional/ep/flexible_tariff/provider",
+        this.getFlexibleTariffDefaultConfiguration($event),
+      );
     },
     getGridFeeDefaultConfiguration(gridFeeType) {
-      const gridFeeDefaults = this.gridFeeList.find(
-        (element) => element.value == gridFeeType,
-      );
+      const gridFeeDefaults = this.gridFeeList.find((element) => element.value == gridFeeType);
       if (gridFeeDefaults && Object.prototype.hasOwnProperty.call(gridFeeDefaults, "defaults")) {
         return { ...gridFeeDefaults.defaults };
       }
