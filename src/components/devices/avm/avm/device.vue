@@ -12,8 +12,8 @@
       title="Benutzername"
       subtype="user"
       required
-      :model-value="device.configuration.user"
-      @update:model-value="updateConfiguration($event, 'configuration.user')"
+      :model-value="device.configuration.username"
+      @update:model-value="updateConfiguration($event, 'configuration.username')"
     />
     <openwb-base-text-input
       title="Passwort"
