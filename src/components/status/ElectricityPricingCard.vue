@@ -403,6 +403,8 @@ export default {
     dynamicChartOptions() {
       const options = JSON.parse(JSON.stringify(this.chartOptions)); // Deep copy
       options.plugins.legend.display = this.showLegend;
+      // Setze den korrekten Callback für die Tick-Labels
+      options.scales.x.ticks.callback = this.formatTickLabel;
       return options;
     },
   },
