@@ -1,26 +1,29 @@
 <template>
   <openwb-io-single-pattern
+    v-if="ioDevice && value && value.length > 0 && ioDevice.type !== 'eebus'"
     v-model="value"
-    :contacts="ioDevice?.input?.digital"
+    :contacts="ioDevice?.input?.digital || {}"
   />
   <openwb-base-number-input
+    v-if="ioAction?.configuration && ioDevice && ioDevice.type !== 'eebus'"
     title="maximale Bezugsleistung"
     unit="kW"
     min="0"
     step="0.01"
     required
-    :disabled="Object.keys(value[0].matrix).length > 0 ? false : true"
-    :model-value="ioAction?.configuration.max_import_power / 1000"
+    :disabled="!isPatternConfigured"
+    :model-value="(ioAction.configuration.max_import_power || 0) / 1000"
     @update:model-value="updateConfiguration($event * 1000, 'configuration.max_import_power')"
   />
-  <hr />
+  <hr v-if="ioDevice && ioDevice.type !== 'eebus'" />
   <openwb-base-select-input
+    v-if="ioAction?.configuration"
     title="Anwenden auf..."
     :groups="availableDevices"
     required
     multiple
-    :disabled="Object.keys(value[0].matrix).length > 0 ? false : true"
-    :model-value="ioAction?.configuration.devices"
+    :disabled="!isPatternConfigured"
+    :model-value="ioAction.configuration.devices || []"
     @update:model-value="updateConfiguration($event, 'configuration.devices')"
   >
     <template #help>
@@ -50,38 +53,55 @@ export default {
   computed: {
     value: {
       get() {
-        return this.ioAction.configuration.input_pattern;
+        return this.ioAction?.configuration?.input_pattern || [];
       },
       set(newValue) {
         this.updateConfiguration(newValue, "configuration.input_pattern");
       },
     },
+    isPatternConfigured() {
+      return (
+        this.value &&
+        this.value.length > 0 &&
+        this.value[0] &&
+        this.value[0].matrix &&
+        Object.keys(this.value[0].matrix).length > 0
+      );
+    },
     ioDevicesOutputOptions() {
       let deviceGroups = [];
-      this.availableIoDevices.forEach((device) => {
-        let options = [];
-        Object.keys(device?.output.digital).forEach((digitalOutput) => {
-          options.push({
-            text: `${digitalOutput}`,
-            value: { type: "io", id: device.id, digital_output: digitalOutput },
-          });
+      if (this.availableIoDevices) {
+        this.availableIoDevices.forEach((device) => {
+          if (device?.output?.digital) {
+            let options = [];
+            Object.keys(device.output.digital).forEach((digitalOutput) => {
+              options.push({
+                text: `${digitalOutput}`,
+                value: { type: "io", id: device.id, digital_output: digitalOutput },
+              });
+            });
+            if (options.length > 0) {
+              deviceGroups.push({
+                label: device.name,
+                options: options,
+              });
+            }
+          }
         });
-        if (options.length > 0) {
-          deviceGroups.push({
-            label: device.name,
-            options: options,
-          });
-        }
-      });
+      }
       return deviceGroups;
     },
     availableDevices() {
-      return [
-        {
-          label: "Ladepunkte",
-          options: this.availableChargePoints.map((cp) => ({ value: { type: "cp", id: cp.value }, text: cp.text })),
-        },
-      ].concat(this.ioDevicesOutputOptions);
+      const chargePointsGroup = {
+        label: "Ladepunkte",
+        options: this.availableChargePoints
+          ? this.availableChargePoints.map((cp) => ({
+              value: { type: "cp", id: cp.value },
+              text: cp.text,
+            }))
+          : [],
+      };
+      return [chargePointsGroup].concat(this.ioDevicesOutputOptions);
     },
   },
 };

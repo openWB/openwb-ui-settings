@@ -1,6 +1,6 @@
 <template>
   <div class="io-device-eebus">
-  <openwb-base-number-input
+    <openwb-base-number-input
       title="Port"
       required
       :min="1"
@@ -13,11 +13,11 @@
       :model-value="ioDevice.configuration.remote_ski"
       @update:model-value="updateConfiguration($event, 'configuration.remote_ski')"
     />
-     <openwb-base-button-input
+    <openwb-base-button-input
       title="Zertifikat und SKI-Schlüssel"
       button-text="Zertifikat und SKI-Schlüssel generieren"
       subtype="warning"
-      @button-clicked="sendSystemCommand('createEebusCert', { io_device: ioDevice.id, })"
+      @button-clicked="sendSystemCommand('createEebusCert', { io_device: ioDevice.id })"
     >
       <template #help>
         Zugangstoken wird abgerufen und gespeichert, damit das Backup durchgeführt werden kann. Zugangstoken werden nur
@@ -25,7 +25,8 @@
       </template>
     </openwb-base-button-input>
     <openwb-base-alert subtype="danger">
-      Vorhandene Zertifkate werden gelöscht. Der SKI-Schlüssel muss danach beim Netzbetreiber (VNB) neu eingetragen werden.
+      Vorhandene Zertifkate werden gelöscht. Der SKI-Schlüssel muss danach beim Netzbetreiber (VNB) neu eingetragen
+      werden.
     </openwb-base-alert>
     <openwb-base-text-input
       title="SKI-Schlüssel (zum Eintragen beim VNB)"
