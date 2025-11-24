@@ -18,10 +18,8 @@
       @update:model-value="updateConfiguration($event, 'configuration.vebus_id')"
     >
       <template #help>
-        Die Modbus ID des VE.Bus kann je nach Victron Version abweichen. Übliche IDs sind
-        227, 228, 242 und 246.<br />
-        Die ID kann unter "Settings > Services > Modbus/TCP >
-        Available services" eingesehen werden.
+        Die Modbus ID des VE.Bus kann je nach Victron Version abweichen. Übliche IDs sind 227, 228, 242 und 246.<br />
+        Die ID kann unter "Settings > Services > Modbus/TCP > Available services" eingesehen werden.
       </template>
     </openwb-base-number-input>
   </div>

@@ -1154,7 +1154,8 @@
                   Ist der berechnete Zeitpunkt des Ladestarts noch nicht erreicht, wird mit Überschuss geladen. Auch
                   nach Erreichen des Ziel-SoCs wird mit Überschuss geladen, solange bis das "SoC-Limit für das Fahrzeug"
                   erreicht wird.<br />
-                  Es wird nach den Vorgaben des Zeitplans geladen, dessen Zieltermin am nächsten liegt, bis max 20 Minuten nach dem angegebenen Zieltermin.
+                  Es wird nach den Vorgaben des Zeitplans geladen, dessen Zieltermin am nächsten liegt, bis max 20
+                  Minuten nach dem angegebenen Zieltermin.
                 </template>
               </openwb-base-heading>
               <openwb-base-alert
