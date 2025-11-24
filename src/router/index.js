@@ -167,12 +167,12 @@ const routes = [
     component: () => import("../views/System.vue"),
   },
   {
-    path: "/System/NetworkConfiguration",
-    name: "NetworkConfig",
+    path: "/System/SecurityConfiguration",
+    name: "SecurityConfig",
     meta: {
-      heading: "System - Netzwerk",
+      heading: "System - Sicherheit",
     },
-    component: () => import("../views/Network.vue"),
+    component: () => import("../views/Security.vue"),
   },
   {
     path: "/System/DataManagement",
