@@ -174,7 +174,7 @@ export default {
       default: false,
     },
   },
-  emits: ["save", "reset", "defaults", "sendCommand"],
+  emits: ["save", "reset", "defaults", "send-command"],
   data() {
     return {
       mqttTopicsToSubscribe: [
@@ -291,7 +291,7 @@ export default {
       }
     },
     sendSystemCommand(command, data) {
-      this.$emit("sendCommand", {
+      this.$emit("send-command", {
         command: command,
         data: data,
       });
