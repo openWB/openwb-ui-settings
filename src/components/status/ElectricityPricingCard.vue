@@ -16,7 +16,9 @@
       class="py-1 mb-2"
     >
       <template #header>
-        <span v-html="providersTitle"></span>
+        <span v-if="tariffProvider">Stromtarif: {{ tariffProvider }}</span>
+        <br v-if="tariffProvider && gridFeeProvider" />
+        <span v-if="gridFeeProvider">Netzentgelte: {{ gridFeeProvider }}</span>
       </template>
       <div class="openwb-chart">
         <chartjs-line
@@ -382,18 +384,11 @@ export default {
 
       return messages.length > 0 ? messages.join("\n") : undefined;
     },
-    providersTitle() {
-      const providers = [];
-
-      if (this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/provider"]?.type) {
-        providers.push(`Stromtarif: ${this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/provider"].name}`);
-      }
-
-      if (this.$store.state.mqtt["openWB/optional/ep/grid_fee/provider"]?.type) {
-        providers.push(`Netzentgelt: ${this.$store.state.mqtt["openWB/optional/ep/grid_fee/provider"].name}`);
-      }
-
-      return providers.join("<br>") || "Variable Preise";
+    tariffProvider() {
+      return this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/provider"]?.name || null;
+    },
+    gridFeeProvider() {
+      return this.$store.state.mqtt["openWB/optional/ep/grid_fee/provider"]?.name || null;
     },
     showLegend() {
       const flexibleTariffConfigured = this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/provider"]?.type;
