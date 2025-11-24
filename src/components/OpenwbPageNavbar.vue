@@ -250,11 +250,11 @@
               Datenverwaltung
             </router-link>
             <router-link
-              to="/System/NetworkConfiguration"
+              to="/System/SecurityConfiguration"
               class="dropdown-item"
               active-class="active disabled"
             >
-              Netzwerk
+              Sicherheit
             </router-link>
             <router-link
               to="/System/SystemConfiguration"
