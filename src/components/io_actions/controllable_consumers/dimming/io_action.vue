@@ -22,7 +22,7 @@
     :groups="availableDevices"
     required
     multiple
-    :disabled="!isPatternConfigured"
+    :disabled="ioDevice?.type !== 'eebus' && !isPatternConfigured"
     :model-value="ioAction.configuration.devices || []"
     @update:model-value="updateConfiguration($event, 'configuration.devices')"
   >
