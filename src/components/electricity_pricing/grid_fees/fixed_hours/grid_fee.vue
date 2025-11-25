@@ -31,8 +31,8 @@
       v-if="value.configuration.tariffs.length === 0"
       subtype="info"
     >
-      Es wurde noch kein Tarif konfiguriert. Klicken Sie auf das Plus-Symbol um einen neuen Tarif hinzuzufügen.<br />
-      Tarife ermöglichen es unterschiedliche Preise für unterschiedliche Zeiten zu definieren.
+      Es wurde noch kein Tarif konfiguriert. Klicken Sie auf das Plus-Symbol, um einen neuen Tarif hinzuzufügen.<br />
+      Tarife ermöglichen es, Preise für unterschiedliche Zeiten zu definieren.
     </openwb-base-alert>
     <fixed-tariff
       v-for="(tariff, index) in value.configuration.tariffs"
