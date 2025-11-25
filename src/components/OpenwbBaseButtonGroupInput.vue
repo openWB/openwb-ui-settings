@@ -17,14 +17,22 @@
           v-for="button in buttons"
           :key="button.value"
           class="btn btn-same-size btn-centered"
-          :class="[value == button.buttonValue ? 'active' : '', button.class ? button.class : 'btn-outline-info']"
+          :disabled="disabled"
+          :class="[
+            { active: value == button.buttonValue },
+            { disabled: disabled },
+            button.class ? button.class : 'btn-outline-info',
+          ]"
+          :for="`${uid}-${button.buttonValue}`"
         >
           <span>
             <input
+              :id="`${uid}-${button.buttonValue}`"
               v-model="value"
               type="radio"
               :value="button.buttonValue"
               v-bind="$attrs"
+              :disabled="disabled"
               @click="$emit('button-click', button.buttonValue)"
             />
             <slot :name="'label-' + button.buttonValue">
@@ -44,6 +52,7 @@
 
 <script>
 import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+import BaseSettingComponents from "./mixins/BaseSettingComponents.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faCheck as fasCheck } from "@fortawesome/free-solid-svg-icons";
@@ -57,11 +66,13 @@ export default {
     FontAwesomeIcon,
     OpenwbBaseSettingElement,
   },
+  mixins: [BaseSettingComponents],
   inheritAttrs: false,
   props: {
     title: { type: String, required: false, default: "" },
     modelValue: { type: [String, Number, Boolean], default: undefined },
     buttons: { type: Array, required: true },
+    disabled: { type: Boolean, required: false, default: false },
   },
   emits: ["update:modelValue", "button-click"],
   computed: {

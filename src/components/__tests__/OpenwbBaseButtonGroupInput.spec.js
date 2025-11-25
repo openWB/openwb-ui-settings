@@ -14,7 +14,7 @@ describe("OpenwbBaseButtonGroupInput.vue", () => {
     const wrapper = mount(OpenwbBaseButtonGroupInput, {
       props: { title, buttons },
     });
-    const titleLabel = wrapper.find("label.col-form-label");
+    const titleLabel = wrapper.find("div.col-form-label");
     expect(titleLabel.html()).toContain(title);
   });
   // check buttons

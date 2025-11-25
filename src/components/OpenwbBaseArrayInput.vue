@@ -25,6 +25,7 @@
             </div>
           </div>
           <input
+            :id="`${uid}-tag-input`"
             ref="tagInput"
             v-model="newTag"
             type="text"
@@ -76,6 +77,7 @@
 
 <script>
 import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+import BaseSettingComponents from "./mixins/BaseSettingComponents.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -94,6 +96,7 @@ export default {
     FontAwesomeIcon,
     OpenwbBaseSettingElement,
   },
+  mixins: [BaseSettingComponents],
   inheritAttrs: false,
   props: {
     title: { type: String, required: true, default: "#TITLE#" },
@@ -120,7 +123,6 @@ export default {
   data() {
     return {
       newTag: "",
-      showHelp: false,
     };
   },
   computed: {

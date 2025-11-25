@@ -1,6 +1,7 @@
 <template>
   <div class="wrapper">
     <input
+      :id="`${uid}-color-input`"
       type="color"
       class="custom-color-picker"
       :value="modelValue"
@@ -18,6 +19,8 @@
 </template>
 
 <script>
+import BaseSettingComponents from "./mixins/BaseSettingComponents.vue";
+
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faRotateLeft as fasRotateLeft } from "@fortawesome/free-solid-svg-icons";
@@ -28,6 +31,7 @@ export default {
   components: {
     FontAwesomeIcon,
   },
+  mixins: [BaseSettingComponents],
   props: {
     defaultColor: {
       type: String,

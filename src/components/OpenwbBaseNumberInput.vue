@@ -19,6 +19,7 @@
           </div>
         </div>
         <input
+          :id="`${uid}-number-input`"
           v-model.number="value"
           type="number"
           class="form-control"
@@ -47,6 +48,7 @@
 
 <script>
 import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+import BaseSettingComponents from "./mixins/BaseSettingComponents.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faCalculator as fasCalculator } from "@fortawesome/free-solid-svg-icons";
@@ -60,6 +62,7 @@ export default {
     FontAwesomeIcon,
     OpenwbBaseSettingElement,
   },
+  mixins: [BaseSettingComponents],
   inheritAttrs: false,
   props: {
     title: { type: String, required: false, default: "" },
