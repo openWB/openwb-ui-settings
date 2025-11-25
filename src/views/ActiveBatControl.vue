@@ -313,7 +313,7 @@
                       $store.state.mqtt['openWB/bat/'+batteryConfig.id+'/get/max_charge_power'] / 1000
                     "
                     @update:model-value="
-                      updateState('openWB/bat/'+batteryConfig.id+'/max_charge_power', $event * 1000)
+                      updateState('openWB/bat/'+batteryConfig.id+'/get/max_charge_power', $event * 1000)
                     "
                   />
                   <openwb-base-range-input
