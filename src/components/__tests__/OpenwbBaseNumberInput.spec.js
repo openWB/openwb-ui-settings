@@ -9,7 +9,7 @@ describe("OpenwbBaseNumberInput.vue", () => {
     const wrapper = mount(OpenwbBaseNumberInput, {
       props: { title },
     });
-    const titleLabel = wrapper.find("label.col-form-label");
+    const titleLabel = wrapper.find("div.col-form-label");
     expect(titleLabel.html()).toContain(title);
   });
   // check unit prop

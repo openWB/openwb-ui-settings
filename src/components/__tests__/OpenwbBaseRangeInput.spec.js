@@ -9,7 +9,7 @@ describe("OpenwbBaseRangeInput.vue", () => {
     const wrapper = mount(OpenwbBaseRangeInput, {
       props: { title, min: 0, max: 100 },
     });
-    const titleLabel = wrapper.find("label.col-form-label");
+    const titleLabel = wrapper.find("div.col-form-label");
     expect(titleLabel.html()).toContain(title);
   });
   // check unit prop
