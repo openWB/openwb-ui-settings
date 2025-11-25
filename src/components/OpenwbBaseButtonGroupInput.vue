@@ -23,9 +23,11 @@
             { disabled: disabled },
             button.class ? button.class : 'btn-outline-info',
           ]"
+          :for="`${uid}-${button.buttonValue}`"
         >
           <span>
             <input
+              :id="`${uid}-${button.buttonValue}`"
               v-model="value"
               type="radio"
               :value="button.buttonValue"
@@ -50,6 +52,7 @@
 
 <script>
 import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+import BaseSettingComponents from "./mixins/BaseSettingComponents.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faCheck as fasCheck } from "@fortawesome/free-solid-svg-icons";
@@ -63,6 +66,7 @@ export default {
     FontAwesomeIcon,
     OpenwbBaseSettingElement,
   },
+  mixins: [BaseSettingComponents],
   inheritAttrs: false,
   props: {
     title: { type: String, required: false, default: "" },
