@@ -25,7 +25,7 @@
       </template>
     </openwb-base-button-input>
     <openwb-base-alert subtype="danger">
-      Vorhandene Zertifkate werden gelöscht. Der SKI-Schlüssel muss danach beim Netzbetreiber (VNB) neu eingetragen
+      Vorhandene Zertifikate werden gelöscht. Der SKI-Schlüssel muss danach beim Netzbetreiber (VNB) neu eingetragen
       werden.
     </openwb-base-alert>
     <openwb-base-text-input

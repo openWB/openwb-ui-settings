@@ -55,7 +55,7 @@ export default {
       let deviceGroups = [];
       this.availableIoDevices.forEach((device) => {
         let options = [];
-        Object.keys(device?.output.digital).forEach((digitalOutput) => {
+        Object.keys(device?.output?.digital || {}).forEach((digitalOutput) => {
           options.push({
             text: `${digitalOutput}`,
             value: { type: "io", id: device.id, digital_output: digitalOutput },
