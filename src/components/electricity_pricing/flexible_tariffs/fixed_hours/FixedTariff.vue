@@ -2,6 +2,7 @@
   <openwb-base-card
     subtype="info"
     :collapsible="true"
+    :collapsed="true"
   >
     <template #header>
       {{ tariff.name }}
