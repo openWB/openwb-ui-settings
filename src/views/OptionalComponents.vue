@@ -203,17 +203,6 @@ export default {
     return {
       mqttTopicsToSubscribe: [
         "openWB/general/extern",
-        "openWB/optional/led/active",
-        "ToDo/optional/led/instant_blocked",
-        "ToDo/optional/led/pv_blocked",
-        "ToDo/optional/led/scheduled_blocked",
-        "ToDo/optional/led/standby_blocked",
-        "ToDo/optional/led/stop_blocked",
-        "ToDo/optional/led/instant",
-        "ToDo/optional/led/pv",
-        "ToDo/optional/led/scheduled",
-        "ToDo/optional/led/standby",
-        "ToDo/optional/led/stop",
         "openWB/optional/int_display/active",
         "openWB/optional/int_display/on_if_plugged_in",
         "openWB/optional/int_display/only_local_charge_points",
