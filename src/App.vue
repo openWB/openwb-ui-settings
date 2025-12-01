@@ -69,6 +69,9 @@ export default {
     topicList() {
       return Object.keys(this.$store.state.mqtt);
     },
+    nodeEnv() {
+      return import.meta.env.MODE;
+    },
   },
   created() {
     this.createConnection();
@@ -141,12 +144,14 @@ export default {
       // Connect string, and specify the connection method used through protocol
       // ws not encrypted WebSocket connection
       // wss encrypted WebSocket connection
-      // mqtt not encrypted TCP connection
-      // mqtts encrypted TCP connection
-      // wxs WeChat mini app connection
-      // alis Alipay mini app connection
       const { protocol, host, port, endpoint, ...options } = this.connection;
       const connectUrl = `${protocol}://${host}:${port}${endpoint}`;
+      const [user, pass] = this.$cookies.get("mqtt")?.split(":") || [null, null];
+      if ((this.nodeEnv !== "production" || protocol == "wss") && user && pass) {
+        console.debug("Using mqtt credentials from cookie:", user, "/", pass);
+        options.username = user;
+        options.password = pass;
+      }
       console.debug("connecting to broker:", connectUrl);
       try {
         this.client = mqtt.connect(connectUrl, options);
@@ -155,6 +160,10 @@ export default {
       }
       this.client.on("connect", () => {
         console.debug("Connection succeeded! ClientId: ", this.client.options.clientId);
+        if (user) {
+          this.postClientMessage(`Angemeldet als "${user}."`, "success");
+          this.$store.commit("storeLocal", { name: "username", value: user });
+        }
         // required for route guards
         this.doSubscribe(["openWB/system/usage_terms_acknowledged"]);
         this.doSubscribe(["openWB/system/installAssistantDone"]);
@@ -183,6 +192,21 @@ export default {
           // });
         }
       });
+    },
+    endConnection() {
+      if (this.client?.connected) {
+        console.warn("Ending mqtt connection...");
+        this.client.end();
+        this.postClientMessage("Abgemeldet.", "info");
+      } else {
+        console.error("No mqtt connection to end.");
+      }
+    },
+    reconnectMqttClient() {
+      if (this.client?.connected) {
+        this.endConnection();
+      }
+      this.createConnection();
     },
     doSubscribe(topics) {
       topics.forEach((topic) => {
@@ -245,7 +269,7 @@ export default {
     postClientMessage(message, type = "secondary") {
       console.debug("postMessage:", message, type);
       const timestamp = Date.now();
-      const topic = "openWB/command/" + this.mqttClientId + "/messages/" + timestamp;
+      const topic = "openWB/command/local/messages/" + timestamp;
       this.$store.commit({
         type: "addTopic",
         topic: topic,

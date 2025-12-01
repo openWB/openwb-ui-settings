@@ -312,10 +312,14 @@
 
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faExternalLinkAlt as fasExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faExternalLinkAlt as fasExternalLinkAlt,
+  faCircleUser as fasCircleUser,
+  faArrowRightToBracket as fasArrowRightToBracket,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasExternalLinkAlt);
+library.add(fasExternalLinkAlt, fasCircleUser, fasArrowRightToBracket);
 
 export default {
   name: "OpenwbNavBar",
@@ -325,6 +329,9 @@ export default {
   computed: {
     nodeEnv() {
       return import.meta.env.MODE;
+    },
+    loggedInUser() {
+      return this.$store.state.local.username || null;
     },
   },
   watch: {

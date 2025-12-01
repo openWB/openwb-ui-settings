@@ -26,6 +26,7 @@ let states = {
   local: {
     reloadRequired: false,
     savingData: false,
+    username: null,
   },
 };
 
