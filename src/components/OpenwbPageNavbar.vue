@@ -8,7 +8,7 @@
     </a>
     <button
       ref="navbarButton"
-      class="navbar-toggler mr-5"
+      class="navbar-toggler mr-auto"
       type="button"
       data-toggle="collapse"
       data-target="#collapsibleNavbar"
@@ -20,7 +20,7 @@
       ref="collapsibleNavbar"
       class="collapse navbar-collapse navbar-nav-scroll"
     >
-      <ul class="navbar-nav">
+      <ul class="navbar-nav mr-auto">
         <li class="nav-item">
           <router-link
             to="/Status"
@@ -307,19 +307,19 @@
         </li>
       </ul>
     </div>
+    <div
+      id="infoBar"
+      class="ml-auto d-flex flex-row align-items-center"
+    ></div>
   </nav>
 </template>
 
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faExternalLinkAlt as fasExternalLinkAlt,
-  faCircleUser as fasCircleUser,
-  faArrowRightToBracket as fasArrowRightToBracket,
-} from "@fortawesome/free-solid-svg-icons";
+import { faExternalLinkAlt as fasExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasExternalLinkAlt, fasCircleUser, fasArrowRightToBracket);
+library.add(fasExternalLinkAlt);
 
 export default {
   name: "OpenwbNavBar",
@@ -329,9 +329,6 @@ export default {
   computed: {
     nodeEnv() {
       return import.meta.env.MODE;
-    },
-    loggedInUser() {
-      return this.$store.state.local.username || null;
     },
   },
   watch: {
