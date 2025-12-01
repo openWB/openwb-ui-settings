@@ -190,6 +190,22 @@ const routes = [
     },
     component: () => import("../views/InstallAssistant.vue"),
   },
+  {
+    path: "/Login",
+    name: "Login",
+    meta: {
+      heading: "Anmeldung",
+    },
+    component: () => import("../views/Login.vue"),
+  },
+  {
+    path: "/Logout",
+    name: "Logout",
+    meta: {
+      heading: "Abmeldung",
+    },
+    component: () => import("../views/Logout.vue"),
+  },
 ];
 /* examples for development only start here */
 if (import.meta.env.MODE !== "production") {
