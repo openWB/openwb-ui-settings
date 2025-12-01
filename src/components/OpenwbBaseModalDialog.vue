@@ -12,6 +12,7 @@
       <div
         class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
         role="document"
+        @click.stop
       >
         <div class="modal-content">
           <!-- modal header -->
@@ -90,7 +91,7 @@ export default {
       if (this.buttons !== undefined) {
         buttons = this.buttons;
       }
-      if (!this.preventClose) {
+      if (buttons.findIndex((b) => b.event === "close") === -1 && !this.preventClose) {
         buttons.push({ text: "Schließen", event: "close" });
       }
       return buttons;
