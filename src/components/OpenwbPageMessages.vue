@@ -77,7 +77,11 @@ export default {
   mixins: [ComponentState],
   data() {
     return {
-      mqttTopicsToSubscribe: ["openWB/system/messages/+", "openWB/command/" + this.$root.mqttClientId + "/messages/+"],
+      mqttTopicsToSubscribe: [
+        "openWB/system/messages/+",
+        "openWB/command/local/messages/+",
+        "openWB/command/" + this.$root.mqttClientId + "/messages/+",
+      ],
       showAllMessages: false,
       hiddenMessages: [],
     };
@@ -100,6 +104,9 @@ export default {
     messages() {
       const myMessages = [];
       this.systemMessages.forEach((message) => {
+        myMessages.push(message);
+      });
+      this.localMessages.forEach((message) => {
         myMessages.push(message);
       });
       this.clientMessages.forEach((message) => {
@@ -131,6 +138,14 @@ export default {
       }
       return messageList;
     },
+    localMessages() {
+      let messageTopics = this.getWildcardTopics("openWB/command/local/messages/+");
+      var messageList = [];
+      for (const [key, element] of Object.entries(messageTopics)) {
+        messageList.push({ topic: key, ...element });
+      }
+      return messageList;
+    },
     clientMessages() {
       let messageTopics = this.getWildcardTopics("openWB/command/" + this.$root.mqttClientId + "/messages/+");
       var messageList = [];
@@ -155,7 +170,11 @@ export default {
      * Removes system or client specific topics from broker
      */
     dismissMessage(event) {
-      this.clearTopic(event.topic);
+      if (this.localMessages.find((msg) => msg.topic === event.topic)) {
+        this.$store.commit("removeTopic", event.topic);
+      } else {
+        this.clearTopic(event.topic);
+      }
       var index = this.hiddenMessages.indexOf(event.topic);
       if (index > -1) {
         this.hiddenMessages.splice(index, 1);
@@ -165,7 +184,13 @@ export default {
      * Removes all received message topics from broker
      */
     dismissAllMessages() {
-      this.messages.forEach((message) => {
+      this.localMessages.forEach((message) => {
+        this.$store.commit("removeTopic", message.topic);
+      });
+      this.clientMessages.forEach((message) => {
+        this.clearTopic(message.topic);
+      });
+      this.systemMessages.forEach((message) => {
         this.clearTopic(message.topic);
       });
       this.hiddenMessages = [];
