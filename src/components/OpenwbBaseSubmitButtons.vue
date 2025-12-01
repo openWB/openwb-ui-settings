@@ -30,7 +30,9 @@
       <button
         id="saveSettingsBtn"
         type="submit"
-        class="btn btn-block btn-success"
+        class="btn btn-block"
+        :class="[{ disabled: saveDisabled }, saveDisabled ? 'btn-outline-success' : 'btn-success']"
+        :disabled="saveDisabled"
         @click="saveSettings"
       >
         {{ saveLabel }}
@@ -44,7 +46,9 @@
       <button
         id="modalResetBtn"
         type="button"
-        class="btn btn-block btn-warning"
+        class="btn btn-block"
+        :class="[{ disabled: resetDisabled }, resetDisabled ? 'btn-outline-warning' : 'btn-warning']"
+        :disabled="saveDisabled"
         @click="showResetModal"
       >
         {{ resetLabel }}
@@ -58,7 +62,9 @@
       <button
         id="modalDefaultsBtn"
         type="button"
-        class="btn btn-block btn-danger"
+        class="btn btn-block"
+        :class="[{ disabled: defaultsDisabled }, defaultsDisabled ? 'btn-outline-danger' : 'btn-danger']"
+        :disabled="saveDisabled"
         @click="showDefaultsModal"
       >
         {{ defaultsLabel }}
@@ -86,8 +92,11 @@ export default {
     // set to defaults not implemented yet
     hideDefaults: { type: Boolean, default: true },
     saveLabel: { type: String, default: "Speichern" },
+    saveDisabled: { type: Boolean, default: false },
     resetLabel: { type: String, default: "Änderungen verwerfen" },
+    resetDisabled: { type: Boolean, default: false },
     defaultsLabel: { type: String, default: "Werkseinstellungen" },
+    defaultsDisabled: { type: Boolean, default: false },
   },
   emits: ["reset", "defaults", "save"],
   data() {
