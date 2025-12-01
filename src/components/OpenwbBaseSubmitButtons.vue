@@ -29,11 +29,11 @@
     <div class="col-md-4 d-flex py-1 justify-content-center">
       <button
         id="saveSettingsBtn"
-        type="button"
+        type="submit"
         class="btn btn-block btn-success"
         @click="saveSettings"
       >
-        Speichern
+        {{ saveLabel }}
         <font-awesome-icon :icon="['fas', 'check']" />
       </button>
     </div>
@@ -47,7 +47,7 @@
         class="btn btn-block btn-warning"
         @click="showResetModal"
       >
-        Änderungen verwerfen
+        {{ resetLabel }}
         <font-awesome-icon :icon="['fas', 'undo']" />
       </button>
     </div>
@@ -61,7 +61,7 @@
         class="btn btn-block btn-danger"
         @click="showDefaultsModal"
       >
-        Werkseinstellungen
+        {{ defaultsLabel }}
         <font-awesome-icon :icon="['fas', 'times']" />
       </button>
     </div>
@@ -85,6 +85,9 @@ export default {
     hideReset: { type: Boolean, default: false },
     // set to defaults not implemented yet
     hideDefaults: { type: Boolean, default: true },
+    saveLabel: { type: String, default: "Speichern" },
+    resetLabel: { type: String, default: "Änderungen verwerfen" },
+    defaultsLabel: { type: String, default: "Werkseinstellungen" },
   },
   emits: ["reset", "defaults", "save"],
   data() {
