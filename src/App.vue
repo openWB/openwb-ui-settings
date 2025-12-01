@@ -156,11 +156,7 @@ export default {
         options.password = pass;
       }
       console.debug("connecting to broker:", connectUrl);
-      try {
-        this.client = mqtt.connect(connectUrl, options);
-      } catch (error) {
-        console.error("mqtt.connect error", error);
-      }
+      this.client = mqtt.connect(connectUrl, options);
       this.client.on("connect", () => {
         console.debug("Connection succeeded! ClientId: ", this.client.options.clientId);
         if (user) {
@@ -173,6 +169,11 @@ export default {
       });
       this.client.on("error", (error) => {
         console.error("Connection failed", error);
+        this.postClientMessage("Verbindungsfehler:<br />" + error.message, "danger");
+        this.$cookies.remove("mqtt");
+        this.$store.commit("storeLocal", { name: "username", value: null });
+        this.client.end();
+        this.createConnection();
       });
       this.client.on("message", (topic, message) => {
         if (message.toString().length > 0) {
@@ -200,7 +201,7 @@ export default {
       if (this.client?.connected) {
         console.warn("Ending mqtt connection...");
         this.client.end();
-        this.postClientMessage("Abgemeldet.", "info");
+        this.$store.commit("storeLocal", { name: "username", value: null });
       } else {
         console.error("No mqtt connection to end.");
       }
