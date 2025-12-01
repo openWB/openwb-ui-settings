@@ -17,6 +17,7 @@
     </div>
   </div>
   <page-footer />
+  <user-info />
   <messages />
   <blocker />
 </template>
@@ -24,6 +25,7 @@
 <script>
 import NavBar from "./components/OpenwbPageNavbar.vue";
 import PageFooter from "./components/OpenwbPageFooter.vue";
+import UserInfo from "./components/OpenwbPageUser.vue";
 import Messages from "./components/OpenwbPageMessages.vue";
 import Blocker from "./components/OpenwbPageBlocker.vue";
 import mqtt from "mqtt";
@@ -33,6 +35,7 @@ export default {
   components: {
     NavBar,
     PageFooter,
+    UserInfo,
     Messages,
     Blocker,
   },

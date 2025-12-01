@@ -1,15 +1,15 @@
 <template>
-  <teleport to="body">
+  <teleport
+    defer
+    to="#infoBar"
+  >
     <div
       id="message-indicator"
-      class="text-light mt-1 p-2 mr-1 clickable"
+      class="text-light clickable"
       :class="showAllMessages ? 'active' : ''"
       @click="toggleAllMessages"
     >
-      <font-awesome-layers
-        full-width
-        style="font-size: 175%"
-      >
+      <font-awesome-layers full-width>
         <font-awesome-icon
           :icon="showAllMessages ? ['fas', 'bell'] : ['far', 'bell']"
           :class="messageIndicatorClass"
@@ -209,15 +209,12 @@ export default {
 </script>
 
 <style scoped>
-#message-indicator {
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 2000; /* navbar: 1030 */
-}
-
 #message-indicator .message-counter {
   font-weight: bolder;
+}
+
+#message-indicator .fa-layers {
+  font-size: 175%;
 }
 
 .openwb-toast-container {
