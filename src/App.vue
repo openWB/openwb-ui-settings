@@ -273,10 +273,9 @@ export default {
     postClientMessage(message, type = "secondary") {
       console.debug("postMessage:", message, type);
       const timestamp = Date.now();
-      const topic = "openWB/command/local/messages/" + timestamp;
       this.$store.commit({
-        type: "addTopic",
-        topic: topic,
+        type: "addClientMessage",
+        timestamp: timestamp,
         payload: {
           message: message,
           type: type,
