@@ -46,11 +46,16 @@ export default {
       },
       connection: {
         protocol: location.protocol == "https:" ? "wss" : "ws",
+        protocolVersion: 5,
         host: location.hostname,
         port: parseInt(location.port) || (location.protocol == "https:" ? 443 : 80),
         endpoint: "/ws",
         connectTimeout: 4000,
         reconnectPeriod: 4000,
+        properties: {
+          requestResponseInformation: true,
+          requestProblemInformation: true,
+        },
       },
     };
   },
