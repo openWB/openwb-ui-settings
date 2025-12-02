@@ -107,6 +107,17 @@
         >
           <template #help> Eingabefeld für ein Datum </template>
         </openwb-base-text-input>
+        <openwb-base-text-input
+          title="8. Text (mit Add-Button)"
+          subtype="text"
+          add-button
+          class="mb-2"
+          :model-value="$store.state.examples.text8"
+          @update:model-value="updateState('text8', $event)"
+          @input:add="alert('Add button clicked!')"
+        >
+          <template #help> Eingabefeld mit einem Add-Button </template>
+        </openwb-base-text-input>
         <hr />
         <openwb-base-number-input
           title="1. Zahl"

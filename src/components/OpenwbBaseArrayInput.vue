@@ -25,6 +25,7 @@
             </div>
           </div>
           <input
+            v-if="validElements === null"
             :id="`${uid}-tag-input`"
             ref="tagInput"
             v-model="newTag"
@@ -33,6 +34,29 @@
             v-bind="$attrs"
             @keyup.enter="addTag"
           />
+          <select
+            v-else
+            :id="`${uid}-tag-input`"
+            ref="tagInput"
+            v-model="newTag"
+            class="form-control"
+            v-bind="$attrs"
+            @keyup.enter="addTag"
+          >
+            <option
+              value=""
+              disabled
+            >
+              {{ remainingElements.length > 0 ? "Bitte wählen..." : "Keine weiteren Optionen verfügbar" }}
+            </option>
+            <option
+              v-for="(option, index) in remainingElements"
+              :key="index"
+              :value="option"
+            >
+              {{ option }}
+            </option>
+          </select>
           <div class="input-group-append">
             <div
               class="input-group-text"
@@ -106,6 +130,12 @@ export default {
         return [];
       },
     },
+    validElements: {
+      type: Array,
+      default: () => {
+        return null;
+      },
+    },
     noElementsMessage: {
       type: String,
       default: () => {
@@ -134,9 +164,21 @@ export default {
         this.$emit("update:modelValue", newValue);
       },
     },
+    remainingElements() {
+      if (this.validElements === null) {
+        return null;
+      } else {
+        return this.validElements.filter((el) => !this.value.includes(el));
+      }
+    },
     newTagValid: {
       get() {
-        return this.newTag.length > 0 && !this.value.includes(this.newTag) && this.$refs.tagInput?.checkValidity();
+        return (
+          this.newTag.length > 0 &&
+          !this.value.includes(this.newTag) &&
+          this.validElements?.includes(this.newTag) &&
+          this.$refs.tagInput?.checkValidity()
+        );
       },
     },
   },
