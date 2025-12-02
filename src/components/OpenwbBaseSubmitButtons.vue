@@ -29,7 +29,7 @@
     <div class="col-md-4 d-flex py-1 justify-content-center">
       <button
         id="saveSettingsBtn"
-        type="submit"
+        type="button"
         class="btn btn-block"
         :class="[{ disabled: saveDisabled }, saveDisabled ? 'btn-outline-success' : 'btn-success']"
         :disabled="saveDisabled"

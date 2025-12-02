@@ -172,6 +172,20 @@
             <div class="input-group-text">+</div>
           </div>
           <div
+            v-if="addButton"
+            class="input-group-append"
+          >
+            <div
+              class="input-group-text"
+              :class="addDisabled ? 'not-clickable' : 'bg-success clickable'"
+              @click="addClicked()"
+            >
+              <slot name="inputAdd">
+                <font-awesome-icon :icon="['fas', 'plus']" />
+              </slot>
+            </div>
+          </div>
+          <div
             v-if="$slots.append"
             class="input-group-append"
           >
@@ -201,6 +215,7 @@ import {
   faUnlock as fasUnlock,
   faClock as fasClock,
   faCalendarDay as fasCalendarDay,
+  faPlus as fasPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { faEye as farEye, faEyeSlash as farEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -216,6 +231,7 @@ library.add(
   fasUnlock,
   fasClock,
   fasCalendarDay,
+  fasPlus,
   farEye,
   farEyeSlash,
 );
@@ -249,8 +265,9 @@ export default {
       default: null,
     },
     showQuickButtons: { type: Boolean, default: false },
+    addButton: { type: Boolean, default: false },
   },
-  emits: ["update:modelValue"],
+  emits: ["update:modelValue", "input:add"],
   data() {
     return {
       showPassword: false,
@@ -323,6 +340,11 @@ export default {
         "^((?=[^.]*[a-zA-Z][^.]*\\.)([a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9]\\.))+((?=[^.]*[a-zA-Z].*$)([a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9]))$";
       return `(${ipPattern})|(${hostOnlyPattern})|(${domainPattern})`;
     },
+    addDisabled: {
+      get() {
+        return this.value === this.emptyValue;
+      },
+    },
   },
   methods: {
     togglePassword() {
@@ -357,6 +379,11 @@ export default {
         return;
       }
       this.value = newValue;
+    },
+    addClicked() {
+      if (!this.addDisabled) {
+        this.$emit("input:add");
+      }
     },
   },
 };
