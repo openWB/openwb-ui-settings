@@ -1,7 +1,8 @@
 <template>
   <teleport
+    v-if="$store.state.mqtt['openWB/general/user_management_active'] === true"
     defer
-    to="#infoBar"
+    to="#infobar"
   >
     <div id="user-indicator">
       <span v-if="loggedInUser">
@@ -9,29 +10,24 @@
           :icon="['fas', 'circle-user']"
           :title="loggedInUser"
         />
-        <a
-          class="text-light px-2"
-          @click="showLogoutModal = true"
-        >
-          <FontAwesomeIcon
-            :icon="['fas', 'arrow-right-from-bracket']"
-            title="Abmelden"
-          />
-        </a>
-      </span>
-      <a
-        v-else
-        class="text-light px-2"
-        @click="showLoginModal = true"
-      >
         <FontAwesomeIcon
-          :icon="['fas', 'arrow-right-to-bracket']"
-          title="Anmelden"
+          class="text-light clickable px-2"
+          :icon="['fas', 'arrow-right-from-bracket']"
+          title="Abmelden"
+          @click="showLogoutModal = true"
         />
-      </a>
+      </span>
+      <FontAwesomeIcon
+        v-else
+        class="text-light clickable px-2"
+        :icon="['fas', 'arrow-right-to-bracket']"
+        title="Anmelden"
+        @click="showLoginModal = true"
+      />
     </div>
   </teleport>
   <openwb-base-modal-dialog
+    v-if="$store.state.mqtt['openWB/general/user_management_active'] === true"
     :show="showLogoutModal"
     title="Abmelden"
     subtype="warning"
@@ -41,13 +37,11 @@
     <p>Willst Du Dich wirklich abmelden?</p>
   </openwb-base-modal-dialog>
   <openwb-base-modal-dialog
+    v-if="$store.state.mqtt['openWB/general/user_management_active'] === true"
     :show="showLoginModal"
     title="Anmelden"
     subtype="success"
-    :buttons="[
-      { text: 'Anmelden', event: 'login', subtype: 'success' },
-      // { text: 'Abbrechen', event: 'close', subtype: 'secondary' },
-    ]"
+    :buttons="[{ text: 'Anmelden', event: 'login', subtype: 'success' }]"
     @modal-result="doLogin($event)"
   >
     <form name="loginForm">
@@ -80,13 +74,17 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasCircleUser, fasArrowRightToBracket, fasArrowRightFromBracket);
 
+import ComponentState from "./mixins/ComponentState.vue";
+
 export default {
   name: "OpenwbPageUser",
   components: {
     FontAwesomeIcon,
   },
+  mixins: [ComponentState],
   data() {
     return {
+      mqttTopicsToSubscribe: ["openWB/general/user_management_active"],
       showLoginModal: false,
       showLogoutModal: false,
       username: "",
