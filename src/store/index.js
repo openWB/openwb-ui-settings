@@ -144,6 +144,17 @@ export default createStore({
         }
       }
     },
+    addClientMessage(state, message) {
+      if (!state.local.messages) {
+        state.local.messages = {};
+      }
+      state.local.messages[message.timestamp] = message.payload;
+    },
+    removeClientMessage(state, timestamp) {
+      if (state.local.messages && timestamp in state.local.messages) {
+        delete state.local.messages[timestamp];
+      }
+    },
     addSubscription(state, topic) {
       // add subscription to list or increment count
       if (topic in state.mqttSubscriptions) {
