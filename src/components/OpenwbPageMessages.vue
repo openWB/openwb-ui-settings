@@ -1,7 +1,7 @@
 <template>
   <teleport
     defer
-    to="#infoBar"
+    to="nav"
   >
     <div
       id="message-indicator"
@@ -77,11 +77,7 @@ export default {
   mixins: [ComponentState],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/system/messages/+",
-        "openWB/command/local/messages/+",
-        "openWB/command/" + this.$root.mqttClientId + "/messages/+",
-      ],
+      mqttTopicsToSubscribe: ["openWB/system/messages/+", "openWB/command/" + this.$root.mqttClientId + "/messages/+"],
       showAllMessages: false,
       hiddenMessages: [],
     };
@@ -139,9 +135,9 @@ export default {
       return messageList;
     },
     localMessages() {
-      let messageTopics = this.getWildcardTopics("openWB/command/local/messages/+");
+      const messages = this.$store.state.local.messages || {};
       var messageList = [];
-      for (const [key, element] of Object.entries(messageTopics)) {
+      for (const [key, element] of Object.entries(messages)) {
         messageList.push({ topic: key, ...element });
       }
       return messageList;
@@ -171,7 +167,7 @@ export default {
      */
     dismissMessage(event) {
       if (this.localMessages.find((msg) => msg.topic === event.topic)) {
-        this.$store.commit("removeTopic", event.topic);
+        this.$store.commit("removeClientMessage", event.topic);
       } else {
         this.clearTopic(event.topic);
       }
@@ -184,14 +180,8 @@ export default {
      * Removes all received message topics from broker
      */
     dismissAllMessages() {
-      this.localMessages.forEach((message) => {
-        this.$store.commit("removeTopic", message.topic);
-      });
-      this.clientMessages.forEach((message) => {
-        this.clearTopic(message.topic);
-      });
-      this.systemMessages.forEach((message) => {
-        this.clearTopic(message.topic);
+      this.messages.forEach((message) => {
+        this.dismissMessage({ topic: message.topic });
       });
       this.hiddenMessages = [];
       this.toggleAllMessages();

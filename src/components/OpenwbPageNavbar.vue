@@ -308,9 +308,9 @@
       </ul>
     </div>
     <div
-      id="infoBar"
+      id="infobar"
       class="ml-auto d-flex flex-row align-items-center"
-    ></div>
+    />
   </nav>
 </template>
 
