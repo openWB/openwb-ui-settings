@@ -155,6 +155,9 @@ export default {
       const { protocol, host, port, endpoint, ...options } = this.connection;
       const connectUrl = `${protocol}://${host}:${port}${endpoint}`;
       const [user, pass] = this.$cookies.get("mqtt")?.split(":") || [null, null];
+      if (!(user && pass)) {
+        console.debug("Anonymous mqtt connection (no cookie set)");
+      }
       if ((this.nodeEnv !== "production" || protocol == "wss") && user && pass) {
         console.debug("Using mqtt credentials from cookie:", user, "/", pass);
         options.username = user;
@@ -165,7 +168,7 @@ export default {
       this.client.on("connect", () => {
         console.debug("Connection succeeded! ClientId: ", this.client.options.clientId);
         if (user) {
-          this.postClientMessage(`Angemeldet als "${user}."`, "success");
+          this.postClientMessage(`Angemeldet als "${user}".`, "success");
           this.$store.commit("storeLocal", { name: "username", value: user });
         }
         // required for route guards
@@ -231,7 +234,10 @@ export default {
           }
           this.client.subscribe(topic, {}, (error) => {
             if (error) {
-              console.error("Subscribe to topics error", error);
+              this.postClientMessage(
+                `Daten konnten nicht abonniert werden.<br />Topic: ${topic}<br />${error}`,
+                "danger",
+              );
               return;
             }
           });
@@ -247,6 +253,10 @@ export default {
           this.client.unsubscribe(topic, (error) => {
             if (error) {
               console.error("Unsubscribe error", error);
+              this.postClientMessage(
+                `Daten konnten nicht abbestellt werden.<br />Topic: ${topic}<br />${error}`,
+                "danger",
+              );
             }
           });
           if (topic.includes("#") || topic.includes("+")) {
@@ -272,6 +282,10 @@ export default {
       this.client.publish(topic, JSON.stringify(payload), options, (error) => {
         if (error) {
           console.error("Publish error", error);
+          this.postClientMessage(
+            `Daten konnten nicht geschrieben werden.<br />Topic: ${topic}<br />${error}`,
+            "danger",
+          );
         }
       });
     },
