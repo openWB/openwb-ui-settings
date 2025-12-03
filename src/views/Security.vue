@@ -78,78 +78,193 @@
         :collapsed="true"
       >
         <template #header>
-          <FontAwesomeIcon :icon="['fas', 'users']" />
+          <FontAwesomeIcon :icon="['fas', 'circle-user']" />
           Benutzer
         </template>
-        <openwb-base-text-input
-          v-model="newClientName"
-          title="Neuen Benutzer erstellen"
-          subtype="user"
-          add-button
-          @input:add="createClient()"
+        <openwb-base-alert
+          v-if="clients.length === 0"
+          subtype="info"
         >
-          <template #help>
-            Hier kann ein neuer Benutzer für die openWB Benutzerverwaltung angelegt werden. Der Benutzername kann nicht
-            mehr geändert werden!
-          </template>
-        </openwb-base-text-input>
-        <openwb-base-card
-          v-for="client in clients"
-          :key="client"
-          :collapsible="true"
-          :collapsed="true"
-          @expanded="getClient(client)"
-        >
-          <template #header>
-            <FontAwesomeIcon :icon="['fas', 'circle-user']" />
-            {{ client }}
-          </template>
-          <template #actions="slotProps">
-            <openwb-base-avatar
-              v-if="!slotProps.collapsed"
-              class="bg-danger clickable"
-              title="Benutzer löschen"
-              @click.stop="deleteClient(client)"
+          Es sind noch keine Benutzer angelegt oder Du hast nicht die benötigten Rechte, Daten anzuzeigen.
+        </openwb-base-alert>
+        <div v-else>
+          <openwb-base-text-input
+            v-model="newClientName"
+            title="Neuen Benutzer erstellen"
+            subtype="user"
+            add-button
+            @input:add="createClient()"
+          >
+            <template #help>
+              Hier kann ein neuer Benutzer für die openWB Benutzerverwaltung angelegt werden. Der Benutzername kann
+              nicht mehr geändert werden!
+            </template>
+          </openwb-base-text-input>
+          <form name="clientForm-{{ client }}">
+            <openwb-base-card
+              v-for="client in clients"
+              :key="client"
+              :collapsible="true"
+              :collapsed="true"
             >
-              <font-awesome-icon :icon="['fas', 'trash']" />
-            </openwb-base-avatar>
-          </template>
-          <div v-if="clientDetails[client]">
-            <openwb-base-text-input
-              v-model="clientDetails[client].username"
-              title="Benutzername"
-              subtype="user"
-              disabled
-            />
-            <openwb-base-text-input
-              v-model="clientDetails[client].textname"
-              title="E-Mail"
-              subtype="email"
-            />
-            <openwb-base-array-input
-              title="Zugewiesene Rollen"
-              :valid-elements="roles"
-              :model-value="clientDetails[client].roles.map((role) => role.rolename)"
-              @update:model-value="
-                (newRoles) => {
-                  clientDetails[client].roles = newRoles.map((roleName) => ({ rolename: roleName }));
-                }
-              "
-            >
-              <template #input-prefix>
-                <font-awesome-icon :icon="['fas', 'users-rectangle']" />
+              <template #header>
+                <FontAwesomeIcon :icon="['fas', 'circle-user']" />
+                {{ client }}
               </template>
-            </openwb-base-array-input>
-          </div>
-          <div v-else>Lade Benutzerdetails...</div>
-          <template #footer>
-            <openwb-base-submit-buttons
-              :hide-reset="true"
-              :hide-defaults="true"
-              @save="modifyClient(client)"
-            />
-          </template>
-        </openwb-base-card>
+              <template #actions="slotProps">
+                <span
+                  v-if="!slotProps.collapsed"
+                  class="pill clickable mr-2"
+                  :class="clientDetails[client]?.disabled ? 'bg-danger' : 'bg-success'"
+                  @click.stop="toggleClientDisabled(client)"
+                >
+                  {{ clientDetails[client]?.disabled ? "Deaktiviert" : "Aktiv" }}
+                </span>
+                <openwb-base-avatar
+                  v-if="!slotProps.collapsed"
+                  class="bg-danger clickable"
+                  title="Benutzer löschen"
+                  @click.stop="deleteClient(client)"
+                >
+                  <font-awesome-icon :icon="['fas', 'trash']" />
+                </openwb-base-avatar>
+              </template>
+              <div v-if="clientDetails[client]">
+                <openwb-base-text-input
+                  v-model="clientDetails[client].username"
+                  title="Benutzername"
+                  subtype="user"
+                  disabled
+                />
+                <openwb-base-text-input
+                  v-model="clientDetails[client].textname"
+                  title="E-Mail"
+                  subtype="email"
+                  required
+                />
+                <openwb-base-text-input
+                  v-model="clientDetails[client].password"
+                  title="Passwort"
+                  subtype="password"
+                >
+                  <template #help>
+                    Bereits festgelegte Passwörter werden nicht angezeigt!<br />
+                    Um das Passwort zu ändern, bitte ein neues Passwort eingeben und speichern, andernfalls das Feld
+                    leer lassen.
+                  </template>
+                </openwb-base-text-input>
+                <openwb-base-array-input
+                  title="Zugewiesene Gruppen"
+                  :valid-elements="groups"
+                  :model-value="clientDetails[client].groups.map((group) => group.groupname)"
+                  @update:model-value="
+                    (newGroups) => {
+                      clientDetails[client].groups = newGroups.map((groupName) => ({ groupname: groupName }));
+                    }
+                  "
+                >
+                  <template #input-prefix>
+                    <font-awesome-icon :icon="['fas', 'users']" />
+                  </template>
+                </openwb-base-array-input>
+                <openwb-base-array-input
+                  title="Zugewiesene Rollen"
+                  :valid-elements="roles"
+                  :model-value="clientDetails[client].roles.map((role) => role.rolename)"
+                  @update:model-value="
+                    (newRoles) => {
+                      clientDetails[client].roles = newRoles.map((roleName) => ({ rolename: roleName }));
+                    }
+                  "
+                >
+                  <template #input-prefix>
+                    <font-awesome-icon :icon="['fas', 'users-rectangle']" />
+                  </template>
+                </openwb-base-array-input>
+              </div>
+              <div v-else>Lade Benutzerdetails...</div>
+              <template #footer>
+                <openwb-base-submit-buttons
+                  :hide-reset="true"
+                  :hide-defaults="true"
+                  @save="modifyClient(client)"
+                />
+              </template>
+            </openwb-base-card>
+          </form>
+        </div>
+      </openwb-base-card>
+      <openwb-base-card
+        :collapsible="true"
+        :collapsed="true"
+      >
+        <template #header>
+          <FontAwesomeIcon :icon="['fas', 'users']" />
+          Gruppen
+        </template>
+        <openwb-base-alert
+          v-if="groups.length === 0"
+          subtype="info"
+        >
+          Es sind noch keine Gruppen angelegt oder Du hast nicht die benötigten Rechte, Daten anzuzeigen.
+        </openwb-base-alert>
+        <div v-else>
+          <openwb-base-card
+            v-for="group in groups"
+            :key="group"
+            :collapsible="true"
+            :collapsed="true"
+            @expanded="getGroup(group)"
+          >
+            <template #header>
+              <FontAwesomeIcon :icon="['fas', 'users']" />
+              {{ group }}
+            </template>
+            <div v-if="groupDetails[group]">
+              <openwb-base-text-input
+                v-model="groupDetails[group].groupname"
+                title="Gruppenname"
+                subtype="text"
+                disabled
+              />
+              <openwb-base-text-input
+                v-model="groupDetails[group].textname"
+                title="Beschreibung"
+                subtype="text"
+                disabled
+              />
+              <openwb-base-array-input
+                title="Zugewiesene Benutzer"
+                :valid-elements="clients"
+                :model-value="groupDetails[group].clients.map((client) => client.username)"
+                @update:model-value="
+                  (newClients) => {
+                    groupDetails[group].clients = newClients.map((clientName) => ({ username: clientName }));
+                  }
+                "
+              >
+                <template #input-prefix>
+                  <font-awesome-icon :icon="['fas', 'circle-user']" />
+                </template>
+              </openwb-base-array-input>
+              <openwb-base-array-input
+                title="Zugewiesene Rollen"
+                :valid-elements="roles"
+                :model-value="groupDetails[group].roles.map((role) => role.rolename)"
+                @update:model-value="
+                  (newRoles) => {
+                    groupDetails[group].roles = newRoles.map((roleName) => ({ rolename: roleName }));
+                  }
+                "
+              >
+                <template #input-prefix>
+                  <font-awesome-icon :icon="['fas', 'users-rectangle']" />
+                </template>
+              </openwb-base-array-input>
+            </div>
+            <div v-else>Lade Gruppendetails...</div>
+          </openwb-base-card>
+        </div>
       </openwb-base-card>
       <openwb-base-card
         :collapsible="true"
@@ -159,33 +274,41 @@
           <FontAwesomeIcon :icon="['fas', 'users-rectangle']" />
           Rollen
         </template>
-        <openwb-base-card
-          v-for="role in roles"
-          :key="role"
-          :collapsible="true"
-          :collapsed="true"
-          @expanded="getRole(role)"
+        <openwb-base-alert
+          v-if="roles.length === 0"
+          subtype="info"
         >
-          <template #header>
-            <FontAwesomeIcon :icon="['fas', 'users-rectangle']" />
-            {{ role }}
-          </template>
-          <div v-if="roleDetails[role]">
-            <openwb-base-text-input
-              v-model="roleDetails[role].rolename"
-              title="Rollenname"
-              subtype="text"
-              disabled
-            />
-            <openwb-base-text-input
-              v-model="roleDetails[role].textname"
-              title="Beschreibung"
-              subtype="text"
-              disabled
-            />
-          </div>
-          <div v-else>Lade Benutzerdetails...</div>
-        </openwb-base-card>
+          Es sind noch keine Rollen angelegt oder Du hast nicht die benötigten Rechte, Daten anzuzeigen.
+        </openwb-base-alert>
+        <div v-else>
+          <openwb-base-card
+            v-for="role in roles"
+            :key="role"
+            :collapsible="true"
+            :collapsed="true"
+            @expanded="getRole(role)"
+          >
+            <template #header>
+              <FontAwesomeIcon :icon="['fas', 'users-rectangle']" />
+              {{ role }}
+            </template>
+            <div v-if="roleDetails[role]">
+              <openwb-base-text-input
+                v-model="roleDetails[role].rolename"
+                title="Rollenname"
+                subtype="text"
+                disabled
+              />
+              <openwb-base-text-input
+                v-model="roleDetails[role].textname"
+                title="Beschreibung"
+                subtype="text"
+                disabled
+              />
+            </div>
+            <div v-else>Lade Rollendetails...</div>
+          </openwb-base-card>
+        </div>
       </openwb-base-card>
     </div>
   </div>
@@ -232,6 +355,8 @@ export default {
       controlCommandsQueue: [],
       clients: [],
       clientDetails: {},
+      groups: [],
+      groupDetails: {},
       roles: [],
       roleDetails: {},
       newClientName: null,
@@ -240,6 +365,9 @@ export default {
   computed: {
     dynSecResponse() {
       return this.$store.state.mqtt["$CONTROL/dynamic-security/v1/response"];
+    },
+    loggedInUser() {
+      return this.$store.state.local.username || null;
     },
   },
   watch: {
@@ -256,7 +384,15 @@ export default {
             case "createClient":
             case "modifyClient":
             case "deleteClient":
+            case "disableClient":
+            case "enableClient":
               this.getClientList();
+              break;
+            case "listGroups":
+              this.groups = JSON.parse(JSON.stringify(response.data.groups));
+              break;
+            case "getGroup":
+              this.groupDetails[response.data.group.groupname] = JSON.parse(JSON.stringify(response.data.group));
               break;
             case "listRoles":
               this.roles = JSON.parse(JSON.stringify(response.data.roles));
@@ -273,14 +409,31 @@ export default {
       this.activeControlCommand = null;
       this.processControlCommandQueue();
     },
+    loggedInUser(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        this.init();
+      }
+    },
   },
   mounted() {
-    if (this.$store.state.mqtt["openWB/general/user_management_active"] === true) {
-      this.getClientList();
-      this.getRoleList();
-    }
+    this.init();
   },
   methods: {
+    init() {
+      this.clients = [];
+      this.clientDetails = {};
+      this.groups = [];
+      this.groupDetails = {};
+      this.roles = [];
+      this.roleDetails = {};
+      console.log("User management active?", this.$store.state.mqtt["openWB/general/user_management_active"]);
+      if (this.$store.state.mqtt["openWB/general/user_management_active"] === true) {
+        console.log("Initializing Security view for user:", this.loggedInUser);
+        this.getClientList();
+        this.getGroupList();
+        this.getRoleList();
+      }
+    },
     sendControlCommand(command, payload = {}) {
       if (this.activeControlCommand !== null) {
         console.warn("Control command already running, please wait.");
@@ -321,9 +474,27 @@ export default {
       console.log("Deleting client:", client);
       this.queueControlCommand("deleteClient", { username: client });
     },
+    toggleClientDisabled(client) {
+      const isDisabled = this.clientDetails[client]?.disabled || false;
+      this.queueControlCommand(isDisabled ? "enableClient" : "disableClient", {
+        username: client,
+      });
+      this.queueControlCommand("getClient", { username: client });
+    },
     modifyClient(client) {
       console.log("Modifying client:", client);
+      if ([null, undefined, ""].includes(this.clientDetails[client].password)) {
+        // remove password field to avoid resetting password to empty
+        console.log("No password change, removing password field from modification.");
+        delete this.clientDetails[client].password;
+      }
       this.queueControlCommand("modifyClient", { username: client, ...this.clientDetails[client] });
+    },
+    getGroupList() {
+      this.queueControlCommand("listGroups");
+    },
+    getGroup(group) {
+      this.queueControlCommand("getGroup", { groupname: group });
     },
     getRoleList() {
       this.queueControlCommand("listRoles");

@@ -108,6 +108,8 @@ export default {
         this.$cookies.set("mqtt", `${this.username}:${this.password}`);
         // reconnect mqtt
         this.$root.reconnectMqttClient();
+        // reload page ?
+        // this.$router.go();
       }
       console.warn("Closing login modal", event);
       this.showLoginModal = false;
@@ -120,6 +122,8 @@ export default {
         this.$cookies.remove("mqtt");
         // reconnect mqtt
         this.$root.reconnectMqttClient();
+        // reload page ?
+        // this.$router.go();
       }
     },
   },
