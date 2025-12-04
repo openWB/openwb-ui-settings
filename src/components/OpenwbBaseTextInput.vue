@@ -37,6 +37,10 @@
                 :icon="['fas', 'user']"
               />
               <font-awesome-icon
+                v-if="subtype == 'group'"
+                :icon="['fas', 'users']"
+              />
+              <font-awesome-icon
                 v-if="subtype == 'json'"
                 :icon="['fas', 'code']"
               />
@@ -55,7 +59,7 @@
             </div>
           </div>
           <input
-            v-if="['text', 'user'].includes(subtype)"
+            v-if="['text', 'user', 'group'].includes(subtype)"
             :id="`${uid}-text-input`"
             ref="textInput"
             v-model="value"
@@ -210,6 +214,7 @@ import {
   faNetworkWired as fasNetworkWired,
   faGlobe as fasGlobe,
   faUser as fasUser,
+  faUsers as fasUsers,
   faCode as fasCode,
   faLock as fasLock,
   faUnlock as fasUnlock,
@@ -226,6 +231,7 @@ library.add(
   fasNetworkWired,
   fasGlobe,
   fasUser,
+  fasUsers,
   fasCode,
   fasLock,
   fasUnlock,
@@ -250,9 +256,20 @@ export default {
     subtype: {
       validator: function (value) {
         return (
-          ["text", "email", "host", "url", "user", "json", "password", "time", "date", "month", "year"].indexOf(
-            value,
-          ) !== -1
+          [
+            "text",
+            "email",
+            "host",
+            "url",
+            "user",
+            "group",
+            "json",
+            "password",
+            "time",
+            "date",
+            "month",
+            "year",
+          ].indexOf(value) !== -1
         );
       },
       default: "text",
