@@ -297,10 +297,10 @@
                     unit="kW"
                     required
                     :model-value="
-                      $store.state.mqtt['openWB/bat/'+batteryConfig.id+'/max_discharge_power'] / 1000
+                      $store.state.mqtt['openWB/bat/'+batteryConfig.id+'/get/max_discharge_power'] / 1000
                     "
                     @update:model-value="
-                      updateState('openWB/bat/'+batteryConfig.id+'/max_discharge_power', $event * 1000)
+                      updateState('openWB/bat/'+batteryConfig.id+'/get/max_discharge_power', $event * 1000)
                     "
                   />
                   <openwb-base-number-input
@@ -310,10 +310,10 @@
                     unit="kW"
                     required
                     :model-value="
-                      $store.state.mqtt['openWB/bat/'+batteryConfig.id+'/max_charge_power'] / 1000
+                      $store.state.mqtt['openWB/bat/'+batteryConfig.id+'/get/max_charge_power'] / 1000
                     "
                     @update:model-value="
-                      updateState('openWB/bat/'+batteryConfig.id+'/max_charge_power', $event * 1000)
+                      updateState('openWB/bat/'+batteryConfig.id+'/get/max_charge_power', $event * 1000)
                     "
                   />
                 </openwb-base-card>
@@ -586,8 +586,19 @@ export default {
         "openWB/general/chargemode_config/pv_charging/min_bat_soc",
         "openWB/general/chargemode_config/pv_charging/max_bat_soc",
         "openWB/bat/config/bat_control_permitted",
+        "openWB/bat/config/bat_control_activated",
         "openWB/bat/get/power_limit_controllable",
+        "openWB/bat/+/get/max_charge_power",
+        "openWB/bat/+/get/max_discharge_power",
+        "openWB/bat/config/bat_control_min_soc",
+        "openWB/bat/config/bat_control_max_soc",
         "openWB/bat/config/power_limit_mode",
+        "openWB/bat/config/power_limit_condition",
+        "openWB/bat/config/manual_mode",
+        "openWB/bat/config/price_limit_activated",
+        "openWB/bat/config/price_limit",
+        "openWB/bat/config/price_charge_activated",
+        "openWB/bat/config/charge_limit",
         "openWB/system/device/+/component/+/config",
         "openWB/bat/+/get/power_limit_controllable",
       ],
