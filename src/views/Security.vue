@@ -1,5 +1,21 @@
 <template>
   <div class="security">
+    <openwb-base-modal-dialog
+      :show="showResetModal"
+      title="Benutzerverwaltung zurücksetzten"
+      subtype="danger"
+      :buttons="[{ text: 'Alles zurücksetzen!', event: 'confirm', subtype: 'danger' }]"
+      @modal-result="handleResetModal($event)"
+    >
+      <p>
+        Bist Du sicher, dass Du die openWB Benutzerverwaltung zurücksetzen möchtest? Hiermit werden alle Benutzer,
+        Gruppen und Rollen gelöscht und auf die Werkseinstellungen zurückgesetzt. Diese Aktion ist irreversibel!
+      </p>
+      <p>
+        Standard-Admin-Benutzer nach dem Zurücksetzen: Benutzername: <strong>admin</strong> Passwort:
+        <strong>openwb</strong>
+      </p>
+    </openwb-base-modal-dialog>
     <form name="accessForm">
       <openwb-base-card title="Allgemein">
         <openwb-base-button-group-input
@@ -62,6 +78,23 @@
             </p>
           </template>
         </openwb-base-button-group-input>
+        <hr />
+        <openwb-base-button-input
+          title="Benutzerverwaltung zurücksetzen"
+          button-text="Zurücksetzen"
+          subtype="danger"
+          :disabled="$store.state.mqtt['openWB/general/user_management_active'] === true || loggedInUser !== null"
+          @button-clicked="showResetModal = true"
+        >
+          <template #help>
+            Hiermit werden alle Benutzer, Gruppen und Rollen der openWB Benutzerverwaltung gelöscht und auf die
+            Werkseinstellungen zurückgesetzt. Diese Aktion ist irreversibel!<br />
+            <strong>Hinweis:</strong> Die Benutzerverwaltung muss deaktiviert sein und es darf kein Benutzer angemeldet
+            sein, um die Benutzerverwaltung zurücksetzen zu können.<br />
+            Standard-Admin-Benutzer nach dem Zurücksetzen: Benutzername: <strong>admin</strong> Passwort:
+            <strong>openwb</strong>
+          </template>
+        </openwb-base-button-input>
         <template #footer>
           <openwb-base-submit-buttons
             form-name="accessForm"
@@ -476,6 +509,7 @@ export default {
       newGroupName: null,
       anonymousGroupName: null,
       defaultAclAccess: [],
+      showResetModal: false,
     };
   },
   computed: {
@@ -585,6 +619,13 @@ export default {
         this.getClientList();
         this.getGroupList();
         this.getRoleList();
+      }
+    },
+    handleResetModal(event) {
+      this.showResetModal = false;
+      if (event === "confirm") {
+        console.error("Resetting user management!");
+        this.$emit("sendCommand", { command: "resetUserManagement" });
       }
     },
     sendControlCommand(command, parameters = {}) {
