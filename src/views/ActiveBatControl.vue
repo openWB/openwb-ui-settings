@@ -316,26 +316,43 @@
                       updateState('openWB/bat/'+batteryConfig.id+'/max_charge_power', $event * 1000)
                     "
                   />
-                  <openwb-base-range-input
-                    title="Untere Entladeschranke"
-                    :min="0"
-                    :max="100"
-                    :step="1"
-                    unit="%"
-                    required
-                    :model-value="$store.state.mqtt['openWB/bat/'+batteryConfig.id+'/min_bat_soc']"
-                    @update:model-value="updateState('openWB/bat/'+batteryConfig.id+'/min_bat_soc', $event)"
-                  >
-                    <template #help>
-                      Auch Modi, welche den Speicher aktiv entladen (Verbraucher ausgleichen) dürfen nicht
-                      unterhalb dieses SoC entladen.
-                    </template>
-                  </openwb-base-range-input>
                 </openwb-base-card>
                 <hr />
               </div>
             </openwb-base-card>
             <div v-if="$store.state.mqtt['openWB/bat/get/power_limit_controllable'] === true">
+
+              <openwb-base-range-input
+                title="Untere Entladeschranke"
+                :min="0"
+                :max="100"
+                :step="1"
+                unit="%"
+                required
+                :model-value="$store.state.mqtt['openWB/bat/config/bat_control_min_soc']"
+                @update:model-value="updateState('openWB/bat/config/bat_control_min_soc', $event)"
+              >
+                <template #help>
+                  Speicher welche aktiv entladen werden sollen schalten unterhalb des eingestellten SoC
+                  aud "Eigenregelung" um mögliche Tiefenentladung zu verhindern. Die aktive Ladung ist
+                  weiterhin möglich.
+                </template>
+              </openwb-base-range-input>
+              <openwb-base-range-input
+                title="Obere Ladeschranke"
+                :min="0"
+                :max="100"
+                :step="1"
+                unit="%"
+                required
+                :model-value="$store.state.mqtt['openWB/bat/config/bat_control_max_soc']"
+                @update:model-value="updateState('openWB/bat/config/bat_control_max_soc', $event)"
+              >
+                <template #help>
+                  Speicher welche aktiv geladen werden sollen werden oberhalb des eingestellten SoC gesperrt.
+                  Eine aktive Entladung ist weiterhin möglich.
+                </template>
+              </openwb-base-range-input>
               <openwb-base-button-group-input
                 v-model="powerLimit"
                 title="Regellimit"
