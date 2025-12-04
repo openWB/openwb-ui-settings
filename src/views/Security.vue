@@ -76,9 +76,10 @@
       <openwb-base-card
         :collapsible="true"
         :collapsed="true"
+        @expanded="getClientsDetails()"
       >
         <template #header>
-          <FontAwesomeIcon :icon="['fas', 'circle-user']" />
+          <FontAwesomeIcon :icon="['fas', 'user']" />
           Benutzer
         </template>
         <openwb-base-alert
@@ -100,36 +101,46 @@
               nicht mehr geändert werden!
             </template>
           </openwb-base-text-input>
-          <form name="clientForm-{{ client }}">
-            <openwb-base-card
-              v-for="client in clients"
-              :key="client"
-              :collapsible="true"
-              :collapsed="true"
-            >
-              <template #header>
-                <FontAwesomeIcon :icon="['fas', 'circle-user']" />
-                {{ client }}
-              </template>
-              <template #actions="slotProps">
-                <span
-                  v-if="!slotProps.collapsed"
-                  class="pill clickable mr-2"
-                  :class="clientDetails[client]?.disabled ? 'bg-danger' : 'bg-success'"
-                  @click.stop="toggleClientDisabled(client)"
-                >
-                  {{ clientDetails[client]?.disabled ? "Deaktiviert" : "Aktiv" }}
-                </span>
-                <openwb-base-avatar
-                  v-if="!slotProps.collapsed"
-                  class="bg-danger clickable"
-                  title="Benutzer löschen"
-                  @click.stop="deleteClient(client)"
-                >
-                  <font-awesome-icon :icon="['fas', 'trash']" />
-                </openwb-base-avatar>
-              </template>
-              <div v-if="clientDetails[client]">
+          <hr />
+          <openwb-base-card
+            v-for="client in clients"
+            :key="client"
+            :collapsible="true"
+            :collapsed="true"
+            @expanded="getClient(client)"
+          >
+            <template #header>
+              <FontAwesomeIcon :icon="['fas', clientDetails[client]?.disabled ? 'user-slash' : 'user']" />
+              {{ client }}
+            </template>
+            <template #actions="slotProps">
+              <span
+                v-if="!slotProps.collapsed"
+                class="pill mr-2"
+                :class="[
+                  clientDetails[client]?.disabled ? 'bg-danger' : 'bg-success',
+                  { clickable: loggedInUser !== client },
+                ]"
+                :title="
+                  loggedInUser !== client
+                    ? `Benutzer ${clientDetails[client]?.disabled ? 'aktivieren' : 'deaktivieren'}`
+                    : 'Der aktuell angemeldete Benutzer kann nicht deaktiviert werden.'
+                "
+                @click.stop="if (loggedInUser !== client) toggleClientDisabled(client);"
+              >
+                {{ clientDetails[client]?.disabled ? "Deaktiviert" : "Aktiv" }}
+              </span>
+              <openwb-base-avatar
+                v-if="!slotProps.collapsed && loggedInUser !== client"
+                class="bg-danger clickable"
+                title="Benutzer löschen"
+                @click.stop="if (loggedInUser !== client) deleteClient(client);"
+              >
+                <font-awesome-icon :icon="['fas', 'trash']" />
+              </openwb-base-avatar>
+            </template>
+            <div v-if="clientDetails[client]">
+              <form :name="`clientForm-${client}`">
                 <openwb-base-text-input
                   v-model="clientDetails[client].username"
                   title="Benutzername"
@@ -181,17 +192,26 @@
                     <font-awesome-icon :icon="['fas', 'users-rectangle']" />
                   </template>
                 </openwb-base-array-input>
-              </div>
-              <div v-else>Lade Benutzerdetails...</div>
-              <template #footer>
-                <openwb-base-submit-buttons
-                  :hide-reset="true"
-                  :hide-defaults="true"
-                  @save="modifyClient(client)"
-                />
-              </template>
-            </openwb-base-card>
-          </form>
+                <openwb-base-textarea
+                  v-model="clientDetails[client].textdescription"
+                  title="Zusatzinformationen"
+                  subtype="text"
+                >
+                  <template #help> Hier können zusätzliche Informationen zum Benutzer hinterlegt werden. </template>
+                </openwb-base-textarea>
+              </form>
+            </div>
+            <div v-else>Lade Benutzerdetails...</div>
+            <template #footer>
+              <openwb-base-submit-buttons
+                :form-name="`clientForm-${client}`"
+                :save-id="`saveClientBtn-${client}`"
+                :hide-reset="true"
+                :hide-defaults="true"
+                @save="modifyClient(client)"
+              />
+            </template>
+          </openwb-base-card>
         </div>
       </openwb-base-card>
       <openwb-base-card
@@ -209,6 +229,19 @@
           Es sind noch keine Gruppen angelegt oder Du hast nicht die benötigten Rechte, Daten anzuzeigen.
         </openwb-base-alert>
         <div v-else>
+          <openwb-base-text-input
+            v-model="newGroupName"
+            title="Neue Gruppe erstellen"
+            subtype="group"
+            add-button
+            @input:add="createGroup()"
+          >
+            <template #help>
+              Hier kann eine neue Gruppe für die openWB Benutzerverwaltung angelegt werden. Der Gruppenname kann nicht
+              mehr geändert werden!
+            </template>
+          </openwb-base-text-input>
+          <hr />
           <openwb-base-card
             v-for="group in groups"
             :key="group"
@@ -220,49 +253,84 @@
               <FontAwesomeIcon :icon="['fas', 'users']" />
               {{ group }}
             </template>
+            <template #actions="slotProps">
+              <openwb-base-avatar
+                v-if="!slotProps.collapsed && group !== anonymousGroupName"
+                class="bg-danger clickable"
+                title="Gruppe löschen"
+                @click.stop="deleteGroup(group)"
+              >
+                <font-awesome-icon :icon="['fas', 'trash']" />
+              </openwb-base-avatar>
+            </template>
             <div v-if="groupDetails[group]">
-              <openwb-base-text-input
-                v-model="groupDetails[group].groupname"
-                title="Gruppenname"
-                subtype="text"
-                disabled
-              />
-              <openwb-base-text-input
-                v-model="groupDetails[group].textname"
-                title="Beschreibung"
-                subtype="text"
-                disabled
-              />
-              <openwb-base-array-input
-                title="Zugewiesene Benutzer"
-                :valid-elements="clients"
-                :model-value="groupDetails[group].clients.map((client) => client.username)"
-                @update:model-value="
-                  (newClients) => {
-                    groupDetails[group].clients = newClients.map((clientName) => ({ username: clientName }));
-                  }
-                "
+              <openwb-base-alert
+                v-if="group === anonymousGroupName"
+                subtype="info"
               >
-                <template #input-prefix>
-                  <font-awesome-icon :icon="['fas', 'circle-user']" />
-                </template>
-              </openwb-base-array-input>
-              <openwb-base-array-input
-                title="Zugewiesene Rollen"
-                :valid-elements="roles"
-                :model-value="groupDetails[group].roles.map((role) => role.rolename)"
-                @update:model-value="
-                  (newRoles) => {
-                    groupDetails[group].roles = newRoles.map((roleName) => ({ rolename: roleName }));
-                  }
-                "
-              >
-                <template #input-prefix>
-                  <font-awesome-icon :icon="['fas', 'users-rectangle']" />
-                </template>
-              </openwb-base-array-input>
+                Die Gruppe "{{ group }}" kann nicht gelöscht werden, da sie für den anonymen Zugriff (ohne Anmeldung)
+                auf openWB benötigt wird.
+              </openwb-base-alert>
+              <form :name="`groupForm-${group}`">
+                <openwb-base-text-input
+                  v-model="groupDetails[group].groupname"
+                  title="Gruppenname"
+                  subtype="text"
+                  disabled
+                />
+                <openwb-base-text-input
+                  v-model="groupDetails[group].textname"
+                  title="Beschreibung"
+                  subtype="text"
+                  disabled
+                />
+                <openwb-base-array-input
+                  title="Zugewiesene Benutzer"
+                  :valid-elements="clients"
+                  :model-value="groupDetails[group].clients.map((client) => client.username)"
+                  @update:model-value="
+                    (newClients) => {
+                      groupDetails[group].clients = newClients.map((clientName) => ({ username: clientName }));
+                    }
+                  "
+                >
+                  <template #input-prefix>
+                    <font-awesome-icon :icon="['fas', 'circle-user']" />
+                  </template>
+                </openwb-base-array-input>
+                <openwb-base-array-input
+                  title="Zugewiesene Rollen"
+                  :valid-elements="roles"
+                  :model-value="groupDetails[group].roles.map((role) => role.rolename)"
+                  @update:model-value="
+                    (newRoles) => {
+                      groupDetails[group].roles = newRoles.map((roleName) => ({ rolename: roleName }));
+                    }
+                  "
+                >
+                  <template #input-prefix>
+                    <font-awesome-icon :icon="['fas', 'users-rectangle']" />
+                  </template>
+                </openwb-base-array-input>
+                <openwb-base-textarea
+                  v-model="groupDetails[group].textdescription"
+                  title="Zusatzinformationen"
+                  subtype="text"
+                >
+                  <template #help> Hier können zusätzliche Informationen zur Gruppe hinterlegt werden. </template>
+                </openwb-base-textarea>
+              </form>
             </div>
             <div v-else>Lade Gruppendetails...</div>
+            <template #footer>
+              <openwb-base-submit-buttons
+                :form-name="`groupForm-${group}`"
+                :save-id="`saveGroupBtn-${group}`"
+                :hide-reset="true"
+                :hide-defaults="true"
+                @save="modifyGroup(group)"
+              />
+            </template>
           </openwb-base-card>
         </div>
       </openwb-base-card>
@@ -281,6 +349,26 @@
           Es sind noch keine Rollen angelegt oder Du hast nicht die benötigten Rechte, Daten anzuzeigen.
         </openwb-base-alert>
         <div v-else>
+          <openwb-base-alert subtype="info">
+            Rollen definieren die Zugriffsrechte (Access Control Lists, ACLs) für Benutzer und Gruppen. Jeder Benutzer
+            oder jede Gruppe kann mehrere Rollen zugewiesen bekommen, wodurch sich die effektiven Zugriffsrechte
+            zusammensetzen.<br />
+            openWB erstellt automatisch relevante Rollen während der Installation und bei der Aktivierung bestimmter
+            Funktionen oder Bearbeitung von Ladepunkten, Geräten und Komponenten etc. Rollen können hier nicht
+            bearbeitet oder gelöscht werden.
+          </openwb-base-alert>
+          <openwb-base-textarea
+            title="Standard-Zugriffsrechte"
+            :model-value="readableAcls(defaultAclAccess)"
+            disabled
+          >
+            <template #help>
+              Hier werden die Standard Zugriffsrechte (Access Control Lists, ACLs) angezeigt. Diese werden verwendet,
+              wenn keine spezifischen ACLs für einen Benutzer oder eine Gruppe definiert sind oder die Topics nicht
+              explizit abgedeckt werden.
+            </template>
+          </openwb-base-textarea>
+          <hr />
           <openwb-base-card
             v-for="role in roles"
             :key="role"
@@ -293,23 +381,47 @@
               {{ role }}
             </template>
             <div v-if="roleDetails[role]">
-              <openwb-base-text-input
-                v-model="roleDetails[role].rolename"
-                title="Rollenname"
-                subtype="text"
-                disabled
-              />
-              <openwb-base-text-input
-                v-model="roleDetails[role].textname"
-                title="Beschreibung"
-                subtype="text"
-                disabled
-              />
+              <form :name="`roleForm-${role}`">
+                <openwb-base-text-input
+                  v-model="roleDetails[role].rolename"
+                  title="Rollenname"
+                  subtype="text"
+                  disabled
+                />
+                <openwb-base-text-input
+                  v-model="roleDetails[role].textname"
+                  title="Beschreibung"
+                  subtype="text"
+                  disabled
+                />
+                <openwb-base-alert
+                  v-if="roleDetails[role].textdescription"
+                  subtype="info"
+                >
+                  {{ roleDetails[role].textdescription }}
+                </openwb-base-alert>
+                <openwb-base-textarea
+                  title="Zugriffsrechte (ACLs)"
+                  :model-value="readableAcls(roleDetails[role].acls)"
+                  disabled
+                >
+                  <template #help>
+                    Hier werden die Zugriffsrechte (Access Control Lists, ACLs) für diese Rolle angezeigt.
+                  </template>
+                </openwb-base-textarea>
+              </form>
             </div>
             <div v-else>Lade Rollendetails...</div>
           </openwb-base-card>
         </div>
       </openwb-base-card>
+    </div>
+    <div v-else>
+      <openwb-base-alert subtype="info">
+        Die Benutzerverwaltung ist deaktiviert. In diesem Modus haben alle Benutzer uneingeschränkten Zugriff auf
+        openWB.<br />
+        Um Benutzer, Gruppen und Rollen zu verwalten, muss die Benutzerverwaltung zuerst aktiviert werden.
+      </openwb-base-alert>
     </div>
   </div>
 </template>
@@ -317,7 +429,8 @@
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-  faCircleUser as fasCircleUser,
+  faUser as fasUser,
+  faUserSlash as fasUserSlash,
   faUsers as fasUsers,
   faUsersRectangle as fasUsersRectangle,
   faPlus as fasPlus,
@@ -325,7 +438,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasCircleUser, fasUsers, fasUsersRectangle, fasPlus, fasTrash);
+library.add(fasUser, fasUserSlash, fasUsers, fasUsersRectangle, fasPlus, fasTrash);
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 
@@ -360,6 +473,9 @@ export default {
       roles: [],
       roleDetails: {},
       newClientName: null,
+      newGroupName: null,
+      anonymousGroupName: null,
+      defaultAclAccess: [],
     };
   },
   computed: {
@@ -368,6 +484,21 @@ export default {
     },
     loggedInUser() {
       return this.$store.state.local.username || null;
+    },
+    readableAcls() {
+      return (acls) => {
+        if (!acls || !Array.isArray(acls)) {
+          return "";
+        }
+        return acls
+          .map((acl) => {
+            const type = acl.acltype;
+            const allow = acl.allow === true ? "erlaubt" : acl.allow === false ? "verboten" : "unbekannt";
+            const topic = acl.topic ? '"' + acl.topic + '"' : "<alle Topics>";
+            return `${type} ${topic} ${allow}`;
+          })
+          .join("\n");
+      };
     },
   },
   watch: {
@@ -382,23 +513,43 @@ export default {
               this.clientDetails[response.data.client.username] = JSON.parse(JSON.stringify(response.data.client));
               break;
             case "createClient":
-            case "modifyClient":
-            case "deleteClient":
             case "disableClient":
             case "enableClient":
               this.getClientList();
               break;
+            case "modifyClient":
+            case "deleteClient":
+              this.getClientList();
+              // update groups after client modification/deletion as clients in groups may have changed
+              this.getGroupsDetails();
+              break;
             case "listGroups":
               this.groups = JSON.parse(JSON.stringify(response.data.groups));
               break;
+            case "getAnonymousGroup":
+              this.anonymousGroupName = response.data.group.groupname;
+              break;
             case "getGroup":
               this.groupDetails[response.data.group.groupname] = JSON.parse(JSON.stringify(response.data.group));
+              break;
+            case "createGroup":
+              this.getGroupList();
+              break;
+            case "modifyGroup":
+            case "deleteGroup":
+              this.getGroupList();
+              // update clients after group modification/deletion as groups in clients may have changed
+              this.getClientsDetails();
               break;
             case "listRoles":
               this.roles = JSON.parse(JSON.stringify(response.data.roles));
               break;
             case "getRole":
               this.roleDetails[response.data.role.rolename] = JSON.parse(JSON.stringify(response.data.role));
+              break;
+            case "getDefaultACLAccess":
+              console.log("Default ACL Access:", response);
+              this.defaultAclAccess = JSON.parse(JSON.stringify(response.data.acls));
               break;
             default:
               console.warn("Unhandled dynamic security response:", response);
@@ -411,7 +562,8 @@ export default {
     },
     loggedInUser(newVal, oldVal) {
       if (newVal !== oldVal) {
-        this.init();
+        // reload the page to apply new user permissions
+        this.$router.go();
       }
     },
   },
@@ -426,27 +578,26 @@ export default {
       this.groupDetails = {};
       this.roles = [];
       this.roleDetails = {};
-      console.log("User management active?", this.$store.state.mqtt["openWB/general/user_management_active"]);
       if (this.$store.state.mqtt["openWB/general/user_management_active"] === true) {
-        console.log("Initializing Security view for user:", this.loggedInUser);
+        console.debug("Initializing Security view for user:", this.loggedInUser);
+        this.getAnonymousGroupName();
+        this.getDefaultAclAccess();
         this.getClientList();
         this.getGroupList();
         this.getRoleList();
       }
     },
-    sendControlCommand(command, payload = {}) {
+    sendControlCommand(command, parameters = {}) {
       if (this.activeControlCommand !== null) {
         console.warn("Control command already running, please wait.");
         return;
       }
       this.activeControlCommand = command;
-      console.log("Sending control command:", command, payload);
-      console.log("$CONTROL command:", {
-        commands: [{ command: command, ...payload }],
-      });
-      this.$root.doPublish("$CONTROL/dynamic-security/v1", {
-        commands: [{ command: command, ...payload }],
-      });
+      const payload = {
+        commands: [{ command: command, ...parameters }],
+      };
+      console.debug("$CONTROL command:", payload);
+      this.$root.doPublish("$CONTROL/dynamic-security/v1", payload);
     },
     queueControlCommand(command, payload = {}) {
       this.controlCommandsQueue.push({ command, payload });
@@ -462,30 +613,44 @@ export default {
     getClientList() {
       this.queueControlCommand("listClients");
     },
+    getClientsDetails() {
+      this.clients.forEach((client) => {
+        this.queueControlCommand("getClient", { username: client });
+      });
+    },
     getClient(client) {
       this.queueControlCommand("getClient", { username: client });
     },
     createClient() {
-      console.log("Creating new client:", this.nweClientName);
-      this.queueControlCommand("createClient", { username: this.nweClientName });
+      console.debug("Creating new client:", this.newClientName);
+      this.queueControlCommand("createClient", { username: this.newClientName });
       this.newClientName = null;
     },
     deleteClient(client) {
-      console.log("Deleting client:", client);
+      if (client === this.loggedInUser) {
+        console.error("Cannot delete currently logged in user:", client);
+        this.$root.postClientMessage("Der aktuell angemeldete Benutzer kann nicht gelöscht werden.", "danger");
+        return;
+      }
+      console.debug("Deleting client:", client);
       this.queueControlCommand("deleteClient", { username: client });
     },
     toggleClientDisabled(client) {
       const isDisabled = this.clientDetails[client]?.disabled || false;
+      if (client === this.loggedInUser && isDisabled === false) {
+        console.error("Cannot disable currently logged in user:", client);
+        this.$root.postClientMessage("Der aktuell angemeldete Benutzer kann nicht deaktiviert werden.", "danger");
+        return;
+      }
       this.queueControlCommand(isDisabled ? "enableClient" : "disableClient", {
         username: client,
       });
       this.queueControlCommand("getClient", { username: client });
     },
     modifyClient(client) {
-      console.log("Modifying client:", client);
+      console.debug("Modifying client:", client);
       if ([null, undefined, ""].includes(this.clientDetails[client].password)) {
         // remove password field to avoid resetting password to empty
-        console.log("No password change, removing password field from modification.");
         delete this.clientDetails[client].password;
       }
       this.queueControlCommand("modifyClient", { username: client, ...this.clientDetails[client] });
@@ -493,14 +658,38 @@ export default {
     getGroupList() {
       this.queueControlCommand("listGroups");
     },
+    getAnonymousGroupName() {
+      this.queueControlCommand("getAnonymousGroup");
+    },
+    getGroupsDetails() {
+      this.groups.forEach((group) => {
+        this.queueControlCommand("getGroup", { groupname: group });
+      });
+    },
     getGroup(group) {
       this.queueControlCommand("getGroup", { groupname: group });
+    },
+    createGroup() {
+      console.debug("Creating new group:", this.newGroupName);
+      this.queueControlCommand("createGroup", { groupname: this.newGroupName });
+      this.newGroupName = null;
+    },
+    deleteGroup(group) {
+      console.debug("Deleting group:", group);
+      this.queueControlCommand("deleteGroup", { groupname: group });
+    },
+    modifyGroup(group) {
+      console.debug("Modifying group:", group);
+      this.queueControlCommand("modifyGroup", { groupname: group, ...this.groupDetails[group] });
     },
     getRoleList() {
       this.queueControlCommand("listRoles");
     },
     getRole(role) {
       this.queueControlCommand("getRole", { rolename: role });
+    },
+    getDefaultAclAccess() {
+      this.queueControlCommand("getDefaultACLAccess");
     },
   },
 };
