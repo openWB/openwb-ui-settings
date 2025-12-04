@@ -626,6 +626,75 @@
               Zählerstand bei Ladeende
             </template>
           </openwb-base-button-group-input>
+          <openwb-base-button-group-input
+            :buttons="[
+              {
+                buttonValue: false,
+                text: 'Nein',
+                class: 'btn-outline-danger',
+              },
+              {
+                buttonValue: true,
+                text: 'Ja',
+                class: 'btn-outline-success',
+              },
+            ]"
+            :model-value="$store.state.mqtt['openWB/general/charge_log_data_config']?.data_exported_since_mode_switch"
+            @update:model-value="
+              updateState('openWB/general/charge_log_data_config', $event, 'data_exported_since_mode_switch')
+            "
+          >
+            <template #title>
+              <font-awesome-icon :icon="['fas', 'charging-station']" />
+              Entladene Energie
+            </template>
+          </openwb-base-button-group-input>
+          <openwb-base-button-group-input
+            :buttons="[
+              {
+                buttonValue: false,
+                text: 'Nein',
+                class: 'btn-outline-danger',
+              },
+              {
+                buttonValue: true,
+                text: 'Ja',
+                class: 'btn-outline-success',
+              },
+            ]"
+            :model-value="$store.state.mqtt['openWB/general/charge_log_data_config']?.chargepoint_exported_at_start"
+            @update:model-value="
+              updateState('openWB/general/charge_log_data_config', $event, 'chargepoint_exported_at_start')
+            "
+          >
+            <template #title>
+              <font-awesome-icon :icon="['fas', 'charging-station']" />
+              Zählerstand bei Entladebeginn
+            </template>
+          </openwb-base-button-group-input>
+          <openwb-base-button-group-input
+            :buttons="[
+              {
+                buttonValue: false,
+                text: 'Nein',
+                class: 'btn-outline-danger',
+              },
+              {
+                buttonValue: true,
+                text: 'Ja',
+                class: 'btn-outline-success',
+              },
+            ]"
+            :model-value="$store.state.mqtt['openWB/general/charge_log_data_config']?.chargepoint_exported_at_end"
+            @update:model-value="
+              updateState('openWB/general/charge_log_data_config', $event, 'chargepoint_exported_at_end')
+            "
+          >
+            <template #title>
+              <font-awesome-icon :icon="['fas', 'charging-station']" />
+              Zählerstand bei Entladeende
+            </template>
+          </openwb-base-button-group-input>
           <!-- <openwb-base-button-group-input
             :buttons="[
               {
