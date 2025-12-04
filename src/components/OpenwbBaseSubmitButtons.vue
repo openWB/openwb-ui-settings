@@ -28,7 +28,7 @@
   <div class="row justify-content-center mb-1">
     <div class="col-md-4 d-flex py-1 justify-content-center">
       <button
-        id="saveSettingsBtn"
+        :id="saveId"
         type="button"
         class="btn btn-block"
         :class="[{ disabled: saveDisabled }, saveDisabled ? 'btn-outline-success' : 'btn-success']"
@@ -44,7 +44,7 @@
       class="col-md-4 d-flex py-1 justify-content-center"
     >
       <button
-        id="modalResetBtn"
+        :id="resetId"
         type="button"
         class="btn btn-block"
         :class="[{ disabled: resetDisabled }, resetDisabled ? 'btn-outline-warning' : 'btn-warning']"
@@ -60,7 +60,7 @@
       class="col-md-4 d-flex py-1 justify-content-center"
     >
       <button
-        id="modalDefaultsBtn"
+        :id="defaultsId"
         type="button"
         class="btn btn-block"
         :class="[{ disabled: defaultsDisabled }, defaultsDisabled ? 'btn-outline-danger' : 'btn-danger']"
@@ -93,10 +93,13 @@ export default {
     hideDefaults: { type: Boolean, default: true },
     saveLabel: { type: String, default: "Speichern" },
     saveDisabled: { type: Boolean, default: false },
+    saveId: { type: String, default: "saveSettingsBtn" },
     resetLabel: { type: String, default: "Änderungen verwerfen" },
     resetDisabled: { type: Boolean, default: false },
+    resetId: { type: String, default: "modalResetBtn" },
     defaultsLabel: { type: String, default: "Werkseinstellungen" },
     defaultsDisabled: { type: Boolean, default: false },
+    defaultsId: { type: String, default: "modalDefaultsBtn" },
   },
   emits: ["reset", "defaults", "save"],
   data() {
