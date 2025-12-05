@@ -110,7 +110,7 @@ export default {
   },
   inheritAttrs: false,
   props: {
-    title: { type: String, required: true, default: "#TITLE#" },
+    title: { type: String, required: true },
     modelValue: {
       type: Array,
       default: () => {
