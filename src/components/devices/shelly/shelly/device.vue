@@ -28,6 +28,18 @@
         Vorzeichen invertieren.
       </template>
     </openwb-base-select-input>
+    <openwb-base-number-input
+      title="Phase"
+      required
+      :min="1"
+      :max="3"
+      :model-value="device.configuration.phase"
+      @update:model-value="updateConfiguration($event, 'configuration.phase')"
+    >
+      <template #help>
+        Gibt an an welcher Phase des Hausanschlusses die (erste) Phase des Shelly angeschlossen ist.
+      </template>
+    </openwb-base-number-input>
   </div>
 </template>
 

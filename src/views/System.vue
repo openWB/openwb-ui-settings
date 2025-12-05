@@ -50,13 +50,13 @@
           readonly
         />
       </openwb-base-card>
-      <form name="versionInfoForm">
-        <openwb-base-card
-          title="Versions-Informationen / Aktualisierung"
-          subtype="success"
-          :collapsible="true"
-          :collapsed="!installAssistantActive"
-        >
+      <openwb-base-card
+        title="Versions-Informationen / Aktualisierung"
+        subtype="success"
+        :collapsible="true"
+        :collapsed="!installAssistantActive"
+      >
+        <form name="versionInfoForm">
           <openwb-base-text-input
             v-model="$store.state.mqtt['openWB/system/current_branch']"
             title="Entwicklungszweig"
@@ -94,7 +94,7 @@
               </li>
             </ul>
           </openwb-base-card>
-          <openwb-base-alert 
+          <openwb-base-alert
             v-if="!installAssistantActive"
             subtype="danger"
           >
@@ -114,15 +114,6 @@
           <div class="row justify-content-center">
             <div class="col-md-4 d-flex py-1 justify-content-center">
               <openwb-base-click-button
-                class="btn-info"
-                @button-clicked="sendSystemCommand('systemFetchVersions')"
-              >
-                Informationen aktualisieren
-                <font-awesome-icon :icon="['fas', 'download']" />
-              </openwb-base-click-button>
-            </div>
-            <div class="col-md-4 d-flex py-1 justify-content-center">
-              <openwb-base-click-button
                 :class="updateAvailable ? 'btn-success clickable' : 'btn-outline-success'"
                 :disabled="!updateAvailable"
                 @button-clicked="systemUpdate()"
@@ -132,7 +123,13 @@
               </openwb-base-click-button>
             </div>
           </div>
-          <div v-if="$store.state.mqtt['openWB/general/extern'] != true && !installAssistantActive">
+          <div
+            v-if="
+              $store.state.mqtt['openWB/general/extern'] != true &&
+              !installAssistantActive &&
+              Object.keys(externalChargePoints).length > 0
+            "
+          >
             <hr />
             <openwb-base-heading>Automatisches Update von Secondary openWBs</openwb-base-heading>
             <openwb-base-alert subtype="info">
@@ -166,39 +163,39 @@
                   gleichzeitig mit der Primary openWB aktualisiert.
                 </template>
               </openwb-base-button-group-input>
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th>Secondary</th>
-                    <th>Software-Status</th>
-                    <th>IP-Adresse</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    v-for="externalChargepoint in externalChargepoints"
-                    :key="externalChargepoint.id"
-                  >
-                    <td>{{ externalChargepoint.name }}</td>
-                    <td>
-                      {{
-                        $store.state.mqtt["openWB/chargepoint/" + externalChargepoint.id + "/get/current_branch"] ===
-                        undefined
-                          ? "Version zu alt oder openWB ist nicht erreichbar. Bitte manuell updaten bzw. prüfen."
-                          : $store.state.mqtt["openWB/chargepoint/" + externalChargepoint.id + "/get/current_branch"] !=
-                              "Release"
-                            ? "Secondary ist nicht auf dem Release-Zweig. Bitte manuell updaten."
-                            : $store.state.mqtt[
-                                "openWB/chargepoint/" + externalChargepoint.id + "/get/current_branch"
-                              ] +
-                              " " +
-                              $store.state.mqtt["openWB/chargepoint/" + externalChargepoint.id + "/get/version"]
-                      }}
-                    </td>
-                    <td>{{ externalChargepoint.configuration.ip_address }}</td>
-                  </tr>
-                </tbody>
-              </table>
+            </div>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Secondary</th>
+                  <th>Software-Status</th>
+                  <th>IP-Adresse</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="externalChargePoint in externalChargePoints"
+                  :key="externalChargePoint.id"
+                >
+                  <td>{{ externalChargePoint.name }}</td>
+                  <td>
+                    {{
+                      $store.state.mqtt["openWB/chargepoint/" + externalChargePoint.id + "/get/current_branch"] ===
+                      undefined
+                        ? "Version zu alt oder openWB ist nicht erreichbar. Bitte manuell updaten bzw. prüfen."
+                        : $store.state.mqtt["openWB/chargepoint/" + externalChargePoint.id + "/get/current_branch"] !=
+                            "Release"
+                          ? "Secondary ist nicht auf dem Release-Zweig. Bitte manuell updaten."
+                          : $store.state.mqtt["openWB/chargepoint/" + externalChargePoint.id + "/get/current_branch"] +
+                            " " +
+                            $store.state.mqtt["openWB/chargepoint/" + externalChargePoint.id + "/get/version"]
+                    }}
+                  </td>
+                  <td>{{ externalChargePoint.configuration.ip_address }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div v-if="$store.state.mqtt['openWB/system/current_branch'] == 'Release'">
               <openwb-base-submit-buttons
                 form-name="versionInfoForm"
                 :hide-defaults="true"
@@ -207,8 +204,8 @@
               />
             </div>
           </div>
-        </openwb-base-card>
-      </form>
+        </form>
+      </openwb-base-card>
       <form
         v-if="!installAssistantActive"
         name="powerForm"
@@ -224,8 +221,8 @@
           </openwb-base-alert>
           <openwb-base-alert subtype="info">
             Ein Neustart löscht wichtige Protokolle, die bei der Fehlersuche helfen können. <br />Tipp: Erstelle
-            stattdessen zuerst einen <router-link to="/Support"> Systembericht </router-link> – das hilft oft mehr und
-            bewahrt alle relevanten Logs.
+            stattdessen zuerst einen <router-link to="/System/Support"> Systembericht </router-link> – das hilft oft
+            mehr und bewahrt alle relevanten Logs.
           </openwb-base-alert>
           <template #footer>
             <div class="row justify-content-center">
@@ -364,7 +361,7 @@ export default {
     };
   },
   computed: {
-    externalChargepoints: {
+    externalChargePoints: {
       get() {
         let chargePoints = this.getWildcardTopics("openWB/chargepoint/+/config");
         let myObj = {};
@@ -523,6 +520,9 @@ export default {
       }
       return options.sort(compareTags);
     },
+  },
+  beforeMount() {
+    this.sendSystemCommand("systemFetchVersions");
   },
   methods: {
     sendSystemCommand(command, data = {}) {

@@ -19,10 +19,10 @@
             {{ output }}
           </openwb-base-copy-to-clipboard>
         </li>
-        Als Wert wird ein boolean als json oder 0/1 akzeptiert.<br />
-        Beispiel:
-        <span class="text-info">false</span>
       </ul>
+      Als Wert wird ein boolean als json oder 0/1 akzeptiert.<br />
+      Beispiel:
+      <span class="text-info">false</span>
     </openwb-base-alert>
     <component
       :is="myComponent"

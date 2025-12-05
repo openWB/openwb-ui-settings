@@ -1,5 +1,6 @@
 <template>
   <openwb-io-pattern
+    v-if="ioDevice?.type !== 'eebus'"
     v-slot="slotProps"
     v-model="ioAction.configuration.input_pattern"
     :contacts="ioDevice.input.digital"
@@ -9,7 +10,7 @@
   >
     {{ slotProps.pattern.value * 100 + "%" }}
   </openwb-io-pattern>
-  <hr />
+  <hr v-if="ioDevice?.type !== 'eebus'" />
   <openwb-base-select-input
     v-model="ioAction.configuration.devices"
     title="Zugeordnete Erzeugungsanlagen..."
@@ -26,8 +27,9 @@
       zugeordneten Erzeugungsanlagen wird im Status angezeigt.
     </template>
   </openwb-base-select-input>
-  <hr />
+  <hr v-if="ioDevice?.type !== 'eebus'" />
   <openwb-base-button-group-input
+    v-if="ioDevice?.type !== 'eebus'"
     v-model="ioAction.configuration.passthrough_enabled"
     title="Ausgänge aktivieren"
     :buttons="[

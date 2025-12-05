@@ -33,28 +33,32 @@
       </openwb-base-alert>
       <form
         v-if="!cloudBridgeKey"
-        name="cloudConfigCreateForm"
-      >
-        <openwb-base-card title="Neuen Zugang erstellen">
-          <openwb-base-alert subtype="warning">
-            Derzeit können keine neuen Zugänge für die openWB Cloud angelegt werden. Bitte nutze die in/an der openWB
-            notierten Zugangsdaten im unteren Bereich dieser Seite. Wenn bei einer gekauften openWB keine Zugangsdaten
-            vorhanden sind, schreibe bitte eine Mail unter Angabe der Bestell- und/oder Seriennummer an
-            <a
-              href="mailto:support@openwb.de"
-              subject="Cloud Zugangsdaten"
-            >
-              support@openwb.de
-            </a>
-            .
-          </openwb-base-alert>
-        </openwb-base-card>
-      </form>
-      <form
-        v-if="!cloudBridgeKey"
         name="cloudConfigConnectForm"
       >
         <openwb-base-card title="Vorhandenen Zugang einrichten">
+          <openwb-base-alert subtype="info">
+            <p>
+              Bitte nutze die in/an der openWB notierten Zugangsdaten. Wenn bei einer gekauften openWB keine
+              Zugangsdaten vorhanden sind, schreibe bitte eine Mail unter Angabe der Bestell- und/oder Seriennummer an
+              <a
+                href="mailto:support@openwb.de"
+                subject="Cloud Zugangsdaten"
+              >
+                support@openwb.de
+              </a>
+              .
+            </p>
+            <p>
+              Eine Anleitung zur Einrichtung der openWB Cloud findest Du im
+              <a
+                href="https://wiki.openwb.de/doku.php?id=openwb:faq:cloudeinrichten"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Wiki </a
+              >.
+            </p>
+          </openwb-base-alert>
           <openwb-base-text-input
             v-model="connectCloudData.username"
             title="Benutzername"

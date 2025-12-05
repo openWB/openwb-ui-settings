@@ -193,7 +193,7 @@
       </div>
       <openwb-base-card
         v-if="!installAssistantActive"
-        title="Darstellung"
+        title="Bedienung & Darstellung"
       >
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
           <openwb-base-alert subtype="info">
@@ -201,6 +201,50 @@
           </openwb-base-alert>
         </div>
         <div v-else>
+          <openwb-base-button-group-input
+            title="Temporäre Ladeeinstellungen"
+            :buttons="[
+              {
+                buttonValue: false,
+                text: 'Nein',
+                class: 'btn-outline-danger',
+              },
+              {
+                buttonValue: true,
+                text: 'Ja',
+                class: 'btn-outline-success',
+              },
+            ]"
+            :model-value="$store.state.mqtt['openWB/general/temporary_charge_templates_active']"
+            @update:model-value="updateState('openWB/general/temporary_charge_templates_active', $event)"
+          >
+            <template #help>
+              <p>
+                Bei Auswahl "Ja" werden Änderungen am Ladepunkt über die Hauptseite oder den Touchscreen der openWB als
+                "temporäre" Eingaben behandelt. Dies erlaubt z.B. das schnelle, temporäre Umschalten des Lademodus oder
+                deren Detaileinstellungen für eine unplanmäßige Ladeanforderung (Bsp. Voreinstellung -> PV-Laden /
+                unplanmäßig -> Sofort-Laden für Laden wegen unplanmäßigen Termins).
+                <br />
+                Alle Einstellungen, die unter Einstellungen → Konfiguration → Fahrzeuge → Lade-Profil für das jeweilige
+                Fahrzeug konfiguriert sind, gelten als persistent (dauerhaft). Diese werden bei jedem Abstecken des
+                jeweiligen Fahrzeugs neu geladen - sind also Voreinstellungen (default).
+              </p>
+              <p>
+                Bei Auswahl "Nein" werden Änderungen am Ladepunkt über die Hauptseite oder den Touchscreen der openWB
+                direkt als "persistente" (dauerhafte) Eingaben behandelt.
+              </p>
+              <p>
+                Eine ausführliche Erläuterung mit Beispielen findet Ihr im
+                <a
+                  href="https://wiki.openwb.de/doku.php?id=openwb:software:bedienung:temporaere-persistente-ladeprofile"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  openWB-DokuWiki
+                </a>
+              </p>
+            </template>
+          </openwb-base-button-group-input>
           <openwb-base-heading class="mt-0"> Hauptseite </openwb-base-heading>
           <div v-if="$store.state.mqtt['openWB/general/web_theme'] !== undefined">
             <openwb-base-select-input
@@ -677,6 +721,7 @@ export default {
         "openWB/general/notifications/stop_charging",
         "openWB/general/price_kwh",
         "openWB/general/range_unit",
+        "openWB/general/temporary_charge_templates_active",
         "openWB/general/web_theme",
         "openWB/system/configurable/web_themes",
         "openWB/system/ip_address",

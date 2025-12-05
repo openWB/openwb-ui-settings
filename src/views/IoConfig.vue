@@ -59,6 +59,7 @@
           <openwb-io-device-proxy
             :io-device="installedIoDevice"
             @update:configuration="updateConfiguration(installedIoDeviceKey, $event)"
+            @send-command="sendSystemCommand($event.command, $event.data)"
           />
         </openwb-base-card>
         <hr v-if="Object.keys(installedIoDevices).length > 0" />
@@ -288,6 +289,12 @@ export default {
           data: { id: ioActionIndex },
         });
       }
+    },
+    sendSystemCommand(command, data) {
+      this.$emit("send-command", {
+        command: command,
+        data: data,
+      });
     },
     updateConfiguration(key, event) {
       console.debug("updateConfiguration", key, event);

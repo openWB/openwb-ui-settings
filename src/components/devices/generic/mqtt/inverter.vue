@@ -33,6 +33,18 @@
           Dezimaltrennzeichen, nur positiv<br />
           Beispiel: <span class="text-info">123.45</span>
         </li>
+        <li>
+          <openwb-base-copy-to-clipboard
+            class="text-info"
+            tooltip="Topic kopieren"
+          >
+            openWB/set/mqtt/pv/{{ component.id }}/get/imported
+          </openwb-base-copy-to-clipboard>
+          <br />
+          Bezogene Energie in Wh (optional, zB für Hybridsysteme, die den Speicher aus dem Netz laden), Zahl mit oder
+          ohne Nachkommastellen (Float, Integer) und einem Punkt als Dezimaltrennzeichen, nur positiv<br />
+          Beispiel: <span class="text-info">123.45</span>
+        </li>
       </ul>
       Ströme je Phase sind optional, jedoch für phasenbasiertes Lastmanagement in Verbindung mit einem virtuellen Zähler
       unbedingt erforderlich. Ansonsten erfolgt das Lastmanagement ausschließlich auf Basis der Gesamtleistung an diesem

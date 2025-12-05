@@ -131,32 +131,35 @@
             />
             <hr />
             <div v-if="!installAssistantActive">
-
-            <openwb-base-heading> Fahrzeugzuordnung per ID-Tags </openwb-base-heading>
+              <openwb-base-heading> Fahrzeugzuordnung per ID-Tags </openwb-base-heading>
               <div v-if="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id'].length > 0">
                 <openwb-base-alert subtype="info">
                   Einstellungen zur Fahrzeugzuordnung finden sich unter
                   <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.
                   <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === false">
-                    Aktuell ist die Option in den Einstellungen deaktiviert.
+                    Aktuell ist die Identifikation in den Einstellungen deaktiviert.
                   </div>
                   <div v-else>
-                    Die Option ist aktiv. Das Fahrzeug lässt sich per ID-Tag automatisch
-                    einem Ladepunkt zuordnen.
+                    Die Identifikation ist aktiv. Das Fahrzeug lässt sich per ID-Tag automatisch einem Ladepunkt
+                    zuordnen.
                   </div>
-                  Dem Fahrzeug sind folgende ID-Tags zugeordnet:
                 </openwb-base-alert>
                 <openwb-base-array-input
                   title="Zugeordnete ID-Tags"
                   no-elements-message="Keine keine ID-Tags zugeordnet."
-                  :no-input="true"
+                  :readonly="true"
                   :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id']"
-                />
+                >
+                  <template #help>
+                    Hier werden die ID-Tags aufgelistet, welche diesem Fahrzeug zugeordnet sind. Mit diesen ID-Tags kann
+                    dieses Fahrzeug an Ladepunkten automatisch zugeordnet werden.
+                  </template>
+                </openwb-base-array-input>
               </div>
               <div v-else>
                 <openwb-base-alert subtype="info">
                   Einstellungen zur Fahrzeugzuordnung finden sich unter
-                  <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.<br>
+                  <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.<br />
                   Dem Fahrzeug sind aktuell keine ID-Tags zum Entsperren zugeordnet.
                 </openwb-base-alert>
               </div>
@@ -226,6 +229,7 @@
                 title="Während der Ladung"
                 unit="Min."
                 :min="1"
+                :max="30"
                 required
                 :model-value="
                   $store.state.mqtt['openWB/vehicle/' + vehicleId + '/soc_module/general_config']
@@ -247,7 +251,7 @@
               <openwb-base-number-input
                 title="Ohne laufende Ladung"
                 unit="Min."
-                :min="1"
+                :min="5"
                 required
                 :model-value="
                   $store.state.mqtt['openWB/vehicle/' + vehicleId + '/soc_module/general_config']
@@ -357,23 +361,22 @@
               v-if="$store.state.mqtt['openWB/general/extern'] === false"
               #actions="slotProps"
             >
-              <span v-if="!slotProps.collapsed">
-                <openwb-base-avatar
-                  class="bg-success clickable"
-                  title="Fahrzeug-Profil duplizieren"
-                  @click="addEvTemplate($event, key)"
-                >
-                  <font-awesome-icon :icon="['fas', 'copy']" />
-                </openwb-base-avatar>
-                <openwb-base-avatar
-                  v-if="!key.endsWith('/0')"
-                  class="bg-danger clickable ml-1"
-                  title="Fahrzeug-Profil löschen"
-                  @click="removeEvTemplateModal($event, key)"
-                >
-                  <font-awesome-icon :icon="['fas', 'trash']" />
-                </openwb-base-avatar>
-              </span>
+              <openwb-base-avatar
+                v-if="!slotProps.collapsed"
+                class="bg-success clickable"
+                title="Fahrzeug-Profil duplizieren"
+                @click="addEvTemplate($event, key)"
+              >
+                <font-awesome-icon :icon="['fas', 'copy']" />
+              </openwb-base-avatar>
+              <openwb-base-avatar
+                v-if="!slotProps.collapsed && !key.endsWith('/0')"
+                class="bg-danger clickable ml-1"
+                title="Fahrzeug-Profil löschen"
+                @click="removeEvTemplateModal($event, key)"
+              >
+                <font-awesome-icon :icon="['fas', 'trash']" />
+              </openwb-base-avatar>
             </template>
             <openwb-base-text-input
               title="Bezeichnung"
@@ -613,15 +616,6 @@
                 nach einer Ladungsunterbrechung keine Ladung mehr starten.
               </template>
             </openwb-base-button-group-input>
-            <openwb-base-number-input
-              title="Pause bei Phasenumschaltung"
-              unit="s"
-              :min="2"
-              :step="1"
-              required
-              :model-value="template.phase_switch_pause"
-              @update:model-value="updateState(key, $event, 'phase_switch_pause')"
-            />
             <div v-if="!installAssistantActive">
               <openwb-base-number-input
                 title="Mindestzeit zwischen Umschaltungen"
@@ -682,23 +676,22 @@
             "
           >
             <template #actions="slotProps">
-              <span v-if="!slotProps.collapsed">
-                <openwb-base-avatar
-                  class="bg-success clickable"
-                  title="Lade-Profil duplizieren"
-                  @click="addChargeTemplate($event, templateKey)"
-                >
-                  <font-awesome-icon :icon="['fas', 'copy']" />
-                </openwb-base-avatar>
-                <openwb-base-avatar
-                  v-if="!templateKey.endsWith('/0')"
-                  class="bg-danger clickable ml-1"
-                  title="Lade-Profil löschen"
-                  @click.stop="removeChargeTemplateModal($event, template.id)"
-                >
-                  <font-awesome-icon :icon="['fas', 'trash']" />
-                </openwb-base-avatar>
-              </span>
+              <openwb-base-avatar
+                v-if="!slotProps.collapsed"
+                class="bg-success clickable"
+                title="Lade-Profil duplizieren"
+                @click="addChargeTemplate($event, templateKey)"
+              >
+                <font-awesome-icon :icon="['fas', 'copy']" />
+              </openwb-base-avatar>
+              <openwb-base-avatar
+                v-if="!slotProps.collapsed && !templateKey.endsWith('/0')"
+                class="bg-danger clickable ml-1"
+                title="Lade-Profil löschen"
+                @click.stop="removeChargeTemplateModal($event, template.id)"
+              >
+                <font-awesome-icon :icon="['fas', 'trash']" />
+              </openwb-base-avatar>
             </template>
             <openwb-base-text-input
               title="Bezeichnung"
@@ -1131,7 +1124,7 @@
                 @update:model-value="updateState(templateKey, $event, 'chargemode.pv_charging.feed_in_limit')"
               >
                 <template #help>
-                  Erläuterung siehe "Ladeeinstellungen" -> "PV-Laden" -> "Regelparameter" -> "Regelpunkt
+                  Erläuterung siehe "Ladeeinstellungen" -> "Überschuss-Laden" -> "Regelparameter" -> "Regelpunkt
                   Einspeisegrenze"
                 </template>
               </openwb-base-button-group-input>
@@ -1161,10 +1154,8 @@
                   Ist der berechnete Zeitpunkt des Ladestarts noch nicht erreicht, wird mit Überschuss geladen. Auch
                   nach Erreichen des Ziel-SoCs wird mit Überschuss geladen, solange bis das "SoC-Limit für das Fahrzeug"
                   erreicht wird.<br />
-                  Es wird nach den Vorgaben des Zeitplans geladen, dessen Zieltermin am nächsten liegt. Ist der
-                  Zielzeitpunkt vorbei, wird solange geladen bis, das Ziel erreicht oder das Auto abgesteckt wird. Wenn
-                  der Ziel-Termin des nächsten Plans innerhalb der nächsten 12 Stunden liegt, wird auf den nächsten Plan
-                  umgeschaltet.
+                  Es wird nach den Vorgaben des Zeitplans geladen, dessen Zieltermin am nächsten liegt, bis max 20
+                  Minuten nach dem angegebenen Zieltermin.
                 </template>
               </openwb-base-heading>
               <openwb-base-alert
@@ -1218,7 +1209,7 @@
                 "
               />
               <openwb-base-button-group-input
-                title="Anzahl Phasen"
+                title="Anzahl Phasen bei Überschuss"
                 :buttons="[
                   { buttonValue: 1, text: '1' },
                   { buttonValue: 3, text: 'Maximum' },
@@ -1232,7 +1223,8 @@
                   Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Im Modus "Automatik"
                   entscheidet die Regelung, welche Einstellung genutzt wird, um den verfügbaren Überschuss in die
                   Fahrzeuge zu laden. Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen einer und mehreren
-                  Phasen (sog. 1p3p).
+                  Phasen (sog. 1p3p).<br />
+                  Wird die eingestellte Preisgrenze unterschritten, wird immer mit der maximalen Anzahl Phasen geladen.
                 </template>
               </openwb-base-button-group-input>
               <openwb-base-button-group-input
@@ -1285,8 +1277,8 @@
               </openwb-base-number-input>
               <openwb-base-alert
                 v-if="
-                  !$store.state.mqtt['openWB/optional/et/provider'] ||
-                  !$store.state.mqtt['openWB/optional/et/provider'].type
+                  !$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'] ||
+                  !$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'].type
                 "
                 subtype="warning"
               >
@@ -1458,7 +1450,7 @@ export default {
       mqttTopicsToSubscribe: [
         "openWB/general/extern",
         "openWB/optional/dc_charging",
-        "openWB/optional/et/provider",
+        "openWB/optional/ep/flexible_tariff/provider",
         "openWB/optional/rfid/active",
         "openWB/vehicle/template/ev_template/+",
         "openWB/vehicle/template/charge_template/+",
@@ -1649,14 +1641,14 @@ export default {
     addChargeTemplateSchedulePlan(templateId) {
       this.$emit("sendCommand", {
         command: "addChargeTemplateSchedulePlan",
-        data: { template: templateId },
+        data: { template: templateId, changed_in_theme: false },
       });
     },
     /* charge template time charging plan management */
     addChargeTemplateTimeChargingPlan(templateId) {
       this.$emit("sendCommand", {
         command: "addChargeTemplateTimeChargingPlan",
-        data: { template: templateId },
+        data: { template: templateId, changed_in_theme: false },
       });
     },
     openActiveChargeModeCard(templateKey, activeMode) {

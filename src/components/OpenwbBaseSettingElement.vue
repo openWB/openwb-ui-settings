@@ -3,7 +3,7 @@
     class="form-row"
     :class="$slots.title ? 'mb-1' : 'mx-0'"
   >
-    <label
+    <div
       v-if="$slots.title"
       class="col-md-4 col-form-label"
     >
@@ -15,7 +15,7 @@
         :class="showHelp ? 'text-info' : ''"
         @click.stop="toggleHelp"
       />
-    </label>
+    </div>
     <div :class="$slots.title ? 'col-md-8' : 'col px-0'">
       <div :class="{ 'form-row': $slots.title }">
         <slot>*ELEMENT MISSING*</slot>

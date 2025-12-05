@@ -28,6 +28,7 @@
           </div>
           <textarea
             v-if="subtype === 'json'"
+            :id="`${uid}-textarea`"
             ref="jsonInput"
             v-model.lazy="value"
             class="form-control"
@@ -35,6 +36,7 @@
           />
           <textarea
             v-else
+            :id="`${uid}-textarea`"
             v-model="value"
             class="form-control"
             v-bind="$attrs"
@@ -55,6 +57,7 @@
 
 <script>
 import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+import BaseSettingComponents from "./mixins/BaseSettingComponents.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faKeyboard as fasKeyboard, faCode as fasCode } from "@fortawesome/free-solid-svg-icons";
@@ -68,6 +71,7 @@ export default {
     OpenwbBaseSettingElement,
     FontAwesomeIcon,
   },
+  mixins: [BaseSettingComponents],
   inheritAttrs: false,
   props: {
     title: { type: String, required: false, default: "" },

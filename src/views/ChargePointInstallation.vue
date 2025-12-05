@@ -212,9 +212,9 @@
           </template>
         </openwb-base-select-input>
       </openwb-base-card>
-      <hr 
+      <hr
         v-if="$store.state.mqtt['openWB/general/extern'] == false || !installAssistantActive"
-        class="border-secondary" 
+        class="border-secondary"
       />
       <!-- charge point template card -->
       <openwb-base-card
@@ -257,23 +257,22 @@
             :collapsed="true"
           >
             <template #actions="slotProps">
-              <span v-if="slotProps.collapsed == false">
-                <openwb-base-avatar
-                  class="bg-success clickable"
-                  title="Ladepunkt-Profil duplizieren"
-                  @click="addChargePointTemplate($event, chargePointTemplateKey)"
-                >
-                  <font-awesome-icon :icon="['fas', 'copy']" />
-                </openwb-base-avatar>
-                <openwb-base-avatar
-                  v-if="!chargePointTemplateKey.endsWith('/0')"
-                  class="bg-danger clickable ml-1"
-                  title="Ladepunkt-Profil löschen"
-                  @click="removeChargePointTemplateModal($event, chargePointTemplateKey)"
-                >
-                  <font-awesome-icon :icon="['fas', 'trash']" />
-                </openwb-base-avatar>
-              </span>
+              <openwb-base-avatar
+                v-if="slotProps.collapsed == false"
+                class="bg-success clickable"
+                title="Ladepunkt-Profil duplizieren"
+                @click="addChargePointTemplate($event, chargePointTemplateKey)"
+              >
+                <font-awesome-icon :icon="['fas', 'copy']" />
+              </openwb-base-avatar>
+              <openwb-base-avatar
+                v-if="slotProps.collapsed == false && !chargePointTemplateKey.endsWith('/0')"
+                class="bg-danger clickable ml-1"
+                title="Ladepunkt-Profil löschen"
+                @click="removeChargePointTemplateModal($event, chargePointTemplateKey)"
+              >
+                <font-awesome-icon :icon="['fas', 'trash']" />
+              </openwb-base-avatar>
             </template>
             <openwb-base-text-input
               title="Bezeichnung"
@@ -312,18 +311,28 @@
                       chargePointTemplate.disable_after_unplug
                     "
                   >
-                    Die Option ist aktiv. Ladepunkte denen dieses Ladepunkt-Profil zugeordnet ist müssen per ID-Tag
-                    entsperrt werden.
+                    Ladepunkte mit diesem Profil werden automatisch beim Abstecken eines Fahrzeugs gesperrt und müssen
+                    für den nächsten Ladevorgang mit einem ID-Tag entsperrt werden.
                   </div>
-                  <div v-else>Aktuell ist die Option in den Einstellungen deaktiviert.</div>
-                  Dem Ladepunkt-Profil sind folgende ID-Tags zum Entsperren zugeordnet:
+                  <div v-else-if="$store.state.mqtt['openWB/optional/rfid/active'] === false">
+                    Die Zugangskontrolle ist aktuell deaktiviert.
+                  </div>
+                  <div v-else>
+                    Die Zugangskontrolle ist aktiviert, jedoch werden Ladepunkte mit diesem Profil nicht automatisch
+                    nach dem Abstecken eines Fahrzeugs gesperrt.
+                  </div>
                 </openwb-base-alert>
                 <openwb-base-array-input
                   title="Zugeordnete ID-Tags"
                   no-elements-message="Keine keine ID-Tags zugeordnet."
-                  no-input="true"
+                  :readonly="true"
                   :model-value="chargePointTemplate.valid_tags"
-                />
+                >
+                  <template #help>
+                    Hier werden die ID-Tags aufgelistet, welche diesem Ladepunkt-Profil zugeordnet sind. Nur mit diesen
+                    ID-Tags können Ladepunkte, denen dieses Profil zugeordnet ist, entsperrt werden.
+                  </template>
+                </openwb-base-array-input>
               </div>
               <div v-else>
                 <openwb-base-alert subtype="info">
@@ -343,8 +352,8 @@
               <span v-if="chargePointTemplate.charging_type === 'AC'">
                 Bei einer openWB mit 22kW Maximalleistung sind hier jeweils 32A einzustellen. Ist die openWB
                 beispielsweise auf 11kW begrenzt (KfW-Förderung oder die Zuleitung ist mit 16A abgesichert), dann sind
-                hier jeweils 16A einzustellen. </span
-              >
+                hier jeweils 16A einzustellen.
+              </span>
             </openwb-base-alert>
             <div v-if="chargePointTemplate.charging_type === 'AC' || dcChargingEnabled !== true">
               <openwb-base-range-input
@@ -380,7 +389,7 @@
             <div v-if="!installAssistantActive">
               <hr />
               <openwb-base-heading>
-                Sperren nach Uhrzeit (Komplettsperrung - keine Freischaltung per ID-Tag möglich)
+                Sperren nach Uhrzeit (Komplettsperrung - Freischaltung per Identifikation möglich)
               </openwb-base-heading>
               <openwb-base-button-group-input
                 title="Sperren nach Uhrzeit aktiv"

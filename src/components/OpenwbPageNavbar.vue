@@ -119,11 +119,18 @@
               Übergreifendes
             </router-link>
             <router-link
-              to="/PVChargeConfig"
+              to="/SurplusChargeConfig"
               class="dropdown-item"
               active-class="active disabled"
             >
-              PV-Laden
+              Überschuss-Laden
+            </router-link>
+            <router-link
+              to="/ActiveBatControl"
+              class="dropdown-item"
+              active-class="active disabled"
+            >
+              Speichersteuerung
             </router-link>
             <router-link
               to="/ActiveBatControl"
@@ -291,7 +298,7 @@
         <li class="nav-item nav-separator-before">
           <a
             class="nav-link"
-            href="https://github.com/openWB/core/wiki"
+            href="https://wiki.openwb.de/"
             target="_blank"
           >
             Wiki

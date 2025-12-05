@@ -21,7 +21,7 @@
                 class="text-info"
                 tooltip="Topic kopieren"
               >
-                openWB/set/mqtt/chargepoint/{{ chargePoint.id }}/set/current
+                openWB/mqtt/chargepoint/{{ chargePoint.id }}/set/current
               </openwb-base-copy-to-clipboard>
               <br />
               Sollwert des Ladestroms, mit Nachkommastellen (Float), positiv (laden) oder negativ (entladen, falls vom
@@ -33,7 +33,7 @@
                 class="text-info"
                 tooltip="Topic kopieren"
               >
-                openWB/set/mqtt/chargepoint/{{ chargePoint.id }}/set/phases_to_use
+                openWB/mqtt/chargepoint/{{ chargePoint.id }}/set/phases_to_use
               </openwb-base-copy-to-clipboard>
               <br />
               Sollwert für die Anzahl Phasen als Ganzzahl (Integer). Mögliche Werte: 1 oder 3<br />
@@ -165,10 +165,11 @@
                 class="text-info"
                 tooltip="Topic kopieren"
               >
-                openWB/set/mqtt/chargepoint/{{ chargePoint.id }}/get/rfid_tag
+                openWB/set/mqtt/chargepoint/{{ chargePoint.id }}/get/rfid
               </openwb-base-copy-to-clipboard>
               <br />
-              Eine Zeichenfolge, die einen eingelesenen Tag für openWB repräsentiert.<br />
+              Eine Zeichenfolge, die einen eingelesenen Tag für openWB repräsentiert. Der Tag darf nur einmalig nach dem
+              Scannen gesendet werden. Nach der Verarbeitung leert openWB das Topic.<br />
               Beispiel:
               <span class="text-info">"123654"</span>
             </li>

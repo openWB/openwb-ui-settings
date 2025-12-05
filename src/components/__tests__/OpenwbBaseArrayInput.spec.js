@@ -9,7 +9,7 @@ describe("OpenwbBaseArrayInput.vue", () => {
     const wrapper = mount(OpenwbBaseArrayInput, {
       props: { title },
     });
-    const titleLabel = wrapper.find("label.col-form-label");
+    const titleLabel = wrapper.find("div.col-form-label");
     expect(titleLabel.html()).toContain(title);
   });
   // check initial value

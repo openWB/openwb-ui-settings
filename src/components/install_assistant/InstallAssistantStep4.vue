@@ -1,30 +1,26 @@
 <template>
   <InstallAssistantStepTemplate
-    title="4. Einrichten der Ladepunkte (openWB als secondary)"
+    title="4. Ein- und Ausgänge konfigurieren"
     @next-page="nextPage"
     @previous-page="previousPage"
     @end-assistant="endAssistant"
   >
     <template #help>
+      <p>Diese openWB ist als "primary" konfiguriert und übernimmt die Regelung des Systems.</p>
+      <p class="font-weight-bold">Optional:</p>
       <p>
-        Diese openWB wurde als "secondary" eingestellt und wird von einer anderen openWB oder
-        standalone ferngesteuert.
+        Wird die openWB nicht als Energiemanagementsystem für steuerbare Verbrauchseinrichtungen (SteuVE) gemäß §14a
+        EnWG verwendet,
+        <span class="font-weight-bold">kann dieser Schritt übersprungen werden.</span>
       </p>
       <p>
-        Bei vorkonfigurierten openWBs ist ab Werk bereits ein (zwei bei einer Duo) interner Ladepunkt eingetragen. Es
-        müssen keine weiteren Ladepunkte hinzugefügt werden.
-      </p>
-      <p>
-        Tragen Sie unter Ladepunkte bei verfügbare Ladepunkte "Interne openWB" ein und wählen Sie die Bauart der openWB
-        (z.B. openWB series 1/2 custom, Standard (+), Buchse oder Pro+) aus.
-      </p>
-      <p>
-        Wenn eine openWB Duo gewählt wird, so sind zwei Ladepunkte mit Ladepunkt-Nummer 1 und 2 zu konfigurieren.
+        Soll die openWB als Energiemanagementsystem für steuerbare Verbrauchseinrichtungen (SteuVE) gemäß §14a EnWG
+        verwendet werden, so ist für die VNB-Signaleingänge die entsprechende Hardware auszuwählen.
       </p>
       <p class="font-weight-bold">Änderungen werden nur durch Klicken auf Speichern wirksam!</p>
     </template>
     <template #content>
-      <ChargePointInstallationView
+      <IoConfigView
         :install-assistant-active="true"
         @send-command="$emit('sendCommand', $event)"
         @save="$emit('save')"
@@ -38,13 +34,13 @@
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
 import InstallAssistantStepTemplate from "./InstallAssistantStepTemplate.vue";
-import ChargePointInstallationView from "../../views/ChargePointInstallation.vue";
+import IoConfigView from "../../views/IoConfig.vue";
 
 export default {
   name: "InstallAssistantStep4",
   components: {
     InstallAssistantStepTemplate,
-    ChargePointInstallationView,
+    IoConfigView,
   },
   mixins: [ComponentState],
   emits: ["save", "reset", "defaults", "sendCommand", "switchPage", "endAssistant"],
@@ -53,7 +49,7 @@ export default {
   }),
   methods: {
     nextPage() {
-      this.$emit("switchPage", 9);
+      this.$emit("switchPage", 5);
     },
     previousPage() {
       this.$emit("switchPage", 3);

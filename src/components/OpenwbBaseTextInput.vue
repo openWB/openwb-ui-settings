@@ -56,6 +56,7 @@
           </div>
           <input
             v-if="['text', 'user'].includes(subtype)"
+            :id="`${uid}-text-input`"
             ref="textInput"
             v-model="value"
             type="text"
@@ -66,6 +67,7 @@
           />
           <input
             v-if="subtype == 'json'"
+            :id="`${uid}-json-input`"
             ref="jsonInput"
             v-model="value"
             type="text"
@@ -75,6 +77,7 @@
           />
           <input
             v-if="subtype == 'password'"
+            :id="`${uid}-password-input`"
             ref="passwordInput"
             v-model="value"
             :type="showPassword ? 'text' : 'password'"
@@ -84,6 +87,7 @@
           />
           <input
             v-if="subtype == 'host'"
+            :id="`${uid}-host-input`"
             ref="hostInput"
             v-model="value"
             type="text"
@@ -93,6 +97,7 @@
           />
           <input
             v-if="['email', 'url'].includes(subtype)"
+            :id="`${uid}-url-input`"
             v-model="value"
             refs="urlInput"
             :type="subtype"
@@ -101,6 +106,7 @@
           />
           <input
             v-if="subtype == 'time'"
+            :id="`${uid}-time-input`"
             ref="timeInput"
             v-model="value"
             type="time"
@@ -109,6 +115,7 @@
           />
           <input
             v-if="subtype == 'date'"
+            :id="`${uid}-date-input`"
             ref="dateInput"
             v-model="value"
             type="date"
@@ -117,6 +124,7 @@
           />
           <input
             v-if="subtype == 'month'"
+            :id="`${uid}-month-input`"
             ref="monthInput"
             v-model="value"
             type="month"
@@ -125,6 +133,7 @@
           />
           <input
             v-if="subtype == 'year'"
+            :id="`${uid}-year-input`"
             ref="yearInput"
             v-model="value"
             type="number"
@@ -178,6 +187,7 @@
 
 <script>
 import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+import BaseSettingComponents from "./mixins/BaseSettingComponents.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -216,6 +226,7 @@ export default {
     FontAwesomeIcon,
     OpenwbBaseSettingElement,
   },
+  mixins: [BaseSettingComponents],
   inheritAttrs: false,
   props: {
     title: { type: String, required: false, default: "" },

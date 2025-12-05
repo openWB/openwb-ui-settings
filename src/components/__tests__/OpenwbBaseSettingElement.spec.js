@@ -9,7 +9,7 @@ describe("OpenwbBaseSettingElement.vue", () => {
     const wrapper = mount(OpenwbBaseSettingElement, {
       slots: { title: title },
     });
-    const titleLabel = wrapper.find("label.col-form-label");
+    const titleLabel = wrapper.find("div.col-form-label");
     expect(titleLabel.html()).toContain(title);
   });
   // check help slot
@@ -22,7 +22,7 @@ describe("OpenwbBaseSettingElement.vue", () => {
         help: helpContent,
       },
     });
-    const titleLabel = wrapper.find("label.col-form-label");
+    const titleLabel = wrapper.find("div.col-form-label");
     expect(titleLabel.html()).toContain("question-circle");
   });
   it("show help slot when title is clicked", async () => {
@@ -34,7 +34,7 @@ describe("OpenwbBaseSettingElement.vue", () => {
         help: helpContent,
       },
     });
-    const titleLabel = wrapper.find("label.col-form-label svg.clickable");
+    const titleLabel = wrapper.find("div.col-form-label svg.clickable");
     expect(wrapper.find("span.alert.alert-info").exists()).toBe(false);
     await titleLabel.trigger("click");
     expect(wrapper.find("span.alert.alert-info").html()).toContain(helpContent);

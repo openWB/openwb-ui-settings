@@ -217,7 +217,8 @@
     <openwb-base-alert
       v-if="
         plan.et_active == true &&
-        (!$store.state.mqtt['openWB/optional/et/provider'] || !$store.state.mqtt['openWB/optional/et/provider'].type)
+        (!$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'] ||
+          !$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'].type)
       "
       subtype="danger"
     >
@@ -386,7 +387,7 @@ export default {
   emits: ["update:modelValue", "sendCommand"],
   data() {
     return {
-      mqttTopicsToSubscribe: ["openWB/optional/et/provider"],
+      mqttTopicsToSubscribe: ["openWB/optional/ep/flexible_tariff/provider"],
       showRemoveModal: false,
     };
   },
@@ -407,7 +408,7 @@ export default {
     copyPlan() {
       this.$emit("sendCommand", {
         command: "addChargeTemplateSchedulePlan",
-        data: { template: this.templateId, copy: this.modelValue.id },
+        data: { template: this.templateId, changed_in_theme: false, copy: this.modelValue.id },
       });
     },
     removePlanModal() {
@@ -418,7 +419,7 @@ export default {
       if (event == "confirm") {
         this.$emit("sendCommand", {
           command: "removeChargeTemplateSchedulePlan",
-          data: { template: this.templateId, plan: this.modelValue.id },
+          data: { template: this.templateId, plan: this.modelValue.id, changed_in_theme: false },
         });
       }
     },

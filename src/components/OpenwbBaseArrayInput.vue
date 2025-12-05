@@ -13,7 +13,7 @@
     </template>
     <template #default>
       <div
-        v-if="!noInput"
+        v-if="!readonly"
         class="w-100"
       >
         <div class="input-group">
@@ -25,6 +25,7 @@
             </div>
           </div>
           <input
+            :id="`${uid}-tag-input`"
             ref="tagInput"
             v-model="newTag"
             type="text"
@@ -63,7 +64,7 @@
           </slot>
           {{ tag }}
           <font-awesome-icon
-            v-if="!noInput"
+            v-if="!readonly"
             class="clickable remove-element"
             :icon="['fas', 'times-circle']"
             @click="removeTag(index)"
@@ -76,6 +77,7 @@
 
 <script>
 import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+import BaseSettingComponents from "./mixins/BaseSettingComponents.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -94,6 +96,7 @@ export default {
     FontAwesomeIcon,
     OpenwbBaseSettingElement,
   },
+  mixins: [BaseSettingComponents],
   inheritAttrs: false,
   props: {
     title: { type: String, required: true, default: "#TITLE#" },
@@ -109,7 +112,7 @@ export default {
         return "Keine Elemente zugeordnet.";
       },
     },
-    noInput: {
+    readonly: {
       type: Boolean,
       default: () => {
         return false;
@@ -120,7 +123,6 @@ export default {
   data() {
     return {
       newTag: "",
-      showHelp: false,
     };
   },
   computed: {
@@ -134,7 +136,7 @@ export default {
     },
     newTagValid: {
       get() {
-        return this.newTag.length > 0 && !this.value.includes(this.newTag);
+        return this.newTag.length > 0 && !this.value.includes(this.newTag) && this.$refs.tagInput?.checkValidity();
       },
     },
   },
@@ -163,7 +165,7 @@ export default {
 
 input.invalid,
 input:invalid {
-  border: 2px solid var(--danger);
+  background-color: pink;
 }
 
 .tagList {
