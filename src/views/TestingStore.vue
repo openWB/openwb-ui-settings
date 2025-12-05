@@ -333,6 +333,16 @@
             <pre>{{ JSON.stringify($store.state.examples.tags, undefined, 2) }}</pre>
           </template>
         </openwb-base-array-input>
+        <openwb-base-array-input
+          title="Tag Array mit Vorgaben"
+          :valid-elements="['1234', '5678']"
+          :model-value="$store.state.examples.tags"
+          @update:model-value="updateState('tags', $event)"
+        >
+          <template #help>
+            <pre>{{ JSON.stringify($store.state.examples.tags, undefined, 2) }}</pre>
+          </template>
+        </openwb-base-array-input>
       </openwb-base-card>
 
       <openwb-base-card title="Meldungen">

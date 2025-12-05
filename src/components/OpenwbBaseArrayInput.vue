@@ -176,7 +176,7 @@ export default {
         return (
           this.newTag.length > 0 &&
           !this.value.includes(this.newTag) &&
-          this.validElements?.includes(this.newTag) &&
+          (this.validElements === null || this.validElements.includes(this.newTag)) &&
           this.$refs.tagInput?.checkValidity()
         );
       },
