@@ -2,6 +2,7 @@ import js from "@eslint/js";
 import pluginVue from "eslint-plugin-vue";
 import prettier from "eslint-plugin-prettier";
 import prettierConfig from "eslint-config-prettier";
+import globals from "globals";
 
 export default [
   js.configs.recommended,
@@ -14,6 +15,10 @@ export default [
     ignores: ["public/modules/legacy_smart_home/**", "public/dataProtection-usageTerms.html"],
     languageOptions: {
       ecmaVersion: "latest",
+      sourceType: "module",
+      globals: {
+        ...globals.browser,
+      },
     },
     plugins: {
       prettier,
