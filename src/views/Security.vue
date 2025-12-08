@@ -526,10 +526,16 @@ export default {
         }
         return acls
           .map((acl) => {
-            const type = acl.acltype;
+            const alcTypes = {
+              publishClientSend: "Veröffentlichen (publish)",
+              publishClientReceive: "Empfangen (receive)",
+              subscribe: "Abonnieren (subscribe)",
+              unsubscribe: "Abonnement aufheben (unsubscribe)",
+            };
+            const type = alcTypes[acl.acltype] || acl.acltype;
             const allow = acl.allow === true ? "erlaubt" : acl.allow === false ? "verboten" : "unbekannt";
             const topic = acl.topic ? '"' + acl.topic + '"' : "<alle Topics>";
-            return `${type} ${topic} ${allow}`;
+            return `${type} ${allow} für ${topic}`;
           })
           .join("\n");
       };
@@ -582,7 +588,6 @@ export default {
               this.roleDetails[response.data.role.rolename] = JSON.parse(JSON.stringify(response.data.role));
               break;
             case "getDefaultACLAccess":
-              console.log("Default ACL Access:", response);
               this.defaultAclAccess = JSON.parse(JSON.stringify(response.data.acls));
               break;
             default:
