@@ -49,7 +49,7 @@ export default {
         protocolVersion: 5,
         host: location.hostname,
         port: parseInt(location.port) || (location.protocol == "https:" ? 443 : 80),
-        endpoint: "/ws",
+        path: "/ws",
         connectTimeout: 4000,
         reconnectPeriod: 4000,
         properties: {
@@ -152,8 +152,8 @@ export default {
       // Connect string, and specify the connection method used through protocol
       // ws not encrypted WebSocket connection
       // wss encrypted WebSocket connection
-      const { protocol, host, port, endpoint, ...options } = this.connection;
-      const connectUrl = `${protocol}://${host}:${port}${endpoint}`;
+      const { protocol, host, port, path, ...options } = this.connection;
+      const connectUrl = `${protocol}://${host}:${port}${path}`;
       const [user, pass] = this.$cookies.get("mqtt")?.split(":") || [null, null];
       if (!(user && pass)) {
         console.debug("Anonymous mqtt connection (no cookie set)");
@@ -162,6 +162,13 @@ export default {
         console.debug("Using mqtt credentials from cookie:", user, "/", pass);
         options.username = user;
         options.password = pass;
+        if (user === "admin" && pass === "openwb") {
+          console.warn("Using default mqtt credentials! This is insecure and not recommended for production systems.");
+          this.postClientMessage(
+            "Warnung: Es werden die Standard-Zugangsdaten für MQTT verwendet! Dies ist unsicher und wird für Produktivsysteme nicht empfohlen.",
+            "warning",
+          );
+        }
       }
       console.debug("connecting to broker:", connectUrl);
       this.client = mqtt.connect(connectUrl, options);
