@@ -277,6 +277,7 @@ export default {
         "openWB/counter/+/config/max_total_power",
         "openWB/pv/+/config/max_ac_out",
         "openWB/chargepoint/+/config",
+        "openWB/vehicle/+/name",
       ],
     };
   },
@@ -344,21 +345,21 @@ export default {
       get() {
         const prioList = this.$store.state.mqtt['openWB/counter/get/loadmanagement_prios'] || [];
         if (Array.isArray(prioList)) {
-          return prioList.map(id => ({ id, type: 'cp' }));
+          return prioList.map(id => ({ id, type: 'vehicle' }));
         }
         
-        // Fallback: erstelle Liste aller verfügbaren Ladepunkte
-        let chargePointIds = [];
+        // Fallback: erstelle Liste aller verfügbaren Fahrzeuge
+        let vehicleIds = [];
         Object.keys(this.$store.state.mqtt).forEach((key) => {
-          if (key.match(/^openWB\/chargepoint\/[0-9]+\/config$/)) {
-            const matches = key.match(/^openWB\/chargepoint\/([0-9]+)\/config$/);
+          if (key.match(/^openWB\/vehicle\/[0-9]+\/name$/)) {
+            const matches = key.match(/^openWB\/vehicle\/([0-9]+)\/name$/);
             if (matches) {
-              chargePointIds.push(`cp${matches[1]}`);
+              vehicleIds.push(`ev${matches[1]}`); // ev0, ev1 wie im Store
             }
           }
         });
         
-        return chargePointIds.sort().map(id => ({ id, type: 'cp' }));
+        return vehicleIds.sort().map(id => ({ id, type: 'vehicle' }));
       },
       set(newList) {
         const updatedPrioList = newList.map(item => item.id);
@@ -368,11 +369,11 @@ export default {
     loadmanagementPrioLabels: {
       get() {
         return this.loadmanagementPrioList.reduce((result, item, index) => {
-          if (typeof item.id === 'string' && item.id.startsWith('cp')) {
-            const chargePointId = item.id.substring(2);
-            const chargePoint = this.getChargePoint(chargePointId);
-            if (chargePoint) {
-              result[item.id] = `${index + 1}. ${chargePoint.name}`;
+          if (typeof item.id === 'string' && item.id.startsWith('ev')) {
+            const vehicleId = item.id.substring(2); // "ev" hat 2 Zeichen -> ev0 -> 0
+            const vehicleName = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/name`];
+            if (vehicleName) {
+              result[item.id] = `${index + 1}. ${vehicleName}`;
             }
           }
           return result;
@@ -435,6 +436,7 @@ export default {
     isComponentType(componentType, verifier) {
       return componentType?.split("_").includes(verifier);
     },
+
   },
 };
 </script>
