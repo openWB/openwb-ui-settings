@@ -212,6 +212,19 @@
               Abhängigkeit in der Regelung berücksichtigt werden kann.
             </template>
           </sortable-list>
+          <hr/>
+          <sortable-list
+            v-model="loadmanagementPrioList"
+            title="Lastmanagement-Prioritäten"
+            :labels="loadmanagementPrioLabels"
+            :nesting="false"
+          >
+            <template #help>
+              Reihenfolge der Ladepunkt-Prioritäten für das Lastmanagement.<br />
+              Ladepunkte mit höherer Priorität (weiter oben in der Liste) werden bevorzugt behandelt, wenn die verfügbare Leistung begrenzt ist.<br />
+              Die Reihenfolge kann durch Drag & Drop geändert werden.
+            </template>
+          </sortable-list>
         </div>
       </openwb-base-card>
 
@@ -257,6 +270,7 @@ export default {
         "openWB/counter/config/home_consumption_source_id",
         "openWB/counter/config/consider_less_charging",
         "openWB/counter/get/hierarchy",
+        "openWB/counter/get/loadmanagement_prios",
         "openWB/system/device/+/component/+/config",
         "openWB/counter/+/config/max_power_errorcase",
         "openWB/counter/+/config/max_currents",
@@ -324,6 +338,45 @@ export default {
           };
         }
         return labels;
+      },
+    },
+    loadmanagementPrioList: {
+      get() {
+        const prioList = this.$store.state.mqtt['openWB/counter/get/loadmanagement_prios'] || [];
+        if (Array.isArray(prioList)) {
+          return prioList.map(id => ({ id, type: 'cp' }));
+        }
+        
+        // Fallback: erstelle Liste aller verfügbaren Ladepunkte
+        let chargePointIds = [];
+        Object.keys(this.$store.state.mqtt).forEach((key) => {
+          if (key.match(/^openWB\/chargepoint\/[0-9]+\/config$/)) {
+            const matches = key.match(/^openWB\/chargepoint\/([0-9]+)\/config$/);
+            if (matches) {
+              chargePointIds.push(`cp${matches[1]}`);
+            }
+          }
+        });
+        
+        return chargePointIds.sort().map(id => ({ id, type: 'cp' }));
+      },
+      set(newList) {
+        const updatedPrioList = newList.map(item => item.id);
+        this.updateState('openWB/counter/get/loadmanagement_prios', updatedPrioList);
+      },
+    },
+    loadmanagementPrioLabels: {
+      get() {
+        return this.loadmanagementPrioList.reduce((result, item, index) => {
+          if (typeof item.id === 'string' && item.id.startsWith('cp')) {
+            const chargePointId = item.id.substring(2);
+            const chargePoint = this.getChargePoint(chargePointId);
+            if (chargePoint) {
+              result[item.id] = `${index + 1}. ${chargePoint.name}`;
+            }
+          }
+          return result;
+        }, {});
       },
     },
     getHcSourceIdOptions() {
