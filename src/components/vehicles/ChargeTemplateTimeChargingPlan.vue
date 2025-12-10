@@ -83,66 +83,6 @@
         },
       ]"
     />
-    <openwb-base-range-input
-      v-model="plan.current"
-      :title="`Ladestrom${dcChargingEnabled ? ' (AC)' : ''}`"
-      :min="6"
-      :max="32"
-      :step="1"
-      unit="A"
-    />
-    <openwb-base-number-input
-      v-if="dcChargingEnabled === true"
-      title="Ladeleistung (DC)"
-      unit="kW"
-      :min="0"
-      :model-value="ac_current2dc_power(plan.dc_current)"
-      @update:model-value="plan.dc_current = dc_power2ac_current($event)"
-    />
-    <openwb-base-button-group-input
-      v-model="plan.limit.selected"
-      title="Begrenzung"
-      :buttons="[
-        { buttonValue: 'none', text: 'Aus' },
-        {
-          buttonValue: 'soc',
-          text: 'Fahrzeug-SoC',
-        },
-        {
-          buttonValue: 'amount',
-          text: 'Energie',
-        },
-      ]"
-    >
-      <template #help> Bestimmt die Art der Grenze für den Ladevorgang. </template>
-    </openwb-base-button-group-input>
-    <openwb-base-range-input
-      v-model="plan.limit.soc"
-      title="Ziel-SoC für das Fahrzeug"
-      :min="5"
-      :max="100"
-      :step="5"
-      unit="%"
-    >
-      <template #help>
-        Ladestand des Akku (State of Charge, SoC), bis zu welchem maximal geladen werden soll.
-      </template>
-    </openwb-base-range-input>
-    <openwb-base-number-input
-      title="Ziel-Energie"
-      unit="kWh"
-      :min="1"
-      :step="0.5"
-      :model-value="plan.limit.amount / 1000"
-      @update:model-value="plan.limit.amount = $event * 1000"
-    >
-      <template #help>
-        Maximal zu ladende Energie innerhalb des Zeitfensters. Eignet sich immer dann wenn kein SoC zur Verfügung steht.
-        Die geladene Energiemenge wird beim Wechsel des Lademodus, Wechsel des Plans oder nach dem Anstecken, wenn
-        Zeitladen schon aktiv ist, neu gezählt.
-      </template>
-    </openwb-base-number-input>
-    <hr />
     <openwb-base-text-input
       v-model="plan.time[0]"
       title="Zeitpunkt des Ladebeginns"
@@ -208,6 +148,22 @@
       />
     </div>
     <hr />
+    <openwb-base-range-input
+      v-model="plan.current"
+      :title="`Ladestrom${dcChargingEnabled ? ' (AC)' : ''}`"
+      :min="6"
+      :max="32"
+      :step="1"
+      unit="A"
+    />
+    <openwb-base-number-input
+      v-if="dcChargingEnabled === true"
+      title="Ladeleistung (DC)"
+      unit="kW"
+      :min="0"
+      :model-value="ac_current2dc_power(plan.dc_current)"
+      @update:model-value="plan.dc_current = dc_power2ac_current($event)"
+    />
     <openwb-base-button-group-input
       v-model="plan.phases_to_use"
       title="Anzahl Phasen"
@@ -222,6 +178,50 @@
         Umschaltmöglichkeit zwischen 1- und 3-phasig (sog. 1p3p).
       </template>
     </openwb-base-button-group-input>
+    <hr />
+    <openwb-base-button-group-input
+      v-model="plan.limit.selected"
+      title="Begrenzung"
+      :buttons="[
+        { buttonValue: 'none', text: 'Keine' },
+        {
+          buttonValue: 'soc',
+          text: 'Fahrzeug-SoC',
+        },
+        {
+          buttonValue: 'amount',
+          text: 'Energie',
+        },
+      ]"
+    >
+      <template #help> Bestimmt die Art der Grenze für den Ladevorgang. </template>
+    </openwb-base-button-group-input>
+    <openwb-base-range-input
+      v-model="plan.limit.soc"
+      title="Ziel-SoC für das Fahrzeug"
+      :min="5"
+      :max="100"
+      :step="5"
+      unit="%"
+    >
+      <template #help>
+        Ladestand des Akku (State of Charge, SoC), bis zu welchem maximal geladen werden soll.
+      </template>
+    </openwb-base-range-input>
+    <openwb-base-number-input
+      title="Ziel-Energie"
+      unit="kWh"
+      :min="1"
+      :step="0.5"
+      :model-value="plan.limit.amount / 1000"
+      @update:model-value="plan.limit.amount = $event * 1000"
+    >
+      <template #help>
+        Maximal zu ladende Energie innerhalb des Zeitfensters. Eignet sich immer dann wenn kein SoC zur Verfügung steht.
+        Die geladene Energiemenge wird beim Wechsel des Lademodus, Wechsel des Plans oder nach dem Anstecken, wenn
+        Zeitladen schon aktiv ist, neu gezählt.
+      </template>
+    </openwb-base-number-input>
   </openwb-base-card>
 </template>
 

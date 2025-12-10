@@ -86,7 +86,7 @@
     />
     <openwb-base-text-input
       v-model="plan.time"
-      title="Ziel-Uhrzeit"
+      title="Ziel-Termin"
       subtype="time"
     >
       <template #help>
@@ -94,6 +94,110 @@
         Energiemenge BEREITS ERREICHT haben soll.
       </template>
     </openwb-base-text-input>
+    <openwb-base-button-group-input
+      v-model="plan.frequency.selected"
+      title="Wiederholungen"
+      :buttons="[
+        {
+          buttonValue: 'once',
+          text: 'Einmalig',
+          class: 'btn-outline-info',
+        },
+        {
+          buttonValue: 'daily',
+          text: 'Täglich',
+          class: 'btn-outline-info',
+        },
+        {
+          buttonValue: 'weekly',
+          text: 'Wöchentlich',
+          class: 'btn-outline-info',
+        },
+      ]"
+    />
+    <openwb-base-text-input
+      v-if="plan.frequency.selected == 'once'"
+      v-model="plan.frequency.once"
+      title="Datum"
+      subtype="date"
+    />
+    <div v-if="plan.frequency.selected == 'weekly'">
+      <openwb-base-button-group-input
+        v-for="(day, dayIndex) in weekdays"
+        :key="dayIndex"
+        v-model="plan.frequency.weekly[dayIndex]"
+        :title="day"
+        :buttons="[
+          {
+            buttonValue: false,
+            text: 'Aus',
+            class: 'btn-outline-danger',
+          },
+          {
+            buttonValue: true,
+            text: 'An',
+            class: 'btn-outline-success',
+          },
+        ]"
+      />
+    </div>
+    <hr />
+    <openwb-base-range-input
+      v-model="plan.current"
+      :title="`Ladestrom${dcChargingEnabled ? ' (AC)' : ''}`"
+      :min="6"
+      :max="32"
+      :step="1"
+      unit="A"
+    >
+      <template #help>
+        Mit dieser Stromstärke wird der Zeitpunkt berechnet, wann die Ladung mit Netzbezug gestartet werden muss. Wird
+        der Ziel-SoC nicht zum angegebenen Termin erreicht, weil z.B. das Auto erst später angesteckt wurde, wird auch
+        mit einer höheren Stromstärke geladen. Um etwas Puffer zu haben, empfiehlt es sich, etwas weniger als die
+        Maximalstromstärke des Fahrzeugs zu wählen.
+      </template>
+    </openwb-base-range-input>
+    <openwb-base-number-input
+      v-if="dcChargingEnabled === true"
+      title="Ladeleistung (DC)"
+      unit="kW"
+      :min="0"
+      :model-value="ac_current2dc_power(plan.dc_current)"
+      @update:model-value="plan.dc_current = dc_power2ac_current($event)"
+    />
+    <openwb-base-button-group-input
+      v-model="plan.phases_to_use"
+      title="Anzahl Phasen Zielladen"
+      :buttons="[
+        { buttonValue: 1, text: '1' },
+        { buttonValue: 3, text: 'Maximum' },
+        { buttonValue: 0, text: 'Automatik' },
+      ]"
+    >
+      <template #help>
+        Hier kann eingestellt werden, ob Ladevorgänge im Modus "Zielladen" mit nur einer Phase oder dem möglichen
+        Maximum in Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Im Modus "Automatik"
+        entscheidet die Regelung, welche Einstellung genutzt wird, um das Ziel zu erreichen. Voraussetzung ist die
+        verbaute Umschaltmöglichkeit zwischen 1- und 3-phasig (sog. 1p3p).
+      </template>
+    </openwb-base-button-group-input>
+    <openwb-base-button-group-input
+      v-model="plan.phases_to_use_pv"
+      title="Anzahl Phasen bei PV-Überschuss"
+      :buttons="[
+        { buttonValue: 1, text: '1' },
+        { buttonValue: 3, text: 'Maximum' },
+        { buttonValue: 0, text: 'Automatik' },
+      ]"
+    >
+      <template #help>
+        Hier kann eingestellt werden, ob Ladevorgänge im Modus "Zielladen" bei Laden mit PV-Überschuss mit nur einer
+        Phase oder dem möglichen Maximum in Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt
+        werden. Im Modus "Automatik" entscheidet die Regelung, welche Einstellung genutzt wird, um das Ziel zu
+        erreichen. Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen 1- und 3-phasig (sog. 1p3p).
+      </template>
+    </openwb-base-button-group-input>
+    <hr />
     <openwb-base-button-group-input
       v-model="plan.limit.selected"
       title="Ziel"
@@ -151,54 +255,6 @@
     </openwb-base-number-input>
     <hr />
     <openwb-base-button-group-input
-      v-model="plan.frequency.selected"
-      title="Wiederholungen"
-      :buttons="[
-        {
-          buttonValue: 'once',
-          text: 'Einmalig',
-          class: 'btn-outline-info',
-        },
-        {
-          buttonValue: 'daily',
-          text: 'Täglich',
-          class: 'btn-outline-info',
-        },
-        {
-          buttonValue: 'weekly',
-          text: 'Wöchentlich',
-          class: 'btn-outline-info',
-        },
-      ]"
-    />
-    <openwb-base-text-input
-      v-if="plan.frequency.selected == 'once'"
-      v-model="plan.frequency.once"
-      title="Datum"
-      subtype="date"
-    />
-    <div v-if="plan.frequency.selected == 'weekly'">
-      <openwb-base-button-group-input
-        v-for="(day, dayIndex) in weekdays"
-        :key="dayIndex"
-        v-model="plan.frequency.weekly[dayIndex]"
-        :title="day"
-        :buttons="[
-          {
-            buttonValue: false,
-            text: 'Aus',
-            class: 'btn-outline-danger',
-          },
-          {
-            buttonValue: true,
-            text: 'An',
-            class: 'btn-outline-success',
-          },
-        ]"
-      />
-    </div>
-    <hr />
-    <openwb-base-button-group-input
       v-model="plan.et_active"
       title="Strompreisbasiert Laden"
       :buttons="[
@@ -224,61 +280,6 @@
     >
       Bitte in den übergreifenden Ladeeinstellungen einen Strompreis-Anbieter konfigurieren.
     </openwb-base-alert>
-    <openwb-base-button-group-input
-      v-model="plan.phases_to_use"
-      title="Anzahl Phasen Zielladen"
-      :buttons="[
-        { buttonValue: 1, text: '1' },
-        { buttonValue: 3, text: 'Maximum' },
-        { buttonValue: 0, text: 'Automatik' },
-      ]"
-    >
-      <template #help>
-        Hier kann eingestellt werden, ob Ladevorgänge im Modus "Zielladen" mit nur einer Phase oder dem möglichen
-        Maximum in Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Im Modus "Automatik"
-        entscheidet die Regelung, welche Einstellung genutzt wird, um das Ziel zu erreichen. Voraussetzung ist die
-        verbaute Umschaltmöglichkeit zwischen 1- und 3-phasig (sog. 1p3p).
-      </template>
-    </openwb-base-button-group-input>
-    <openwb-base-button-group-input
-      v-model="plan.phases_to_use_pv"
-      title="Anzahl Phasen bei PV-Überschuss"
-      :buttons="[
-        { buttonValue: 1, text: '1' },
-        { buttonValue: 3, text: 'Maximum' },
-        { buttonValue: 0, text: 'Automatik' },
-      ]"
-    >
-      <template #help>
-        Hier kann eingestellt werden, ob Ladevorgänge im Modus "Zielladen" bei Laden mit PV-Überschuss mit nur einer
-        Phase oder dem möglichen Maximum in Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt
-        werden. Im Modus "Automatik" entscheidet die Regelung, welche Einstellung genutzt wird, um das Ziel zu
-        erreichen. Voraussetzung ist die verbaute Umschaltmöglichkeit zwischen 1- und 3-phasig (sog. 1p3p).
-      </template>
-    </openwb-base-button-group-input>
-    <openwb-base-range-input
-      v-model="plan.current"
-      :title="`Ladestrom${dcChargingEnabled ? ' (AC)' : ''}`"
-      :min="6"
-      :max="32"
-      :step="1"
-      unit="A"
-    >
-      <template #help>
-        Mit dieser Stromstärke wird der Zeitpunkt berechnet, wann die Ladung mit Netzbezug gestartet werden muss. Wird
-        der Ziel-SoC nicht zum angegebenen Termin erreicht, weil z.B. das Auto erst später angesteckt wurde, wird auch
-        mit einer höheren Stromstärke geladen. Um etwas Puffer zu haben, empfiehlt es sich, etwas weniger als die
-        Maximalstromstärke des Fahrzeugs zu wählen.
-      </template>
-    </openwb-base-range-input>
-    <openwb-base-number-input
-      v-if="dcChargingEnabled === true"
-      title="Ladeleistung (DC)"
-      unit="kW"
-      :min="0"
-      :model-value="ac_current2dc_power(plan.dc_current)"
-      @update:model-value="plan.dc_current = dc_power2ac_current($event)"
-    />
     <div v-if="plan.limit.selected == 'soc'">
       <hr />
       <openwb-base-button-group-input
@@ -316,17 +317,6 @@
         eingestellte Ladeleistung verwendet. Unterstützen das Fahrzeug und/oder der Ladepunkt die Norm nicht, wird der
         Ladestrom und die vorgegebene Phasenzahl angewendet.
       </openwb-base-alert>
-      <openwb-base-number-input
-        v-if="plan.bidi_charging_enabled === true"
-        title="Ladeleistung"
-        :min="1"
-        :max="22"
-        :step="0.5"
-        unit="kW"
-        :model-value="plan.bidi_power / 1000"
-        @update:model-value="updateState(templateKey, $event * 1000, 'plan.bidi_power')"
-      >
-      </openwb-base-number-input>
     </div>
   </openwb-base-card>
 </template>

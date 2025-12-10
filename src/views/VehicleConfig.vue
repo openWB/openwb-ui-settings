@@ -850,7 +850,7 @@
                 :buttons="[
                   {
                     buttonValue: 'none',
-                    text: 'Aus',
+                    text: 'Keine',
                   },
                   {
                     buttonValue: 'soc',
@@ -976,7 +976,7 @@
                 :buttons="[
                   {
                     buttonValue: 'none',
-                    text: 'Aus',
+                    text: 'Keine',
                   },
                   {
                     buttonValue: 'soc',
@@ -1232,7 +1232,7 @@
                 :buttons="[
                   {
                     buttonValue: 'none',
-                    text: 'Aus',
+                    text: 'Keine',
                   },
                   {
                     buttonValue: 'soc',
