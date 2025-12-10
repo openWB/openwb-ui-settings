@@ -170,6 +170,10 @@ export default {
   color: var(--dark);
 }
 
+.element-titel.vehicle {
+  background-color: var(--info);
+}
+
 .element-actions {
   cursor: pointer;
 }
