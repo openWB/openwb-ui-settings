@@ -198,7 +198,7 @@
     </openwb-base-button-group-input>
     <openwb-base-range-input
       v-model="plan.limit.soc"
-      title="Ziel-SoC für das Fahrzeug"
+      title="SoC-Limit für das Fahrzeug"
       :min="5"
       :max="100"
       :step="5"
@@ -209,7 +209,7 @@
       </template>
     </openwb-base-range-input>
     <openwb-base-number-input
-      title="Ziel-Energie"
+      title="Energie-Limit"
       unit="kWh"
       :min="1"
       :step="0.5"
