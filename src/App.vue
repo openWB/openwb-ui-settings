@@ -111,6 +111,11 @@ export default {
         }
       }
       for (const [topic, payload] of Object.entries(topics)) {
+        // skip topics starting with "$CONTROL"
+        if (topic.startsWith("$CONTROL")) {
+          console.debug("skipping control topic:", topic);
+          continue;
+        }
         let setTopic = topic.replace("openWB/", "openWB/set/");
         console.debug("saving data:", setTopic, payload);
         this.doPublish(setTopic, payload);
