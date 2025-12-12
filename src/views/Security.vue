@@ -21,7 +21,7 @@
         <openwb-base-button-group-input
           title="Unverschlüsselten Zugang erlauben"
           :model-value="$store.state.mqtt['openWB/general/allow_unencrypted_access']"
-          :disabled="$store.state.mqtt['openWB/general/user_management_active'] === true ? true : false"
+          :disabled="$store.state.mqtt['openWB/system/security/user_management_active'] === true ? true : false"
           :buttons="[
             {
               buttonValue: false,
@@ -50,7 +50,7 @@
         </openwb-base-button-group-input>
         <openwb-base-button-group-input
           title="Benutzerverwaltung"
-          :model-value="$store.state.mqtt['openWB/general/user_management_active']"
+          :model-value="$store.state.mqtt['openWB/system/security/user_management_active']"
           :disabled="$store.state.mqtt['openWB/general/allow_unencrypted_access'] === true ? true : false"
           :buttons="[
             {
@@ -64,7 +64,7 @@
               class: 'btn-outline-success',
             },
           ]"
-          @update:model-value="updateState('openWB/general/user_management_active', $event)"
+          @update:model-value="updateState('openWB/system/security/user_management_active', $event)"
         >
           <template #help>
             <p>
@@ -83,7 +83,9 @@
           title="Benutzerverwaltung zurücksetzen"
           button-text="Zurücksetzen"
           subtype="danger"
-          :disabled="$store.state.mqtt['openWB/general/user_management_active'] === true || loggedInUser !== null"
+          :disabled="
+            $store.state.mqtt['openWB/system/security/user_management_active'] === true || loggedInUser !== null
+          "
           @button-clicked="showResetModal = true"
         >
           <template #help>
@@ -105,7 +107,7 @@
         </template>
       </openwb-base-card>
     </form>
-    <div v-if="$store.state.mqtt['openWB/general/user_management_active'] === true">
+    <div v-if="$store.state.mqtt['openWB/system/security/user_management_active'] === true">
       <openwb-base-card
         :collapsible="true"
         :collapsed="true"
@@ -494,7 +496,7 @@ export default {
     return {
       mqttTopicsToSubscribe: [
         "openWB/general/allow_unencrypted_access",
-        "openWB/general/user_management_active",
+        "openWB/system/security/user_management_active",
         "$CONTROL/dynamic-security/v1/response",
       ],
       activeControlCommand: null,
@@ -525,17 +527,26 @@ export default {
           return "";
         }
         return acls
+          .sort((a, b) => {
+            if (a.topic < b.topic) return -1;
+            if (a.topic > b.topic) return 1;
+            return 0;
+          })
           .map((acl) => {
             const alcTypes = {
-              publishClientSend: "Veröffentlichen (publish)",
-              publishClientReceive: "Empfangen (receive)",
-              subscribe: "Abonnieren (subscribe)",
-              unsubscribe: "Abonnement aufheben (unsubscribe)",
+              publishClientSend: "Veröffentlichen",
+              publishClientReceive: "Empfangen",
+              subscribe: "Abonnieren",
+              unsubscribe: "Abonnement aufheben",
+              subscribeLiteral: "Abonnieren (exakt)",
+              unsubscribeLiteral: "Abonnement aufheben (exakt)",
+              subscribePattern: "Abonnieren (Muster)",
+              unsubscribePattern: "Abonnement aufheben (Muster)",
             };
             const type = alcTypes[acl.acltype] || acl.acltype;
             const allow = acl.allow === true ? "erlaubt" : acl.allow === false ? "verboten" : "unbekannt";
             const topic = acl.topic ? '"' + acl.topic + '"' : "<alle Topics>";
-            return `${type} ${allow} für ${topic}`;
+            return `${topic} -> ${type} ${allow}`;
           })
           .join("\n");
       };
@@ -617,7 +628,7 @@ export default {
       this.groupDetails = {};
       this.roles = [];
       this.roleDetails = {};
-      if (this.$store.state.mqtt["openWB/general/user_management_active"] === true) {
+      if (this.$store.state.mqtt["openWB/system/security/user_management_active"] === true) {
         console.debug("Initializing Security view for user:", this.loggedInUser);
         this.getAnonymousGroupName();
         this.getDefaultAclAccess();
