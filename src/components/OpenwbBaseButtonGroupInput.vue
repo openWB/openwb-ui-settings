@@ -1,9 +1,7 @@
 <template>
   <openwb-base-setting-element>
     <template #title>
-      <slot name="title">
-        {{ title }}
-      </slot>
+      <slot name="title">{{ title }}</slot>
     </template>
     <template
       v-if="$slots.help"
@@ -12,59 +10,48 @@
       <slot name="help" />
     </template>
     <template #default>
-      <div class="btn-group btn-block btn-group-toggle">
-        <label
-          v-for="button in buttons"
-          :key="button.value"
-          class="btn btn-same-size btn-centered"
+      <!-- Multi Row -->
+      <div
+        v-if="useMultiRow"
+        class="btn-group-multi"
+      >
+        <openwb-base-button-row
+          v-for="(row, index) in buttonRows"
+          :key="index"
+          :buttons="row"
+          :uid="uid"
+          :model-value="value"
           :disabled="disabled"
-          :class="[
-            { active: value == button.buttonValue },
-            { disabled: disabled },
-            button.class ? button.class : 'btn-outline-info',
-          ]"
-          :for="`${uid}-${button.buttonValue}`"
-        >
-          <span>
-            <input
-              :id="`${uid}-${button.buttonValue}`"
-              v-model="value"
-              type="radio"
-              :value="button.buttonValue"
-              v-bind="$attrs"
-              :disabled="disabled"
-              @click="$emit('button-click', button.buttonValue)"
-            />
-            <slot :name="'label-' + button.buttonValue">
-              {{ button.text }}
-            </slot>
-            <span>&nbsp;</span>
-            <font-awesome-icon
-              :icon="['fas', 'check']"
-              :style="[value == button.buttonValue ? 'visibility: visible' : 'visibility: hidden']"
-            />
-          </span>
-        </label>
+          v-bind="$attrs"
+          @update:model-value="value = $event"
+          @button-click="$emit('button-click', $event)"
+        />
       </div>
+      <!-- Single Row -->
+      <openwb-base-button-row
+        v-else
+        :buttons="buttons"
+        :uid="uid"
+        :model-value="value"
+        :disabled="disabled"
+        v-bind="$attrs"
+        @update:model-value="value = $event"
+        @button-click="$emit('button-click', $event)"
+      />
     </template>
   </openwb-base-setting-element>
 </template>
 
 <script>
 import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+import OpenwbBaseButtonRow from "./OpenwbBaseButtonRow.vue";
 import BaseSettingComponents from "./mixins/BaseSettingComponents.vue";
-
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faCheck as fasCheck } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-
-library.add(fasCheck);
 
 export default {
   name: "OpenwbButtonGroupInput",
   components: {
-    FontAwesomeIcon,
     OpenwbBaseSettingElement,
+    OpenwbBaseButtonRow,
   },
   mixins: [BaseSettingComponents],
   inheritAttrs: false,
@@ -73,6 +60,7 @@ export default {
     modelValue: { type: [String, Number, Boolean], default: undefined },
     buttons: { type: Array, required: true },
     disabled: { type: Boolean, required: false, default: false },
+    maxButtonsPerRow: { type: Number, default: null },
   },
   emits: ["update:modelValue", "button-click"],
   computed: {
@@ -84,18 +72,41 @@ export default {
         this.$emit("update:modelValue", newValue);
       },
     },
+    useMultiRow() {
+      return this.maxButtonsPerRow && this.buttons.length > this.maxButtonsPerRow;
+    },
+    buttonRows() {
+      if (!this.useMultiRow) return [this.buttons];
+      const rows = [];
+      for (let i = 0; i < this.buttons.length; i += this.maxButtonsPerRow) {
+        rows.push(this.buttons.slice(i, i + this.maxButtonsPerRow));
+      }
+      return rows;
+    },
   },
 };
 </script>
 
 <style scoped>
-.btn.btn-centered {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+.btn-group-multi {
+  width: 100%;
 }
 
-.btn.btn-same-size {
-  flex-basis: 10px !important; /* make buttons the same size */
+.btn-group-multi :deep(.btn-group:not(:first-child)) {
+  margin-top: -1px; /* collapse shared border with row above */
+}
+
+/* Rows other than first row: remove top outer corners */
+.btn-group-multi :deep(.btn-group:not(:first-child) .btn:first-child),
+.btn-group-multi :deep(.btn-group:not(:first-child) .btn:last-child) {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* Rows other than last row: remove bottom outer corners */
+.btn-group-multi :deep(.btn-group:not(:last-child) .btn:first-child),
+.btn-group-multi :deep(.btn-group:not(:last-child) .btn:last-child) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 </style>
