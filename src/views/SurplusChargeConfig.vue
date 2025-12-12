@@ -11,6 +11,7 @@
           <openwb-base-button-group-input
             v-model="controlMode"
             title="Regelmodus"
+            :max-buttons-per-row="maxButtonsPerRow"
             :buttons="[
               { buttonValue: 'export', text: 'Einspeisung' },
               { buttonValue: 'import', text: 'Bezug' },
@@ -247,6 +248,7 @@
 
 <script>
 import ComponentState from "../components/mixins/ComponentState.vue";
+import MultiLineButtonBreakPoints from "../components/mixins/MultiLineButtonBreakPoints.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -260,7 +262,7 @@ library.add(fasCarBattery, fasCarSide, fasBatteryHalf);
 export default {
   name: "OpenwbSurplusChargeConfigView",
   components: {},
-  mixins: [ComponentState],
+  mixins: [ComponentState, MultiLineButtonBreakPoints],
   emits: ["save", "reset", "defaults"],
   data() {
     return {
@@ -326,6 +328,9 @@ export default {
           this.$store.state.mqtt["openWB/general/chargemode_config/pv_charging/switch_off_threshold"]
         );
       },
+    },
+    maxButtonsPerRow() {
+      return this.screenSizeMd ? 2 : null;
     },
   },
   watch: {

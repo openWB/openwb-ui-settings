@@ -712,6 +712,7 @@
             other charge mode cards have been manually opened with toggle in <openwb-base-button-group-input>)  -->
             <openwb-base-button-group-input
               title="Aktiver Lademodus"
+              :max-buttons-per-row="maxButtonsPerRow"
               :buttons="[
                 { buttonValue: 'instant_charging', text: 'Sofort', class: 'btn-outline-danger' },
                 { buttonValue: 'pv_charging', text: 'PV', class: 'btn-outline-success' },
@@ -1423,6 +1424,7 @@ library.add(
 );
 
 import ComponentState from "../components/mixins/ComponentState.vue";
+import MultiLineButtonBreakPoints from "../components/mixins/MultiLineButtonBreakPoints.vue";
 import OpenwbVehicleProxy from "../components/vehicles/OpenwbVehicleProxy.vue";
 import ChargeTemplateScheduledChargingPlan from "../components/vehicles/ChargeTemplateScheduledChargingPlan.vue";
 import ChargeTemplateTimeChargingPlan from "../components/vehicles/ChargeTemplateTimeChargingPlan.vue";
@@ -1436,7 +1438,7 @@ export default {
     ChargeTemplateScheduledChargingPlan,
     ChargeTemplateTimeChargingPlan,
   },
-  mixins: [ComponentState],
+  mixins: [ComponentState, MultiLineButtonBreakPoints],
   props: {
     installAssistantActive: {
       type: Boolean,
@@ -1520,6 +1522,9 @@ export default {
       get() {
         return this.$store.state.mqtt["openWB/system/configurable/soc_modules"];
       },
+    },
+    maxButtonsPerRow() {
+      return this.screenSizeSm ? 3 : null;
     },
   },
   methods: {
