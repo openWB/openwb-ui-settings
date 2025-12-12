@@ -1,33 +1,54 @@
 <template>
   <teleport
-    v-if="$store.state.mqtt['openWB/general/user_management_active'] === true"
+    v-if="userManagementActive === true"
     defer
     to="#infobar"
   >
     <div id="user-indicator">
-      <span v-if="loggedInUser">
+      <span
+        v-if="loggedInUser"
+        class="pill bg-primary"
+      >
         <FontAwesomeIcon
           :icon="['fas', 'circle-user']"
-          :title="loggedInUser"
+          size="lg"
         />
-        <FontAwesomeIcon
-          class="text-light clickable px-2"
-          :icon="['fas', 'arrow-right-from-bracket']"
-          title="Abmelden"
-          @click="showLogoutModal = true"
-        />
+        <span class="non-selectable"> {{ loggedInUser }} </span>
+        <span title="Abmelden">
+          <FontAwesomeIcon
+            class="text-light clickable px-2"
+            :icon="['fas', 'arrow-right-from-bracket']"
+            size="lg"
+            @click="showLogoutModal = true"
+          />
+        </span>
       </span>
-      <FontAwesomeIcon
+      <span
         v-else
-        class="text-light clickable px-2"
-        :icon="['fas', 'arrow-right-to-bracket']"
-        title="Anmelden"
-        @click="showLoginModal = true"
-      />
+        class="pill bg-secondary"
+      >
+        <span title="Nicht angemeldet">
+          <FontAwesomeLayers>
+            <FontAwesomeIcon :icon="['fas', 'circle-user']" />
+            <FontAwesomeIcon
+              :icon="['fas', 'ban']"
+              color="red"
+            />
+          </FontAwesomeLayers>
+        </span>
+        <span title="Anmelden">
+          <FontAwesomeIcon
+            class="text-light clickable px-2"
+            :icon="['fas', 'arrow-right-to-bracket']"
+            size="lg"
+            @click="showLoginModal = true"
+          />
+        </span>
+      </span>
     </div>
   </teleport>
   <openwb-base-modal-dialog
-    v-if="$store.state.mqtt['openWB/general/user_management_active'] === true"
+    v-if="userManagementActive"
     :show="showLogoutModal"
     title="Abmelden"
     subtype="warning"
@@ -37,8 +58,9 @@
     <p>Willst Du Dich wirklich abmelden?</p>
   </openwb-base-modal-dialog>
   <openwb-base-modal-dialog
-    v-if="$store.state.mqtt['openWB/general/user_management_active'] === true"
+    v-if="userManagementActive"
     :show="showLoginModal"
+    :prevent-close="!anonymousAccessAllowed"
     title="Anmelden"
     subtype="success"
     :buttons="[{ text: 'Anmelden', event: 'login', subtype: 'success' }]"
@@ -67,24 +89,30 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faCircleUser as fasCircleUser,
+  faBan as fasBan,
   faArrowRightToBracket as fasArrowRightToBracket,
   faArrowRightFromBracket as fasArrowRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { FontAwesomeIcon, FontAwesomeLayers } from "@fortawesome/vue-fontawesome";
 
-library.add(fasCircleUser, fasArrowRightToBracket, fasArrowRightFromBracket);
+library.add(fasCircleUser, fasBan, fasArrowRightToBracket, fasArrowRightFromBracket);
 
 import ComponentState from "./mixins/ComponentState.vue";
+import { nextTick } from "vue";
 
 export default {
   name: "OpenwbPageUser",
   components: {
     FontAwesomeIcon,
+    FontAwesomeLayers,
   },
   mixins: [ComponentState],
   data() {
     return {
-      mqttTopicsToSubscribe: ["openWB/general/user_management_active"],
+      mqttTopicsToSubscribe: [
+        "openWB/system/security/user_management_active",
+        "openWB/system/security/anonymous_access_allowed",
+      ],
       showLoginModal: false,
       showLogoutModal: false,
       username: "",
@@ -95,8 +123,48 @@ export default {
     loggedInUser() {
       return this.$store.state.local.username || null;
     },
+    /**
+     * Check if user management is active
+     * Defaults to true if the value is not set as this may be due to insufficient permissions
+     * @returns boolean
+     */
+    userManagementActive() {
+      return this.$store.state.mqtt["openWB/system/security/user_management_active"] !== false;
+    },
+    anonymousAccessAllowed() {
+      if (this.$store.state.mqtt["openWB/system/security/anonymous_access_allowed"] === undefined) {
+        return false;
+      }
+      return this.$store.state.mqtt["openWB/system/security/anonymous_access_allowed"] === true;
+    },
+    settingsAccessible() {
+      return this.$store.state.mqtt["openWB/system/security/settings_accessible"] === true;
+    },
+  },
+  watch: {
+    loggedInUser(newValue) {
+      if (newValue) {
+        this.checkAutoLogin();
+      }
+    },
+    anonymousAccessAllowed() {
+      this.checkAutoLogin();
+    },
+  },
+  mounted() {
+    nextTick(() => {
+      this.checkAutoLogin();
+    });
   },
   methods: {
+    checkAutoLogin() {
+      console.log("Checking auto login: ", this.userManagementActive, this.anonymousAccessAllowed, this.loggedInUser);
+      if (this.userManagementActive && !this.anonymousAccessAllowed && !this.loggedInUser) {
+        this.showLoginModal = true;
+      } else {
+        this.showLoginModal = false;
+      }
+    },
     doLogin(event) {
       if (event === "login") {
         if (!this.username || !this.password) {
@@ -109,10 +177,12 @@ export default {
         // reconnect mqtt
         this.$root.reconnectMqttClient();
         // reload page ?
-        // this.$router.go();
+        this.$router.go();
       }
       console.warn("Closing login modal", event);
       this.showLoginModal = false;
+      this.username = "";
+      this.password = "";
     },
     doLogout(event) {
       this.showLogoutModal = false;
@@ -123,7 +193,7 @@ export default {
         // reconnect mqtt
         this.$root.reconnectMqttClient();
         // reload page ?
-        // this.$router.go();
+        this.$router.go();
       }
     },
   },
@@ -131,8 +201,16 @@ export default {
 </script>
 
 <style scoped>
-#user-indicator {
-  font-weight: bolder;
-  font-size: 175%;
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  padding: 0.2em 0.2em;
+  border-radius: 1em;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.non-selectable {
+  user-select: none;
 }
 </style>
