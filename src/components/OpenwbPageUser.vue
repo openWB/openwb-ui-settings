@@ -109,10 +109,7 @@ export default {
   mixins: [ComponentState],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/system/security/user_management_active",
-        "openWB/system/security/anonymous_access_allowed",
-      ],
+      mqttTopicsToSubscribe: ["openWB/system/security/user_management_active", "openWB/system/security/access_allowed"],
       showLoginModal: false,
       showLogoutModal: false,
       username: "",
@@ -131,11 +128,14 @@ export default {
     userManagementActive() {
       return this.$store.state.mqtt["openWB/system/security/user_management_active"] !== false;
     },
-    anonymousAccessAllowed() {
-      if (this.$store.state.mqtt["openWB/system/security/anonymous_access_allowed"] === undefined) {
+    accessAllowed() {
+      if (this.$store.state.mqtt["openWB/system/security/access_allowed"] === undefined) {
         return false;
       }
-      return this.$store.state.mqtt["openWB/system/security/anonymous_access_allowed"] === true;
+      return this.$store.state.mqtt["openWB/system/security/access_allowed"] === true;
+    },
+    anonymousAccessAllowed() {
+      return this.accessAllowed && this.loggedInUser === null;
     },
     settingsAccessible() {
       return this.$store.state.mqtt["openWB/system/security/settings_accessible"] === true;
@@ -147,7 +147,7 @@ export default {
         this.checkAutoLogin();
       }
     },
-    anonymousAccessAllowed() {
+    accessAllowed() {
       this.checkAutoLogin();
     },
   },
@@ -158,8 +158,8 @@ export default {
   },
   methods: {
     checkAutoLogin() {
-      console.log("Checking auto login: ", this.userManagementActive, this.anonymousAccessAllowed, this.loggedInUser);
-      if (this.userManagementActive && !this.anonymousAccessAllowed && !this.loggedInUser) {
+      console.log("Checking auto login: ", this.userManagementActive, this.accessAllowed, this.loggedInUser);
+      if (this.userManagementActive && !this.accessAllowed) {
         this.showLoginModal = true;
       } else {
         this.showLoginModal = false;
