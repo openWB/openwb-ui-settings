@@ -96,6 +96,7 @@
     <openwb-base-button-group-input
       v-model="plan.frequency.selected"
       title="Wiederholungen"
+      :max-buttons-per-row="screenSizeSm ? 2 : null"
       :buttons="[
         {
           buttonValue: 'once',
@@ -182,6 +183,7 @@
     <openwb-base-button-group-input
       v-model="plan.limit.selected"
       title="Begrenzung"
+      :max-buttons-per-row="screenSizeSm ? 2 : null"
       :buttons="[
         { buttonValue: 'none', text: 'Keine' },
         {
@@ -242,13 +244,14 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasCarBattery, fasBolt, fasClock, fasCalendarDay, fasCalendarWeek, fasCalendarAlt, fasCopy, fasTrash);
 
 import ComponentState from "/src/components/mixins/ComponentState.vue";
+import MultiLineButtonBreakPoints from "/src/components/mixins/MultiLineButtonBreakPoints.vue";
 
 export default {
   name: "ChargeTemplateTimeChargingPlan",
   components: {
     FontAwesomeIcon,
   },
-  mixins: [ComponentState],
+  mixins: [ComponentState, MultiLineButtonBreakPoints],
   props: {
     modelValue: {
       type: Object,
