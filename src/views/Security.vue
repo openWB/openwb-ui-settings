@@ -317,7 +317,7 @@
                   v-model="groupDetails[group].textname"
                   title="Beschreibung"
                   subtype="text"
-                  disabled
+                  :disabled="group === anonymousGroupName"
                 />
                 <openwb-base-array-input
                   title="Zugewiesene Benutzer"
@@ -351,6 +351,7 @@
                   v-model="groupDetails[group].textdescription"
                   title="Zusatzinformationen"
                   subtype="text"
+                  :disabled="group === anonymousGroupName"
                 >
                   <template #help> Hier können zusätzliche Informationen zur Gruppe hinterlegt werden. </template>
                 </openwb-base-textarea>
