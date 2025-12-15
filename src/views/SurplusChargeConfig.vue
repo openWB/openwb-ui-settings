@@ -11,7 +11,7 @@
           <openwb-base-button-group-input
             v-model="controlMode"
             title="Regelmodus"
-            :max-buttons-per-row="maxButtonsPerRow"
+            :max-buttons-per-row="screenSizeMd ? 2 : null"
             :buttons="[
               { buttonValue: 'export', text: 'Einspeisung' },
               { buttonValue: 'import', text: 'Bezug' },
@@ -328,9 +328,6 @@ export default {
           this.$store.state.mqtt["openWB/general/chargemode_config/pv_charging/switch_off_threshold"]
         );
       },
-    },
-    maxButtonsPerRow() {
-      return this.screenSizeMd ? 2 : null;
     },
   },
   watch: {
