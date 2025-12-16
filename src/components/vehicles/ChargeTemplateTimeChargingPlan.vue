@@ -96,7 +96,7 @@
     <openwb-base-button-group-input
       v-model="plan.frequency.selected"
       title="Wiederholungen"
-      :max-buttons-per-row="screenSizeSm ? 2 : null"
+      :max-buttons-per-row="screenSizeSm ? 2 : undefined"
       :buttons="[
         {
           buttonValue: 'once',
@@ -183,7 +183,7 @@
     <openwb-base-button-group-input
       v-model="plan.limit.selected"
       title="Begrenzung"
-      :max-buttons-per-row="screenSizeSm ? 2 : null"
+      :max-buttons-per-row="screenSizeSm ? 2 : undefined"
       :buttons="[
         { buttonValue: 'none', text: 'Keine' },
         {

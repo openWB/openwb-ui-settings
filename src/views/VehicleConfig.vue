@@ -712,7 +712,7 @@
             other charge mode cards have been manually opened with toggle in <openwb-base-button-group-input>)  -->
             <openwb-base-button-group-input
               title="Aktiver Lademodus"
-              :max-buttons-per-row="screenSizeSm ? 3 : null"
+              :max-buttons-per-row="screenSizeSm ? 3 : undefined"
               :buttons="[
                 { buttonValue: 'instant_charging', text: 'Sofort', class: 'btn-outline-danger' },
                 { buttonValue: 'pv_charging', text: 'PV', class: 'btn-outline-success' },
@@ -848,7 +848,7 @@
               </openwb-base-button-group-input>
               <openwb-base-button-group-input
                 title="Begrenzung"
-                :max-buttons-per-row="screenSizeSm ? 2 : null"
+                :max-buttons-per-row="screenSizeSm ? 2 : undefined"
                 :buttons="[
                   {
                     buttonValue: 'none',
@@ -957,7 +957,7 @@
               </openwb-base-number-input>
               <openwb-base-button-group-input
                 title="Anzahl Phasen"
-                :max-buttons-per-row="screenSizeSm ? 2 : null"
+                :max-buttons-per-row="screenSizeSm ? 2 : undefined"
                 :buttons="[
                   { buttonValue: 1, text: '1' },
                   { buttonValue: 3, text: 'Maximum' },
@@ -976,7 +976,7 @@
               </openwb-base-button-group-input>
               <openwb-base-button-group-input
                 title="Begrenzung"
-                :max-buttons-per-row="screenSizeSm ? 2 : null"
+                :max-buttons-per-row="screenSizeSm ? 2 : undefined"
                 :buttons="[
                   {
                     buttonValue: 'none',
@@ -1214,7 +1214,7 @@
               />
               <openwb-base-button-group-input
                 title="Anzahl Phasen bei Überschuss"
-                :max-buttons-per-row="screenSizeSm ? 2 : null"
+                :max-buttons-per-row="screenSizeSm ? 2 : undefined"
                 :buttons="[
                   { buttonValue: 1, text: '1' },
                   { buttonValue: 3, text: 'Maximum' },
@@ -1234,7 +1234,7 @@
               </openwb-base-button-group-input>
               <openwb-base-button-group-input
                 title="Begrenzung"
-                :max-buttons-per-row="screenSizeSm ? 2 : null"
+                :max-buttons-per-row="screenSizeSm ? 2 : undefined"
                 :buttons="[
                   {
                     buttonValue: 'none',

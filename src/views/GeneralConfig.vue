@@ -126,7 +126,7 @@
           <div v-if="$store.state.mqtt['openWB/general/extern'] === false">
             <openwb-base-button-group-input
               title="Geschwindigkeit Regelintervall"
-              :max-buttons-per-row="screenSizeSm ? 2 : null"
+              :max-buttons-per-row="screenSizeSm ? 2 : undefined"
               :buttons="[
                 {
                   buttonValue: 10,

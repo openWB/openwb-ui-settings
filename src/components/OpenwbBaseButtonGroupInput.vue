@@ -10,11 +10,7 @@
       <slot name="help" />
     </template>
     <template #default>
-      <!-- Multi Row -->
-      <div
-        v-if="useMultiRow"
-        class="btn-group-multi"
-      >
+      <div class="btn-group-multi">
         <openwb-base-button-row
           v-for="(row, index) in buttonRows"
           :key="index"
@@ -27,17 +23,6 @@
           @button-click="$emit('button-click', $event)"
         />
       </div>
-      <!-- Single Row -->
-      <openwb-base-button-row
-        v-else
-        :buttons="buttons"
-        :uid="uid"
-        :model-value="value"
-        :disabled="disabled"
-        v-bind="$attrs"
-        @update:model-value="value = $event"
-        @button-click="$emit('button-click', $event)"
-      />
     </template>
   </openwb-base-setting-element>
 </template>
@@ -60,7 +45,7 @@ export default {
     modelValue: { type: [String, Number, Boolean], default: undefined },
     buttons: { type: Array, required: true },
     disabled: { type: Boolean, required: false, default: false },
-    maxButtonsPerRow: { type: Number, default: null },
+    maxButtonsPerRow: { type: Number, default: Number.POSITIVE_INFINITY },
   },
   emits: ["update:modelValue", "button-click"],
   computed: {
@@ -72,11 +57,7 @@ export default {
         this.$emit("update:modelValue", newValue);
       },
     },
-    useMultiRow() {
-      return this.maxButtonsPerRow && this.buttons.length > this.maxButtonsPerRow;
-    },
     buttonRows() {
-      if (!this.useMultiRow) return [this.buttons];
       const rows = [];
       for (let i = 0; i < this.buttons.length; i += this.maxButtonsPerRow) {
         rows.push(this.buttons.slice(i, i + this.maxButtonsPerRow));

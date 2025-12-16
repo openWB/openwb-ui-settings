@@ -97,7 +97,7 @@
     <openwb-base-button-group-input
       v-model="plan.frequency.selected"
       title="Wiederholungen"
-      :max-buttons-per-row="screenSizeSm ? 2 : null"
+      :max-buttons-per-row="screenSizeSm ? 2 : undefined"
       :buttons="[
         {
           buttonValue: 'once',
@@ -169,7 +169,7 @@
     <openwb-base-button-group-input
       v-model="plan.phases_to_use"
       title="Anzahl Phasen Zielladen"
-      :max-buttons-per-row="screenSizeSm ? 2 : null"
+      :max-buttons-per-row="screenSizeSm ? 2 : undefined"
       :buttons="[
         { buttonValue: 1, text: '1' },
         { buttonValue: 3, text: 'Maximum' },
@@ -186,7 +186,7 @@
     <openwb-base-button-group-input
       v-model="plan.phases_to_use_pv"
       title="Anzahl Phasen bei PV-Überschuss"
-      :max-buttons-per-row="screenSizeSm ? 2 : null"
+      :max-buttons-per-row="screenSizeSm ? 2 : undefined"
       :buttons="[
         { buttonValue: 1, text: '1' },
         { buttonValue: 3, text: 'Maximum' },

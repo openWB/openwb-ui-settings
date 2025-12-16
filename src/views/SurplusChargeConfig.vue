@@ -11,7 +11,7 @@
           <openwb-base-button-group-input
             v-model="controlMode"
             title="Regelmodus"
-            :max-buttons-per-row="screenSizeMd ? 2 : null"
+            :max-buttons-per-row="screenSizeMd ? 2 : undefined"
             :buttons="[
               { buttonValue: 'export', text: 'Einspeisung' },
               { buttonValue: 'import', text: 'Bezug' },
