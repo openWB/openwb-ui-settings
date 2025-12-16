@@ -126,7 +126,6 @@
           <div v-if="$store.state.mqtt['openWB/general/extern'] === false">
             <openwb-base-button-group-input
               title="Geschwindigkeit Regelintervall"
-              :max-buttons-per-row="screenSizeSm ? 2 : undefined"
               :buttons="[
                 {
                   buttonValue: 10,
@@ -756,7 +755,6 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasCar, fasChargingStation, fasClock, fasCalendar, fasCoins, fasPieChart);
 import ComponentState from "../components/mixins/ComponentState.vue";
-import MultiLineButtonBreakPoints from "../components/mixins/MultiLineButtonBreakPoints.vue";
 import OpenwbWebThemeProxy from "../components/web_themes/OpenwbWebThemeProxy.vue";
 
 export default {
@@ -765,7 +763,7 @@ export default {
     OpenwbWebThemeProxy,
     FontAwesomeIcon,
   },
-  mixins: [ComponentState, MultiLineButtonBreakPoints],
+  mixins: [ComponentState],
   props: {
     installAssistantActive: {
       type: Boolean,

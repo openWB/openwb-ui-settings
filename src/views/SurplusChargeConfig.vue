@@ -11,7 +11,6 @@
           <openwb-base-button-group-input
             v-model="controlMode"
             title="Regelmodus"
-            :max-buttons-per-row="screenSizeMd ? 2 : undefined"
             :buttons="[
               { buttonValue: 'export', text: 'Einspeisung' },
               { buttonValue: 'import', text: 'Bezug' },
@@ -248,7 +247,6 @@
 
 <script>
 import ComponentState from "../components/mixins/ComponentState.vue";
-import MultiLineButtonBreakPoints from "../components/mixins/MultiLineButtonBreakPoints.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -262,7 +260,7 @@ library.add(fasCarBattery, fasCarSide, fasBatteryHalf);
 export default {
   name: "OpenwbSurplusChargeConfigView",
   components: {},
-  mixins: [ComponentState, MultiLineButtonBreakPoints],
+  mixins: [ComponentState],
   emits: ["save", "reset", "defaults"],
   data() {
     return {

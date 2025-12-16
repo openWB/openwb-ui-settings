@@ -10,7 +10,10 @@
       <slot name="help" />
     </template>
     <template #default>
-      <div class="btn-group-multi">
+      <div
+        ref="container"
+        class="btn-group-multi"
+      >
         <openwb-base-button-row
           v-for="(row, index) in buttonRows"
           :key="index"
@@ -48,6 +51,11 @@ export default {
     maxButtonsPerRow: { type: Number, default: Number.POSITIVE_INFINITY },
   },
   emits: ["update:modelValue", "button-click"],
+  data() {
+    return {
+      containerWidth: 0,
+    };
+  },
   computed: {
     value: {
       get() {
@@ -57,12 +65,43 @@ export default {
         this.$emit("update:modelValue", newValue);
       },
     },
+    maxButtonsPerRowAuto() {
+      if (this.containerWidth <= 200) return 1;
+      if (this.containerWidth <= 360) return 2;
+      if (this.containerWidth <= 550) return 3;
+      if (this.containerWidth <= 1024) return 4;
+      return Infinity;
+    },
     buttonRows() {
       const rows = [];
-      for (let i = 0; i < this.buttons.length; i += this.maxButtonsPerRow) {
-        rows.push(this.buttons.slice(i, i + this.maxButtonsPerRow));
+      for (let i = 0; i < this.buttons.length; i += this.maxButtonsPerRowAuto) {
+        rows.push(this.buttons.slice(i, i + this.maxButtonsPerRowAuto));
       }
       return rows;
+    },
+    screenSizeXs() {
+      return this.containerWidth <= 360;
+    },
+    screenSizeSm() {
+      return this.containerWidth <= 550;
+    },
+    screenSizeMd() {
+      return this.containerWidth <= 1024;
+    },
+  },
+  mounted() {
+    this.updateContainerWidth();
+    window.addEventListener("resize", this.updateContainerWidth);
+  },
+  beforeUnmount() {
+    window.removeEventListener("resize", this.updateContainerWidth);
+  },
+  methods: {
+    updateContainerWidth() {
+      const containerElement = this.$refs.container;
+      if (containerElement) {
+        this.containerWidth = containerElement.offsetWidth;
+      }
     },
   },
 };
