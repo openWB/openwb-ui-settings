@@ -126,13 +126,9 @@ export default {
     },
 
     async createAuthUrl() {
-      
-      const requestData = { "externalCustomerId": null, "state": null };
-
       // Call local server endpoint
       const response = await axios.post(
         "https://rabot.openwb.de/rabot-auth.php",
-        requestData,
         {
           headers: {
             "Content-Type": "application/json",
@@ -143,7 +139,7 @@ export default {
       if (!response.data.success) {
         throw new Error("Server-Fehler beim Erstellen der Rabot-Authentifizierung");
       }
-
+      log.console(response.data)
       return response.data;
     },
     
