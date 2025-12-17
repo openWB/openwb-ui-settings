@@ -41,7 +41,8 @@
       @update:model-value="updateConfiguration($event, 'configuration.calculate_soc')"
     >
       <template #help>
-        Berechnet den Ladestand (SoC) während der Ladung. Dies ist notwendig, wenn der SoC während der Ladung nicht aktualisiert wird. Die Berechnung erfolgt über die Ladeleistung und die Ladedauer.
+        Berechnet den Ladestand (SoC) während der Ladung. Dies ist notwendig, wenn der SoC während der Ladung nicht
+        aktualisiert wird. Die Berechnung erfolgt über die Ladeleistung und die Ladedauer.
       </template>
     </openwb-base-button-group-input>
   </div>
