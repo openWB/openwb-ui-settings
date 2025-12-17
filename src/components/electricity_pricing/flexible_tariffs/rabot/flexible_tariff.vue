@@ -95,34 +95,45 @@ export default {
   },
   computed: {
     contractOptions() {
-      return this.contractNumbers.map(contract => ({
+      const options = this.contractNumbers.map(contract => ({
         value: contract,
         text: contract
       }));
+      
+      // Fallback: Wenn keine Options vorhanden sind, aber eine Vertragsnummer in der Config existiert
+      if (options.length === 0 && this.flexibleTariff.configuration.contract_number) {
+        options.push({
+          value: this.flexibleTariff.configuration.contract_number,
+          text: this.flexibleTariff.configuration.contract_number
+        });
+      }
+      
+      return options;
     }
   },
   methods: {
-    async rabot_login_window() {
-      try {
-        // Call local server endpoint to create Rabot auth URL
-        const authResponse = await this.createAuthUrl();
-        
-        // Open the authorization URL in a new window
-        const rabotLogin = window.open(
-          authResponse.authorizationUrl,
-          "RabotLogin",
-          "width=800,height=600,status=yes,scrollbars=yes,resizable=yes",
-        );
-        
-        rabotLogin.focus();
-        
-      } catch (error) {
-        console.error("Fehler beim Erstellen des Rabot-Links:", error);
-        this.$root.postClientMessage(
-          "Fehler beim Erstellen der Rabot-Authentifizierung: " + (error.response?.data?.message || error.message),
-          "danger"
-        );
-      }
+    rabot_login_window() {
+      // Open popup immediately to avoid popup blocker
+      const rabotLogin = window.open(
+        "about:blank",
+        "RabotLogin",
+        "width=800,height=600,status=yes,scrollbars=yes,resizable=yes",
+      );
+      rabotLogin.focus();
+      
+      // Then get the auth URL and redirect the popup
+      this.createAuthUrl()
+        .then(authResponse => {
+          rabotLogin.location.href = authResponse.authorizationUrl;
+        })
+        .catch(error => {
+          rabotLogin.close();
+          console.error("Fehler beim Erstellen des Rabot-Links:", error);
+          this.$root.postClientMessage(
+            "Fehler beim Erstellen der Rabot-Authentifizierung: " + (error.response?.data?.message || error.message),
+            "danger"
+          );
+        });
     },
 
     async createAuthUrl() {
@@ -139,7 +150,7 @@ export default {
       if (!response.data.success) {
         throw new Error("Server-Fehler beim Erstellen der Rabot-Authentifizierung");
       }
-      log.console(response.data)
+      console.log(response.data);
       return response.data;
     },
     
@@ -185,6 +196,7 @@ export default {
 
       try {
         // Call the Rabot proxy endpoint to get contracts
+        console.log("Vertrag abrufen unter" + `https://rabot.openwb.de/rabot-proxy.php/customers/${this.flexibleTariff.configuration.customer_number}/contracts`)
         const response = await axios.get(
           `https://rabot.openwb.de/rabot-proxy.php/customers/${this.flexibleTariff.configuration.customer_number}/contracts`,
           {
