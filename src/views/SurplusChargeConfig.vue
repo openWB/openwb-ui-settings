@@ -176,6 +176,7 @@
             "
           >
             <template #help>
+              Phasenumschaltungen werden zum Schutz der EV- und WB-Hardware begrenzt.<br />
               Wenn diese Option aktiviert ist, werden bis zu zwei Umschaltversuche vorgenommen, wenn die vorgegebene und
               genutzte Phasenzahl nicht übereinstimmen. Wird die Option deaktiviert, wird nur eine Umschaltung
               durchgeführt.<br />
