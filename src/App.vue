@@ -148,7 +148,7 @@ export default {
      */
     sendCommand(event) {
       console.debug("sendCommand:", event);
-      this.doPublish("openWB/set/command/" + this.client.options.clientId + "/todo", event, false);
+      this.doPublish(`openWB/set/command/${this.client.options.clientId}/todo/${event.command}`, event, false);
     },
     /**
      * Establishes a connection to the configured broker
