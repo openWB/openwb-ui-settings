@@ -236,7 +236,7 @@
               <p>
                 Eine ausführliche Erläuterung mit Beispielen findet Ihr im
                 <a
-                  href="https://wiki.openwb.de/doku.php?id=openwb:vc:2.1.8:software:einstell-konfig:einstellungen:allgemein#temporaere_ladeeinstellungen"
+                  href="https://wiki.openwb.de/doku.php?id=openwb:vc:2.1.9:software:einstell-konfig:einstellungen:allgemein#temporaere_ladeeinstellungen"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
