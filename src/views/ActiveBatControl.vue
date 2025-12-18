@@ -291,6 +291,7 @@
                     {{ batteryConfig.name }} (ID: {{ batteryConfig.id }})
                   </template>
                   <openwb-base-number-input
+                    :key="index"
                     title="Maximale Entladeleistung"
                     :min="0.1"
                     :step="0.1"
@@ -304,6 +305,7 @@
                     "
                   />
                   <openwb-base-number-input
+                    :key="index"
                     title="Maximale Ladeleistung"
                     :min="0.1"
                     :step="0.1"
