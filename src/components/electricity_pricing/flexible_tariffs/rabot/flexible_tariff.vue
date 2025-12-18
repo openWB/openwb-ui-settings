@@ -1,7 +1,7 @@
 <template>
   <div class="flexible-tariff-rabot">
     <openwb-base-alert subtype="info">
-      Über die Rabot-Authentifizierung können Sie Ihre Stromtarif-Daten für das Lastmanagement nutzen. Nach der
+      Über die Rabot-Authentifizierung können Sie Ihre Stromtarif-Daten für die Ladeplanung nutzen. Nach der
       Anmeldung bei Rabot wird eine Kundennummer in der Adresszeile angezeigt, die Sie hier einfügen müssen.
     </openwb-base-alert>
 
