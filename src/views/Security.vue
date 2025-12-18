@@ -718,6 +718,14 @@ export default {
       if ([null, undefined, ""].includes(this.clientDetails[client].password)) {
         // remove password field to avoid resetting password to empty
         delete this.clientDetails[client].password;
+      } else if (this.clientDetails[client].username === "admin") {
+        console.debug("Updating password for client:", client);
+        this.$emit("sendCommand", {
+          command: "updateAdminPassword",
+          data: {
+            newPassword: this.clientDetails[client].password,
+          },
+        });
       }
       this.queueControlCommand("modifyClient", { username: client, ...this.clientDetails[client] });
     },
