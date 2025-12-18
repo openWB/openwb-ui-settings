@@ -13,7 +13,6 @@
     >
       <template #help>
         Es wird ein neues Browserfenster geöffnet, in dem Sie sich bei Rabot mit Ihren Zugangsdaten anmelden können.
-        Nach der erfolgreichen Anmeldung wird eine Kundennummer in der Adresszeile des Browsers angezeigt.
       </template>
     </openwb-base-button-input>
 
