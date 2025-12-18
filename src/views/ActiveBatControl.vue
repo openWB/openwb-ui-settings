@@ -277,6 +277,7 @@
               </openwb-base-alert>
               <div
                   v-for="(batteryConfig, index) in batteryConfigs"
+                  :key="index"
               >
                 <openwb-base-card
                   v-if="$store.state.mqtt['openWB/bat/'+batteryConfig.id+'/get/power_limit_controllable'] === true"
