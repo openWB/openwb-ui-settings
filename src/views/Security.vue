@@ -100,7 +100,7 @@
         <template #footer>
           <openwb-base-submit-buttons
             form-name="accessForm"
-            @save="$emit('save')"
+            @save="saveSecuritySettings"
             @reset="$emit('reset')"
             @defaults="$emit('defaults')"
           />
@@ -641,9 +641,17 @@ export default {
     handleResetModal(event) {
       this.showResetModal = false;
       if (event === "confirm") {
-        console.error("Resetting user management!");
+        console.info("Resetting user management!");
         this.$emit("sendCommand", { command: "resetUserManagement" });
       }
+    },
+    saveSecuritySettings() {
+      if (this.$store.state.mqtt["openWB/system/security/user_management_active"] === false) {
+        // unset cookie
+        console.info("User management deactivated, removing mqtt cookie.");
+        this.$cookies.remove("mqtt");
+      }
+      this.$emit("save");
     },
     sendControlCommand(command, parameters = {}) {
       if (this.activeControlCommand !== null) {
