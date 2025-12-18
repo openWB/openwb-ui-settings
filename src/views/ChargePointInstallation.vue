@@ -37,7 +37,7 @@
         <openwb-base-alert subtype="info">
           Eine detaillierte Anleitung zur Einrichtung der Ladepunkte findet sich in unserem
           <a
-            href="https://wiki.openwb.de/doku.php?id=openwb:software:konfiguration:ladepunkte:openwb"
+            href="https://wiki.openwb.de/doku.php?id=openwb:vc:2.1.9:software:einstell-konfig:konfiguration:ladepunkte:openwb"
             target="_blank"
             rel="noopener noreferrer"
             >Wiki</a
