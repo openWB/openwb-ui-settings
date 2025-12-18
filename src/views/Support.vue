@@ -280,10 +280,7 @@ export default {
         console.warn("form invalid");
         return;
       } else {
-        this.$emit("sendCommand", {
-          command: "sendDebug",
-          data: this.debugData,
-        });
+        this.sendSystemCommand("sendDebug", this.debugData);
         this.enableSendDebugButton = false;
       }
     },
