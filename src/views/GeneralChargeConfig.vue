@@ -109,11 +109,11 @@
           <hr />
           <openwb-base-heading> Variable Strompreise </openwb-base-heading>
           <openwb-base-alert subtype="info">
-            Ist in den Lademodi Eco und Zeitladen "Preisbasiertes Laden" gewählt wird nur geladen, wenn der Strompreis
+            Ist in den Lademodi Eco und Zeitladen "Preisbasiertes Laden" gewählt, wird nur geladen, wenn der Strompreis
             unter dem angegebenen maximalen Strompreis liegt. Für Zielladen wird die Ladedauer ermittelt und dann zu den
             günstigsten Zeiten geladen.<br />
             Wenn keine Preise abgefragt werden können oder "Preisbasiertes Laden" abgewählt wurde, wird in Modus Eco
-            immer geladen und bei Zielladen zunächst mit PV-Überschuss und zum Erreichen des Zieltermins mit Netzstrom.
+            immer geladen bzw. bei Zielladen zunächst mit PV-Überschuss und zum Erreichen des Zieltermins mit Netzstrom.
             Wenn sowohl dynamische Stromtarife als auch dynamische Netzentgelte konfiguriert sind, werden beide zum
             Gesamt-Strompreis addiert. Ist nur eines von beiden konfiguriert, wird dieses als Gesamtpreis verwendet.<br />
           </openwb-base-alert>
@@ -194,8 +194,8 @@
               Die Ladepunkte übermitteln den ID-Tag, Heartbeat und den Zählerstand zum Zeitpunkt des Ansteckens,
               Absteckens und alle 5 Minuten. Eine Steuerung per OCPP ist nicht möglich.<br />
               Alle Ladepunkte, die ihre Daten an das OCPP-Backend übermitteln sollen, müssen zunächst im OCPP-Backend
-              angelegt werden. Die dort eingetragene Chargebox ID muss in der openWB in den Einstellungen des Ladepunkts
-              eingetragen werden.
+              angelegt werden. Die dort eingetragene Chargebox ID muss in der openWB unter Einstellungen ->
+              Konfiguration im zugehörigen -> Ladepunkt eingetragen werden.
             </openwb-base-alert>
             <openwb-base-text-input
               title="URL des OCPP-Backends"
