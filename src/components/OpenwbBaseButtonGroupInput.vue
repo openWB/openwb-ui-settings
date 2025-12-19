@@ -24,7 +24,18 @@
           v-bind="$attrs"
           @update:model-value="value = $event"
           @button-click="$emit('button-click', $event)"
-        />
+        >
+          <!-- Forward all label slots -->
+          <template
+            v-for="btn in row"
+            #[`label-${btn.buttonValue}`]="slotProps"
+          >
+            <slot
+              :name="`label-${btn.buttonValue}`"
+              v-bind="slotProps"
+            />
+          </template>
+        </openwb-base-button-row>
       </div>
     </template>
   </openwb-base-setting-element>
