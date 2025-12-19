@@ -80,7 +80,6 @@ export default {
       if (this.containerWidth <= 200) return 1;
       if (this.containerWidth <= 360) return 2;
       if (this.containerWidth <= 550) return 3;
-      if (this.containerWidth <= 1024) return 4;
       return Infinity;
     },
     buttonRows() {
