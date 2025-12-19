@@ -111,6 +111,14 @@ const routes = [
     component: () => import("../views/VehicleConfig.vue"),
   },
   {
+    path: "/ConsumerConfiguration",
+    name: "ConsumerConfiguration",
+    meta: {
+      heading: "Konfiguration - Verbraucher",
+    },
+    component: () => import("../views/ConsumerConfig.vue"),
+  },
+  {
     path: "/IoConfiguration",
     name: "IoConfiguration",
     meta: {

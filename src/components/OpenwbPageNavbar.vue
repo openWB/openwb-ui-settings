@@ -177,6 +177,13 @@
               Fahrzeuge
             </router-link>
             <router-link
+              to="/ConsumerConfiguration"
+              class="dropdown-item"
+              active-class="active disabled"
+            >
+              Verbraucher
+            </router-link>
+            <router-link
               to="/IoConfiguration"
               class="dropdown-item"
               active-class="active disabled"
