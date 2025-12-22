@@ -70,7 +70,12 @@
             <p>
               Hier kann die integrierte Benutzerverwaltung von openWB aktiviert oder deaktiviert werden. Mit aktivierter
               Benutzerverwaltung ist der Zugriff auf den Mosquitto Broker (MQTT) und davon abhängige Dienste
-              (Weboberfläche, API) nur mit einem gültigen Benutzerkonto möglich.
+              (Weboberfläche, API) nur mit einem gültigen Benutzerkonto (oder anonym ohne Anmeldung, falls erlaubt)
+              möglich.
+            </p>
+            <p>
+              Standard-Admin-Benutzer nach der ersten Aktivierung: Benutzername: <strong>admin</strong> Passwort:
+              <strong>openwb</strong>
             </p>
             <p>
               <strong>Hinweis:</strong> Die Benutzerverwaltung erfordert zwingend die Abschaltung des unverschlüsselten
