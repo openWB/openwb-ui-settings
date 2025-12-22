@@ -69,7 +69,7 @@
             :min="0"
             :step="0.001"
             :model-value="flexibleTariff.configuration.fix * 100000 || 0"
-            @update:model-value="updateConfiguration($event /100000, 'configuration.fix')"
+            @update:model-value="updateConfiguration($event / 100000, 'configuration.fix')"
           >
             <template #help> Feste Gebühr pro kWh (z.B. 1,500 Cent/kWh) </template>
           </openwb-base-number-input>
