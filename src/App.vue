@@ -52,6 +52,7 @@ export default {
         path: "/ws",
         connectTimeout: 4000,
         reconnectPeriod: 4000,
+        resubscribe: true,
         properties: {
           requestResponseInformation: true,
           requestProblemInformation: true,
