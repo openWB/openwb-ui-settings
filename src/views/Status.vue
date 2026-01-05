@@ -35,9 +35,9 @@
     />
     <!-- vehicles -->
     <vehicle-card
-      v-for="(vehicleName, vehicleKey) of vehicleNames"
-      :key="vehicleKey"
-      :vehicle-key="vehicleKey"
+      v-for="(vehicleName, vehicleId) of vehicleNames"
+      :key="vehicleId"
+      :vehicle-id="parseInt(vehicleId)"
       :vehicle-name="vehicleName"
     />
     <!-- io devices -->
@@ -162,7 +162,14 @@ export default {
         if (this.$store.state.mqtt["openWB/general/extern"] === true) {
           return {};
         }
-        return this.getWildcardTopics("openWB/vehicle/+/name");
+        const vehicleNameTopics = this.getWildcardTopics("openWB/vehicle/+/name");
+        // modify keys to get vehicleId only from the topic
+        for (const key of Object.keys(vehicleNameTopics)) {
+          const vehicleIdx = key.match(/(?:\/)(\d+)(?=\/)/)[1];
+          vehicleNameTopics[vehicleIdx] = vehicleNameTopics[key];
+          delete vehicleNameTopics[key];
+        }
+        return vehicleNameTopics;
       },
     },
   },
