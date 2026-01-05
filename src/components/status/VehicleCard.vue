@@ -1,7 +1,7 @@
 <template>
   <status-card
     subtype="info"
-    :component-id="vehicleIndex"
+    :component-id="vehicleId"
     :state="$store.state.mqtt[baseTopic + '/get/fault_state']"
     :state-message="$store.state.mqtt[baseTopic + '/get/fault_str']"
   >
@@ -54,20 +54,15 @@ export default {
   },
   mixins: [ComponentState],
   props: {
-    vehicleKey: { type: String, required: true },
+    vehicleId: { type: Number, required: true },
     vehicleName: { type: String, default: "" },
   },
   data() {
     return {
-      mqttTopicsToSubscribe: ["openWB/vehicle/+/get/+"],
+      mqttTopicsToSubscribe: [`openWB/vehicle/${this.vehicleId}/get/+`],
     };
   },
   computed: {
-    vehicleIndex: {
-      get() {
-        return parseInt(this.vehicleKey.match(/(?:\/)(\d+)(?=\/)/)[1]);
-      },
-    },
     soc: {
       get() {
         return this.formatNumberTopic(this.baseTopic + "/get/soc");
@@ -93,7 +88,7 @@ export default {
     },
     baseTopic: {
       get() {
-        return "openWB/vehicle/" + this.vehicleIndex;
+        return "openWB/vehicle/" + this.vehicleId;
       },
     },
   },
