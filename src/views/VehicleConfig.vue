@@ -132,7 +132,7 @@
             <hr />
             <div v-if="!installAssistantActive">
               <openwb-base-heading> Fahrzeugzuordnung per ID-Tags </openwb-base-heading>
-              <div v-if="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id'].length > 0">
+              <div v-if="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id']?.length > 0">
                 <openwb-base-alert subtype="info">
                   Einstellungen zur Fahrzeugzuordnung finden sich unter
                   <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.
@@ -1481,7 +1481,7 @@ export default {
     },
     vehicleIndexes: {
       get() {
-        return this.getWildcardIndexList("openWB/vehicle/+/name");
+        return this.getWildcardIndexList("openWB/vehicle/+/info");
       },
     },
     evTemplates: {
