@@ -88,7 +88,7 @@
             />
           </span>
           <openwb-base-text-input
-            v-if="$store.state.mqtt['openWB/optional/ocpp/config']['active'] === true"
+            v-if="$store.state.mqtt['openWB/optional/ocpp/config']?.['active'] === true"
             title="OCPP-Chargebox ID"
             :model-value="installedChargePoint?.ocpp_chargebox_id"
             @update:model-value="updateState(installedChargePointKey, $event, 'ocpp_chargebox_id')"
