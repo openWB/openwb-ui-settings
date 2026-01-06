@@ -185,8 +185,14 @@ export default {
           this.$store.commit("storeLocal", { name: "username", value: user });
         }
         // required for route guards
-        this.doSubscribe(["openWB/system/usage_terms_acknowledged"]);
-        this.doSubscribe(["openWB/system/installAssistantDone"]);
+        this.doSubscribe([
+          "openWB/system/usage_terms_acknowledged",
+          "openWB/system/installAssistantDone",
+          "openWB/system/security/settings_accessible",
+          "openWB/system/security/status_accessible",
+          "openWB/system/security/charge_log_accessible",
+          "openWB/system/security/chart_accessible",
+        ]);
       });
       this.client.on("error", (error) => {
         console.error("Connection failed", error);
