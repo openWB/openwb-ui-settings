@@ -1,13 +1,14 @@
 <template>
   <status-card
+    v-if="chargePointConfig"
     subtype="primary"
-    :component-id="chargePointIndex"
+    :component-id="chargePointId"
     :state="$store.state.mqtt[baseTopic + '/get/fault_state']"
     :state-message="$store.state.mqtt[baseTopic + '/get/fault_str']"
   >
     <template #header-left>
       <font-awesome-icon :icon="['fas', 'charging-station']" />
-      {{ installedChargePoint.name }}
+      {{ chargePointConfig.name }}
     </template>
     <template #header-right>{{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW</template>
     <!-- Status -->
@@ -66,7 +67,7 @@
           v-if="$store.state.mqtt['openWB/general/extern'] === true"
           class="col text-right text-monospace"
         >
-          {{ formatNumberTopic("openWB/internal_chargepoint/" + chargePointIndex + "/data/phases_to_use") }}
+          {{ formatNumberTopic("openWB/internal_chargepoint/" + chargePointId + "/data/phases_to_use") }}
         </div>
         <div
           v-else
@@ -211,28 +212,27 @@ export default {
   },
   mixins: [ComponentState],
   props: {
-    installedChargePointKey: { type: String, required: true },
-    installedChargePoint: { type: Object, required: true },
+    chargePointId: { type: Number, required: true },
   },
   data() {
     return {
       mqttTopicsToSubscribe: [
-        `openWB/chargepoint/${this.installedChargePoint.id}/get/+`,
-        `openWB/chargepoint/${this.installedChargePoint.id}/get/connected_vehicle/info`,
-        `openWB/chargepoint/${this.installedChargePoint.id}/set/+`,
-        `openWB/internal_chargepoint/${this.installedChargePoint.id}/data/phases_to_use`,
+        `openWB/chargepoint/${this.chargePointId}/config`,
+        `openWB/chargepoint/${this.chargePointId}/get/+`,
+        `openWB/chargepoint/${this.chargePointId}/set/+`,
+        `openWB/internal_chargepoint/${this.chargePointId}/data/phases_to_use`,
       ],
     };
   },
   computed: {
-    chargePointIndex: {
-      get() {
-        return this.installedChargePoint.id;
-      },
-    },
     baseTopic: {
       get() {
-        return "openWB/chargepoint/" + this.chargePointIndex;
+        return "openWB/chargepoint/" + this.chargePointId;
+      },
+    },
+    chargePointConfig: {
+      get() {
+        return this.$store.state.mqtt[`${this.baseTopic}/config`];
       },
     },
     chargingStatus: {

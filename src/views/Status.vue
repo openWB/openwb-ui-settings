@@ -6,10 +6,9 @@
     />
     <!-- individual charge points -->
     <charge-point-card
-      v-for="(installedChargePoint, installedChargePointKey) in installedChargePoints"
-      :key="installedChargePointKey"
-      :installed-charge-point="installedChargePoint"
-      :installed-charge-point-key="installedChargePointKey"
+      v-for="installedChargePointId in installedChargePoints"
+      :key="installedChargePointId"
+      :charge-point-id="installedChargePointId"
     />
     <!-- counters -->
     <counter-card
@@ -83,28 +82,52 @@ export default {
     return {
       mqttTopicsToSubscribe: [
         "openWB/general/extern",
+        "openWB/counter/get/hierarchy",
         // components
         "openWB/system/device/+/component/+/config",
         // io devices
         "openWB/system/io/+/config",
         // vehicles
         "openWB/vehicle/+/name",
-        // individual charge points
-        "openWB/chargepoint/+/config",
       ],
     };
   },
   computed: {
+    /**
+     * Get all object ids of a specific type from the hierarchy
+     * @param type type of object to get the ids from
+     * @returns number[]
+     */
+    getObjectIds: {
+      get() {
+        return (type) => {
+          function getId(hierarchy) {
+            let result = [];
+            if (hierarchy !== undefined) {
+              hierarchy.forEach((element) => {
+                if (element.type == type) {
+                  result.push(element.id);
+                }
+                result = [...result, ...getId(element.children)];
+              });
+            }
+            return result;
+          }
+          return getId(this.$store.state.mqtt["openWB/counter/get/hierarchy"]);
+        };
+      },
+    },
     installedChargePoints: {
       get() {
-        let chargePoints = this.getWildcardTopics("openWB/chargepoint/+/config");
-        let myObj = {};
-        for (const [key, element] of Object.entries(chargePoints)) {
-          if (element.type === "internal_openwb" || this.$store.state.mqtt["openWB/general/extern"] === false) {
-            myObj[key] = element;
-          }
-        }
-        return myObj;
+        return this.getObjectIds("cp");
+        // let chargePoints = this.getWildcardTopics("openWB/chargepoint/+/config");
+        // let myObj = {};
+        // for (const [key, element] of Object.entries(chargePoints)) {
+        //   if (element.type === "internal_openwb" || this.$store.state.mqtt["openWB/general/extern"] === false) {
+        //     myObj[key] = element;
+        //   }
+        // }
+        // return myObj;
       },
     },
     numChargePointsInstalled: {
