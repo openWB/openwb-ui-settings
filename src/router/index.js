@@ -11,6 +11,7 @@ const routes = [
     name: "Status",
     meta: {
       heading: "Status",
+      requiredPermission: "statusAccessible",
     },
     component: () => import("../views/Status.vue"),
   },
@@ -19,6 +20,7 @@ const routes = [
     name: "ChargeLog",
     meta: {
       heading: "Auswertungen - Ladeprotokoll",
+      requiredPermission: "chargeLogAccessible",
     },
     component: () => import("../views/ChargeLog.vue"),
   },
@@ -27,6 +29,7 @@ const routes = [
     name: "DailyChart",
     meta: {
       heading: "Auswertungen - Diagramme",
+      requiredPermission: "chartAccessible",
     },
     component: () => import("../views/Chart.vue"),
   },
@@ -35,6 +38,7 @@ const routes = [
     name: "GeneralConfig",
     meta: {
       heading: "Einstellungen - Allgemein",
+      requiredPermission: "settingsAccessible",
     },
     component: () => import("../views/GeneralConfig.vue"),
   },
@@ -43,6 +47,7 @@ const routes = [
     name: "IdentificationConfig",
     meta: {
       heading: "Einstellungen - Identifikation",
+      requiredPermission: "settingsAccessible",
     },
     component: () => import("../views/IdentificationConfig.vue"),
   },
@@ -51,6 +56,7 @@ const routes = [
     name: "OptionalComponents",
     meta: {
       heading: "Einstellungen - Display",
+      requiredPermission: "settingsAccessible",
     },
     component: () => import("../views/OptionalComponents.vue"),
   },
@@ -59,6 +65,7 @@ const routes = [
     name: "GeneralChargeConfig",
     meta: {
       heading: "Ladeeinstellungen - Übergreifendes",
+      requiredPermission: "settingsAccessible",
     },
     component: () => import("../views/GeneralChargeConfig.vue"),
   },
@@ -67,6 +74,7 @@ const routes = [
     name: "SurplusChargeConfig",
     meta: {
       heading: "Ladeeinstellungen - Überschuss-Laden",
+      requiredPermission: "settingsAccessible",
     },
     component: () => import("../views/SurplusChargeConfig.vue"),
   },
@@ -75,6 +83,7 @@ const routes = [
     name: "ActiveBatControl",
     meta: {
       heading: "Ladeeinstellungen - Speichersteuerung",
+      requiredPermission: "settingsAccessible",
     },
     component: () => import("../views/ActiveBatControl.vue"),
   },
@@ -83,6 +92,7 @@ const routes = [
     name: "HardwareInstallation",
     meta: {
       heading: "Konfiguration - Geräte und Komponenten",
+      requiredPermission: "settingsAccessible",
     },
     component: () => import("../views/HardwareInstallation.vue"),
   },
@@ -91,6 +101,7 @@ const routes = [
     name: "LoadManagementConfiguration",
     meta: {
       heading: "Konfiguration - Lastmanagement",
+      requiredPermission: "settingsAccessible",
     },
     component: () => import("../views/LoadManagementConfig.vue"),
   },
@@ -99,6 +110,7 @@ const routes = [
     name: "ChargePointInstallation",
     meta: {
       heading: "Konfiguration - Ladepunkte",
+      requiredPermission: "settingsAccessible",
     },
     component: () => import("../views/ChargePointInstallation.vue"),
   },
@@ -107,6 +119,7 @@ const routes = [
     name: "VehicleConfiguration",
     meta: {
       heading: "Konfiguration - Fahrzeuge",
+      requiredPermission: "settingsAccessible",
     },
     component: () => import("../views/VehicleConfig.vue"),
   },
@@ -115,6 +128,7 @@ const routes = [
     name: "IoConfiguration",
     meta: {
       heading: "Konfiguration - Ein- und Ausgänge",
+      requiredPermission: "settingsAccessible",
     },
     component: () => import("../views/IoConfig.vue"),
   },
@@ -123,6 +137,7 @@ const routes = [
     name: "CloudConfig",
     meta: {
       heading: "System - openWB Cloud",
+      requiredPermission: "settingsAccessible",
     },
     component: () => import("../views/CloudConfig.vue"),
   },
@@ -131,6 +146,7 @@ const routes = [
     name: "MqttBridgeConfig",
     meta: {
       heading: "System - MQTT-Brücken",
+      requiredPermission: "settingsAccessible",
     },
     component: () => import("../views/MqttBridgeConfig.vue"),
   },
@@ -139,6 +155,7 @@ const routes = [
     name: "Debugging",
     meta: {
       heading: "System - Fehlersuche",
+      requiredPermission: "settingsAccessible",
     },
     component: () => import("../views/DebugConfig.vue"),
   },
@@ -147,6 +164,7 @@ const routes = [
     name: "Support",
     meta: {
       heading: "System - Support",
+      requiredPermission: "settingsAccessible",
     },
     component: () => import("../views/Support.vue"),
   },
@@ -155,6 +173,7 @@ const routes = [
     name: "LegalSettings",
     meta: {
       heading: "System - Rechtliches",
+      requiredPermission: "settingsAccessible",
     },
     component: () => import("../views/LegalSettings.vue"),
   },
@@ -163,6 +182,7 @@ const routes = [
     name: "SystemConfig",
     meta: {
       heading: "System - System",
+      requiredPermission: "settingsAccessible",
     },
     component: () => import("../views/System.vue"),
   },
@@ -171,6 +191,7 @@ const routes = [
     name: "SecurityConfig",
     meta: {
       heading: "System - Sicherheit",
+      requiredPermission: "settingsAccessible",
     },
     component: () => import("../views/Security.vue"),
   },
@@ -179,6 +200,7 @@ const routes = [
     name: "DataManagement",
     meta: {
       heading: "System - Datenverwaltung",
+      requiredPermission: "settingsAccessible",
     },
     component: () => import("../views/DataManagement.vue"),
   },
@@ -187,8 +209,17 @@ const routes = [
     name: "InstallAssistant",
     meta: {
       heading: "System - Einrichtungsassistent",
+      requiredPermission: "settingsAccessible",
     },
     component: () => import("../views/InstallAssistant.vue"),
+  },
+  {
+    path: "/Error",
+    name: "Error",
+    meta: {
+      heading: "Fehler",
+    },
+    component: () => import("../views/Error.vue"),
   },
 ];
 /* examples for development only start here */
@@ -224,6 +255,13 @@ router.beforeEach(async (to) => {
         // redirect to install assistant as a first setup guide
         return { name: "InstallAssistant" };
       }
+    }
+  }
+  if (to.meta.requiredPermission) {
+    const hasPermission = await store.getters[to.meta.requiredPermission];
+    console.log(`${to.meta.requiredPermission}:`, hasPermission);
+    if (!hasPermission) {
+      return { name: "Error" };
     }
   }
 });

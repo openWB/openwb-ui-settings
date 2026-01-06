@@ -21,7 +21,10 @@
       class="collapse navbar-collapse navbar-nav-scroll"
     >
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
+        <li
+          v-if="statusAccessible"
+          class="nav-item nav-separator-after"
+        >
           <router-link
             to="/Status"
             class="nav-link"
@@ -30,7 +33,10 @@
             Status
           </router-link>
         </li>
-        <li class="nav-item dropdown nav-separator-after">
+        <li
+          v-if="chargeLogAccessible || chartAccessible"
+          class="nav-item dropdown nav-separator-after"
+        >
           <a
             class="nav-link dropdown-toggle"
             href="#"
@@ -45,6 +51,7 @@
             aria-labelledby="navbarDropdown"
           >
             <router-link
+              v-if="chargeLogAccessible"
               to="/Logging/ChargeLog"
               class="dropdown-item"
               active-class="active disabled"
@@ -52,6 +59,7 @@
               Ladeprotokoll
             </router-link>
             <router-link
+              v-if="chartAccessible"
               to="/Logging/Chart"
               class="dropdown-item"
               active-class="active disabled"
@@ -60,7 +68,10 @@
             </router-link>
           </div>
         </li>
-        <li class="nav-item dropdown">
+        <li
+          v-if="settingsAccessible"
+          class="nav-item dropdown"
+        >
           <a
             class="nav-link dropdown-toggle"
             href="#"
@@ -97,7 +108,10 @@
             </router-link>
           </div>
         </li>
-        <li class="nav-item dropdown">
+        <li
+          v-if="settingsAccessible"
+          class="nav-item dropdown"
+        >
           <a
             class="nav-link dropdown-toggle"
             href="#"
@@ -134,7 +148,10 @@
             </router-link>
           </div>
         </li>
-        <li class="nav-item dropdown">
+        <li
+          v-if="settingsAccessible"
+          class="nav-item dropdown"
+        >
           <a
             class="nav-link dropdown-toggle"
             href="#"
@@ -193,7 +210,10 @@
             </a>
           </div>
         </li>
-        <li class="nav-item dropdown">
+        <li
+          v-if="settingsAccessible"
+          class="nav-item dropdown"
+        >
           <a
             class="nav-link dropdown-toggle"
             href="#"
@@ -318,6 +338,7 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faExternalLinkAlt as fasExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import ComponentState from "./mixins/ComponentState.vue";
 
 library.add(fasExternalLinkAlt);
 
@@ -326,9 +347,32 @@ export default {
   components: {
     FontAwesomeIcon,
   },
+  mixins: [ComponentState],
+  data() {
+    return {
+      mqttTopicsToSubscribe: [
+        "openWB/system/security/settings_accessible",
+        "openWB/system/security/status_accessible",
+        "openWB/system/security/charge_log_accessible",
+        "openWB/system/security/chart_accessible",
+      ],
+    };
+  },
   computed: {
     nodeEnv() {
       return import.meta.env.MODE;
+    },
+    settingsAccessible() {
+      return this.$store.state.mqtt["openWB/system/security/settings_accessible"] === true;
+    },
+    statusAccessible() {
+      return this.$store.state.mqtt["openWB/system/security/status_accessible"] === true;
+    },
+    chargeLogAccessible() {
+      return this.$store.state.mqtt["openWB/system/security/charge_log_accessible"] === true;
+    },
+    chartAccessible() {
+      return this.$store.state.mqtt["openWB/system/security/chart_accessible"] === true;
     },
   },
   watch: {
