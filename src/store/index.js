@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
 
-// ChartLegend-Modul for Legenden-States
+// ChartLegend-Modul for Legend-States
 const chartLegend = {
   namespaced: true,
   state: () => ({
@@ -218,6 +218,94 @@ export default createStore({
               clearTimeout(timer);
               clearInterval(interval);
               resolve(state.mqtt["openWB/system/installAssistantDone"]);
+            }
+          }, 100);
+        }
+      });
+    },
+    statusAccessible(state) {
+      return new Promise((resolve) => {
+        if (state.mqtt["openWB/system/security/status_accessible"] !== undefined) {
+          resolve(state.mqtt["openWB/system/security/status_accessible"]);
+        } else {
+          var timer, interval;
+          // add general timeout if topic not set
+          timer = setTimeout(() => {
+            clearInterval(interval);
+            resolve(false);
+          }, 5000);
+          // check until we received valid data
+          interval = setInterval(() => {
+            if (state.mqtt["openWB/system/security/status_accessible"] !== undefined) {
+              clearTimeout(timer);
+              clearInterval(interval);
+              resolve(state.mqtt["openWB/system/security/status_accessible"]);
+            }
+          }, 100);
+        }
+      });
+    },
+    chargeLogAccessible(state) {
+      return new Promise((resolve) => {
+        if (state.mqtt["openWB/system/security/charge_log_accessible"] !== undefined) {
+          resolve(state.mqtt["openWB/system/security/charge_log_accessible"]);
+        } else {
+          var timer, interval;
+          // add general timeout if topic not set
+          timer = setTimeout(() => {
+            clearInterval(interval);
+            resolve(false);
+          }, 5000);
+          // check until we received valid data
+          interval = setInterval(() => {
+            if (state.mqtt["openWB/system/security/charge_log_accessible"] !== undefined) {
+              clearTimeout(timer);
+              clearInterval(interval);
+              resolve(state.mqtt["openWB/system/security/charge_log_accessible"]);
+            }
+          }, 100);
+        }
+      });
+    },
+    chartAccessible(state) {
+      return new Promise((resolve) => {
+        if (state.mqtt["openWB/system/security/chart_accessible"] !== undefined) {
+          resolve(state.mqtt["openWB/system/security/chart_accessible"]);
+        } else {
+          var timer, interval;
+          // add general timeout if topic not set
+          timer = setTimeout(() => {
+            clearInterval(interval);
+            resolve(false);
+          }, 5000);
+          // check until we received valid data
+          interval = setInterval(() => {
+            if (state.mqtt["openWB/system/security/chart_accessible"] !== undefined) {
+              clearTimeout(timer);
+              clearInterval(interval);
+              resolve(state.mqtt["openWB/system/security/chart_accessible"]);
+            }
+          }, 100);
+        }
+      });
+    },
+    settingsAccessible(state) {
+      return new Promise((resolve) => {
+        if (state.mqtt["openWB/system/security/settings_accessible"] !== undefined) {
+          resolve(state.mqtt["openWB/system/security/settings_accessible"]);
+        } else {
+          var timer, interval;
+          // add general timeout if topic not set
+          timer = setTimeout(() => {
+            clearInterval(interval);
+            resolve(false);
+          }, 5000);
+          // check until we received valid data
+          interval = setInterval(() => {
+            if (state.mqtt["openWB/system/security/settings_accessible"] !== undefined) {
+              clearTimeout(timer);
+              clearInterval(interval);
+              resolve(state.mqtt["openWB/system/security/settings_accessible"]);
             }
           }, 100);
         }
