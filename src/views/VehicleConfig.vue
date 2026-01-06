@@ -1481,7 +1481,7 @@ export default {
     },
     vehicleIndexes: {
       get() {
-        return this.getWildcardIndexList("openWB/vehicle/+/name");
+        return this.getWildcardIndexList("openWB/vehicle/+/info");
       },
     },
     evTemplates() {

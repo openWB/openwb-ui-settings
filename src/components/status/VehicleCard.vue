@@ -7,7 +7,7 @@
   >
     <template #header-left>
       <font-awesome-icon :icon="['fas', 'car']" />
-      {{ vehicleName }}
+      {{ name }}
     </template>
     <template
       v-if="soc != '-'"
@@ -16,6 +16,21 @@
       {{ soc }}&nbsp;%
     </template>
     <!-- Fahrzeugdaten -->
+    <openwb-base-card
+      title="Fahrzeuginformationen"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <div class="row">
+        <div class="col pr-0">Hersteller</div>
+        <div class="col text-monospace">{{ information.manufacturer }}</div>
+      </div>
+      <div class="row">
+        <div class="col pr-0">Modell</div>
+        <div class="col text-monospace">{{ information.model }}</div>
+      </div>
+    </openwb-base-card>
     <openwb-base-card
       title="Fahrzeugdaten"
       subtype="white"
@@ -55,14 +70,32 @@ export default {
   mixins: [ComponentState],
   props: {
     vehicleId: { type: Number, required: true },
-    vehicleName: { type: String, default: "" },
   },
   data() {
     return {
-      mqttTopicsToSubscribe: [`openWB/vehicle/${this.vehicleId}/get/+`],
+      mqttTopicsToSubscribe: [
+        `openWB/vehicle/${this.vehicleId}/name`,
+        `openWB/vehicle/${this.vehicleId}/info`,
+        `openWB/vehicle/${this.vehicleId}/get/+`,
+      ],
     };
   },
   computed: {
+    information: {
+      get() {
+        return this.$store.state.mqtt[this.baseTopic + "/info"];
+      },
+    },
+    name: {
+      get() {
+        const nameTopic = this.baseTopic + "/name";
+        if (this.$store.state.mqtt[nameTopic] !== undefined) {
+          return this.$store.state.mqtt[nameTopic];
+        } else {
+          return `Fahrzeug ${this.vehicleId}`;
+        }
+      },
+    },
     soc: {
       get() {
         return this.formatNumberTopic(this.baseTopic + "/get/soc");

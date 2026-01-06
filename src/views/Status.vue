@@ -1,9 +1,7 @@
 <template>
   <div class="status">
     <!-- all charge points -->
-    <charge-point-sum-card
-      v-if="numChargePointsInstalled > 1 && $store.state.mqtt['openWB/general/extern'] === false"
-    />
+    <charge-point-sum-card v-if="showChargePointSumCard" />
     <!-- individual charge points -->
     <charge-point-card
       v-for="installedChargePointId in installedChargePoints"
@@ -17,7 +15,7 @@
       :counter="counter"
     />
     <!-- all inverters -->
-    <inverter-sum-card v-if="numInvertersInstalled > 1 && $store.state.mqtt['openWB/general/extern'] === false" />
+    <inverter-sum-card v-if="showInverterSumCard" />
     <!-- individual inverters -->
     <inverter-card
       v-for="inverter in inverterConfigs"
@@ -25,7 +23,7 @@
       :inverter="inverter"
     />
     <!-- all batteries -->
-    <battery-sum-card v-if="numBatteriesInstalled > 1 && $store.state.mqtt['openWB/general/extern'] === false" />
+    <battery-sum-card v-if="showBatterySumCard" />
     <!-- individual batteries -->
     <battery-card
       v-for="battery in batteryConfigs"
@@ -34,10 +32,9 @@
     />
     <!-- vehicles -->
     <vehicle-card
-      v-for="(vehicleName, vehicleId) of vehicleNames"
+      v-for="vehicleId of vehicles"
       :key="vehicleId"
-      :vehicle-id="parseInt(vehicleId)"
-      :vehicle-name="vehicleName"
+      :vehicle-id="vehicleId"
     />
     <!-- io devices -->
     <io-device-card
@@ -46,7 +43,7 @@
       :io-device="ioDevice"
     />
     <!-- electricity tariff -->
-    <electricity-pricing-card v-if="$store.state.mqtt['openWB/general/extern'] === false" />
+    <electricity-pricing-card v-if="showElectricityPricingCard" />
   </div>
 </template>
 
@@ -82,57 +79,43 @@ export default {
     return {
       mqttTopicsToSubscribe: [
         "openWB/general/extern",
-        "openWB/counter/get/hierarchy",
+        // charge point sum
+        "openWB/chargepoint/get/power",
+        // individual charge points
+        "openWB/chargepoint/+/config",
         // components
         "openWB/system/device/+/component/+/config",
+        // battery sum
+        "openWB/bat/get/power",
+        // inverter sum
+        "openWB/pv/get/power",
         // io devices
         "openWB/system/io/+/config",
         // vehicles
-        "openWB/vehicle/+/name",
+        "openWB/vehicle/+/info",
+        // electricity pricing
+        "openWB/optional/ep/flexible_tariff/provider",
+        "openWB/optional/ep/grid_fee/provider",
       ],
     };
   },
   computed: {
-    /**
-     * Get all object ids of a specific type from the hierarchy
-     * @param type type of object to get the ids from
-     * @returns number[]
-     */
-    getObjectIds: {
-      get() {
-        return (type) => {
-          function getId(hierarchy) {
-            let result = [];
-            if (hierarchy !== undefined) {
-              hierarchy.forEach((element) => {
-                if (element.type == type) {
-                  result.push(element.id);
-                }
-                result = [...result, ...getId(element.children)];
-              });
-            }
-            return result;
-          }
-          return getId(this.$store.state.mqtt["openWB/counter/get/hierarchy"]);
-        };
-      },
-    },
     installedChargePoints: {
       get() {
-        return this.getObjectIds("cp");
-        // let chargePoints = this.getWildcardTopics("openWB/chargepoint/+/config");
-        // let myObj = {};
-        // for (const [key, element] of Object.entries(chargePoints)) {
-        //   if (element.type === "internal_openwb" || this.$store.state.mqtt["openWB/general/extern"] === false) {
-        //     myObj[key] = element;
-        //   }
-        // }
-        // return myObj;
+        return Object.keys(this.getWildcardTopics("openWB/chargepoint/+/config"))
+          .map((topic) => {
+            let match = topic.match(/^openWB\/chargepoint\/(\d+)\/config$/);
+            return match ? parseInt(match[1]) : null;
+          })
+          .filter((id) => id !== null);
       },
     },
-    numChargePointsInstalled: {
+    showChargePointSumCard: {
       get() {
-        return Object.keys(this.installedChargePoints).length;
+        return (
+          (this.$store.state.mqtt["openWB/chargepoint/get/power"] !== undefined ? true : false) &&
+          this.$store.state.mqtt["openWB/general/extern"] === false
+        );
       },
     },
     counterConfigs: {
@@ -146,14 +129,12 @@ export default {
         );
       },
     },
-    ioDeviceConfigs: {
+    showInverterSumCard: {
       get() {
-        return this.getWildcardTopics("openWB/system/io/+/config");
-      },
-    },
-    numInvertersInstalled: {
-      get() {
-        return Object.keys(this.inverterConfigs).length;
+        return (
+          this.$store.state.mqtt["openWB/pv/get/power"] !== undefined &&
+          this.$store.state.mqtt["openWB/general/extern"] === false
+        );
       },
     },
     inverterConfigs: {
@@ -167,9 +148,12 @@ export default {
         );
       },
     },
-    numBatteriesInstalled: {
+    showBatterySumCard: {
       get() {
-        return Object.keys(this.batteryConfigs).length;
+        return (
+          this.$store.state.mqtt["openWB/bat/get/power"] !== undefined &&
+          this.$store.state.mqtt["openWB/general/extern"] === false
+        );
       },
     },
     batteryConfigs: {
@@ -180,19 +164,31 @@ export default {
         return this.filterComponentsByType(this.getWildcardTopics("openWB/system/device/+/component/+/config"), "bat");
       },
     },
-    vehicleNames: {
+    vehicles: {
       get() {
         if (this.$store.state.mqtt["openWB/general/extern"] === true) {
           return {};
         }
-        const vehicleNameTopics = this.getWildcardTopics("openWB/vehicle/+/name");
-        // modify keys to get vehicleId only from the topic
-        for (const key of Object.keys(vehicleNameTopics)) {
-          const vehicleIdx = key.match(/(?:\/)(\d+)(?=\/)/)[1];
-          vehicleNameTopics[vehicleIdx] = vehicleNameTopics[key];
-          delete vehicleNameTopics[key];
-        }
-        return vehicleNameTopics;
+        let vehicleInfoTopics = this.getWildcardTopics("openWB/vehicle/+/info");
+        // return an array of vehicle ids
+        return Object.keys(vehicleInfoTopics).map((topic) => {
+          let match = topic.match(/^openWB\/vehicle\/(\d+)\/info$/);
+          return match ? parseInt(match[1]) : null;
+        });
+      },
+    },
+    ioDeviceConfigs: {
+      get() {
+        return this.getWildcardTopics("openWB/system/io/+/config");
+      },
+    },
+    showElectricityPricingCard: {
+      get() {
+        return (
+          (this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/provider"]?.type ||
+            this.$store.state.mqtt["openWB/optional/ep/grid_fee/provider"]?.type) &&
+          this.$store.state.mqtt["openWB/general/extern"] === false
+        );
       },
     },
   },
