@@ -382,6 +382,8 @@ export default {
     },
     releaseChangeValid() {
       return (
+        this.$store.state.mqtt["openWB/system/current_branch"] !== undefined &&
+        this.$store.state.mqtt["openWB/system/available_branches"] !== undefined &&
         this.$store.state.mqtt["openWB/system/current_branch"] in
           this.$store.state.mqtt["openWB/system/available_branches"] &&
         "tags" in
@@ -498,6 +500,8 @@ export default {
       };
 
       if (
+        this.$store.state.mqtt["openWB/system/current_branch"] === undefined ||
+        this.$store.state.mqtt["openWB/system/available_branches"] === undefined ||
         !(
           this.$store.state.mqtt["openWB/system/current_branch"] in
           this.$store.state.mqtt["openWB/system/available_branches"]
