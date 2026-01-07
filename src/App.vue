@@ -17,6 +17,7 @@
     </div>
   </div>
   <page-footer />
+  <user-info />
   <messages />
   <blocker />
 </template>
@@ -24,6 +25,7 @@
 <script>
 import NavBar from "./components/OpenwbPageNavbar.vue";
 import PageFooter from "./components/OpenwbPageFooter.vue";
+import UserInfo from "./components/OpenwbPageUser.vue";
 import Messages from "./components/OpenwbPageMessages.vue";
 import Blocker from "./components/OpenwbPageBlocker.vue";
 import mqtt from "mqtt";
@@ -33,6 +35,7 @@ export default {
   components: {
     NavBar,
     PageFooter,
+    UserInfo,
     Messages,
     Blocker,
   },
@@ -43,11 +46,17 @@ export default {
       },
       connection: {
         protocol: location.protocol == "https:" ? "wss" : "ws",
+        protocolVersion: 5,
         host: location.hostname,
         port: parseInt(location.port) || (location.protocol == "https:" ? 443 : 80),
-        endpoint: "/ws",
+        path: "/ws",
         connectTimeout: 4000,
         reconnectPeriod: 4000,
+        resubscribe: true,
+        properties: {
+          requestResponseInformation: true,
+          requestProblemInformation: true,
+        },
       },
     };
   },
@@ -68,6 +77,9 @@ export default {
      */
     topicList() {
       return Object.keys(this.$store.state.mqtt);
+    },
+    nodeEnv() {
+      return import.meta.env.MODE;
     },
   },
   created() {
@@ -100,6 +112,11 @@ export default {
         }
       }
       for (const [topic, payload] of Object.entries(topics)) {
+        // skip topics starting with "$CONTROL"
+        if (topic.startsWith("$CONTROL")) {
+          console.debug("skipping control topic:", topic);
+          continue;
+        }
         let setTopic = topic.replace("openWB/", "openWB/set/");
         console.debug("saving data:", setTopic, payload);
         this.doPublish(setTopic, payload);
@@ -132,7 +149,7 @@ export default {
      */
     sendCommand(event) {
       console.debug("sendCommand:", event);
-      this.doPublish("openWB/set/command/" + this.client.options.clientId + "/todo", event, false);
+      this.doPublish(`openWB/set/command/${this.client.options.clientId}/todo/${event.command}`, event, false);
     },
     /**
      * Establishes a connection to the configured broker
@@ -141,26 +158,49 @@ export default {
       // Connect string, and specify the connection method used through protocol
       // ws not encrypted WebSocket connection
       // wss encrypted WebSocket connection
-      // mqtt not encrypted TCP connection
-      // mqtts encrypted TCP connection
-      // wxs WeChat mini app connection
-      // alis Alipay mini app connection
-      const { protocol, host, port, endpoint, ...options } = this.connection;
-      const connectUrl = `${protocol}://${host}:${port}${endpoint}`;
-      console.debug("connecting to broker:", connectUrl);
-      try {
-        this.client = mqtt.connect(connectUrl, options);
-      } catch (error) {
-        console.error("mqtt.connect error", error);
+      const { protocol, host, port, path, ...options } = this.connection;
+      const connectUrl = `${protocol}://${host}:${port}${path}`;
+      const [user, pass] = this.$cookies.get("mqtt")?.split(":") || [null, null];
+      if (!(user && pass)) {
+        console.debug("Anonymous mqtt connection (no cookie set)");
       }
+      if ((this.nodeEnv !== "production" || protocol == "wss") && user && pass) {
+        console.debug("Using mqtt credentials from cookie:", user, "/", pass);
+        options.username = user;
+        options.password = pass;
+        if (user === "admin" && pass === "openwb") {
+          console.warn("Using default mqtt credentials! This is insecure and not recommended for production systems.");
+          this.postClientMessage(
+            "Warnung: Es werden die Standard-Zugangsdaten für MQTT verwendet! Dies ist unsicher und wird für Produktivsysteme nicht empfohlen.",
+            "warning",
+          );
+        }
+      }
+      console.debug("connecting to broker:", connectUrl);
+      this.client = mqtt.connect(connectUrl, options);
       this.client.on("connect", () => {
         console.debug("Connection succeeded! ClientId: ", this.client.options.clientId);
+        if (user) {
+          this.postClientMessage(`Angemeldet als "${user}".`, "success");
+          this.$store.commit("storeLocal", { name: "username", value: user });
+        }
         // required for route guards
-        this.doSubscribe(["openWB/system/usage_terms_acknowledged"]);
-        this.doSubscribe(["openWB/system/installAssistantDone"]);
+        this.doSubscribe([
+          "openWB/system/usage_terms_acknowledged",
+          "openWB/system/installAssistantDone",
+          "openWB/system/security/settings_accessible",
+          "openWB/system/security/status_accessible",
+          "openWB/system/security/charge_log_accessible",
+          "openWB/system/security/chart_accessible",
+        ]);
       });
       this.client.on("error", (error) => {
         console.error("Connection failed", error);
+        this.postClientMessage("Verbindungsfehler:<br />" + error.message, "danger");
+        this.$cookies.remove("mqtt");
+        this.$store.commit("storeLocal", { name: "username", value: null });
+        this.client.end();
+        this.createConnection();
       });
       this.client.on("message", (topic, message) => {
         if (message.toString().length > 0) {
@@ -184,6 +224,21 @@ export default {
         }
       });
     },
+    endConnection() {
+      if (this.client?.connected) {
+        console.warn("Ending mqtt connection...");
+        this.client.end();
+        this.$store.commit("storeLocal", { name: "username", value: null });
+      } else {
+        console.error("No mqtt connection to end.");
+      }
+    },
+    reconnectMqttClient() {
+      if (this.client?.connected) {
+        this.endConnection();
+      }
+      this.createConnection();
+    },
     doSubscribe(topics) {
       topics.forEach((topic) => {
         this.$store.commit("addSubscription", topic);
@@ -198,7 +253,10 @@ export default {
           }
           this.client.subscribe(topic, {}, (error) => {
             if (error) {
-              console.error("Subscribe to topics error", error);
+              this.postClientMessage(
+                `Daten konnten nicht abonniert werden.<br />Topic: ${topic}<br />${error}`,
+                "danger",
+              );
               return;
             }
           });
@@ -214,6 +272,10 @@ export default {
           this.client.unsubscribe(topic, (error) => {
             if (error) {
               console.error("Unsubscribe error", error);
+              this.postClientMessage(
+                `Daten konnten nicht abbestellt werden.<br />Topic: ${topic}<br />${error}`,
+                "danger",
+              );
             }
           });
           if (topic.includes("#") || topic.includes("+")) {
@@ -239,16 +301,19 @@ export default {
       this.client.publish(topic, JSON.stringify(payload), options, (error) => {
         if (error) {
           console.error("Publish error", error);
+          this.postClientMessage(
+            `Daten konnten nicht geschrieben werden.<br />Topic: ${topic}<br />${error}`,
+            "danger",
+          );
         }
       });
     },
     postClientMessage(message, type = "secondary") {
       console.debug("postMessage:", message, type);
       const timestamp = Date.now();
-      const topic = "openWB/command/" + this.mqttClientId + "/messages/" + timestamp;
       this.$store.commit({
-        type: "addTopic",
-        topic: topic,
+        type: "addClientMessage",
+        timestamp: timestamp,
         payload: {
           message: message,
           type: type,

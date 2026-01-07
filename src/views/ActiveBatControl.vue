@@ -255,7 +255,6 @@
             </openwb-base-alert>
             <div v-if="$store.state.mqtt['openWB/bat/get/power_limit_controllable'] === true">
               <openwb-base-button-group-input
-                v-model="powerLimit"
                 title="Speichersteuerung"
                 :buttons="[
                   {

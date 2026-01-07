@@ -1,15 +1,15 @@
 <template>
-  <teleport to="body">
+  <teleport
+    defer
+    to="nav"
+  >
     <div
       id="message-indicator"
-      class="text-light mt-1 p-2 mr-1 clickable"
+      class="text-light clickable"
       :class="showAllMessages ? 'active' : ''"
       @click="toggleAllMessages"
     >
-      <font-awesome-layers
-        full-width
-        style="font-size: 175%"
-      >
+      <font-awesome-layers full-width>
         <font-awesome-icon
           :icon="showAllMessages ? ['fas', 'bell'] : ['far', 'bell']"
           :class="messageIndicatorClass"
@@ -102,6 +102,9 @@ export default {
       this.systemMessages.forEach((message) => {
         myMessages.push(message);
       });
+      this.localMessages.forEach((message) => {
+        myMessages.push(message);
+      });
       this.clientMessages.forEach((message) => {
         myMessages.push(message);
       });
@@ -131,6 +134,14 @@ export default {
       }
       return messageList;
     },
+    localMessages() {
+      const messages = this.$store.state.local.messages || {};
+      var messageList = [];
+      for (const [key, element] of Object.entries(messages)) {
+        messageList.push({ topic: key, ...element });
+      }
+      return messageList;
+    },
     clientMessages() {
       let messageTopics = this.getWildcardTopics("openWB/command/" + this.$root.mqttClientId + "/messages/+");
       var messageList = [];
@@ -155,7 +166,11 @@ export default {
      * Removes system or client specific topics from broker
      */
     dismissMessage(event) {
-      this.clearTopic(event.topic);
+      if (this.localMessages.find((msg) => msg.topic === event.topic)) {
+        this.$store.commit("removeClientMessage", event.topic);
+      } else {
+        this.clearTopic(event.topic);
+      }
       var index = this.hiddenMessages.indexOf(event.topic);
       if (index > -1) {
         this.hiddenMessages.splice(index, 1);
@@ -166,7 +181,7 @@ export default {
      */
     dismissAllMessages() {
       this.messages.forEach((message) => {
-        this.clearTopic(message.topic);
+        this.dismissMessage({ topic: message.topic });
       });
       this.hiddenMessages = [];
       this.toggleAllMessages();
@@ -184,15 +199,12 @@ export default {
 </script>
 
 <style scoped>
-#message-indicator {
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 2000; /* navbar: 1030 */
-}
-
 #message-indicator .message-counter {
   font-weight: bolder;
+}
+
+#message-indicator .fa-layers {
+  font-size: 175%;
 }
 
 .openwb-toast-container {

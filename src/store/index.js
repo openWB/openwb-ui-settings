@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
 
-// ChartLegend-Modul for Legenden-States
+// ChartLegend-Modul for Legend-States
 const chartLegend = {
   namespaced: true,
   state: () => ({
@@ -26,6 +26,7 @@ let states = {
   local: {
     reloadRequired: false,
     savingData: false,
+    username: null,
   },
 };
 
@@ -39,6 +40,7 @@ if (import.meta.env.MODE !== "production") {
     text5: "Benutzername",
     text6: "12:34",
     text7: "2021-10-31",
+    text8: "Text mit Add-Button",
     color1: "#ff0000",
     color2: "#0000ff",
     number1: 5,
@@ -142,6 +144,17 @@ export default createStore({
         }
       }
     },
+    addClientMessage(state, message) {
+      if (!state.local.messages) {
+        state.local.messages = {};
+      }
+      state.local.messages[message.timestamp] = message.payload;
+    },
+    removeClientMessage(state, timestamp) {
+      if (state.local.messages && timestamp in state.local.messages) {
+        delete state.local.messages[timestamp];
+      }
+    },
     addSubscription(state, topic) {
       // add subscription to list or increment count
       if (topic in state.mqttSubscriptions) {
@@ -205,6 +218,94 @@ export default createStore({
               clearTimeout(timer);
               clearInterval(interval);
               resolve(state.mqtt["openWB/system/installAssistantDone"]);
+            }
+          }, 100);
+        }
+      });
+    },
+    statusAccessible(state) {
+      return new Promise((resolve) => {
+        if (state.mqtt["openWB/system/security/status_accessible"] !== undefined) {
+          resolve(state.mqtt["openWB/system/security/status_accessible"]);
+        } else {
+          var timer, interval;
+          // add general timeout if topic not set
+          timer = setTimeout(() => {
+            clearInterval(interval);
+            resolve(false);
+          }, 5000);
+          // check until we received valid data
+          interval = setInterval(() => {
+            if (state.mqtt["openWB/system/security/status_accessible"] !== undefined) {
+              clearTimeout(timer);
+              clearInterval(interval);
+              resolve(state.mqtt["openWB/system/security/status_accessible"]);
+            }
+          }, 100);
+        }
+      });
+    },
+    chargeLogAccessible(state) {
+      return new Promise((resolve) => {
+        if (state.mqtt["openWB/system/security/charge_log_accessible"] !== undefined) {
+          resolve(state.mqtt["openWB/system/security/charge_log_accessible"]);
+        } else {
+          var timer, interval;
+          // add general timeout if topic not set
+          timer = setTimeout(() => {
+            clearInterval(interval);
+            resolve(false);
+          }, 5000);
+          // check until we received valid data
+          interval = setInterval(() => {
+            if (state.mqtt["openWB/system/security/charge_log_accessible"] !== undefined) {
+              clearTimeout(timer);
+              clearInterval(interval);
+              resolve(state.mqtt["openWB/system/security/charge_log_accessible"]);
+            }
+          }, 100);
+        }
+      });
+    },
+    chartAccessible(state) {
+      return new Promise((resolve) => {
+        if (state.mqtt["openWB/system/security/chart_accessible"] !== undefined) {
+          resolve(state.mqtt["openWB/system/security/chart_accessible"]);
+        } else {
+          var timer, interval;
+          // add general timeout if topic not set
+          timer = setTimeout(() => {
+            clearInterval(interval);
+            resolve(false);
+          }, 5000);
+          // check until we received valid data
+          interval = setInterval(() => {
+            if (state.mqtt["openWB/system/security/chart_accessible"] !== undefined) {
+              clearTimeout(timer);
+              clearInterval(interval);
+              resolve(state.mqtt["openWB/system/security/chart_accessible"]);
+            }
+          }, 100);
+        }
+      });
+    },
+    settingsAccessible(state) {
+      return new Promise((resolve) => {
+        if (state.mqtt["openWB/system/security/settings_accessible"] !== undefined) {
+          resolve(state.mqtt["openWB/system/security/settings_accessible"]);
+        } else {
+          var timer, interval;
+          // add general timeout if topic not set
+          timer = setTimeout(() => {
+            clearInterval(interval);
+            resolve(false);
+          }, 5000);
+          // check until we received valid data
+          interval = setInterval(() => {
+            if (state.mqtt["openWB/system/security/settings_accessible"] !== undefined) {
+              clearTimeout(timer);
+              clearInterval(interval);
+              resolve(state.mqtt["openWB/system/security/settings_accessible"]);
             }
           }, 100);
         }

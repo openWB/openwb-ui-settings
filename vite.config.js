@@ -25,7 +25,7 @@ export default defineConfig(({ command, mode }) => {
       myConfiguration.server = {
         proxy: {
           "/ws": {
-            target: "ws://localhost:9001",
+            target: "ws://localhost:9003",
             ws: true,
           },
         },

@@ -107,6 +107,17 @@
         >
           <template #help> Eingabefeld für ein Datum </template>
         </openwb-base-text-input>
+        <openwb-base-text-input
+          title="8. Text (mit Add-Button)"
+          subtype="text"
+          add-button
+          class="mb-2"
+          :model-value="$store.state.examples.text8"
+          @update:model-value="updateState('text8', $event)"
+          @input:add="alert('Add button clicked!')"
+        >
+          <template #help> Eingabefeld mit einem Add-Button </template>
+        </openwb-base-text-input>
         <hr />
         <openwb-base-number-input
           title="1. Zahl"
@@ -315,6 +326,16 @@
         </openwb-base-number-input>
         <openwb-base-array-input
           title="Tag Array"
+          :model-value="$store.state.examples.tags"
+          @update:model-value="updateState('tags', $event)"
+        >
+          <template #help>
+            <pre>{{ JSON.stringify($store.state.examples.tags, undefined, 2) }}</pre>
+          </template>
+        </openwb-base-array-input>
+        <openwb-base-array-input
+          title="Tag Array mit Vorgaben"
+          :valid-elements="['1234', '5678']"
           :model-value="$store.state.examples.tags"
           @update:model-value="updateState('tags', $event)"
         >

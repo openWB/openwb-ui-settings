@@ -53,6 +53,7 @@
             form-name="backupPasswordForm"
             :hide-reset="true"
             :hide-defaults="true"
+            save-id="saveBackupPassword"
             @save="$emit('save', ['openWB/system/backup_password'])"
             @reset="$emit('reset')"
           />
@@ -231,6 +232,7 @@
               form-name="cloudBackupForm"
               :hide-reset="true"
               :hide-defaults="true"
+              save-id="saveCloudBackup"
               @save="$emit('save')"
               @reset="$emit('reset')"
               @defaults="$emit('defaults')"
@@ -414,6 +416,7 @@
             <openwb-base-submit-buttons
               form-name="monitoringForm"
               :hide-defaults="true"
+              save-id="saveMonitoring"
               @save="$emit('save')"
               @reset="$emit('reset')"
             />
