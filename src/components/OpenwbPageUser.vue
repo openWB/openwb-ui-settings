@@ -137,9 +137,6 @@ export default {
     anonymousAccessAllowed() {
       return this.accessAllowed && this.loggedInUser === null;
     },
-    settingsAccessible() {
-      return this.$store.state.mqtt["openWB/system/security/settings_accessible"] === true;
-    },
   },
   watch: {
     loggedInUser(newValue) {
@@ -158,7 +155,7 @@ export default {
   },
   methods: {
     checkAutoLogin() {
-      console.log("Checking auto login: ", this.userManagementActive, this.accessAllowed, this.loggedInUser);
+      console.debug("Checking auto login: ", this.userManagementActive, this.accessAllowed, this.loggedInUser);
       if (this.userManagementActive && !this.accessAllowed) {
         this.showLoginModal = true;
       } else {
@@ -176,7 +173,7 @@ export default {
         this.$cookies.set("mqtt", `${this.username}:${this.password}`);
         // reconnect mqtt
         this.$root.reconnectMqttClient();
-        // reload page ?
+        // reload page
         this.$router.go();
       }
       console.warn("Closing login modal", event);
