@@ -22,7 +22,7 @@
     <openwb-base-number-input
       title="Preis"
       :min="0"
-      :step="0.1"
+      :step="0.001"
       :precision="1"
       required
       unit="ct/kWh"
