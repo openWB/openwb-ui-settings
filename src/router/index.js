@@ -26,7 +26,7 @@ const routes = [
   },
   {
     path: "/Logging/Chart/:chartRange?/:initialDate?",
-    name: "DailyChart",
+    name: "Chart",
     meta: {
       heading: "Auswertungen - Diagramme",
       requiredPermission: "chartAccessible",
@@ -259,9 +259,14 @@ router.beforeEach(async (to) => {
   }
   if (to.meta.requiredPermission) {
     const hasPermission = await store.getters[to.meta.requiredPermission];
-    console.log(`${to.meta.requiredPermission}:`, hasPermission);
     if (!hasPermission) {
-      return { name: "Error" };
+      console.warn("no permission to access", to.name);
+      if (store.state.local.username) {
+        // logged in but no permission
+        return { name: "Error" };
+      }
+      console.debug("not logged in, cancel navigation to", to.name);
+      return false; // cancel navigation
     }
   }
 });
