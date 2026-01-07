@@ -4,6 +4,11 @@
       Über die Rabot-Authentifizierung können Sie Ihre Stromtarif-Daten für die Ladeplanung nutzen. Nach der Anmeldung
       bei Rabot wird eine Kundennummer in der Adresszeile angezeigt, die Sie hier einfügen müssen.
     </openwb-base-alert>
+    <openwb-base-alert subtype="warning">
+      Die Rabot-Authentifizierung kann nur über einen Computer oder die openWB-Cloud (remote.openwb.de) durchgeführt
+      werden. Das Eintragen von Kunden- und Vertragsnummer ist nicht ausreichend, da nach der Anmeldung bei Rabot noch
+      die Zustimmung erteilt werden muss.
+    </openwb-base-alert>
 
     <openwb-base-button-input
       title="1. Bei Rabot anmelden"
