@@ -7,7 +7,8 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeConsumer"
   >
-    Wollen Sie den Verbraucher "{{ modalConsumerName }}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht werden!
+    Wollen Sie den Verbraucher "{{ modalConsumerName }}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig
+    gemacht werden!
   </openwb-base-modal-dialog>
   <!-- main content -->
   <div class="consumerConfig">
@@ -19,31 +20,31 @@
           Allgemeine Einstellungen
         </template>
         <openwb-base-number-input
-            title="Einschaltverzögerung"
-            :model-value="$store.state.mqtt['openWB/general/consumer/config/switch_on_delay']"
-            :min="0"
-            :max="300"
-            :step="1"
-            unit="s"
-            @update:model-value="updateState('openWB/general/consumer/config/switch_on_delay', $event)"
+          title="Einschaltverzögerung"
+          :model-value="$store.state.mqtt['openWB/general/consumer/config/switch_on_delay']"
+          :min="0"
+          :max="300"
+          :step="1"
+          unit="s"
+          @update:model-value="updateState('openWB/general/consumer/config/switch_on_delay', $event)"
         />
         <openwb-base-number-input
-            title="Ausschaltverzögerung"
-            :model-value="$store.state.mqtt['openWB/general/consumer/config/switch_off_delay']"
-            :min="0"
-            :max="300"
-            :step="1"
-            unit="s"
-            @update:model-value="updateState('openWB/general/consumer/config/switch_off_delay', $event)"
+          title="Ausschaltverzögerung"
+          :model-value="$store.state.mqtt['openWB/general/consumer/config/switch_off_delay']"
+          :min="0"
+          :max="300"
+          :step="1"
+          unit="s"
+          @update:model-value="updateState('openWB/general/consumer/config/switch_off_delay', $event)"
         />
         <openwb-base-number-input
-            title="Ausschaltverzögerung"
-            :model-value="$store.state.mqtt['openWB/general/consumer/config/switch_off_threshold' / 1000]"
-            :min="0"
-            :max="30000"
-            :step="1"
-            unit="kWh"
-            @update:model-value="updateState('openWB/general/consumer/config/switch_off_threshold', $event * 1000)"
+          title="Ausschaltverzögerung"
+          :model-value="$store.state.mqtt['openWB/general/consumer/config/switch_off_threshold' / 1000]"
+          :min="0"
+          :max="30000"
+          :step="1"
+          unit="kWh"
+          @update:model-value="updateState('openWB/general/consumer/config/switch_off_threshold', $event * 1000)"
         />
       </openwb-base-card>
 
@@ -121,9 +122,7 @@
             @update:model-value="consumerToAdd = $event"
             @input:add="addConsumer"
           >
-            <template #help>
-              Bitte einen Verbraucher auswählen, der hinzugefügt werden soll.
-            </template>
+            <template #help> Bitte einen Verbraucher auswählen, der hinzugefügt werden soll. </template>
           </openwb-base-select-input>
         </div>
       </openwb-base-card>
@@ -191,17 +190,19 @@ export default {
           return [];
         }
         const configurable = this.$store.state.mqtt["openWB/system/configurable/consumers"];
-        return [{
-          label: configurable.vendors.group_name,
-          options: Object.entries(configurable.vendors.vendors)
-            .map(([vendorKey, vendor]) => {
-              return {
-                value: vendorKey,
-                text: vendor.vendor_name,
-              };
-            })
-            .sort((a, b) => a.text.localeCompare(b.text)),
-        }];
+        return [
+          {
+            label: configurable.vendors.group_name,
+            options: Object.entries(configurable.vendors.vendors)
+              .map(([vendorKey, vendor]) => {
+                return {
+                  value: vendorKey,
+                  text: vendor.vendor_name,
+                };
+              })
+              .sort((a, b) => a.text.localeCompare(b.text)),
+          },
+        ];
       },
     },
     consumerList: {
@@ -227,7 +228,7 @@ export default {
   methods: {
     addConsumer() {
       if (!this.consumerToAdd) return;
-      
+
       this.$emit("sendCommand", {
         command: "addConsumer",
         data: {

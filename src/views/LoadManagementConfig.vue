@@ -212,7 +212,7 @@
               Abhängigkeit in der Regelung berücksichtigt werden kann.
             </template>
           </sortable-list>
-          <hr/>
+          <hr />
           <sortable-list
             v-model="loadmanagementPrioList"
             title="Lastmanagement-Prioritäten"
@@ -221,7 +221,8 @@
           >
             <template #help>
               Reihenfolge der Ladepunkt-Prioritäten für das Lastmanagement.<br />
-              Ladepunkte mit höherer Priorität (weiter oben in der Liste) werden bevorzugt behandelt, wenn die verfügbare Leistung begrenzt ist.<br />
+              Ladepunkte mit höherer Priorität (weiter oben in der Liste) werden bevorzugt behandelt, wenn die
+              verfügbare Leistung begrenzt ist.<br />
               Die Reihenfolge kann durch Drag & Drop geändert werden.
             </template>
           </sortable-list>
@@ -343,11 +344,11 @@ export default {
     },
     loadmanagementPrioList: {
       get() {
-        const prioList = this.$store.state.mqtt['openWB/counter/get/loadmanagement_prios'] || [];
+        const prioList = this.$store.state.mqtt["openWB/counter/get/loadmanagement_prios"] || [];
         if (Array.isArray(prioList)) {
-          return prioList.map(id => ({ id, type: 'vehicle' }));
+          return prioList.map((id) => ({ id, type: "vehicle" }));
         }
-        
+
         // Fallback: erstelle Liste aller verfügbaren Fahrzeuge
         let vehicleIds = [];
         Object.keys(this.$store.state.mqtt).forEach((key) => {
@@ -358,18 +359,18 @@ export default {
             }
           }
         });
-        
-        return vehicleIds.sort().map(id => ({ id, type: 'vehicle' }));
+
+        return vehicleIds.sort().map((id) => ({ id, type: "vehicle" }));
       },
       set(newList) {
-        const updatedPrioList = newList.map(item => item.id);
-        this.updateState('openWB/counter/get/loadmanagement_prios', updatedPrioList);
+        const updatedPrioList = newList.map((item) => item.id);
+        this.updateState("openWB/counter/get/loadmanagement_prios", updatedPrioList);
       },
     },
     loadmanagementPrioLabels: {
       get() {
         return this.loadmanagementPrioList.reduce((result, item, index) => {
-          if (typeof item.id === 'string' && item.id.startsWith('ev')) {
+          if (typeof item.id === "string" && item.id.startsWith("ev")) {
             const vehicleId = item.id.substring(2); // "ev" hat 2 Zeichen -> ev0 -> 0
             const vehicleName = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/name`];
             if (vehicleName) {
@@ -436,7 +437,6 @@ export default {
     isComponentType(componentType, verifier) {
       return componentType?.split("_").includes(verifier);
     },
-
   },
 };
 </script>
