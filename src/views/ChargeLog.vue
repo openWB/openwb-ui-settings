@@ -356,6 +356,7 @@ export default {
         "openWB/general/extern",
         "openWB/general/charge_log_data_config",
         "openWB/chargepoint/+/config",
+        "openWB/vehicle/+/info",
         "openWB/vehicle/+/name",
       ],
       currentMonth: "",
@@ -729,26 +730,36 @@ export default {
           text: this.translateChargeMode(mode),
         };
       });
+      const allModes = chargeModeList.map((item) => item.value);
       chargeModeList.unshift({
-        value: undefined,
+        value: allModes,
         text: "Alle",
       });
       return chargeModeList;
     },
     chargePointList() {
       let chargePoints = this.getWildcardTopics("openWB/chargepoint/+/config");
-      var chargePointList = [{ value: undefined, text: "Alle" }];
+      var chargePointList = [];
       for (const [, element] of Object.entries(chargePoints)) {
         chargePointList.push({ value: element.id, text: element.name });
+      }
+      if (chargePointList.length > 1) {
+        const allIds = chargePointList.map((item) => item.value);
+        chargePointList.unshift({ value: allIds, text: "Alle" });
       }
       return chargePointList;
     },
     vehicleList() {
-      let vehicles = this.getWildcardTopics("openWB/vehicle/+/name");
-      var vehicleList = [{ value: undefined, text: "Alle" }];
-      for (const [key, element] of Object.entries(vehicles)) {
-        let index = parseInt(key.match(/\/([0-9]+)\/name$/)[1]);
-        vehicleList.push({ value: index, text: element });
+      let vehicles = this.getWildcardTopics("openWB/vehicle/+/info");
+      var vehicleList = [];
+      for (const key of Object.keys(vehicles)) {
+        let index = parseInt(key.match(/\/([0-9]+)\/info$/)[1]);
+        const name = this.$store.state.mqtt["openWB/vehicle/" + index + "/name"];
+        vehicleList.push({ value: index, text: name || `Fahrzeug ${index}` });
+      }
+      if (vehicleList.length > 1) {
+        const allIds = vehicleList.map((item) => item.value);
+        vehicleList.unshift({ value: allIds, text: "Alle" });
       }
       return vehicleList;
     },
@@ -772,11 +783,29 @@ export default {
       if ("chargemode" in this.chargeLogRequestData.filter.vehicle) {
         this.chargeLogRequestData.filter.vehicle.chargemode =
           this.chargeLogRequestData.filter.vehicle.chargemode.filter((element) => element != undefined);
+        if (this.chargeLogRequestData.filter.vehicle.chargemode.length == 1) {
+          if (Array.isArray(this.chargeLogRequestData.filter.vehicle.chargemode[0])) {
+            this.chargeLogRequestData.filter.vehicle.chargemode =
+              this.chargeLogRequestData.filter.vehicle.chargemode[0];
+          }
+        }
       }
       if ("id" in this.chargeLogRequestData.filter.vehicle) {
         this.chargeLogRequestData.filter.vehicle.id = this.chargeLogRequestData.filter.vehicle.id.filter(
           (element) => element != undefined,
         );
+        if (this.chargeLogRequestData.filter.vehicle.id.length == 1) {
+          if (Array.isArray(this.chargeLogRequestData.filter.vehicle.id[0])) {
+            this.chargeLogRequestData.filter.vehicle.id = this.chargeLogRequestData.filter.vehicle.id[0];
+          }
+        }
+      }
+      if ("id" in this.chargeLogRequestData.filter.chargepoint) {
+        if (this.chargeLogRequestData.filter.chargepoint.id.length == 1) {
+          if (Array.isArray(this.chargeLogRequestData.filter.chargepoint.id[0])) {
+            this.chargeLogRequestData.filter.chargepoint.id = this.chargeLogRequestData.filter.chargepoint.id[0];
+          }
+        }
       }
       if ("prio" in this.chargeLogRequestData.filter.vehicle) {
         if (this.chargeLogRequestData.filter.vehicle.prio === null) {
