@@ -32,8 +32,9 @@
               title="Priorität"
               :buttons="[
                 {
-                  buttonValue: undefined,
+                  buttonValue: null,
                   text: 'Alle',
+                  class: 'btn-outline-info',
                 },
                 {
                   buttonValue: false,
@@ -536,15 +537,13 @@ export default {
     },
     downloadUrlMonth() {
       if (!this.chargeLogRequestData.year || !this.chargeLogRequestData.month) {
-        console.error("Fehlende Parameter für Monat oder Jahr");
-        return null; // oder ein Standardwert, falls gewünscht
+        return null;
       }
       return `${this.baseUrl}?year=${this.chargeLogRequestData.year}&month=${this.chargeLogRequestData.month}`;
     },
     downloadUrlYear() {
       if (!this.chargeLogRequestData.year) {
-        console.error("Fehlendes Jahr");
-        return null; // oder ein Standardwert
+        return null;
       }
       return `${this.baseUrl}?year=${this.chargeLogRequestData.year}`;
     },
@@ -662,7 +661,7 @@ export default {
             '"Zählerstand Laden Beginn"',
             '"Zählerstand Laden Ende"',
             '"Zählerstand Entladen Beginn"',
-            '"Zählerstand Entlden Ende"',
+            '"Zählerstand Entladen Ende"',
             '"Energie seit Anstecken"',
             '"Entladene Energie seit Anstecken"',
           ],
@@ -778,6 +777,11 @@ export default {
         this.chargeLogRequestData.filter.vehicle.id = this.chargeLogRequestData.filter.vehicle.id.filter(
           (element) => element != undefined,
         );
+      }
+      if ("prio" in this.chargeLogRequestData.filter.vehicle) {
+        if (this.chargeLogRequestData.filter.vehicle.prio === null) {
+          this.chargeLogRequestData.filter.vehicle.prio = undefined;
+        }
       }
     },
     requestChargeLog() {
