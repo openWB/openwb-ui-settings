@@ -1,7 +1,8 @@
 <template>
   <div class="errorPage">
     <OpenwbBaseAlert subtype="danger">
-      Die angeforderte Seite konnte nicht gefunden werden oder es fehlen Berechtigungen.
+      Die angeforderte Seite {{ $route.redirectedFrom ? `"${$route.redirectedFrom.fullPath}" ` : "" }} konnte nicht
+      gefunden werden oder es fehlen Berechtigungen.
     </OpenwbBaseAlert>
   </div>
 </template>
