@@ -18,7 +18,7 @@
       @update:model-value="updateMode($event)"
     />
     <openwb-base-number-input
-      v-if="chargePoint.configuration.mode == 'duo' || chargePoint.configuration.mode == 'eco'"
+      v-if="chargePoint.configuration.mode == 'duo' || chargePoint.configuration.mode == 'se'"
       title="Ladepunkt-Nummer"
       required
       :min="1"
