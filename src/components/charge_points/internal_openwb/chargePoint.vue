@@ -12,7 +12,7 @@
         { value: 'duo', text: 'openWB series1/2 Duo' },
         { value: 'socket', text: 'openWB series1/2 Buchse' },
         { value: 'pro_plus', text: 'openWB Pro+' },
-        { value: 'eco', text: 'openWB series2 Eco' },
+        { value: 'se', text: 'openWB SE (11kW)' },
       ]"
       :model-value="chargePoint.configuration.mode"
       @update:model-value="updateMode($event)"
@@ -27,7 +27,7 @@
       @update:model-value="updateConfiguration($event - 1, 'configuration.duo_num')"
     >
       <template #help>
-        Bei einer openWB Duo oder openWB Eco Duo können mit "1" oder "2" die beiden enthaltenen Ladepunkte angesprochen werden. Bei einer openWB Eco mit einem Ladepunkt ist hier eine 1 einzutragen.
+        Bei einer openWB Duo oder openWB SE Duo können mit "1" oder "2" die beiden enthaltenen Ladepunkte angesprochen werden. Bei einer openWB SE mit einem Ladepunkt ist hier eine 1 einzutragen.
       </template>
     </openwb-base-number-input>
   </div>
