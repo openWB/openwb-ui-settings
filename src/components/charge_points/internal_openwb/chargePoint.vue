@@ -27,7 +27,8 @@
       @update:model-value="updateConfiguration($event - 1, 'configuration.duo_num')"
     >
       <template #help>
-        Bei einer openWB Duo oder openWB SE Duo können mit "1" oder "2" die beiden enthaltenen Ladepunkte angesprochen werden. Bei einer openWB SE mit einem Ladepunkt ist hier eine 1 einzutragen.
+        Bei einer openWB Duo oder openWB SE Duo können mit "1" oder "2" die beiden enthaltenen Ladepunkte angesprochen
+        werden. Bei einer openWB SE mit einem Ladepunkt ist hier eine 1 einzutragen.
       </template>
     </openwb-base-number-input>
   </div>
