@@ -36,8 +36,14 @@
         {{
           (max_power = formatNumberTopic(baseTopic + "/get/max_evse_current", 0)) == "-"
             ? max_power
-            : Math.floor((max_power * 3 * 230) / 1000)
-        }}&nbsp;kW
+            : (() => {
+                const powerKw = Math.floor((max_power * 3 * 230) / 1000);
+                if (powerKw === 13) {
+                  return "20A 1-phasig, 16A 3-phasig";
+                }
+                return powerKw + " kW";
+              })()
+        }}
       </div>
     </openwb-base-card>
     <!-- Ladevorgang -->
