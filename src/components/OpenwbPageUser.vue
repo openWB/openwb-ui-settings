@@ -174,7 +174,9 @@ export default {
         // reconnect mqtt
         this.$root.reconnectMqttClient();
         // reload page
-        this.$router.go();
+        // not functional in Safari browser?
+        // this.$router.go();
+        location.reload();
       }
       console.warn("Closing login modal", event);
       this.showLoginModal = false;
@@ -189,8 +191,10 @@ export default {
         this.$cookies.remove("mqtt");
         // reconnect mqtt
         this.$root.reconnectMqttClient();
-        // reload page ?
-        this.$router.go();
+        // reload page
+        // not functional in Safari browser?
+        // this.$router.go();
+        location.reload();
       }
     },
   },
