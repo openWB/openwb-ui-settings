@@ -767,22 +767,57 @@ export default {
   beforeMount() {
     // we need access to the mqttClientId which is not yet available in the data section
     this.mqttTopicsToSubscribe.push("openWB/log/" + this.mqttClientId + "/data");
-  },
-  mounted() {
     const today = new Date();
     this.currentMonth = this.chargeLogDate = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, "0");
-    this.requestChargeLog();
+  },
+  mounted() {
+    // ugly hack as the vehicle and charge point list are not yet populated on first request
+    window.setTimeout(() => {
+      console.debug("initial charge log request");
+      console.debug("vehicle List on init:", JSON.stringify(this.vehicleList));
+      console.debug("charge Point List on init:", JSON.stringify(this.chargePointList));
+      this.requestChargeLog();
+    }, 500);
   },
   methods: {
     cleanRequestData() {
       if ("id" in this.chargeLogRequestData.filter.chargepoint) {
+        // remove undefined entries from charge point id filter
         this.chargeLogRequestData.filter.chargepoint.id = this.chargeLogRequestData.filter.chargepoint.id.filter(
           (element) => element != undefined,
         );
+        // if no entry, set filter to first available charge point in options
+        if (this.chargeLogRequestData.filter.chargepoint.id.length == 0) {
+          console.debug(
+            "no charge point id filter set, setting to first available",
+            JSON.stringify(this.chargePointList[0]),
+          );
+          if (this.chargePointList.length > 0) {
+            this.chargeLogRequestData.filter.chargepoint.id = this.chargePointList[0].value;
+          }
+        }
+        // flatten array if only one entry which is an array
+        if (this.chargeLogRequestData.filter.chargepoint.id.length == 1) {
+          if (Array.isArray(this.chargeLogRequestData.filter.chargepoint.id[0])) {
+            this.chargeLogRequestData.filter.chargepoint.id = this.chargeLogRequestData.filter.chargepoint.id[0];
+          }
+        }
       }
       if ("chargemode" in this.chargeLogRequestData.filter.vehicle) {
+        // remove undefined entries from chargemode filter
         this.chargeLogRequestData.filter.vehicle.chargemode =
           this.chargeLogRequestData.filter.vehicle.chargemode.filter((element) => element != undefined);
+        // if no entry, set filter to first available mode in options
+        if (this.chargeLogRequestData.filter.vehicle.chargemode.length == 0) {
+          console.debug(
+            "no vehicle chargemode filter set, setting to first available",
+            JSON.stringify(this.chargeModeList[0]),
+          );
+          if (this.chargeModeList.length > 0) {
+            this.chargeLogRequestData.filter.vehicle.chargemode = this.chargeModeList[0].value;
+          }
+        }
+        // flatten array if only one entry which is an array
         if (this.chargeLogRequestData.filter.vehicle.chargemode.length == 1) {
           if (Array.isArray(this.chargeLogRequestData.filter.vehicle.chargemode[0])) {
             this.chargeLogRequestData.filter.vehicle.chargemode =
@@ -791,9 +826,18 @@ export default {
         }
       }
       if ("id" in this.chargeLogRequestData.filter.vehicle) {
+        // remove undefined entries from vehicle id filter
         this.chargeLogRequestData.filter.vehicle.id = this.chargeLogRequestData.filter.vehicle.id.filter(
           (element) => element != undefined,
         );
+        // if no entry, set filter to first available vehicle in options
+        if (this.chargeLogRequestData.filter.vehicle.id.length == 0) {
+          console.debug("no vehicle id filter set, setting to first available", JSON.stringify(this.vehicleList[0]));
+          if (this.vehicleList.length > 0) {
+            this.chargeLogRequestData.filter.vehicle.id = this.vehicleList[0].value;
+          }
+        }
+        // flatten array if only one entry which is an array
         if (this.chargeLogRequestData.filter.vehicle.id.length == 1) {
           if (Array.isArray(this.chargeLogRequestData.filter.vehicle.id[0])) {
             this.chargeLogRequestData.filter.vehicle.id = this.chargeLogRequestData.filter.vehicle.id[0];
@@ -812,8 +856,10 @@ export default {
           this.chargeLogRequestData.filter.vehicle.prio = undefined;
         }
       }
+      console.debug("cleaned request data", JSON.stringify(this.chargeLogRequestData));
     },
     requestChargeLog() {
+      console.debug("requesting charge log with data:", JSON.stringify(this.chargeLogRequestData));
       let myForm = document.forms["chargeLogForm"];
       if (!myForm.reportValidity()) {
         console.warn("form invalid");
