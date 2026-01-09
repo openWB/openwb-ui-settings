@@ -201,6 +201,14 @@ export default {
         "openWB/system/device/+/component/+/config",
         "openWB/chargepoint/+/config",
         "openWB/vehicle/+/name",
+        // Topics to check permissions for components
+        "openWB/counter/+/get/power",
+        "openWB/counter/set/home_consumption",
+        "openWB/bat/get/power",
+        "openWB/bat/+/get/power",
+        "openWB/pv/get/power",
+        "openWB/pv/+/get/power",
+        "openWB/vehicle/+/info",
       ],
       currentDate: "",
       chartRange: "day",
@@ -1077,6 +1085,20 @@ export default {
           var totals = JSON.parse(
             JSON.stringify(this.$store.state.mqtt[this.baseTopic + this.commandData.date].totals),
           );
+          // remove entries with no access rights
+          Object.keys(totals).forEach((baseObject) => {
+            Object.keys(totals[baseObject]).forEach((objectKey) => {
+              if (!this.objectAccessible(baseObject, objectKey)) {
+                console.debug(`Removing totals for ${baseObject} - ${objectKey} due to missing access rights.`);
+                delete totals[baseObject][objectKey];
+              }
+            });
+            // remove baseObject if no objectKeys are left
+            if (Object.keys(totals[baseObject]).length === 0) {
+              console.debug(`Removing empty totals for ${baseObject}.`);
+              delete totals[baseObject];
+            }
+          });
           // remove not relevant data for easier parsing
           delete totals.energy_source;
           Object.keys(totals.counter).forEach((component) => {
@@ -1150,6 +1172,58 @@ export default {
         return this.chartDatasets;
       }
       return undefined;
+    },
+    objectAccessible() {
+      return (baseObject, objectKey) => {
+        let validationTopic = undefined;
+        const id = parseInt(objectKey.match(/\d+$/)?.[0] || "");
+        switch (baseObject) {
+          case "hc":
+            validationTopic = "openWB/counter/set/home_consumption";
+            break;
+          case "cp":
+            if (objectKey == "all") {
+              validationTopic = "openWB/chargepoint/get/power";
+            } else {
+              if (!isNaN(id)) {
+                validationTopic = `openWB/chargepoint/${id}/config`;
+              }
+            }
+            break;
+          case "ev":
+            if (!isNaN(id)) {
+              validationTopic = `openWB/vehicle/${id}/info`;
+            }
+            break;
+          case "pv":
+            if (objectKey == "all") {
+              validationTopic = "openWB/pv/get/power";
+            } else {
+              if (!isNaN(id)) {
+                validationTopic = `openWB/pv/${id}/get/power`;
+              }
+            }
+            break;
+          case "bat":
+            if (objectKey == "all") {
+              validationTopic = "openWB/battery/get/power";
+            } else {
+              if (!isNaN(id)) {
+                validationTopic = `openWB/battery/${id}/get/power`;
+              }
+            }
+            break;
+          case "counter":
+            if (!isNaN(id)) {
+              validationTopic = `openWB/counter/${id}/get/power`;
+            }
+            break;
+        }
+        if (validationTopic) {
+          return this.$store.state.mqtt[validationTopic] !== undefined;
+        }
+        return true;
+      };
     },
   },
   watch: {
@@ -1448,6 +1522,7 @@ export default {
             break;
           case "hc":
             label = ["Hausverbrauch"];
+            break;
         }
       } else {
         if (
@@ -1629,6 +1704,11 @@ export default {
      * @param {string} elementKey - The element key of the dataset.
      */
     initDataset(baseObject, objectKey, elementKey) {
+      // check for rights to access dataset object
+      if (!this.objectAccessible(baseObject, objectKey)) {
+        console.debug("skipping dataset due to missing rights:", baseObject, objectKey, elementKey);
+        return;
+      }
       var elementKeysToAdd = [];
       if (this.chartRange == "day") {
         elementKeysToAdd = {
