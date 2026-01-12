@@ -202,12 +202,13 @@ export default {
         "openWB/chargepoint/+/config",
         "openWB/vehicle/+/name",
         // Topics to check permissions for components
+        "openWB/bat/+/get/power",
+        "openWB/bat/get/power",
+        "openWB/chargepoint/get/power",
         "openWB/counter/+/get/power",
         "openWB/counter/set/home_consumption",
-        "openWB/bat/get/power",
-        "openWB/bat/+/get/power",
-        "openWB/pv/get/power",
         "openWB/pv/+/get/power",
+        "openWB/pv/get/power",
         "openWB/vehicle/+/info",
       ],
       currentDate: "",
@@ -1206,10 +1207,10 @@ export default {
             break;
           case "bat":
             if (objectKey == "all") {
-              validationTopic = "openWB/battery/get/power";
+              validationTopic = "openWB/bat/get/power";
             } else {
               if (!isNaN(id)) {
-                validationTopic = `openWB/battery/${id}/get/power`;
+                validationTopic = `openWB/bat/${id}/get/power`;
               }
             }
             break;
