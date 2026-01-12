@@ -1101,7 +1101,7 @@ export default {
           });
           // remove not relevant data for easier parsing
           delete totals.energy_source;
-          Object.keys(totals.counter).forEach((component) => {
+          Object.keys(totals.counter || {}).forEach((component) => {
             if (Object.prototype.hasOwnProperty.call(totals.counter[component], "grid")) {
               delete totals.counter[component].grid;
             }
