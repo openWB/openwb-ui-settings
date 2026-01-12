@@ -223,10 +223,10 @@ export default createStore({
         }
       });
     },
-    statusAccessible(state) {
+    accessStatusAllowed(state) {
       return new Promise((resolve) => {
-        if (state.mqtt["openWB/system/security/status_accessible"] !== undefined) {
-          resolve(state.mqtt["openWB/system/security/status_accessible"]);
+        if (state.mqtt["openWB/system/security/access/status"] !== undefined) {
+          resolve(state.mqtt["openWB/system/security/access/status"]);
         } else {
           var timer, interval;
           // add general timeout if topic not set
@@ -236,19 +236,19 @@ export default createStore({
           }, 5000);
           // check until we received valid data
           interval = setInterval(() => {
-            if (state.mqtt["openWB/system/security/status_accessible"] !== undefined) {
+            if (state.mqtt["openWB/system/security/access/status"] !== undefined) {
               clearTimeout(timer);
               clearInterval(interval);
-              resolve(state.mqtt["openWB/system/security/status_accessible"]);
+              resolve(state.mqtt["openWB/system/security/access/status"]);
             }
           }, 100);
         }
       });
     },
-    chargeLogAccessible(state) {
+    accessChargeLogAllowed(state) {
       return new Promise((resolve) => {
-        if (state.mqtt["openWB/system/security/charge_log_accessible"] !== undefined) {
-          resolve(state.mqtt["openWB/system/security/charge_log_accessible"]);
+        if (state.mqtt["openWB/system/security/access/charge_log"] !== undefined) {
+          resolve(state.mqtt["openWB/system/security/access/charge_log"]);
         } else {
           var timer, interval;
           // add general timeout if topic not set
@@ -258,19 +258,19 @@ export default createStore({
           }, 5000);
           // check until we received valid data
           interval = setInterval(() => {
-            if (state.mqtt["openWB/system/security/charge_log_accessible"] !== undefined) {
+            if (state.mqtt["openWB/system/security/access/charge_log"] !== undefined) {
               clearTimeout(timer);
               clearInterval(interval);
-              resolve(state.mqtt["openWB/system/security/charge_log_accessible"]);
+              resolve(state.mqtt["openWB/system/security/access/charge_log"]);
             }
           }, 100);
         }
       });
     },
-    chartAccessible(state) {
+    accessChartAllowed(state) {
       return new Promise((resolve) => {
-        if (state.mqtt["openWB/system/security/chart_accessible"] !== undefined) {
-          resolve(state.mqtt["openWB/system/security/chart_accessible"]);
+        if (state.mqtt["openWB/system/security/access/chart"] !== undefined) {
+          resolve(state.mqtt["openWB/system/security/access/chart"]);
         } else {
           var timer, interval;
           // add general timeout if topic not set
@@ -280,19 +280,19 @@ export default createStore({
           }, 5000);
           // check until we received valid data
           interval = setInterval(() => {
-            if (state.mqtt["openWB/system/security/chart_accessible"] !== undefined) {
+            if (state.mqtt["openWB/system/security/access/chart"] !== undefined) {
               clearTimeout(timer);
               clearInterval(interval);
-              resolve(state.mqtt["openWB/system/security/chart_accessible"]);
+              resolve(state.mqtt["openWB/system/security/access/chart"]);
             }
           }, 100);
         }
       });
     },
-    settingsAccessible(state) {
+    accessSettingsAllowed(state) {
       return new Promise((resolve) => {
-        if (state.mqtt["openWB/system/security/settings_accessible"] !== undefined) {
-          resolve(state.mqtt["openWB/system/security/settings_accessible"]);
+        if (state.mqtt["openWB/system/security/access/settings"] !== undefined) {
+          resolve(state.mqtt["openWB/system/security/access/settings"]);
         } else {
           var timer, interval;
           // add general timeout if topic not set
@@ -302,10 +302,10 @@ export default createStore({
           }, 5000);
           // check until we received valid data
           interval = setInterval(() => {
-            if (state.mqtt["openWB/system/security/settings_accessible"] !== undefined) {
+            if (state.mqtt["openWB/system/security/access/settings"] !== undefined) {
               clearTimeout(timer);
               clearInterval(interval);
-              resolve(state.mqtt["openWB/system/security/settings_accessible"]);
+              resolve(state.mqtt["openWB/system/security/access/settings"]);
             }
           }, 100);
         }

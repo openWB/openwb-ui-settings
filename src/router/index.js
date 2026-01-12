@@ -11,7 +11,7 @@ const routes = [
     name: "Status",
     meta: {
       heading: "Status",
-      requiredPermission: "statusAccessible",
+      requiredPermission: "accessStatusAllowed",
     },
     component: () => import("../views/Status.vue"),
   },
@@ -20,7 +20,7 @@ const routes = [
     name: "ChargeLog",
     meta: {
       heading: "Auswertungen - Ladeprotokoll",
-      requiredPermission: "chargeLogAccessible",
+      requiredPermission: "accessChargeLogAllowed",
     },
     component: () => import("../views/ChargeLog.vue"),
   },
@@ -29,7 +29,7 @@ const routes = [
     name: "Chart",
     meta: {
       heading: "Auswertungen - Diagramme",
-      requiredPermission: "chartAccessible",
+      requiredPermission: "accessChartAllowed",
     },
     component: () => import("../views/Chart.vue"),
   },
@@ -38,7 +38,7 @@ const routes = [
     name: "GeneralConfig",
     meta: {
       heading: "Einstellungen - Allgemein",
-      requiredPermission: "settingsAccessible",
+      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/GeneralConfig.vue"),
   },
@@ -47,7 +47,7 @@ const routes = [
     name: "IdentificationConfig",
     meta: {
       heading: "Einstellungen - Identifikation",
-      requiredPermission: "settingsAccessible",
+      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/IdentificationConfig.vue"),
   },
@@ -56,7 +56,7 @@ const routes = [
     name: "OptionalComponents",
     meta: {
       heading: "Einstellungen - Display",
-      requiredPermission: "settingsAccessible",
+      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/OptionalComponents.vue"),
   },
@@ -65,7 +65,7 @@ const routes = [
     name: "GeneralChargeConfig",
     meta: {
       heading: "Ladeeinstellungen - Übergreifendes",
-      requiredPermission: "settingsAccessible",
+      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/GeneralChargeConfig.vue"),
   },
@@ -74,7 +74,7 @@ const routes = [
     name: "SurplusChargeConfig",
     meta: {
       heading: "Ladeeinstellungen - Überschuss-Laden",
-      requiredPermission: "settingsAccessible",
+      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/SurplusChargeConfig.vue"),
   },
@@ -83,7 +83,7 @@ const routes = [
     name: "ActiveBatControl",
     meta: {
       heading: "Ladeeinstellungen - Speichersteuerung",
-      requiredPermission: "settingsAccessible",
+      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/ActiveBatControl.vue"),
   },
@@ -92,7 +92,7 @@ const routes = [
     name: "HardwareInstallation",
     meta: {
       heading: "Konfiguration - Geräte und Komponenten",
-      requiredPermission: "settingsAccessible",
+      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/HardwareInstallation.vue"),
   },
@@ -101,7 +101,7 @@ const routes = [
     name: "LoadManagementConfiguration",
     meta: {
       heading: "Konfiguration - Lastmanagement",
-      requiredPermission: "settingsAccessible",
+      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/LoadManagementConfig.vue"),
   },
@@ -110,7 +110,7 @@ const routes = [
     name: "ChargePointInstallation",
     meta: {
       heading: "Konfiguration - Ladepunkte",
-      requiredPermission: "settingsAccessible",
+      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/ChargePointInstallation.vue"),
   },
@@ -119,7 +119,7 @@ const routes = [
     name: "VehicleConfiguration",
     meta: {
       heading: "Konfiguration - Fahrzeuge",
-      requiredPermission: "settingsAccessible",
+      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/VehicleConfig.vue"),
   },
@@ -128,7 +128,7 @@ const routes = [
     name: "IoConfiguration",
     meta: {
       heading: "Konfiguration - Ein- und Ausgänge",
-      requiredPermission: "settingsAccessible",
+      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/IoConfig.vue"),
   },
@@ -137,7 +137,7 @@ const routes = [
     name: "CloudConfig",
     meta: {
       heading: "System - openWB Cloud",
-      requiredPermission: "settingsAccessible",
+      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/CloudConfig.vue"),
   },
@@ -146,7 +146,7 @@ const routes = [
     name: "MqttBridgeConfig",
     meta: {
       heading: "System - MQTT-Brücken",
-      requiredPermission: "settingsAccessible",
+      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/MqttBridgeConfig.vue"),
   },
@@ -155,7 +155,7 @@ const routes = [
     name: "Debugging",
     meta: {
       heading: "System - Fehlersuche",
-      requiredPermission: "settingsAccessible",
+      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/DebugConfig.vue"),
   },
@@ -164,7 +164,7 @@ const routes = [
     name: "Support",
     meta: {
       heading: "System - Support",
-      requiredPermission: "settingsAccessible",
+      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/Support.vue"),
   },
@@ -173,7 +173,7 @@ const routes = [
     name: "LegalSettings",
     meta: {
       heading: "System - Rechtliches",
-      requiredPermission: "settingsAccessible",
+      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/LegalSettings.vue"),
   },
@@ -182,7 +182,7 @@ const routes = [
     name: "SystemConfig",
     meta: {
       heading: "System - System",
-      requiredPermission: "settingsAccessible",
+      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/System.vue"),
   },
@@ -191,7 +191,7 @@ const routes = [
     name: "SecurityConfig",
     meta: {
       heading: "System - Sicherheit",
-      requiredPermission: "settingsAccessible",
+      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/Security.vue"),
   },
@@ -200,7 +200,7 @@ const routes = [
     name: "DataManagement",
     meta: {
       heading: "System - Datenverwaltung",
-      requiredPermission: "settingsAccessible",
+      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/DataManagement.vue"),
   },
@@ -209,7 +209,7 @@ const routes = [
     name: "InstallAssistant",
     meta: {
       heading: "System - Einrichtungsassistent",
-      requiredPermission: "settingsAccessible",
+      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/InstallAssistant.vue"),
   },
