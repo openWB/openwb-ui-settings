@@ -22,7 +22,7 @@
     >
       <ul class="navbar-nav mr-auto">
         <li
-          v-if="statusAccessible"
+          v-if="accessStatusAllowed"
           class="nav-item nav-separator-after"
         >
           <router-link
@@ -34,7 +34,7 @@
           </router-link>
         </li>
         <li
-          v-if="chargeLogAccessible || chartAccessible"
+          v-if="accessChargeLogAllowed || accessChartAllowed"
           class="nav-item dropdown nav-separator-after"
         >
           <a
@@ -51,7 +51,7 @@
             aria-labelledby="navbarDropdown"
           >
             <router-link
-              v-if="chargeLogAccessible"
+              v-if="accessChargeLogAllowed"
               to="/Logging/ChargeLog"
               class="dropdown-item"
               active-class="active disabled"
@@ -59,7 +59,7 @@
               Ladeprotokoll
             </router-link>
             <router-link
-              v-if="chartAccessible"
+              v-if="accessChartAllowed"
               to="/Logging/Chart"
               class="dropdown-item"
               active-class="active disabled"
@@ -69,7 +69,7 @@
           </div>
         </li>
         <li
-          v-if="settingsAccessible"
+          v-if="accessSettingsAllowed"
           class="nav-item dropdown"
         >
           <a
@@ -109,7 +109,7 @@
           </div>
         </li>
         <li
-          v-if="settingsAccessible"
+          v-if="accessSettingsAllowed"
           class="nav-item dropdown"
         >
           <a
@@ -149,7 +149,7 @@
           </div>
         </li>
         <li
-          v-if="settingsAccessible"
+          v-if="accessSettingsAllowed"
           class="nav-item dropdown"
         >
           <a
@@ -211,7 +211,7 @@
           </div>
         </li>
         <li
-          v-if="settingsAccessible"
+          v-if="accessSettingsAllowed"
           class="nav-item dropdown"
         >
           <a
@@ -351,10 +351,10 @@ export default {
   data() {
     return {
       mqttTopicsToSubscribe: [
-        "openWB/system/security/settings_accessible",
-        "openWB/system/security/status_accessible",
-        "openWB/system/security/charge_log_accessible",
-        "openWB/system/security/chart_accessible",
+        "openWB/system/security/access/settings",
+        "openWB/system/security/access/status",
+        "openWB/system/security/access/charge_log",
+        "openWB/system/security/access/chart",
       ],
     };
   },
@@ -362,17 +362,17 @@ export default {
     nodeEnv() {
       return import.meta.env.MODE;
     },
-    settingsAccessible() {
-      return this.$store.state.mqtt["openWB/system/security/settings_accessible"] === true;
+    accessSettingsAllowed() {
+      return this.$store.state.mqtt["openWB/system/security/access/settings"] === true;
     },
-    statusAccessible() {
-      return this.$store.state.mqtt["openWB/system/security/status_accessible"] === true;
+    accessStatusAllowed() {
+      return this.$store.state.mqtt["openWB/system/security/access/status"] === true;
     },
-    chargeLogAccessible() {
-      return this.$store.state.mqtt["openWB/system/security/charge_log_accessible"] === true;
+    accessChargeLogAllowed() {
+      return this.$store.state.mqtt["openWB/system/security/access/charge_log"] === true;
     },
-    chartAccessible() {
-      return this.$store.state.mqtt["openWB/system/security/chart_accessible"] === true;
+    accessChartAllowed() {
+      return this.$store.state.mqtt["openWB/system/security/access/chart"] === true;
     },
   },
   watch: {
