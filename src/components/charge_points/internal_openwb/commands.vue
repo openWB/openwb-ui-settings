@@ -8,8 +8,8 @@
         @button-clicked="triggerUpdate"
       >
         <template #help>
-          Hier können Sie die Aktualisierung der openWB Pro anstoßen. Bitte stellen Sie sicher, dass kein Fahrzeug
-          angesteckt ist.
+          Hier kannst Du die Aktualisierung der openWB Pro anstoßen. Bitte stelle sicher, dass kein Fahrzeug angesteckt
+          ist.
         </template>
       </openwb-base-button-input>
       <openwb-base-button-input
@@ -19,7 +19,7 @@
         @button-clicked="openSettings"
       >
         <template #help>
-          Mit diesem Befehl können Sie die Einstellungen der openWB Pro in einem neuen Browser-Tab oder -Fenster öffnen.
+          Mit diesem Befehl kannst Du die Einstellungen der openWB Pro in einem neuen Browser-Tab oder -Fenster öffnen.
         </template>
       </openwb-base-button-input>
     </div>

@@ -871,7 +871,7 @@ export default {
     },
     async uploadRestoreFile() {
       const successMessage =
-        "Die Sicherungsdatei wurde erfolgreich hochgeladen. Sie können die Wiederherstellung jetzt starten.";
+        "Die Sicherungsdatei wurde erfolgreich hochgeladen. Du kannst die Wiederherstellung jetzt starten.";
       this.restoreUploadDone = await this.uploadFile(
         "restore",
         this.selectedRestoreFile,
@@ -884,7 +884,7 @@ export default {
       );
     },
     async uploadDataMigrationFile() {
-      const successMessage = "Die Sicherungsdatei wurde erfolgreich hochgeladen. Sie können den Import jetzt starten.";
+      const successMessage = "Die Sicherungsdatei wurde erfolgreich hochgeladen. Du kannst den Import jetzt starten.";
       this.dataMigrationUploadDone = await this.uploadFile("migrate", this.selectedDataMigrationFile, successMessage);
     },
     restoreBackup() {

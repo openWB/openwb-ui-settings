@@ -6,7 +6,7 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removePlan"
   >
-    Wollen Sie den Autolock Zeitplan "{{ plan.name }}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht
+    Willst Du den Autolock Zeitplan "{{ plan.name }}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht
     werden!
   </openwb-base-modal-dialog>
   <openwb-base-card

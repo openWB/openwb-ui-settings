@@ -3,7 +3,7 @@
     <openwb-base-heading> Einstellungen für SolarEdge </openwb-base-heading>
     <openwb-base-alert subtype="info">
       ModbusTCP muss im Wechselrichter aktiviert werden und der Wechselrichter per LAN angebunden sein.<br />
-      SolarEdge lässt nur eine ModbusTCP-Verbindung zu. Wenn Sie mit einem weiteren SmartHome-System, wie z.B. ioBroker
+      SolarEdge lässt nur eine ModbusTCP-Verbindung zu. Wenn Du mit einem weiteren SmartHome-System, wie z.B. ioBroker
       oder openHAB, den SolarEdge-Wechselrichter abfragen, kann dies die Abfrage durch die openWB stören oder
       verhindern.
     </openwb-base-alert>

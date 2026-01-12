@@ -1,7 +1,7 @@
 <template>
   <div class="flexible-tariff-tibber">
     <openwb-base-alert subtype="info">
-      Ihren persönlichen Tibber-Token erhalten Sie über die
+      Deinen persönlichen Tibber-Token erhältst Du über die
       <a
         href="https://developer.tibber.com/explorer"
         target="_blank"
@@ -9,8 +9,8 @@
       >
         Tibber-Developer-Seite
       </a>
-      . Behandeln Sie Ihren Token wie ein Passwort, da sich darüber auch persönliche Daten aus Ihrem Tibber-Account
-      abfragen lassen! Die Home-ID können Sie (wenn bekannt) in das Eingabefeld selbst eintragen oder nach Eingabe Ihres
+      . Behandle Deinen Token wie ein Passwort, da sich darüber auch persönliche Daten aus Deinem Tibber-Account
+      abfragen lassen! Die Home-ID kannst Du (wenn bekannt) in das Eingabefeld selbst eintragen oder nach Eingabe Deines
       Token durch Klick auf den Button von der openWB ermitteln lassen. Unerlaubte Zeichen werden aus dem Token und der
       Home-ID automatisch gelöscht.
     </openwb-base-alert>

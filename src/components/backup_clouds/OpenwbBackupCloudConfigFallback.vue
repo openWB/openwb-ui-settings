@@ -17,7 +17,7 @@
         :model-value="backupCloud.configuration"
         @update:model-value="updateConfiguration($event, 'configuration')"
       >
-        <template #help> Bitte prüfen Sie, ob die Eingaben richtig interpretiert werden. </template>
+        <template #help> Bitte prüfe, ob die Eingaben richtig interpretiert werden. </template>
       </openwb-base-textarea>
       <openwb-base-alert subtype="info">
         <pre>{{ JSON.stringify(backupCloud.configuration, undefined, 2) }}</pre>

@@ -5,7 +5,7 @@
         <openwb-base-alert subtype="info">
           <p>
             Wird für den Steuerungsmodus "primary" gewählt, übernimmt diese openWB die alleinige Regelung und steuert
-            ggf. vorhandene weitere openWB (z.B. secondary openWB, openWB Pro, Satellit u.a.) fern. Sie werden in den
+            ggf. vorhandene weitere openWB (z.B. secondary openWB, openWB Pro, Satellit u.a.) fern. Diese werden in den
             Ladepunkt-Einstellungen der primary-openWB hinzugefügt.
           </p>
           <p>

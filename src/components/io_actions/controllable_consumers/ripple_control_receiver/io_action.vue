@@ -3,7 +3,7 @@
     v-if="ioDevice?.type === 'eebus'"
     subtype="warning"
   >
-    Steuerboxen mit EEBus-Schnistelle sind für Rundsteuerempfänger-Aktionen nicht geeignet. Bitte wählen Sie ein anderes
+    Steuerboxen mit EEBus-Schnistelle sind für Rundsteuerempfänger-Aktionen nicht geeignet. Bitte wähle ein anderes
     I/O-Gerät aus.
   </openwb-base-alert>
   <openwb-io-pattern
