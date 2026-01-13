@@ -31,7 +31,7 @@
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
 import InstallAssistantStepTemplate from "./InstallAssistantStepTemplate.vue";
-import SystemView from "../../views/System.vue";
+import SystemView from "../../views/SystemConfiguration.vue";
 
 export default {
   name: "InstallAssistantStep2",

@@ -188,10 +188,7 @@ export default {
         this.doSubscribe([
           "openWB/system/usage_terms_acknowledged",
           "openWB/system/installAssistantDone",
-          "openWB/system/security/access/settings",
-          "openWB/system/security/access/status",
-          "openWB/system/security/access/chart",
-          "openWB/system/security/access/charge_log",
+          "openWB/system/security/access/+",
         ]);
       });
       this.client.on("error", (error) => {
