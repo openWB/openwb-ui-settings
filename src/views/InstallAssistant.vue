@@ -8,7 +8,7 @@
       :buttons="[{ text: 'Beenden', event: 'confirm', subtype: 'danger' }]"
       @modal-result="endAssistant"
     >
-      Wollen Sie den Assistenten wirklich vorzeitig beenden?
+      Willst Du den Assistenten wirklich vorzeitig beenden?
     </openwb-base-modal-dialog>
     <component
       :is="getInstallAssistantStepComponent()"

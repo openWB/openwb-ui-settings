@@ -7,7 +7,7 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeMqttBridge(modalMqttBridgeIndex, $event)"
   >
-    Wollen Sie die MQTT-Brücke "{{ getMqttBridgeName(modalMqttBridgeIndex) }}" wirklich entfernen? Dieser Vorgang kann
+    Willst Du die MQTT-Brücke "{{ getMqttBridgeName(modalMqttBridgeIndex) }}" wirklich entfernen? Dieser Vorgang kann
     nicht rückgängig gemacht werden!
   </openwb-base-modal-dialog>
   <!-- main content -->
