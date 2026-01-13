@@ -22,8 +22,8 @@
     >
       <ul class="navbar-nav mr-auto">
         <li
-          v-if="accessStatusAllowed"
-          class="nav-item nav-separator-after"
+          v-if="accessAllowed('Status')"
+          class="nav-item nav-separator-before"
         >
           <router-link
             to="/Status"
@@ -33,10 +33,7 @@
             Status
           </router-link>
         </li>
-        <li
-          v-if="accessChargeLogAllowed || accessChartAllowed"
-          class="nav-item dropdown nav-separator-after"
-        >
+        <li class="nav-item dropdown nav-separator-before">
           <a
             class="nav-link dropdown-toggle"
             href="#"
@@ -51,7 +48,7 @@
             aria-labelledby="navbarDropdown"
           >
             <router-link
-              v-if="accessChargeLogAllowed"
+              v-if="accessAllowed('ChargeLog')"
               to="/Logging/ChargeLog"
               class="dropdown-item"
               active-class="active disabled"
@@ -59,7 +56,7 @@
               Ladeprotokoll
             </router-link>
             <router-link
-              v-if="accessChartAllowed"
+              v-if="accessAllowed('Chart')"
               to="/Logging/Chart"
               class="dropdown-item"
               active-class="active disabled"
@@ -68,10 +65,7 @@
             </router-link>
           </div>
         </li>
-        <li
-          v-if="accessSettingsAllowed"
-          class="nav-item dropdown"
-        >
+        <li class="nav-item dropdown nav-separator-before">
           <a
             class="nav-link dropdown-toggle"
             href="#"
@@ -86,21 +80,24 @@
             aria-labelledby="navbarDropdown"
           >
             <router-link
-              to="/GeneralConfig"
+              v-if="accessAllowed('GeneralConfiguration')"
+              to="/GeneralConfiguration"
               class="dropdown-item"
               active-class="active disabled"
             >
               Allgemein
             </router-link>
             <router-link
-              to="/OptionalComponents"
+              v-if="accessAllowed('DisplayConfiguration')"
+              to="/DisplayConfiguration"
               class="dropdown-item"
               active-class="active disabled"
             >
               Display
             </router-link>
             <router-link
-              to="/IdentificationConfig"
+              v-if="accessAllowed('IdentificationConfiguration')"
+              to="/IdentificationConfiguration"
               class="dropdown-item"
               active-class="active disabled"
             >
@@ -108,10 +105,7 @@
             </router-link>
           </div>
         </li>
-        <li
-          v-if="accessSettingsAllowed"
-          class="nav-item dropdown"
-        >
+        <li class="nav-item dropdown">
           <a
             class="nav-link dropdown-toggle"
             href="#"
@@ -126,21 +120,24 @@
             aria-labelledby="navbarDropdown"
           >
             <router-link
-              to="/GeneralChargeConfig"
+              v-if="accessAllowed('GeneralChargeConfiguration')"
+              to="/GeneralChargeConfiguration"
               class="dropdown-item"
               active-class="active disabled"
             >
               Übergreifendes
             </router-link>
             <router-link
-              to="/SurplusChargeConfig"
+              v-if="accessAllowed('SurplusChargeConfiguration')"
+              to="/SurplusChargeConfiguration"
               class="dropdown-item"
               active-class="active disabled"
             >
               Überschuss-Laden
             </router-link>
             <router-link
-              to="/ActiveBatControl"
+              v-if="accessAllowed('ActiveBatControlConfiguration')"
+              to="/ActiveBatControlConfiguration"
               class="dropdown-item"
               active-class="active disabled"
             >
@@ -148,10 +145,7 @@
             </router-link>
           </div>
         </li>
-        <li
-          v-if="accessSettingsAllowed"
-          class="nav-item dropdown"
-        >
+        <li class="nav-item dropdown">
           <a
             class="nav-link dropdown-toggle"
             href="#"
@@ -166,6 +160,7 @@
             aria-labelledby="navbarDropdown"
           >
             <router-link
+              v-if="accessAllowed('HardwareInstallation')"
               to="/HardwareInstallation"
               class="dropdown-item"
               active-class="active disabled"
@@ -173,6 +168,7 @@
               Geräte und Komponenten
             </router-link>
             <router-link
+              v-if="accessAllowed('LoadManagementConfiguration')"
               to="/LoadManagementConfiguration"
               class="dropdown-item"
               active-class="active disabled"
@@ -180,6 +176,7 @@
               Lastmanagement
             </router-link>
             <router-link
+              v-if="accessAllowed('ChargePointInstallation')"
               to="/ChargePointInstallation"
               class="dropdown-item"
               active-class="active disabled"
@@ -187,6 +184,7 @@
               Ladepunkte
             </router-link>
             <router-link
+              v-if="accessAllowed('VehicleConfiguration')"
               to="/VehicleConfiguration"
               class="dropdown-item"
               active-class="active disabled"
@@ -194,6 +192,7 @@
               Fahrzeuge
             </router-link>
             <router-link
+              v-if="accessAllowed('IoConfiguration')"
               to="/IoConfiguration"
               class="dropdown-item"
               active-class="active disabled"
@@ -202,6 +201,7 @@
             </router-link>
             <div class="dropdown-divider" />
             <a
+              v-if="accessAllowed('LegacySmartHomeConfiguration')"
               href="modules/legacy_smart_home/smarthomeconfig.php"
               class="dropdown-item"
               target="_blank"
@@ -210,10 +210,7 @@
             </a>
           </div>
         </li>
-        <li
-          v-if="accessSettingsAllowed"
-          class="nav-item dropdown"
-        >
+        <li class="nav-item dropdown">
           <a
             class="nav-link dropdown-toggle"
             href="#"
@@ -228,6 +225,7 @@
             aria-labelledby="navbarDropdown"
           >
             <router-link
+              v-if="accessAllowed('InstallAssistant')"
               to="/System/InstallAssistant"
               class="dropdown-item"
               active-class="active disabled"
@@ -235,6 +233,7 @@
               Einrichtungsassistent
             </router-link>
             <router-link
+              v-if="accessAllowed('CloudConfiguration')"
               to="/System/CloudConfiguration"
               class="dropdown-item"
               active-class="active disabled"
@@ -242,6 +241,7 @@
               openWB Cloud
             </router-link>
             <router-link
+              v-if="accessAllowed('MqttBridgeConfiguration')"
               to="/System/MqttBridgeConfiguration"
               class="dropdown-item"
               active-class="active disabled"
@@ -249,6 +249,7 @@
               MQTT-Brücken
             </router-link>
             <router-link
+              v-if="accessAllowed('DebugConfiguration')"
               to="/System/DebugConfiguration"
               class="dropdown-item"
               active-class="active disabled"
@@ -256,6 +257,7 @@
               Fehlersuche
             </router-link>
             <router-link
+              v-if="accessAllowed('Support')"
               to="/System/Support"
               class="dropdown-item"
               active-class="active disabled"
@@ -263,6 +265,7 @@
               Support
             </router-link>
             <router-link
+              v-if="accessAllowed('DataManagement')"
               to="/System/DataManagement"
               class="dropdown-item"
               active-class="active disabled"
@@ -270,6 +273,7 @@
               Datenverwaltung
             </router-link>
             <router-link
+              v-if="accessAllowed('SecurityConfiguration')"
               to="/System/SecurityConfiguration"
               class="dropdown-item"
               active-class="active disabled"
@@ -277,6 +281,7 @@
               Sicherheit
             </router-link>
             <router-link
+              v-if="accessAllowed('SystemConfiguration')"
               to="/System/SystemConfiguration"
               class="dropdown-item"
               active-class="active disabled"
@@ -284,6 +289,7 @@
               System
             </router-link>
             <router-link
+              v-if="accessAllowed('LegalSettings')"
               to="/System/LegalSettings"
               class="dropdown-item"
               active-class="active disabled"
@@ -350,29 +356,17 @@ export default {
   mixins: [ComponentState],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/system/security/access/settings",
-        "openWB/system/security/access/status",
-        "openWB/system/security/access/charge_log",
-        "openWB/system/security/access/chart",
-      ],
+      mqttTopicsToSubscribe: ["openWB/system/security/access/+"],
     };
   },
   computed: {
     nodeEnv() {
       return import.meta.env.MODE;
     },
-    accessSettingsAllowed() {
-      return this.$store.state.mqtt["openWB/system/security/access/settings"] === true;
-    },
-    accessStatusAllowed() {
-      return this.$store.state.mqtt["openWB/system/security/access/status"] === true;
-    },
-    accessChargeLogAllowed() {
-      return this.$store.state.mqtt["openWB/system/security/access/charge_log"] === true;
-    },
-    accessChartAllowed() {
-      return this.$store.state.mqtt["openWB/system/security/access/chart"] === true;
+    accessAllowed() {
+      return (page) => {
+        return this.$store.state.mqtt[`openWB/system/security/access/${page}`] === true;
+      };
     },
   },
   watch: {
@@ -391,20 +385,26 @@ export default {
   box-shadow: 0 4px 8px 4px rgba(0, 0, 0, 0.15);
 }
 
-.nav-item.nav-separator-before {
+.nav-item.nav-separator-before:not(:first-child) {
   border-left: 1px solid rgba(255, 255, 255, 0.5);
   margin-left: 5px;
   padding-left: 5px;
 }
 
-.nav-item.nav-separator-after {
+.nav-item.nav-separator-after:not(:last-child) {
   border-right: 1px solid rgba(255, 255, 255, 0.5);
   margin-right: 5px;
   padding-right: 5px;
 }
 
+/* hide dropdowns without items */
+.nav-item.dropdown:not(:has(.dropdown-menu a)) {
+  border: 2px solid #ff0000;
+  display: none;
+}
+
 @media (max-width: 991px) {
-  .nav-item.nav-separator-before {
+  .nav-item.nav-separator-before:not(:first-child) {
     border-left: none;
     margin-left: 0px;
     padding-left: 0px;
@@ -413,7 +413,7 @@ export default {
     padding-top: 5px;
   }
 
-  .nav-item.nav-separator-after {
+  .nav-item.nav-separator-after:not(:last-child) {
     border-right: none;
     margin-right: 0px;
     padding-right: 0px;

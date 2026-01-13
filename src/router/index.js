@@ -4,14 +4,13 @@ import store from "../store";
 const routes = [
   {
     path: "/",
-    redirect: "/GeneralConfig",
+    redirect: "/GeneralConfiguration",
   },
   {
     path: "/Status",
     name: "Status",
     meta: {
       heading: "Status",
-      requiredPermission: "accessStatusAllowed",
     },
     component: () => import("../views/Status.vue"),
   },
@@ -20,7 +19,6 @@ const routes = [
     name: "ChargeLog",
     meta: {
       heading: "Auswertungen - Ladeprotokoll",
-      requiredPermission: "accessChargeLogAllowed",
     },
     component: () => import("../views/ChargeLog.vue"),
   },
@@ -29,70 +27,62 @@ const routes = [
     name: "Chart",
     meta: {
       heading: "Auswertungen - Diagramme",
-      requiredPermission: "accessChartAllowed",
     },
     component: () => import("../views/Chart.vue"),
   },
   {
-    path: "/GeneralConfig",
-    name: "GeneralConfig",
+    path: "/GeneralConfiguration",
+    name: "GeneralConfiguration",
     meta: {
       heading: "Einstellungen - Allgemein",
-      requiredPermission: "accessSettingsAllowed",
     },
-    component: () => import("../views/GeneralConfig.vue"),
+    component: () => import("../views/GeneralConfiguration.vue"),
   },
   {
-    path: "/IdentificationConfig",
-    name: "IdentificationConfig",
+    path: "/IdentificationConfiguration",
+    name: "IdentificationConfiguration",
     meta: {
       heading: "Einstellungen - Identifikation",
-      requiredPermission: "accessSettingsAllowed",
     },
-    component: () => import("../views/IdentificationConfig.vue"),
+    component: () => import("../views/IdentificationConfiguration.vue"),
   },
   {
-    path: "/OptionalComponents",
-    name: "OptionalComponents",
+    path: "/DisplayConfiguration",
+    name: "DisplayConfiguration",
     meta: {
       heading: "Einstellungen - Display",
-      requiredPermission: "accessSettingsAllowed",
     },
-    component: () => import("../views/OptionalComponents.vue"),
+    component: () => import("../views/DisplayConfiguration.vue"),
   },
   {
-    path: "/GeneralChargeConfig",
-    name: "GeneralChargeConfig",
+    path: "/GeneralChargeConfiguration",
+    name: "GeneralChargeConfiguration",
     meta: {
       heading: "Ladeeinstellungen - Übergreifendes",
-      requiredPermission: "accessSettingsAllowed",
     },
-    component: () => import("../views/GeneralChargeConfig.vue"),
+    component: () => import("../views/GeneralChargeConfiguration.vue"),
   },
   {
-    path: "/SurplusChargeConfig",
-    name: "SurplusChargeConfig",
+    path: "/SurplusChargeConfiguration",
+    name: "SurplusChargeConfiguration",
     meta: {
       heading: "Ladeeinstellungen - Überschuss-Laden",
-      requiredPermission: "accessSettingsAllowed",
     },
-    component: () => import("../views/SurplusChargeConfig.vue"),
+    component: () => import("../views/SurplusChargeConfiguration.vue"),
   },
   {
-    path: "/ActiveBatControl",
-    name: "ActiveBatControl",
+    path: "/ActiveBatControlConfiguration",
+    name: "ActiveBatControlConfiguration",
     meta: {
       heading: "Ladeeinstellungen - Speichersteuerung",
-      requiredPermission: "accessSettingsAllowed",
     },
-    component: () => import("../views/ActiveBatControl.vue"),
+    component: () => import("../views/ActiveBatControlConfiguration.vue"),
   },
   {
     path: "/HardwareInstallation",
     name: "HardwareInstallation",
     meta: {
       heading: "Konfiguration - Geräte und Komponenten",
-      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/HardwareInstallation.vue"),
   },
@@ -101,16 +91,14 @@ const routes = [
     name: "LoadManagementConfiguration",
     meta: {
       heading: "Konfiguration - Lastmanagement",
-      requiredPermission: "accessSettingsAllowed",
     },
-    component: () => import("../views/LoadManagementConfig.vue"),
+    component: () => import("../views/LoadManagementConfiguration.vue"),
   },
   {
     path: "/ChargePointInstallation",
     name: "ChargePointInstallation",
     meta: {
       heading: "Konfiguration - Ladepunkte",
-      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/ChargePointInstallation.vue"),
   },
@@ -119,52 +107,46 @@ const routes = [
     name: "VehicleConfiguration",
     meta: {
       heading: "Konfiguration - Fahrzeuge",
-      requiredPermission: "accessSettingsAllowed",
     },
-    component: () => import("../views/VehicleConfig.vue"),
+    component: () => import("../views/VehicleConfiguration.vue"),
   },
   {
     path: "/IoConfiguration",
     name: "IoConfiguration",
     meta: {
       heading: "Konfiguration - Ein- und Ausgänge",
-      requiredPermission: "accessSettingsAllowed",
     },
-    component: () => import("../views/IoConfig.vue"),
+    component: () => import("../views/IoConfiguration.vue"),
   },
   {
     path: "/System/CloudConfiguration",
-    name: "CloudConfig",
+    name: "CloudConfiguration",
     meta: {
       heading: "System - openWB Cloud",
-      requiredPermission: "accessSettingsAllowed",
     },
-    component: () => import("../views/CloudConfig.vue"),
+    component: () => import("../views/CloudConfiguration.vue"),
   },
   {
     path: "/System/MqttBridgeConfiguration",
-    name: "MqttBridgeConfig",
+    name: "MqttBridgeConfiguration",
     meta: {
       heading: "System - MQTT-Brücken",
-      requiredPermission: "accessSettingsAllowed",
     },
-    component: () => import("../views/MqttBridgeConfig.vue"),
+    component: () => import("../views/MqttBridgeConfiguration.vue"),
   },
   {
     path: "/System/DebugConfiguration",
-    name: "Debugging",
+    name: "DebugConfiguration",
     meta: {
       heading: "System - Fehlersuche",
-      requiredPermission: "accessSettingsAllowed",
     },
-    component: () => import("../views/DebugConfig.vue"),
+    component: () => import("../views/DebugConfiguration.vue"),
   },
   {
     path: "/System/Support",
     name: "Support",
     meta: {
       heading: "System - Support",
-      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/Support.vue"),
   },
@@ -173,34 +155,30 @@ const routes = [
     name: "LegalSettings",
     meta: {
       heading: "System - Rechtliches",
-      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/LegalSettings.vue"),
   },
   {
     path: "/System/SystemConfiguration",
-    name: "SystemConfig",
+    name: "SystemConfiguration",
     meta: {
       heading: "System - System",
-      requiredPermission: "accessSettingsAllowed",
     },
-    component: () => import("../views/System.vue"),
+    component: () => import("../views/SystemConfiguration.vue"),
   },
   {
     path: "/System/SecurityConfiguration",
-    name: "SecurityConfig",
+    name: "SecurityConfiguration",
     meta: {
       heading: "System - Sicherheit",
-      requiredPermission: "accessSettingsAllowed",
     },
-    component: () => import("../views/Security.vue"),
+    component: () => import("../views/SecurityConfiguration.vue"),
   },
   {
     path: "/System/DataManagement",
     name: "DataManagement",
     meta: {
       heading: "System - Datenverwaltung",
-      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/DataManagement.vue"),
   },
@@ -209,7 +187,6 @@ const routes = [
     name: "InstallAssistant",
     meta: {
       heading: "System - Einrichtungsassistent",
-      requiredPermission: "accessSettingsAllowed",
     },
     component: () => import("../views/InstallAssistant.vue"),
   },
@@ -257,17 +234,17 @@ router.beforeEach(async (to) => {
       }
     }
   }
-  if (to.meta.requiredPermission) {
-    const hasPermission = await store.getters[to.meta.requiredPermission];
-    if (!hasPermission) {
-      console.warn("no permission to access", to.name);
-      if (store.state.local.username) {
-        // logged in but no permission
-        return { name: "Error" };
-      }
-      console.debug("not logged in, cancel navigation to", to.name);
-      return false; // cancel navigation
+  console.log("checking access for", to.name);
+  const hasPermission = await store.getters.accessAllowed(to.name);
+  console.log("access check for", to.name, "->", hasPermission);
+  if (!hasPermission) {
+    console.warn("no permission to access", to.name);
+    if (store.state.local.username) {
+      // logged in but no permission
+      return { name: "Error" };
     }
+    console.debug("not logged in, cancel navigation to", to.name);
+    return false; // cancel navigation
   }
 });
 
