@@ -31,7 +31,7 @@
       <p class="font-weight-bold">Änderungen werden nur durch Klicken auf Speichern wirksam!</p>
     </template>
     <template #content>
-      <VehicleConfigView
+      <VehicleConfigurationView
         :install-assistant-active="true"
         @send-command="$emit('sendCommand', $event)"
         @save="$emit('save')"
@@ -45,14 +45,14 @@
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
 import InstallAssistantStepTemplate from "./InstallAssistantStepTemplate.vue";
-import VehicleConfigView from "../../views/VehicleConfig.vue";
+import VehicleConfigurationView from "../../views/VehicleConfiguration.vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 export default {
   name: "InstallAssistantStep8",
   components: {
     InstallAssistantStepTemplate,
-    VehicleConfigView,
+    VehicleConfigurationView,
     FontAwesomeIcon,
   },
   mixins: [ComponentState],

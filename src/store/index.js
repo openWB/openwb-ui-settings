@@ -223,93 +223,30 @@ export default createStore({
         }
       });
     },
-    accessStatusAllowed(state) {
-      return new Promise((resolve) => {
-        if (state.mqtt["openWB/system/security/access/status"] !== undefined) {
-          resolve(state.mqtt["openWB/system/security/access/status"]);
-        } else {
-          var timer, interval;
-          // add general timeout if topic not set
-          timer = setTimeout(() => {
-            clearInterval(interval);
-            resolve(false);
-          }, 5000);
-          // check until we received valid data
-          interval = setInterval(() => {
-            if (state.mqtt["openWB/system/security/access/status"] !== undefined) {
-              clearTimeout(timer);
+    accessAllowed(state) {
+      return (page) => {
+        return new Promise((resolve) => {
+          const topic = `openWB/system/security/access/${page}`;
+          if (state.mqtt[topic] !== undefined) {
+            resolve(state.mqtt[topic]);
+          } else {
+            var timer, interval;
+            // add general timeout if topic not set
+            timer = setTimeout(() => {
               clearInterval(interval);
-              resolve(state.mqtt["openWB/system/security/access/status"]);
-            }
-          }, 100);
-        }
-      });
-    },
-    accessChargeLogAllowed(state) {
-      return new Promise((resolve) => {
-        if (state.mqtt["openWB/system/security/access/charge_log"] !== undefined) {
-          resolve(state.mqtt["openWB/system/security/access/charge_log"]);
-        } else {
-          var timer, interval;
-          // add general timeout if topic not set
-          timer = setTimeout(() => {
-            clearInterval(interval);
-            resolve(false);
-          }, 5000);
-          // check until we received valid data
-          interval = setInterval(() => {
-            if (state.mqtt["openWB/system/security/access/charge_log"] !== undefined) {
-              clearTimeout(timer);
-              clearInterval(interval);
-              resolve(state.mqtt["openWB/system/security/access/charge_log"]);
-            }
-          }, 100);
-        }
-      });
-    },
-    accessChartAllowed(state) {
-      return new Promise((resolve) => {
-        if (state.mqtt["openWB/system/security/access/chart"] !== undefined) {
-          resolve(state.mqtt["openWB/system/security/access/chart"]);
-        } else {
-          var timer, interval;
-          // add general timeout if topic not set
-          timer = setTimeout(() => {
-            clearInterval(interval);
-            resolve(false);
-          }, 5000);
-          // check until we received valid data
-          interval = setInterval(() => {
-            if (state.mqtt["openWB/system/security/access/chart"] !== undefined) {
-              clearTimeout(timer);
-              clearInterval(interval);
-              resolve(state.mqtt["openWB/system/security/access/chart"]);
-            }
-          }, 100);
-        }
-      });
-    },
-    accessSettingsAllowed(state) {
-      return new Promise((resolve) => {
-        if (state.mqtt["openWB/system/security/access/settings"] !== undefined) {
-          resolve(state.mqtt["openWB/system/security/access/settings"]);
-        } else {
-          var timer, interval;
-          // add general timeout if topic not set
-          timer = setTimeout(() => {
-            clearInterval(interval);
-            resolve(false);
-          }, 5000);
-          // check until we received valid data
-          interval = setInterval(() => {
-            if (state.mqtt["openWB/system/security/access/settings"] !== undefined) {
-              clearTimeout(timer);
-              clearInterval(interval);
-              resolve(state.mqtt["openWB/system/security/access/settings"]);
-            }
-          }, 100);
-        }
-      });
+              resolve(false);
+            }, 5000);
+            // check until we received valid data
+            interval = setInterval(() => {
+              if (state.mqtt[topic] !== undefined) {
+                clearTimeout(timer);
+                clearInterval(interval);
+                resolve(state.mqtt[topic]);
+              }
+            }, 100);
+          }
+        });
+      };
     },
     subscriptionCount: (state) => (topic) => {
       return state.mqttSubscriptions[topic] || 0;
