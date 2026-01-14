@@ -11,6 +11,7 @@ const routes = [
     name: "Status",
     meta: {
       heading: "Status",
+      checkPermissions: true,
     },
     component: () => import("../views/Status.vue"),
   },
@@ -19,6 +20,7 @@ const routes = [
     name: "ChargeLog",
     meta: {
       heading: "Auswertungen - Ladeprotokoll",
+      checkPermissions: true,
     },
     component: () => import("../views/ChargeLog.vue"),
   },
@@ -27,6 +29,7 @@ const routes = [
     name: "Chart",
     meta: {
       heading: "Auswertungen - Diagramme",
+      checkPermissions: true,
     },
     component: () => import("../views/Chart.vue"),
   },
@@ -35,6 +38,7 @@ const routes = [
     name: "GeneralConfiguration",
     meta: {
       heading: "Einstellungen - Allgemein",
+      checkPermissions: true,
     },
     component: () => import("../views/GeneralConfiguration.vue"),
   },
@@ -43,6 +47,7 @@ const routes = [
     name: "IdentificationConfiguration",
     meta: {
       heading: "Einstellungen - Identifikation",
+      checkPermissions: true,
     },
     component: () => import("../views/IdentificationConfiguration.vue"),
   },
@@ -51,6 +56,7 @@ const routes = [
     name: "DisplayConfiguration",
     meta: {
       heading: "Einstellungen - Display",
+      checkPermissions: true,
     },
     component: () => import("../views/DisplayConfiguration.vue"),
   },
@@ -59,6 +65,7 @@ const routes = [
     name: "GeneralChargeConfiguration",
     meta: {
       heading: "Ladeeinstellungen - Übergreifendes",
+      checkPermissions: true,
     },
     component: () => import("../views/GeneralChargeConfiguration.vue"),
   },
@@ -67,6 +74,7 @@ const routes = [
     name: "SurplusChargeConfiguration",
     meta: {
       heading: "Ladeeinstellungen - Überschuss-Laden",
+      checkPermissions: true,
     },
     component: () => import("../views/SurplusChargeConfiguration.vue"),
   },
@@ -75,6 +83,7 @@ const routes = [
     name: "ActiveBatControlConfiguration",
     meta: {
       heading: "Ladeeinstellungen - Speichersteuerung",
+      checkPermissions: true,
     },
     component: () => import("../views/ActiveBatControlConfiguration.vue"),
   },
@@ -83,6 +92,7 @@ const routes = [
     name: "HardwareInstallation",
     meta: {
       heading: "Konfiguration - Geräte und Komponenten",
+      checkPermissions: true,
     },
     component: () => import("../views/HardwareInstallation.vue"),
   },
@@ -91,6 +101,7 @@ const routes = [
     name: "LoadManagementConfiguration",
     meta: {
       heading: "Konfiguration - Lastmanagement",
+      checkPermissions: true,
     },
     component: () => import("../views/LoadManagementConfiguration.vue"),
   },
@@ -99,6 +110,7 @@ const routes = [
     name: "ChargePointInstallation",
     meta: {
       heading: "Konfiguration - Ladepunkte",
+      checkPermissions: true,
     },
     component: () => import("../views/ChargePointInstallation.vue"),
   },
@@ -107,6 +119,7 @@ const routes = [
     name: "VehicleConfiguration",
     meta: {
       heading: "Konfiguration - Fahrzeuge",
+      checkPermissions: true,
     },
     component: () => import("../views/VehicleConfiguration.vue"),
   },
@@ -115,6 +128,7 @@ const routes = [
     name: "IoConfiguration",
     meta: {
       heading: "Konfiguration - Ein- und Ausgänge",
+      checkPermissions: true,
     },
     component: () => import("../views/IoConfiguration.vue"),
   },
@@ -123,6 +137,7 @@ const routes = [
     name: "CloudConfiguration",
     meta: {
       heading: "System - openWB Cloud",
+      checkPermissions: true,
     },
     component: () => import("../views/CloudConfiguration.vue"),
   },
@@ -131,6 +146,7 @@ const routes = [
     name: "MqttBridgeConfiguration",
     meta: {
       heading: "System - MQTT-Brücken",
+      checkPermissions: true,
     },
     component: () => import("../views/MqttBridgeConfiguration.vue"),
   },
@@ -139,6 +155,7 @@ const routes = [
     name: "DebugConfiguration",
     meta: {
       heading: "System - Fehlersuche",
+      checkPermissions: true,
     },
     component: () => import("../views/DebugConfiguration.vue"),
   },
@@ -147,6 +164,7 @@ const routes = [
     name: "Support",
     meta: {
       heading: "System - Support",
+      checkPermissions: true,
     },
     component: () => import("../views/Support.vue"),
   },
@@ -155,6 +173,7 @@ const routes = [
     name: "LegalSettings",
     meta: {
       heading: "System - Rechtliches",
+      checkPermissions: true,
     },
     component: () => import("../views/LegalSettings.vue"),
   },
@@ -163,6 +182,7 @@ const routes = [
     name: "SystemConfiguration",
     meta: {
       heading: "System - System",
+      checkPermissions: true,
     },
     component: () => import("../views/SystemConfiguration.vue"),
   },
@@ -171,6 +191,7 @@ const routes = [
     name: "SecurityConfiguration",
     meta: {
       heading: "System - Sicherheit",
+      checkPermissions: true,
     },
     component: () => import("../views/SecurityConfiguration.vue"),
   },
@@ -179,6 +200,7 @@ const routes = [
     name: "DataManagement",
     meta: {
       heading: "System - Datenverwaltung",
+      checkPermissions: true,
     },
     component: () => import("../views/DataManagement.vue"),
   },
@@ -187,6 +209,7 @@ const routes = [
     name: "InstallAssistant",
     meta: {
       heading: "System - Einrichtungsassistent",
+      checkPermissions: true,
     },
     component: () => import("../views/InstallAssistant.vue"),
   },
@@ -195,6 +218,7 @@ const routes = [
     name: "Error",
     meta: {
       heading: "Fehler",
+      checkPermissions: false,
     },
     component: () => import("../views/Error.vue"),
   },
@@ -206,6 +230,7 @@ if (import.meta.env.MODE !== "production") {
     name: "VUEX Store",
     meta: {
       heading: "Beispiele - VUEX Store",
+      checkPermissions: false,
     },
     component: () => import("../views/TestingStore.vue"),
   });
@@ -234,17 +259,18 @@ router.beforeEach(async (to) => {
       }
     }
   }
-  console.log("checking access for", to.name);
-  const hasPermission = await store.getters.accessAllowed(to.name);
-  console.log("access check for", to.name, "->", hasPermission);
-  if (!hasPermission) {
-    console.warn("no permission to access", to.name);
-    if (store.state.local.username) {
-      // logged in but no permission
-      return { name: "Error" };
+  if (to.meta.checkPermissions === true) {
+    const hasPermission = await store.getters.accessAllowed(to.name);
+    console.log("access check for", to.name, "->", hasPermission);
+    if (!hasPermission) {
+      console.warn("no permission to access", to.name);
+      if (store.state.local.username) {
+        // logged in but no permission
+        return { name: "Error" };
+      }
+      console.debug("not logged in, cancel navigation to", to.name);
+      return false; // cancel navigation
     }
-    console.debug("not logged in, cancel navigation to", to.name);
-    return false; // cancel navigation
   }
 });
 
