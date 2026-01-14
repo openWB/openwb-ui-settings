@@ -190,10 +190,11 @@ export default {
           return [];
         }
         const configurable = this.$store.state.mqtt["openWB/system/configurable/consumers"];
-        return [
-          {
-            label: configurable.vendors.group_name,
-            options: Object.entries(configurable.vendors.vendors)
+        
+        return Object.entries(configurable).map(([groupKey, group]) => {
+          return {
+            label: group.group_name,
+            options: Object.entries(group.vendors)
               .map(([vendorKey, vendor]) => {
                 return {
                   value: vendorKey,
@@ -201,8 +202,8 @@ export default {
                 };
               })
               .sort((a, b) => a.text.localeCompare(b.text)),
-          },
-        ];
+          };
+        });
       },
     },
     consumerList: {
@@ -211,10 +212,24 @@ export default {
           return [];
         }
         const configurable = this.$store.state.mqtt["openWB/system/configurable/consumers"];
-        if (!configurable || !configurable.vendors.vendors[this.selectedVendor]) {
+        if (!configurable) {
           return [];
         }
-        return Object.entries(configurable.vendors.vendors[this.selectedVendor].consumers)
+        
+        // Finde den Vendor in allen Gruppen
+        let selectedVendorData = null;
+        for (const group of Object.values(configurable)) {
+          if (group.vendors && group.vendors[this.selectedVendor]) {
+            selectedVendorData = group.vendors[this.selectedVendor];
+            break;
+          }
+        }
+        
+        if (!selectedVendorData || !selectedVendorData.consumers) {
+          return [];
+        }
+        
+        return Object.entries(selectedVendorData.consumers)
           .map(([consumerKey, consumer]) => {
             return {
               value: [this.selectedVendor, consumerKey],
