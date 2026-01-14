@@ -199,7 +199,10 @@
             >
               Ein-/Ausgänge
             </router-link>
-            <div class="dropdown-divider" />
+            <div
+              v-if="accessAllowed('LegacySmartHomeConfiguration')"
+              class="dropdown-divider"
+            />
             <a
               v-if="accessAllowed('LegacySmartHomeConfiguration')"
               href="modules/legacy_smart_home/smarthomeconfig.php"
