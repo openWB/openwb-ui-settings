@@ -1454,8 +1454,6 @@ export default {
         "openWB/optional/rfid/active",
         "openWB/vehicle/template/ev_template/+",
         "openWB/vehicle/template/charge_template/+",
-        "openWB/vehicle/template/charge_template/+/chargemode/scheduled_charging/plans/+",
-        "openWB/vehicle/template/charge_template/+/time_charging/plans/+",
         "openWB/vehicle/+/name",
         "openWB/vehicle/+/info",
         "openWB/vehicle/+/charge_template",
