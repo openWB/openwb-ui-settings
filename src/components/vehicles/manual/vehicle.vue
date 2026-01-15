@@ -1,9 +1,9 @@
 <template>
-  <div class="vehicle-soc-tesla">
+  <div class="vehicle-soc-manual">
     <openwb-base-alert subtype="info">
       Beim Anstecken des Fahrzeugs muss der aktuelle SoC über die Hauptseite angegeben werden. Anhand des Zählers im
       Ladepunkt wird dann der aktuelle SoC errechnet. Ausschlaggebend für die Qualität dieses Moduls sind die beiden
-      Einstellungen "Kapazität der Batterie" in dem Fahrzeug-Profil und "Wirkungsgrad der Ladeelektronik".
+      Einstellungen "Kapazität der Batterie" und "Wirkungsgrad der Ladeelektronik" in dem Fahrzeug-Profil.
     </openwb-base-alert>
   </div>
 </template>

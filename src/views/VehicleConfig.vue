@@ -7,7 +7,7 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeVehicle($event, modalVehicleIndex)"
   >
-    Wollen Sie das Fahrzeug "{{ getVehicleName(modalVehicleIndex) }}" wirklich entfernen? Dieser Vorgang kann nicht
+    Willst Du das Fahrzeug "{{ getVehicleName(modalVehicleIndex) }}" wirklich entfernen? Dieser Vorgang kann nicht
     rückgängig gemacht werden!
   </openwb-base-modal-dialog>
   <openwb-base-modal-dialog
@@ -17,7 +17,7 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeEvTemplate($event, modalEvTemplateIndex)"
   >
-    Wollen Sie das Fahrzeug-Profil "{{ getEvTemplateName(modalEvTemplateIndex) }}" wirklich entfernen? Dieser Vorgang
+    Willst Du das Fahrzeug-Profil "{{ getEvTemplateName(modalEvTemplateIndex) }}" wirklich entfernen? Dieser Vorgang
     kann nicht rückgängig gemacht werden!
   </openwb-base-modal-dialog>
   <openwb-base-modal-dialog
@@ -27,8 +27,8 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeChargeTemplate($event, modalChargeTemplateIndex)"
   >
-    Wollen Sie das Lade-Profil "{{ getChargeTemplateName(modalChargeTemplateIndex) }}" wirklich entfernen? Dieser
-    Vorgang kann nicht rückgängig gemacht werden!
+    Willst Du das Lade-Profil "{{ getChargeTemplateName(modalChargeTemplateIndex) }}" wirklich entfernen? Dieser Vorgang
+    kann nicht rückgängig gemacht werden!
   </openwb-base-modal-dialog>
   <!-- main content -->
   <div class="vehicleConfig">
@@ -616,15 +616,6 @@
                 nach einer Ladungsunterbrechung keine Ladung mehr starten.
               </template>
             </openwb-base-button-group-input>
-            <openwb-base-number-input
-              title="Pause bei Phasenumschaltung"
-              unit="s"
-              :min="2"
-              :step="1"
-              required
-              :model-value="template.phase_switch_pause"
-              @update:model-value="updateState(key, $event, 'phase_switch_pause')"
-            />
             <div v-if="!installAssistantActive">
               <openwb-base-number-input
                 title="Mindestzeit zwischen Umschaltungen"
@@ -859,7 +850,7 @@
                 :buttons="[
                   {
                     buttonValue: 'none',
-                    text: 'Aus',
+                    text: 'Keine',
                   },
                   {
                     buttonValue: 'soc',
@@ -985,7 +976,7 @@
                 :buttons="[
                   {
                     buttonValue: 'none',
-                    text: 'Aus',
+                    text: 'Keine',
                   },
                   {
                     buttonValue: 'soc',
@@ -1133,7 +1124,7 @@
                 @update:model-value="updateState(templateKey, $event, 'chargemode.pv_charging.feed_in_limit')"
               >
                 <template #help>
-                  Erläuterung siehe "Ladeeinstellungen" -> "PV-Laden" -> "Regelparameter" -> "Regelpunkt
+                  Erläuterung siehe "Ladeeinstellungen" -> "Überschuss-Laden" -> "Regelparameter" -> "Regelpunkt
                   Einspeisegrenze"
                 </template>
               </openwb-base-button-group-input>
@@ -1163,10 +1154,8 @@
                   Ist der berechnete Zeitpunkt des Ladestarts noch nicht erreicht, wird mit Überschuss geladen. Auch
                   nach Erreichen des Ziel-SoCs wird mit Überschuss geladen, solange bis das "SoC-Limit für das Fahrzeug"
                   erreicht wird.<br />
-                  Es wird nach den Vorgaben des Zeitplans geladen, dessen Zieltermin am nächsten liegt. Ist der
-                  Zielzeitpunkt vorbei, wird solange geladen bis, das Ziel erreicht oder das Auto abgesteckt wird. Wenn
-                  der Ziel-Termin des nächsten Plans innerhalb der nächsten 12 Stunden liegt, wird auf den nächsten Plan
-                  umgeschaltet.
+                  Es wird nach den Vorgaben des Zeitplans geladen, dessen Zieltermin am nächsten liegt, bis max 20
+                  Minuten nach dem angegebenen Zieltermin.
                 </template>
               </openwb-base-heading>
               <openwb-base-alert
@@ -1243,7 +1232,7 @@
                 :buttons="[
                   {
                     buttonValue: 'none',
-                    text: 'Aus',
+                    text: 'Keine',
                   },
                   {
                     buttonValue: 'soc',
@@ -1288,8 +1277,8 @@
               </openwb-base-number-input>
               <openwb-base-alert
                 v-if="
-                  !$store.state.mqtt['openWB/optional/et/provider'] ||
-                  !$store.state.mqtt['openWB/optional/et/provider'].type
+                  !$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'] ||
+                  !$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'].type
                 "
                 subtype="warning"
               >
@@ -1461,7 +1450,7 @@ export default {
       mqttTopicsToSubscribe: [
         "openWB/general/extern",
         "openWB/optional/dc_charging",
-        "openWB/optional/et/provider",
+        "openWB/optional/ep/flexible_tariff/provider",
         "openWB/optional/rfid/active",
         "openWB/vehicle/template/ev_template/+",
         "openWB/vehicle/template/charge_template/+",
@@ -1652,14 +1641,14 @@ export default {
     addChargeTemplateSchedulePlan(templateId) {
       this.$emit("sendCommand", {
         command: "addChargeTemplateSchedulePlan",
-        data: { template: templateId },
+        data: { template: templateId, changed_in_theme: false },
       });
     },
     /* charge template time charging plan management */
     addChargeTemplateTimeChargingPlan(templateId) {
       this.$emit("sendCommand", {
         command: "addChargeTemplateTimeChargingPlan",
-        data: { template: templateId },
+        data: { template: templateId, changed_in_theme: false },
       });
     },
     openActiveChargeModeCard(templateKey, activeMode) {

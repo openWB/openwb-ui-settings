@@ -7,7 +7,7 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeDevice"
   >
-    Wollen Sie das Gerät "{{ modalDeviceName }}" inklusive aller Komponenten wirklich entfernen? Dieser Vorgang kann
+    Willst Du das Gerät "{{ modalDeviceName }}" inklusive aller Komponenten wirklich entfernen? Dieser Vorgang kann
     nicht rückgängig gemacht werden!
   </openwb-base-modal-dialog>
   <openwb-base-modal-dialog
@@ -17,8 +17,8 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeComponent"
   >
-    Wollen Sie die Komponente "{{ modalComponentName }}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig
-    gemacht werden!
+    Willst Du die Komponente "{{ modalComponentName }}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht
+    werden!
   </openwb-base-modal-dialog>
   <!-- main content -->
   <div class="hardwareInstallation">

@@ -1,10 +1,19 @@
 <template>
+  <openwb-base-alert
+    v-if="ioDevice?.type === 'eebus'"
+    subtype="warning"
+  >
+    Steuerboxen mit EEBus-Schnistelle sind für Dimmen per Direktsteuerung nicht geeignet. Bitte wähle ein anderes
+    I/O-Gerät aus.
+  </openwb-base-alert>
   <openwb-io-single-pattern
+    v-else-if="ioDevice"
     v-model="value"
     :contacts="ioDevice?.input?.digital"
   />
-  <hr />
+  <hr v-if="ioDevice?.type !== 'eebus'" />
   <openwb-base-select-input
+    v-if="ioDevice?.type !== 'eebus'"
     title="Verhalten anwenden auf..."
     not-selected="Bitte auswählen"
     :empty-value="[]"
@@ -46,7 +55,7 @@ export default {
       let deviceGroups = [];
       this.availableIoDevices.forEach((device) => {
         let options = [];
-        Object.keys(device?.output.digital).forEach((digitalOutput) => {
+        Object.keys(device?.output?.digital || {}).forEach((digitalOutput) => {
           options.push({
             text: `${digitalOutput}`,
             value: { type: "io", id: device.id, digital_output: digitalOutput },

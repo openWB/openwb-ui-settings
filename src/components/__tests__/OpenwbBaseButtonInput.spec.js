@@ -12,7 +12,7 @@ describe("OpenwbBaseButtonInput.vue", () => {
     const wrapper = mount(OpenwbBaseButtonInput, {
       props: { title, buttonText, buttonSubtype },
     });
-    const titleLabel = wrapper.find("label.col-form-label");
+    const titleLabel = wrapper.find("div.col-form-label");
     expect(titleLabel.html()).toContain(title);
   });
 });

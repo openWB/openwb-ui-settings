@@ -14,6 +14,7 @@
     <template #default>
       <div class="col-md-8">
         <input
+          :id="`${uid}-checkbox-input`"
           v-model="value"
           class="form-control"
           type="checkbox"
@@ -26,12 +27,14 @@
 
 <script>
 import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+import BaseSettingComponents from "./mixins/BaseSettingComponents.vue";
 
 export default {
   name: "OpenwbCheckboxInput",
   components: {
     OpenwbBaseSettingElement,
   },
+  mixins: [BaseSettingComponents],
   inheritAttrs: false,
   props: {
     title: { type: String, required: false, default: "" },

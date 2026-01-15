@@ -14,7 +14,7 @@
     :buttons="[{ text: 'Ok', event: 'confirm', subtype: 'warning' }]"
     @modal-result="handleModalReset"
   >
-    Wollen Sie die nicht gespeicherten Änderungen wirklich verwerfen?
+    Willst Du die nicht gespeicherten Änderungen wirklich verwerfen?
   </openwb-base-modal-dialog>
   <openwb-base-modal-dialog
     :show="showModalDefaults"
@@ -23,7 +23,7 @@
     :buttons="[{ text: 'Ok', event: 'confirm', subtype: 'danger' }]"
     @modal-result="handleModalDefaults"
   >
-    Wollen Sie wirklich alle Werte dieser Seite auf die Werkseinstellungen zurücksetzen?
+    Willst Du wirklich alle Werte dieser Seite auf die Werkseinstellungen zurücksetzen?
   </openwb-base-modal-dialog>
   <div class="row justify-content-center mb-1">
     <div class="col-md-4 d-flex py-1 justify-content-center">

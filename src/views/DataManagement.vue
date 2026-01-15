@@ -33,11 +33,36 @@
         :collapsible="true"
         :collapsed="!installAssistantActive"
       >
+        <form name="backupPasswordForm">
+          <openwb-base-heading>Allgemein</openwb-base-heading>
+          <openwb-base-text-input
+            title="Kennwort für Sicherungen"
+            subtype="password"
+            :model-value="$store.state.mqtt['openWB/system/backup_password']"
+            @update:model-value="updateState('openWB/system/backup_password', $event)"
+          >
+            <template #help>
+              Ist hier ein Kennwort gesetzt, werden alle Sicherungen mit einem Kennwortschutz versehen. Diese Option
+              sollte genutzt werden, wenn die Sicherungsdatei über unsichere Kanäle (z.B. eine Backup-Cloud im Internet)
+              übertragen wird.<br />
+              Wichtig: Das Kennwort wird nicht in der Sicherung gespeichert! Ohne gültiges Kennwort kann eine geschützte
+              Sicherung nicht wiederhergestellt werden!
+            </template>
+          </openwb-base-text-input>
+          <openwb-base-submit-buttons
+            form-name="backupPasswordForm"
+            :hide-reset="true"
+            :hide-defaults="true"
+            @save="$emit('save', ['openWB/system/backup_password'])"
+            @reset="$emit('reset')"
+          />
+          <hr />
+        </form>
         <form name="backupForm">
           <openwb-base-heading>Sicherung</openwb-base-heading>
           <openwb-base-alert subtype="danger">
-            Aktuell können nur Sicherungen wiederhergestellt werden, die in den Entwicklungszweigen "master", "Beta"
-            oder "Release" erstellt wurden!
+            Es können nur Sicherungen wiederhergestellt werden, die in den Entwicklungszweigen "master", "Beta" oder
+            "Release" erstellt wurden!
           </openwb-base-alert>
           <openwb-base-alert subtype="info">
             Nachdem die Sicherung abgeschlossen ist, kann die erstellte Datei über den Link in der Benachrichtigung oder
@@ -46,8 +71,7 @@
               target="_blank"
               >hier</a
             >
-            heruntergeladen werden. Beim Herunterladen bitte darauf achten, dass die Datei mit der Endung .tar.gz
-            gespeichert wird. Ggf. das automatische Entpacken des Browsers deaktivieren.
+            heruntergeladen werden.
           </openwb-base-alert>
           <div class="row justify-content-center">
             <div class="col-md-4 d-flex py-1 justify-content-center">
@@ -76,7 +100,7 @@
             Es können nur Sicherungen wiederhergestellt werden, die in den Entwicklungszweigen "master", "Beta" oder
             "Release" erstellt wurden!
           </openwb-base-alert>
-          <div class="input-group">
+          <div class="input-group mb-2">
             <div class="input-group-prepend">
               <div class="input-group-text">
                 <font-awesome-icon :icon="['fas', 'file-archive']" />
@@ -87,7 +111,7 @@
                 id="input-file"
                 type="file"
                 class="custom-file-input"
-                accept=".tar.gz,application/gzip,application/tar+gzip"
+                accept=".tar.gz,.openwb-backup,application/gzip,application/tar+gzip,.openwb-backup.gpg,application/gzip+gpg,application/tar+gzip+gpg"
                 @change="updateSelectedRestoreFile($event)"
               />
               <label
@@ -102,8 +126,8 @@
             <div class="input-group-append">
               <button
                 class="btn"
-                :class="selectedRestoreFile ? 'btn-success clickable' : 'btn-outline-success'"
-                :disabled="!selectedRestoreFile"
+                :class="disableRestoreUpload ? 'btn-outline-success' : 'btn-success clickable'"
+                :disabled="disableRestoreUpload"
                 type="button"
                 @click="uploadRestoreFile()"
               >
@@ -112,6 +136,18 @@
               </button>
             </div>
           </div>
+          <openwb-base-text-input
+            v-if="selectedRestoreFile?.name?.endsWith('.gpg')"
+            v-model="restorePassword"
+            title="Kennwort dieser Sicherung"
+            subtype="password"
+          >
+            <template #help>
+              Wenn die Sicherung mit einem Kennwortschutz versehen wurde, wird zuerst eine Entschlüsselung mit dem unter
+              "Allgemein" hinterlegten Kennwort versucht. Falls die Sicherung mit einem anderen Kennwort geschützt
+              wurde, muss dieses hier eingegeben werden.
+            </template>
+          </openwb-base-text-input>
           <div class="row justify-content-center">
             <div class="col-md-4 d-flex py-1 justify-content-center">
               <openwb-base-click-button
@@ -431,6 +467,7 @@ export default {
         "openWB/general/extern",
         "openWB/system/configurable/backup_clouds",
         "openWB/system/configurable/monitoring",
+        "openWB/system/backup_password",
         "openWB/system/backup_cloud/config",
         "openWB/system/backup_cloud/backup_before_update",
         "openWB/system/device/+/component/+/config",
@@ -442,6 +479,7 @@ export default {
       ],
       warningAcknowledged: false,
       showRestoreSection: !this.installAssistantActive,
+      restorePassword: undefined,
       selectedRestoreFile: undefined,
       restoreUploadDone: false,
       selectedDataMigrationFile: undefined,
@@ -697,6 +735,13 @@ export default {
       }
       return myOptions;
     },
+    disableRestoreUpload() {
+      return (
+        !this.selectedRestoreFile ||
+        (this.selectedRestoreFile?.name?.endsWith(".gpg") &&
+          !(this.restorePassword || this.$store.state.mqtt["openWB/system/backup_password"]))
+      );
+    },
   },
   methods: {
     /**
@@ -764,13 +809,17 @@ export default {
     updateSelectedDataMigrationFile(event) {
       this.selectedDataMigrationFile = event.target.files[0];
     },
-    uploadFile(target, selectedFile, successMessage) {
+    uploadFile(target, selectedFile, successMessage, additionalData = {}) {
       return new Promise((resolve) => {
         if (selectedFile !== undefined) {
           this.$root.postClientMessage("Hochladen der Datei gestartet.", "info");
           let formData = new FormData();
           formData.append("file", selectedFile);
           formData.append("target", target);
+          // add each key/value pair from additionalData to formData
+          for (const [key, value] of Object.entries(additionalData)) {
+            formData.append(key, value);
+          }
           this.axios
             .post(location.protocol + "//" + location.host + "/openWB/web/settings/uploadFile.php", formData, {
               headers: {
@@ -822,12 +871,20 @@ export default {
     },
     async uploadRestoreFile() {
       const successMessage =
-        "Die Sicherungsdatei wurde erfolgreich hochgeladen. " + "Sie können die Wiederherstellung jetzt starten.";
-      this.restoreUploadDone = await this.uploadFile("restore", this.selectedRestoreFile, successMessage);
+        "Die Sicherungsdatei wurde erfolgreich hochgeladen. Du kannst die Wiederherstellung jetzt starten.";
+      this.restoreUploadDone = await this.uploadFile(
+        "restore",
+        this.selectedRestoreFile,
+        successMessage,
+        [undefined, null, ""].includes(this.restorePassword)
+          ? undefined
+          : {
+              restorePassword: this.restorePassword,
+            },
+      );
     },
     async uploadDataMigrationFile() {
-      const successMessage =
-        "Die Sicherungsdatei wurde erfolgreich hochgeladen. " + "Sie können den Import jetzt starten.";
+      const successMessage = "Die Sicherungsdatei wurde erfolgreich hochgeladen. Du kannst den Import jetzt starten.";
       this.dataMigrationUploadDone = await this.uploadFile("migrate", this.selectedDataMigrationFile, successMessage);
     },
     restoreBackup() {

@@ -17,10 +17,12 @@
           <label
             v-if="label"
             class="col-2 pl-0 col-form-label valueLabel"
+            :for="`${uid}-button`"
           >
             {{ label }}
           </label>
           <button
+            :id="`${uid}-button`"
             class="col-1 btn btn-block btn-info"
             type="button"
             @click="decrement"
@@ -53,6 +55,7 @@
 
 <script>
 import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+import BaseSettingComponents from "./mixins/BaseSettingComponents.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faStepForward as fasStepForward, faStepBackward as fasStepBackward } from "@fortawesome/free-solid-svg-icons";
@@ -66,6 +69,7 @@ export default {
     FontAwesomeIcon,
     OpenwbBaseSettingElement,
   },
+  mixins: [BaseSettingComponents],
   inheritAttrs: false,
   props: {
     title: { type: String, required: false, default: "" },

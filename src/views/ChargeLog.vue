@@ -32,8 +32,9 @@
               title="Priorität"
               :buttons="[
                 {
-                  buttonValue: undefined,
+                  buttonValue: null,
                   text: 'Alle',
+                  class: 'btn-outline-info',
                 },
                 {
                   buttonValue: false,
@@ -228,6 +229,13 @@
                 <span class="no-wrap"> ({{ formatRange(data.value.data_range_charged) }}) </span>
               </div>
             </template>
+            <template #data_exported_since_mode_switch="data">
+              <div class="td-end">
+                <span class="no-wrap">
+                  {{ formatWh(data.value.data_exported_since_mode_switch || 0) }}
+                </span>
+              </div>
+            </template>
             <!-- <template #data_power="data">
               <div class="td-end">
                 {{ formatW(data.value.data_power) }}
@@ -241,6 +249,16 @@
             <template #chargepoint_imported_at_end="data">
               <div class="td-end">
                 {{ formatWh(data.value.chargepoint_imported_at_end) }}
+              </div>
+            </template>
+            <template #chargepoint_exported_at_start="data">
+              <div class="td-end">
+                {{ formatWh(data.value.chargepoint_exported_at_start || 0) }}
+              </div>
+            </template>
+            <template #chargepoint_exported_at_end="data">
+              <div class="td-end">
+                {{ formatWh(data.value.chargepoint_exported_at_end || 0) }}
               </div>
             </template>
           </vue3-table-lite>
@@ -281,6 +299,11 @@
               <template #imported_since_mode_switch="data">
                 <div class="td-end">
                   {{ formatWh(data.value.imported_since_mode_switch) }}
+                </div>
+              </template>
+              <template #exported_since_mode_switch="data">
+                <div class="td-end">
+                  {{ formatWh(data.value.exported_since_mode_switch || 0) }}
                 </div>
               </template>
               <template #range_charged="data">
@@ -443,13 +466,28 @@ export default {
           //   sortable: true,
           // },
           {
-            label: "Zähler Beginn",
+            label: "Zähler Laden Beginn",
             field: "chargepoint_imported_at_start",
             sortable: true,
           },
           {
-            label: "Zähler Ende",
+            label: "Zähler Laden Ende",
             field: "chargepoint_imported_at_end",
+            sortable: true,
+          },
+          {
+            label: "Entladene Energie",
+            field: "data_exported_since_mode_switch",
+            sortable: true,
+          },
+          {
+            label: "Zähler Entladen Beginn",
+            field: "chargepoint_exported_at_start",
+            sortable: true,
+          },
+          {
+            label: "Zähler Entladen Ende",
+            field: "chargepoint_exported_at_end",
             sortable: true,
           },
         ],
@@ -468,6 +506,11 @@ export default {
           {
             label: "Energie",
             field: "imported_since_mode_switch",
+            sortable: false,
+          },
+          {
+            label: "Entladene Energie",
+            field: "exported_since_mode_switch",
             sortable: false,
           },
           {
@@ -494,15 +537,13 @@ export default {
     },
     downloadUrlMonth() {
       if (!this.chargeLogRequestData.year || !this.chargeLogRequestData.month) {
-        console.error("Fehlende Parameter für Monat oder Jahr");
-        return null; // oder ein Standardwert, falls gewünscht
+        return null;
       }
       return `${this.baseUrl}?year=${this.chargeLogRequestData.year}&month=${this.chargeLogRequestData.month}`;
     },
     downloadUrlYear() {
       if (!this.chargeLogRequestData.year) {
-        console.error("Fehlendes Jahr");
-        return null; // oder ein Standardwert
+        return null;
       }
       return `${this.baseUrl}?year=${this.chargeLogRequestData.year}`;
     },
@@ -547,6 +588,8 @@ export default {
               chargepoint_name: entry["chargepoint"]["name"],
               chargepoint_imported_at_start: entry["chargepoint"]["imported_at_start"],
               chargepoint_imported_at_end: entry["chargepoint"]["imported_at_end"],
+              chargepoint_exported_at_start: entry["chargepoint"]["exported_at_start"],
+              chargepoint_exported_at_end: entry["chargepoint"]["exported_at_end"],
               chargepoint_serial_number: entry["chargepoint"]["serial_number"],
               vehicle_id: entry["vehicle"]["id"],
               vehicle_name: entry["vehicle"]["name"],
@@ -575,6 +618,8 @@ export default {
               data_costs: entry["data"]["costs"],
               data_imported_since_plugged: entry["data"]["imported_since_plugged"],
               data_imported_since_mode_switch: entry["data"]["imported_since_mode_switch"],
+              data_exported_since_plugged: entry["data"]["exported_since_plugged"],
+              data_exported_since_mode_switch: entry["data"]["exported_since_mode_switch"],
             };
           });
         } catch (error) {
@@ -609,12 +654,16 @@ export default {
             '"Ladepunkt"',
             '"Ladepunkt-ID"',
             '"Zähler Seriennummer"',
-            '"Energie"',
+            '"Geladene Energie"',
+            '"Entladene Energie"',
             '"Reichweite"',
             // '"Leistung"',
-            '"Zählerstand Beginn"',
-            '"Zählerstand Ende"',
+            '"Zählerstand Laden Beginn"',
+            '"Zählerstand Laden Ende"',
+            '"Zählerstand Entladen Beginn"',
+            '"Zählerstand Entladen Ende"',
             '"Energie seit Anstecken"',
+            '"Entladene Energie seit Anstecken"',
           ],
           ...this.chargeLogDataset.map((row) => [
             row.time_begin == undefined ? "" : '"' + row.time_begin + '"',
@@ -640,11 +689,15 @@ export default {
             row.chargepoint_id,
             row.chargepoint_serial_number == undefined ? "" : '"' + row.chargepoint_serial_number + '"',
             this.formatNumber(row.data_imported_since_mode_switch / 1000, 2),
+            this.formatNumber((row.data_exported_since_mode_switch || 0) / 1000, 2),
             this.formatNumber(row.data_range_charged, 0),
             // this.formatNumber(row.data_power / 1000, 3),
             this.formatNumber(row.chargepoint_imported_at_start / 1000, 2),
             this.formatNumber(row.chargepoint_imported_at_end / 1000, 2),
+            this.formatNumber((row.chargepoint_exported_at_start || 0) / 1000, 2),
+            this.formatNumber((row.chargepoint_exported_at_end || 0) / 1000, 2),
             this.formatNumber(row.data_imported_since_plugged / 1000, 2),
+            this.formatNumber((row.data_exported_since_plugged || 0) / 1000, 2),
           ]),
         ]
           .map((element) => element.join(";"))
@@ -724,6 +777,11 @@ export default {
         this.chargeLogRequestData.filter.vehicle.id = this.chargeLogRequestData.filter.vehicle.id.filter(
           (element) => element != undefined,
         );
+      }
+      if ("prio" in this.chargeLogRequestData.filter.vehicle) {
+        if (this.chargeLogRequestData.filter.vehicle.prio === null) {
+          this.chargeLogRequestData.filter.vehicle.prio = undefined;
+        }
       }
     },
     requestChargeLog() {

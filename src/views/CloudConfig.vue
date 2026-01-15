@@ -51,7 +51,7 @@
             <p>
               Eine Anleitung zur Einrichtung der openWB Cloud findest Du im
               <a
-                href="https://wiki.openwb.de/doku.php?id=openwb:faq:cloudeinrichten"
+                href="https://wiki.openwb.de/doku.php?id=openwb:tutorials:cloudeinrichten"
                 target="_blank"
                 rel="noopener noreferrer"
               >

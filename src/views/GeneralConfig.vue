@@ -5,7 +5,7 @@
         <openwb-base-alert subtype="info">
           <p>
             Wird für den Steuerungsmodus "primary" gewählt, übernimmt diese openWB die alleinige Regelung und steuert
-            ggf. vorhandene weitere openWB (z.B. secondary openWB, openWB Pro, Satellit u.a.) fern. Sie werden in den
+            ggf. vorhandene weitere openWB (z.B. secondary openWB, openWB Pro, Satellit u.a.) fern. Diese werden in den
             Ladepunkt-Einstellungen der primary-openWB hinzugefügt.
           </p>
           <p>
@@ -193,7 +193,7 @@
       </div>
       <openwb-base-card
         v-if="!installAssistantActive"
-        title="Darstellung & Bedienung"
+        title="Bedienung & Darstellung"
       >
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
           <openwb-base-alert subtype="info">
@@ -220,18 +220,29 @@
           >
             <template #help>
               <p>
-                Alle Einstellungen die unter Einstellungen → Konfiguration → Fahrzeuge → Lade-Profil für das jeweilige
-                Fahrzeug konfiguriert sind, gelten bei aktiver Einstellung als persistent. Das heißt, diese werden bei
-                jedem Abstecken des jeweiligen Fahrzeugs neu geladen. <br />
-                Änderungen an den Ladeeinstellungen, die direkt am Ladepunkt (erste Seite des Webinterfaces oder
-                7-Zoll-Bildschirm der openWB, wenn vorhanden) vorgenommen werden gelten als temporär. Das heißt, diese
-                bleiben nur bis zum nächsten Abstecken erhalten.
+                Bei Auswahl "Ja" werden Änderungen am Ladepunkt über die Hauptseite oder den Touchscreen der openWB als
+                "temporäre" Eingaben behandelt. Dies erlaubt z.B. das schnelle, temporäre Umschalten des Lademodus oder
+                deren Detaileinstellungen für eine unplanmäßige Ladeanforderung (Bsp. Voreinstellung -> PV-Laden /
+                unplanmäßig -> Sofort-Laden für Laden wegen unplanmäßigen Termins).
+                <br />
+                Alle Einstellungen, die unter Einstellungen → Konfiguration → Fahrzeuge → Lade-Profil für das jeweilige
+                Fahrzeug konfiguriert sind, gelten als persistent (dauerhaft). Diese werden bei jedem Abstecken des
+                jeweiligen Fahrzeugs neu geladen - sind also Voreinstellungen (default).
               </p>
               <p>
-                Bei deaktivierter Einstellung sind sowhl die Einstellungen unter unter Einstellungen → Konfiguration →
-                Fahrzeuge → Lade-Profil als direkt am Ladepunkt persistent.
+                Bei Auswahl "Nein" werden Änderungen am Ladepunkt über die Hauptseite oder den Touchscreen der openWB
+                direkt als "persistente" (dauerhafte) Eingaben behandelt.
               </p>
-              <p>Eine ausführliche Erläuterung mit Beispielen findet Ihr im Wiki:</p>
+              <p>
+                Eine ausführliche Erläuterung mit Beispielen findet Ihr im
+                <a
+                  href="https://wiki.openwb.de/doku.php?id=openwb:vc:2.1.9:software:einstell-konfig:einstellungen:allgemein#temporaere_ladeeinstellungen"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  openWB-DokuWiki
+                </a>
+              </p>
             </template>
           </openwb-base-button-group-input>
           <openwb-base-heading class="mt-0"> Hauptseite </openwb-base-heading>
@@ -613,6 +624,75 @@
             <template #title>
               <font-awesome-icon :icon="['fas', 'charging-station']" />
               Zählerstand bei Ladeende
+            </template>
+          </openwb-base-button-group-input>
+          <openwb-base-button-group-input
+            :buttons="[
+              {
+                buttonValue: false,
+                text: 'Nein',
+                class: 'btn-outline-danger',
+              },
+              {
+                buttonValue: true,
+                text: 'Ja',
+                class: 'btn-outline-success',
+              },
+            ]"
+            :model-value="$store.state.mqtt['openWB/general/charge_log_data_config']?.data_exported_since_mode_switch"
+            @update:model-value="
+              updateState('openWB/general/charge_log_data_config', $event, 'data_exported_since_mode_switch')
+            "
+          >
+            <template #title>
+              <font-awesome-icon :icon="['fas', 'charging-station']" />
+              Entladene Energie
+            </template>
+          </openwb-base-button-group-input>
+          <openwb-base-button-group-input
+            :buttons="[
+              {
+                buttonValue: false,
+                text: 'Nein',
+                class: 'btn-outline-danger',
+              },
+              {
+                buttonValue: true,
+                text: 'Ja',
+                class: 'btn-outline-success',
+              },
+            ]"
+            :model-value="$store.state.mqtt['openWB/general/charge_log_data_config']?.chargepoint_exported_at_start"
+            @update:model-value="
+              updateState('openWB/general/charge_log_data_config', $event, 'chargepoint_exported_at_start')
+            "
+          >
+            <template #title>
+              <font-awesome-icon :icon="['fas', 'charging-station']" />
+              Zählerstand bei Entladebeginn
+            </template>
+          </openwb-base-button-group-input>
+          <openwb-base-button-group-input
+            :buttons="[
+              {
+                buttonValue: false,
+                text: 'Nein',
+                class: 'btn-outline-danger',
+              },
+              {
+                buttonValue: true,
+                text: 'Ja',
+                class: 'btn-outline-success',
+              },
+            ]"
+            :model-value="$store.state.mqtt['openWB/general/charge_log_data_config']?.chargepoint_exported_at_end"
+            @update:model-value="
+              updateState('openWB/general/charge_log_data_config', $event, 'chargepoint_exported_at_end')
+            "
+          >
+            <template #title>
+              <font-awesome-icon :icon="['fas', 'charging-station']" />
+              Zählerstand bei Entladeende
             </template>
           </openwb-base-button-group-input>
           <!-- <openwb-base-button-group-input

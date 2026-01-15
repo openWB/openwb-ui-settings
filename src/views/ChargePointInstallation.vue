@@ -7,8 +7,8 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeChargePoint($event, modalChargePointIndex)"
   >
-    Wollen Sie den Ladepunkt "{{ getChargePointName(modalChargePointIndex) }}" (ID: {{ modalChargePointIndex }})
-    wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht werden!
+    Willst Du den Ladepunkt "{{ getChargePointName(modalChargePointIndex) }}" (ID: {{ modalChargePointIndex }}) wirklich
+    entfernen? Dieser Vorgang kann nicht rückgängig gemacht werden!
   </openwb-base-modal-dialog>
   <openwb-base-modal-dialog
     :show="showChargePointTemplateModal"
@@ -17,7 +17,7 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeChargePointTemplate($event, modalChargePointTemplateIndex)"
   >
-    Wollen Sie das Ladepunkt-Profil "{{ getChargePointTemplateName(modalChargePointTemplateIndex) }}" (ID:
+    Willst Du das Ladepunkt-Profil "{{ getChargePointTemplateName(modalChargePointTemplateIndex) }}" (ID:
     {{ modalChargePointTemplateIndex }}) wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht werden!
   </openwb-base-modal-dialog>
   <!-- main content -->
@@ -37,7 +37,7 @@
         <openwb-base-alert subtype="info">
           Eine detaillierte Anleitung zur Einrichtung der Ladepunkte findet sich in unserem
           <a
-            href="https://wiki.openwb.de/doku.php?id=openwb:software:konfiguration:ladepunkte:openwb"
+            href="https://wiki.openwb.de/doku.php?id=openwb:vc:2.1.9:software:einstell-konfig:konfiguration:ladepunkte:openwb"
             target="_blank"
             rel="noopener noreferrer"
             >Wiki</a
@@ -94,8 +94,8 @@
             @update:model-value="updateState(installedChargePointKey, $event, 'ocpp_chargebox_id')"
           >
             <template #help>
-              Bitte geben Sie hier die Chargebox ID ein, die im OCPP-Backend für diesen Ladepunkt verwendet wird. Sollen
-              die Daten dieses Ladepunktes nicht an ein OCPP-Backend übertragen werden, lasse dieses Feld leer.
+              Bitte gib hier die Chargebox ID ein, die im OCPP-Backend für diesen Ladepunkt verwendet wird. Sollen die
+              Daten dieses Ladepunktes nicht an ein OCPP-Backend übertragen werden, lasse dieses Feld leer.
             </template>
           </openwb-base-text-input>
           <hr />

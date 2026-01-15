@@ -9,7 +9,7 @@ describe("OpenwbBaseCheckboxInput.vue", () => {
     const wrapper = mount(OpenwbBaseCheckboxInput, {
       props: { title },
     });
-    const titleLabel = wrapper.find("label.col-form-label");
+    const titleLabel = wrapper.find("div.col-form-label");
     expect(titleLabel.html()).toContain(title);
   });
   // check buttons

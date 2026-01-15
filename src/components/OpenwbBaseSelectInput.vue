@@ -26,6 +26,7 @@
             </div>
           </div>
           <select
+            :id="`${uid}-select`"
             v-model="value"
             class="col form-control"
             v-bind="$attrs"
@@ -82,6 +83,7 @@
 
 <script>
 import OpenwbBaseSettingElement from "./OpenwbBaseSettingElement.vue";
+import BaseSettingComponents from "./mixins/BaseSettingComponents.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlus as fasPlus } from "@fortawesome/free-solid-svg-icons";
@@ -95,6 +97,7 @@ export default {
     FontAwesomeIcon,
     OpenwbBaseSettingElement,
   },
+  mixins: [BaseSettingComponents],
   inheritAttrs: false,
   props: {
     title: { type: String, required: false, default: undefined },

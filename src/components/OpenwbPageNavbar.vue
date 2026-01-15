@@ -119,11 +119,18 @@
               Übergreifendes
             </router-link>
             <router-link
-              to="/PVChargeConfig"
+              to="/SurplusChargeConfig"
               class="dropdown-item"
               active-class="active disabled"
             >
-              PV-Laden
+              Überschuss-Laden
+            </router-link>
+            <router-link
+              to="/ActiveBatControl"
+              class="dropdown-item"
+              active-class="active disabled"
+            >
+              Speichersteuerung
             </router-link>
           </div>
         </li>

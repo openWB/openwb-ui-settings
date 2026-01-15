@@ -123,7 +123,13 @@
               </openwb-base-click-button>
             </div>
           </div>
-          <div v-if="$store.state.mqtt['openWB/general/extern'] != true && !installAssistantActive">
+          <div
+            v-if="
+              $store.state.mqtt['openWB/general/extern'] != true &&
+              !installAssistantActive &&
+              Object.keys(externalChargePoints).length > 0
+            "
+          >
             <hr />
             <openwb-base-heading>Automatisches Update von Secondary openWBs</openwb-base-heading>
             <openwb-base-alert subtype="info">
@@ -157,39 +163,39 @@
                   gleichzeitig mit der Primary openWB aktualisiert.
                 </template>
               </openwb-base-button-group-input>
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th>Secondary</th>
-                    <th>Software-Status</th>
-                    <th>IP-Adresse</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    v-for="externalChargepoint in externalChargepoints"
-                    :key="externalChargepoint.id"
-                  >
-                    <td>{{ externalChargepoint.name }}</td>
-                    <td>
-                      {{
-                        $store.state.mqtt["openWB/chargepoint/" + externalChargepoint.id + "/get/current_branch"] ===
-                        undefined
-                          ? "Version zu alt oder openWB ist nicht erreichbar. Bitte manuell updaten bzw. prüfen."
-                          : $store.state.mqtt["openWB/chargepoint/" + externalChargepoint.id + "/get/current_branch"] !=
-                              "Release"
-                            ? "Secondary ist nicht auf dem Release-Zweig. Bitte manuell updaten."
-                            : $store.state.mqtt[
-                                "openWB/chargepoint/" + externalChargepoint.id + "/get/current_branch"
-                              ] +
-                              " " +
-                              $store.state.mqtt["openWB/chargepoint/" + externalChargepoint.id + "/get/version"]
-                      }}
-                    </td>
-                    <td>{{ externalChargepoint.configuration.ip_address }}</td>
-                  </tr>
-                </tbody>
-              </table>
+            </div>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Secondary</th>
+                  <th>Software-Status</th>
+                  <th>IP-Adresse</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="externalChargePoint in externalChargePoints"
+                  :key="externalChargePoint.id"
+                >
+                  <td>{{ externalChargePoint.name }}</td>
+                  <td>
+                    {{
+                      $store.state.mqtt["openWB/chargepoint/" + externalChargePoint.id + "/get/current_branch"] ===
+                      undefined
+                        ? "Version zu alt oder openWB ist nicht erreichbar. Bitte manuell updaten bzw. prüfen."
+                        : $store.state.mqtt["openWB/chargepoint/" + externalChargePoint.id + "/get/current_branch"] !=
+                            "Release"
+                          ? "Secondary ist nicht auf dem Release-Zweig. Bitte manuell updaten."
+                          : $store.state.mqtt["openWB/chargepoint/" + externalChargePoint.id + "/get/current_branch"] +
+                            " " +
+                            $store.state.mqtt["openWB/chargepoint/" + externalChargePoint.id + "/get/version"]
+                    }}
+                  </td>
+                  <td>{{ externalChargePoint.configuration.ip_address }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div v-if="$store.state.mqtt['openWB/system/current_branch'] == 'Release'">
               <openwb-base-submit-buttons
                 form-name="versionInfoForm"
                 :hide-defaults="true"
@@ -355,7 +361,7 @@ export default {
     };
   },
   computed: {
-    externalChargepoints: {
+    externalChargePoints: {
       get() {
         let chargePoints = this.getWildcardTopics("openWB/chargepoint/+/config");
         let myObj = {};

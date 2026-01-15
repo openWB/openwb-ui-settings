@@ -12,7 +12,7 @@
     @modal-result="verifyModalInput($event)"
   >
     Möglicherweise wurde das Problem bereits behoben.<br />
-    Bitte führen Sie vor dem Absenden ein
+    Bitte führe vor dem Absenden ein
     <router-link to="/System/SystemConfiguration"> Update </router-link>
     durch.<br />
     Falls ein Update nicht möglich ist, kann der Systembericht dennoch versendet werden. Falls kein Update gewünscht

@@ -165,10 +165,11 @@
                 class="text-info"
                 tooltip="Topic kopieren"
               >
-                openWB/set/mqtt/chargepoint/{{ chargePoint.id }}/get/rfid_tag
+                openWB/set/mqtt/chargepoint/{{ chargePoint.id }}/get/rfid
               </openwb-base-copy-to-clipboard>
               <br />
-              Eine Zeichenfolge, die einen eingelesenen Tag für openWB repräsentiert.<br />
+              Eine Zeichenfolge, die einen eingelesenen Tag für openWB repräsentiert. Der Tag darf nur einmalig nach dem
+              Scannen gesendet werden. Nach der Verarbeitung leert openWB das Topic.<br />
               Beispiel:
               <span class="text-info">"123654"</span>
             </li>
