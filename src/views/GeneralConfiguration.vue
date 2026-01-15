@@ -778,22 +778,13 @@ export default {
         "openWB/general/charge_log_data_config",
         "openWB/general/control_interval",
         "openWB/general/extern",
-        "openWB/general/external_buttons_hw",
         "openWB/general/grid_protection_configured",
         "openWB/general/http_api",
         "openWB/general/modbus_control",
-        "openWB/general/notifications/configuration",
-        "openWB/general/notifications/plug",
-        "openWB/general/notifications/selected",
-        "openWB/general/notifications/smart_home",
-        "openWB/general/notifications/start_charging",
-        "openWB/general/notifications/stop_charging",
-        "openWB/general/price_kwh",
         "openWB/general/range_unit",
         "openWB/general/temporary_charge_templates_active",
         "openWB/general/web_theme",
         "openWB/system/configurable/web_themes",
-        "openWB/system/ip_address",
       ],
     };
   },
@@ -821,9 +812,6 @@ export default {
     },
   },
   methods: {
-    getIpAddress() {
-      return this.$store.state.mqtt["openWB/system/ip_address"];
-    },
     getWebThemeDefaults(webThemeType) {
       const webThemeDefaults = this.webThemeList.find((element) => element.value == webThemeType);
       if (Object.prototype.hasOwnProperty.call(webThemeDefaults, "defaults")) {

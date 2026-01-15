@@ -98,10 +98,7 @@ export default {
   emits: ["sendCommand", "save"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/system/dataprotection_acknowledged",
-        // "openWB/system/usage_terms_acknowledged", // already done in app.vue
-      ],
+      mqttTopicsToSubscribe: ["openWB/system/dataprotection_acknowledged", "openWB/system/usage_terms_acknowledged"],
     };
   },
   methods: {
