@@ -203,26 +203,12 @@ export default {
     return {
       mqttTopicsToSubscribe: [
         "openWB/general/extern",
-        "openWB/optional/led/active",
-        "ToDo/optional/led/instant_blocked",
-        "ToDo/optional/led/pv_blocked",
-        "ToDo/optional/led/scheduled_blocked",
-        "ToDo/optional/led/standby_blocked",
-        "ToDo/optional/led/stop_blocked",
-        "ToDo/optional/led/instant",
-        "ToDo/optional/led/pv",
-        "ToDo/optional/led/scheduled",
-        "ToDo/optional/led/standby",
-        "ToDo/optional/led/stop",
         "openWB/optional/int_display/active",
-        "openWB/optional/int_display/on_if_plugged_in",
+        "openWB/optional/int_display/on_if_plugged_in", // not yet implemented
         "openWB/optional/int_display/only_local_charge_points",
-        "openWB/optional/int_display/pin_active",
-        "openWB/optional/int_display/pin_code",
         "openWB/optional/int_display/rotation",
         "openWB/optional/int_display/standby",
         "openWB/optional/int_display/theme",
-        "openWB/optional/rfid/active",
         "openWB/system/configurable/display_themes",
       ],
     };

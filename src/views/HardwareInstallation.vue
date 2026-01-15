@@ -265,7 +265,6 @@ export default {
     return {
       mqttTopicsToSubscribe: [
         "openWB/general/extern",
-        "openWB/counter/get/hierarchy",
         "openWB/system/device/+/config",
         "openWB/system/device/+/component/+/config",
         "openWB/system/configurable/devices_components",

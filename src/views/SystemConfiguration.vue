@@ -340,7 +340,7 @@ export default {
   data() {
     return {
       mqttTopicsToSubscribe: [
-        "openWB/system/optionBackup",
+        "openWB/general/extern",
         "openWB/system/secondary_auto_update",
         "openWB/system/current_commit",
         "openWB/system/current_branch_commit",
@@ -354,7 +354,6 @@ export default {
         "openWB/chargepoint/+/get/version",
         "openWB/chargepoint/+/get/current_branch",
         "openWB/chargepoint/+/config",
-        "openWB/general/extern",
       ],
       warningAcknowledged: false,
       selectedTag: "*HEAD*",

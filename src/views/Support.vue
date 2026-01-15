@@ -206,7 +206,6 @@ export default {
         "openWB/system/device/+/component/+/config",
         "openWB/vehicle/+/name",
         "openWB/vehicle/+/info",
-
         "openWB/system/current_commit",
         "openWB/system/current_branch_commit",
       ],
