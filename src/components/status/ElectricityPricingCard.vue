@@ -265,19 +265,23 @@ export default {
           });
         }
         // repeat last dataset
-        const lastData = myData.slice(-1)[0];
-        // midnight as default
-        let nextTimestamp = this.endOfToday;
-        if (myData.length > 1) {
-          // same offset minus 1ms as the last one
-          const previousData = myData.slice(-2, -1)[0];
-          nextTimestamp = lastData.timestamp + lastData.timestamp - previousData.timestamp - 1;
+        if (myData.length > 0) {
+          const lastData = myData.slice(-1)[0];
+          // midnight as default
+          let nextTimestamp = this.endOfToday;
+          if (myData.length > 1) {
+            // same offset minus 1ms as the last one
+            const previousData = myData.slice(-2, -1)[0];
+            nextTimestamp = lastData.timestamp + lastData.timestamp - previousData.timestamp - 1;
+          }
+          myData.push({
+            timestamp: nextTimestamp,
+            price: lastData.price,
+          });
         }
-        myData.push({
-          timestamp: nextTimestamp,
-          price: lastData.price,
-        });
         dataObject.datasets[0].data = myData;
+      } else {
+        dataObject.datasets[0].hidden = true;
       }
 
       // Stromtarif-Preise
