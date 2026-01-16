@@ -301,7 +301,7 @@
       </openwb-base-card>
       <openwb-base-submit-buttons
         form-name="batteryConfigForm"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -342,6 +342,17 @@ export default {
         "openWB/general/chargemode_config/pv_charging/max_bat_soc",
         "openWB/bat/config/bat_control_permitted",
         "openWB/bat/get/power_limit_controllable",
+        "openWB/bat/config/power_limit_mode",
+      ],
+      mqttTopicsToPublish: [
+        "openWB/general/chargemode_config/pv_charging/bat_mode",
+        "openWB/general/chargemode_config/pv_charging/min_bat_soc",
+        "openWB/general/chargemode_config/pv_charging/max_bat_soc",
+        "openWB/general/chargemode_config/pv_charging/bat_power_reserve",
+        "openWB/general/chargemode_config/pv_charging/bat_power_reserve_active",
+        "openWB/general/chargemode_config/pv_charging/bat_power_discharge",
+        "openWB/general/chargemode_config/pv_charging/bat_power_discharge_active",
+        "openWB/bat/config/bat_control_permitted",
         "openWB/bat/config/power_limit_mode",
       ],
     };

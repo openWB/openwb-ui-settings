@@ -450,7 +450,7 @@
 
       <openwb-base-submit-buttons
         form-name="chargePointInstallationForm"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -507,6 +507,7 @@ export default {
         "openWB/system/configurable/chargepoints",
         "openWB/system/configurable/chargepoints_internal",
       ],
+      mqttTopicsToPublish: ["openWB/chargepoint/+/config", "openWB/chargepoint/template/+"],
       chargePointToAdd: undefined,
       showChargePointModal: false,
       modalChargePointIndex: undefined,

@@ -505,6 +505,7 @@ export default {
         "openWB/system/security/user_management_active",
         "$CONTROL/dynamic-security/v1/response",
       ],
+      mqttTopicsToPublish: ["openWB/general/allow_unencrypted_access", "openWB/system/security/user_management_active"],
       activeControlCommand: null,
       controlCommandsQueue: [],
       clients: [],
@@ -656,7 +657,7 @@ export default {
         console.info("User management deactivated, removing mqtt cookie.");
         this.$cookies.remove("mqtt");
       }
-      this.$emit("save");
+      this.$emit("save", this.mqttTopicsToPublish);
     },
     sendControlCommand(command, parameters = {}) {
       if (this.activeControlCommand !== null) {

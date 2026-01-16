@@ -99,6 +99,7 @@ export default {
   data() {
     return {
       mqttTopicsToSubscribe: ["openWB/system/dataprotection_acknowledged", "openWB/system/usage_terms_acknowledged"],
+      mqttTopicsToPublish: ["openWB/system/dataprotection_acknowledged", "openWB/system/usage_terms_acknowledged"],
     };
   },
   methods: {
@@ -109,7 +110,7 @@ export default {
       });
     },
     async onSaveLegal() {
-      this.$emit("save");
+      this.$emit("save", this.mqttTopicsToPublish);
       await new Promise((resolve) => {
         const stopWatching = this.$watch(
           () => this.$store.state.local.savingData,

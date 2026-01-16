@@ -733,7 +733,7 @@
       </openwb-base-card>
       <openwb-base-submit-buttons
         form-name="generalConfigForm"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -785,6 +785,17 @@ export default {
         "openWB/general/temporary_charge_templates_active",
         "openWB/general/web_theme",
         "openWB/system/configurable/web_themes",
+      ],
+      mqttTopicsToPublish: [
+        "openWB/general/charge_log_data_config",
+        "openWB/general/control_interval",
+        "openWB/general/extern",
+        "openWB/general/grid_protection_configured",
+        "openWB/general/http_api",
+        "openWB/general/modbus_control",
+        "openWB/general/range_unit",
+        "openWB/general/temporary_charge_templates_active",
+        "openWB/general/web_theme",
       ],
     };
   },
