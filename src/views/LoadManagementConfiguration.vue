@@ -217,7 +217,7 @@
 
       <openwb-base-submit-buttons
         form-name="loadManagementConfigForm"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -263,6 +263,15 @@ export default {
         "openWB/counter/+/config/max_total_power",
         "openWB/pv/+/config/max_ac_out",
         "openWB/chargepoint/+/config",
+      ],
+      mqttTopicsToPublish: [
+        "openWB/counter/config/consider_less_charging",
+        "openWB/counter/config/home_consumption_source_id",
+        "openWB/counter/+/config/max_power_errorcase",
+        "openWB/counter/+/config/max_currents",
+        "openWB/counter/+/config/max_total_power",
+        "openWB/pv/+/config/max_ac_out",
+        "openWB/counter/get/hierarchy",
       ],
     };
   },

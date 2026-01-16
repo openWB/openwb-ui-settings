@@ -221,7 +221,7 @@
       </openwb-base-card>
       <openwb-base-submit-buttons
         form-name="generalChargeConfigForm"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -256,6 +256,16 @@ export default {
         "openWB/optional/ocpp/config",
         "openWB/system/configurable/flexible_tariffs",
         "openWB/system/configurable/grid_fees",
+      ],
+      mqttTopicsToPublish: [
+        "openWB/general/chargemode_config/unbalanced_load",
+        "openWB/general/chargemode_config/unbalanced_load_limit",
+        "openWB/general/prices/bat",
+        "openWB/general/prices/grid",
+        "openWB/general/prices/pv",
+        "openWB/optional/ep/flexible_tariff/provider",
+        "openWB/optional/ep/grid_fee/provider",
+        "openWB/optional/ocpp/config",
       ],
     };
   },

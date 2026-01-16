@@ -5,6 +5,7 @@ export default {
   data() {
     return {
       mqttTopicsToSubscribe: [],
+      mqttTopicsToPublish: [],
     };
   },
   computed: {
