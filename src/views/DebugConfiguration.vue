@@ -27,7 +27,7 @@
       </openwb-base-card>
       <openwb-base-submit-buttons
         form-name="debugConfigForm"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -55,6 +55,7 @@ export default {
   data() {
     return {
       mqttTopicsToSubscribe: ["openWB/general/extern", "openWB/system/debug_level"],
+      mqttTopicsToPublish: ["openWB/system/debug_level"],
       logFiles: [
         {
           title: "Main-Log",

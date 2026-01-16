@@ -234,7 +234,7 @@
       </openwb-base-card>
       <openwb-base-submit-buttons
         form-name="optionalComponentsForm"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -264,6 +264,12 @@ export default {
         "openWB/vehicle/+/name",
         "openWB/vehicle/+/charge_template",
         "openWB/vehicle/+/tag_id",
+      ],
+      mqttTopicsToPublish: [
+        "openWB/optional/rfid/active",
+        "openWB/chargepoint/template/+",
+        "openWB/vehicle/+/tag_id",
+        "openWB/vehicle/template/charge_template/+",
       ],
       tempIdTagList: {},
     };

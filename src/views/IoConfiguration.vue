@@ -149,7 +149,7 @@
       </openwb-base-card>
       <openwb-base-submit-buttons
         form-name="ioConfigForm"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -195,6 +195,7 @@ export default {
         "openWB/chargepoint/+/config",
         "openWB/system/device/+/component/+/config",
       ],
+      mqttTopicsToPublish: ["openWB/system/io/+/config", "openWB/io/action/+/config"],
       showIoDeviceDeleteModal: false,
       modalIoDeviceIndex: undefined,
       ioDeviceToAdd: undefined,
@@ -265,10 +266,7 @@ export default {
         : "I/O-Gerät " + ioDeviceIndex;
     },
     addIoDevice() {
-      this.$emit("send-command", {
-        command: "addIoDevice",
-        data: { type: this.ioDeviceToAdd },
-      });
+      this.sendSystemCommand("addIoDevice", { type: this.ioDeviceToAdd });
     },
     removeIoDeviceModal(ioDevice, event) {
       // prevent further processing of the click event
@@ -279,17 +277,11 @@ export default {
     removeIoDevice(ioDeviceIndex, event) {
       this.showIoDeviceDeleteModal = false;
       if (event == "confirm") {
-        this.$emit("send-command", {
-          command: "removeIoDevice",
-          data: { id: ioDeviceIndex },
-        });
+        this.sendSystemCommand("removeIoDevice", { id: ioDeviceIndex });
       }
     },
     addIoAction() {
-      this.$emit("send-command", {
-        command: "addIoAction",
-        data: { type: this.ioActionToAdd },
-      });
+      this.sendSystemCommand("addIoAction", { type: this.ioActionToAdd });
     },
     removeIoActionModal(ioAction, event) {
       // prevent further processing of the click event
@@ -300,10 +292,7 @@ export default {
     removeIoAction(ioActionIndex, event) {
       this.showIoActionDeleteModal = false;
       if (event == "confirm") {
-        this.$emit("send-command", {
-          command: "removeIoAction",
-          data: { id: ioActionIndex },
-        });
+        this.sendSystemCommand("removeIoAction", { id: ioActionIndex });
       }
     },
     sendSystemCommand(command, data) {

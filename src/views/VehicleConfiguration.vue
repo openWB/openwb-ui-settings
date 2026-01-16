@@ -1379,7 +1379,7 @@
 
       <openwb-base-submit-buttons
         form-name="vehicleConfigForm"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -1462,6 +1462,17 @@ export default {
         "openWB/system/configurable/soc_modules",
         "openWB/vehicle/+/soc_module/general_config",
         "openWB/vehicle/+/soc_module/config",
+      ],
+      mqttTopicsToPublish: [
+        "openWB/vehicle/+/name",
+        "openWB/vehicle/+/info",
+        "openWB/vehicle/+/tag_id",
+        "openWB/vehicle/+/ev_template",
+        "openWB/vehicle/+/charge_template",
+        "openWB/vehicle/+/soc_module/general_config",
+        "openWB/vehicle/+/soc_module/config",
+        "openWB/vehicle/template/ev_template/+",
+        "openWB/vehicle/template/charge_template/+",
       ],
       showVehicleModal: false,
       modalVehicleIndex: undefined,

@@ -95,21 +95,34 @@ export default {
         return new Promise((resolve) => setTimeout(resolve, milliseconds));
       }
 
+      function isWildcardTopic(topic) {
+        return topic.includes("#") || topic.includes("+");
+      }
+
       this.$store.state.local.savingData = true;
       // collect data
       let topics = {};
       if (topicsToSave === undefined) {
-        console.debug("no topics defined, so save everything we have in store");
-        topics = this.$store.state.mqtt;
-      } else {
-        if (Array.isArray(topicsToSave)) {
-          topicsToSave.forEach((topicToSave) => {
+        console.error("no topics to save defined!");
+        return;
+      }
+      if (Array.isArray(topicsToSave)) {
+        topicsToSave.forEach((topicToSave) => {
+          if (isWildcardTopic(topicToSave)) {
+            console.debug("expanding wildcard topic:", topicToSave);
+            const wildcardTopics = this.getWildcardTopics(topicToSave);
+            Object.entries(wildcardTopics).forEach(([wildcardTopic, payload]) => {
+              console.debug("adding topic to save:", wildcardTopic);
+              topics[wildcardTopic] = payload;
+            });
+          } else {
             console.debug("adding topic to save:", topicToSave);
             topics[topicToSave] = this.$store.state.mqtt[topicToSave];
-          });
-        } else {
-          console.error("expected array, got ", typeof topicsToSave);
-        }
+          }
+        });
+      } else {
+        console.error("expected array, got ", typeof topicsToSave);
+        return;
       }
       for (const [topic, payload] of Object.entries(topics)) {
         // skip topics starting with "$CONTROL"
@@ -122,7 +135,7 @@ export default {
         this.doPublish(setTopic, payload);
         // publishing without sleeping is inconsistent! (mqtt v4.3.7)
         // This may change with newer versions.
-        await sleep(100);
+        await sleep(50);
       }
       this.$store.state.local.savingData = false;
     },

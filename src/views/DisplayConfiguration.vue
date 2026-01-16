@@ -182,7 +182,7 @@
       </openwb-base-card>
       <openwb-base-submit-buttons
         form-name="optionalComponentsForm"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -210,6 +210,13 @@ export default {
         "openWB/optional/int_display/standby",
         "openWB/optional/int_display/theme",
         "openWB/system/configurable/display_themes",
+      ],
+      mqttTopicsToPublish: [
+        "openWB/optional/int_display/active",
+        "openWB/optional/int_display/only_local_charge_points",
+        "openWB/optional/int_display/rotation",
+        "openWB/optional/int_display/standby",
+        "openWB/optional/int_display/theme",
       ],
     };
   },
