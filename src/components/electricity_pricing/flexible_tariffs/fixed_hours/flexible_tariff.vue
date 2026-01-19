@@ -6,11 +6,11 @@
     <openwb-base-number-input
       title="Standardpreis"
       :step="0.001"
-      :precision="2"
+      :precision="3"
       required
       unit="ct/kWh"
       :model-value="value.configuration.default_price * 100"
-      @update:model-value="value.configuration.default_price = parseFloat(($event / 100).toFixed(4))"
+      @update:model-value="value.configuration.default_price = parseFloat(($event / 100).toFixed(5))"
     >
       <template #help> Standardpreis sofern kein anderer Tarif aktiv ist. </template>
     </openwb-base-number-input>
