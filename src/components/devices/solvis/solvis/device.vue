@@ -1,7 +1,7 @@
 <template>
   <div class="device-solvis">
     <openwb-base-heading> Einstellungen für Solvis </openwb-base-heading>
-    <openwb-base-alert subtype="info"> Für Solvis Wärmepumpe mit SC3 Regler </openwb-base-alert>
+    <openwb-base-alert subtype="info"> Für Solvis Wärmepumpe mit SC3 Regler, Modbus TCP muss im Installateur Menü eingeschaltet sein! </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
       subtype="host"
