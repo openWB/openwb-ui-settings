@@ -13,7 +13,7 @@
     </template>
     <template #default>
       <div
-        v-if="!readonly"
+        v-if="!(readonly || disabled)"
         class="w-100"
       >
         <div class="input-group">
@@ -32,6 +32,7 @@
             type="text"
             class="form-control"
             v-bind="$attrs"
+            :disabled="disabled"
             @keyup.enter="addTag"
           />
           <select
@@ -41,6 +42,7 @@
             v-model="newTag"
             class="form-control"
             v-bind="$attrs"
+            :disabled="disabled"
             @keyup.enter="addTag"
           >
             <option
@@ -88,7 +90,7 @@
           </slot>
           {{ tag }}
           <font-awesome-icon
-            v-if="!readonly"
+            v-if="!(readonly || disabled)"
             class="clickable remove-element"
             :icon="['fas', 'times-circle']"
             @click="removeTag(index)"
@@ -140,6 +142,12 @@ export default {
       type: String,
       default: () => {
         return "Keine Elemente zugeordnet.";
+      },
+    },
+    disabled: {
+      type: Boolean,
+      default: () => {
+        return false;
       },
     },
     readonly: {
