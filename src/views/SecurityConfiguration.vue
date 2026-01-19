@@ -217,6 +217,9 @@
                   <template #input-prefix>
                     <font-awesome-icon :icon="['fas', 'users']" />
                   </template>
+                  <template #element-prefix>
+                    <font-awesome-icon :icon="['fas', 'users']" />
+                  </template>
                 </openwb-base-array-input>
                 <openwb-base-array-input
                   title="Zugewiesene Rollen"
@@ -229,7 +232,10 @@
                   "
                 >
                   <template #input-prefix>
-                    <font-awesome-icon :icon="['fas', 'users-rectangle']" />
+                    <font-awesome-icon :icon="['fas', 'file-shield']" />
+                  </template>
+                  <template #element-prefix>
+                    <font-awesome-icon :icon="['fas', 'file-shield']" />
                   </template>
                 </openwb-base-array-input>
                 <openwb-base-textarea
@@ -295,7 +301,7 @@
             </template>
             <template #actions="slotProps">
               <openwb-base-avatar
-                v-if="!slotProps.collapsed && group !== anonymousGroupName"
+                v-if="!slotProps.collapsed && ![anonymousGroupName, userGroupName].includes(group)"
                 class="bg-danger clickable"
                 title="Gruppe löschen"
                 @click.stop="deleteGroup(group)"
@@ -311,6 +317,14 @@
                 Die Gruppe "{{ group }}" kann nicht gelöscht werden, da sie für den anonymen Zugriff (ohne Anmeldung)
                 auf openWB benötigt wird.
               </openwb-base-alert>
+              <openwb-base-alert
+                v-if="group === userGroupName"
+                subtype="info"
+              >
+                Die Gruppe "{{ group }}" kann nicht bearbeitet werden, da sie von openWB für reguläre Benutzer verwendet
+                wird. Es wird empfohlen, diese Gruppe für alle Benutzer zu verwenden und weitere Rollen durch separate
+                Gruppen oder direkt bei den Benutzern zuzuweisen.
+              </openwb-base-alert>
               <form :name="`groupForm-${group}`">
                 <openwb-base-text-input
                   v-model="groupDetails[group].groupname"
@@ -322,7 +336,7 @@
                   v-model="groupDetails[group].textname"
                   title="Beschreibung"
                   subtype="text"
-                  :disabled="group === anonymousGroupName"
+                  :disabled="[anonymousGroupName, userGroupName].includes(group)"
                 />
                 <openwb-base-array-input
                   title="Zugewiesene Benutzer"
@@ -337,10 +351,15 @@
                   <template #input-prefix>
                     <font-awesome-icon :icon="['fas', 'circle-user']" />
                   </template>
+                  <template #element-prefix>
+                    <font-awesome-icon :icon="['fas', 'circle-user']" />
+                  </template>
                 </openwb-base-array-input>
                 <openwb-base-array-input
                   title="Zugewiesene Rollen"
                   :valid-elements="roles"
+                  :disabled="[anonymousGroupName, userGroupName].includes(group)"
+                  :readonly="[anonymousGroupName, userGroupName].includes(group)"
                   :model-value="groupDetails[group].roles.map((role) => role.rolename)"
                   @update:model-value="
                     (newRoles) => {
@@ -349,14 +368,17 @@
                   "
                 >
                   <template #input-prefix>
-                    <font-awesome-icon :icon="['fas', 'users-rectangle']" />
+                    <font-awesome-icon :icon="['fas', 'file-shield']" />
+                  </template>
+                  <template #element-prefix>
+                    <font-awesome-icon :icon="['fas', 'file-shield']" />
                   </template>
                 </openwb-base-array-input>
                 <openwb-base-textarea
                   v-model="groupDetails[group].textdescription"
                   title="Zusatzinformationen"
                   subtype="text"
-                  :disabled="group === anonymousGroupName"
+                  :disabled="[anonymousGroupName, userGroupName].includes(group)"
                 >
                   <template #help> Hier können zusätzliche Informationen zur Gruppe hinterlegt werden. </template>
                 </openwb-base-textarea>
@@ -380,7 +402,7 @@
         :collapsed="true"
       >
         <template #header>
-          <FontAwesomeIcon :icon="['fas', 'users-rectangle']" />
+          <FontAwesomeIcon :icon="['fas', 'file-shield']" />
           Rollen
         </template>
         <openwb-base-alert
@@ -398,6 +420,18 @@
             Funktionen oder Bearbeitung von Ladepunkten, Geräten und Komponenten etc. Rollen können hier nicht
             bearbeitet oder gelöscht werden.
           </openwb-base-alert>
+          <openwb-base-text-input
+            :model-value="rolesVersion"
+            title="Versionsnummer der Rollendefinitionen"
+            disabled
+          >
+            <template #help>
+              Hier wird die aktuell verwendete Rollen-Version der openWB Benutzerverwaltung angezeigt. Diese Version
+              gibt an, welche vordefinierten Rollen und Zugriffsrechte (ACLs) von openWB generiert werden. Bei einem
+              Update von openWB kann sich die Rollen-Version ändern, wodurch neue Rollen hinzugefügt oder bestehende
+              Rollen angepasst werden können.
+            </template>
+          </openwb-base-text-input>
           <openwb-base-textarea
             title="Standard-Zugriffsrechte"
             :model-value="readableAcls(defaultAclAccess)"
@@ -418,7 +452,7 @@
             @expanded="getRole(role)"
           >
             <template #header>
-              <FontAwesomeIcon :icon="['fas', 'users-rectangle']" />
+              <FontAwesomeIcon :icon="['fas', 'file-shield']" />
               {{ role }}
             </template>
             <div v-if="roleDetails[role]">
@@ -473,13 +507,13 @@ import {
   faUser as fasUser,
   faUserSlash as fasUserSlash,
   faUsers as fasUsers,
-  faUsersRectangle as fasUsersRectangle,
+  faFileShield as fasFileShield,
   faPlus as fasPlus,
   faTrash as fasTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasUser, fasUserSlash, fasUsers, fasUsersRectangle, fasPlus, fasTrash);
+library.add(fasUser, fasUserSlash, fasUsers, fasFileShield, fasPlus, fasTrash);
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 
@@ -514,9 +548,11 @@ export default {
       groupDetails: {},
       roles: [],
       roleDetails: {},
+      rolesVersion: null,
       newClientName: null,
       newGroupName: null,
       anonymousGroupName: null,
+      userGroupName: "user",
       defaultAclAccess: [],
       showResetModal: false,
     };
@@ -600,7 +636,14 @@ export default {
               this.getClientsDetails();
               break;
             case "listRoles":
-              this.roles = JSON.parse(JSON.stringify(response.data.roles));
+              this.roles = JSON.parse(JSON.stringify(response.data.roles)).filter((role) => {
+                console.log("Checking role:", JSON.stringify(role));
+                if (role.startsWith("openwb-version:")) {
+                  this.rolesVersion = role.split(":")[1];
+                  return false;
+                }
+                return true;
+              });
               break;
             case "getRole":
               this.roleDetails[response.data.role.rolename] = JSON.parse(JSON.stringify(response.data.role));
