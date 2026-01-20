@@ -7,6 +7,7 @@
       id="message-indicator"
       class="text-light clickable"
       :class="showAllMessages ? 'active' : ''"
+      :title="showAllMessages ? 'nur neue Nachrichten anzeigen' : 'Alle Nachrichten anzeigen'"
       @click="toggleAllMessages"
     >
       <font-awesome-layers full-width>

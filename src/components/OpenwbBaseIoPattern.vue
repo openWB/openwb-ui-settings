@@ -16,18 +16,19 @@
         v-for="(input, index) in value"
         :key="index"
       >
-        <font-awesome-icon
-          :title="getTitle(input)"
-          :icon="getIcon(input)"
-          :class="getIconClass(input)"
-          class="fa-fw clickable"
-          size="2x"
-          :transform="input == 'undefined' ? 'shrink-6' : null"
-          :mask="input == 'undefined' ? ['fas', 'square'] : null"
-          @click.stop.prevent="toggleInput(index, input)"
-          @mousedown.stop.prevent
-          @mouseup.stop.prevent
-        />
+        <openwb-base-tooltip :description="getTitle(input)">
+          <font-awesome-icon
+            :icon="getIcon(input)"
+            :class="getIconClass(input)"
+            class="fa-fw clickable"
+            size="2x"
+            :transform="input == 'undefined' ? 'shrink-6' : null"
+            :mask="input == 'undefined' ? ['fas', 'square'] : null"
+            @click.stop.prevent="toggleInput(index, input)"
+            @mousedown.stop.prevent
+            @mouseup.stop.prevent
+          />
+        </openwb-base-tooltip>
       </span>
     </template>
   </openwb-base-setting-element>
