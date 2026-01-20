@@ -14,20 +14,20 @@
           size="lg"
         />
         <span class="non-selectable"> {{ loggedInUser }} </span>
-        <span title="Abmelden">
+        <openwb-base-tooltip description="Abmelden">
           <FontAwesomeIcon
             class="text-light clickable px-2"
             :icon="['fas', 'arrow-right-from-bracket']"
             size="lg"
             @click="showLogoutModal = true"
           />
-        </span>
+        </openwb-base-tooltip>
       </span>
       <span
         v-else
         class="pill bg-secondary"
       >
-        <span title="Nicht angemeldet">
+        <openwb-base-tooltip description="Nicht angemeldet">
           <FontAwesomeLayers>
             <FontAwesomeIcon :icon="['fas', 'circle-user']" />
             <FontAwesomeIcon
@@ -35,15 +35,15 @@
               color="red"
             />
           </FontAwesomeLayers>
-        </span>
-        <span title="Anmelden">
+        </openwb-base-tooltip>
+        <openwb-base-tooltip description="Anmelden">
           <FontAwesomeIcon
             class="text-light clickable px-2"
             :icon="['fas', 'arrow-right-to-bracket']"
             size="lg"
             @click="showLoginModal = true"
           />
-        </span>
+        </openwb-base-tooltip>
       </span>
     </div>
   </teleport>
