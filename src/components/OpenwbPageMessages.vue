@@ -52,7 +52,7 @@
       @dismiss="dismissMessage"
       @hide="hideMessage"
     >
-      <span v-html="message.message" />
+      <span v-html="sanitizeMessage(message.message)" />
     </openwb-base-toast>
   </div>
 </template>
@@ -178,6 +178,32 @@ export default {
       if (!this.hiddenMessages.includes(event.topic)) {
         this.hiddenMessages.push(event.topic);
       }
+    },
+    /**
+     * Sanitize HTML message to allow only safe tags like links and line breaks
+     */
+    sanitizeMessage(message) {
+      if (!message) return '';
+      
+      // Escape all HTML first
+      const escaped = message
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;');
+      
+      // Then allow specific safe tags back
+      return escaped
+        // Allow <br> tags
+        .replace(/&lt;br\s*\/?&gt;/gi, '<br>')
+        // Allow <a> tags with href and target attributes
+        .replace(/&lt;a\s+href=&quot;([^&"]+)&quot;(?:\s+target=&quot;([^&"]+)&quot;)?&gt;([^&]+)&lt;\/a&gt;/gi, 
+          '<a href="$1" target="$2" rel="noopener noreferrer">$3</a>')
+        // Allow <strong> and <b> tags
+        .replace(/&lt;(strong|b)&gt;([^&]+)&lt;\/(strong|b)&gt;/gi, '<$1>$2</$3>')
+        // Allow <em> and <i> tags
+        .replace(/&lt;(em|i)&gt;([^&]+)&lt;\/(em|i)&gt;/gi, '<$1>$2</$3>');
     },
   },
 };
