@@ -223,11 +223,11 @@
                 </openwb-base-array-input>
                 <openwb-base-array-input
                   title="Zugewiesene Rollen"
-                  :valid-elements="roles"
+                  :valid-elements="rolesList.map((role) => ({ value: role.name, label: role.friendlyName }))"
                   :model-value="clientDetails[client].roles.map((role) => role.rolename)"
                   @update:model-value="
                     (newRoles) => {
-                      clientDetails[client].roles = newRoles.map((roleName) => ({ rolename: roleName }));
+                      clientDetails[client].roles = newRoles.map((name) => ({ rolename: name }));
                     }
                   "
                 >
@@ -357,13 +357,13 @@
                 </openwb-base-array-input>
                 <openwb-base-array-input
                   title="Zugewiesene Rollen"
-                  :valid-elements="roles"
+                  :valid-elements="rolesList.map((role) => ({ value: role.name, label: role.friendlyName }))"
                   :disabled="[anonymousGroupName, userGroupName].includes(group)"
                   :readonly="[anonymousGroupName, userGroupName].includes(group)"
                   :model-value="groupDetails[group].roles.map((role) => role.rolename)"
                   @update:model-value="
                     (newRoles) => {
-                      groupDetails[group].roles = newRoles.map((roleName) => ({ rolename: roleName }));
+                      groupDetails[group].roles = newRoles.map((name) => ({ rolename: name }));
                     }
                   "
                 >
@@ -445,39 +445,39 @@
           </openwb-base-textarea>
           <hr />
           <openwb-base-card
-            v-for="role in roles"
-            :key="role"
+            v-for="role in rolesList"
+            :key="role.name"
             :collapsible="true"
             :collapsed="true"
-            @expanded="getRole(role)"
+            @expanded="getRole(role.name)"
           >
             <template #header>
               <FontAwesomeIcon :icon="['fas', 'file-shield']" />
-              {{ role }}
+              {{ role.friendlyName }}
             </template>
-            <div v-if="roleDetails[role]">
-              <form :name="`roleForm-${role}`">
+            <div v-if="roleDetails[role.name]">
+              <form :name="`roleForm-${role.name}`">
                 <openwb-base-text-input
-                  v-model="roleDetails[role].rolename"
+                  v-model="roleDetails[role.name].rolename"
                   title="Rollenname"
                   subtype="text"
                   disabled
                 />
                 <openwb-base-text-input
-                  v-model="roleDetails[role].textname"
+                  v-model="roleDetails[role.name].textname"
                   title="Beschreibung"
                   subtype="text"
                   disabled
                 />
                 <openwb-base-alert
-                  v-if="roleDetails[role].textdescription"
+                  v-if="roleDetails[role.name].textdescription"
                   subtype="info"
                 >
-                  {{ roleDetails[role].textdescription }}
+                  {{ roleDetails[role.name].textdescription }}
                 </openwb-base-alert>
                 <openwb-base-textarea
                   title="Zugriffsrechte (ACLs)"
-                  :model-value="readableAcls(roleDetails[role].acls)"
+                  :model-value="readableAcls(roleDetails[role.name].acls)"
                   disabled
                 >
                   <template #help>
@@ -537,6 +537,11 @@ export default {
       mqttTopicsToSubscribe: [
         "openWB/general/allow_unencrypted_access",
         "openWB/system/security/user_management_active",
+        "openWB/system/device/+/component/+/config",
+        "openWB/chargepoint/+/config",
+        "openWB/system/io/+/config",
+        "openWB/io/action/+/config",
+        "openWB/vehicle/+/name",
         "$CONTROL/dynamic-security/v1/response",
       ],
       mqttTopicsToPublish: ["openWB/general/allow_unencrypted_access", "openWB/system/security/user_management_active"],
@@ -546,7 +551,7 @@ export default {
       clientDetails: {},
       groups: [],
       groupDetails: {},
-      roles: [],
+      rawRoles: [],
       roleDetails: {},
       rolesVersion: null,
       newClientName: null,
@@ -594,6 +599,169 @@ export default {
           .join("\n");
       };
     },
+    componentName() {
+      return (componentId) => {
+        const nameTopic = `openWB/system/device/+/component/${componentId}/config`;
+        return Object.values(this.getWildcardTopics(nameTopic))[0]?.name || undefined;
+      };
+    },
+    chargePointName() {
+      return (chargePointId) => {
+        const nameTopic = `openWB/chargepoint/${chargePointId}/config`;
+        return this.$store.state.mqtt[nameTopic]?.name || undefined;
+      };
+    },
+    vehicleName() {
+      return (vehicleId) => {
+        const nameTopic = `openWB/vehicle/${vehicleId}/name`;
+        return this.$store.state.mqtt[nameTopic] || undefined;
+      };
+    },
+    ioDeviceName() {
+      return (deviceId) => {
+        const nameTopic = `openWB/system/io/${deviceId}/config`;
+        return this.$store.state.mqtt[nameTopic]?.name || undefined;
+      };
+    },
+    ioActionName() {
+      return (actionId) => {
+        const nameTopic = `openWB/io/action/${actionId}/config`;
+        return this.$store.state.mqtt[nameTopic]?.name || undefined;
+      };
+    },
+    routes() {
+      const routes = this.$router.getRoutes();
+      console.debug("All route names:", routes.map((r) => r.name).sort());
+      return routes;
+    },
+    routeName() {
+      return (view) => {
+        // convert to pascal case
+        const pascalCaseView = view
+          .split("-")
+          .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+          .join("");
+        const myRoute = this.routes.find((route) => {
+          return route.name === pascalCaseView;
+        });
+        if (myRoute === undefined) {
+          console.warn("No route found for view:", view, "(searched for route name:", pascalCaseView + ")");
+          return;
+        }
+        return myRoute.meta.heading;
+      };
+    },
+    friendlyRoleName() {
+      return (role) => {
+        let view = null;
+        switch (role) {
+          case "charge-log-access":
+          case "install-assistant-access":
+          case "data-management-access":
+          case "legal-settings-access":
+            view = role.replace("-access", "");
+            break;
+          case "settings-access":
+            return "Einstellungen: Zugang ermöglichen";
+          case "legacy-smart-home-configuration-access":
+            return "Einstellungen: Konfiguration - SmartHome";
+          case "full-access":
+            return "Voller Zugang";
+          case "dynsec-admin":
+            return "Sicherheits-Administrator";
+          case "basic-display-data":
+            return "Basisdaten: Display";
+          case "basic-system-data":
+            return "Basisdaten: System";
+          case "basic-theme-data":
+            return "Basisdaten: Hauptseite/Theme";
+          case "basic-user-data":
+            return "Basisdaten: Benutzer";
+          case "electricity-price-access":
+            return "Daten: Strompreise (lesen)";
+          case "graph-access":
+            return "Daten: Verlaufsdiagramm (lesen)";
+          case "home-consumption-access":
+            return "Daten: Hausverbrauch (lesen)";
+        }
+        const roleParts = role.split("-");
+        if (
+          role.endsWith("-configuration-access") ||
+          role.endsWith("-installation-access") ||
+          (role.endsWith("-access") && roleParts.length == 2)
+        ) {
+          view = role.replace("-access", "");
+        }
+        if (view !== null) {
+          const routeName = this.routeName(view);
+          if (routeName !== undefined) {
+            return `Einstellungen: ${routeName}`;
+          }
+        }
+        switch (roleParts[0]) {
+          case "counter":
+            if (!isNaN(roleParts[1])) {
+              return `Daten: Zähler '${this.componentName(roleParts[1]) || roleParts[1]}' (${roleParts[1]})`;
+            }
+            break;
+          case "inverter":
+            if (!isNaN(roleParts[1])) {
+              return `Daten: Wechselrichter '${this.componentName(roleParts[1]) || roleParts[1]}' (${roleParts[1]})`;
+            }
+            if (roleParts[1] == "sum") {
+              return "Daten: Wechselrichter Summendaten";
+            }
+            break;
+          case "bat":
+            if (!isNaN(roleParts[1])) {
+              return `Daten: Speicher '${this.componentName(roleParts[1]) || roleParts[1]}' (${roleParts[1]})`;
+            }
+            if (roleParts[1] == "sum") {
+              return "Daten: Speicher Summendaten";
+            }
+            break;
+          case "chargepoint":
+            if (!isNaN(roleParts[1])) {
+              return `Daten: Ladepunkt '${this.chargePointName(roleParts[1]) || roleParts[1]}' (${roleParts[1]})`;
+            }
+            if (roleParts[1] === "sum") {
+              return "Daten: Ladepunkt Summendaten";
+            }
+            break;
+          case "vehicle":
+            if (!isNaN(roleParts[1])) {
+              return `Daten: Fahrzeug '${this.vehicleName(roleParts[1]) || roleParts[1]}' (${roleParts[1]})`;
+            }
+            if (roleParts[1] === "configuration") {
+              return "Einstellungen: Fahrzeuge";
+            }
+            break;
+          case "io":
+            switch (roleParts[1]) {
+              case "configuration":
+                return "Einstellungen: Ein-/Ausgänge";
+              case "device":
+                return `Daten: Ein-/Ausgangs-Gerät '${this.ioDeviceName(roleParts[2]) || roleParts[2]}' (${roleParts[2]})`;
+              case "action":
+                return `Daten: Ein-/Ausgangs-Aktion '${this.ioActionName(roleParts[2]) || roleParts[2]}' (${roleParts[2]})`;
+            }
+            break;
+        }
+        return `*${role}*`;
+      };
+    },
+    rolesList() {
+      // return roles with friendly names, sorted by friendly name
+      return this.roles
+        .map((role) => {
+          return { name: role, friendlyName: this.friendlyRoleName(role) };
+        })
+        .sort((a, b) => {
+          if (a.friendlyName < b.friendlyName) return -1;
+          if (a.friendlyName > b.friendlyName) return 1;
+          return 0;
+        });
+    },
   },
   watch: {
     dynSecResponse(newVal) {
@@ -637,7 +805,6 @@ export default {
               break;
             case "listRoles":
               this.roles = JSON.parse(JSON.stringify(response.data.roles)).filter((role) => {
-                console.log("Checking role:", JSON.stringify(role));
                 if (role.startsWith("openwb-version:")) {
                   this.rolesVersion = role.split(":")[1];
                   return false;
