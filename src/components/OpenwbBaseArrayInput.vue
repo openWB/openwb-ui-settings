@@ -54,9 +54,9 @@
             <option
               v-for="(option, index) in remainingElements"
               :key="index"
-              :value="option"
+              :value="option.value || option"
             >
-              {{ option }}
+              {{ option.label || option.value || option }}
             </option>
           </select>
           <div class="input-group-append">
@@ -88,7 +88,7 @@
           <slot name="element-prefix">
             <font-awesome-icon :icon="['fas', 'tag']" />
           </slot>
-          {{ tag }}
+          {{ tagLabel(tag) }}
           <font-awesome-icon
             v-if="!(readonly || disabled)"
             class="clickable remove-element"
@@ -134,6 +134,7 @@ export default {
     },
     validElements: {
       type: Array,
+      // can be a simple Array of values or an Array of Objects with 'value' and 'label' properties
       default: () => {
         return null;
       },
@@ -176,7 +177,7 @@ export default {
       if (this.validElements === null) {
         return null;
       } else {
-        return this.validElements.filter((el) => !this.value.includes(el));
+        return this.validElements.filter((el) => !this.value.includes(el.value || el));
       }
     },
     newTagValid: {
@@ -184,10 +185,22 @@ export default {
         return (
           this.newTag.length > 0 &&
           !this.value.includes(this.newTag) &&
-          (this.validElements === null || this.validElements.includes(this.newTag)) &&
+          (this.validElements === null ||
+            this.validElements.includes(this.newTag) ||
+            this.validElements.some((el) => el.value === this.newTag)) &&
           this.$refs.tagInput?.checkValidity()
         );
       },
+    },
+    tagLabel() {
+      return (tag) => {
+        if (this.validElements === null) {
+          return tag;
+        } else {
+          const found = this.validElements.find((el) => (el.value || el) === tag);
+          return found ? found.label || found.value || found : tag;
+        }
+      };
     },
   },
   methods: {
