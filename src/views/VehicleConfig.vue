@@ -667,7 +667,7 @@
         </div>
         <div v-else>
           <openwb-base-card
-            v-for="{ key: templateKey, template } in chargeTemplates"
+            v-for="(template, templateKey) in chargeTemplates"
             :key="templateKey"
             :title="template.name ? template.name : templateKey"
             :collapsible="true"
@@ -1484,10 +1484,11 @@ export default {
         return this.getWildcardIndexList("openWB/vehicle/+/name");
       },
     },
-    evTemplates: {
-      get() {
-        return this.getWildcardTopics("openWB/vehicle/template/ev_template/+");
-      },
+    evTemplates() {
+      const evTemplates = this.getWildcardTopics("openWB/vehicle/template/ev_template/+");
+      return Object.fromEntries(
+        Object.entries(evTemplates).filter(([, template]) => template && typeof template === "object"),
+      );
     },
     evTemplateList: {
       get() {
@@ -1501,11 +1502,9 @@ export default {
       },
     },
     chargeTemplates() {
-      return (
-        Object.entries(this.getWildcardTopics("openWB/vehicle/template/charge_template/+"))
-          // Filter out invalid templates and prepare the data for the template as an array
-          .filter(([, template]) => template && typeof template === "object")
-          .map(([key, template]) => ({ key, template }))
+      const chargeTemplate = this.getWildcardTopics("openWB/vehicle/template/charge_template/+");
+      return Object.fromEntries(
+        Object.entries(chargeTemplate).filter(([, template]) => template && typeof template === "object"),
       );
     },
     chargeTemplateList: {
