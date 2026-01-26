@@ -1487,6 +1487,8 @@ export default {
     evTemplates() {
       const evTemplates = this.getWildcardTopics("openWB/vehicle/template/ev_template/+");
       return Object.fromEntries(
+        // Filter out temporarily undefined entries caused by async MQTT (unsubscribe/resubscribe),
+        // (on button push, discard changes) so templates never try to render incomplete data.
         Object.entries(evTemplates).filter(([, template]) => template && typeof template === "object"),
       );
     },
@@ -1504,6 +1506,8 @@ export default {
     chargeTemplates() {
       const chargeTemplates = this.getWildcardTopics("openWB/vehicle/template/charge_template/+");
       return Object.fromEntries(
+        // Filter out temporarily undefined entries caused by async MQTT (unsubscribe/resubscribe),
+        // (on button push, discard changes) so templates never try to render incomplete data.
         Object.entries(chargeTemplates).filter(([, template]) => template && typeof template === "object"),
       );
     },
