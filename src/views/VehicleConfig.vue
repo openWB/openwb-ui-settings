@@ -96,7 +96,7 @@
             <openwb-base-text-input
               v-if="vehicleId !== 0"
               title="Fahrzeughersteller "
-              :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/info'].manufacturer"
+              :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/info']?.manufacturer"
               @update:model-value="updateState('openWB/vehicle/' + vehicleId + '/info', $event, 'manufacturer')"
             >
               <template #help> Optional: zusätzliche Information für den Systembericht. </template>
@@ -104,7 +104,7 @@
             <openwb-base-text-input
               v-if="vehicleId !== 0"
               title="Fahrzeugmodell"
-              :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/info'].model"
+              :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/info']?.model"
               @update:model-value="updateState('openWB/vehicle/' + vehicleId + '/info', $event, 'model')"
             >
               <template #help>
@@ -132,7 +132,7 @@
             <hr />
             <div v-if="!installAssistantActive">
               <openwb-base-heading> Fahrzeugzuordnung per ID-Tags </openwb-base-heading>
-              <div v-if="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id'].length > 0">
+              <div v-if="($store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id']?.length ?? 0) > 0">
                 <openwb-base-alert subtype="info">
                   Einstellungen zur Fahrzeugzuordnung finden sich unter
                   <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.
@@ -169,7 +169,7 @@
               class="mb-2"
               title="SoC-Modul des Fahrzeugs"
               :options="socModuleList"
-              :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/soc_module/config'].type"
+              :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/soc_module/config']?.type"
               @update:model-value="updateSelectedSocModule(vehicleId, $event)"
             >
               <template #help>
@@ -189,7 +189,7 @@
                 infolge von zeitlicher Verzögerungen kommen. Hilfestellung erfolgt primär im openWB-Forum.
               </template>
             </openwb-base-select-input>
-            <div v-if="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/soc_module/config'].type">
+            <div v-if="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/soc_module/config']?.type">
               <openwb-base-button-group-input
                 title="SoC direkt aus Fahrzeug auslesen"
                 :buttons="[
@@ -205,7 +205,7 @@
                   },
                 ]"
                 :model-value="
-                  $store.state.mqtt['openWB/vehicle/' + vehicleId + '/soc_module/general_config'].use_soc_from_cp
+                  $store.state.mqtt['openWB/vehicle/' + vehicleId + '/soc_module/general_config']?.use_soc_from_cp
                 "
                 @update:model-value="
                   updateState('openWB/vehicle/' + vehicleId + '/soc_module/general_config', $event, 'use_soc_from_cp')
@@ -233,7 +233,7 @@
                 required
                 :model-value="
                   $store.state.mqtt['openWB/vehicle/' + vehicleId + '/soc_module/general_config']
-                    .request_interval_charging / 60
+                    ?.request_interval_charging / 60
                 "
                 @update:model-value="
                   updateState(
@@ -1484,10 +1484,13 @@ export default {
         return this.getWildcardIndexList("openWB/vehicle/+/name");
       },
     },
-    evTemplates: {
-      get() {
-        return this.getWildcardTopics("openWB/vehicle/template/ev_template/+");
-      },
+    evTemplates() {
+      const evTemplates = this.getWildcardTopics("openWB/vehicle/template/ev_template/+");
+      return Object.fromEntries(
+        // Filter out temporarily undefined entries caused by async MQTT (unsubscribe/resubscribe),
+        // (on button push, discard changes) so templates never try to render incomplete data.
+        Object.entries(evTemplates).filter(([, template]) => template && typeof template === "object"),
+      );
     },
     evTemplateList: {
       get() {
@@ -1500,10 +1503,13 @@ export default {
         return myList;
       },
     },
-    chargeTemplates: {
-      get() {
-        return this.getWildcardTopics("openWB/vehicle/template/charge_template/+");
-      },
+    chargeTemplates() {
+      const chargeTemplates = this.getWildcardTopics("openWB/vehicle/template/charge_template/+");
+      return Object.fromEntries(
+        // Filter out temporarily undefined entries caused by async MQTT (unsubscribe/resubscribe),
+        // (on button push, discard changes) so templates never try to render incomplete data.
+        Object.entries(chargeTemplates).filter(([, template]) => template && typeof template === "object"),
+      );
     },
     chargeTemplateList: {
       get() {
