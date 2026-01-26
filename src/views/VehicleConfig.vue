@@ -1502,9 +1502,9 @@ export default {
       },
     },
     chargeTemplates() {
-      const chargeTemplate = this.getWildcardTopics("openWB/vehicle/template/charge_template/+");
+      const chargeTemplates = this.getWildcardTopics("openWB/vehicle/template/charge_template/+");
       return Object.fromEntries(
-        Object.entries(chargeTemplate).filter(([, template]) => template && typeof template === "object"),
+        Object.entries(chargeTemplates).filter(([, template]) => template && typeof template === "object"),
       );
     },
     chargeTemplateList: {
