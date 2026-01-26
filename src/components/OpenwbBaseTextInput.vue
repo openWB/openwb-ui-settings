@@ -281,6 +281,7 @@ export default {
       required: false,
       default: null,
     },
+    validator: { type: Function, required: false, default: null },
     showQuickButtons: { type: Boolean, default: false },
     addButton: { type: Boolean, default: false },
   },
@@ -306,6 +307,21 @@ export default {
         return this.modelValue;
       },
       set(newValue) {
+        if (this.validator) {
+          console.log("Validating input value:", newValue);
+          const valid = this.validator(newValue);
+          console.log("Validation result:", valid);
+          if (valid !== true) {
+            console.log("Marking input as invalid", JSON.stringify(this.$refs));
+            this.$refs[this.subtype + "Input"].setCustomValidity(valid);
+            this.inputInvalid = true;
+            this.tempValue = newValue;
+          } else {
+            console.log("Input is valid");
+            this.$refs[this.subtype + "Input"].setCustomValidity("");
+            this.inputInvalid = false;
+          }
+        }
         if (this.subtype == "json") {
           try {
             let myNewJsonValue = JSON.parse(newValue);

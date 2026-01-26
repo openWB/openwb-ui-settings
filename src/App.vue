@@ -17,7 +17,7 @@
     </div>
   </div>
   <page-footer />
-  <user-info />
+  <user-info @send-command="sendCommand" />
   <messages />
   <blocker />
 </template>

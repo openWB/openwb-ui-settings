@@ -63,7 +63,10 @@
     :prevent-close="!anonymousAccessAllowed"
     title="Anmelden"
     subtype="success"
-    :buttons="[{ text: 'Anmelden', event: 'login', subtype: 'success' }]"
+    :buttons="[
+      { text: 'Anmelden', event: 'login', subtype: 'success' },
+      { text: 'Kennwort vergessen', event: 'forgot_password', subtype: 'warning' },
+    ]"
     @modal-result="doLogin($event)"
   >
     <form name="loginForm">
@@ -80,6 +83,44 @@
         subtype="password"
         required
         autocomplete="current-password"
+      />
+    </form>
+  </openwb-base-modal-dialog>
+  <openwb-base-modal-dialog
+    v-if="userManagementActive"
+    :show="showPasswordResetModal"
+    title="Kennwort zurücksetzen"
+    subtype="warning"
+    :buttons="[
+      { text: 'Token anfordern', event: 'request_token', subtype: 'success' },
+      { text: 'Kennwort zurücksetzen', event: 'reset_password', subtype: 'primary' },
+      { text: 'Zurück', event: 'close', subtype: 'secondary' },
+    ]"
+    @modal-result="processResetResult($event)"
+  >
+    <form name="requestTokenForm">
+      <openwb-base-text-input
+        v-model="username"
+        title="Benutzername"
+        subtype="user"
+        required
+        autocomplete="username"
+      />
+      <openwb-base-text-input
+        v-model="token"
+        title="Token"
+        subtype="password"
+      />
+      <openwb-base-text-input
+        v-model="password"
+        title="Neues Kennwort"
+        subtype="password"
+      />
+      <openwb-base-text-input
+        v-model="passwordConfirm"
+        title="Neues Kennwort bestätigen"
+        subtype="password"
+        :validator="(value) => value === password || 'Kennwörter stimmen nicht überein'"
       />
     </form>
   </openwb-base-modal-dialog>
@@ -107,13 +148,17 @@ export default {
     FontAwesomeLayers,
   },
   mixins: [ComponentState],
+  emits: ["sendCommand"],
   data() {
     return {
       mqttTopicsToSubscribe: ["openWB/system/security/user_management_active", "openWB/system/security/access_allowed"],
       showLoginModal: false,
+      showPasswordResetModal: false,
       showLogoutModal: false,
       username: "",
       password: "",
+      token: "",
+      passwordConfirm: "",
     };
   },
   computed: {
@@ -163,25 +208,87 @@ export default {
       }
     },
     doLogin(event) {
-      if (event === "login") {
-        if (!this.username || !this.password) {
-          this.$root.postClientMessage("Benutzername und Passwort erforderlich.", "danger");
-          return;
-        }
-        console.warn("Login with:", this.username, "/", this.password);
-        // set cookie
-        this.$cookies.set("mqtt", `${this.username}:${this.password}`);
-        // reconnect mqtt
-        this.$root.reconnectMqttClient();
-        // reload page
-        // not functional in Safari browser?
-        // this.$router.go();
-        location.reload();
+      switch (event) {
+        case "login":
+          if (!this.username || !this.password) {
+            this.$root.postClientMessage("Benutzername und Passwort erforderlich.", "danger");
+            return;
+          }
+          console.warn("Login with:", this.username, "/", this.password);
+          // set cookie
+          this.$cookies.set("mqtt", `${this.username}:${this.password}`);
+          // reconnect mqtt
+          this.$root.reconnectMqttClient();
+          // reload page
+          location.reload();
+          break;
+        case "forgot_password":
+          console.warn("Password reset requested for user:", this.username);
+          this.showLoginModal = false;
+          this.username = "";
+          this.password = "";
+          this.showPasswordResetModal = true;
+          break;
+        default:
+          this.showLoginModal = false;
+          this.username = "";
+          this.password = "";
       }
-      console.warn("Closing login modal", event);
-      this.showLoginModal = false;
-      this.username = "";
-      this.password = "";
+    },
+    processResetResult(event) {
+      console.log("Password reset modal result:", event);
+      switch (event) {
+        case "request_token":
+          if (!this.username) {
+            this.$root.postClientMessage("Benutzername erforderlich.", "danger");
+            return;
+          }
+          console.warn("Requesting password reset token for:", this.username);
+          // Implement token request logic here
+          this.$emit("sendCommand", {
+            command: "createPasswordResetToken",
+            data: {
+              username: this.username,
+            },
+          });
+          break;
+        case "reset_password":
+          if (
+            !this.username ||
+            !this.token ||
+            !this.password ||
+            !this.passwordConfirm ||
+            this.password !== this.passwordConfirm
+          ) {
+            this.$root.postClientMessage("Benutzername, Token und neues Kennwort erforderlich.", "danger");
+            return;
+          }
+          console.warn(
+            "Resetting password for:",
+            this.username,
+            "with token:",
+            this.token,
+            "and new password:",
+            this.password,
+          );
+          // Implement password reset logic here
+          this.$emit("sendCommand", {
+            command: "resetUserPassword",
+            data: {
+              username: this.username,
+              token: this.token,
+              newPassword: this.password,
+            },
+          });
+          break;
+        case "close":
+          this.showPasswordResetModal = false;
+          this.username = "";
+          this.password = "";
+          this.token = "";
+          this.showLoginModal = true;
+          return;
+      }
     },
     doLogout(event) {
       this.showLogoutModal = false;
@@ -192,8 +299,6 @@ export default {
         // reconnect mqtt
         this.$root.reconnectMqttClient();
         // reload page
-        // not functional in Safari browser?
-        // this.$router.go();
         location.reload();
       }
     },
