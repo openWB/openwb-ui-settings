@@ -113,6 +113,13 @@
       </openwb-base-card>
     </form>
     <div v-if="$store.state.mqtt['openWB/system/security/user_management_active'] === true">
+      <openwb-base-alert
+        v-if="$store.state.mqtt['openWB/system/dataprotection_acknowledged'] !== true"
+        subtype="warning"
+      >
+        Sie müssen der <router-link to="/System/LegalSettings">Datenschutzerklärung</router-link> zustimmen, um die
+        Funktion "Kennwort vergessen" nutzen zu können!
+      </openwb-base-alert>
       <openwb-base-card
         :collapsible="true"
         :collapsed="true"
@@ -192,7 +199,11 @@
                   title="E-Mail"
                   subtype="email"
                   required
-                />
+                >
+                  <template #help>
+                    Die hier angegebene E-Mail wird für die Funktion "Kennwort vergessen" verwendet.
+                  </template>
+                </openwb-base-text-input>
                 <openwb-base-text-input
                   v-model="clientDetails[client].password"
                   title="Passwort"
@@ -537,6 +548,7 @@ export default {
       mqttTopicsToSubscribe: [
         "openWB/general/allow_unencrypted_access",
         "openWB/system/security/user_management_active",
+        "openWB/system/dataprotection_acknowledged",
         "openWB/system/device/+/component/+/config",
         "openWB/chargepoint/+/config",
         "openWB/system/io/+/config",
