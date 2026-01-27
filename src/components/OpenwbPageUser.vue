@@ -63,15 +63,7 @@
     :prevent-close="!anonymousAccessAllowed"
     title="Anmelden"
     subtype="success"
-    :buttons="[
-      {
-        text: 'Anmelden',
-        event: 'login',
-        subtype: 'success',
-        disabled: stringIsEmpty(username) || stringIsEmpty(password),
-      },
-      { text: 'Kennwort vergessen', event: 'forgot_password', subtype: 'warning' },
-    ]"
+    :buttons="loginButtons"
     @modal-result="doLogin($event)"
   >
     <form name="loginForm">
@@ -92,7 +84,7 @@
     </form>
   </openwb-base-modal-dialog>
   <openwb-base-modal-dialog
-    v-if="userManagementActive"
+    v-if="userManagementActive && dataProtectionAcknowledged"
     :show="showPasswordResetModal"
     title="Kennwort zurücksetzen"
     subtype="warning"
@@ -156,7 +148,11 @@ export default {
   emits: ["sendCommand"],
   data() {
     return {
-      mqttTopicsToSubscribe: ["openWB/system/security/user_management_active", "openWB/system/security/access_allowed"],
+      mqttTopicsToSubscribe: [
+        "openWB/system/security/user_management_active",
+        "openWB/system/security/access_allowed",
+        "openWB/system/dataprotection_acknowledged",
+      ],
       showLoginModal: false,
       showPasswordResetModal: false,
       showLogoutModal: false,
@@ -186,6 +182,23 @@ export default {
     },
     anonymousAccessAllowed() {
       return this.accessAllowed && this.loggedInUser === null;
+    },
+    dataProtectionAcknowledged() {
+      return this.$store.state.mqtt["openWB/system/dataprotection_acknowledged"] === true;
+    },
+    loginButtons() {
+      let buttons = [
+        {
+          text: "Anmelden",
+          event: "login",
+          subtype: "success",
+          disabled: this.stringIsEmpty(this.username) || this.stringIsEmpty(this.password),
+        },
+      ];
+      if (this.dataProtectionAcknowledged) {
+        buttons.push({ text: "Kennwort vergessen", event: "forgot_password", subtype: "warning" });
+      }
+      return buttons;
     },
     requestTokenDisabled() {
       return this.stringIsEmpty(this.username);
