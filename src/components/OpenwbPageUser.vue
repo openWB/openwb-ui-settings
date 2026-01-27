@@ -64,7 +64,12 @@
     title="Anmelden"
     subtype="success"
     :buttons="[
-      { text: 'Anmelden', event: 'login', subtype: 'success' },
+      {
+        text: 'Anmelden',
+        event: 'login',
+        subtype: 'success',
+        disabled: stringIsEmpty(username) || stringIsEmpty(password),
+      },
       { text: 'Kennwort vergessen', event: 'forgot_password', subtype: 'warning' },
     ]"
     @modal-result="doLogin($event)"
@@ -92,8 +97,8 @@
     title="Kennwort zurücksetzen"
     subtype="warning"
     :buttons="[
-      { text: 'Token anfordern', event: 'request_token', subtype: 'success' },
-      { text: 'Kennwort zurücksetzen', event: 'reset_password', subtype: 'primary' },
+      { text: 'Token anfordern', event: 'request_token', subtype: 'success', disabled: requestTokenDisabled },
+      { text: 'Kennwort zurücksetzen', event: 'reset_password', subtype: 'primary', disabled: resetPasswordDisabled },
       { text: 'Zurück', event: 'close', subtype: 'secondary' },
     ]"
     @modal-result="processResetResult($event)"
@@ -182,6 +187,18 @@ export default {
     anonymousAccessAllowed() {
       return this.accessAllowed && this.loggedInUser === null;
     },
+    requestTokenDisabled() {
+      return this.stringIsEmpty(this.username);
+    },
+    resetPasswordDisabled() {
+      return (
+        this.stringIsEmpty(this.username) ||
+        this.stringIsEmpty(this.token) ||
+        this.stringIsEmpty(this.password) ||
+        this.stringIsEmpty(this.passwordConfirm) ||
+        this.password !== this.passwordConfirm
+      );
+    },
   },
   watch: {
     loggedInUser(newValue) {
@@ -199,6 +216,9 @@ export default {
     });
   },
   methods: {
+    stringIsEmpty(myString) {
+      return !myString || myString.length === 0;
+    },
     checkAutoLogin() {
       console.debug("Checking auto login: ", this.userManagementActive, this.accessAllowed, this.loggedInUser);
       if (this.userManagementActive && !this.accessAllowed) {

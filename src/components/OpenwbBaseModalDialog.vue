@@ -45,9 +45,10 @@
             <button
               v-for="button in myButtons"
               :key="button.text"
+              :disabled="button.disabled === true"
               type="button"
               class="btn"
-              :class="button.subtype ? 'btn-' + button.subtype : 'btn-secondary'"
+              :class="(button.disabled ? 'btn-outline-' : 'btn-') + (button.subtype ?? 'secondary')"
               data-dismiss="modal"
               :data-event="button.event ? button.event : 'close'"
               @click="handleClick"
