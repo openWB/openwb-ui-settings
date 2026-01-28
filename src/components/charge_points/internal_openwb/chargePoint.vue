@@ -12,7 +12,7 @@
         { value: 'duo', text: 'openWB series1/2 Duo' },
         { value: 'socket', text: 'openWB series1/2 Buchse' },
         { value: 'pro_plus', text: 'openWB Pro+' },
-        { value: 'se', text: 'openWB SE (11kW)' },
+        { value: 'se', text: 'openWB SE 11kW' },
       ]"
       :model-value="chargePoint.configuration.mode"
       @update:model-value="updateMode($event)"
