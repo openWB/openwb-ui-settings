@@ -212,7 +212,7 @@
               Abhängigkeit in der Regelung berücksichtigt werden kann.
             </template>
           </sortable-list>
-          <hr/>
+          <hr />
           <sortable-list
             v-model="loadmanagementPrioList"
             title="Lastmanagement-Prioritäten"
@@ -221,7 +221,8 @@
           >
             <template #help>
               Reihenfolge der Ladepunkt-Prioritäten für das Lastmanagement.<br />
-              Ladepunkte mit höherer Priorität (weiter oben in der Liste) werden bevorzugt behandelt, wenn die verfügbare Leistung begrenzt ist.<br />
+              Ladepunkte mit höherer Priorität (weiter oben in der Liste) werden bevorzugt behandelt, wenn die
+              verfügbare Leistung begrenzt ist.<br />
               Die Reihenfolge kann durch Drag & Drop geändert werden.
             </template>
           </sortable-list>
@@ -263,14 +264,6 @@ export default {
     },
   },
   emits: ["sendCommand", "save", "reset", "defaults"],
-  mounted() {
-    // Manuell prüfen ob loadmanagement_prios Topic Daten hat
-    console.debug('Component mounted, checking for loadmanagement_prios...');
-    this.$nextTick(() => {
-      const prioData = this.$store.state.mqtt['openWB/counter/get/loadmanagement_prios'];
-      console.debug('loadmanagement_prios in mounted:', prioData);
-    });
-  },
   data() {
     return {
       mqttTopicsToSubscribe: [
@@ -286,19 +279,9 @@ export default {
         "openWB/pv/+/config/max_ac_out",
         "openWB/chargepoint/+/config",
         "openWB/vehicle/+/name",
+        "openWB/vehicle/+/max_surplus",
       ],
     };
-  },
-  watch: {
-    '$store.state.mqtt': {
-      handler(newMqttState) {
-        const prioData = newMqttState['openWB/counter/get/loadmanagement_prios'];
-        if (prioData) {
-          console.debug('MQTT data changed - loadmanagement_prios:', prioData);
-        }
-      },
-      deep: true
-    }
   },
   computed: {
     componentConfigurations() {
@@ -362,29 +345,22 @@ export default {
     },
     loadmanagementPrioList: {
       get() {
-        const prioList = this.$store.state.mqtt['openWB/counter/get/loadmanagement_prios'];
-        console.debug('raw prioList from store:', prioList);
-        console.debug('prioList type:', typeof prioList);
-        console.debug('prioList isArray:', Array.isArray(prioList));
-        
+        const prioList = this.$store.state.mqtt["openWB/counter/get/loadmanagement_prios"];
+
         if (Array.isArray(prioList) && prioList.length > 0) {
-          const result = prioList.map(item => {
-            console.debug('mapping item:', item);
-            if (typeof item === 'object' && item.type === 'vehicle') {
-              return { id: `ev${item.id}`, type: 'vehicle' };
-            } else if (typeof item === 'string') {
-              return { id: item, type: 'vehicle' };
-            } else if (typeof item === 'number') {
-              return { id: `ev${item}`, type: 'vehicle' };
+          const result = prioList.map((item) => {
+            if (typeof item === "object" && item.type === "vehicle") {
+              return { id: `ev${item.id}`, type: "vehicle" };
+            } else if (typeof item === "string") {
+              return { id: item, type: "vehicle" };
+            } else if (typeof item === "number") {
+              return { id: `ev${item}`, type: "vehicle" };
             }
             return item;
           });
-          console.debug('mapped result:', result);
           return result;
         }
-        
         // Fallback: erstelle Liste aller verfügbaren Fahrzeuge
-        console.debug('using fallback - creating list from vehicle names');
         let vehicleIds = [];
         Object.keys(this.$store.state.mqtt).forEach((key) => {
           if (key.match(/^openWB\/vehicle\/[0-9]+\/name$/)) {
@@ -394,35 +370,32 @@ export default {
             }
           }
         });
-        
-        const fallbackResult = vehicleIds.sort().map(id => ({ id, type: 'vehicle' }));
-        console.debug('fallback result:', fallbackResult);
+
+        const fallbackResult = vehicleIds.sort().map((id) => ({ id, type: "vehicle" }));
+        console.debug("fallback result:", fallbackResult);
         return fallbackResult;
       },
       set(newList) {
-        const updatedPrioList = newList.map(item => {
-          if (item.id && item.id.startsWith('ev')) {
+        const updatedPrioList = newList.map((item) => {
+          if (item.id && item.id.startsWith("ev")) {
             const vehicleId = parseInt(item.id.substring(2));
-            return { id: vehicleId, type: 'vehicle' };
+            return { id: vehicleId, type: "vehicle" };
           }
           return item;
         });
-        this.updateState('openWB/counter/get/loadmanagement_prios', updatedPrioList);
+        this.updateState("openWB/counter/get/loadmanagement_prios", updatedPrioList);
       },
     },
     loadmanagementPrioLabels: {
       get() {
-        console.debug('loadmanagementPrioList:', this.loadmanagementPrioList);
-        console.debug('all mqtt keys:', Object.keys(this.$store.state.mqtt).filter(k => k.includes('vehicle')));
-        
         return this.loadmanagementPrioList.reduce((result, item, index) => {
-          console.debug('processing item:', item);
-          if (typeof item.id === 'string' && item.id.startsWith('ev')) {
+          if (typeof item.id === "string" && item.id.startsWith("ev")) {
             const vehicleId = item.id.substring(2); // "ev" hat 2 Zeichen -> ev0 -> 0
             const vehicleName = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/name`];
-            console.debug(`Looking for vehicle ${vehicleId}, found name:`, vehicleName);
+            const maxSurplus = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/max_surplus`];
             if (vehicleName) {
-              result[item.id] = `${index + 1}. ${vehicleName}`;
+              const lightningIcon = maxSurplus === true ? " ⚡" : "";
+              result[item.id] = `${index + 1}. ${vehicleName}${lightningIcon}`;
             } else {
               // Fallback für Debug
               result[item.id] = `${index + 1}. Fahrzeug ${vehicleId}`;
@@ -447,6 +420,21 @@ export default {
       ];
       return { options: options, groups: groups };
     },
+  },
+  watch: {
+    "$store.state.mqtt": {
+      handler(newMqttState) {
+        const prioData = newMqttState["openWB/counter/get/loadmanagement_prios"];
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    // Manuell prüfen ob loadmanagement_prios Topic Daten hat
+    this.$nextTick(() => {
+      const prioData = this.$store.state.mqtt["openWB/counter/get/loadmanagement_prios"];
+      console.debug("loadmanagement_prios in mounted:", prioData);
+    });
   },
   methods: {
     getElementTreeNames(element) {
@@ -488,7 +476,6 @@ export default {
     isComponentType(componentType, verifier) {
       return componentType?.split("_").includes(verifier);
     },
-
   },
 };
 </script>
