@@ -215,7 +215,7 @@
           <hr />
           <sortable-list
             v-model="loadmanagementPrioList"
-            title="Lastmanagement-Prioritäten"
+            title="Prioritäten-Steuerung für das Lastmanagement"
             :labels="loadmanagementPrioLabels"
             :nesting="false"
           >
@@ -279,7 +279,7 @@ export default {
         "openWB/pv/+/config/max_ac_out",
         "openWB/chargepoint/+/config",
         "openWB/vehicle/+/name",
-        "openWB/vehicle/+/max_surplus",
+        "openWB/vehicle/+/full_power",
       ],
     };
   },
@@ -392,7 +392,7 @@ export default {
           if (typeof item.id === "string" && item.id.startsWith("ev")) {
             const vehicleId = item.id.substring(2); // "ev" hat 2 Zeichen -> ev0 -> 0
             const vehicleName = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/name`];
-            const maxSurplus = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/max_surplus`];
+            const maxSurplus = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/full_power`];
             if (vehicleName) {
               const lightningIcon = maxSurplus === true ? " ⚡" : "";
               result[item.id] = `${index + 1}. ${vehicleName}${lightningIcon}`;

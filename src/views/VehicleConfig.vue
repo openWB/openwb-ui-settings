@@ -130,7 +130,7 @@
               @update:model-value="updateState('openWB/vehicle/' + vehicleId + '/charge_template', $event)"
             />
             <openwb-base-button-group-input
-              title="Bei Überschuss vorrangig laden"
+              title="Bevorzugt laden ⚡"
               :buttons="[
                 {
                   buttonValue: false,
@@ -143,8 +143,8 @@
                   class: 'btn-outline-success',
                 },
               ]"
-              :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/max_surplus']"
-              @update:model-value="updateState('openWB/vehicle/' + vehicleId + '/max_surplus', $event)"
+              :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/full_power']"
+              @update:model-value="updateState('openWB/vehicle/' + vehicleId + '/full_power', $event)"
             >
             </openwb-base-button-group-input>
             <hr />
@@ -1476,7 +1476,7 @@ export default {
         "openWB/vehicle/template/charge_template/+/time_charging/plans/+",
         "openWB/vehicle/+/name",
         "openWB/vehicle/+/info",
-        "openWB/vehicle/+/max_surplus",
+        "openWB/vehicle/+/full_power",
         "openWB/vehicle/+/charge_template",
         "openWB/vehicle/+/ev_template",
         "openWB/vehicle/+/tag_id",
