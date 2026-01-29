@@ -90,14 +90,14 @@
             </openwb-base-alert>
             <openwb-base-card
               v-for="(installedComponent, installedComponentKey) in getMyInstalledComponents(installedDevice?.id)"
-              :key="installedComponent.id"
+              :key="installedComponent?.id"
               :collapsible="true"
               :collapsed="true"
-              :subtype="getComponentTypeClass(installedComponent.type)"
+              :subtype="getComponentTypeClass(installedComponent?.type)"
             >
               <template #header>
-                <font-awesome-icon :icon="getComponentTypeIcon(installedComponent.type)" />
-                {{ installedComponent.name }}
+                <font-awesome-icon :icon="getComponentTypeIcon(installedComponent?.type)" />
+                {{ installedComponent?.name }}
               </template>
               <template #actions="slotProps">
                 <openwb-base-avatar
@@ -105,10 +105,10 @@
                   class="bg-danger clickable"
                   @click="
                     removeComponentModal(
-                      installedDevice.id,
-                      installedComponent.id,
-                      installedComponent.type,
-                      installedComponent.name,
+                      installedDevice?.id,
+                      installedComponent?.id,
+                      installedComponent?.type,
+                      installedComponent?.name,
                       $event,
                     )
                   "
@@ -119,13 +119,13 @@
               <openwb-base-text-input
                 title="Bezeichnung"
                 subtype="text"
-                :model-value="installedComponent.name"
+                :model-value="installedComponent?.name"
                 @update:model-value="updateState(installedComponentKey, $event, 'name')"
               />
               <openwb-base-text-input
                 title="Hersteller"
                 subtype="text"
-                :model-value="installedComponent.info.manufacturer"
+                :model-value="installedComponent?.info.manufacturer"
                 @update:model-value="updateState(installedComponentKey, $event, 'info.manufacturer')"
               >
                 <template #help> Optional: zusätzliche Information für den Systembericht. </template>
@@ -133,7 +133,7 @@
               <openwb-base-text-input
                 title="Modell"
                 subtype="text"
-                :model-value="installedComponent.info.model"
+                :model-value="installedComponent?.info.model"
                 @update:model-value="updateState(installedComponentKey, $event, 'info.model')"
               >
                 <template #help> Optional: zusätzliche Information für den Systembericht. </template>
@@ -150,16 +150,16 @@
               v-if="getComponentList(installedDevice?.vendor, installedDevice?.type)?.length"
               title="Verfügbare Komponenten"
               not-selected="Bitte auswählen"
-              :options="getComponentList(installedDevice.vendor, installedDevice.type)"
-              :model-value="componentToAdd[installedDevice.id]"
+              :options="getComponentList(installedDevice?.vendor, installedDevice?.type)"
+              :model-value="componentToAdd[installedDevice?.id]"
               :add-button="true"
-              @update:model-value="componentToAdd[installedDevice.id] = $event"
+              @update:model-value="componentToAdd[installedDevice?.id] = $event"
               @input:add="
                 addComponent(
-                  installedDevice.id,
-                  installedDevice.vendor,
-                  installedDevice.type,
-                  componentToAdd[installedDevice.id],
+                  installedDevice?.id,
+                  installedDevice?.vendor,
+                  installedDevice?.type,
+                  componentToAdd[installedDevice?.id],
                 )
               "
             >
@@ -175,7 +175,7 @@
               Dieses System bietet keine Komponenten zur Installation an.
             </openwb-base-alert>
           </openwb-base-card>
-          <hr v-if="Object.keys(installedDevices).length > 0" />
+          <hr v-if="Object.keys(installedDevices)?.length > 0" />
           <openwb-base-select-input
             v-model="selectedVendor"
             title="Hersteller"
@@ -296,24 +296,25 @@ export default {
     },
     vendorList: {
       get() {
-        if (this.$store.state.mqtt["openWB/system/configurable/devices_components"] === undefined) {
+        const devicesComponents = this.$store.state.mqtt["openWB/system/configurable/devices_components"];
+        if (!devicesComponents) {
           return [];
         }
-        return Object.entries(this.$store.state.mqtt["openWB/system/configurable/devices_components"])
+        return Object.entries(devicesComponents)
           .map(([groupKey, group]) => {
+            // Fallback für group.vendors
+            const vendors = group?.vendors || {};
             return {
-              label: group.group_name,
-              options: Object.entries(group.vendors)
-                .map(([vendorKey, vendor]) => {
-                  return {
-                    value: [groupKey, vendorKey],
-                    text: vendor.vendor_name,
-                  };
-                })
+              label: group?.group_name || "",
+              options: Object.entries(vendors)
+                .map(([vendorKey, vendor]) => ({
+                  value: [groupKey, vendorKey],
+                  text: vendor?.vendor_name || "",
+                }))
                 .sort((a, b) => a.text.localeCompare(b.text)),
             };
           })
-          .sort((a, b) => -a.label.localeCompare(b.label)); // reverse order to have "openWB" at the top
+          .sort((a, b) => -a.label.localeCompare(b.label));
       },
     },
     deviceList: {
@@ -322,15 +323,17 @@ export default {
           return [];
         }
         let [groupKey, vendorKey] = this.selectedVendor;
-        return Object.entries(
-          this.$store.state.mqtt["openWB/system/configurable/devices_components"][groupKey].vendors[vendorKey].devices,
-        )
-          .map(([deviceKey, device]) => {
-            return {
-              value: [vendorKey, deviceKey],
-              text: device.device_name,
-            };
-          })
+        const devices =
+          this.$store.state.mqtt["openWB/system/configurable/devices_components"]?.[groupKey]?.vendors?.[vendorKey]
+            ?.devices;
+        if (!devices) {
+          return [];
+        }
+        return Object.entries(devices)
+          .map(([deviceKey, device]) => ({
+            value: [vendorKey, deviceKey],
+            text: device.device_name,
+          }))
           .sort((a, b) => a.text.localeCompare(b.text));
       },
     },
