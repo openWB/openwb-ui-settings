@@ -1,5 +1,5 @@
 <template>
-  <div class="device-sungrow_micro">
+  <div class="device-sungrow-micro">
     <openwb-base-heading> Einstellungen für Sungrow Micro Wechselrichter SxxxS</openwb-base-heading>
     <openwb-base-text-input
       title="IP oder Hostname"
@@ -15,6 +15,14 @@
       :max="65535"
       :model-value="device.configuration.port"
       @update:model-value="updateConfiguration($event, 'configuration.port')"
+    />
+    <openwb-base-number-input
+      title="Modbus ID"
+      required
+      :model-value="device.configuration.modbus_id"
+      min="1"
+      max="255"
+      @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
     />
   </div>
 </template>
