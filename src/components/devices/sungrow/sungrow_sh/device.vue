@@ -3,6 +3,7 @@
     <openwb-base-heading> Einstellungen für Sungrow SH Wechselrichter</openwb-base-heading>
     <openwb-base-alert subtype="info">
       Bitte zur Fehlervermeidung die Firmware des Sungrow Wechselrichters und WiNet-S Dongles aktuell halten.
+      Modbus muss in der iSolarCloud für den Wechselrichter aktiviert sein.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
