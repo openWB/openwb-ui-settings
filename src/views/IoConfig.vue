@@ -199,10 +199,11 @@ export default {
         return this.$store.state.mqtt["openWB/system/configurable/io_devices"];
       },
     },
-    installedIoDevices: {
-      get() {
-        return this.getWildcardTopics("openWB/system/io/+/config");
-      },
+    installedIoDevices() {
+      const installedIoDevices = this.getWildcardTopics("openWB/system/io/+/config");
+      return Object.fromEntries(
+        Object.entries(installedIoDevices).filter(([, template]) => template && typeof template === "object"),
+      );
     },
     ioActionList: {
       get() {
