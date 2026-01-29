@@ -62,10 +62,10 @@
               <div v-else>
                 <openwb-base-avatar
                   v-for="installedComponent in getMyInstalledComponents(installedDevice?.id)"
-                  :key="installedComponent.id"
-                  :class="'ml-1 bg-' + getComponentTypeClass(installedComponent.type)"
+                  :key="installedComponent?.id"
+                  :class="'ml-1 bg-' + getComponentTypeClass(installedComponent?.type)"
                 >
-                  <font-awesome-icon :icon="getComponentTypeIcon(installedComponent.type)" />
+                  <font-awesome-icon :icon="getComponentTypeIcon(installedComponent?.type)" />
                 </openwb-base-avatar>
               </div>
             </template>
@@ -89,7 +89,7 @@
               Es wurden noch keine Komponenten zu diesem Gerät angelegt.
             </openwb-base-alert>
             <openwb-base-card
-              v-for="(installedComponent, installedComponentKey) in getMyInstalledComponents(installedDevice.id)"
+              v-for="(installedComponent, installedComponentKey) in getMyInstalledComponents(installedDevice?.id)"
               :key="installedComponent.id"
               :collapsible="true"
               :collapsed="true"
@@ -147,7 +147,7 @@
             </openwb-base-card>
             <hr />
             <openwb-base-select-input
-              v-if="getComponentList(installedDevice.vendor, installedDevice.type).length"
+              v-if="getComponentList(installedDevice?.vendor, installedDevice?.type)?.length"
               title="Verfügbare Komponenten"
               not-selected="Bitte auswählen"
               :options="getComponentList(installedDevice.vendor, installedDevice.type)"
@@ -282,15 +282,17 @@ export default {
     };
   },
   computed: {
-    installedDevices: {
-      get() {
-        return this.getWildcardTopics("openWB/system/device/+/config");
-      },
+    installedDevices() {
+      const installedDevices = this.getWildcardTopics("openWB/system/device/+/config");
+      return Object.fromEntries(
+        Object.entries(installedDevices).filter(([, template]) => template && typeof template === "object"),
+      );
     },
-    installedComponents: {
-      get() {
-        return this.getWildcardTopics("openWB/system/device/+/component/+/config");
-      },
+    installedComponents() {
+      const installedComponents = this.getWildcardTopics("openWB/system/device/+/component/+/config");
+      return Object.fromEntries(
+        Object.entries(installedComponents).filter(([, template]) => template && typeof template === "object"),
+      );
     },
     vendorList: {
       get() {
