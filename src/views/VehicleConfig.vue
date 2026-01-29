@@ -130,7 +130,7 @@
               @update:model-value="updateState('openWB/vehicle/' + vehicleId + '/charge_template', $event)"
             />
             <openwb-base-button-group-input
-              title="Bevorzugt laden ⚡"
+              title="Mit höherer Leistung laden ⚡"
               :buttons="[
                 {
                   buttonValue: false,

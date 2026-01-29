@@ -345,7 +345,16 @@ export default {
     },
     loadmanagementPrioList: {
       get() {
-        const prioList = this.$store.state.mqtt["openWB/counter/get/loadmanagement_prios"];
+        let prioList = this.$store.state.mqtt["openWB/counter/get/loadmanagement_prios"];
+
+        if (typeof prioList === "string") {
+          try {
+            prioList = JSON.parse(prioList);
+          } catch (error) {
+            console.warn("Kann loadmanagement_prios Payload nicht parsen", error, prioList);
+            prioList = [];
+          }
+        }
 
         if (Array.isArray(prioList) && prioList.length > 0) {
           const result = prioList.map((item) => {
@@ -392,9 +401,9 @@ export default {
           if (typeof item.id === "string" && item.id.startsWith("ev")) {
             const vehicleId = item.id.substring(2); // "ev" hat 2 Zeichen -> ev0 -> 0
             const vehicleName = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/name`];
-            const maxSurplus = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/full_power`];
+            const fullPower = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/full_power`];
             if (vehicleName) {
-              const lightningIcon = maxSurplus === true ? " ⚡" : "";
+              const lightningIcon = this.isTruthy(fullPower) ? " ⚡" : "";
               result[item.id] = `${index + 1}. ${vehicleName}${lightningIcon}`;
             } else {
               // Fallback für Debug
@@ -475,6 +484,15 @@ export default {
     },
     isComponentType(componentType, verifier) {
       return componentType?.split("_").includes(verifier);
+    },
+    isTruthy(value) {
+      if (typeof value === "string") {
+        return ["true", "1", "yes", "on"].includes(value.toLowerCase());
+      }
+      if (typeof value === "number") {
+        return value !== 0;
+      }
+      return Boolean(value);
     },
   },
 };
