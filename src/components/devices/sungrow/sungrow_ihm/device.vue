@@ -1,6 +1,10 @@
 <template>
   <div class="device-sungrow-ihm">
     <openwb-base-heading> Einstellungen für Sungrow iHomeManager</openwb-base-heading>
+    <openwb-base-alert subtype="info">
+      In der iSolarCloud muss Modbus TCP für Port 503 (!!!) aktiviert werden. Port 502 ist für die Kommunikation
+      mit dem Wechselrichter vorgesehen.
+    </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
       subtype="host"
