@@ -526,17 +526,22 @@ export default {
         let chargePoints = this.getWildcardTopics("openWB/chargepoint/+/config");
         let myObj = {};
         for (const [key, element] of Object.entries(chargePoints)) {
-          if (element.type === "internal_openwb" || this.$store.state.mqtt["openWB/general/extern"] === false) {
+          if (
+            element &&
+            typeof element === "object" &&
+            (element.type === "internal_openwb" || this.$store.state.mqtt["openWB/general/extern"] === false)
+          ) {
             myObj[key] = element;
           }
         }
         return myObj;
       },
     },
-    chargePointTemplates: {
-      get() {
-        return this.getWildcardTopics("openWB/chargepoint/template/+");
-      },
+    chargePointTemplates() {
+      const chargePointTemplates = this.getWildcardTopics("openWB/chargepoint/template/+");
+      return Object.fromEntries(
+        Object.entries(chargePointTemplates).filter(([, template]) => template && typeof template === "object"),
+      );
     },
     chargePointTemplateList: {
       get() {
