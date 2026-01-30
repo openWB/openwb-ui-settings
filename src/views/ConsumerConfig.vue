@@ -218,27 +218,29 @@
               </openwb-base-select-input>
             </openwb-base-card>
             <hr />
-            <openwb-base-heading> Zusätzlicher Zähler hinzufügen </openwb-base-heading>
-            <!-- Select extra meter device -->
-            <openwb-base-select-input
-              v-model="selectedExtraMeterVendor"
-              title="Hersteller (Zusätzlicher Zähler)"
-              not-selected="Bitte auswählen"
-              :groups="extraMeterVendorList"
-            />
-            <openwb-base-select-input
-              v-model="extraMeterDeviceToAdd"
-              title="Verfügbare Zählergeräte"
-              not-selected="Bitte auswählen"
-              :disabled="!selectedExtraMeterVendor"
-              :options="extraMeterDeviceList"
-              :add-button="true"
-              @input:add="addExtraMeterDevice(installedConsumer.id)"
-            >
-              <template #help>
-                Wählen Sie das Gerät aus, über das die zusätzliche Leistungsmessung erfolgen soll.
-              </template>
-            </openwb-base-select-input>
+            <div v-if="!getExtraMeterDevice(installedConsumer.id)">
+              <openwb-base-heading> Zusätzlicher Zähler hinzufügen </openwb-base-heading>
+              <!-- Select extra meter device -->
+              <openwb-base-select-input
+                v-model="selectedExtraMeterVendor"
+                title="Hersteller (Zusätzlicher Zähler)"
+                not-selected="Bitte auswählen"
+                :groups="extraMeterVendorList"
+              />
+              <openwb-base-select-input
+                v-model="extraMeterDeviceToAdd"
+                title="Verfügbare Zählergeräte"
+                not-selected="Bitte auswählen"
+                :disabled="!selectedExtraMeterVendor"
+                :options="extraMeterDeviceList"
+                :add-button="true"
+                @input:add="addExtraMeterDevice(installedConsumer.id)"
+              >
+                <template #help>
+                  Wählen Sie das Gerät aus, über das die zusätzliche Leistungsmessung erfolgen soll.
+                </template>
+              </openwb-base-select-input>
+            </div>
           </openwb-base-card>
           <hr v-if="Object.keys(installedConsumers).length > 0" />
           <openwb-base-select-input
