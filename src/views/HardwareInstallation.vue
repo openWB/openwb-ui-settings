@@ -302,7 +302,7 @@ export default {
         }
         return Object.entries(devicesComponents)
           .map(([groupKey, group]) => {
-            // Fallback für group.vendors
+            // Fallback for group.vendors
             const vendors = group?.vendors || {};
             return {
               label: group?.group_name || "",
@@ -314,7 +314,7 @@ export default {
                 .sort((a, b) => a.text.localeCompare(b.text)),
             };
           })
-          .sort((a, b) => -a.label.localeCompare(b.label));
+          .sort((a, b) => -a.label.localeCompare(b.label)); // reverse order to have "openWB" at the top
       },
     },
     deviceList: {

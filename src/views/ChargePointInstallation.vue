@@ -527,9 +527,8 @@ export default {
         let myObj = {};
         for (const [key, element] of Object.entries(chargePoints)) {
           if (
-            element &&
-            typeof element === "object" &&
-            (element.type === "internal_openwb" || this.$store.state.mqtt["openWB/general/extern"] === false)
+            (element && typeof element === "object" && element.type === "internal_openwb") ||
+            this.$store.state.mqtt["openWB/general/extern"] === false
           ) {
             myObj[key] = element;
           }
