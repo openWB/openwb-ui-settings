@@ -10,6 +10,16 @@
     Wollen Sie den Verbraucher "{{ modalConsumerName }}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig
     gemacht werden!
   </openwb-base-modal-dialog>
+  <openwb-base-modal-dialog
+    :show="showComponentRemoveModal"
+    title="Komponente löschen"
+    subtype="danger"
+    :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
+    @modal-result="removeComponent"
+  >
+    Wollen Sie die Komponente "{{ modalComponentName }}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig
+    gemacht werden!
+  </openwb-base-modal-dialog>
   <!-- main content -->
   <div class="consumerConfig">
     <form name="consumerConfigForm">
@@ -137,6 +147,15 @@
                 <template #header>
                   <font-awesome-icon :icon="['fas', 'fa-gauge-high']" />
                   {{ getExtraMeterComponent(installedConsumer.id)?.name }}
+                </template>
+                <template #actions="slotProps">
+                  <openwb-base-avatar
+                    v-if="!slotProps.collapsed"
+                    class="bg-danger clickable"
+                    @click="removeExtraMeterComponentModal(installedConsumer.id, $event)"
+                  >
+                    <font-awesome-icon :icon="['fas', 'trash']" />
+                  </openwb-base-avatar>
                 </template>
                 <openwb-base-text-input
                   title="Bezeichnung"
@@ -297,6 +316,7 @@ export default {
       extraMeterDeviceToAdd: undefined,
       extraMeterComponentToAdd: undefined,
       showConsumerRemoveModal: false,
+      showComponentRemoveModal: false,
       modalConsumer: undefined,
       modalConsumerName: "",
     };
@@ -426,6 +446,21 @@ export default {
       if (event == "confirm") {
         this.$emit("sendCommand", {
           command: "removeConsumer",
+          data: { consumer_id: this.modalConsumer },
+        });
+      }
+    },
+    removeExtraMeterComponentModal(consumerId, event) {
+      event.stopPropagation();
+      this.modalConsumer = consumerId;
+      this.modalComponentName = this.getExtraMeterComponent(consumerId)?.name ?? "";
+      this.showComponentRemoveModal = true;
+    },
+    removeComponent(event) {
+      this.showComponentRemoveModal = false;
+      if (event == "confirm") {
+        this.$emit("sendCommand", {
+          command: "removeConsumerExtraMeterComponent",
           data: { consumer_id: this.modalConsumer },
         });
       }
