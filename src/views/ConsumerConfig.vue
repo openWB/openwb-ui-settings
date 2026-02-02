@@ -109,6 +109,19 @@
               <template #help> Optional: zusätzliche Information für den Systembericht. </template>
             </openwb-base-text-input>
             <hr />
+            <openwb-base-heading> Verwendung Optionen </openwb-base-heading>
+            <openwb-base-select-input
+              title="Verwendung"
+              not-selected="Bitte auswählen"
+              :options="getUsageOptions(installedConsumer)"
+              :model-value="installedConsumer.consumerUsage?.type ?? null"
+              @update:model-value="setUsage(installedConsumer.id, $event)"
+            >
+              <template #help> Legt fest, wie dieser Verbraucher im Energiemanagement berücksichtigt wird. </template>
+            </openwb-base-select-input>
+
+            <hr />
+
             <openwb-config-proxy
               :device="installedConsumer"
               @update:configuration="updateConfiguration(installedConsumerKey, $event)"
@@ -304,6 +317,7 @@ export default {
         "openWB/general/extern",
         "openWB/consumer/+/module",
         "openWB/consumer/+/config",
+        "openWB/consumer/+/usage",
         "openWB/system/configurable/consumers_extra_meter",
         "openWB/consumer/+/extra_meter/device/config",
         "openWB/consumer/+/extra_meter/device/component/config",
@@ -327,17 +341,18 @@ export default {
     installedConsumers() {
       const modules = this.getWildcardTopics("openWB/consumer/+/module");
       const configs = this.getWildcardTopics("openWB/consumer/+/config");
+      const usages = this.getWildcardTopics("openWB/consumer/+/usage");
 
       return Object.fromEntries(
         Object.entries(modules).map(([moduleTopic, module]) => {
           const id = module.id;
-          const configTopic = `openWB/consumer/${id}/config`;
 
           return [
             moduleTopic,
             {
               ...module,
-              consumerConfig: configs[configTopic] ?? {},
+              consumerConfig: configs[`openWB/consumer/${id}/config`] ?? {},
+              consumerUsage: usages[`openWB/consumer/${id}/usage`] ?? null,
             },
           ];
         }),
@@ -515,7 +530,6 @@ export default {
           consumer_id: consumerId,
         },
       });
-
       this.extraMeterComponentToAdd = undefined;
     },
     getExtraMeterDevice(consumerId) {
@@ -525,7 +539,6 @@ export default {
     getExtraMeterComponent(consumerId) {
       return this.$store.state.mqtt[`openWB/consumer/${consumerId}/extra_meter/device/component/config`];
     },
-
     hasExtraMeter(consumerId) {
       return !!this.getExtraMeterDevice(consumerId);
     },
@@ -534,6 +547,33 @@ export default {
     },
     updateExtraMeterComponentConfiguration(consumerId, event) {
       this.updateState(`openWB/consumer/${consumerId}/extra_meter/device/component/config`, event.value, event.object);
+    },
+    getUsageOptions(consumer) {
+      if (!Array.isArray(consumer.usage)) return [];
+      return consumer.usage.map((use) => ({
+        value: use,
+        text: this.usageLabels(use),
+      }));
+    },
+    usageLabels(type) {
+      const map = {
+        meter_only: "Nur Messung",
+        suspendable_onoff: "Schaltbar (Ein/Aus)",
+        suspendable_onoff_individual: "Schaltbar (Individuell)",
+        suspendable_tunable: "Stufenlos regelbar",
+        suspendable_tunable_individual: "Stufenlos regelbar (Individuell)",
+        continuous: "Dauerverbraucher",
+      };
+      return map[type] ?? type;
+    },
+    setUsage(consumerId, usage) {
+      this.$emit("sendCommand", {
+        command: "selectUsage",
+        data: {
+          consumer_id: consumerId,
+          usage,
+        },
+      });
     },
     updateConfiguration(key, event) {
       console.debug("updateConfiguration", key, event);
