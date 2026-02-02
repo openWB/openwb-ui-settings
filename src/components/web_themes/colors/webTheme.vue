@@ -174,7 +174,30 @@
     >
       <template #help> Zeige den Verlauf des dynamischen Strompreises auf der Hauptseite. </template>
     </openwb-base-button-group-input>
-    <!-- alternatives Energie-Widget alternativeEnergy -->
+    <!-- lower price bound -->
+    <openwb-base-range-input
+      title="Untere Markierung in der Preistabelle"
+      :min="-25"
+      :max="95"
+      :step="0.1"
+      unit="ct"
+      :model-value="webTheme.configuration.lowerPriceBound"
+      @update:model-value="updateConfiguration($event, 'configuration.lowerPriceBound')"
+    >
+      <template #help> Position der unteren Markierung festlegen. </template>
+    </openwb-base-range-input>
+    <!-- upper price bound -->
+    <openwb-base-range-input
+      title="Obere Markierung in der Preistabelle"
+      :min="-25"
+      :max="95"
+      :step="0.1"
+      unit="ct"
+      :model-value="webTheme.configuration.upperPriceBound"
+      @update:model-value="updateConfiguration($event, 'configuration.upperPriceBound')"
+    >
+      <template #help> Position der oberen Markierung festlegen. </template>
+    </openwb-base-range-input>
     <openwb-base-button-group-input
       title="Alternatives Energie-Widget"
       :buttons="[
