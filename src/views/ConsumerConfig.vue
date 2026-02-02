@@ -124,7 +124,7 @@
 
             <openwb-config-proxy
               :device="installedConsumer"
-              @update:configuration="updateConfiguration(installedConsumerKey, $event)"
+              @update:configuration="consumerDeviceConfiguration(installedConsumer, $event)"
             />
             <hr />
             <openwb-base-heading> Zusätzliche Leistungsmessung </openwb-base-heading>
@@ -351,7 +351,7 @@ export default {
             moduleTopic,
             {
               ...module,
-              consumerConfig: configs[`openWB/consumer/${id}/config`] ?? {},
+              config: configs[`openWB/consumer/${id}/config`] ?? {},
               consumerUsage: usages[`openWB/consumer/${id}/usage`] ?? null,
             },
           ];
@@ -364,19 +364,21 @@ export default {
           return [];
         }
         const configurable = this.$store.state.mqtt["openWB/system/configurable/consumers"];
-        return Object.entries(configurable).map(([groupKey, group]) => {
-          return {
-            label: group.group_name,
-            options: Object.entries(group.vendors)
-              .map(([vendorKey, vendor]) => {
-                return {
-                  value: vendorKey,
-                  text: vendor.vendor_name,
-                };
-              })
-              .sort((a, b) => a.text.localeCompare(b.text)),
-          };
-        });
+        return Object.entries(configurable)
+          .map(([groupKey, group]) => {
+            return {
+              label: group.group_name,
+              options: Object.entries(group.vendors)
+                .map(([vendorKey, vendor]) => {
+                  return {
+                    value: vendorKey,
+                    text: vendor.vendor_name,
+                  };
+                })
+                .sort((a, b) => a.text.localeCompare(b.text)),
+            };
+          })
+          .sort((a, b) => -a.label.localeCompare(b.label)); // reverse order to have "openWB" at the top
       },
     },
     consumerList: {
@@ -411,15 +413,17 @@ export default {
     extraMeterVendorList() {
       const consumerExtraMeterDevice = this.$store.state.mqtt["openWB/system/configurable/consumers_extra_meter"];
       if (!consumerExtraMeterDevice) return [];
-      return Object.entries(consumerExtraMeterDevice).map(([groupKey, group]) => ({
-        label: group.group_name,
-        options: Object.entries(group.vendors)
-          .map(([vendorKey, vendor]) => ({
-            value: vendorKey,
-            text: vendor.vendor_name,
-          }))
-          .sort((a, b) => a.text.localeCompare(b.text)),
-      }));
+      return Object.entries(consumerExtraMeterDevice)
+        .map(([groupKey, group]) => ({
+          label: group.group_name,
+          options: Object.entries(group.vendors)
+            .map(([vendorKey, vendor]) => ({
+              value: vendorKey,
+              text: vendor.vendor_name,
+            }))
+            .sort((a, b) => a.text.localeCompare(b.text)),
+        }))
+        .sort((a, b) => -a.label.localeCompare(b.label)); // reverse order to have "openWB" at the top
     },
     extraMeterDeviceList() {
       if (!this.selectedExtraMeterVendor) return [];
@@ -547,6 +551,14 @@ export default {
     },
     updateExtraMeterComponentConfiguration(consumerId, event) {
       this.updateState(`openWB/consumer/${consumerId}/extra_meter/device/component/config`, event.value, event.object);
+    },
+    consumerDeviceConfiguration(consumer, event) {
+      const { object, value } = event;
+      const moduleFields = ["configuration.ip_address", "configuration.port", "configuration.modbus_id"];
+      const targetTopic = moduleFields.includes(object)
+        ? `openWB/consumer/${consumer.id}/module`
+        : `openWB/consumer/${consumer.id}/config`;
+      this.updateState(targetTopic, value, object);
     },
     getUsageOptions(consumer) {
       if (!Array.isArray(consumer.usage)) return [];

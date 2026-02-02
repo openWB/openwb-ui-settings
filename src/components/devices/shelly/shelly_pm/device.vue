@@ -35,8 +35,8 @@
         { buttonValue: 2, text: '2' },
         { buttonValue: 3, text: '3' },
       ]"
-      :model-value="device.consumerConfig.connected_phases"
-      @update:model-value="updateConfiguration($event, 'consumerConfig.connected_phases')"
+      :model-value="device.config?.connected_phases"
+      @update:model-value="updateConfiguration($event, 'connected_phases')"
     />
     <openwb-base-button-group-input
       title="Phase 1 des Ladekabels"
@@ -45,15 +45,16 @@
         { buttonValue: 2, text: 'EVU L2' },
         { buttonValue: 3, text: 'EVU L3' },
       ]"
-      :model-value="device.consumerConfig.phase_1"
-      @update:model-value="updateConfiguration($event, 'consumerConfig.phase_1')"
+      :model-value="device?.config?.phase_1"
+      @update:model-value="updateConfiguration($event, 'phase_1')"
     >
     </openwb-base-button-group-input>
     <openwb-base-number-input
       title="Max Leistung"
+      unit="W"
       :min="1"
-      :model-value="device.consumerConfig.max_power"
-      @update:model-value="updateConfiguration($event, 'consumerConfig.max_power')"
+      :model-value="device?.config?.max_power"
+      @update:model-value="updateConfiguration($event, 'max_power')"
     >
     </openwb-base-number-input>
   </div>
