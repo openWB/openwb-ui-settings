@@ -135,7 +135,7 @@
               <div v-if="($store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id']?.length ?? 0) > 0">
                 <openwb-base-alert subtype="info">
                   Einstellungen zur Fahrzeugzuordnung finden sich unter
-                  <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.
+                  <router-link to="/IdentificationConfiguration"> Einstellungen - Identifikation </router-link>.
                   <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === false">
                     Aktuell ist die Identifikation in den Einstellungen deaktiviert.
                   </div>
@@ -159,7 +159,7 @@
               <div v-else>
                 <openwb-base-alert subtype="info">
                   Einstellungen zur Fahrzeugzuordnung finden sich unter
-                  <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.<br />
+                  <router-link to="/IdentificationConfiguration"> Einstellungen - Identifikation </router-link>.<br />
                   Dem Fahrzeug sind aktuell keine ID-Tags zum Entsperren zugeordnet.
                 </openwb-base-alert>
               </div>
