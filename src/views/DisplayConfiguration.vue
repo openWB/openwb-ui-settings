@@ -158,6 +158,17 @@
               Ladepunkte angezeigt werden sollen.
             </template>
           </openwb-base-button-group-input>
+          <openwb-base-alert
+            subtype="info"
+            class="mb-3"
+          >
+            Wenn die Benutzerverwaltung aktiviert ist, werden nur die Ladepunkte angezeigt, für welche dem jeweiligen
+            Display-Benutzer auch Zugriffsrechte gegeben wurden. Ebenfalls ist es möglich, dass bestimmte Daten von
+            Wechselrichtern, Fahrzeugen, etc. nicht angezeigt werden, wenn der Benutzer hierfür keine Berechtigung
+            besitzt.<br />
+            Bei aktivierter Benutzerverwaltung wird empfohlen, die Anzeige auf "Alle" Ladepunkte zu setzen, damit es
+            nicht zu Überschneidungen zwischen diesen Einschränkungen kommt.
+          </openwb-base-alert>
           <hr />
           <div v-if="$store.state.mqtt['openWB/optional/int_display/theme'] !== undefined">
             <openwb-base-select-input

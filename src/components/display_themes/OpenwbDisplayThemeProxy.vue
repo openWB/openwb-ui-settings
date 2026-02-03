@@ -14,6 +14,12 @@
     Das ausgewählte Display Theme "{{ displayTheme.name }}" wird in unserer Community gepflegt. Rückfragen oder Probleme
     bitte im Forum diskutieren.
   </openwb-base-alert>
+  <openwb-base-alert :subtype="displayTheme.userManagementSupported ? 'success' : 'warning'">
+    <font-awesome-icon :icon="['fas', displayTheme.userManagementSupported ? 'user-check' : 'user-slash']" />
+    Das ausgewählte Display Theme "{{ displayTheme.name }}" unterstützt die Benutzerverwaltung{{
+      displayTheme.userManagementSupported ? "" : " nicht"
+    }}.
+  </openwb-base-alert>
   <openwb-base-heading> Einstellungen für Display Theme "{{ displayTheme.name }}" </openwb-base-heading>
   <component
     :is="getDisplayThemeComponent()"
@@ -24,10 +30,15 @@
 
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faPeopleGroup as fasPeopleGroup, faCertificate as fasCertificate } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPeopleGroup as fasPeopleGroup,
+  faCertificate as fasCertificate,
+  faUserCheck as fasUserCheck,
+  faUserSlash as fasUserSlash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasPeopleGroup, fasCertificate);
+library.add(fasPeopleGroup, fasCertificate, fasUserCheck, fasUserSlash);
 
 import { defineAsyncComponent } from "vue";
 import OpenwbDisplayThemeFallback from "./OpenwbDisplayThemeFallback.vue";
