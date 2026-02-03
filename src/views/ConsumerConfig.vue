@@ -11,14 +11,24 @@
     gemacht werden!
   </openwb-base-modal-dialog>
   <openwb-base-modal-dialog
+    :show="showDeviceRemoveModal"
+    title="Komponente löschen"
+    subtype="danger"
+    :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
+    @modal-result="removeExtraMeterDevice"
+  >
+    Wollen Sie die Device "{{ modalExtraMeterDeviceName }}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig
+    gemacht werden!
+  </openwb-base-modal-dialog>
+  <openwb-base-modal-dialog
     :show="showComponentRemoveModal"
     title="Komponente löschen"
     subtype="danger"
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
-    @modal-result="removeComponent"
+    @modal-result="removeExtraMeterComponent"
   >
-    Wollen Sie die Komponente "{{ modalComponentName }}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig
-    gemacht werden!
+    Wollen Sie die Komponente "{{ modalExtraMeterComponentName }}" wirklich entfernen? Dieser Vorgang kann nicht
+    rückgängig gemacht werden!
   </openwb-base-modal-dialog>
   <!-- main content -->
   <div class="consumerConfig">
@@ -144,6 +154,15 @@
               <template #header>
                 <font-awesome-icon :icon="['fas', 'fa-network-wired']" />
                 {{ getExtraMeterDevice(installedConsumer.id)?.name }}
+              </template>
+              <template #actions="slotProps">
+                <openwb-base-avatar
+                  v-if="!slotProps.collapsed"
+                  class="bg-danger clickable"
+                  @click="removeExtraMeterDeviceModal(installedConsumer?.id, $event)"
+                >
+                  <font-awesome-icon :icon="['fas', 'trash']" />
+                </openwb-base-avatar>
               </template>
               <openwb-config-proxy
                 :device="getExtraMeterDevice(installedConsumer.id)"
@@ -332,9 +351,12 @@ export default {
       extraMeterDeviceToAdd: undefined,
       extraMeterComponentToAdd: undefined,
       showConsumerRemoveModal: false,
+      showDeviceRemoveModal: false,
       showComponentRemoveModal: false,
       modalConsumer: undefined,
       modalConsumerName: "",
+      modalExtraMeterDeviceName: "",
+      modelExtraMeterComponentName: "",
     };
   },
   computed: {
@@ -446,7 +468,6 @@ export default {
   methods: {
     addConsumer() {
       if (!this.consumerToAdd) return;
-
       this.$emit("sendCommand", {
         command: "addConsumer",
         data: {
@@ -471,13 +492,28 @@ export default {
         });
       }
     },
+    removeExtraMeterDeviceModal(consumerId, event) {
+      event.stopPropagation();
+      this.modalConsumer = consumerId;
+      this.modalExtraMeterDeviceName = this.getExtraMeterDevice(consumerId)?.name ?? "";
+      this.showDeviceRemoveModal = true;
+    },
+    removeExtraMeterDevice(event) {
+      this.showDeviceRemoveModal = false;
+      if (event == "confirm") {
+        this.$emit("sendCommand", {
+          command: "removeConsumerExtraMeterDevice",
+          data: { consumer_id: this.modalConsumer },
+        });
+      }
+    },
     removeExtraMeterComponentModal(consumerId, event) {
       event.stopPropagation();
       this.modalConsumer = consumerId;
-      this.modalComponentName = this.getExtraMeterComponent(consumerId)?.name ?? "";
+      this.modalExtraMeterComponentName = this.getExtraMeterComponent(consumerId)?.name ?? "";
       this.showComponentRemoveModal = true;
     },
-    removeComponent(event) {
+    removeExtraMeterComponent(event) {
       this.showComponentRemoveModal = false;
       if (event == "confirm") {
         this.$emit("sendCommand", {
