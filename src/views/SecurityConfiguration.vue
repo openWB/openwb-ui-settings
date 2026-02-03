@@ -83,6 +83,14 @@
             </p>
           </template>
         </openwb-base-button-group-input>
+        <openwb-base-alert
+          subtype="warning"
+          class="mt-2"
+        >
+          Stelle sicher, dass Du sowohl für die <router-link to="/GeneralConfiguration">Hauptseite</router-link> als
+          auch für ein eventuell vorhandenes <router-link to="/DisplayConfiguration">Display</router-link> ein Theme
+          auswählst, welches die Benutzerverwaltung auch unterstützt!
+        </openwb-base-alert>
         <hr />
         <openwb-base-button-input
           title="Benutzerverwaltung zurücksetzen"
