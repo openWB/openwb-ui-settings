@@ -7,6 +7,11 @@ describe("OpenwbBaseArrayInput.vue", () => {
   // check title prop
   it("render title", () => {
     const wrapper = mount(OpenwbBaseArrayInput, {
+      global: {
+        stubs: {
+          OpenwbBaseTooltip: { template: "<span><slot /></span>" },
+        },
+      },
       props: { title },
     });
     const titleLabel = wrapper.find("div.col-form-label");
@@ -16,6 +21,11 @@ describe("OpenwbBaseArrayInput.vue", () => {
   it("display initial value", () => {
     const modelValue = ["1234", "2345"];
     const wrapper = mount(OpenwbBaseArrayInput, {
+      global: {
+        stubs: {
+          OpenwbBaseTooltip: { template: "<span><slot /></span>" },
+        },
+      },
       props: { title, modelValue },
     });
     const renderedTagList = wrapper.find(".tagList");
@@ -27,6 +37,11 @@ describe("OpenwbBaseArrayInput.vue", () => {
   it("add element", async () => {
     const newTag = "1234";
     const wrapper = mount(OpenwbBaseArrayInput, {
+      global: {
+        stubs: {
+          OpenwbBaseTooltip: { template: "<span><slot /></span>" },
+        },
+      },
       props: { title },
     });
     const renderedTextInput = wrapper.find("input[type=text]");

@@ -7,6 +7,11 @@ describe("OpenwbBaseNumberInput.vue", () => {
   it("render title", () => {
     const title = "Number Input Test";
     const wrapper = mount(OpenwbBaseNumberInput, {
+      global: {
+        stubs: {
+          OpenwbBaseTooltip: { template: "<span><slot /></span>" },
+        },
+      },
       props: { title },
     });
     const titleLabel = wrapper.find("div.col-form-label");
@@ -16,6 +21,11 @@ describe("OpenwbBaseNumberInput.vue", () => {
   it("render unit", () => {
     const unit = "$";
     const wrapper = mount(OpenwbBaseNumberInput, {
+      global: {
+        stubs: {
+          OpenwbBaseTooltip: { template: "<span><slot /></span>" },
+        },
+      },
       props: { unit },
     });
     const unitDiv = wrapper.find("div.input-group-append");
@@ -25,6 +35,11 @@ describe("OpenwbBaseNumberInput.vue", () => {
   it("display initial value", () => {
     const modelValue = 2;
     const wrapper = mount(OpenwbBaseNumberInput, {
+      global: {
+        stubs: {
+          OpenwbBaseTooltip: { template: "<span><slot /></span>" },
+        },
+      },
       props: { modelValue },
     });
     const renderedInput = wrapper.find("input[type=number]");
@@ -34,6 +49,11 @@ describe("OpenwbBaseNumberInput.vue", () => {
   it("emit on change", async () => {
     const modelValue = 2;
     const wrapper = mount(OpenwbBaseNumberInput, {
+      global: {
+        stubs: {
+          OpenwbBaseTooltip: { template: "<span><slot /></span>" },
+        },
+      },
       props: { modelValue },
     });
     const renderedInput = wrapper.find("input[type=number]");
