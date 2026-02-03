@@ -279,6 +279,7 @@ export default {
         "openWB/pv/+/config/max_ac_out",
         "openWB/chargepoint/+/config",
         "openWB/vehicle/+/name",
+        "openWB/consumer/+/module",
       ],
     };
   },
@@ -345,39 +346,43 @@ export default {
     loadmanagementPrioList: {
       get() {
         const prioList = this.$store.state.mqtt["openWB/counter/get/loadmanagement_prios"] || [];
-        if (Array.isArray(prioList)) {
-          return prioList.map((id) => ({ id, type: "vehicle" }));
-        }
-
-        // Fallback: erstelle Liste aller verfügbaren Fahrzeuge
-        let vehicleIds = [];
-        Object.keys(this.$store.state.mqtt).forEach((key) => {
-          if (key.match(/^openWB\/vehicle\/[0-9]+\/name$/)) {
-            const matches = key.match(/^openWB\/vehicle\/([0-9]+)\/name$/);
-            if (matches) {
-              vehicleIds.push(`ev${matches[1]}`); // ev0, ev1 wie im Store
-            }
+        if (!Array.isArray(prioList)) return [];
+        return prioList.map((item) => {
+          // Backward compatibility: legacy prio entries ... plain vehicle IDs (e.g. "ev3")
+          if (typeof item === "string") {
+            return { id: item, type: "vehicle" };
           }
+          return item;
         });
-
-        return vehicleIds.sort().map((id) => ({ id, type: "vehicle" }));
       },
       set(newList) {
-        const updatedPrioList = newList.map((item) => item.id);
-        this.updateState("openWB/counter/get/loadmanagement_prios", updatedPrioList);
+        this.updateState("openWB/counter/get/loadmanagement_prios", newList);
       },
     },
     loadmanagementPrioLabels: {
       get() {
-        return this.loadmanagementPrioList.reduce((result, item, index) => {
-          if (typeof item.id === "string" && item.id.startsWith("ev")) {
-            const vehicleId = item.id.substring(2); // "ev" hat 2 Zeichen -> ev0 -> 0
-            const vehicleName = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/name`];
-            if (vehicleName) {
-              result[item.id] = `${index + 1}. ${vehicleName}`;
+        return this.loadmanagementPrioList.reduce((labels, item, index) => {
+          let name = null;
+          switch (item.type) {
+            case "vehicle": {
+              const vehicleId = String(item.id).replace(/^ev/, "");
+              name = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/name`];
+              break;
+            }
+            case "consumer": {
+              name = this.$store.state.mqtt[`openWB/consumer/${item.id}/module`]?.name;
+              break;
+            }
+            case "counter": {
+              const component = this.getComponent(item.id);
+              name = component?.name;
+              break;
             }
           }
-          return result;
+          if (name) {
+            labels[item.id] = `${index + 1}. ${name}`;
+          }
+          return labels;
         }, {});
       },
     },
@@ -400,15 +405,26 @@ export default {
   methods: {
     getElementTreeNames(element) {
       let myNames = {};
-      if (element.type == "cp") {
-        let chargePoint = this.getChargePoint(element.id);
-        if (chargePoint) {
-          myNames[element.id] = chargePoint.name;
+      switch (element.type) {
+        case "cp": {
+          const chargePoint = this.getChargePoint(element.id);
+          if (chargePoint) {
+            myNames[element.id] = chargePoint.name;
+          }
+          break;
         }
-      } else {
-        let component = this.getComponent(element.id);
-        if (component) {
-          myNames[element.id] = component.name;
+        case "consumer": {
+          const consumer = this.$store.state.mqtt[`openWB/consumer/${element.id}/module`];
+          if (consumer?.name) {
+            myNames[element.id] = consumer.name;
+          }
+          break;
+        }
+        default: {
+          const component = this.getComponent(element.id);
+          if (component?.name) {
+            myNames[element.id] = component.name;
+          }
         }
       }
       element.children.forEach((child) => {
