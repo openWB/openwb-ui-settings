@@ -114,7 +114,8 @@ export default {
       get() {
         return (
           (this.$store.state.mqtt["openWB/chargepoint/get/power"] !== undefined ? true : false) &&
-          this.$store.state.mqtt["openWB/general/extern"] === false
+          this.$store.state.mqtt["openWB/general/extern"] === false &&
+          this.installedChargePoints.length > 1
         );
       },
     },
@@ -133,7 +134,8 @@ export default {
       get() {
         return (
           this.$store.state.mqtt["openWB/pv/get/power"] !== undefined &&
-          this.$store.state.mqtt["openWB/general/extern"] === false
+          this.$store.state.mqtt["openWB/general/extern"] === false &&
+          Object.keys(this.inverterConfigs).length > 1
         );
       },
     },
@@ -152,7 +154,8 @@ export default {
       get() {
         return (
           this.$store.state.mqtt["openWB/bat/get/power"] !== undefined &&
-          this.$store.state.mqtt["openWB/general/extern"] === false
+          this.$store.state.mqtt["openWB/general/extern"] === false &&
+          Object.keys(this.batteryConfigs).length > 1
         );
       },
     },
