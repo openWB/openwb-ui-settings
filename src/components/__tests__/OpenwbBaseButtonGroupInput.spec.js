@@ -12,6 +12,11 @@ describe("OpenwbBaseButtonGroupInput.vue", () => {
   // check title prop
   it("render title", () => {
     const wrapper = mount(OpenwbBaseButtonGroupInput, {
+      global: {
+        stubs: {
+          OpenwbBaseTooltip: { template: "<span><slot /></span>" },
+        },
+      },
       props: { title, buttons },
     });
     const titleLabel = wrapper.find("div.col-form-label");
@@ -21,6 +26,11 @@ describe("OpenwbBaseButtonGroupInput.vue", () => {
   it("render buttons", () => {
     const modelValue = 2;
     const wrapper = mount(OpenwbBaseButtonGroupInput, {
+      global: {
+        stubs: {
+          OpenwbBaseTooltip: { template: "<span><slot /></span>" },
+        },
+      },
       props: { buttons, modelValue },
     });
     const renderedButtons = wrapper.findAll("label.btn");
@@ -31,6 +41,11 @@ describe("OpenwbBaseButtonGroupInput.vue", () => {
   it("emit on click", async () => {
     const modelValue = 2;
     const wrapper = mount(OpenwbBaseButtonGroupInput, {
+      global: {
+        stubs: {
+          OpenwbBaseTooltip: { template: "<span><slot /></span>" },
+        },
+      },
       props: { buttons, modelValue },
     });
     const renderedButtons = wrapper.findAll("input[type=radio]");

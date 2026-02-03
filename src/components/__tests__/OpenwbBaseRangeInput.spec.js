@@ -7,6 +7,11 @@ describe("OpenwbBaseRangeInput.vue", () => {
   it("render title", () => {
     const title = "Range Input Test";
     const wrapper = mount(OpenwbBaseRangeInput, {
+      global: {
+        stubs: {
+          OpenwbBaseTooltip: { template: "<span><slot /></span>" },
+        },
+      },
       props: { title, min: 0, max: 100 },
     });
     const titleLabel = wrapper.find("div.col-form-label");
@@ -17,6 +22,11 @@ describe("OpenwbBaseRangeInput.vue", () => {
     const modelValue = 2;
     const unit = "$";
     const wrapper = mount(OpenwbBaseRangeInput, {
+      global: {
+        stubs: {
+          OpenwbBaseTooltip: { template: "<span><slot /></span>" },
+        },
+      },
       props: { modelValue, unit, min: 0, max: 100 },
     });
     const unitDiv = wrapper.find("label.valueLabel");
@@ -26,6 +36,11 @@ describe("OpenwbBaseRangeInput.vue", () => {
   it("display initial value", () => {
     const modelValue = 2;
     const wrapper = mount(OpenwbBaseRangeInput, {
+      global: {
+        stubs: {
+          OpenwbBaseTooltip: { template: "<span><slot /></span>" },
+        },
+      },
       props: { modelValue, min: 0, max: 100 },
     });
     const renderedInput = wrapper.find("input[type=range]");
@@ -38,6 +53,11 @@ describe("OpenwbBaseRangeInput.vue", () => {
     const min = 10;
     const max = 20;
     const wrapper = mount(OpenwbBaseRangeInput, {
+      global: {
+        stubs: {
+          OpenwbBaseTooltip: { template: "<span><slot /></span>" },
+        },
+      },
       props: { modelValue, min, max, step },
     });
     const renderedInput = wrapper.find("input[type=range]");

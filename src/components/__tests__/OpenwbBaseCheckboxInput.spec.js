@@ -7,6 +7,11 @@ describe("OpenwbBaseCheckboxInput.vue", () => {
   it("render title", () => {
     const title = "Checkbox Test";
     const wrapper = mount(OpenwbBaseCheckboxInput, {
+      global: {
+        stubs: {
+          OpenwbBaseTooltip: { template: "<span><slot /></span>" },
+        },
+      },
       props: { title },
     });
     const titleLabel = wrapper.find("div.col-form-label");
@@ -16,6 +21,11 @@ describe("OpenwbBaseCheckboxInput.vue", () => {
   it("render checkbox", () => {
     const modelValue = true;
     const wrapper = mount(OpenwbBaseCheckboxInput, {
+      global: {
+        stubs: {
+          OpenwbBaseTooltip: { template: "<span><slot /></span>" },
+        },
+      },
       props: { modelValue },
     });
     const renderedCheckbox = wrapper.find("input[type=checkbox]");
@@ -25,6 +35,11 @@ describe("OpenwbBaseCheckboxInput.vue", () => {
   it("emit on click", async () => {
     const modelValue = false;
     const wrapper = mount(OpenwbBaseCheckboxInput, {
+      global: {
+        stubs: {
+          OpenwbBaseTooltip: { template: "<span><slot /></span>" },
+        },
+      },
       props: { modelValue },
     });
     const renderedCheckbox = wrapper.find("input[type=checkbox]");
