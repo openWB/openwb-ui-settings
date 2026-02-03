@@ -241,7 +241,10 @@ const router = createRouter({
   routes,
 });
 
+let routeDone = false;
+
 router.beforeEach(async (to) => {
+  routeDone = false;
   // get usage terms status
   const usageTermsAcknowledged = await store.getters.usageTermsAcknowledged;
   if (!usageTermsAcknowledged) {
@@ -249,19 +252,22 @@ router.beforeEach(async (to) => {
       // redirect to data protection page to force acceptance of usage terms
       return { name: "LegalSettings" };
     }
-  } else {
-    // get install assistant status
-    const installAssistantDone = await store.getters.installAssistantDone;
-    if (!installAssistantDone) {
-      if (to.name !== "InstallAssistant") {
-        // redirect to install assistant as a first setup guide
-        return { name: "InstallAssistant" };
-      }
+  }
+  // get install assistant status
+  const installAssistantDone = await store.getters.installAssistantDone;
+  if (!installAssistantDone) {
+    if (to.name !== "InstallAssistant") {
+      // redirect to install assistant as a first setup guide
+      return { name: "InstallAssistant" };
     }
   }
   if (to.meta.checkPermissions === true) {
     const hasPermission = await store.getters.accessAllowed(to.name);
-    console.log("access check for", to.name, "->", hasPermission);
+    console.debug("access check for", to.name, "->", hasPermission);
+    if (routeDone) {
+      console.debug("route already handled, cancel further processing");
+      return false;
+    }
     if (!hasPermission) {
       console.warn("no permission to access", to.name);
       if (store.state.local.username) {
@@ -269,9 +275,11 @@ router.beforeEach(async (to) => {
         return { name: "Error" };
       }
       console.debug("not logged in, cancel navigation to", to.name);
+      routeDone = true;
       return false; // cancel navigation
     }
   }
+  routeDone = true;
 });
 
 router.afterEach((to) => {
