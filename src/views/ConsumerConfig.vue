@@ -137,6 +137,20 @@
               @update:configuration="consumerDeviceConfiguration(installedConsumer, $event)"
             />
             <hr />
+            <openwb-base-heading> Integrierter Zähler </openwb-base-heading>
+            <openwb-base-alert
+              v-if="!hasIntegratedCounter[installedConsumer.id]"
+              subtype="warning"
+            >
+              Dieser Verbraucher besitzt keinen integrierten Zähler.
+            </openwb-base-alert>
+            <openwb-base-alert
+              v-else
+              subtype="info"
+            >
+              Dieser Verbraucher besitzt einen integrierten Zähler.
+            </openwb-base-alert>
+            <hr />
             <openwb-base-heading> Zusätzliche Leistungsmessung </openwb-base-heading>
             <openwb-base-alert
               v-if="!hasExtraMeter(installedConsumer.id)"
@@ -463,6 +477,14 @@ export default {
         }
       }
       return [];
+    },
+    hasIntegratedCounter() {
+      const result = {};
+      Object.values(this.installedConsumers).forEach((consumer) => {
+        result[consumer.id] = consumer?.usage?.includes("meter_only") ?? false;
+      });
+      console.log("consumersWithIntegratedCounter", result);
+      return result;
     },
   },
   methods: {
