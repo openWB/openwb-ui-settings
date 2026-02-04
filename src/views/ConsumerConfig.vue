@@ -401,7 +401,7 @@ export default {
         }
         const configurable = this.$store.state.mqtt["openWB/system/configurable/consumers"];
         return Object.entries(configurable)
-          .map(([groupKey, group]) => {
+          .map(([, group]) => {
             return {
               label: group.group_name,
               options: Object.entries(group.vendors)
@@ -450,7 +450,7 @@ export default {
       const consumerExtraMeterDevice = this.$store.state.mqtt["openWB/system/configurable/consumers_extra_meter"];
       if (!consumerExtraMeterDevice) return [];
       return Object.entries(consumerExtraMeterDevice)
-        .map(([groupKey, group]) => ({
+        .map(([, group]) => ({
           label: group.group_name,
           options: Object.entries(group.vendors)
             .map(([vendorKey, vendor]) => ({
@@ -483,7 +483,6 @@ export default {
       Object.values(this.installedConsumers).forEach((consumer) => {
         result[consumer.id] = consumer?.usage?.includes("meter_only") ?? false;
       });
-      console.log("consumersWithIntegratedCounter", result);
       return result;
     },
   },
