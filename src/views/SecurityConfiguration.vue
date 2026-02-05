@@ -755,6 +755,8 @@ export default {
             return "Basisdaten: Hauptseite/Theme";
           case "basic-user-data":
             return "Basisdaten: Benutzer";
+          case "other-data":
+            return "Daten: Externe Anwendungen lesen und schreiben";
           case "electricity-price-access":
             return "Daten: Strompreise lesen";
           case "graph-access":
