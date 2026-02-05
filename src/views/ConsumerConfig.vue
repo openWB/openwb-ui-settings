@@ -655,10 +655,5 @@ export default {
       this.updateState(key, event.value, event.object);
     },
   },
-  mounted() {
-    setTimeout(() => {
-      console.log("ConsumerConfig mounted", this.installedConsumers);
-    }, 500);
-  },
 };
 </script>
