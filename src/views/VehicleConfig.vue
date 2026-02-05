@@ -130,7 +130,7 @@
               @update:model-value="updateState('openWB/vehicle/' + vehicleId + '/charge_template', $event)"
             />
             <openwb-base-button-group-input
-              title="Mit höherer Leistung laden ⚡"
+              title="Prio volle Leistung ⚡"
               :buttons="[
                 {
                   buttonValue: false,
@@ -146,6 +146,9 @@
               :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/full_power']"
               @update:model-value="updateState('openWB/vehicle/' + vehicleId + '/full_power', $event)"
             >
+              <template #help>
+              Prio volle Leistung vor der minimalen Leistungsfreigabe für nachfolgende Fahrzeugen bei begrenzter Leistung durch das Lastmanagement
+              </template>
             </openwb-base-button-group-input>
             <hr />
             <div v-if="!installAssistantActive">
