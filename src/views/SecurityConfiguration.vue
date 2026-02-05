@@ -673,6 +673,64 @@ export default {
     },
     friendlyRoleName() {
       return (role) => {
+        const componentTypeName = (parts) => {
+          switch (parts[0]) {
+            case "counter":
+              return "Zähler";
+            case "inverter":
+              return "Wechselrichter";
+            case "bat":
+              return "Speicher";
+            case "chargepoint":
+              return "Ladepunkt";
+            case "vehicle":
+              return "Fahrzeug";
+            case "io":
+              switch (parts[1]) {
+                case "device":
+                  return "Ein-/Ausgangs Gerät";
+                case "action":
+                  return "Ein-/Ausgangs Aktion";
+              }
+              break;
+            default:
+              return parts[0];
+          }
+        };
+
+        const buildDataName = (parts) => {
+          let id = parts[1];
+          let type = componentTypeName(parts);
+          let name = "";
+          switch (parts[0]) {
+            case "counter":
+            case "inverter":
+            case "bat":
+              name = this.componentName(id) || id;
+              break;
+            case "chargepoint":
+              name = this.chargePointName(id) || id;
+              break;
+            case "vehicle":
+              name = this.vehicleName(id) || id;
+              break;
+            case "io":
+              id = parts[2];
+              switch (parts[1]) {
+                case "device":
+                  name = this.ioDeviceName(id) || id;
+                  break;
+                case "action":
+                  name = this.ioActionName(id) || id;
+                  break;
+                default:
+                  name = id;
+              }
+              break;
+          }
+          return `Daten: ${type} '${name}' (${id}) ${roleParts[roleParts.length - 2] == "write" ? "schreiben" : "lesen"}`;
+        };
+
         let view = null;
         switch (role) {
           case "charge-log-access":
@@ -686,7 +744,7 @@ export default {
           case "legacy-smart-home-configuration-access":
             return "Einstellungen: Konfiguration - SmartHome";
           case "full-access":
-            return "Voller Zugang";
+            return "Voller Zugang lesen und schreiben";
           case "dynsec-admin":
             return "Sicherheits-Administrator";
           case "basic-display-data":
@@ -698,11 +756,11 @@ export default {
           case "basic-user-data":
             return "Basisdaten: Benutzer";
           case "electricity-price-access":
-            return "Daten: Strompreise (lesen)";
+            return "Daten: Strompreise lesen";
           case "graph-access":
-            return "Daten: Verlaufsdiagramm (lesen)";
+            return "Daten: Verlaufsdiagramm lesen";
           case "home-consumption-access":
-            return "Daten: Hausverbrauch (lesen)";
+            return "Daten: Hausverbrauch lesen";
         }
         const roleParts = role.split("-");
         if (
@@ -718,40 +776,21 @@ export default {
             return `Einstellungen: ${routeName}`;
           }
         }
+        if (roleParts[1] == "sum") {
+          switch (roleParts[0]) {
+            case "inverter":
+              return "Daten: Wechselrichter Summendaten lesen";
+            case "bat":
+              return "Daten: Speicher Summendaten lesen";
+            case "chargepoint":
+              return "Daten: Ladepunkt Summendaten lesen";
+          }
+        }
+        if (!isNaN(roleParts[1]) && ["counter", "inverter", "bat", "chargepoint", "vehicle"].includes(roleParts[0])) {
+          return buildDataName(roleParts);
+        }
         switch (roleParts[0]) {
-          case "counter":
-            if (!isNaN(roleParts[1])) {
-              return `Daten: Zähler '${this.componentName(roleParts[1]) || roleParts[1]}' (${roleParts[1]})`;
-            }
-            break;
-          case "inverter":
-            if (!isNaN(roleParts[1])) {
-              return `Daten: Wechselrichter '${this.componentName(roleParts[1]) || roleParts[1]}' (${roleParts[1]})`;
-            }
-            if (roleParts[1] == "sum") {
-              return "Daten: Wechselrichter Summendaten";
-            }
-            break;
-          case "bat":
-            if (!isNaN(roleParts[1])) {
-              return `Daten: Speicher '${this.componentName(roleParts[1]) || roleParts[1]}' (${roleParts[1]})`;
-            }
-            if (roleParts[1] == "sum") {
-              return "Daten: Speicher Summendaten";
-            }
-            break;
-          case "chargepoint":
-            if (!isNaN(roleParts[1])) {
-              return `Daten: Ladepunkt '${this.chargePointName(roleParts[1]) || roleParts[1]}' (${roleParts[1]})`;
-            }
-            if (roleParts[1] === "sum") {
-              return "Daten: Ladepunkt Summendaten";
-            }
-            break;
           case "vehicle":
-            if (!isNaN(roleParts[1])) {
-              return `Daten: Fahrzeug '${this.vehicleName(roleParts[1]) || roleParts[1]}' (${roleParts[1]})`;
-            }
             if (roleParts[1] === "configuration") {
               return "Einstellungen: Fahrzeuge";
             }
@@ -760,12 +799,9 @@ export default {
             switch (roleParts[1]) {
               case "configuration":
                 return "Einstellungen: Ein-/Ausgänge";
-              case "device":
-                return `Daten: Ein-/Ausgangs-Gerät '${this.ioDeviceName(roleParts[2]) || roleParts[2]}' (${roleParts[2]})`;
-              case "action":
-                return `Daten: Ein-/Ausgangs-Aktion '${this.ioActionName(roleParts[2]) || roleParts[2]}' (${roleParts[2]})`;
+              default:
+                return buildDataName(roleParts);
             }
-            break;
         }
         return `*${role}*`;
       };
