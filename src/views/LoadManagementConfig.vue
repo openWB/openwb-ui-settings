@@ -222,7 +222,8 @@
             <template #help>
               Reihenfolge der Ladepunkt-Prioritäten für das Lastmanagement.<br />
               Ladepunkte mit höherer Priorität (weiter oben in der Liste) werden bevorzugt behandelt, wenn die
-              verfügbare Leistung begrenzt ist.<br />
+              verfügbare Leistung begrenzt ist. Fahrzeuge mit einem Blitz erhalten möglichst ihre volle Soll-Leistung,
+              bevor die Ladung nachfolgender Fahrzeuge gestartet wird.<br />
               Die Reihenfolge kann durch Drag & Drop geändert werden.
             </template>
           </sortable-list>
