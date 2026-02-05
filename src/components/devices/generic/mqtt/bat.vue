@@ -84,7 +84,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/mqtt/bat/{{ component.id }}/set/power_limit
+            openWB/mqtt/bat/{{ component.id }}/set/power_limit
           </openwb-base-copy-to-clipboard>
           <br />
           Entladeleistung in Watt (Float), die im Speicher gesetzt werden muss.<br />
