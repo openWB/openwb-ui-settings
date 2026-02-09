@@ -132,7 +132,7 @@
 
             <hr />
 
-            <openwb-config-proxy
+            <openwb-consumer-config-proxy
               :device="installedConsumer"
               @update:configuration="consumerDeviceConfiguration(installedConsumer, $event)"
             />
@@ -178,7 +178,7 @@
                   <font-awesome-icon :icon="['fas', 'trash']" />
                 </openwb-base-avatar>
               </template>
-              <openwb-config-proxy
+              <openwb-consumer-config-proxy
                 :device="getExtraMeterDevice(installedConsumer.id)"
                 @update:configuration="updateExtraMeterDeviceConfiguration(installedConsumer.id, $event)"
               />
@@ -237,7 +237,7 @@
                   "
                 />
                 <hr />
-                <openwb-config-proxy
+                <openwb-consumer-config-proxy
                   :device="getExtraMeterDevice(installedConsumer.id)"
                   :component="getExtraMeterComponent(installedConsumer.id)"
                   @update:configuration="updateExtraMeterComponentConfiguration(installedConsumer.id, $event)"
@@ -334,13 +334,13 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasHome, fasPlus, fasTrash, fasCog, fasNetworkWired, fasGaugeHigh);
 import ComponentState from "../components/mixins/ComponentState.vue";
-import OpenwbConfigProxy from "../components/devices/OpenwbConfigProxy.vue";
+import OpenwbConsumerConfigProxy from "../components/consumers/OpenwbConsumerConfigProxy.vue";
 
 export default {
   name: "OpenwbConsumerConfigView",
   components: {
     FontAwesomeIcon,
-    OpenwbConfigProxy,
+    OpenwbConsumerConfigProxy,
   },
   mixins: [ComponentState],
   emits: ["sendCommand", "save", "reset", "defaults"],
