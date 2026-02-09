@@ -26,37 +26,6 @@
       @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
     >
     </openwb-base-number-input>
-    <hr />
-    <openwb-base-heading> Elektrischer Anschluss </openwb-base-heading>
-    <openwb-base-button-group-input
-      title="Anzahl angeschlossener Phasen"
-      :buttons="[
-        { buttonValue: 1, text: '1' },
-        { buttonValue: 2, text: '2' },
-        { buttonValue: 3, text: '3' },
-      ]"
-      :model-value="device.config?.connected_phases"
-      @update:model-value="updateConfiguration($event, 'connected_phases')"
-    />
-    <openwb-base-button-group-input
-      title="Phase 1 des Ladekabels"
-      :buttons="[
-        { buttonValue: 1, text: 'EVU L1' },
-        { buttonValue: 2, text: 'EVU L2' },
-        { buttonValue: 3, text: 'EVU L3' },
-      ]"
-      :model-value="device?.config?.phase_1"
-      @update:model-value="updateConfiguration($event, 'phase_1')"
-    >
-    </openwb-base-button-group-input>
-    <openwb-base-number-input
-      title="Max Leistung"
-      unit="W"
-      :min="1"
-      :model-value="device?.config?.max_power"
-      @update:model-value="updateConfiguration($event, 'max_power')"
-    >
-    </openwb-base-number-input>
   </div>
 </template>
 
