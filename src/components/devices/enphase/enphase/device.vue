@@ -9,8 +9,8 @@
       @update:model-value="updateConfiguration($event, 'configuration.hostname')"
     >
       <template #help>
-        Bitte geben Sie die IP-Adresse oder den Hostnamen des Enphase Envoy oder IQ Gateway an. Die Info finden Sie in
-        Ihrem Router. Ab Werk ist der Hostname "envoy" oder "envoy.local".
+        Bitte gib die IP-Adresse oder den Hostnamen des Enphase Envoy oder IQ Gateway an. Die Info findest Du in Deinem
+        Router. Ab Werk ist der Hostname "envoy" oder "envoy.local".
       </template>
     </openwb-base-text-input>
     <openwb-base-select-input
@@ -24,7 +24,7 @@
       @update:model-value="updateConfiguration($event, 'configuration.version')"
     >
       <template #help>
-        Bitte wählen Sie die Version des Enphase Envoy oder IQ Gateway aus. Die Version 1 ist für Geräte mit einer
+        Bitte wähle die Version des Enphase Envoy oder IQ Gateway aus. Die Version 1 ist für Geräte mit einer
         Firmware-Version unter 7.0, die Version 2 für Geräte mit einer Firmware-Version ab 7.0. Ein angebundener
         Speicher wird nur bei Version 2 unterstützt.
       </template>
@@ -63,7 +63,7 @@
       <template #help>
         Wenn Benutzer, Kennwort und Seriennummer des Envoys angegeben werden, wird das Token automatisch beim Speichern
         abgerufen. Ebenfalls wird ein abgelaufenes Token (derzeit nach einem Jahr) automatisch erneuert.<br />
-        Wenn Sie ein Token manuell erstellen möchten, können Sie dies auf der
+        Wenn Du ein Token manuell erstellen möchtest, kannst Du dies auf der
         <a
           href="https://developer.enphase.com/docs/quickstart.html"
           target="_blank"

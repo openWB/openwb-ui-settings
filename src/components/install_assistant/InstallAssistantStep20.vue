@@ -14,8 +14,8 @@
         müssen keine weiteren Ladepunkte hinzugefügt werden.
       </p>
       <p>
-        Tragen Sie unter Ladepunkte bei verfügbare Ladepunkte "Interne openWB" ein und wählen Sie die Bauart der openWB
-        (z.B. openWB series 1/2 custom, Standard (+), Buchse oder Pro+) aus.
+        Trage unter Ladepunkte bei verfügbare Ladepunkte "Interne openWB" ein und wähle die Bauart der openWB (z.B.
+        openWB series 1/2 custom, Standard (+), Buchse oder Pro+) aus.
       </p>
       <p>Wenn eine openWB Duo gewählt wird, so sind zwei Ladepunkte mit Ladepunkt-Nummer 1 und 2 zu konfigurieren.</p>
       <p class="font-weight-bold">Änderungen werden nur durch Klicken auf Speichern wirksam!</p>

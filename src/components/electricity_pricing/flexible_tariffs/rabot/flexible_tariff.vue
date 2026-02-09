@@ -1,8 +1,8 @@
 <template>
   <div class="flexible-tariff-rabot">
     <openwb-base-alert subtype="info">
-      Über die Rabot-Authentifizierung können Sie Ihre Stromtarif-Daten für die Ladeplanung nutzen. Nach der Anmeldung
-      bei Rabot wird eine Kundennummer in der Adresszeile angezeigt, die Sie hier einfügen müssen.
+      Über die Rabot-Authentifizierung kannst Du Deine Stromtarif-Daten für die Ladeplanung nutzen. Nach der Anmeldung
+      bei Rabot wird eine Kundennummer in der Adresszeile angezeigt, die Du hier einfügen musst.
     </openwb-base-alert>
     <openwb-base-alert subtype="warning">
       Die Rabot-Authentifizierung kann nur über einen Computer oder die openWB-Cloud (remote.openwb.de) durchgeführt
@@ -17,7 +17,7 @@
       @button-clicked="() => rabot_login_window()"
     >
       <template #help>
-        Es wird ein neues Browserfenster geöffnet, in dem Sie sich bei Rabot mit Ihren Zugangsdaten anmelden können.
+        Es wird ein neues Browserfenster geöffnet, in dem Du Dich bei Rabot mit Deinen Zugangsdaten anmelden kannst.
       </template>
     </openwb-base-button-input>
 
@@ -52,7 +52,7 @@
       @update:model-value="updateConfiguration($event, 'configuration.contract_number')"
     >
       <template #help>
-        Wählen Sie eine der verfügbaren Vertragsnummern aus. Diese wird für den Zugriff auf die Tarif-Daten benötigt.
+        Wähle eine der verfügbaren Vertragsnummern aus. Diese wird für den Zugriff auf die Tarif-Daten benötigt.
       </template>
     </openwb-base-select-input>
   </div>
@@ -129,7 +129,7 @@ export default {
 
     async fetch_contract_number() {
       if (!this.flexibleTariff.configuration.customer_number) {
-        this.$root.postClientMessage("Bitte geben Sie zuerst eine Kundennummer ein.", "warning");
+        this.$root.postClientMessage("Bitte gib zuerst eine Kundennummer ein.", "warning");
         return;
       }
 
@@ -156,7 +156,7 @@ export default {
 
           if (contractNumbers.length > 1) {
             this.$root.postClientMessage(
-              `${contractNumbers.length} Verträge gefunden. Erster Vertrag ausgewählt: ${contractNumber}. Sie können einen anderen Vertrag aus der Liste wählen.`,
+              `${contractNumbers.length} Verträge gefunden. Erster Vertrag ausgewählt: ${contractNumber}. Du kannst einen anderen Vertrag aus der Liste wählen.`,
               "success",
             );
           } else {

@@ -31,7 +31,7 @@
           subtype="danger"
           class="mb-1"
         >
-          Sie müssen die Nutzungsbedingungen akzeptieren, bevor openWB eingesetzt werden kann.
+          Du musst die Nutzungsbedingungen akzeptieren, bevor openWB eingesetzt werden kann.
           <div class="row justify-content-center">
             <div class="col-md-4 d-flex justify-content-center">
               <openwb-base-click-button
