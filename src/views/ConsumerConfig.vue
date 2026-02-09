@@ -610,14 +610,13 @@ export default {
       this.updateState(`openWB/consumer/${consumerId}/extra_meter/device/component/config`, event.value, event.object);
     },
     consumerDeviceConfiguration(consumer, event) {
-      const { object, value, source } = event;
-      //  If fallback and device is a consumer (no Vue device component available ) >> module topic
-      if (source === "fallback") {
-        this.updateState(`openWB/consumer/${consumer.id}/module`, value, "configuration");
-        return;
-      }
-      // Normal consumer routing (module and config topics)
-      const moduleFields = ["configuration.ip_address", "configuration.port", "configuration.modbus_id"];
+      const { object, value } = event;
+      const moduleFields = [
+        "configuration.ip_address",
+        "configuration.port",
+        "configuration.modbus_id",
+        "configuration",
+      ];
       const targetTopic = moduleFields.includes(object)
         ? `openWB/consumer/${consumer.id}/module`
         : `openWB/consumer/${consumer.id}/config`;

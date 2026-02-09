@@ -38,7 +38,6 @@ export default {
       this.$emit("update:configuration", {
         value,
         object: "configuration",
-        source: "fallback",
       });
     },
   },
