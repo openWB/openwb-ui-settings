@@ -74,10 +74,6 @@
               möglich.
             </p>
             <p>
-              Standard-Admin-Benutzer nach der ersten Aktivierung: Benutzername: <strong>admin</strong> Passwort:
-              <strong>openwb</strong>
-            </p>
-            <p>
               <strong>Hinweis:</strong> Die Benutzerverwaltung erfordert zwingend die Abschaltung des unverschlüsselten
               Zugangs.
             </p>
@@ -87,6 +83,11 @@
           subtype="warning"
           class="mt-2"
         >
+          Standard-Admin-Benutzer nach der ersten Aktivierung oder dem Zurücksetzen:
+          <ul>
+            <li>Benutzername: <strong>admin</strong></li>
+            <li>Passwort: <strong>openwb</strong></li>
+          </ul>
           Stelle sicher, dass Du sowohl für die <router-link to="/GeneralConfiguration">Hauptseite</router-link> als
           auch für ein eventuell vorhandenes <router-link to="/DisplayConfiguration">Display</router-link> ein Theme
           auswählst, welches die Benutzerverwaltung auch unterstützt!
@@ -104,10 +105,8 @@
           <template #help>
             Hiermit werden alle Benutzer, Gruppen und Rollen der openWB Benutzerverwaltung gelöscht und auf die
             Werkseinstellungen zurückgesetzt. Diese Aktion ist irreversibel!<br />
-            <strong>Hinweis:</strong> Die Benutzerverwaltung muss deaktiviert sein und es darf kein Benutzer angemeldet
-            sein, um die Benutzerverwaltung zurücksetzen zu können.<br />
-            Standard-Admin-Benutzer nach dem Zurücksetzen: Benutzername: <strong>admin</strong> Passwort:
-            <strong>openwb</strong>
+            <strong>Hinweis:</strong> Die Benutzerverwaltung muss deaktiviert sein, um die Benutzerverwaltung
+            zurücksetzen zu können.
           </template>
         </openwb-base-button-input>
         <template #footer>
@@ -186,7 +185,7 @@
                 {{ clientDetails[client]?.disabled ? "Deaktiviert" : "Aktiv" }}
               </span>
               <openwb-base-avatar
-                v-if="!slotProps.collapsed && loggedInUser !== client"
+                v-if="!slotProps.collapsed && loggedInUser !== client && !client.startsWith('Display-')"
                 class="bg-danger clickable"
                 title="Benutzer löschen"
                 @click.stop="if (loggedInUser !== client) deleteClient(client);"
@@ -203,16 +202,18 @@
                   disabled
                 />
                 <openwb-base-text-input
+                  v-if="!clientDetails[client].username.startsWith('Display-')"
                   v-model="clientDetails[client].textname"
                   title="E-Mail"
                   subtype="email"
-                  required
+                  :required="clientDetails[client].username.startsWith('Display-') ? false : true"
                 >
                   <template #help>
                     Die hier angegebene E-Mail wird für die Funktion "Kennwort vergessen" verwendet.
                   </template>
                 </openwb-base-text-input>
                 <openwb-base-text-input
+                  v-if="!clientDetails[client].username.startsWith('Display-')"
                   v-model="clientDetails[client].password"
                   title="Passwort"
                   subtype="password"
@@ -320,7 +321,7 @@
             </template>
             <template #actions="slotProps">
               <openwb-base-avatar
-                v-if="!slotProps.collapsed && ![anonymousGroupName, userGroupName].includes(group)"
+                v-if="!slotProps.collapsed && ![anonymousGroupName, userGroupName, displayGroupName].includes(group)"
                 class="bg-danger clickable"
                 title="Gruppe löschen"
                 @click.stop="deleteGroup(group)"
@@ -344,6 +345,14 @@
                 wird. Es wird empfohlen, diese Gruppe für alle Benutzer zu verwenden und weitere Rollen durch separate
                 Gruppen oder direkt bei den Benutzern zuzuweisen.
               </openwb-base-alert>
+              <openwb-base-alert
+                v-if="group === displayGroupName"
+                subtype="info"
+              >
+                Die Gruppe "{{ group }}" kann nicht bearbeitet werden, da sie von openWB für integrierte Displays
+                verwendet wird. Es wird empfohlen, diese Gruppe für alle Displays zu verwenden und weitere Rollen durch
+                separate Gruppen oder direkt bei den Display-Benutzern zuzuweisen.
+              </openwb-base-alert>
               <form :name="`groupForm-${group}`">
                 <openwb-base-text-input
                   v-model="groupDetails[group].groupname"
@@ -355,7 +364,7 @@
                   v-model="groupDetails[group].textname"
                   title="Beschreibung"
                   subtype="text"
-                  :disabled="[anonymousGroupName, userGroupName].includes(group)"
+                  :disabled="[anonymousGroupName, userGroupName, displayGroupName].includes(group)"
                 />
                 <openwb-base-array-input
                   title="Zugewiesene Benutzer"
@@ -377,8 +386,8 @@
                 <openwb-base-array-input
                   title="Zugewiesene Rollen"
                   :valid-elements="rolesList.map((role) => ({ value: role.name, label: role.friendlyName }))"
-                  :disabled="[anonymousGroupName, userGroupName].includes(group)"
-                  :readonly="[anonymousGroupName, userGroupName].includes(group)"
+                  :disabled="[anonymousGroupName, userGroupName, displayGroupName].includes(group)"
+                  :readonly="[anonymousGroupName, userGroupName, displayGroupName].includes(group)"
                   :model-value="groupDetails[group].roles.map((role) => role.rolename)"
                   @update:model-value="
                     (newRoles) => {
@@ -397,7 +406,7 @@
                   v-model="groupDetails[group].textdescription"
                   title="Zusatzinformationen"
                   subtype="text"
-                  :disabled="[anonymousGroupName, userGroupName].includes(group)"
+                  :disabled="[anonymousGroupName, userGroupName, displayGroupName].includes(group)"
                 >
                   <template #help> Hier können zusätzliche Informationen zur Gruppe hinterlegt werden. </template>
                 </openwb-base-textarea>
@@ -578,6 +587,7 @@ export default {
       newGroupName: null,
       anonymousGroupName: null,
       userGroupName: "user",
+      displayGroupName: "display",
       defaultAclAccess: [],
       showResetModal: false,
     };
