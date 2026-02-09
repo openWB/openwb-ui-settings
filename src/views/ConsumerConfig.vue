@@ -176,13 +176,15 @@
               v-if="!hasIntegratedCounter[installedConsumer.id]"
               subtype="warning"
             >
-              Dieser Verbraucher besitzt keinen integrierten Zähler.
+              Es wurde noch kein zusätzlicher Zähler hinzugefügt. Wenn kein zusätzlicher Zähler vorhanden ist, wird das
+              Gerät anhand der eingegebenen minimalen Leistung geschaltet.
             </openwb-base-alert>
             <openwb-base-alert
               v-else
               subtype="info"
             >
-              Dieser Verbraucher besitzt einen integrierten Zähler.
+              Es wurde noch kein zusätzlicher Zähler hinzugefügt. Falls gewünscht, kann ein zusätzlicher Zähler
+              hinzugefügt werden, der die Messwerte des integrierten Zählers überschreibt.
             </openwb-base-alert>
             <hr />
             <openwb-base-heading> Zusätzliche Leistungsmessung </openwb-base-heading>
