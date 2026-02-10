@@ -378,12 +378,12 @@
           :collapsible="true"
           :collapsed="true"
         >
-          <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-            <openwb-base-alert subtype="info">
-              Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary"
-              befindet.
-            </openwb-base-alert>
-          </div>
+          <openwb-base-alert
+            v-if="$store.state.mqtt['openWB/general/extern'] === true"
+            subtype="info"
+          >
+            Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
+          </openwb-base-alert>
           <div v-else>
             <openwb-base-alert subtype="info">
               Das Monitoring informiert Dich sofort per E-Mail, wenn eine Deiner Komponenten oder Ladepunkte ein Problem
@@ -412,7 +412,10 @@
               />
             </div>
           </div>
-          <template #footer>
+          <template
+            v-if="$store.state.mqtt['openWB/general/extern'] !== true"
+            #footer
+          >
             <openwb-base-submit-buttons
               form-name="monitoringForm"
               :hide-defaults="true"
