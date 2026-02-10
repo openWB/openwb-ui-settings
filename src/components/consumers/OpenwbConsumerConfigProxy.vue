@@ -31,14 +31,12 @@ export default {
       if (this.SHARED_DEVICE_VENDORS.includes(this.device.vendor)) {
         return `../devices/${this.device.vendor}/${this.device.type}/device.vue`;
       }
-
-      return `./${this.device.vendor}/${this.device.type}/device.vue`;
+      return `./${this.device.vendor}/${this.device.type}/consumer.vue`;
     },
     getComponentPath() {
       if (this.SHARED_DEVICE_VENDORS.includes(this.device.vendor)) {
         return `../devices/${this.device.vendor}/${this.device.type}/${this.component.type}.vue`;
       }
-
       return `./${this.device.vendor}/${this.device.type}/${this.component.type}.vue`;
     },
     getComponent() {

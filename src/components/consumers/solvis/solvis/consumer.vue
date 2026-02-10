@@ -1,10 +1,6 @@
 <template>
-  <div class="device-shelly">
-    <openwb-base-heading> Einstellungen für Shelly </openwb-base-heading>
-    <openwb-base-alert subtype="info">
-      Unterstützt werden theoretisch alle ein- und dreiphasigen Shelly der Generation 1-3. Getestete Modelle sind Shelly
-      1pm, 1pm plus, Pro Pro 3EM, Plug S.
-    </openwb-base-alert>
+  <div class="device-avm">
+    <openwb-base-heading>Einstellungen für Solvis Wärmepumpe</openwb-base-heading>
     <openwb-base-text-input
       title="IP oder Hostname"
       subtype="host"
@@ -14,18 +10,20 @@
     />
     <openwb-base-number-input
       title="Port"
+      required
       :min="1"
+      :max="65535"
       :model-value="device.configuration.port"
       @update:model-value="updateConfiguration($event, 'configuration.port')"
-    >
-    </openwb-base-number-input>
+    />
     <openwb-base-number-input
-      title="Modbus id"
-      :min="1"
+      title="Modbus ID"
+      required
       :model-value="device.configuration.modbus_id"
+      min="1"
+      max="255"
       @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
-    >
-    </openwb-base-number-input>
+    />
   </div>
 </template>
 
@@ -33,7 +31,7 @@
 import ConsumerDeviceConfigMixin from "../../ConsumerDeviceConfigMixin.vue";
 
 export default {
-  name: "DeviceShelly",
+  name: "ConsumerSolvisHeatPump",
   mixins: [ConsumerDeviceConfigMixin],
 };
 </script>

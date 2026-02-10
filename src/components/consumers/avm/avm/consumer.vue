@@ -22,6 +22,12 @@
       :model-value="device.configuration.password"
       @update:model-value="updateConfiguration($event, 'configuration.password')"
     />
+    <openwb-base-text-input
+      title="Name"
+      subtype="text"
+      :model-value="device.configuration.name"
+      @update:model-value="updateConfiguration($event, 'configuration.name')"
+    />
   </div>
 </template>
 
@@ -29,7 +35,7 @@
 import ConsumerDeviceConfigMixin from "../../ConsumerDeviceConfigMixin.vue";
 
 export default {
-  name: "DeviceAvm",
+  name: "ConsumerAvm",
   mixins: [ConsumerDeviceConfigMixin],
 };
 </script>

@@ -1,7 +1,6 @@
 <template>
   <div class="device-idm">
-    <openwb-base-heading> Einstellungen für IDM </openwb-base-heading>
-    <openwb-base-alert subtype="info"> ModbusTCP muss in der Fachmannebene aktiviert sein. </openwb-base-alert>
+    <openwb-base-heading> Einstellungen für Askoheat</openwb-base-heading>
     <openwb-base-text-input
       title="IP oder Hostname"
       subtype="host"
@@ -32,7 +31,7 @@
 import ConsumerDeviceConfigMixin from "../../ConsumerDeviceConfigMixin.vue";
 
 export default {
-  name: "DeviceIDM",
+  name: "ConsumerAskoheat",
   mixins: [ConsumerDeviceConfigMixin],
 };
 </script>

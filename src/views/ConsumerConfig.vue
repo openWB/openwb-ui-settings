@@ -420,6 +420,7 @@ export default {
       modalConsumerName: "",
       modalExtraMeterDeviceName: "",
       modelExtraMeterComponentName: "",
+      CONSUMER_CONFIG_FIELDS: ["connected_phases", "phase_1", "max_power"],
     };
   },
   computed: {
@@ -660,15 +661,10 @@ export default {
     },
     consumerDeviceConfiguration(consumer, event) {
       const { object, value } = event;
-      const moduleFields = [
-        "configuration.ip_address",
-        "configuration.port",
-        "configuration.modbus_id",
-        "configuration",
-      ];
-      const targetTopic = moduleFields.includes(object)
-        ? `openWB/consumer/${consumer.id}/module`
-        : `openWB/consumer/${consumer.id}/config`;
+      const isConsumerConfigField = this.CONSUMER_CONFIG_FIELDS.includes(object);
+      const targetTopic = isConsumerConfigField
+        ? `openWB/consumer/${consumer.id}/config`
+        : `openWB/consumer/${consumer.id}/module`;
       this.updateState(targetTopic, value, object);
     },
     getUsageOptions(consumer) {
