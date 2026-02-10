@@ -173,18 +173,31 @@
             <hr />
             <openwb-base-heading> Integrierter Zähler </openwb-base-heading>
             <openwb-base-alert
-              v-if="!hasIntegratedCounter[installedConsumer.id]"
+              v-if="!hasIntegratedCounter[installedConsumer.id] && !hasExtraMeter(installedConsumer.id)"
               subtype="warning"
             >
-              Es wurde noch kein zusätzlicher Zähler hinzugefügt. Wenn kein zusätzlicher Zähler vorhanden ist, wird das
-              Gerät anhand der eingegebenen minimalen Leistung geschaltet.
+              Es wurde noch kein zusätzlicher Zähler hinzugefügt. Wenn kein zusätzlicher Zähler vorhanden ist, wird der
+              Verbraucher anhand der eingegebenen minimalen Leistung geschaltet.
             </openwb-base-alert>
             <openwb-base-alert
-              v-else
+              v-if="!hasIntegratedCounter[installedConsumer.id] && hasExtraMeter(installedConsumer.id)"
+              subtype="info"
+            >
+              Diese Verbraucher verfügt über keinen integrierten Zähler. Ein zusätzlicher Zähler wurde hinzugefügt.
+            </openwb-base-alert>
+            <openwb-base-alert
+              v-if="hasIntegratedCounter[installedConsumer.id] && !hasExtraMeter(installedConsumer.id)"
               subtype="info"
             >
               Es wurde noch kein zusätzlicher Zähler hinzugefügt. Falls gewünscht, kann ein zusätzlicher Zähler
               hinzugefügt werden, der die Messwerte des integrierten Zählers überschreibt.
+            </openwb-base-alert>
+            <openwb-base-alert
+              v-if="hasIntegratedCounter[installedConsumer.id] && hasExtraMeter(installedConsumer.id)"
+              subtype="info"
+            >
+              Zusätzlicher Zähler hinzugefügt. Die Messwerte des integrierten Zählers werden durch die Werte des
+              zusätzlichen Zählers überschrieben.
             </openwb-base-alert>
             <hr />
             <openwb-base-heading> Zusätzliche Leistungsmessung </openwb-base-heading>
