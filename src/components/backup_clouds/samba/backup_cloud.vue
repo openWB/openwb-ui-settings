@@ -41,11 +41,11 @@
     />
     <openwb-base-number-input
       title="Anzahl Backups aufbewahren"
-      :model-value="backupCloud.configuration.retention_count"
+      :model-value="backupCloud.configuration.max_backups"
       :min="0"
       :max="100"
       required
-      @update:model-value="updateConfiguration($event, 'configuration.retention_count')"
+      @update:model-value="updateConfiguration($event, 'configuration.max_backups')"
     >
       <template #help>
         0 = keine automatische Löschung.<br />
