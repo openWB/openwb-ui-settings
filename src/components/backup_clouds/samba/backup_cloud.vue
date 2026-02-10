@@ -39,6 +39,20 @@
       :model-value="backupCloud.configuration.smb_password"
       @update:model-value="updateConfiguration($event, 'configuration.smb_password')"
     />
+    <openwb-base-number-input
+      title="Anzahl Backups aufbewahren"
+      :model-value="backupCloud.configuration.retention_count"
+      :min="0"
+      :max="100"
+      required
+      @update:model-value="updateConfiguration($event, 'configuration.retention_count')"
+    >
+      <template #help>
+        0 = keine automatische Löschung.<br />
+        Bei Werten &gt; 0 werden nur die neuesten Backups behalten, ältere mit dem Prefix "openwb_backup_" werden
+        gelöscht.
+      </template>
+    </openwb-base-number-input>
   </div>
 </template>
 
