@@ -14,6 +14,7 @@
     />
     <openwb-base-number-input
       title="Port"
+      required
       :min="1"
       :model-value="device.configuration.port"
       @update:model-value="updateConfiguration($event, 'configuration.port')"
@@ -21,6 +22,7 @@
     </openwb-base-number-input>
     <openwb-base-number-input
       title="Modbus id"
+      required
       :min="1"
       :model-value="device.configuration.modbus_id"
       @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
