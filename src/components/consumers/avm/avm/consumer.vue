@@ -25,6 +25,7 @@
     <openwb-base-text-input
       title="Name"
       subtype="text"
+      required
       :model-value="device.configuration.name"
       @update:model-value="updateConfiguration($event, 'configuration.name')"
     />
