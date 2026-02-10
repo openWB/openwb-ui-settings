@@ -82,7 +82,7 @@
           subtype="info"
         >
           Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary"
-          befindet.<br />
+          befindet.
         </openwb-base-alert>
         <div v-else>
           <openwb-base-card
@@ -148,7 +148,6 @@
         </div>
       </openwb-base-card>
       <openwb-base-submit-buttons
-        v-if="$store.state.mqtt['openWB/general/extern'] !== true"
         form-name="ioConfigForm"
         @save="$emit('save')"
         @reset="$emit('reset')"
