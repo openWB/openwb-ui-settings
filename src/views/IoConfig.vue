@@ -83,7 +83,6 @@
         >
           Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary"
           befindet.<br />
-          Die Konfiguration zur Fahrzeugzuordnung bitte auf der "primary" openWB durchführen.
         </openwb-base-alert>
         <div v-else>
           <openwb-base-card
