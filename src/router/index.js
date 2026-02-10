@@ -244,42 +244,54 @@ const router = createRouter({
 let routeDone = false;
 
 router.beforeEach(async (to) => {
+  const checkPermissions = async (to) => {
+    if (to.meta.checkPermissions === true) {
+      const hasPermission = await store.getters.accessAllowed(to.name);
+      console.debug("access check for", to.name, "->", hasPermission);
+      if (routeDone) {
+        console.debug("route already handled, cancel further processing");
+        return false;
+      }
+      if (!hasPermission) {
+        console.warn("no permission to access", to.name);
+        if (store.state.local.username) {
+          // logged in but no permission
+          return { name: "Error" };
+        }
+        console.debug("not logged in, cancel navigation to", to.name);
+        routeDone = true;
+        return false; // cancel navigation
+      }
+    }
+    return true; // allow navigation
+  };
+
   routeDone = false;
   // get usage terms status
   const usageTermsAcknowledged = await store.getters.usageTermsAcknowledged;
   if (!usageTermsAcknowledged) {
     if (to.name !== "LegalSettings") {
-      // redirect to data protection page to force acceptance of usage terms
+      // redirect to legal settings page to force acceptance of usage terms
+      console.log("usage terms not acknowledged, redirect to legal settings");
       return { name: "LegalSettings" };
     }
+    console.log("usage terms not acknowledged, but already on legal settings, continue");
+    return await checkPermissions(to);
   }
   // get install assistant status
   const installAssistantDone = await store.getters.installAssistantDone;
   if (!installAssistantDone) {
     if (to.name !== "InstallAssistant") {
       // redirect to install assistant as a first setup guide
+      console.log("install assistant not done, redirect to install assistant");
       return { name: "InstallAssistant" };
     }
+    console.log("install assistant not done, but already on install assistant, continue");
+    return await checkPermissions(to);
   }
-  if (to.meta.checkPermissions === true) {
-    const hasPermission = await store.getters.accessAllowed(to.name);
-    console.debug("access check for", to.name, "->", hasPermission);
-    if (routeDone) {
-      console.debug("route already handled, cancel further processing");
-      return false;
-    }
-    if (!hasPermission) {
-      console.warn("no permission to access", to.name);
-      if (store.state.local.username) {
-        // logged in but no permission
-        return { name: "Error" };
-      }
-      console.debug("not logged in, cancel navigation to", to.name);
-      routeDone = true;
-      return false; // cancel navigation
-    }
-  }
+  const result = await checkPermissions(to);
   routeDone = true;
+  return result;
 });
 
 router.afterEach((to) => {

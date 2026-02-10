@@ -7,14 +7,8 @@
       :buttons="[{ text: 'Alles zurücksetzen!', event: 'confirm', subtype: 'danger' }]"
       @modal-result="handleResetModal($event)"
     >
-      <p>
-        Bist Du sicher, dass Du die openWB Benutzerverwaltung zurücksetzen möchtest? Hiermit werden alle Benutzer,
-        Gruppen und Rollen gelöscht und auf die Werkseinstellungen zurückgesetzt. Diese Aktion ist irreversibel!
-      </p>
-      <p>
-        Standard-Admin-Benutzer nach dem Zurücksetzen: Benutzername: <strong>admin</strong> Passwort:
-        <strong>openwb</strong>
-      </p>
+      Bist Du sicher, dass Du die openWB Benutzerverwaltung zurücksetzen möchtest? Hiermit werden alle Benutzer, Gruppen
+      und Rollen gelöscht und auf die Werkseinstellungen zurückgesetzt. Diese Aktion ist irreversibel!
     </openwb-base-modal-dialog>
     <form name="accessForm">
       <openwb-base-card title="Allgemein">
