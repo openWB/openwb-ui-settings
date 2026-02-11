@@ -131,24 +131,73 @@
             </openwb-base-select-input>
 
             <hr />
+            <openwb-base-heading> Elektrischer Anschluss </openwb-base-heading>
+            <openwb-base-button-group-input
+              title="Anzahl angeschlossener Phasen"
+              :buttons="[
+                { buttonValue: 1, text: '1' },
+                { buttonValue: 2, text: '2' },
+                { buttonValue: 3, text: '3' },
+              ]"
+              :model-value="installedConsumer.config?.connected_phases"
+              @update:model-value="
+                updateState(`openWB/consumer/${installedConsumer.id}/config`, $event, 'connected_phases')
+              "
+            />
+            <openwb-base-button-group-input
+              title="Phase 1 des Ladekabels"
+              :buttons="[
+                { buttonValue: 1, text: 'EVU L1' },
+                { buttonValue: 2, text: 'EVU L2' },
+                { buttonValue: 3, text: 'EVU L3' },
+              ]"
+              :model-value="installedConsumer?.config?.phase_1"
+              @update:model-value="updateState(`openWB/consumer/${installedConsumer.id}/config`, $event, 'phase_1')"
+            >
+            </openwb-base-button-group-input>
+            <openwb-base-number-input
+              title="Max Leistung"
+              unit="W"
+              :min="1"
+              :model-value="installedConsumer?.config?.max_power"
+              @update:model-value="updateState(`openWB/consumer/${installedConsumer.id}/config`, $event, 'max_power')"
+            >
+            </openwb-base-number-input>
 
-            <openwb-config-proxy
+            <hr />
+
+            <openwb-consumer-config-proxy
               :device="installedConsumer"
               @update:configuration="consumerDeviceConfiguration(installedConsumer, $event)"
             />
             <hr />
             <openwb-base-heading> Integrierter Zähler </openwb-base-heading>
             <openwb-base-alert
-              v-if="!hasIntegratedCounter[installedConsumer.id]"
+              v-if="!hasIntegratedCounter[installedConsumer.id] && !hasExtraMeter(installedConsumer.id)"
               subtype="warning"
             >
-              Dieser Verbraucher besitzt keinen integrierten Zähler.
+              Es wurde noch kein zusätzlicher Zähler hinzugefügt. Wenn kein zusätzlicher Zähler vorhanden ist, wird der
+              Verbraucher anhand der eingegebenen minimalen Leistung geschaltet.
             </openwb-base-alert>
             <openwb-base-alert
-              v-else
+              v-if="!hasIntegratedCounter[installedConsumer.id] && hasExtraMeter(installedConsumer.id)"
               subtype="info"
             >
-              Dieser Verbraucher besitzt einen integrierten Zähler.
+              Diese Verbraucher verfügt über keinen integrierten Zähler. Ein zusätzlicher Zähler wurde hinzugefügt.
+            </openwb-base-alert>
+            <openwb-base-alert
+              v-if="hasIntegratedCounter[installedConsumer.id] && !hasExtraMeter(installedConsumer.id)"
+              subtype="info"
+            >
+              Es wurde noch kein zusätzlicher Zähler hinzugefügt. Falls gewünscht, kann ein zusätzlicher Zähler
+              hinzugefügt werden, der die Messwerte des integrierten Zählers überschreibt.
+            </openwb-base-alert>
+            <openwb-base-alert
+              v-if="hasIntegratedCounter[installedConsumer.id] && hasExtraMeter(installedConsumer.id)"
+              subtype="info"
+            >
+              Zusätzlicher Zähler hinzugefügt. Die Messwerte des integrierten Zählers werden durch die Werte des
+              zusätzlichen Zählers überschrieben.
             </openwb-base-alert>
             <hr />
             <openwb-base-heading> Zusätzliche Leistungsmessung </openwb-base-heading>
@@ -178,7 +227,7 @@
                   <font-awesome-icon :icon="['fas', 'trash']" />
                 </openwb-base-avatar>
               </template>
-              <openwb-config-proxy
+              <openwb-consumer-config-proxy
                 :device="getExtraMeterDevice(installedConsumer.id)"
                 @update:configuration="updateExtraMeterDeviceConfiguration(installedConsumer.id, $event)"
               />
@@ -237,7 +286,7 @@
                   "
                 />
                 <hr />
-                <openwb-config-proxy
+                <openwb-consumer-config-proxy
                   :device="getExtraMeterDevice(installedConsumer.id)"
                   :component="getExtraMeterComponent(installedConsumer.id)"
                   @update:configuration="updateExtraMeterComponentConfiguration(installedConsumer.id, $event)"
@@ -334,13 +383,13 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasHome, fasPlus, fasTrash, fasCog, fasNetworkWired, fasGaugeHigh);
 import ComponentState from "../components/mixins/ComponentState.vue";
-import OpenwbConfigProxy from "../components/devices/OpenwbConfigProxy.vue";
+import OpenwbConsumerConfigProxy from "../components/consumers/OpenwbConsumerConfigProxy.vue";
 
 export default {
   name: "OpenwbConsumerConfigView",
   components: {
     FontAwesomeIcon,
-    OpenwbConfigProxy,
+    OpenwbConsumerConfigProxy,
   },
   mixins: [ComponentState],
   emits: ["sendCommand", "save", "reset", "defaults"],
@@ -371,6 +420,7 @@ export default {
       modalConsumerName: "",
       modalExtraMeterDeviceName: "",
       modelExtraMeterComponentName: "",
+      CONSUMER_CONFIG_FIELDS: ["connected_phases", "phase_1", "max_power"],
     };
   },
   computed: {
@@ -610,17 +660,11 @@ export default {
       this.updateState(`openWB/consumer/${consumerId}/extra_meter/device/component/config`, event.value, event.object);
     },
     consumerDeviceConfiguration(consumer, event) {
-      const { object, value, source } = event;
-      //  If fallback and device is a consumer (no Vue device component available ) >> module topic
-      if (source === "fallback") {
-        this.updateState(`openWB/consumer/${consumer.id}/module`, value, "configuration");
-        return;
-      }
-      // Normal consumer routing (module and config topics)
-      const moduleFields = ["configuration.ip_address", "configuration.port", "configuration.modbus_id"];
-      const targetTopic = moduleFields.includes(object)
-        ? `openWB/consumer/${consumer.id}/module`
-        : `openWB/consumer/${consumer.id}/config`;
+      const { object, value } = event;
+      const isConsumerConfigField = this.CONSUMER_CONFIG_FIELDS.includes(object);
+      const targetTopic = isConsumerConfigField
+        ? `openWB/consumer/${consumer.id}/config`
+        : `openWB/consumer/${consumer.id}/module`;
       this.updateState(targetTopic, value, object);
     },
     getUsageOptions(consumer) {
