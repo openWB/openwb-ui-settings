@@ -174,6 +174,10 @@ export default {
   background-color: var(--info);
 }
 
+.element-titel.consumer {
+  background-color: rgb(147, 111, 50);
+}
+
 .element-actions {
   cursor: pointer;
 }
