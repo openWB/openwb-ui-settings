@@ -171,7 +171,11 @@ export default {
 }
 
 .element-titel.vehicle {
-  background-color: var(--info);
+  background-color: var(--primary);
+}
+
+.element-titel.consumer {
+  background-color: rgb(147, 111, 50);
 }
 
 .element-actions {

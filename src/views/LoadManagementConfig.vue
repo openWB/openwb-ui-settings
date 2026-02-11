@@ -281,6 +281,7 @@ export default {
         "openWB/chargepoint/+/config",
         "openWB/vehicle/+/name",
         "openWB/vehicle/+/full_power",
+        "openWB/consumer/+/module",
       ],
     };
   },
@@ -346,72 +347,51 @@ export default {
     },
     loadmanagementPrioList: {
       get() {
-        let prioList = this.$store.state.mqtt["openWB/counter/get/loadmanagement_prios"];
-
-        if (typeof prioList === "string") {
-          try {
-            prioList = JSON.parse(prioList);
-          } catch (error) {
-            console.warn("Kann loadmanagement_prios Payload nicht parsen", error, prioList);
-            prioList = [];
-          }
-        }
-
-        if (Array.isArray(prioList) && prioList.length > 0) {
-          const result = prioList.map((item) => {
-            if (typeof item === "object" && item.type === "vehicle") {
-              return { id: `ev${item.id}`, type: "vehicle" };
-            } else if (typeof item === "string") {
-              return { id: item, type: "vehicle" };
-            } else if (typeof item === "number") {
-              return { id: `ev${item}`, type: "vehicle" };
-            }
-            return item;
-          });
-          return result;
-        }
-        // Fallback: erstelle Liste aller verfügbaren Fahrzeuge
-        let vehicleIds = [];
-        Object.keys(this.$store.state.mqtt).forEach((key) => {
-          if (key.match(/^openWB\/vehicle\/[0-9]+\/name$/)) {
-            const matches = key.match(/^openWB\/vehicle\/([0-9]+)\/name$/);
-            if (matches) {
-              vehicleIds.push(`ev${matches[1]}`);
-            }
-          }
-        });
-
-        const fallbackResult = vehicleIds.sort().map((id) => ({ id, type: "vehicle" }));
-        console.debug("fallback result:", fallbackResult);
-        return fallbackResult;
-      },
-      set(newList) {
-        const updatedPrioList = newList.map((item) => {
-          if (item.id && item.id.startsWith("ev")) {
-            const vehicleId = parseInt(item.id.substring(2));
-            return { id: vehicleId, type: "vehicle" };
+        const prioList = this.$store.state.mqtt["openWB/counter/get/loadmanagement_prios"] || [];
+        if (!Array.isArray(prioList)) return [];
+        return prioList.map((item) => {
+          // Backward compatibility: legacy prio entries ... plain vehicle IDs (e.g. "ev3")
+          if (typeof item === "string") {
+            return { id: item, type: "vehicle" };
           }
           return item;
         });
-        this.updateState("openWB/counter/get/loadmanagement_prios", updatedPrioList);
+      },
+      set(newList) {
+        this.updateState("openWB/counter/get/loadmanagement_prios", newList);
       },
     },
     loadmanagementPrioLabels: {
       get() {
-        return this.loadmanagementPrioList.reduce((result, item, index) => {
-          if (typeof item.id === "string" && item.id.startsWith("ev")) {
-            const vehicleId = item.id.substring(2); // "ev" hat 2 Zeichen -> ev0 -> 0
-            const vehicleName = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/name`];
-            const fullPower = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/full_power`];
-            if (vehicleName) {
-              const lightningIcon = this.isTruthy(fullPower) ? " ⚡" : "";
-              result[item.id] = `${index + 1}. ${vehicleName}${lightningIcon}`;
-            } else {
-              // Fallback für Debug
-              result[item.id] = `${index + 1}. Fahrzeug ${vehicleId}`;
+        return this.loadmanagementPrioList.reduce((labels, item, index) => {
+          switch (item.type) {
+            case "vehicle": {
+              const vehicleId = String(item.id).replace(/^ev/, "");
+              const name = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/name`];
+              const fullPower = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/full_power`];
+              if (name) {
+                const lightning = fullPower === true ? " ⚡" : "";
+                labels[item.id] = `${index + 1}. ${name}${lightning}`;
+              }
+              break;
+            }
+            case "consumer": {
+              const name = this.$store.state.mqtt[`openWB/consumer/${item.id}/module`]?.name;
+              if (name) {
+                labels[item.id] = `${index + 1}. ${name}`;
+              }
+              break;
+            }
+            case "counter": {
+              const component = this.getComponent(item.id);
+              const name = component?.name;
+              if (name) {
+                labels[item.id] = `${index + 1}. ${name}`;
+              }
+              break;
             }
           }
-          return result;
+          return labels;
         }, {});
       },
     },
@@ -431,33 +411,29 @@ export default {
       return { options: options, groups: groups };
     },
   },
-  watch: {
-    "$store.state.mqtt": {
-      handler(newMqttState) {
-        const prioData = newMqttState["openWB/counter/get/loadmanagement_prios"];
-      },
-      deep: true,
-    },
-  },
-  mounted() {
-    // Manuell prüfen ob loadmanagement_prios Topic Daten hat
-    this.$nextTick(() => {
-      const prioData = this.$store.state.mqtt["openWB/counter/get/loadmanagement_prios"];
-      console.debug("loadmanagement_prios in mounted:", prioData);
-    });
-  },
   methods: {
     getElementTreeNames(element) {
       let myNames = {};
-      if (element.type == "cp") {
-        let chargePoint = this.getChargePoint(element.id);
-        if (chargePoint) {
-          myNames[element.id] = chargePoint.name;
+      switch (element.type) {
+        case "cp": {
+          const chargePoint = this.getChargePoint(element.id);
+          if (chargePoint) {
+            myNames[element.id] = chargePoint.name;
+          }
+          break;
         }
-      } else {
-        let component = this.getComponent(element.id);
-        if (component) {
-          myNames[element.id] = component.name;
+        case "consumer": {
+          const consumer = this.$store.state.mqtt[`openWB/consumer/${element.id}/module`];
+          if (consumer?.name) {
+            myNames[element.id] = consumer.name;
+          }
+          break;
+        }
+        default: {
+          const component = this.getComponent(element.id);
+          if (component?.name) {
+            myNames[element.id] = component.name;
+          }
         }
       }
       element.children.forEach((child) => {
@@ -485,15 +461,6 @@ export default {
     },
     isComponentType(componentType, verifier) {
       return componentType?.split("_").includes(verifier);
-    },
-    isTruthy(value) {
-      if (typeof value === "string") {
-        return ["true", "1", "yes", "on"].includes(value.toLowerCase());
-      }
-      if (typeof value === "number") {
-        return value !== 0;
-      }
-      return Boolean(value);
     },
   },
 };
