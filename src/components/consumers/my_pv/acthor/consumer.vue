@@ -1,6 +1,6 @@
 <template>
   <div class="device-idm">
-    <openwb-base-heading> Einstellungen für my-PV Acthor</openwb-base-heading>
+    <openwb-base-heading> Einstellungen für my-PV Acthor oder Elwa2 Heizstab </openwb-base-heading>
     <openwb-base-text-input
       title="IP oder Hostname"
       subtype="host"
