@@ -486,7 +486,7 @@
               <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'price_limit'">
                 <openwb-base-heading class="mt-0"> Preisgrenze (Variable Strompreise) </openwb-base-heading>
                 <openwb-base-button-group-input
-                  title="Regellimit nach Preisgrenze anwenden"
+                  title="Preisgrenze für Netzbezug statt Speicherentladung"
                   :buttons="[
                     {
                       buttonValue: false,
@@ -509,7 +509,7 @@
                   </template>
                 </openwb-base-button-group-input>
                 <openwb-base-number-input
-                  title="Preisgrenze für Regellimit"
+                  title="Preisgrenze für Netzbezug"
                   :step="0.001"
                   :precision="3"
                   unit="ct/kWh"
@@ -518,7 +518,7 @@
                   @update:model-value="updateState('openWB/bat/config/price_limit', parseFloat(($event / 100000).toFixed(7)))"
                 />
                 <openwb-base-button-group-input
-                  title="Speicher nach Preisgrenze laden"
+                  title="Preisgrenze für Speicherladung mit Netzbezug"
                   :buttons="[
                     {
                       buttonValue: false,
@@ -543,7 +543,7 @@
                   </template>
                 </openwb-base-button-group-input>
                 <openwb-base-number-input
-                  title="Preisgrenze für Ladung"
+                  title="Preisgrenze für Speicherladung"
                   :step="0.001"
                   :precision="3"
                   unit="ct/kWh"
