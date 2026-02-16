@@ -220,7 +220,7 @@
               Die Nutzung dieser Option ergibt nur Sinn, wenn ein Wechselrichter in irgendeiner Form abgeregelt wird
               Weitere Infos dazu im
               <a
-                href="https://wiki.openwb.de/doku.php?id=openwb:software:ladeeinstellungen:pv-laden#regelpunkt_einspeisegrenze"
+                href="https://wiki.openwb.de/doku.php?id=openwb:vc:2.1.9:software:einstell-konfig:ladeeinstellungen:pv-laden-speicherbeachtung#regelpunkt_einspeisegrenze"
                 target="_blank"
                 rel="noopener noreferrer"
               >

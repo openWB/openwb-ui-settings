@@ -1,8 +1,8 @@
 <template>
   <div class="flexible-tariff-voltego">
     <openwb-base-alert subtype="info">
-      Ihre persönlichen Zugangsdaten (Client-ID und Client-Secret) erhalten Sie direkt von Voltego. Behandeln Sie diese
-      Daten wie ein Passwort, da sich darüber auch persönliche Daten aus Ihrem Voltego-Account abfragen lassen!
+      Deine persönlichen Zugangsdaten (Client-ID und Client-Secret) erhältst Du direkt von Voltego. Behandle diese Daten
+      wie ein Passwort, da sich darüber auch persönliche Daten aus Deinem Voltego-Account abfragen lassen!
     </openwb-base-alert>
     <openwb-base-text-input
       title="Client-ID"

@@ -7,8 +7,8 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeChargePoint($event, modalChargePointIndex)"
   >
-    Wollen Sie den Ladepunkt "{{ getChargePointName(modalChargePointIndex) }}" (ID: {{ modalChargePointIndex }})
-    wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht werden!
+    Willst Du den Ladepunkt "{{ getChargePointName(modalChargePointIndex) }}" (ID: {{ modalChargePointIndex }}) wirklich
+    entfernen? Dieser Vorgang kann nicht rückgängig gemacht werden!
   </openwb-base-modal-dialog>
   <openwb-base-modal-dialog
     :show="showChargePointTemplateModal"
@@ -17,7 +17,7 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeChargePointTemplate($event, modalChargePointTemplateIndex)"
   >
-    Wollen Sie das Ladepunkt-Profil "{{ getChargePointTemplateName(modalChargePointTemplateIndex) }}" (ID:
+    Willst Du das Ladepunkt-Profil "{{ getChargePointTemplateName(modalChargePointTemplateIndex) }}" (ID:
     {{ modalChargePointTemplateIndex }}) wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht werden!
   </openwb-base-modal-dialog>
   <!-- main content -->
@@ -37,7 +37,7 @@
         <openwb-base-alert subtype="info">
           Eine detaillierte Anleitung zur Einrichtung der Ladepunkte findet sich in unserem
           <a
-            href="https://wiki.openwb.de/doku.php?id=openwb:software:konfiguration:ladepunkte:openwb"
+            href="https://wiki.openwb.de/doku.php?id=openwb:vc:2.1.9:software:einstell-konfig:konfiguration:ladepunkte:openwb"
             target="_blank"
             rel="noopener noreferrer"
             >Wiki</a
@@ -47,7 +47,7 @@
         <openwb-base-card
           v-for="(installedChargePoint, installedChargePointKey) in installedChargePoints"
           :key="installedChargePointKey"
-          :title="installedChargePoint.name + ' (ID: ' + installedChargePoint.id + ')'"
+          :title="installedChargePoint?.name + ' (ID: ' + installedChargePoint?.id + ')'"
           :collapsible="true"
           :collapsed="true"
           subtype="primary"
@@ -65,7 +65,7 @@
           <openwb-base-text-input
             title="Bezeichnung"
             subtype="text"
-            :model-value="installedChargePoint.name"
+            :model-value="installedChargePoint?.name"
             @update:model-value="updateState(installedChargePointKey, $event, 'name')"
           />
           <openwb-base-text-input
@@ -77,7 +77,7 @@
           />
           <span
             v-if="
-              installedChargePoint.type !== 'internal_openwb' || $store.state.mqtt['openWB/general/extern'] === false
+              installedChargePoint?.type !== 'internal_openwb' || $store.state.mqtt['openWB/general/extern'] === false
             "
           >
             <openwb-base-select-input
@@ -90,12 +90,12 @@
           <openwb-base-text-input
             v-if="$store.state.mqtt['openWB/optional/ocpp/config']['active'] === true"
             title="OCPP-Chargebox ID"
-            :model-value="installedChargePoint.ocpp_chargebox_id"
+            :model-value="installedChargePoint?.ocpp_chargebox_id"
             @update:model-value="updateState(installedChargePointKey, $event, 'ocpp_chargebox_id')"
           >
             <template #help>
-              Bitte geben Sie hier die Chargebox ID ein, die im OCPP-Backend für diesen Ladepunkt verwendet wird. Sollen
-              die Daten dieses Ladepunktes nicht an ein OCPP-Backend übertragen werden, lasse dieses Feld leer.
+              Bitte gib hier die Chargebox ID ein, die im OCPP-Backend für diesen Ladepunkt verwendet wird. Sollen die
+              Daten dieses Ladepunktes nicht an ein OCPP-Backend übertragen werden, lasse dieses Feld leer.
             </template>
           </openwb-base-text-input>
           <hr />
@@ -105,9 +105,9 @@
           />
           <div
             v-if="
-              (installedChargePoint.type !== 'internal_openwb' ||
+              (installedChargePoint?.type !== 'internal_openwb' ||
                 $store.state.mqtt['openWB/general/extern'] === false) &&
-              installedChargePoint.charging_type !== 'DC'
+              installedChargePoint?.charging_type !== 'DC'
             "
           >
             <hr />
@@ -118,7 +118,7 @@
                 { buttonValue: false, text: 'Nein' },
                 { buttonValue: true, text: 'Ja' },
               ]"
-              :model-value="installedChargePoint.auto_phase_switch_hw"
+              :model-value="installedChargePoint?.auto_phase_switch_hw"
               @update:model-value="updateState(installedChargePointKey, $event, 'auto_phase_switch_hw')"
             />
             <openwb-base-button-group-input
@@ -127,7 +127,7 @@
                 { buttonValue: false, text: 'Nein' },
                 { buttonValue: true, text: 'Ja' },
               ]"
-              :model-value="installedChargePoint.control_pilot_interruption_hw"
+              :model-value="installedChargePoint?.control_pilot_interruption_hw"
               @update:model-value="updateState(installedChargePointKey, $event, 'control_pilot_interruption_hw')"
             >
               <template #help>
@@ -146,7 +146,7 @@
                 { buttonValue: 2, text: '2' },
                 { buttonValue: 3, text: '3' },
               ]"
-              :model-value="installedChargePoint.connected_phases"
+              :model-value="installedChargePoint?.connected_phases"
               @update:model-value="updateState(installedChargePointKey, $event, 'connected_phases')"
             />
             <openwb-base-button-group-input
@@ -156,7 +156,7 @@
                 { buttonValue: 2, text: 'EVU L2' },
                 { buttonValue: 3, text: 'EVU L3' },
               ]"
-              :model-value="installedChargePoint.phase_1"
+              :model-value="installedChargePoint?.phase_1"
               @update:model-value="updateState(installedChargePointKey, $event, 'phase_1')"
             >
               <template #help>
@@ -526,17 +526,21 @@ export default {
         let chargePoints = this.getWildcardTopics("openWB/chargepoint/+/config");
         let myObj = {};
         for (const [key, element] of Object.entries(chargePoints)) {
-          if (element.type === "internal_openwb" || this.$store.state.mqtt["openWB/general/extern"] === false) {
+          if (
+            (element && typeof element === "object" && element.type === "internal_openwb") ||
+            this.$store.state.mqtt["openWB/general/extern"] === false
+          ) {
             myObj[key] = element;
           }
         }
         return myObj;
       },
     },
-    chargePointTemplates: {
-      get() {
-        return this.getWildcardTopics("openWB/chargepoint/template/+");
-      },
+    chargePointTemplates() {
+      const chargePointTemplates = this.getWildcardTopics("openWB/chargepoint/template/+");
+      return Object.fromEntries(
+        Object.entries(chargePointTemplates).filter(([, template]) => template && typeof template === "object"),
+      );
     },
     chargePointTemplateList: {
       get() {

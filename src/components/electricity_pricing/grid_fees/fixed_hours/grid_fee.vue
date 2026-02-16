@@ -5,13 +5,12 @@
     </openwb-base-alert>
     <openwb-base-number-input
       title="Standardpreis"
-      :min="0"
-      :step="0.1"
-      :precision="1"
+      :step="0.001"
+      :precision="3"
       required
       unit="ct/kWh"
       :model-value="value.configuration.default_price * 100"
-      @update:model-value="value.configuration.default_price = parseFloat(($event / 100).toFixed(3))"
+      @update:model-value="value.configuration.default_price = parseFloat(($event / 100).toFixed(5))"
     >
       <template #help> Standardpreis sofern kein anderer Tarif aktiv ist. </template>
     </openwb-base-number-input>
@@ -31,7 +30,7 @@
       v-if="value.configuration.tariffs.length === 0"
       subtype="info"
     >
-      Es wurde noch kein Tarif konfiguriert. Klicken Sie auf das Plus-Symbol, um einen neuen Tarif hinzuzufügen.<br />
+      Es wurde noch kein Tarif konfiguriert. Klicke auf das Plus-Symbol, um einen neuen Tarif hinzuzufügen.<br />
       Tarife ermöglichen es, Preise für unterschiedliche Zeiten zu definieren.
     </openwb-base-alert>
     <fixed-tariff

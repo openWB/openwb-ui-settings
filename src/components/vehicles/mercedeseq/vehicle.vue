@@ -44,8 +44,8 @@
       @button-clicked="login_window"
     >
       <template #help>
-        Es wird ein neues Browserfenster geöffnet, in dem Sie sich bei Mercedes mit Ihren Zugangsdaten anmelden
-        können.<br />
+        Es wird ein neues Browserfenster geöffnet, in dem Du dich bei Mercedes mit Deinen Zugangsdaten anmelden
+        kannst.<br />
       </template>
     </openwb-base-button-input>
   </div>

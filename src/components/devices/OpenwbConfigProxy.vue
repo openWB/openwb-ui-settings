@@ -3,9 +3,6 @@
     :is="getComponent()"
     :device="device"
     :component="component"
-    :configuration="component ? component.configuration : device.configuration"
-    :device-id="device.id"
-    :device-type="device.type"
     :component-id="component ? component.id : undefined"
     :component-type="component ? component.type : undefined"
     @update:configuration="updateConfiguration($event)"
@@ -26,15 +23,15 @@ export default {
   emits: ["update:configuration"],
   methods: {
     getComponent() {
-      console.debug(`loading component: ${this.device.type} / ${this.component?.type}`);
+      console.debug(`loading component: ${this.device?.type} / ${this.component?.type}`);
       if (this.component !== undefined) {
         return defineAsyncComponent({
-          loader: () => import(`./${this.device.vendor}/${this.device.type}/${this.component.type}.vue`),
+          loader: () => import(`./${this.device?.vendor}/${this.device?.type}/${this.component?.type}.vue`),
           errorComponent: OpenwbComponentConfigFallback,
         });
       } else {
         return defineAsyncComponent({
-          loader: () => import(`./${this.device.vendor}/${this.device.type}/device.vue`),
+          loader: () => import(`./${this.device?.vendor}/${this.device?.type}/device.vue`),
           errorComponent: OpenwbDeviceConfigFallback,
         });
       }

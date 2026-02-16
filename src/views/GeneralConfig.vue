@@ -5,7 +5,7 @@
         <openwb-base-alert subtype="info">
           <p>
             Wird für den Steuerungsmodus "primary" gewählt, übernimmt diese openWB die alleinige Regelung und steuert
-            ggf. vorhandene weitere openWB (z.B. secondary openWB, openWB Pro, Satellit u.a.) fern. Sie werden in den
+            ggf. vorhandene weitere openWB (z.B. secondary openWB, openWB Pro, Satellit u.a.) fern. Diese werden in den
             Ladepunkt-Einstellungen der primary-openWB hinzugefügt.
           </p>
           <p>
@@ -236,7 +236,7 @@
               <p>
                 Eine ausführliche Erläuterung mit Beispielen findet Ihr im
                 <a
-                  href="https://wiki.openwb.de/doku.php?id=openwb:software:bedienung:temporaere-persistente-ladeprofile"
+                  href="https://wiki.openwb.de/doku.php?id=openwb:vc:2.1.9:software:einstell-konfig:einstellungen:allgemein#temporaere_ladeeinstellungen"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

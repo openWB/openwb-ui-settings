@@ -43,7 +43,7 @@
         {{ (flexibleTariff.configuration.proportional / 100 || 0).toFixed(2) }} ({{
           (flexibleTariff.configuration.proportional || 0).toFixed(0)
         }}%)<br />
-        + {{ (flexibleTariff.configuration.fix * 100 || 0).toFixed(3) }} Cent/kWh<br />
+        + {{ (flexibleTariff.configuration.fix * 100000 || 0).toFixed(3) }} Cent/kWh<br />
         + {{ (flexibleTariff.configuration.tax || 0).toFixed(0) }}% MwSt.
       </div>
 
@@ -68,8 +68,8 @@
             unit="Cent/kWh"
             :min="0"
             :step="0.001"
-            :model-value="flexibleTariff.configuration.fix * 100 || 0"
-            @update:model-value="updateConfiguration($event, 'configuration.fix/100')"
+            :model-value="flexibleTariff.configuration.fix * 100000 || 0"
+            @update:model-value="updateConfiguration($event / 100000, 'configuration.fix')"
           >
             <template #help> Feste Gebühr pro kWh (z.B. 1,500 Cent/kWh) </template>
           </openwb-base-number-input>

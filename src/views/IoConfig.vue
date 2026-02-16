@@ -7,7 +7,7 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeIoDevice(modalIoDeviceIndex, $event)"
   >
-    Wollen Sie das Ein-/Ausgangs-Gerät "{{ getIoDeviceName(modalIoDeviceIndex) }}" (ID: {{ modalIoDeviceIndex }})
+    Willst Du das Ein-/Ausgangs-Gerät "{{ getIoDeviceName(modalIoDeviceIndex) }}" (ID: {{ modalIoDeviceIndex }})
     wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht werden!
   </openwb-base-modal-dialog>
   <openwb-base-modal-dialog
@@ -17,7 +17,7 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeIoAction(modalIoActionIndex, $event)"
   >
-    Wollen Sie die Aktion "{{ getIoDeviceName(modalIoActionIndex) }}" (ID: {{ modalIoActionIndex }}) wirklich entfernen?
+    Willst Du die Aktion "{{ getIoDeviceName(modalIoActionIndex) }}" (ID: {{ modalIoActionIndex }}) wirklich entfernen?
     Dieser Vorgang kann nicht rückgängig gemacht werden!
   </openwb-base-modal-dialog>
 
@@ -135,7 +135,7 @@
           subtype="warning"
         >
           Keine Ein-/Ausgangs-Geräte vorhanden!<br />
-          Bitte fügen Sie zuerst ein Ein-/Ausgangs-Gerät hinzu, bevor Sie Aktionen konfigurieren.
+          Bitte füge zuerst ein Ein-/Ausgangs-Gerät hinzu, bevor Du Aktionen konfigurierst.
         </openwb-base-alert>
       </openwb-base-card>
       <openwb-base-submit-buttons
@@ -199,10 +199,11 @@ export default {
         return this.$store.state.mqtt["openWB/system/configurable/io_devices"];
       },
     },
-    installedIoDevices: {
-      get() {
-        return this.getWildcardTopics("openWB/system/io/+/config");
-      },
+    installedIoDevices() {
+      const installedIoDevices = this.getWildcardTopics("openWB/system/io/+/config");
+      return Object.fromEntries(
+        Object.entries(installedIoDevices).filter(([, template]) => template && typeof template === "object"),
+      );
     },
     ioActionList: {
       get() {

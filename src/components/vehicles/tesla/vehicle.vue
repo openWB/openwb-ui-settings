@@ -17,7 +17,7 @@
       @button-clicked="tesla_login_window"
     >
       <template #help>
-        Es wird ein neues Browserfenster geöffnet, in dem Sie sich bei Tesla mit Ihren Zugangsdaten anmelden können.
+        Es wird ein neues Browserfenster geöffnet, in dem Du dich bei Tesla mit Deinen Zugangsdaten anmelden kannst.
       </template>
     </openwb-base-button-input>
     <openwb-base-text-input

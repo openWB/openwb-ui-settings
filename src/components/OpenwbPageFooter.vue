@@ -5,7 +5,7 @@
   >
     <div class="container text-center">
       <small>
-        Sie befinden sich hier: Einstellungen /
+        Du befindest dich hier: Einstellungen /
         {{ $route.meta.heading }}
       </small>
     </div>

@@ -21,13 +21,12 @@
     />
     <openwb-base-number-input
       title="Preis"
-      :min="0"
-      :step="0.1"
-      :precision="1"
+      :step="0.001"
+      :precision="3"
       required
       unit="ct/kWh"
       :model-value="tariff.price * 100"
-      @update:model-value="tariff.price = parseFloat(($event / 100).toFixed(3))"
+      @update:model-value="tariff.price = parseFloat(($event / 100).toFixed(5))"
     />
     <openwb-base-select-input
       v-model="dates"

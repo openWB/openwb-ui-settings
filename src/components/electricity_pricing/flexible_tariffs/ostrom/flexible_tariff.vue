@@ -1,7 +1,7 @@
 <template>
   <div class="flexible-tariff-ostrom">
     <openwb-base-alert subtype="info">
-      Ihre persönlichen Zugangsdaten (Client-ID und Client-Secret) erhalten Sie über das
+      Deine persönlichen Zugangsdaten (Client-ID und Client-Secret) erhältst Du über das
       <a
         href="https://developer.ostrom-api.io/"
         target="_blank"
@@ -9,8 +9,8 @@
       >
         Ostrom Developer Portal
       </a>
-      . Behandeln Sie diese Daten wie ein Passwort, da sich darüber auch persönliche Daten aus Ihrem ostrom-Account
-      abfragen lassen!
+      . Behandle diese Daten wie ein Passwort, da sich darüber auch persönliche Daten aus Deinem ostrom-Account abfragen
+      lassen!
     </openwb-base-alert>
     <openwb-base-text-input
       title="Client-ID"

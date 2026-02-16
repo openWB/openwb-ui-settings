@@ -7,7 +7,7 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeMqttBridge(modalMqttBridgeIndex, $event)"
   >
-    Wollen Sie die MQTT-Brücke "{{ getMqttBridgeName(modalMqttBridgeIndex) }}" wirklich entfernen? Dieser Vorgang kann
+    Willst Du die MQTT-Brücke "{{ getMqttBridgeName(modalMqttBridgeIndex) }}" wirklich entfernen? Dieser Vorgang kann
     nicht rückgängig gemacht werden!
   </openwb-base-modal-dialog>
   <!-- main content -->
@@ -47,7 +47,7 @@
           :name="'mqttBridgeConfigurationForm' + getMqttBridgeIndex(mqttBridgeKey)"
         >
           <openwb-base-card
-            :title="mqttBridge.name"
+            :title="mqttBridge?.name"
             :collapsible="true"
             :collapsed="true"
             subtype="primary"
@@ -65,7 +65,7 @@
               subtype="text"
               required
               pattern="[A-Za-z0-9]+"
-              :model-value="mqttBridge.name"
+              :model-value="mqttBridge?.name"
               @update:model-value="updateState(mqttBridgeKey, $event, 'name')"
             >
               <template #help> Die Bezeichnung darf nur aus Buchstaben ohne Umlaute und Zahlen bestehen. </template>
@@ -84,7 +84,7 @@
                   class: 'btn-outline-success',
                 },
               ]"
-              :model-value="mqttBridge.active"
+              :model-value="mqttBridge?.active"
               @update:model-value="updateState(mqttBridgeKey, $event, 'active')"
             />
             <hr />
@@ -93,7 +93,7 @@
               title="Entfernter Server"
               subtype="host"
               required
-              :model-value="mqttBridge.remote.host"
+              :model-value="mqttBridge?.remote?.host"
               @update:model-value="updateState(mqttBridgeKey, $event, 'remote.host')"
             />
             <openwb-base-number-input
@@ -101,7 +101,7 @@
               required
               :min="1"
               :max="65535"
-              :model-value="mqttBridge.remote.port"
+              :model-value="mqttBridge?.remote?.port"
               @update:model-value="updateState(mqttBridgeKey, $event, 'remote.port')"
             />
             <openwb-base-text-input
@@ -109,21 +109,21 @@
               subtype="user"
               required
               pattern="[a-zA-Z0-9_\-+.]+"
-              :model-value="mqttBridge.remote.username"
+              :model-value="mqttBridge?.remote?.username"
               @update:model-value="updateState(mqttBridgeKey, $event, 'remote.username')"
             />
             <openwb-base-text-input
               title="Passwort"
               subtype="password"
               required
-              :model-value="mqttBridge.remote.password"
+              :model-value="mqttBridge?.remote?.password"
               @update:model-value="updateState(mqttBridgeKey, $event, 'remote.password')"
             />
             <openwb-base-text-input
               title="Präfix"
               subtype="text"
               pattern="[A-Za-z0-9_\-]+(\/[A-Za-z0-9_\-]+)?\/"
-              :model-value="mqttBridge.remote.prefix"
+              :model-value="mqttBridge?.remote?.prefix"
               @update:model-value="updateState(mqttBridgeKey, $event, 'remote.prefix')"
             >
               <template #help>
@@ -137,7 +137,7 @@
               subtype="text"
               required
               pattern="[A-Za-z0-9_\-]+"
-              :model-value="mqttBridge.remote.client_id"
+              :model-value="mqttBridge?.remote?.client_id"
               @update:model-value="updateState(mqttBridgeKey, $event, 'remote.client_id')"
             >
               <template #help>
@@ -157,7 +157,7 @@
                   text: 'v3.1.1',
                 },
               ]"
-              :model-value="mqttBridge.remote.protocol"
+              :model-value="mqttBridge?.remote?.protocol"
               @update:model-value="updateState(mqttBridgeKey, $event, 'remote.protocol')"
             />
             <openwb-base-button-group-input
@@ -183,7 +183,7 @@
                   text: 'v1.2',
                 },
               ]"
-              :model-value="mqttBridge.remote.tls_version"
+              :model-value="mqttBridge?.remote?.tls_version"
               @update:model-value="updateState(mqttBridgeKey, $event, 'remote.tls_version')"
             >
               <template #help>
@@ -206,7 +206,7 @@
                   class: 'btn-outline-success',
                 },
               ]"
-              :model-value="mqttBridge.remote.try_private"
+              :model-value="mqttBridge?.remote?.try_private"
               @update:model-value="updateState(mqttBridgeKey, $event, 'remote.try_private')"
             >
               <template #help>
@@ -232,7 +232,7 @@
                   class: 'btn-outline-success',
                 },
               ]"
-              :model-value="mqttBridge.data_transfer.status"
+              :model-value="mqttBridge?.data_transfer?.status"
               @update:model-value="updateState(mqttBridgeKey, $event, 'data_transfer.status')"
             >
               <template #help>
@@ -254,7 +254,7 @@
                   class: 'btn-outline-success',
                 },
               ]"
-              :model-value="mqttBridge.data_transfer.graph"
+              :model-value="mqttBridge?.data_transfer?.graph"
               @update:model-value="updateState(mqttBridgeKey, $event, 'data_transfer.graph')"
             >
               <template #help>
@@ -279,7 +279,7 @@
                   class: 'btn-outline-success',
                 },
               ]"
-              :model-value="mqttBridge.data_transfer.configuration"
+              :model-value="mqttBridge?.data_transfer?.configuration"
               @update:model-value="updateState(mqttBridgeKey, $event, 'data_transfer.configuration')"
             >
               <template #help>
@@ -331,13 +331,17 @@ export default {
   computed: {
     configuredMqttBridges: {
       get() {
-        let bridges = this.getWildcardTopics("openWB/system/mqtt/bridge/+");
-        for (const [key, value] of Object.entries(bridges)) {
-          if (value.remote.is_openwb_cloud) {
-            delete bridges[key];
+        const bridges = this.getWildcardTopics("openWB/system/mqtt/bridge/+");
+        if (!bridges || typeof bridges !== "object") {
+          return {};
+        }
+        const filtered = { ...bridges };
+        for (const [key, value] of Object.entries(filtered)) {
+          if (value?.remote?.is_openwb_cloud) {
+            delete filtered[key];
           }
         }
-        return bridges;
+        return filtered;
       },
     },
   },
