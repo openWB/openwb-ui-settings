@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg bg-dark navbar-dark fixed-top">
+  <nav class="navbar navbar-expand-xl bg-dark navbar-dark fixed-top">
     <a
       class="navbar-brand"
       href="/openWB/web/"
@@ -23,7 +23,7 @@
       <ul class="navbar-nav mr-auto">
         <li
           v-if="accessAllowed('Status')"
-          class="nav-item nav-separator-before"
+          class="nav-item"
         >
           <router-link
             to="/Status"
@@ -388,41 +388,49 @@ export default {
   box-shadow: 0 4px 8px 4px rgba(0, 0, 0, 0.15);
 }
 
-.nav-item.nav-separator-before:not(:first-child) {
-  border-left: 1px solid rgba(255, 255, 255, 0.5);
-  margin-left: 5px;
-  padding-left: 5px;
-}
-
-.nav-item.nav-separator-after:not(:last-child) {
-  border-right: 1px solid rgba(255, 255, 255, 0.5);
-  margin-right: 5px;
-  padding-right: 5px;
-}
-
 /* hide dropdowns without items */
 .nav-item.dropdown:not(:has(.dropdown-menu a)) {
   border: 2px solid #ff0000;
   display: none;
 }
 
-@media (max-width: 991px) {
+.nav-item.nav-separator-before:not(:first-child) {
+  border-left: none;
+  margin-left: 0px;
+  padding-left: 0px;
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  margin-top: 5px;
+  padding-top: 5px;
+}
+
+.nav-item.nav-separator-after:not(:last-child) {
+  border-right: none;
+  margin-right: 0px;
+  padding-right: 0px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+}
+
+/* navbar is quite big, use xl breakpoint as reference for expanding */
+/* ToDo: dynamic collapsing based on available width and content */
+@media (min-width: 1200px) {
   .nav-item.nav-separator-before:not(:first-child) {
-    border-left: none;
-    margin-left: 0px;
-    padding-left: 0px;
-    border-top: 1px solid rgba(255, 255, 255, 0.5);
-    margin-top: 5px;
-    padding-top: 5px;
+    border-left: 1px solid rgba(255, 255, 255, 0.5);
+    margin-left: 5px;
+    padding-left: 5px;
+    border-top: none;
+    margin-top: 0px;
+    padding-top: 0px;
   }
 
   .nav-item.nav-separator-after:not(:last-child) {
-    border-right: none;
-    margin-right: 0px;
-    padding-right: 0px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-    margin-bottom: 5px;
-    padding-bottom: 5px;
+    border-right: 1px solid rgba(255, 255, 255, 0.5);
+    margin-right: 5px;
+    padding-right: 5px;
+    border-bottom: none;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
   }
 }
 </style>
