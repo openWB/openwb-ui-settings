@@ -411,7 +411,7 @@ export default {
     formatTickLabel(timeValue) {
       const date = new Date(timeValue);
       // Prüfe ob das Datum zum nächsten Tag gehört
-      const isTomorrow = this.endOfToday < date;
+      const isTomorrow =  new Date(this.chartDataObject.datasets[0].data[0].timestamp).setHours(23, 59, 59, 999).valueOf() < date;
       // Zeige nur den Zeitwert, wenn es nicht morgen ist
       return `${isTomorrow ? date.toLocaleDateString(undefined, { day: "2-digit", month: "2-digit" }) + " " : ""}${date.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}`;
     },
