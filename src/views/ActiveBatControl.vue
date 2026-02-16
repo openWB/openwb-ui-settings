@@ -327,7 +327,7 @@
 
               <openwb-base-range-input
                 title="Untere Entladeschranke"
-                :min="0"
+                :min="5"
                 :max="100"
                 :step="1"
                 unit="%"
@@ -351,7 +351,7 @@
               </openwb-base-range-input>
               <openwb-base-range-input
                 title="Obere Ladeschranke"
-                :min="0"
+                :min="5"
                 :max="100"
                 :step="1"
                 unit="%"
@@ -385,7 +385,7 @@
                   },
                   {
                     buttonValue: 'mode_charge_pv_production',
-                    text: 'Speichervorrang',
+                    text: 'PV-Ertrag speichern',
                   },
                 ]"
                 :model-value="$store.state.mqtt['openWB/bat/config/power_limit_mode']"
@@ -485,6 +485,16 @@
               </div>
               <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'price_limit'">
                 <openwb-base-heading class="mt-0"> Preisgrenze (Variable Strompreise) </openwb-base-heading>
+                <openwb-base-alert
+                  v-if="
+                    !$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'] ||
+                    !$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'].type
+                  "
+                  subtype="warning"
+                >
+                  Bitte in den übergreifenden Ladeeinstellungen einen Strompreis-Anbieter konfigurieren. Ohne
+                  Strompreis-Anbieter schaltet der Speicher auf Eigenregelung.
+                </openwb-base-alert>
                 <openwb-base-button-group-input
                   title="Preisgrenze für Netzbezug statt Speicherentladung"
                   :buttons="[
