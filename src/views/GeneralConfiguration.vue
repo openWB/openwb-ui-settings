@@ -31,9 +31,20 @@
               class: 'btn-outline-success',
             },
           ]"
+          :disabled="disableExternModeSwitch"
           :model-value="$store.state.mqtt['openWB/general/extern']"
           @update:model-value="updateState('openWB/general/extern', $event)"
-        />
+        >
+          <template
+            v-if="disableExternModeSwitch"
+            #help
+          >
+            Die Benutzerverwaltung ist aktiviert oder der unverschlüsselte Zugriff ist nicht erlaubt. Um den
+            Steuerungsmodus ändern zu können, muss die Benutzerverwaltung im Bereich
+            <RouterLink to="/System/SecurityConfiguration">Sicherheit</RouterLink> zunächst deaktiviert und der
+            unverschlüsselte Zugang erlaubt werden.
+          </template>
+        </openwb-base-button-group-input>
         <div v-if="!installAssistantActive">
           <openwb-base-button-group-input
             v-if="$store.state.mqtt['openWB/general/extern'] === true"
@@ -785,6 +796,8 @@ export default {
         "openWB/general/temporary_charge_templates_active",
         "openWB/general/web_theme",
         "openWB/system/configurable/web_themes",
+        "openWB/system/security/user_management_active",
+        "openWB/general/allow_unencrypted_access",
       ],
       mqttTopicsToPublish: [
         "openWB/general/charge_log_data_config",
@@ -812,14 +825,27 @@ export default {
           { label: "Community", options: [] },
         ];
         this.webThemeList?.forEach((theme) => {
+          if (
+            theme.defaults.userManagementSupported !== true &&
+            this.$store.state.mqtt["openWB/system/security/user_management_active"] === true
+          ) {
+            // skip themes that do not support user management if user management is active, as they would cause issues in this case
+            return;
+          }
           if (theme.official === true) {
             groups[0].options.push(theme);
           } else {
             groups[1].options.push(theme);
           }
         });
-        return groups;
+        return groups.filter((group) => group.options.length > 0);
       },
+    },
+    disableExternModeSwitch() {
+      return (
+        this.$store.state.mqtt["openWB/system/security/user_management_active"] === true ||
+        this.$store.state.mqtt["openWB/general/allow_unencrypted_access"] === false
+      );
     },
   },
   methods: {

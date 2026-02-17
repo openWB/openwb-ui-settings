@@ -221,6 +221,7 @@ export default {
         "openWB/optional/int_display/standby",
         "openWB/optional/int_display/theme",
         "openWB/system/configurable/display_themes",
+        "openWB/system/security/user_management_active",
       ],
       mqttTopicsToPublish: [
         "openWB/optional/int_display/active",
@@ -241,13 +242,20 @@ export default {
         { label: "Community", options: [] },
       ];
       this.displayThemeList?.forEach((theme) => {
+        if (
+          theme.defaults.userManagementSupported !== true &&
+          this.$store.state.mqtt["openWB/system/security/user_management_active"] === true
+        ) {
+          // skip themes that do not support user management if user management is active, as they would cause issues in this case
+          return;
+        }
         if (theme.official === true) {
           groups[0].options.push(theme);
         } else {
           groups[1].options.push(theme);
         }
       });
-      return groups;
+      return groups.filter((group) => group.options.length > 0);
     },
   },
   methods: {
