@@ -6,7 +6,7 @@
           <p>
             Eine ausführliche Anleitung findest Du hier:
             <a
-              href="https://wiki.openwb.de/doku.php?id=openwb:vc:2.2.0:software:einstell-konfig:einstellungen:identifikation"
+              :href="`https://wiki.openwb.de/doku.php?id=openwb:vc:${systemVersion}:software:einstell-konfig:einstellungen:identifikation`"
               target="_blank"
               rel="noopener noreferrer"
             >
