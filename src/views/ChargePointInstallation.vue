@@ -37,7 +37,7 @@
         <openwb-base-alert subtype="info">
           Eine detaillierte Anleitung zur Einrichtung der Ladepunkte findet sich in unserem
           <a
-            href="https://wiki.openwb.de/doku.php?id=openwb:vc:2.2.0:software:einstell-konfig:konfiguration:ladepunkte:openwb"
+            :href="`https://wiki.openwb.de/doku.php?id=openwb:vc:${systemVersion}:software:einstell-konfig:konfiguration:ladepunkte:openwb`"
             target="_blank"
             rel="noopener noreferrer"
             >Wiki</a
@@ -504,6 +504,7 @@ export default {
         "openWB/optional/rfid/active",
         "openWB/chargepoint/+/config",
         "openWB/chargepoint/template/+",
+        "openWB/system/version",
         "openWB/system/configurable/chargepoints",
         "openWB/system/configurable/chargepoints_internal",
       ],
