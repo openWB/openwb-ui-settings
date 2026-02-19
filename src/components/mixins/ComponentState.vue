@@ -18,9 +18,9 @@ export default {
       return this.mqttTopics.filter((topic) => topic.writeable).map((topic) => topic.topic);
     },
     systemVersion() {
-      const version = this.$store.state.mqtt["openWB/system/version"] || "0.0.0";
+      const version = this.$store.state.mqtt["openWB/system/version"] || "2.1.8";
       const match = version.match(/^\d+\.\d+\.\d+/);
-      return match ? match[0] : "0.0.0";
+      return match ? match[0] : "2.1.8";
     },
   },
   mounted() {
