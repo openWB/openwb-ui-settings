@@ -337,11 +337,14 @@ export default {
       ) {
         var gridFeeEntries = this.$store.state.mqtt["openWB/optional/ep/grid_fee/get/prices"];
         var gridFeeData = [];
+        var lastTimestampPriseSums = dataObject.dataset[0].slice(-1).timestamp 
         for (const [key, value] of Object.entries(gridFeeEntries)) {
-          gridFeeData.push({
-            timestamp: key * 1000,
-            price: value * 100000,
-          });
+          if (key < lastTimestampPriseSums) { // skiping matching last entry makes results same length
+            gridFeeData.push({
+              timestamp: key * 1000,
+              price: value * 100000,
+            });
+          }
         }
         // repeat last dataset
         if (gridFeeData.length > 0) {
