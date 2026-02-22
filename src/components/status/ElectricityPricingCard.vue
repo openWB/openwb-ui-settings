@@ -16,9 +16,24 @@
       class="py-1 mb-2"
     >
       <template #header>
-        <span v-if="tariffProvider">Stromtarif: {{ tariffProvider }}</span>
-        <br v-if="tariffProvider && gridFeeProvider" />
-        <span v-if="gridFeeProvider">Netzentgelte: {{ gridFeeProvider }}</span>
+        <table style="border-collapse: collapse; width: 100%;">
+            <tr v-if="tariffProvider">
+                <td style="border: none; padding: 8px;">
+                    Stromtarif:
+                </td>
+                <td style="border: none; padding: 8px;">
+                    {{ tariffProvider }}
+                </td>
+            </tr>
+            <tr v-if="gridFeeProvider">
+                <td style="border: none; padding: 8px;">
+                    Netzentgelte:
+                </td>
+                <td style="border: none; padding: 8px;">
+                    {{ gridFeeProvider }}
+                </td>
+            </tr>
+        </table>
       </template>
       <div class="openwb-chart">
         <chartjs-line
