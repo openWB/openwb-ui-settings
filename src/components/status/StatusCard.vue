@@ -31,6 +31,7 @@
             <openwb-base-alert :subtype="stateClass">
               <font-awesome-icon :icon="stateIcon" />
               Modulmeldung:
+              <br v-if="hasMessageLineBreaks" /><!-- looks better for flexible tariff + GridFee -->
               <span style="white-space: pre-wrap">
                 {{ stateMessage }}
               </span>
@@ -122,6 +123,9 @@ export default {
         default:
           return "Unbekannt";
       }
+    },
+    hasMessageLineBreaks() {
+      return this.stateMessage.includes('\n'); // Prüft auf Zeilenumbrüche
     },
   },
 };
