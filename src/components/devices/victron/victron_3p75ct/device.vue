@@ -1,5 +1,5 @@
 <template>
-  <div class="device-victron">
+  <div class="device-victron-3p75ct">
     <openwb-base-heading> Einstellungen für Victron 3P75CT </openwb-base-heading>
     <openwb-base-text-input
       title="IP oder Hostname"
