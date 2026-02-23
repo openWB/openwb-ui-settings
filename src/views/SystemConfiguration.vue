@@ -246,7 +246,7 @@
               <div class="col-md-4 d-flex py-1 justify-content-center">
                 <openwb-base-click-button
                   class="btn-warning"
-                  @button-clicked="sendSystemCommand('systemReboot')"
+                  @button-clicked="systemReboot()"
                 >
                   Neustart
                   <font-awesome-icon :icon="['fas', 'undo']" />
@@ -255,7 +255,7 @@
               <div class="col-md-4 d-flex py-1 justify-content-center">
                 <openwb-base-click-button
                   class="btn-danger"
-                  @button-clicked="sendSystemCommand('systemShutdown')"
+                  @button-clicked="systemShutdown()"
                 >
                   Ausschalten
                   <font-awesome-icon :icon="['fas', 'power-off']" />
@@ -555,6 +555,16 @@ export default {
     updateConfiguration(key, event) {
       console.debug("updateConfiguration", key, event);
       this.updateState(key, event.value, event.object);
+    },
+    systemReboot() {
+      this.$store.commit("storeLocal", {
+        name: "reloadRequired",
+        value: true,
+      });
+      this.sendSystemCommand("systemReboot");
+    },
+    systemShutdown() {
+      this.sendSystemCommand("systemShutdown");
     },
     systemUpdate() {
       this.sendSystemCommand("systemUpdate", {});
