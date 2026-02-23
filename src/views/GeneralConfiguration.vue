@@ -124,6 +124,14 @@
               </p>
             </template>
           </openwb-base-button-group-input>
+          <openwb-base-alert
+            v-if="$store.state.mqtt['openWB/system/security/user_management_active'] === true"
+            subtype="info"
+          >
+            Die Benutzerverwaltung ist aktiviert. Es muss bei jedem HTTP-API Zugriff ein gültiger Benutzername und
+            Passwort mittels HTTP Basic Auth übermittelt werden. Es wird empfohlen, hierfür einen separaten Benutzer mit
+            eingeschränkten Rechten anzulegen.
+          </openwb-base-alert>
         </div>
       </openwb-base-card>
       <div v-if="!installAssistantActive">
