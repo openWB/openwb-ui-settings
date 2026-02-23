@@ -78,21 +78,22 @@
                 Dienste (Weboberfläche, API) nur mit einem gültigen Benutzerkonto (oder anonym ohne Anmeldung, falls
                 erlaubt) möglich.
               </p>
-              <p>
-                <strong>Hinweis:</strong> Die Benutzerverwaltung erfordert zwingend die Abschaltung des
-                unverschlüsselten Zugangs.
-              </p>
             </template>
           </openwb-base-button-group-input>
           <openwb-base-alert
             subtype="warning"
             class="mt-2"
           >
-            Werden Änderungen an dem unverschlüsselten Zugang oder dem Status der Benutzerverwaltung vorgenommen, so ist
-            zwingend ein
-            <router-link to="/System/SystemConfiguration">Neustart dieser openWB</router-link> erforderlich, damit die
-            Änderungen wirksam werden! Erst danach können Benutzer, Gruppen und Rollen angelegt und verwaltet werden.<br />
-            Standard-Admin-Benutzer nach der ersten Aktivierung oder dem Zurücksetzen:
+            <p>
+              <strong>Die Benutzerverwaltung erfordert zwingend die Abschaltung des unverschlüsselten Zugangs!</strong>
+            </p>
+            <p>
+              Werden Änderungen an dem unverschlüsselten Zugang oder dem Status der Benutzerverwaltung vorgenommen, so
+              ist zwingend ein
+              <router-link to="/System/SystemConfiguration">Neustart dieser openWB</router-link> erforderlich, damit die
+              Änderungen wirksam werden! Erst danach können Benutzer, Gruppen und Rollen angelegt und verwaltet werden.
+            </p>
+            <p>Standard-Admin-Benutzer nach der ersten Aktivierung oder dem Zurücksetzen:</p>
             <ul>
               <li>Benutzername: <strong>admin</strong></li>
               <li>Passwort: <strong>openwb</strong></li>
