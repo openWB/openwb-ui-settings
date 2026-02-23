@@ -64,10 +64,17 @@ export default {
       return this.$store.state.local.reloadRequired;
     },
     showModalBlocker() {
-      return this.bootInProgress || this.updateInProgress || this.reloadRequired;
+      this.updateLocalStore();
+      return this.$store.state.local.modalBlockerVisible;
     },
   },
   methods: {
+    updateLocalStore() {
+      this.$store.commit("storeLocal", {
+        name: "modalBlockerVisible",
+        value: this.bootInProgress || this.updateInProgress || this.reloadRequired,
+      });
+    },
     handleModalResult(event) {
       if (event == "reload") {
         location.reload();

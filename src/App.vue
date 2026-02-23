@@ -99,7 +99,10 @@ export default {
         return topic.includes("#") || topic.includes("+");
       }
 
-      this.$store.state.local.savingData = true;
+      this.$store.commit("storeLocal", {
+        name: "savingData",
+        value: true,
+      });
       // collect data
       let topics = {};
       if (topicsToSave === undefined) {
@@ -137,7 +140,10 @@ export default {
         // This may change with newer versions.
         await sleep(50);
       }
-      this.$store.state.local.savingData = false;
+      this.$store.commit("storeLocal", {
+        name: "savingData",
+        value: false,
+      });
     },
     /**
      * Reload topics from broker
@@ -199,6 +205,7 @@ export default {
         }
         // required for route guards
         this.doSubscribe([
+          "openWB/system/boot_done",
           "openWB/system/usage_terms_acknowledged",
           "openWB/system/installAssistantDone",
           "openWB/system/security/access/+",
@@ -232,6 +239,21 @@ export default {
           //   payload: undefined,
           // });
         }
+      });
+      this.client.on("end", () => {
+        console.error("mqtt connection ended");
+      });
+      this.client.on("close", () => {
+        console.error("mqtt connection closed");
+      });
+      this.client.on("offline", () => {
+        console.error("mqtt connection offline");
+      });
+      this.client.on("disconnect", () => {
+        console.error("mqtt connection disconnected");
+      });
+      this.client.on("reconnect", () => {
+        console.error("mqtt connection reconnecting...");
       });
     },
     endConnection() {
