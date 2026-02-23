@@ -34,21 +34,38 @@
         :collapsible="true"
         :collapsed="true"
       >
-        <openwb-base-text-input
-          v-model="$store.state.mqtt['openWB/system/serial_number']"
-          title="Seriennummer"
-          readonly
-        />
-        <openwb-base-text-input
-          v-model="$store.state.mqtt['openWB/system/ip_address']"
-          title="IP-Adresse"
-          readonly
-        />
-        <openwb-base-text-input
-          v-model="$store.state.mqtt['openWB/system/mac_address']"
-          title="MAC-Adresse"
-          readonly
-        />
+        <form name="systemInfoForm">
+          <openwb-base-text-input
+            v-model="$store.state.mqtt['openWB/system/serial_number']"
+            title="Seriennummer"
+            readonly
+          />
+          <openwb-base-text-input
+            v-model="$store.state.mqtt['openWB/system/ip_address']"
+            title="IP-Adresse"
+            subtype="host"
+            readonly
+          />
+          <openwb-base-text-input
+            v-model="$store.state.mqtt['openWB/system/mac_address']"
+            title="MAC-Adresse"
+            readonly
+          />
+          <openwb-base-text-input
+            v-model="$store.state.mqtt['openWB/system/hostname']"
+            title="Hostname"
+            subtype="host"
+            required
+            readonly
+          />
+          <!-- <openwb-base-submit-buttons
+            form-name="systemInfoForm"
+            :hide-defaults="true"
+            :hide-reset="true"
+            save-label="Hostnamen ändern"
+            @save="$emit('save', ['openWB/system/hostname'])"
+          /> -->
+        </form>
       </openwb-base-card>
       <openwb-base-card
         title="Versions-Informationen / Aktualisierung"
@@ -349,6 +366,7 @@ export default {
         "openWB/system/current_branch",
         "openWB/system/version",
         "openWB/system/serial_number",
+        "openWB/system/hostname",
         "openWB/system/ip_address",
         "openWB/system/mac_address",
         "openWB/chargepoint/+/get/version",
