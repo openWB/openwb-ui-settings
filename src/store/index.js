@@ -24,6 +24,7 @@ let states = {
   mqtt: {}, // will be filled with mqtt data
   mqttSubscriptions: {}, // will be filled with mqtt subscriptions count
   local: {
+    modalBlockerVisible: false,
     reloadRequired: false,
     savingData: false,
     username: null,

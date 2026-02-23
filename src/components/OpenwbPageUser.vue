@@ -149,6 +149,8 @@ export default {
   data() {
     return {
       mqttTopicsToSubscribe: [
+        "openWB/system/boot_done",
+        "openWB/system/update_in_progress",
         "openWB/system/security/user_management_active",
         "openWB/system/security/access_allowed",
         "openWB/system/dataprotection_acknowledged",
@@ -212,6 +214,9 @@ export default {
         this.password !== this.passwordConfirm
       );
     },
+    modalBlockerVisible() {
+      return this.$store.state.local.modalBlockerVisible === true;
+    },
   },
   watch: {
     loggedInUser(newValue) {
@@ -220,6 +225,9 @@ export default {
       }
     },
     accessAllowed() {
+      this.checkAutoLogin();
+    },
+    modalBlockerVisible() {
       this.checkAutoLogin();
     },
   },
@@ -234,7 +242,7 @@ export default {
     },
     checkAutoLogin() {
       console.debug("Checking auto login: ", this.userManagementActive, this.accessAllowed, this.loggedInUser);
-      if (this.userManagementActive && !this.accessAllowed) {
+      if (this.userManagementActive && !this.accessAllowed && !this.modalBlockerVisible) {
         this.showLoginModal = true;
       } else {
         this.showLoginModal = false;
