@@ -204,12 +204,15 @@ export default {
           this.$store.commit("storeLocal", { name: "username", value: user });
         }
         // required for route guards
-        this.doSubscribe([
-          "openWB/system/boot_done",
-          "openWB/system/usage_terms_acknowledged",
-          "openWB/system/installAssistantDone",
-          "openWB/system/security/access/+",
-        ]);
+        this.doSubscribe(
+          [
+            "openWB/system/boot_done",
+            "openWB/system/usage_terms_acknowledged",
+            "openWB/system/installAssistantDone",
+            "openWB/system/security/access/+",
+          ],
+          true,
+        );
       });
       this.client.on("error", (error) => {
         console.error("Connection failed", error);
@@ -271,10 +274,10 @@ export default {
       }
       this.createConnection();
     },
-    doSubscribe(topics) {
+    doSubscribe(topics, forceResubscribe = false) {
       topics.forEach((topic) => {
-        this.$store.commit("addSubscription", topic);
-        if (this.$store.getters.subscriptionCount(topic) == 1) {
+        if (this.$store.getters.subscriptionCount(topic) == 0 || forceResubscribe) {
+          this.$store.commit("addSubscription", topic);
           if (topic.includes("#") || topic.includes("+")) {
             console.debug("skipping init of wildcard topic:", topic);
           } else {
