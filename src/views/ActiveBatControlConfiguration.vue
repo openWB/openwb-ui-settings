@@ -336,7 +336,6 @@
                     "
                   />
                 </openwb-base-card>
-                <hr />
               </div>
             </openwb-base-card>
             <div v-if="$store.state.mqtt['openWB/bat/get/power_limit_controllable'] === true">
@@ -360,8 +359,8 @@
                 "
               >
                 <template #help>
-                  Speicher welche durch die aktive Steuerung entladen werden, schalten unterhalb des eingestellten SoC
-                  auf "Eigenregelung" um mögliche Tiefenentladung zu verhindern. Die aktive Ladung ist weiterhin
+                  Speicher, welche durch die aktive Steuerung entladen werden, schalten unterhalb des eingestellten SoC
+                  auf "Eigenregelung", um mögliche Tiefenentladung zu verhindern. Die aktive Ladung ist weiterhin
                   möglich.
                 </template>
               </openwb-base-range-input>
@@ -385,7 +384,7 @@
                 "
               >
                 <template #help>
-                  Speicher welche aktiv geladen werden sperren oberhalb des eingestellten SoC die Entladung oder
+                  Speicher, welche aktiv geladen werden, sperren oberhalb des eingestellten SoC die Entladung oder
                   schalten auf Eigenregelung des Speichers.
                 </template>
               </openwb-base-range-input>
@@ -417,8 +416,8 @@
                   <div
                     v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'mode_discharge_home_consumption'"
                   >
-                    Die Speicherentladung in Fahrzeuge wird komplett gesperrt! Fahrzeugladung die nicht durch
-                    PV-Überschuss gedeckt werden kann erzeugt Netzbezug statt Speicherentladung. Weitere Verbraucher
+                    Die Speicherentladung in Fahrzeuge wird komplett gesperrt! Fahrzeugladung, die nicht durch
+                    PV-Überschuss gedeckt werden kann, erzeugt Netzbezug statt Speicherentladung. Weitere Verbraucher
                     (bspw. Hausverbrauch) werden durch den Speicher ausgeglichen. Kann die Entladung am Speicher nur
                     komplett gesperrt werden, verhält sich diese Einstellung wie "volle Entladesperre".
                   </div>
@@ -452,7 +451,7 @@
                     Der Speicher regelt direkt entsprechend der manuellen Einstellung.
                   </div>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'vehicle_charging'">
-                    Das oben eingestellte Regellimit wird angewendet sobald ein oder mehrere Fahrzeuge Laden.
+                    Das oben eingestellte Regellimit wird angewendet, sobald ein oder mehrere Fahrzeuge Laden.
                   </div>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'price_limit'">
                     Regelung nach Preisgrenze bei variablen Strompreisen.
@@ -651,14 +650,25 @@ export default {
       ],
       mqttTopicsToPublish: [
         "openWB/general/chargemode_config/pv_charging/bat_mode",
-        "openWB/general/chargemode_config/pv_charging/min_bat_soc",
-        "openWB/general/chargemode_config/pv_charging/max_bat_soc",
         "openWB/general/chargemode_config/pv_charging/bat_power_reserve",
         "openWB/general/chargemode_config/pv_charging/bat_power_reserve_active",
         "openWB/general/chargemode_config/pv_charging/bat_power_discharge",
         "openWB/general/chargemode_config/pv_charging/bat_power_discharge_active",
+        "openWB/general/chargemode_config/pv_charging/min_bat_soc",
+        "openWB/general/chargemode_config/pv_charging/max_bat_soc",
         "openWB/bat/config/bat_control_permitted",
+        "openWB/bat/config/bat_control_activated",
+        "openWB/bat/+/get/max_charge_power",
+        "openWB/bat/+/get/max_discharge_power",
+        "openWB/bat/config/bat_control_min_soc",
+        "openWB/bat/config/bat_control_max_soc",
         "openWB/bat/config/power_limit_mode",
+        "openWB/bat/config/power_limit_condition",
+        "openWB/bat/config/manual_mode",
+        "openWB/bat/config/price_limit_activated",
+        "openWB/bat/config/price_limit",
+        "openWB/bat/config/price_charge_activated",
+        "openWB/bat/config/charge_limit",
       ],
     };
   },
