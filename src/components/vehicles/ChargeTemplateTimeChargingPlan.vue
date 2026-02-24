@@ -266,7 +266,7 @@ export default {
   emits: ["update:modelValue", "sendCommand"],
   data() {
     return {
-      mqttTopicsToSubscribe: ["openWB/optional/dc_charging"],
+      mqttTopics: [{ topic: "openWB/optional/dc_charging", writeable: false }],
       showRemoveModal: false,
     };
   },

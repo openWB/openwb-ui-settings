@@ -78,7 +78,10 @@ export default {
   mixins: [ComponentState],
   data() {
     return {
-      mqttTopicsToSubscribe: ["openWB/system/messages/+", "openWB/command/" + this.$root.mqttClientId + "/messages/+"],
+      mqttTopics: [
+        { topic: "openWB/command/" + this.$root.mqttClientId + "/messages/+", writeable: false },
+        { topic: "openWB/system/messages/+", writeable: false },
+      ],
       showAllMessages: false,
       hiddenMessages: [],
     };

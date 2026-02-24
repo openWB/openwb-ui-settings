@@ -352,12 +352,12 @@ export default {
         minute: "2-digit",
         second: "2-digit",
       }),
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/general/charge_log_data_config",
-        "openWB/chargepoint/+/config",
-        "openWB/vehicle/+/info",
-        "openWB/vehicle/+/name",
+      mqttTopics: [
+        { topic: "openWB/chargepoint/+/config", writeable: false },
+        { topic: "openWB/general/charge_log_data_config", writeable: false },
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/vehicle/+/info", writeable: false },
+        { topic: "openWB/vehicle/+/name", writeable: false },
       ],
       currentMonth: "",
       chargeLogRequestData: {
@@ -766,7 +766,7 @@ export default {
   },
   beforeMount() {
     // we need access to the mqttClientId which is not yet available in the data section
-    this.mqttTopicsToSubscribe.push("openWB/log/" + this.mqttClientId + "/data");
+    this.mqttTopics.push({ topic: "openWB/log/" + this.mqttClientId + "/data", writeable: false });
     const today = new Date();
     this.currentMonth = this.chargeLogDate = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, "0");
   },

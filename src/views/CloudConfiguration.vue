@@ -249,13 +249,12 @@ export default {
   emits: ["sendCommand", "save", "reset", "defaults"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/system/dataprotection_acknowledged",
-        "openWB/system/mqtt/bridge/+",
-        "openWB/system/mqtt/valid_partner_ids",
+      mqttTopics: [
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/system/dataprotection_acknowledged", writeable: false },
+        { topic: "openWB/system/mqtt/bridge/+", writeable: true },
+        { topic: "openWB/system/mqtt/valid_partner_ids", writeable: true },
       ],
-      mqttTopicsToPublish: ["openWB/system/mqtt/bridge/+", "openWB/system/mqtt/valid_partner_ids"],
       enableNewCloudButton: true,
       newCloudData: {
         email: "",

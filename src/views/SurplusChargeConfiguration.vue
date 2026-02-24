@@ -265,27 +265,15 @@ export default {
   emits: ["save", "reset", "defaults"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/general/chargemode_config/pv_charging/control_range",
-        "openWB/general/chargemode_config/pv_charging/feed_in_yield",
-        "openWB/general/chargemode_config/pv_charging/phase_switch_delay",
-        "openWB/general/chargemode_config/pv_charging/switch_on_threshold",
-        "openWB/general/chargemode_config/pv_charging/retry_failed_phase_switches",
-        "openWB/general/chargemode_config/pv_charging/switch_on_delay",
-        "openWB/general/chargemode_config/pv_charging/switch_off_threshold",
-        "openWB/general/chargemode_config/pv_charging/switch_off_delay",
-        "openWB/general/chargemode_config/pv_charging/phases_to_use",
-      ],
-      mqttTopicsToPublish: [
-        "openWB/general/chargemode_config/pv_charging/control_range",
-        "openWB/general/chargemode_config/pv_charging/switch_on_threshold",
-        "openWB/general/chargemode_config/pv_charging/switch_on_delay",
-        "openWB/general/chargemode_config/pv_charging/switch_off_threshold",
-        "openWB/general/chargemode_config/pv_charging/switch_off_delay",
-        "openWB/general/chargemode_config/pv_charging/retry_failed_phase_switches",
-        "openWB/general/chargemode_config/pv_charging/phase_switch_delay",
-        "openWB/general/chargemode_config/pv_charging/feed_in_yield",
+      mqttTopics: [
+        { topic: "openWB/general/chargemode_config/pv_charging/control_range", writeable: true },
+        { topic: "openWB/general/chargemode_config/pv_charging/feed_in_yield", writeable: true },
+        { topic: "openWB/general/chargemode_config/pv_charging/phase_switch_delay", writeable: true },
+        { topic: "openWB/general/chargemode_config/pv_charging/retry_failed_phase_switches", writeable: true },
+        { topic: "openWB/general/chargemode_config/pv_charging/switch_off_delay", writeable: true },
+        { topic: "openWB/general/chargemode_config/pv_charging/switch_off_threshold", writeable: true },
+        { topic: "openWB/general/chargemode_config/pv_charging/switch_on_delay", writeable: true },
+        { topic: "openWB/general/chargemode_config/pv_charging/switch_on_threshold", writeable: true },
       ],
       calculatedControlMode: undefined,
     };

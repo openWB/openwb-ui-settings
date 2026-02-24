@@ -404,7 +404,7 @@ export default {
   emits: ["save", "reset", "defaults"],
   data() {
     return {
-      mqttTopicsToSubscribe: [],
+      mqttTopics: [],
     };
   },
 };

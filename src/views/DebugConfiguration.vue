@@ -54,8 +54,10 @@ export default {
   emits: ["save", "reset", "defaults"],
   data() {
     return {
-      mqttTopicsToSubscribe: ["openWB/general/extern", "openWB/system/debug_level"],
-      mqttTopicsToPublish: ["openWB/system/debug_level"],
+      mqttTopics: [
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/system/debug_level", writeable: true },
+      ],
       logFiles: [
         {
           title: "Main-Log",

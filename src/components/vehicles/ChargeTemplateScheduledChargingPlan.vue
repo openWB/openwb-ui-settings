@@ -377,7 +377,7 @@ export default {
   emits: ["update:modelValue", "sendCommand"],
   data() {
     return {
-      mqttTopicsToSubscribe: ["openWB/optional/ep/flexible_tariff/provider"],
+      mqttTopics: [{ topic: "openWB/optional/ep/flexible_tariff/provider", writeable: false }],
       showRemoveModal: false,
     };
   },

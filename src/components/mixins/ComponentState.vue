@@ -4,11 +4,16 @@ export default {
   emits: ["reset", "defaults", "save"],
   data() {
     return {
-      mqttTopicsToSubscribe: [],
-      mqttTopicsToPublish: [],
+      mqttTopics: [],
     };
   },
   computed: {
+    mqttTopicsToSubscribe() {
+      return this.mqttTopics.map((topic) => topic.topic);
+    },
+    mqttTopicsToPublish() {
+      return this.mqttTopics.filter((topic) => topic.writeable).map((topic) => topic.topic);
+    },
     weekdays() {
       return ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"];
     },

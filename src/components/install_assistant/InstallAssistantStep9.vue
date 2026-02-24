@@ -40,7 +40,7 @@ export default {
   mixins: [ComponentState],
   emits: ["save", "reset", "defaults", "sendCommand", "switchPage", "endAssistant"],
   data: () => ({
-    mqttTopicsToSubscribe: ["openWB/general/extern"],
+    mqttTopics: [{ topic: "openWB/general/extern", writeable: false }],
   }),
   computed: {
     stepNumber() {

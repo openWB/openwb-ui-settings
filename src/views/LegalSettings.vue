@@ -98,8 +98,10 @@ export default {
   emits: ["sendCommand", "save"],
   data() {
     return {
-      mqttTopicsToSubscribe: ["openWB/system/dataprotection_acknowledged", "openWB/system/usage_terms_acknowledged"],
-      mqttTopicsToPublish: ["openWB/system/dataprotection_acknowledged", "openWB/system/usage_terms_acknowledged"],
+      mqttTopics: [
+        { topic: "openWB/system/dataprotection_acknowledged", writeable: true },
+        { topic: "openWB/system/usage_terms_acknowledged", writeable: true },
+      ],
     };
   },
   methods: {

@@ -359,7 +359,7 @@ export default {
   mixins: [ComponentState],
   data() {
     return {
-      mqttTopicsToSubscribe: ["openWB/system/security/access/+"],
+      mqttTopics: [{ topic: "openWB/system/security/access/+", writeable: false }],
     };
   },
   computed: {

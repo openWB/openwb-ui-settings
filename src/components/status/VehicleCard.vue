@@ -73,10 +73,10 @@ export default {
   },
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        `openWB/vehicle/${this.vehicleId}/name`,
-        `openWB/vehicle/${this.vehicleId}/info`,
-        `openWB/vehicle/${this.vehicleId}/get/+`,
+      mqttTopics: [
+        { topic: `openWB/vehicle/${this.vehicleId}/get/+`, writeable: false },
+        { topic: `openWB/vehicle/${this.vehicleId}/info`, writeable: false },
+        { topic: `openWB/vehicle/${this.vehicleId}/name`, writeable: false },
       ],
     };
   },

@@ -83,7 +83,7 @@ export default {
   mixins: [ComponentState],
   data() {
     return {
-      mqttTopicsToSubscribe: ["openWB/bat/get/+"],
+      mqttTopics: [{ topic: "openWB/bat/get/+", writeable: false }],
     };
   },
   computed: {
