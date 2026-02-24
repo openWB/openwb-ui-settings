@@ -77,25 +77,17 @@ export default {
   mixins: [ComponentState],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        // charge point sum
-        "openWB/chargepoint/get/power",
-        // individual charge points
-        "openWB/chargepoint/+/config",
-        // components
-        "openWB/system/device/+/component/+/config",
-        // battery sum
-        "openWB/bat/get/power",
-        // inverter sum
-        "openWB/pv/get/power",
-        // io devices
-        "openWB/system/io/+/config",
-        // vehicles
-        "openWB/vehicle/+/info",
-        // electricity pricing
-        "openWB/optional/ep/flexible_tariff/provider",
-        "openWB/optional/ep/grid_fee/provider",
+      mqttTopics: [
+        { topic: "openWB/bat/get/power", writeable: false },
+        { topic: "openWB/chargepoint/+/config", writeable: false },
+        { topic: "openWB/chargepoint/get/power", writeable: false },
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/optional/ep/flexible_tariff/provider", writeable: false },
+        { topic: "openWB/optional/ep/grid_fee/provider", writeable: false },
+        { topic: "openWB/pv/get/power", writeable: false },
+        { topic: "openWB/system/device/+/component/+/config", writeable: false },
+        { topic: "openWB/system/io/+/config", writeable: false },
+        { topic: "openWB/vehicle/+/info", writeable: false },
       ],
     };
   },

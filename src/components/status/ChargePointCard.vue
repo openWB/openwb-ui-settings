@@ -222,11 +222,11 @@ export default {
   },
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        `openWB/chargepoint/${this.chargePointId}/config`,
-        `openWB/chargepoint/${this.chargePointId}/get/+`,
-        `openWB/chargepoint/${this.chargePointId}/set/+`,
-        `openWB/internal_chargepoint/${this.chargePointId}/data/phases_to_use`,
+      mqttTopics: [
+        { topic: `openWB/chargepoint/${this.chargePointId}/config`, writeable: false },
+        { topic: `openWB/chargepoint/${this.chargePointId}/get/+`, writeable: false },
+        { topic: `openWB/chargepoint/${this.chargePointId}/set/+`, writeable: false },
+        { topic: `openWB/internal_chargepoint/${this.chargePointId}/data/phases_to_use`, writeable: false },
       ],
     };
   },

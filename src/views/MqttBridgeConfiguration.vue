@@ -323,7 +323,10 @@ export default {
   emits: ["sendCommand", "save", "reset"],
   data() {
     return {
-      mqttTopicsToSubscribe: ["openWB/general/extern", "openWB/system/mqtt/bridge/+"],
+      mqttTopics: [
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/system/mqtt/bridge/+", writeable: true },
+      ],
       showMqttBridgeModal: false,
       modalMqttBridgeIndex: undefined,
     };

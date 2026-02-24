@@ -24,7 +24,10 @@ export default {
   mixins: [ComponentState],
   data() {
     return {
-      mqttTopicsToSubscribe: ["openWB/system/boot_done", "openWB/system/update_in_progress"],
+      mqttTopics: [
+        { topic: "openWB/system/boot_done", writeable: false },
+        { topic: "openWB/system/update_in_progress", writeable: false },
+      ],
     };
   },
   computed: {

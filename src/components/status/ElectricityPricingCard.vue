@@ -69,16 +69,16 @@ export default {
   mixins: [ComponentState],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/optional/ep/flexible_tariff/provider",
-        "openWB/optional/ep/flexible_tariff/get/fault_state",
-        "openWB/optional/ep/flexible_tariff/get/fault_str",
-        "openWB/optional/ep/grid_fee/provider",
-        "openWB/optional/ep/grid_fee/get/fault_state",
-        "openWB/optional/ep/grid_fee/get/fault_str",
-        "openWB/optional/ep/get/prices",
-        "openWB/optional/ep/flexible_tariff/get/prices",
-        "openWB/optional/ep/grid_fee/get/prices",
+      mqttTopics: [
+        { topic: "openWB/optional/ep/flexible_tariff/get/fault_state", writeable: false },
+        { topic: "openWB/optional/ep/flexible_tariff/get/fault_str", writeable: false },
+        { topic: "openWB/optional/ep/flexible_tariff/get/prices", writeable: false },
+        { topic: "openWB/optional/ep/flexible_tariff/provider", writeable: false },
+        { topic: "openWB/optional/ep/get/prices", writeable: false },
+        { topic: "openWB/optional/ep/grid_fee/get/fault_state", writeable: false },
+        { topic: "openWB/optional/ep/grid_fee/get/fault_str", writeable: false },
+        { topic: "openWB/optional/ep/grid_fee/get/prices", writeable: false },
+        { topic: "openWB/optional/ep/grid_fee/provider", writeable: false },
       ],
       chartDatasets: {
         datasets: [

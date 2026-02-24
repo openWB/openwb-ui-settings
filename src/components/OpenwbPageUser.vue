@@ -148,12 +148,12 @@ export default {
   emits: ["sendCommand"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/system/boot_done",
-        "openWB/system/update_in_progress",
-        "openWB/system/security/user_management_active",
-        "openWB/system/security/access_allowed",
-        "openWB/system/dataprotection_acknowledged",
+      mqttTopics: [
+        { topic: "openWB/system/boot_done", writeable: false },
+        { topic: "openWB/system/dataprotection_acknowledged", writeable: false },
+        { topic: "openWB/system/security/access_allowed", writeable: false },
+        { topic: "openWB/system/security/user_management_active", writeable: false },
+        { topic: "openWB/system/update_in_progress", writeable: false },
       ],
       showLoginModal: false,
       showPasswordResetModal: false,

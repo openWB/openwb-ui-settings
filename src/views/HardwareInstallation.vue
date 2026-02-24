@@ -263,13 +263,12 @@ export default {
   emits: ["sendCommand", "save", "reset", "defaults"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/system/device/+/config",
-        "openWB/system/device/+/component/+/config",
-        "openWB/system/configurable/devices_components",
+      mqttTopics: [
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/system/configurable/devices_components", writeable: false },
+        { topic: "openWB/system/device/+/component/+/config", writeable: true },
+        { topic: "openWB/system/device/+/config", writeable: true },
       ],
-      mqttTopicsToPublish: ["openWB/system/device/+/config", "openWB/system/device/+/component/+/config"],
       selectedVendor: undefined,
       deviceToAdd: undefined,
       showDeviceRemoveModal: false,

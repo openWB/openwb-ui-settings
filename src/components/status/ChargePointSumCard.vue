@@ -75,12 +75,12 @@ export default {
   mixins: [ComponentState],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/chargepoint/get/power",
-        "openWB/chargepoint/get/imported",
-        "openWB/chargepoint/get/exported",
-        "openWB/chargepoint/get/daily_imported",
-        "openWB/chargepoint/get/daily_exported",
+      mqttTopics: [
+        { topic: "openWB/chargepoint/get/daily_exported", writeable: false },
+        { topic: "openWB/chargepoint/get/daily_imported", writeable: false },
+        { topic: "openWB/chargepoint/get/exported", writeable: false },
+        { topic: "openWB/chargepoint/get/imported", writeable: false },
+        { topic: "openWB/chargepoint/get/power", writeable: false },
       ],
     };
   },

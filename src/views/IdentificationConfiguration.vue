@@ -251,25 +251,19 @@ export default {
   emits: ["save", "reset", "defaults"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/chargepoint/+/config",
-        "openWB/chargepoint/+/get/rfid",
-        "openWB/chargepoint/+/get/vehicle_id",
-        "openWB/chargepoint/+/get/rfid_timestamp",
-        "openWB/chargepoint/+/set/rfid",
-        "openWB/optional/rfid/active",
-        "openWB/chargepoint/template/+",
-        "openWB/vehicle/template/charge_template/+",
-        "openWB/vehicle/+/name",
-        "openWB/vehicle/+/charge_template",
-        "openWB/vehicle/+/tag_id",
-      ],
-      mqttTopicsToPublish: [
-        "openWB/optional/rfid/active",
-        "openWB/chargepoint/template/+",
-        "openWB/vehicle/+/tag_id",
-        "openWB/vehicle/template/charge_template/+",
+      mqttTopics: [
+        { topic: "openWB/chargepoint/+/config", writeable: false },
+        { topic: "openWB/chargepoint/+/get/rfid", writeable: false },
+        { topic: "openWB/chargepoint/+/get/rfid_timestamp", writeable: false },
+        { topic: "openWB/chargepoint/+/get/vehicle_id", writeable: false },
+        { topic: "openWB/chargepoint/+/set/rfid", writeable: false },
+        { topic: "openWB/chargepoint/template/+", writeable: true },
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/optional/rfid/active", writeable: true },
+        { topic: "openWB/vehicle/+/charge_template", writeable: false },
+        { topic: "openWB/vehicle/+/name", writeable: false },
+        { topic: "openWB/vehicle/+/tag_id", writeable: true },
+        { topic: "openWB/vehicle/template/charge_template/+", writeable: true },
       ],
       tempIdTagList: {},
     };

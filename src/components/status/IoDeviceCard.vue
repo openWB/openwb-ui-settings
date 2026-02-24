@@ -152,10 +152,10 @@ export default {
   },
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        `openWB/io/states/${this.ioDevice.id}/get/+`,
-        "openWB/io/action/+/config",
-        "openWB/io/action/+/timestamp",
+      mqttTopics: [
+        { topic: "openWB/io/action/+/config", writeable: false },
+        { topic: "openWB/io/action/+/timestamp", writeable: false },
+        { topic: `openWB/io/states/${this.ioDevice.id}/get/+`, writeable: false },
       ],
       state: {
         true: {

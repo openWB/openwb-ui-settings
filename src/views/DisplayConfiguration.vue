@@ -212,23 +212,16 @@ export default {
   emits: ["save", "reset", "defaults"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/optional/int_display/active",
-        "openWB/optional/int_display/on_if_plugged_in", // not yet implemented
-        "openWB/optional/int_display/only_local_charge_points",
-        "openWB/optional/int_display/rotation",
-        "openWB/optional/int_display/standby",
-        "openWB/optional/int_display/theme",
-        "openWB/system/configurable/display_themes",
-        "openWB/system/security/user_management_active",
-      ],
-      mqttTopicsToPublish: [
-        "openWB/optional/int_display/active",
-        "openWB/optional/int_display/only_local_charge_points",
-        "openWB/optional/int_display/rotation",
-        "openWB/optional/int_display/standby",
-        "openWB/optional/int_display/theme",
+      mqttTopics: [
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/optional/int_display/active", writeable: true },
+        { topic: "openWB/optional/int_display/on_if_plugged_in", writeable: true }, // not yet implemented!
+        { topic: "openWB/optional/int_display/only_local_charge_points", writeable: true },
+        { topic: "openWB/optional/int_display/rotation", writeable: true },
+        { topic: "openWB/optional/int_display/standby", writeable: true },
+        { topic: "openWB/optional/int_display/theme", writeable: true },
+        { topic: "openWB/system/configurable/display_themes", writeable: false },
+        { topic: "openWB/system/security/user_management_active", writeable: false },
       ],
     };
   },

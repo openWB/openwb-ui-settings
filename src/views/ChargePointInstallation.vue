@@ -497,17 +497,16 @@ export default {
   emits: ["sendCommand", "save", "reset", "defaults"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/optional/dc_charging",
-        "openWB/optional/ocpp/config",
-        "openWB/optional/rfid/active",
-        "openWB/chargepoint/+/config",
-        "openWB/chargepoint/template/+",
-        "openWB/system/configurable/chargepoints",
-        "openWB/system/configurable/chargepoints_internal",
+      mqttTopics: [
+        { topic: "openWB/chargepoint/+/config", writeable: true },
+        { topic: "openWB/chargepoint/template/+", writeable: true },
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/optional/dc_charging", writeable: false },
+        { topic: "openWB/optional/ocpp/config", writeable: false },
+        { topic: "openWB/optional/rfid/active", writeable: false },
+        { topic: "openWB/system/configurable/chargepoints", writeable: false },
+        { topic: "openWB/system/configurable/chargepoints_internal", writeable: false },
       ],
-      mqttTopicsToPublish: ["openWB/chargepoint/+/config", "openWB/chargepoint/template/+"],
       chargePointToAdd: undefined,
       showChargePointModal: false,
       modalChargePointIndex: undefined,

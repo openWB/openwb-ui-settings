@@ -81,8 +81,7 @@
           v-if="$store.state.mqtt['openWB/general/extern'] === true"
           subtype="info"
         >
-          Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary"
-          befindet.
+          Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
         </openwb-base-alert>
         <div v-else>
           <openwb-base-card
@@ -186,16 +185,15 @@ export default {
   emits: ["save", "reset", "defaults", "send-command"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/system/configurable/io_devices",
-        "openWB/system/io/+/config",
-        "openWB/system/configurable/io_actions",
-        "openWB/io/action/+/config",
-        "openWB/chargepoint/+/config",
-        "openWB/system/device/+/component/+/config",
+      mqttTopics: [
+        { topic: "openWB/chargepoint/+/config", writeable: false },
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/io/action/+/config", writeable: true },
+        { topic: "openWB/system/configurable/io_actions", writeable: false },
+        { topic: "openWB/system/configurable/io_devices", writeable: false },
+        { topic: "openWB/system/device/+/component/+/config", writeable: false },
+        { topic: "openWB/system/io/+/config", writeable: true },
       ],
-      mqttTopicsToPublish: ["openWB/system/io/+/config", "openWB/io/action/+/config"],
       showIoDeviceDeleteModal: false,
       modalIoDeviceIndex: undefined,
       ioDeviceToAdd: undefined,
