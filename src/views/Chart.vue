@@ -217,8 +217,8 @@ export default {
           category: "component",
           unit: "kW",
           jsonKey: null,
-          borderColor: "rgba(255, 0, 0, 0.7)",
-          backgroundColor: "rgba(255, 10, 13, 0.3)",
+          borderColor: "#dc3545b2",
+          backgroundColor: "#dc35454c",
           fill: true,
           pointStyle: "circle",
           pointRadius: 0,
@@ -238,8 +238,8 @@ export default {
           category: "component",
           unit: "kWh",
           jsonKey: null,
-          borderColor: "rgba(255, 0, 0, 0.7)",
-          backgroundColor: "rgba(255, 10, 13, 0.3)",
+          borderColor: "#dc3545b2",
+          backgroundColor: "#dc35454c",
           fill: true,
           pointStyle: "circle",
           pointRadius: 0,
@@ -281,8 +281,8 @@ export default {
           unit: "kWh",
           type: "bar",
           jsonKey: null,
-          borderColor: "rgba(255, 0, 0, 0.7)",
-          backgroundColor: "rgba(255, 10, 13, 0.3)",
+          borderColor: "#dc3545b2",
+          backgroundColor: "#dc35454c",
           fill: true,
           pointStyle: "circle",
           pointRadius: 0,
@@ -304,8 +304,8 @@ export default {
           unit: "kWh",
           type: "bar",
           jsonKey: null,
-          borderColor: "rgba(40, 167, 69, 0.7)",
-          backgroundColor: "rgba(255, 10, 13, 0.3)",
+          borderColor: "#28a745b2",
+          backgroundColor: "#dc35454c",
           fill: true,
           pointStyle: "circle",
           pointRadius: 0,
@@ -327,8 +327,8 @@ export default {
           unit: "kWh",
           type: "bar",
           jsonKey: null,
-          borderColor: "rgba(253, 126, 20, 0.7)",
-          backgroundColor: "rgba(255, 10, 13, 0.3)",
+          borderColor: "#ffc107b2",
+          backgroundColor: "#dc35454c",
           fill: true,
           pointStyle: "circle",
           pointRadius: 0,
@@ -349,8 +349,8 @@ export default {
           category: "component",
           unit: "kW",
           jsonKey: null,
-          borderColor: "rgba(40, 167, 69, 0.7)",
-          backgroundColor: "rgba(10, 255, 13, 0.3)",
+          borderColor: "#28a745b2",
+          backgroundColor: "#28a7454c",
           fill: true,
           pointStyle: "circle",
           pointRadius: 0,
@@ -371,8 +371,8 @@ export default {
           category: "component",
           unit: "kWh",
           jsonKey: null,
-          borderColor: "rgba(40, 167, 69, 0.7)",
-          backgroundColor: "rgba(10, 255, 13, 0.3)",
+          borderColor: "#28a745b2",
+          backgroundColor: "#28a7454c",
           fill: true,
           pointStyle: "circle",
           pointRadius: 0,
@@ -393,8 +393,8 @@ export default {
           category: "component",
           unit: "kW",
           jsonKey: null,
-          borderColor: "rgba(253, 126, 20, 0.7)",
-          backgroundColor: "rgba(200, 255, 13, 0.3)",
+          borderColor: "#ffc107b2",
+          backgroundColor: "#ffc1074c",
           fill: true,
           pointStyle: "circle",
           pointRadius: 0,
@@ -415,8 +415,8 @@ export default {
           category: "component",
           unit: "kWh",
           jsonKey: null,
-          borderColor: "rgba(253, 126, 20, 0.7)",
-          backgroundColor: "rgba(200, 255, 13, 0.3)",
+          borderColor: "#ffc107b2",
+          backgroundColor: "#ffc1074c",
           fill: true,
           pointStyle: "circle",
           pointRadius: 0,
@@ -437,8 +437,8 @@ export default {
           category: "component",
           unit: "kWh",
           jsonKey: null,
-          borderColor: "rgba(253, 126, 20, 0.7)",
-          backgroundColor: "rgba(200, 255, 13, 0.3)",
+          borderColor: "#ffc107b2",
+          backgroundColor: "#ffc1074c",
           fill: true,
           pointStyle: "circle",
           pointRadius: 0,
@@ -459,8 +459,8 @@ export default {
           category: "component",
           unit: "%",
           jsonKey: null,
-          borderColor: "rgba(253, 126, 20, 0.7)",
-          backgroundColor: "rgba(200, 255, 13, 0.3)",
+          borderColor: "#ffc107b2",
+          backgroundColor: "#ffc1074c",
           borderDash: [10, 5],
           hidden: true,
           fill: false,
@@ -481,8 +481,8 @@ export default {
           category: "chargepoint",
           unit: "kW",
           jsonKey: null,
-          borderColor: "rgba(0, 0, 255, 0.7)",
-          backgroundColor: "rgba(0, 0, 255, 0.3)",
+          borderColor: "#0000ff4c",
+          backgroundColor: "#0000ff4c",
           fill: true,
           pointStyle: "circle",
           pointRadius: 0,
@@ -503,8 +503,8 @@ export default {
           category: "chargepoint",
           unit: "kWh",
           jsonKey: null,
-          borderColor: "rgba(0, 0, 255, 0.7)",
-          backgroundColor: "rgba(0, 0, 255, 0.3)",
+          borderColor: "#0000ff4c",
+          backgroundColor: "#0000ff4c",
           fill: true,
           pointStyle: "circle",
           pointRadius: 0,
@@ -526,8 +526,8 @@ export default {
           unit: "kWh",
           type: "bar",
           jsonKey: null,
-          borderColor: "rgba(255, 0, 0, 0.7)",
-          backgroundColor: "rgba(0, 0, 255, 0.3)",
+          borderColor: "#dc3545b2",
+          backgroundColor: "#0000ff4c",
           fill: true,
           pointStyle: "circle",
           pointRadius: 0,
@@ -549,8 +549,8 @@ export default {
           unit: "kWh",
           type: "bar",
           jsonKey: null,
-          borderColor: "rgba(40, 167, 69, 0.7)",
-          backgroundColor: "rgba(0, 0, 255, 0.3)",
+          borderColor: "#28a745b2",
+          backgroundColor: "#0000ff4c",
           fill: true,
           pointStyle: "circle",
           pointRadius: 0,
@@ -572,8 +572,8 @@ export default {
           unit: "kWh",
           type: "bar",
           jsonKey: null,
-          borderColor: "rgba(253, 126, 20, 0.7)",
-          backgroundColor: "rgba(0, 0, 255, 0.3)",
+          borderColor: "#ffc107b2",
+          backgroundColor: "#0000ff4c",
           fill: true,
           pointStyle: "circle",
           pointRadius: 0,
@@ -594,8 +594,8 @@ export default {
           category: "vehicle",
           unit: "%",
           jsonKey: null,
-          borderColor: "rgba(0, 0, 255, 0.7)",
-          backgroundColor: "rgba(0, 0, 255, 0.3)",
+          borderColor: "#17a2b8b2",
+          backgroundColor: "#17a2b84c",
           borderDash: [10, 5],
           hidden: true,
           fill: false,
@@ -679,8 +679,8 @@ export default {
           category: "component",
           unit: "kW",
           jsonKey: null,
-          borderColor: "rgba(120, 122, 124, 0.7)",
-          backgroundColor: "rgba(120, 122, 124, 0.3)",
+          borderColor: "#787a7cb2",
+          backgroundColor: "#787a7c4c",
           fill: true,
           pointStyle: "circle",
           pointRadius: 0,
@@ -700,8 +700,8 @@ export default {
           category: "component",
           unit: "kWh",
           jsonKey: null,
-          borderColor: "rgba(120, 122, 124, 0.7)",
-          backgroundColor: "rgba(120, 122, 124, 0.3)",
+          borderColor: "##787a7cb2",
+          backgroundColor: "#787a7c4c",
           fill: true,
           pointStyle: "circle",
           pointRadius: 0,
@@ -722,8 +722,8 @@ export default {
           unit: "kWh",
           type: "bar",
           jsonKey: null,
-          borderColor: "rgba(255, 0, 0, 0.7)",
-          backgroundColor: "rgba(120, 122, 124, 0.3)",
+          borderColor: "#dc3545b2",
+          backgroundColor: "#787a7c4c",
           fill: true,
           pointStyle: "circle",
           pointRadius: 0,
@@ -745,8 +745,8 @@ export default {
           unit: "kWh",
           type: "bar",
           jsonKey: null,
-          borderColor: "rgba(40, 167, 69, 0.7)",
-          backgroundColor: "rgba(120, 122, 124, 0.3)",
+          borderColor: "#28a745b2",
+          backgroundColor: "#787a7c4c",
           fill: true,
           pointStyle: "circle",
           pointRadius: 0,
@@ -768,8 +768,8 @@ export default {
           unit: "kWh",
           type: "bar",
           jsonKey: null,
-          borderColor: "rgba(253, 126, 20, 0.7)",
-          backgroundColor: "rgba(120, 122, 124, 0.3)",
+          borderColor: "#ffc107b2",
+          backgroundColor: "#787a7c4c",
           fill: true,
           pointStyle: "circle",
           pointRadius: 0,
@@ -1543,6 +1543,37 @@ export default {
       return `${label.join(" ")}${details.length ? " (" + details.join(", ") + ")" : ""}`;
     },
     /**
+     * Returns the color for a dataset based on the base object, object key, and element key.
+     * @param {String} baseObject
+     * @param {String} objectKey
+     * @param {String} elementKey
+     * @param {String} datasetKey
+     * @returns {Object|undefined} - An object containing borderColor and backgroundColor, or undefined if no color is found.
+     */
+    getDatasetColor(baseObject, objectKey, elementKey, datasetKey) {
+      let color = undefined;
+      if (
+        Object.prototype.hasOwnProperty.call(
+          this.$store.state.mqtt[this.baseTopic + this.commandData.date],
+          "colors",
+        ) &&
+        Object.prototype.hasOwnProperty.call(
+          this.$store.state.mqtt[this.baseTopic + this.commandData.date].colors,
+          objectKey,
+        )
+      ) {
+        color = this.$store.state.mqtt[this.baseTopic + this.commandData.date].colors[objectKey];
+      }
+      console.debug("getDatasetColor:", baseObject, objectKey, elementKey, datasetKey, color);
+      // mix colors with some opacity
+      return color
+        ? {
+            borderColor: `${color}b2`,
+            backgroundColor: `${color}${elementKey == "soc" ? "00" : "4c"}`,
+          }
+        : undefined;
+    },
+    /**
      * Returns the index of the dataset with the specified dataset key.
      *
      * @param {string} datasetKey - The key of the dataset to find.
@@ -1615,6 +1646,12 @@ export default {
         }
         newDataset.hidden = this.hideDataset(baseObject, objectKey, elementKey);
         newDataset.stack = this.updateDatasetStack(newDataset.stack, objectKey, elementKey);
+        const colors = this.getDatasetColor(baseObject, objectKey, elementKey, datasetKey);
+        console.log("dataset color", colors);
+        if (colors) {
+          newDataset.borderColor = colors.borderColor;
+          newDataset.backgroundColor = colors.backgroundColor;
+        }
         return this.chartDatasets.datasets.push(newDataset) - 1;
       } else {
         console.warn("no matching template found for: " + datasetKey + " with template: " + datasetTemplate);
