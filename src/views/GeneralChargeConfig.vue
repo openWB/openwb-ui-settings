@@ -84,6 +84,7 @@
             :step="0.001"
             :precision="3"
             unit="ct/kWh"
+            :min="0"
             required
             :model-value="$store.state.mqtt['openWB/general/prices/grid'] * 100000"
             @update:model-value="updateState('openWB/general/prices/grid', parseFloat(($event / 100000).toFixed(7)))"
@@ -93,6 +94,7 @@
             :step="0.001"
             :precision="3"
             unit="ct/kWh"
+            :min="0"
             required
             :model-value="$store.state.mqtt['openWB/general/prices/bat'] * 100000"
             @update:model-value="updateState('openWB/general/prices/bat', parseFloat(($event / 100000).toFixed(7)))"
@@ -102,6 +104,7 @@
             :step="0.001"
             :precision="3"
             unit="ct/kWh"
+            :min="0"
             required
             :model-value="$store.state.mqtt['openWB/general/prices/pv'] * 100000"
             @update:model-value="updateState('openWB/general/prices/pv', parseFloat(($event / 100000).toFixed(7)))"
