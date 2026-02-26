@@ -1,8 +1,9 @@
 <template>
-  <div class="device-sungrow">
-    <openwb-base-heading> Einstellungen für Sungrow </openwb-base-heading>
+  <div class="device-sungrow-sh">
+    <openwb-base-heading> Einstellungen für Sungrow SH Wechselrichter</openwb-base-heading>
     <openwb-base-alert subtype="info">
       Bitte zur Fehlervermeidung die Firmware des Sungrow Wechselrichters und WiNet-S Dongles aktuell halten.
+      Modbus muss in der iSolarCloud für den Wechselrichter aktiviert sein.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
@@ -31,9 +32,7 @@
       title="Version"
       :options="[
         { value: 0, text: 'SH (Hybrid)' },
-        { value: 3, text: 'SH (Hybrid) über WiNet-S Dongle' },
-        { value: 1, text: 'SG (kein Hybrid)' },
-        { value: 2, text: 'SG (kein Hybrid) über WiNet-S Dongle' },
+        { value: 1, text: 'SH (Hybrid) über WiNet-S Dongle' },
       ]"
       :model-value="device.configuration.version"
       required
@@ -52,7 +51,7 @@
 import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
 
 export default {
-  name: "DeviceSungrow",
+  name: "DeviceSungrowSH",
   mixins: [DeviceConfigMixin],
 };
 </script>
