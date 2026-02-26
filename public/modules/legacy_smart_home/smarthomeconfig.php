@@ -1224,11 +1224,11 @@ $numDevices = 9;
 		<!-- load topics -->
 		<script src = "modules/legacy_smart_home/topicsToSubscribe_smarthomeconfig.js?ver=20210215" ></script>
 		<!-- load helper functions -->
-		<script src = "modules/legacy_smart_home/helperFunctions.js?ver=20210215" ></script>
+		<script src = "modules/legacy_smart_home/helperFunctions.js?ver=20260226" ></script>
 		<!-- load service -->
-		<script src = "modules/legacy_smart_home/setupMqttServices.js?ver=20260112" ></script>
+		<script src = "modules/legacy_smart_home/setupMqttServices.js?ver=20260226" ></script>
 		<!-- load mqtt handler-->
-		<script src = "modules/legacy_smart_home/processAllMqttMsg.js?ver=20210104" ></script>
+		<script src = "modules/legacy_smart_home/processAllMqttMsg.js?ver=20260226" ></script>
 
 		<script>
 			<?php for( $devicenum = 1; $devicenum <= $numDevices; $devicenum++ ) { ?>

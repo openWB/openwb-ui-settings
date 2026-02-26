@@ -87,7 +87,7 @@ client.on("error", (error) => {
 // Gets called whenever you receive a message
 client.on("message", (topic, message) => {
 	// func processMessages defined in respective processAllMqttMsg_
-	processMessages(topic, message);
+	processMessages(topic, message.toString());
 });
 
 // Publishes a message to the broker
