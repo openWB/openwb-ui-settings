@@ -99,6 +99,13 @@
               <li>Passwort: <strong>openwb</strong></li>
             </ul>
           </openwb-base-alert>
+          <openwb-base-alert subtype="danger">
+            Einige Bereiche sind noch nicht kompatibel mit der Benutzerverwaltung. Bitte überprüfe vor der Aktivierung,
+            ob Du eine oder mehrere dieser Funktionen nutzt:
+            <ul>
+              <li>SimpleAPI</li>
+            </ul>
+          </openwb-base-alert>
           <openwb-base-alert
             v-if="!webThemeSupported"
             subtype="danger"
@@ -631,6 +638,7 @@ export default {
       newClientName: null,
       newGroupName: null,
       anonymousGroupName: null,
+      dynSecAdminRoleName: "dynsec-admin",
       userGroupName: "user",
       displayGroupName: "display",
       defaultAclAccess: [],
@@ -706,7 +714,6 @@ export default {
     },
     routes() {
       const routes = this.$router.getRoutes();
-      console.debug("All route names:", routes.map((r) => r.name).sort());
       return routes;
     },
     routeName() {
@@ -800,7 +807,7 @@ export default {
             return "Einstellungen: Konfiguration - SmartHome";
           case "full-access":
             return "Voller Zugang lesen und schreiben";
-          case "dynsec-admin":
+          case this.dynSecAdminRoleName:
             return "Sicherheits-Administrator";
           case "basic-display-data":
             return "Basisdaten: Display";
@@ -976,7 +983,6 @@ export default {
     handleResetModal(event) {
       this.showResetModal = false;
       if (event === "confirm") {
-        console.info("Resetting user management!");
         this.$emit("sendCommand", { command: "resetUserManagement" });
       }
     },
@@ -1023,7 +1029,6 @@ export default {
       this.queueControlCommand("getClient", { username: client });
     },
     createClient() {
-      console.debug("Creating new client:", this.newClientName);
       this.queueControlCommand("createClient", { username: this.newClientName });
       this.newClientName = null;
     },
@@ -1033,7 +1038,6 @@ export default {
         this.$root.postClientMessage("Der aktuell angemeldete Benutzer kann nicht gelöscht werden.", "danger");
         return;
       }
-      console.debug("Deleting client:", client);
       this.queueControlCommand("deleteClient", { username: client });
     },
     toggleClientDisabled(client) {
@@ -1049,12 +1053,23 @@ export default {
       this.queueControlCommand("getClient", { username: client });
     },
     modifyClient(client) {
-      console.debug("Modifying client:", client);
+      if (
+        client === this.loggedInUser &&
+        !this.clientDetails[client]?.roles.map((role) => role.rolename).includes(this.dynSecAdminRoleName)
+      ) {
+        console.error(`Cannot remove ${this.dynSecAdminRoleName} role from currently logged in user:`, client);
+        this.$root.postClientMessage(
+          `Die Rolle '${this.friendlyRoleName(this.dynSecAdminRoleName)}' kann vom aktuell angemeldeten Benutzer nicht entfernt werden ` +
+            "und wird automatisch wieder hinzugefügt, da sie für die Verwaltung der Benutzerrechte benötigt wird. " +
+            "Bitte wechsle vor der Bearbeitung zu einem anderen Benutzer, um die Rolle zu entfernen.",
+          "warning",
+        );
+        this.clientDetails[client].roles.push({ rolename: this.dynSecAdminRoleName });
+      }
       if ([null, undefined, ""].includes(this.clientDetails[client].password)) {
         // remove password field to avoid resetting password to empty
         delete this.clientDetails[client].password;
       } else if (this.clientDetails[client].username === "admin") {
-        console.debug("Updating password for client:", client);
         this.$emit("sendCommand", {
           command: "updateAdminPassword",
           data: {
@@ -1079,16 +1094,13 @@ export default {
       this.queueControlCommand("getGroup", { groupname: group });
     },
     createGroup() {
-      console.debug("Creating new group:", this.newGroupName);
       this.queueControlCommand("createGroup", { groupname: this.newGroupName });
       this.newGroupName = null;
     },
     deleteGroup(group) {
-      console.debug("Deleting group:", group);
       this.queueControlCommand("deleteGroup", { groupname: group });
     },
     modifyGroup(group) {
-      console.debug("Modifying group:", group);
       this.queueControlCommand("modifyGroup", { groupname: group, ...this.groupDetails[group] });
     },
     getRoleList() {

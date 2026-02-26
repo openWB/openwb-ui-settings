@@ -35,16 +35,16 @@
           :model-value="$store.state.mqtt['openWB/general/extern']"
           @update:model-value="updateState('openWB/general/extern', $event)"
         >
-          <template
-            v-if="disableExternModeSwitch"
-            #help
-          >
-            Die Benutzerverwaltung ist aktiviert oder der unverschlüsselte Zugriff ist nicht erlaubt. Um den
-            Steuerungsmodus ändern zu können, muss die Benutzerverwaltung im Bereich
-            <RouterLink to="/System/SecurityConfiguration">Sicherheit</RouterLink> zunächst deaktiviert und der
-            unverschlüsselte Zugang erlaubt werden.
-          </template>
         </openwb-base-button-group-input>
+        <openwb-base-alert
+          v-if="disableExternModeSwitch"
+          subtype="warning"
+        >
+          Die Benutzerverwaltung ist aktiviert oder der unverschlüsselte Zugriff ist nicht erlaubt. Um den
+          Steuerungsmodus ändern zu können, muss die Benutzerverwaltung im Bereich
+          <RouterLink to="/System/SecurityConfiguration">Sicherheit</RouterLink> zunächst deaktiviert und der
+          unverschlüsselte Zugang erlaubt werden.
+        </openwb-base-alert>
         <div v-if="!installAssistantActive">
           <openwb-base-button-group-input
             v-if="$store.state.mqtt['openWB/general/extern'] === true"
