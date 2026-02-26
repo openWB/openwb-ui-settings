@@ -255,7 +255,6 @@ export default {
             this.$root.postClientMessage("Benutzername und Passwort erforderlich.", "danger");
             return;
           }
-          console.warn("Login with:", this.username, "/", this.password);
           // set cookie
           this.$cookies.set("mqtt", `${this.username}:${this.password}`);
           // reconnect mqtt

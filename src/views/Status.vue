@@ -162,7 +162,7 @@ export default {
     vehicles: {
       get() {
         if (this.$store.state.mqtt["openWB/general/extern"] === true) {
-          return {};
+          return []; // return empty array if extern is true, no vehicles should be shown
         }
         let vehicleInfoTopics = this.getWildcardTopics("openWB/vehicle/+/info");
         // return an array of vehicle ids

@@ -48,7 +48,7 @@
         type="button"
         class="btn btn-block"
         :class="[{ disabled: resetDisabled }, resetDisabled ? 'btn-outline-warning' : 'btn-warning']"
-        :disabled="saveDisabled"
+        :disabled="resetDisabled"
         @click="showResetModal"
       >
         {{ resetLabel }}
@@ -64,7 +64,7 @@
         type="button"
         class="btn btn-block"
         :class="[{ disabled: defaultsDisabled }, defaultsDisabled ? 'btn-outline-danger' : 'btn-danger']"
-        :disabled="saveDisabled"
+        :disabled="defaultsDisabled"
         @click="showDefaultsModal"
       >
         {{ defaultsLabel }}

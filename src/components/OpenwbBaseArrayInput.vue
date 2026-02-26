@@ -25,7 +25,7 @@
             </div>
           </div>
           <input
-            v-if="validElements === null"
+            v-if="validElements.length === 0"
             :id="`${uid}-tag-input`"
             ref="tagInput"
             v-model="newTag"
@@ -136,7 +136,7 @@ export default {
       type: Array,
       // can be a simple Array of values or an Array of Objects with 'value' and 'label' properties
       default: () => {
-        return null;
+        return [];
       },
     },
     noElementsMessage: {
@@ -174,8 +174,8 @@ export default {
       },
     },
     remainingElements() {
-      if (this.validElements === null) {
-        return null;
+      if (this.validElements.length === 0) {
+        return [];
       } else {
         return this.validElements.filter((el) => !this.value.includes(el.value || el));
       }
@@ -185,7 +185,7 @@ export default {
         return (
           this.newTag.length > 0 &&
           !this.value.includes(this.newTag) &&
-          (this.validElements === null ||
+          (this.validElements.length === 0 ||
             this.validElements.includes(this.newTag) ||
             this.validElements.some((el) => el.value === this.newTag)) &&
           this.$refs.tagInput?.checkValidity()
@@ -194,12 +194,8 @@ export default {
     },
     tagLabel() {
       return (tag) => {
-        if (this.validElements === null) {
-          return tag;
-        } else {
-          const found = this.validElements.find((el) => (el.value || el) === tag);
-          return found ? found.label || found.value || found : tag;
-        }
+        const found = this.validElements.find((el) => (el.value || el) === tag);
+        return found ? found.label || found.value || found : tag;
       };
     },
   },

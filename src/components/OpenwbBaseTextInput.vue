@@ -102,8 +102,8 @@
           <input
             v-if="['email', 'url'].includes(subtype)"
             :id="`${uid}-url-input`"
+            ref="urlInput"
             v-model="value"
-            refs="urlInput"
             :type="subtype"
             class="form-control"
             v-bind="$attrs"
@@ -311,14 +311,19 @@ export default {
           console.log("Validating input value:", newValue);
           const valid = this.validator(newValue);
           console.log("Validation result:", valid);
+          const inputElement = this.inputRef;
           if (valid !== true) {
             console.log("Marking input as invalid", JSON.stringify(this.$refs));
-            this.$refs[this.subtype + "Input"].setCustomValidity(valid);
+            if (inputElement && typeof inputElement.setCustomValidity === "function") {
+              inputElement.setCustomValidity(valid);
+            }
             this.inputInvalid = true;
             this.tempValue = newValue;
           } else {
             console.log("Input is valid");
-            this.$refs[this.subtype + "Input"].setCustomValidity("");
+            if (inputElement && typeof inputElement.setCustomValidity === "function") {
+              inputElement.setCustomValidity("");
+            }
             this.inputInvalid = false;
           }
         }
