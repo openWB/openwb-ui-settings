@@ -188,7 +188,7 @@ export default {
         console.debug("Anonymous mqtt connection (no cookie set)");
       }
       if ((this.nodeEnv !== "production" || protocol == "wss") && user && pass) {
-        console.debug("Using mqtt credentials from cookie:", user, "/", pass.charAt(0), "...");
+        console.debug(`Using mqtt credentials from cookie: "${user}" / "${pass.charAt(0)}..."`);
         options.username = user;
         options.password = pass;
         if (user === "admin" && pass === "openwb") {
