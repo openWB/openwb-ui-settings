@@ -216,6 +216,17 @@
               :model-value="$store.state.mqtt['openWB/optional/ocpp/config']?.version"
               @update:model-value="updateState('openWB/optional/ocpp/config', $event, 'version')"
             />
+            <openwb-base-text-input
+              title="Standard ID-Tag"
+              :model-value="$store.state.mqtt['openWB/optional/ocpp/config']?.dummy_id_tag"
+              @update:model-value="updateState('openWB/optional/ocpp/config', $event, 'dummy_id_tag')"
+            >
+              <template #help>
+                Wenn hier ein ID-Tag eingetragen wird, wird dieser bei allen OCPP-Transaktionen verwendet,
+                unabhängig davon ob ein physischer RFID-Tag gescannt wurde oder nicht.
+                Leer lassen, um den tatsächlich gescannten ID-Tag zu verwenden.
+              </template>
+            </openwb-base-text-input>
           </div>
         </div>
       </openwb-base-card>
