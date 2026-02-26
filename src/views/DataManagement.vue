@@ -233,7 +233,9 @@
               :hide-reset="true"
               :hide-defaults="true"
               save-id="saveCloudBackup"
-              @save="$emit('save')"
+              @save="
+                $emit('save', ['openWB/system/backup_cloud/backup_before_update', 'openWB/system/backup_cloud/config'])
+              "
               @reset="$emit('reset')"
               @defaults="$emit('defaults')"
             />
@@ -420,7 +422,7 @@
               form-name="monitoringForm"
               :hide-defaults="true"
               save-id="saveMonitoring"
-              @save="$emit('save')"
+              @save="$emit('save', ['openWB/optional/monitoring/config'])"
               @reset="$emit('reset')"
             />
           </template>

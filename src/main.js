@@ -19,7 +19,7 @@ vApp.use(store).use(router).use(VueAxios, axios).use(VueCookies, {
   expire: "30d",
   path: "/",
   domain: "",
-  secure: true,
+  secure: true, // user management and cookie handling is only enabled in secure contexts
   sameSite: "Lax",
 });
 

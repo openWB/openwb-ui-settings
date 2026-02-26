@@ -2,7 +2,7 @@
   <div class="security">
     <openwb-base-modal-dialog
       :show="showResetModal"
-      title="Benutzerverwaltung zurücksetzten"
+      title="Benutzerverwaltung zurücksetzen"
       subtype="danger"
       :buttons="[{ text: 'Alles zurücksetzen!', event: 'confirm', subtype: 'danger' }]"
       @modal-result="handleResetModal($event)"

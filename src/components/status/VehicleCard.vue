@@ -17,6 +17,7 @@
     </template>
     <!-- Fahrzeugdaten -->
     <openwb-base-card
+      v-if="information !== undefined"
       title="Fahrzeuginformationen"
       subtype="white"
       body-bg="white"

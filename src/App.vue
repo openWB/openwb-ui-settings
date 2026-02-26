@@ -104,47 +104,50 @@ export default {
         name: "savingData",
         value: true,
       });
-      // collect data
-      let topics = {};
-      if (topicsToSave === undefined) {
-        console.error("no topics to save defined!");
-        return;
-      }
-      if (Array.isArray(topicsToSave)) {
-        topicsToSave.forEach((topicToSave) => {
-          if (isWildcardTopic(topicToSave)) {
-            console.debug("expanding wildcard topic:", topicToSave);
-            const wildcardTopics = this.getWildcardTopics(topicToSave);
-            Object.entries(wildcardTopics).forEach(([wildcardTopic, payload]) => {
-              console.debug("adding topic to save:", wildcardTopic);
-              topics[wildcardTopic] = payload;
-            });
-          } else {
-            console.debug("adding topic to save:", topicToSave);
-            topics[topicToSave] = this.$store.state.mqtt[topicToSave];
-          }
-        });
-      } else {
-        console.error("expected array, got ", typeof topicsToSave);
-        return;
-      }
-      for (const [topic, payload] of Object.entries(topics)) {
-        // skip topics starting with "$CONTROL"
-        if (topic.startsWith("$CONTROL")) {
-          console.debug("skipping control topic:", topic);
-          continue;
+      try {
+        // collect data
+        let topics = {};
+        if (topicsToSave === undefined) {
+          console.error("no topics to save defined!");
+          return;
         }
-        let setTopic = topic.replace("openWB/", "openWB/set/");
-        console.debug("saving data:", setTopic, payload);
-        this.doPublish(setTopic, payload);
-        // publishing without sleeping is inconsistent! (mqtt v4.3.7)
-        // This may change with newer versions.
-        await sleep(50);
+        if (Array.isArray(topicsToSave)) {
+          topicsToSave.forEach((topicToSave) => {
+            if (isWildcardTopic(topicToSave)) {
+              console.debug("expanding wildcard topic:", topicToSave);
+              const wildcardTopics = this.getWildcardTopics(topicToSave);
+              Object.entries(wildcardTopics).forEach(([wildcardTopic, payload]) => {
+                console.debug("adding topic to save:", wildcardTopic);
+                topics[wildcardTopic] = payload;
+              });
+            } else {
+              console.debug("adding topic to save:", topicToSave);
+              topics[topicToSave] = this.$store.state.mqtt[topicToSave];
+            }
+          });
+        } else {
+          console.error("expected array, got ", typeof topicsToSave);
+          return;
+        }
+        for (const [topic, payload] of Object.entries(topics)) {
+          // skip topics starting with "$CONTROL"
+          if (topic.startsWith("$CONTROL")) {
+            console.debug("skipping control topic:", topic);
+            continue;
+          }
+          let setTopic = topic.replace("openWB/", "openWB/set/");
+          console.debug("saving data:", setTopic, payload);
+          this.doPublish(setTopic, payload);
+          // publishing without sleeping is inconsistent! (mqtt v4.3.7)
+          // This may change with newer versions.
+          await sleep(50);
+        }
+      } finally {
+        this.$store.commit("storeLocal", {
+          name: "savingData",
+          value: false,
+        });
       }
-      this.$store.commit("storeLocal", {
-        name: "savingData",
-        value: false,
-      });
     },
     /**
      * Reload topics from broker
@@ -304,8 +307,10 @@ export default {
     },
     doSubscribe(topics, forceResubscribe = false) {
       topics.forEach((topic) => {
-        if (this.$store.getters.subscriptionCount(topic) == 0 || forceResubscribe) {
+        if (!forceResubscribe) {
           this.$store.commit("addSubscription", topic);
+        }
+        if (this.$store.getters.subscriptionCount(topic) === 1 || forceResubscribe) {
           if (topic.includes("#") || topic.includes("+")) {
             console.debug("skipping init of wildcard topic:", topic);
           } else {
@@ -320,6 +325,9 @@ export default {
                 `Daten konnten nicht abonniert werden.<br />Topic: ${topic}<br />${error}`,
                 "danger",
               );
+              if (!forceResubscribe) {
+                this.$store.commit("removeSubscription", topic);
+              }
               return;
             }
           });
