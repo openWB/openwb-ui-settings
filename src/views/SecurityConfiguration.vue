@@ -44,7 +44,7 @@
               </p>
               <p>
                 <strong>Hinweis:</strong> Aus Sicherheitsgründen sollte der unverschlüsselte Zugang nur in geschützten
-                Netzwerken aktiviert werden. Für die integrierten Benutzerverwaltung muss der unverschlüsselte Zugang
+                Netzwerken aktiviert werden. Um die Benutzerverwaltung zu aktivieren, muss der unverschlüsselte Zugang
                 zuerst deaktiviert werden.
               </p>
             </template>
@@ -567,8 +567,7 @@
       </div>
       <div v-else>
         <openwb-base-alert subtype="info">
-          Die Benutzerverwaltung ist deaktiviert. In diesem Modus haben alle Benutzer uneingeschränkten Zugriff auf
-          openWB.<br />
+          Die Benutzerverwaltung ist deaktiviert. In diesem Modus hat jeder uneingeschränkten Zugriff auf openWB.<br />
           Um Benutzer, Gruppen und Rollen zu verwalten, muss die Benutzerverwaltung zuerst aktiviert werden. Dazu ist
           nach der Aktivierung zwingend ein
           <router-link to="/System/SystemConfiguration">Neustart dieser openWB</router-link> erforderlich, damit die
