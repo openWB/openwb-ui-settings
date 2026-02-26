@@ -58,6 +58,7 @@ export default {
           requestProblemInformation: true,
         },
       },
+      dataTimeout: null,
     };
   },
   computed: {
@@ -213,16 +214,39 @@ export default {
           ],
           true,
         );
+        // after one second check if we received any data, if not, the connection is probably not working and we should inform the user
+        this.dataTimeout = setTimeout(() => {
+          console.warn(
+            "No data received after 1 second, connection might not be working. Removing mqtt cookie and trying again with anonymous connection.",
+          );
+          if (user) {
+            this.postClientMessage(
+              "Es wurden zwar Anmeldeinformationen gefunden, aber nach 1 Sekunde keine Daten empfangen. Die Verbindung scheint nicht zu funktionieren. " +
+                "Anmeldedaten werden entfernt und es wird erneut mit anonymer Verbindung versucht.",
+              "warning",
+            );
+            this.$cookies.remove("mqtt");
+            this.reconnectMqttClient();
+          } else {
+            this.postClientMessage(
+              "Es wurden keine Anmeldeinformationen gefunden und nach 1 Sekunde keine Daten empfangen. Die Verbindung scheint nicht zu funktionieren.",
+              "danger",
+            );
+          }
+        }, 1000);
       });
       this.client.on("error", (error) => {
         console.error("Connection failed", error);
         this.postClientMessage("Verbindungsfehler:<br />" + error.message, "danger");
         this.$cookies.remove("mqtt");
         this.$store.commit("storeLocal", { name: "username", value: null });
-        this.client.end();
-        this.createConnection();
+        this.reconnectMqttClient();
       });
       this.client.on("message", (topic, message) => {
+        if (this.dataTimeout) {
+          clearTimeout(this.dataTimeout);
+          this.dataTimeout = null;
+        }
         if (message.toString().length > 0) {
           let myPayload = undefined;
           try {
@@ -264,6 +288,10 @@ export default {
         console.warn("Ending mqtt connection...");
         this.client.end();
         this.$store.commit("storeLocal", { name: "username", value: null });
+        if (this.dataTimeout) {
+          clearTimeout(this.dataTimeout);
+          this.dataTimeout = null;
+        }
       } else {
         console.error("No mqtt connection to end.");
       }
