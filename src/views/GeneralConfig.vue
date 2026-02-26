@@ -236,7 +236,7 @@
               <p>
                 Eine ausführliche Erläuterung mit Beispielen findet Ihr im
                 <a
-                  href="https://wiki.openwb.de/doku.php?id=openwb:vc:2.1.9:software:einstell-konfig:einstellungen:allgemein#temporaere_ladeeinstellungen"
+                  :href="`https://wiki.openwb.de/doku.php?id=openwb:vc:${systemVersion}:software:einstell-konfig:einstellungen:allgemein#temporaere_ladeeinstellungen`"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -792,6 +792,7 @@ export default {
         "openWB/general/range_unit",
         "openWB/general/temporary_charge_templates_active",
         "openWB/general/web_theme",
+        "openWB/system/version",
         "openWB/system/configurable/web_themes",
         "openWB/system/ip_address",
       ],

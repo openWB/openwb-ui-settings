@@ -220,7 +220,7 @@
               Die Nutzung dieser Option ergibt nur Sinn, wenn ein Wechselrichter in irgendeiner Form abgeregelt wird
               Weitere Infos dazu im
               <a
-                href="https://wiki.openwb.de/doku.php?id=openwb:vc:2.1.9:software:einstell-konfig:ladeeinstellungen:pv-laden-speicherbeachtung#regelpunkt_einspeisegrenze"
+                :href="`https://wiki.openwb.de/doku.php?id=openwb:vc:${systemVersion}:software:einstell-konfig:ladeeinstellungen:pv-laden-speicherbeachtung#regelpunkt_einspeisegrenze`"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -276,6 +276,7 @@ export default {
         "openWB/general/chargemode_config/pv_charging/switch_off_threshold",
         "openWB/general/chargemode_config/pv_charging/switch_off_delay",
         "openWB/general/chargemode_config/pv_charging/phases_to_use",
+        "openWB/system/version",
       ],
       calculatedControlMode: undefined,
     };
