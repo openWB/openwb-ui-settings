@@ -67,8 +67,18 @@ export default {
       return this.$store.state.local.reloadRequired;
     },
     showModalBlocker() {
-      this.updateLocalStore();
       return this.$store.state.local.modalBlockerVisible;
+    },
+  },
+  watch: {
+    bootInProgress() {
+      this.updateLocalStore();
+    },
+    updateInProgress() {
+      this.updateLocalStore();
+    },
+    reloadRequired() {
+      this.updateLocalStore();
     },
   },
   methods: {
