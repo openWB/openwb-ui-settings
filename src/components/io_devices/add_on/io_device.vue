@@ -40,7 +40,10 @@ export default {
   mixins: [ComponentState, OpenwbIoDeviceConfigMixin],
   data() {
     return {
-      mqttTopicsToSubscribe: ["openWB/general/extern", "openWB/chargepoint/+/config"],
+      mqttTopics: [
+        { topic: "openWB/chargepoint/+/config", writeable: false },
+        { topic: "openWB/general/extern", writeable: false },
+      ],
     };
   },
   computed: {

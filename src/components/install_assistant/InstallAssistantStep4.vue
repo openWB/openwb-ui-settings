@@ -34,7 +34,7 @@
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
 import InstallAssistantStepTemplate from "./InstallAssistantStepTemplate.vue";
-import IoConfigView from "../../views/IoConfig.vue";
+import IoConfigView from "../../views/IoConfiguration.vue";
 
 export default {
   name: "InstallAssistantStep4",
@@ -45,7 +45,7 @@ export default {
   mixins: [ComponentState],
   emits: ["save", "reset", "defaults", "sendCommand", "switchPage", "endAssistant"],
   data: () => ({
-    mqttTopicsToSubscribe: [],
+    mqttTopics: [],
   }),
   methods: {
     nextPage() {

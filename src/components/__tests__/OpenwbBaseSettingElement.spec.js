@@ -7,6 +7,11 @@ describe("OpenwbBaseSettingElement.vue", () => {
   it("render title", () => {
     const title = "Base Setting Element Test";
     const wrapper = mount(OpenwbBaseSettingElement, {
+      global: {
+        stubs: {
+          OpenwbBaseTooltip: { template: "<span><slot /></span>" },
+        },
+      },
       slots: { title: title },
     });
     const titleLabel = wrapper.find("div.col-form-label");
@@ -17,6 +22,11 @@ describe("OpenwbBaseSettingElement.vue", () => {
     const title = "Base Setting Element Test";
     const helpContent = "This is our help text.";
     const wrapper = mount(OpenwbBaseSettingElement, {
+      global: {
+        stubs: {
+          OpenwbBaseTooltip: { template: "<span><slot /></span>" },
+        },
+      },
       slots: {
         title: title,
         help: helpContent,
@@ -29,6 +39,11 @@ describe("OpenwbBaseSettingElement.vue", () => {
     const title = "Base Setting Element Test";
     const helpContent = "This is our help text.";
     const wrapper = mount(OpenwbBaseSettingElement, {
+      global: {
+        stubs: {
+          OpenwbBaseTooltip: { template: "<span><slot /></span>" },
+        },
+      },
       slots: {
         title: title,
         help: helpContent,

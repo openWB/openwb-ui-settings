@@ -32,7 +32,7 @@
       <p class="font-weight-bold">Änderungen werden nur durch Klicken auf Speichern wirksam!</p>
     </template>
     <template #content>
-      <LoadManagementConfigView
+      <LoadManagementConfigurationView
         :install-assistant-active="true"
         @send-command="$emit('sendCommand', $event)"
         @save="$emit('save')"
@@ -46,18 +46,18 @@
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
 import InstallAssistantStepTemplate from "./InstallAssistantStepTemplate.vue";
-import LoadManagementConfigView from "../../views/LoadManagementConfig.vue";
+import LoadManagementConfigurationView from "../../views/LoadManagementConfiguration.vue";
 
 export default {
   name: "InstallAssistantStep7",
   components: {
     InstallAssistantStepTemplate,
-    LoadManagementConfigView,
+    LoadManagementConfigurationView,
   },
   mixins: [ComponentState],
   emits: ["save", "reset", "defaults", "sendCommand", "switchPage", "endAssistant"],
   data: () => ({
-    mqttTopicsToSubscribe: [],
+    mqttTopics: [],
   }),
   methods: {
     nextPage() {

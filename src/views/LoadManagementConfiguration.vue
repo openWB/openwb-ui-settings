@@ -217,7 +217,7 @@
 
       <openwb-base-submit-buttons
         form-name="loadManagementConfigForm"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -252,17 +252,17 @@ export default {
   emits: ["sendCommand", "save", "reset", "defaults"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/counter/config/home_consumption_source_id",
-        "openWB/counter/config/consider_less_charging",
-        "openWB/counter/get/hierarchy",
-        "openWB/system/device/+/component/+/config",
-        "openWB/counter/+/config/max_power_errorcase",
-        "openWB/counter/+/config/max_currents",
-        "openWB/counter/+/config/max_total_power",
-        "openWB/pv/+/config/max_ac_out",
-        "openWB/chargepoint/+/config",
+      mqttTopics: [
+        { topic: "openWB/chargepoint/+/config", writeable: false },
+        { topic: "openWB/counter/+/config/max_currents", writeable: true },
+        { topic: "openWB/counter/+/config/max_power_errorcase", writeable: true },
+        { topic: "openWB/counter/+/config/max_total_power", writeable: true },
+        { topic: "openWB/counter/config/consider_less_charging", writeable: true },
+        { topic: "openWB/counter/config/home_consumption_source_id", writeable: true },
+        { topic: "openWB/counter/get/hierarchy", writeable: true },
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/pv/+/config/max_ac_out", writeable: true },
+        { topic: "openWB/system/device/+/component/+/config", writeable: false },
       ],
     };
   },

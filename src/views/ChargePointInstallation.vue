@@ -88,7 +88,7 @@
             />
           </span>
           <openwb-base-text-input
-            v-if="$store.state.mqtt['openWB/optional/ocpp/config']['active'] === true"
+            v-if="$store.state.mqtt['openWB/optional/ocpp/config']?.['active'] === true"
             title="OCPP-Chargebox ID"
             :model-value="installedChargePoint?.ocpp_chargebox_id"
             @update:model-value="updateState(installedChargePointKey, $event, 'ocpp_chargebox_id')"
@@ -450,7 +450,7 @@
 
       <openwb-base-submit-buttons
         form-name="chargePointInstallationForm"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -497,15 +497,15 @@ export default {
   emits: ["sendCommand", "save", "reset", "defaults"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/optional/dc_charging",
-        "openWB/optional/ocpp/config",
-        "openWB/optional/rfid/active",
-        "openWB/chargepoint/+/config",
-        "openWB/chargepoint/template/+",
-        "openWB/system/configurable/chargepoints",
-        "openWB/system/configurable/chargepoints_internal",
+      mqttTopics: [
+        { topic: "openWB/chargepoint/+/config", writeable: true },
+        { topic: "openWB/chargepoint/template/+", writeable: true },
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/optional/dc_charging", writeable: false },
+        { topic: "openWB/optional/ocpp/config", writeable: false },
+        { topic: "openWB/optional/rfid/active", writeable: false },
+        { topic: "openWB/system/configurable/chargepoints", writeable: false },
+        { topic: "openWB/system/configurable/chargepoints_internal", writeable: false },
       ],
       chargePointToAdd: undefined,
       showChargePointModal: false,

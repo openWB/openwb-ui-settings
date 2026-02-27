@@ -17,6 +17,7 @@
     </div>
   </div>
   <page-footer />
+  <user-info @send-command="sendCommand" />
   <messages />
   <blocker />
 </template>
@@ -24,6 +25,7 @@
 <script>
 import NavBar from "./components/OpenwbPageNavbar.vue";
 import PageFooter from "./components/OpenwbPageFooter.vue";
+import UserInfo from "./components/OpenwbPageUser.vue";
 import Messages from "./components/OpenwbPageMessages.vue";
 import Blocker from "./components/OpenwbPageBlocker.vue";
 import mqtt from "mqtt";
@@ -33,6 +35,7 @@ export default {
   components: {
     NavBar,
     PageFooter,
+    UserInfo,
     Messages,
     Blocker,
   },
@@ -43,12 +46,19 @@ export default {
       },
       connection: {
         protocol: location.protocol == "https:" ? "wss" : "ws",
+        protocolVersion: 5,
         host: location.hostname,
         port: parseInt(location.port) || (location.protocol == "https:" ? 443 : 80),
-        endpoint: "/ws",
+        path: "/ws",
         connectTimeout: 4000,
         reconnectPeriod: 4000,
+        resubscribe: true,
+        properties: {
+          requestResponseInformation: true,
+          requestProblemInformation: true,
+        },
       },
+      dataTimeout: null,
     };
   },
   computed: {
@@ -69,6 +79,9 @@ export default {
     topicList() {
       return Object.keys(this.$store.state.mqtt);
     },
+    nodeEnv() {
+      return import.meta.env.MODE;
+    },
   },
   created() {
     this.createConnection();
@@ -83,31 +96,58 @@ export default {
         return new Promise((resolve) => setTimeout(resolve, milliseconds));
       }
 
-      this.$store.state.local.savingData = true;
-      // collect data
-      let topics = {};
-      if (topicsToSave === undefined) {
-        console.debug("no topics defined, so save everything we have in store");
-        topics = this.$store.state.mqtt;
-      } else {
+      function isWildcardTopic(topic) {
+        return topic.includes("#") || topic.includes("+");
+      }
+
+      this.$store.commit("storeLocal", {
+        name: "savingData",
+        value: true,
+      });
+      try {
+        // collect data
+        let topics = {};
+        if (topicsToSave === undefined) {
+          console.error("no topics to save defined!");
+          return;
+        }
         if (Array.isArray(topicsToSave)) {
           topicsToSave.forEach((topicToSave) => {
-            console.debug("adding topic to save:", topicToSave);
-            topics[topicToSave] = this.$store.state.mqtt[topicToSave];
+            if (isWildcardTopic(topicToSave)) {
+              console.debug("expanding wildcard topic:", topicToSave);
+              const wildcardTopics = this.getWildcardTopics(topicToSave);
+              Object.entries(wildcardTopics).forEach(([wildcardTopic, payload]) => {
+                console.debug("adding topic to save:", wildcardTopic);
+                topics[wildcardTopic] = payload;
+              });
+            } else {
+              console.debug("adding topic to save:", topicToSave);
+              topics[topicToSave] = this.$store.state.mqtt[topicToSave];
+            }
           });
         } else {
           console.error("expected array, got ", typeof topicsToSave);
+          return;
         }
+        for (const [topic, payload] of Object.entries(topics)) {
+          // skip topics starting with "$CONTROL"
+          if (topic.startsWith("$CONTROL")) {
+            console.debug("skipping control topic:", topic);
+            continue;
+          }
+          let setTopic = topic.replace("openWB/", "openWB/set/");
+          console.debug("saving data:", setTopic, payload);
+          this.doPublish(setTopic, payload);
+          // publishing without sleeping is inconsistent! (mqtt v4.3.7)
+          // This may change with newer versions.
+          await sleep(50);
+        }
+      } finally {
+        this.$store.commit("storeLocal", {
+          name: "savingData",
+          value: false,
+        });
       }
-      for (const [topic, payload] of Object.entries(topics)) {
-        let setTopic = topic.replace("openWB/", "openWB/set/");
-        console.debug("saving data:", setTopic, payload);
-        this.doPublish(setTopic, payload);
-        // publishing without sleeping is inconsistent! (mqtt v4.3.7)
-        // This may change with newer versions.
-        await sleep(100);
-      }
-      this.$store.state.local.savingData = false;
     },
     /**
      * Reload topics from broker
@@ -132,7 +172,7 @@ export default {
      */
     sendCommand(event) {
       console.debug("sendCommand:", event);
-      this.doPublish("openWB/set/command/" + this.client.options.clientId + "/todo", event, false);
+      this.doPublish(`openWB/set/command/${this.client.options.clientId}/todo/${event.command}`, event, false);
     },
     /**
      * Establishes a connection to the configured broker
@@ -141,28 +181,78 @@ export default {
       // Connect string, and specify the connection method used through protocol
       // ws not encrypted WebSocket connection
       // wss encrypted WebSocket connection
-      // mqtt not encrypted TCP connection
-      // mqtts encrypted TCP connection
-      // wxs WeChat mini app connection
-      // alis Alipay mini app connection
-      const { protocol, host, port, endpoint, ...options } = this.connection;
-      const connectUrl = `${protocol}://${host}:${port}${endpoint}`;
-      console.debug("connecting to broker:", connectUrl);
-      try {
-        this.client = mqtt.connect(connectUrl, options);
-      } catch (error) {
-        console.error("mqtt.connect error", error);
+      const { protocol, host, port, path, ...options } = this.connection;
+      const connectUrl = `${protocol}://${host}:${port}${path}`;
+      const [user, pass] = this.$cookies
+        .get("mqtt")
+        ?.match(/^([^:]+):(.+)$/)
+        ?.slice(1) || [null, null];
+      if (!(user && pass)) {
+        console.debug("Anonymous mqtt connection (no cookie set)");
       }
+      if ((this.nodeEnv !== "production" || protocol == "wss") && user && pass) {
+        console.debug(`Using mqtt credentials from cookie: "${user}" / "${pass.charAt(0)}..."`);
+        options.username = user;
+        options.password = pass;
+        if (user === "admin" && pass === "openwb") {
+          console.warn("Using default mqtt credentials! This is insecure and not recommended for production systems.");
+          this.postClientMessage(
+            "Warnung: Es werden die Standard-Zugangsdaten für MQTT verwendet! Dies ist unsicher und wird für Produktivsysteme nicht empfohlen.",
+            "warning",
+          );
+        }
+      }
+      console.debug("connecting to broker:", connectUrl);
+      this.client = mqtt.connect(connectUrl, options);
       this.client.on("connect", () => {
         console.debug("Connection succeeded! ClientId: ", this.client.options.clientId);
+        if (user) {
+          this.postClientMessage(`Angemeldet als "${user}".`, "success");
+          this.$store.commit("storeLocal", { name: "username", value: user });
+        }
         // required for route guards
-        this.doSubscribe(["openWB/system/usage_terms_acknowledged"]);
-        this.doSubscribe(["openWB/system/installAssistantDone"]);
+        this.doSubscribe(
+          [
+            "openWB/system/boot_done",
+            "openWB/system/usage_terms_acknowledged",
+            "openWB/system/installAssistantDone",
+            "openWB/system/security/access/+",
+          ],
+          true,
+        );
+        // after one second check if we received any data, if not, the connection is probably not working and we should inform the user
+        this.dataTimeout = setTimeout(() => {
+          console.warn(
+            "No data received after 1 second, connection might not be working. Removing mqtt cookie and trying again with anonymous connection.",
+          );
+          if (user) {
+            this.postClientMessage(
+              "Es wurden zwar Anmeldeinformationen gefunden, aber nach 1 Sekunde keine Daten empfangen. Die Verbindung scheint nicht zu funktionieren. " +
+                "Anmeldedaten werden entfernt und es wird erneut mit anonymer Verbindung versucht.",
+              "warning",
+            );
+            this.$cookies.remove("mqtt");
+            this.reconnectMqttClient();
+          } else {
+            this.postClientMessage(
+              "Es wurden keine Anmeldeinformationen gefunden und nach 1 Sekunde keine Daten empfangen. Die Verbindung scheint nicht zu funktionieren.",
+              "danger",
+            );
+          }
+        }, 1000);
       });
       this.client.on("error", (error) => {
         console.error("Connection failed", error);
+        this.postClientMessage("Verbindungsfehler:<br />" + error.message, "danger");
+        this.$cookies.remove("mqtt");
+        this.$store.commit("storeLocal", { name: "username", value: null });
+        this.reconnectMqttClient();
       });
       this.client.on("message", (topic, message) => {
+        if (this.dataTimeout) {
+          clearTimeout(this.dataTimeout);
+          this.dataTimeout = null;
+        }
         if (message.toString().length > 0) {
           let myPayload = undefined;
           try {
@@ -183,11 +273,47 @@ export default {
           // });
         }
       });
+      this.client.on("end", () => {
+        console.error("mqtt connection ended");
+      });
+      this.client.on("close", () => {
+        console.error("mqtt connection closed");
+      });
+      this.client.on("offline", () => {
+        console.error("mqtt connection offline");
+      });
+      this.client.on("disconnect", () => {
+        console.error("mqtt connection disconnected");
+      });
+      this.client.on("reconnect", () => {
+        console.error("mqtt connection reconnecting...");
+      });
     },
-    doSubscribe(topics) {
+    endConnection() {
+      if (this.client?.connected) {
+        console.warn("Ending mqtt connection...");
+        this.client.end();
+        this.$store.commit("storeLocal", { name: "username", value: null });
+        if (this.dataTimeout) {
+          clearTimeout(this.dataTimeout);
+          this.dataTimeout = null;
+        }
+      } else {
+        console.error("No mqtt connection to end.");
+      }
+    },
+    reconnectMqttClient() {
+      if (this.client?.connected) {
+        this.endConnection();
+      }
+      this.createConnection();
+    },
+    doSubscribe(topics, forceResubscribe = false) {
       topics.forEach((topic) => {
-        this.$store.commit("addSubscription", topic);
-        if (this.$store.getters.subscriptionCount(topic) == 1) {
+        if (!forceResubscribe) {
+          this.$store.commit("addSubscription", topic);
+        }
+        if (this.$store.getters.subscriptionCount(topic) === 1 || forceResubscribe) {
           if (topic.includes("#") || topic.includes("+")) {
             console.debug("skipping init of wildcard topic:", topic);
           } else {
@@ -198,7 +324,13 @@ export default {
           }
           this.client.subscribe(topic, {}, (error) => {
             if (error) {
-              console.error("Subscribe to topics error", error);
+              this.postClientMessage(
+                `Daten konnten nicht abonniert werden.<br />Topic: ${topic}<br />${error}`,
+                "danger",
+              );
+              if (!forceResubscribe) {
+                this.$store.commit("removeSubscription", topic);
+              }
               return;
             }
           });
@@ -214,6 +346,10 @@ export default {
           this.client.unsubscribe(topic, (error) => {
             if (error) {
               console.error("Unsubscribe error", error);
+              this.postClientMessage(
+                `Daten konnten nicht abbestellt werden.<br />Topic: ${topic}<br />${error}`,
+                "danger",
+              );
             }
           });
           if (topic.includes("#") || topic.includes("+")) {
@@ -239,16 +375,19 @@ export default {
       this.client.publish(topic, JSON.stringify(payload), options, (error) => {
         if (error) {
           console.error("Publish error", error);
+          this.postClientMessage(
+            `Daten konnten nicht geschrieben werden.<br />Topic: ${topic}<br />${error}`,
+            "danger",
+          );
         }
       });
     },
     postClientMessage(message, type = "secondary") {
       console.debug("postMessage:", message, type);
       const timestamp = Date.now();
-      const topic = "openWB/command/" + this.mqttClientId + "/messages/" + timestamp;
       this.$store.commit({
-        type: "addTopic",
-        topic: topic,
+        type: "addClientMessage",
+        timestamp: timestamp,
         payload: {
           message: message,
           type: type,

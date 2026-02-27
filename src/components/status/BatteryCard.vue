@@ -125,7 +125,7 @@ export default {
   },
   data() {
     return {
-      mqttTopicsToSubscribe: [`openWB/bat/${this.battery.id}/get/+`],
+      mqttTopics: [{ topic: `openWB/bat/${this.battery.id}/get/+`, writeable: false }],
     };
   },
   computed: {

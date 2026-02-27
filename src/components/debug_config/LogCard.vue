@@ -11,34 +11,30 @@
         v-if="!collapsed"
         class="clickable mr-1"
         :class="pastebinLink ? 'bg-success' : 'bg-info'"
+        :title="pastebinLink ? 'Link in die Zwischenablage kopiert' : 'Log auf paste.openwb.de teilen'"
         @click.stop="postToPastebin"
       >
-        <font-awesome-icon
-          :icon="pastebinLink ? ['fas', 'check'] : ['fas', 'share-nodes']"
-          :title="pastebinLink ? 'Link in die Zwischenablage kopiert' : 'Log auf paste.openwb.de teilen'"
-        />
+        <font-awesome-icon :icon="pastebinLink ? ['fas', 'check'] : ['fas', 'share-nodes']" />
       </openwb-base-avatar>
       <openwb-base-avatar
         v-if="!collapsed"
         class="clickable mr-1"
         :class="copyMessage ? 'bg-success' : 'bg-info'"
+        :title="copyMessage ? 'Log in die Zwischenablage kopiert' : 'Log kopieren'"
         @click.stop="copyToClipboard(logData)"
       >
-        <font-awesome-icon
-          :icon="copyMessage ? ['fas', 'check'] : ['fas', 'clipboard']"
-          :title="copyMessage ? 'Log in die Zwischenablage kopiert' : 'Log kopieren'"
-        />
+        <font-awesome-icon :icon="copyMessage ? ['fas', 'check'] : ['fas', 'clipboard']" />
       </openwb-base-avatar>
       <openwb-base-avatar
         v-if="!collapsed"
         class="clickable"
         :class="loading ? 'bg-success' : 'bg-info'"
+        title="Log laden/aktualisieren"
         @click.stop="loadLog(logFile, selectedVariant)"
       >
         <font-awesome-icon
           :class="loading ? 'fa-spin-pulse' : ''"
           :icon="loading ? ['fas', 'spinner'] : ['fas', 'file-download']"
-          title="Log laden/aktualisieren"
         />
       </openwb-base-avatar>
     </template>

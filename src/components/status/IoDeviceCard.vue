@@ -29,11 +29,12 @@
         class="row"
       >
         <div class="col-auto">
-          <font-awesome-icon
-            :title="getActionTitle(![undefined, null].includes(ioActionState(value.id)))"
-            :icon="getIcon(![undefined, null].includes(ioActionState(value.id)))"
-            class="fa-fw"
-          />
+          <openwb-base-tooltip :description="getActionTitle(![undefined, null].includes(ioActionState(value.id)))">
+            <font-awesome-icon
+              :icon="getIcon(![undefined, null].includes(ioActionState(value.id)))"
+              class="fa-fw"
+            />
+          </openwb-base-tooltip>
           {{ value.name }}
         </div>
         <div class="col text-right">
@@ -55,11 +56,12 @@
           class="col io-state"
         >
           {{ key }}:
-          <font-awesome-icon
-            :title="getTitle(value)"
-            :icon="getIcon(value)"
-            class="fa-fw"
-          />
+          <openwb-base-tooltip :description="getTitle(value)">
+            <font-awesome-icon
+              :icon="getIcon(value)"
+              class="fa-fw"
+            />
+          </openwb-base-tooltip>
         </div>
       </div>
     </openwb-base-card>
@@ -77,11 +79,12 @@
           class="col io-state"
         >
           {{ key }}:
-          <font-awesome-icon
-            :title="getActionTitle(value)"
-            :icon="getIcon(value)"
-            class="fa-fw"
-          />
+          <openwb-base-tooltip :description="getTitle(value)">
+            <font-awesome-icon
+              :icon="getIcon(value)"
+              class="fa-fw"
+            />
+          </openwb-base-tooltip>
         </div>
       </div>
     </openwb-base-card>
@@ -149,10 +152,10 @@ export default {
   },
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        `openWB/io/states/${this.ioDevice.id}/get/+`,
-        "openWB/io/action/+/config",
-        "openWB/io/action/+/timestamp",
+      mqttTopics: [
+        { topic: "openWB/io/action/+/config", writeable: false },
+        { topic: "openWB/io/action/+/timestamp", writeable: false },
+        { topic: `openWB/io/states/${this.ioDevice.id}/get/+`, writeable: false },
       ],
       state: {
         true: {

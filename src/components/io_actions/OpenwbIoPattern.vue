@@ -50,29 +50,33 @@
           :key="deviceContactKey"
           class="text-center"
         >
-          <font-awesome-icon
-            :title="getTitle(pattern.matrix[deviceContactKey])"
-            :icon="getIcon(pattern.matrix[deviceContactKey])"
-            :class="getIconClass(pattern.matrix[deviceContactKey])"
-            class="fa-fw clickable"
-            size="2x"
-            :transform="pattern.matrix[deviceContactKey] == undefined ? 'shrink-6' : null"
-            :mask="pattern.matrix[deviceContactKey] == undefined ? ['fas', 'square'] : null"
-            @click.stop.prevent="toggleContact(patternKey, deviceContactKey)"
-            @mousedown.stop.prevent
-            @mouseup.stop.prevent
-          />
+          <openwb-base-tooltip :description="getTitle(pattern.matrix[deviceContactKey])">
+            <font-awesome-icon
+              :icon="getIcon(pattern.matrix[deviceContactKey])"
+              :class="getIconClass(pattern.matrix[deviceContactKey])"
+              class="fa-fw clickable"
+              size="2x"
+              :transform="pattern.matrix[deviceContactKey] == undefined ? 'shrink-6' : null"
+              :mask="pattern.matrix[deviceContactKey] == undefined ? ['fas', 'square'] : null"
+              @click.stop.prevent="toggleContact(patternKey, deviceContactKey)"
+              @mousedown.stop.prevent
+              @mouseup.stop.prevent
+            />
+          </openwb-base-tooltip>
         </td>
         <td
           v-if="showTestPattern"
           class="text-center"
         >
-          <font-awesome-icon
-            title="Muster passt"
-            :icon="['fas', 'check-circle']"
-            class="text-success fa-fw"
-            :class="{ hidden: !patternMatch(patternKey) }"
-          />
+          <openwb-base-tooltip
+            v-if="patternMatch(patternKey)"
+            :description="'Muster passt'"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'check-circle']"
+              class="text-success fa-fw"
+            />
+          </openwb-base-tooltip>
         </td>
         <td v-bind="$attrs">
           <slot :pattern="pattern">{{ pattern.value }}</slot>
@@ -107,18 +111,19 @@
           :key="deviceContactKey"
           class="text-center text-body"
         >
-          <font-awesome-icon
-            :title="getTitle(testPattern[deviceContactKey])"
-            :icon="getIcon(testPattern[deviceContactKey])"
-            :class="getIconClass(testPattern[deviceContactKey])"
-            class="fa-fw clickable"
-            size="2x"
-            :transform="testPattern[deviceContactKey] == undefined ? 'shrink-6' : null"
-            :mask="testPattern[deviceContactKey] == undefined ? ['fas', 'square'] : null"
-            @click.stop.prevent="toggleTestPattern(deviceContactKey)"
-            @mousedown.stop.prevent
-            @mouseup.stop.prevent
-          />
+          <openwb-base-tooltip :description="getTitle(testPattern[deviceContactKey])">
+            <font-awesome-icon
+              :icon="getIcon(testPattern[deviceContactKey])"
+              :class="getIconClass(testPattern[deviceContactKey])"
+              class="fa-fw clickable"
+              size="2x"
+              :transform="testPattern[deviceContactKey] == undefined ? 'shrink-6' : null"
+              :mask="testPattern[deviceContactKey] == undefined ? ['fas', 'square'] : null"
+              @click.stop.prevent="toggleTestPattern(deviceContactKey)"
+              @mousedown.stop.prevent
+              @mouseup.stop.prevent
+            />
+          </openwb-base-tooltip>
         </td>
         <td
           class="pl-2"

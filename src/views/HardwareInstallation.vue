@@ -220,7 +220,7 @@
 
       <openwb-base-submit-buttons
         form-name="hardwareInstallationForm"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -263,12 +263,11 @@ export default {
   emits: ["sendCommand", "save", "reset", "defaults"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/counter/get/hierarchy",
-        "openWB/system/device/+/config",
-        "openWB/system/device/+/component/+/config",
-        "openWB/system/configurable/devices_components",
+      mqttTopics: [
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/system/configurable/devices_components", writeable: false },
+        { topic: "openWB/system/device/+/component/+/config", writeable: true },
+        { topic: "openWB/system/device/+/config", writeable: true },
       ],
       selectedVendor: undefined,
       deviceToAdd: undefined,

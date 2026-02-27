@@ -135,7 +135,7 @@
               <div v-if="($store.state.mqtt['openWB/vehicle/' + vehicleId + '/tag_id']?.length ?? 0) > 0">
                 <openwb-base-alert subtype="info">
                   Einstellungen zur Fahrzeugzuordnung finden sich unter
-                  <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.
+                  <router-link to="/IdentificationConfiguration"> Einstellungen - Identifikation </router-link>.
                   <div v-if="$store.state.mqtt['openWB/optional/rfid/active'] === false">
                     Aktuell ist die Identifikation in den Einstellungen deaktiviert.
                   </div>
@@ -159,7 +159,7 @@
               <div v-else>
                 <openwb-base-alert subtype="info">
                   Einstellungen zur Fahrzeugzuordnung finden sich unter
-                  <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.<br />
+                  <router-link to="/IdentificationConfiguration"> Einstellungen - Identifikation </router-link>.<br />
                   Dem Fahrzeug sind aktuell keine ID-Tags zum Entsperren zugeordnet.
                 </openwb-base-alert>
               </div>
@@ -1379,7 +1379,7 @@
 
       <openwb-base-submit-buttons
         form-name="vehicleConfigForm"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -1447,23 +1447,21 @@ export default {
   emits: ["sendCommand", "save", "reset", "defaults"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/optional/dc_charging",
-        "openWB/optional/ep/flexible_tariff/provider",
-        "openWB/optional/rfid/active",
-        "openWB/vehicle/template/ev_template/+",
-        "openWB/vehicle/template/charge_template/+",
-        "openWB/vehicle/template/charge_template/+/chargemode/scheduled_charging/plans/+",
-        "openWB/vehicle/template/charge_template/+/time_charging/plans/+",
-        "openWB/vehicle/+/name",
-        "openWB/vehicle/+/info",
-        "openWB/vehicle/+/charge_template",
-        "openWB/vehicle/+/ev_template",
-        "openWB/vehicle/+/tag_id",
-        "openWB/system/configurable/soc_modules",
-        "openWB/vehicle/+/soc_module/general_config",
-        "openWB/vehicle/+/soc_module/config",
+      mqttTopics: [
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/optional/dc_charging", writeable: false },
+        { topic: "openWB/optional/ep/flexible_tariff/provider", writeable: false },
+        { topic: "openWB/optional/rfid/active", writeable: false },
+        { topic: "openWB/system/configurable/soc_modules", writeable: false },
+        { topic: "openWB/vehicle/+/charge_template", writeable: true },
+        { topic: "openWB/vehicle/+/ev_template", writeable: true },
+        { topic: "openWB/vehicle/+/info", writeable: true },
+        { topic: "openWB/vehicle/+/name", writeable: true },
+        { topic: "openWB/vehicle/+/soc_module/config", writeable: true },
+        { topic: "openWB/vehicle/+/soc_module/general_config", writeable: true },
+        { topic: "openWB/vehicle/+/tag_id", writeable: true },
+        { topic: "openWB/vehicle/template/charge_template/+", writeable: true },
+        { topic: "openWB/vehicle/template/ev_template/+", writeable: true },
       ],
       showVehicleModal: false,
       modalVehicleIndex: undefined,
@@ -1481,7 +1479,7 @@ export default {
     },
     vehicleIndexes: {
       get() {
-        return this.getWildcardIndexList("openWB/vehicle/+/name");
+        return this.getWildcardIndexList("openWB/vehicle/+/info");
       },
     },
     evTemplates() {

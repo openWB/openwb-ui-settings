@@ -24,7 +24,10 @@ export default {
   mixins: [ComponentState],
   data() {
     return {
-      mqttTopicsToSubscribe: ["openWB/system/boot_done", "openWB/system/update_in_progress"],
+      mqttTopics: [
+        { topic: "openWB/system/boot_done", writeable: false },
+        { topic: "openWB/system/update_in_progress", writeable: false },
+      ],
     };
   },
   computed: {
@@ -64,10 +67,27 @@ export default {
       return this.$store.state.local.reloadRequired;
     },
     showModalBlocker() {
-      return this.bootInProgress || this.updateInProgress || this.reloadRequired;
+      return this.$store.state.local.modalBlockerVisible;
+    },
+  },
+  watch: {
+    bootInProgress() {
+      this.updateLocalStore();
+    },
+    updateInProgress() {
+      this.updateLocalStore();
+    },
+    reloadRequired() {
+      this.updateLocalStore();
     },
   },
   methods: {
+    updateLocalStore() {
+      this.$store.commit("storeLocal", {
+        name: "modalBlockerVisible",
+        value: this.bootInProgress || this.updateInProgress || this.reloadRequired,
+      });
+    },
     handleModalResult(event) {
       if (event == "reload") {
         location.reload();

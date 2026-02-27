@@ -8,13 +8,16 @@
       :title="`Farbe: ${modelValue}`"
       @input="changed($event.target.value)"
     />
-    <font-awesome-icon
+    <openwb-base-tooltip
       v-if="defaultColor"
-      class="ml-1 clickable"
-      :icon="['fas', 'rotate-left']"
-      :title="`Zurücksetzen auf Standardfarbe (${defaultColor})`"
-      @click="changed(defaultColor)"
-    />
+      :description="`Zurücksetzen auf Standardfarbe (${defaultColor})`"
+    >
+      <font-awesome-icon
+        class="ml-1 clickable"
+        :icon="['fas', 'rotate-left']"
+        @click="changed(defaultColor)"
+      />
+    </openwb-base-tooltip>
   </div>
 </template>
 

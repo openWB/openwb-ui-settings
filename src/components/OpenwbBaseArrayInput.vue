@@ -13,7 +13,7 @@
     </template>
     <template #default>
       <div
-        v-if="!readonly"
+        v-if="!(readonly || disabled)"
         class="w-100"
       >
         <div class="input-group">
@@ -25,14 +25,40 @@
             </div>
           </div>
           <input
+            v-if="validElements.length === 0"
             :id="`${uid}-tag-input`"
             ref="tagInput"
             v-model="newTag"
             type="text"
             class="form-control"
             v-bind="$attrs"
+            :disabled="disabled"
             @keyup.enter="addTag"
           />
+          <select
+            v-else
+            :id="`${uid}-tag-input`"
+            ref="tagInput"
+            v-model="newTag"
+            class="form-control"
+            v-bind="$attrs"
+            :disabled="disabled"
+            @keyup.enter="addTag"
+          >
+            <option
+              value=""
+              disabled
+            >
+              {{ remainingElements.length > 0 ? "Bitte wählen..." : "Keine weiteren Optionen verfügbar" }}
+            </option>
+            <option
+              v-for="(option, index) in remainingElements"
+              :key="index"
+              :value="option.value || option"
+            >
+              {{ option.label || option.value || option }}
+            </option>
+          </select>
           <div class="input-group-append">
             <div
               class="input-group-text"
@@ -62,9 +88,9 @@
           <slot name="element-prefix">
             <font-awesome-icon :icon="['fas', 'tag']" />
           </slot>
-          {{ tag }}
+          {{ tagLabel(tag) }}
           <font-awesome-icon
-            v-if="!readonly"
+            v-if="!(readonly || disabled)"
             class="clickable remove-element"
             :icon="['fas', 'times-circle']"
             @click="removeTag(index)"
@@ -99,9 +125,16 @@ export default {
   mixins: [BaseSettingComponents],
   inheritAttrs: false,
   props: {
-    title: { type: String, required: true, default: "#TITLE#" },
+    title: { type: String, required: true },
     modelValue: {
       type: Array,
+      default: () => {
+        return [];
+      },
+    },
+    validElements: {
+      type: Array,
+      // can be a simple Array of values or an Array of Objects with 'value' and 'label' properties
       default: () => {
         return [];
       },
@@ -110,6 +143,12 @@ export default {
       type: String,
       default: () => {
         return "Keine Elemente zugeordnet.";
+      },
+    },
+    disabled: {
+      type: Boolean,
+      default: () => {
+        return false;
       },
     },
     readonly: {
@@ -134,10 +173,30 @@ export default {
         this.$emit("update:modelValue", newValue);
       },
     },
+    remainingElements() {
+      if (this.validElements.length === 0) {
+        return [];
+      } else {
+        return this.validElements.filter((el) => !this.value.includes(el.value || el));
+      }
+    },
     newTagValid: {
       get() {
-        return this.newTag.length > 0 && !this.value.includes(this.newTag) && this.$refs.tagInput?.checkValidity();
+        return (
+          this.newTag.length > 0 &&
+          !this.value.includes(this.newTag) &&
+          (this.validElements.length === 0 ||
+            this.validElements.includes(this.newTag) ||
+            this.validElements.some((el) => el.value === this.newTag)) &&
+          this.$refs.tagInput?.checkValidity()
+        );
       },
+    },
+    tagLabel() {
+      return (tag) => {
+        const found = this.validElements.find((el) => (el.value || el) === tag);
+        return found ? found.label || found.value || found : tag;
+      };
     },
   },
   methods: {

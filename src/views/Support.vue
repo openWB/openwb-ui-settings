@@ -198,17 +198,16 @@ export default {
   emits: ["sendCommand"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/system/dataprotection_acknowledged",
-        "openWB/system/serial_number",
-        "openWB/system/device/+/config",
-        "openWB/system/device/+/component/+/config",
-        "openWB/vehicle/+/name",
-        "openWB/vehicle/+/info",
-
-        "openWB/system/current_commit",
-        "openWB/system/current_branch_commit",
+      mqttTopics: [
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/system/current_branch_commit", writeable: false },
+        { topic: "openWB/system/current_commit", writeable: false },
+        { topic: "openWB/system/dataprotection_acknowledged", writeable: false },
+        { topic: "openWB/system/device/+/component/+/config", writeable: false },
+        { topic: "openWB/system/device/+/config", writeable: false },
+        { topic: "openWB/system/serial_number", writeable: false },
+        { topic: "openWB/vehicle/+/info", writeable: false },
+        { topic: "openWB/vehicle/+/name", writeable: false },
       ],
       showDeprecatedFirmwareModal: false,
       email: undefined,
@@ -280,10 +279,7 @@ export default {
         console.warn("form invalid");
         return;
       } else {
-        this.$emit("sendCommand", {
-          command: "sendDebug",
-          data: this.debugData,
-        });
+        this.sendSystemCommand("sendDebug", this.debugData);
         this.enableSendDebugButton = false;
       }
     },

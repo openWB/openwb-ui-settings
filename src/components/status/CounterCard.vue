@@ -147,7 +147,7 @@ export default {
   },
   data() {
     return {
-      mqttTopicsToSubscribe: [`openWB/counter/${this.counter.id}/get/+`],
+      mqttTopics: [{ topic: `openWB/counter/${this.counter.id}/get/+`, writeable: false }],
     };
   },
   computed: {

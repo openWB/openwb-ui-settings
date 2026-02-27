@@ -19,7 +19,7 @@
       <p class="font-weight-bold">Änderungen werden nur durch Klicken auf Speichern wirksam!</p>
     </template>
     <template #content>
-      <GeneralConfigView
+      <GeneralConfigurationView
         :install-assistant-active="true"
         @send-command="$emit('sendCommand', $event)"
         @save="$emit('save')"
@@ -33,18 +33,18 @@
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
 import InstallAssistantStepTemplate from "./InstallAssistantStepTemplate.vue";
-import GeneralConfigView from "../../views/GeneralConfig.vue";
+import GeneralConfigurationView from "../../views/GeneralConfiguration.vue";
 
 export default {
   name: "InstallAssistantStep3",
   components: {
     InstallAssistantStepTemplate,
-    GeneralConfigView,
+    GeneralConfigurationView,
   },
   mixins: [ComponentState],
   emits: ["save", "reset", "defaults", "sendCommand", "switchPage", "endAssistant"],
   data: () => ({
-    mqttTopicsToSubscribe: ["openWB/general/extern"],
+    mqttTopics: [{ topic: "openWB/general/extern", writeable: false }],
   }),
   methods: {
     nextPage() {

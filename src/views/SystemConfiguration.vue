@@ -34,21 +34,38 @@
         :collapsible="true"
         :collapsed="true"
       >
-        <openwb-base-text-input
-          v-model="$store.state.mqtt['openWB/system/serial_number']"
-          title="Seriennummer"
-          readonly
-        />
-        <openwb-base-text-input
-          v-model="$store.state.mqtt['openWB/system/ip_address']"
-          title="IP-Adresse"
-          readonly
-        />
-        <openwb-base-text-input
-          v-model="$store.state.mqtt['openWB/system/mac_address']"
-          title="MAC-Adresse"
-          readonly
-        />
+        <form name="systemInfoForm">
+          <openwb-base-text-input
+            v-model="$store.state.mqtt['openWB/system/serial_number']"
+            title="Seriennummer"
+            readonly
+          />
+          <openwb-base-text-input
+            v-model="$store.state.mqtt['openWB/system/ip_address']"
+            title="IP-Adresse"
+            subtype="host"
+            readonly
+          />
+          <openwb-base-text-input
+            v-model="$store.state.mqtt['openWB/system/mac_address']"
+            title="MAC-Adresse"
+            readonly
+          />
+          <openwb-base-text-input
+            v-model="$store.state.mqtt['openWB/system/hostname']"
+            title="Hostname"
+            subtype="host"
+            required
+            readonly
+          />
+          <!-- <openwb-base-submit-buttons
+            form-name="systemInfoForm"
+            :hide-defaults="true"
+            :hide-reset="true"
+            save-label="Hostnamen ändern"
+            @save="$emit('save', ['openWB/system/hostname'])"
+          /> -->
+        </form>
       </openwb-base-card>
       <openwb-base-card
         title="Versions-Informationen / Aktualisierung"
@@ -229,7 +246,7 @@
               <div class="col-md-4 d-flex py-1 justify-content-center">
                 <openwb-base-click-button
                   class="btn-warning"
-                  @button-clicked="sendSystemCommand('systemReboot')"
+                  @button-clicked="systemReboot()"
                 >
                   Neustart
                   <font-awesome-icon :icon="['fas', 'undo']" />
@@ -238,7 +255,7 @@
               <div class="col-md-4 d-flex py-1 justify-content-center">
                 <openwb-base-click-button
                   class="btn-danger"
-                  @button-clicked="sendSystemCommand('systemShutdown')"
+                  @button-clicked="systemShutdown()"
                 >
                   Ausschalten
                   <font-awesome-icon :icon="['fas', 'power-off']" />
@@ -339,22 +356,22 @@ export default {
   emits: ["save", "reset", "sendCommand"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/system/optionBackup",
-        "openWB/system/secondary_auto_update",
-        "openWB/system/current_commit",
-        "openWB/system/current_branch_commit",
-        "openWB/system/current_missing_commits",
-        "openWB/system/available_branches",
-        "openWB/system/current_branch",
-        "openWB/system/version",
-        "openWB/system/serial_number",
-        "openWB/system/ip_address",
-        "openWB/system/mac_address",
-        "openWB/chargepoint/+/get/version",
-        "openWB/chargepoint/+/get/current_branch",
-        "openWB/chargepoint/+/config",
-        "openWB/general/extern",
+      mqttTopics: [
+        { topic: "openWB/chargepoint/+/config", writeable: false },
+        { topic: "openWB/chargepoint/+/get/current_branch", writeable: false },
+        { topic: "openWB/chargepoint/+/get/version", writeable: false },
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/system/available_branches", writeable: false },
+        { topic: "openWB/system/current_branch", writeable: false },
+        { topic: "openWB/system/current_branch_commit", writeable: false },
+        { topic: "openWB/system/current_commit", writeable: false },
+        { topic: "openWB/system/current_missing_commits", writeable: false },
+        { topic: "openWB/system/hostname", writeable: false },
+        { topic: "openWB/system/ip_address", writeable: false },
+        { topic: "openWB/system/mac_address", writeable: false },
+        { topic: "openWB/system/secondary_auto_update", writeable: false },
+        { topic: "openWB/system/serial_number", writeable: false },
+        { topic: "openWB/system/version", writeable: false },
       ],
       warningAcknowledged: false,
       selectedTag: "*HEAD*",
@@ -382,6 +399,8 @@ export default {
     },
     releaseChangeValid() {
       return (
+        this.$store.state.mqtt["openWB/system/current_branch"] !== undefined &&
+        this.$store.state.mqtt["openWB/system/available_branches"] !== undefined &&
         this.$store.state.mqtt["openWB/system/current_branch"] in
           this.$store.state.mqtt["openWB/system/available_branches"] &&
         "tags" in
@@ -498,6 +517,8 @@ export default {
       };
 
       if (
+        this.$store.state.mqtt["openWB/system/current_branch"] === undefined ||
+        this.$store.state.mqtt["openWB/system/available_branches"] === undefined ||
         !(
           this.$store.state.mqtt["openWB/system/current_branch"] in
           this.$store.state.mqtt["openWB/system/available_branches"]
@@ -534,6 +555,16 @@ export default {
     updateConfiguration(key, event) {
       console.debug("updateConfiguration", key, event);
       this.updateState(key, event.value, event.object);
+    },
+    systemReboot() {
+      this.$store.commit("storeLocal", {
+        name: "reloadRequired",
+        value: true,
+      });
+      this.sendSystemCommand("systemReboot");
+    },
+    systemShutdown() {
+      this.sendSystemCommand("systemShutdown");
     },
     systemUpdate() {
       this.sendSystemCommand("systemUpdate", {});
