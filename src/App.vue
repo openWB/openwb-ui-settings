@@ -183,7 +183,10 @@ export default {
       // wss encrypted WebSocket connection
       const { protocol, host, port, path, ...options } = this.connection;
       const connectUrl = `${protocol}://${host}:${port}${path}`;
-      const [user, pass] = this.$cookies.get("mqtt")?.split(":") || [null, null];
+      const [user, pass] = this.$cookies
+        .get("mqtt")
+        ?.match(/^([^:]+):(.+)$/)
+        ?.slice(1) || [null, null];
       if (!(user && pass)) {
         console.debug("Anonymous mqtt connection (no cookie set)");
       }
