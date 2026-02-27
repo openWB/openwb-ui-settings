@@ -90,7 +90,7 @@ export default {
     myButtons() {
       var buttons = [];
       if (this.buttons !== undefined) {
-        buttons = this.buttons;
+        buttons = [...this.buttons];
       }
       if (buttons.findIndex((b) => b.event === "close") === -1 && !this.preventClose) {
         buttons.push({ text: "Schließen", event: "close" });
