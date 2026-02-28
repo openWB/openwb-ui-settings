@@ -40,6 +40,23 @@
       :model-value="flexibleTariff.configuration.home_id"
       @update:model-value="updateConfiguration($event, 'configuration.home_id')"
     />
+    <openwb-base-button-group-input
+      title="Auflösung der Preisvorhersage"
+      :buttons="[
+        { buttonValue: 'HOURLY', text: 'stündlich (veraltete Abrechnung)' },
+        { buttonValue: 'QUARTER_HOURLY', text: 'viertelstündlich (Börse)' },
+      ]"
+      :model-value="electricityTariff.configuration.resolution"
+      @update:model-value="updateConfiguration($event, 'configuration.resolution')"
+    >
+      <template #help>
+        Derzeit werden von Tibber zwar Preisvorhersagen mit viertelstündlicher Auflösung angeboten, 
+        die Abrechnung erfolgt aber unter Umständen auf Grund stündlicher Durchschnittspreise.
+        Dies kann in Verbindung mit den Lademodus <tt>Zielladen</tt> und <tt>ECO</tt> zu höheren Kosten führen, 
+        als die viertelstündliche Preisvorhersage erwarten lässt, wenn beispielsweise nur eine oder zwei der vier 
+        Viertelstunden als Ladezeit ausgewählt wurden.
+      </template>
+    </openwb-base-button-group-input>
   </div>
 </template>
 
