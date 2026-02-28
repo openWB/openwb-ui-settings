@@ -40,7 +40,7 @@ export default {
   mixins: [ComponentState, OpenwbIoDeviceConfigMixin],
   data() {
     return {
-      mqttTopicsToSubscribe: ["openWB/chargepoint/+/config"],
+      mqttTopicsToSubscribe: ["openWB/general/extern", "openWB/chargepoint/+/config"],
     };
   },
   computed: {
@@ -66,6 +66,9 @@ export default {
     },
     availableIoSources: {
       get() {
+        if (this.$store.state.mqtt["openWB/general/extern"] === true) {
+          return [];
+        }
         return [
           {
             label: "Ladepunkte",

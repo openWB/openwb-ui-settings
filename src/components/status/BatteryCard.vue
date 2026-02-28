@@ -13,6 +13,21 @@
       {{ formatNumberTopic(baseTopic + "/get/power", 1, 1, 0.001) }}&nbsp;kW /
       {{ $store.state.mqtt[baseTopic + "/get/soc"] }}&nbsp;%
     </template>
+    <!-- Status -->
+    <openwb-base-card
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <div class="row py-2">
+        <div class="col col-auto font-weight-bold">Status</div>
+      </div>
+
+      <openwb-base-alert subtype="info">
+        Aktive Speichersteuerung:
+        <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/state_str"] }}</span>
+      </openwb-base-alert>
+    </openwb-base-card>
     <!-- Aktuelle Werte -->
     <openwb-base-card
       title="Aktuelle Werte"
