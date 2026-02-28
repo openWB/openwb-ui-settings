@@ -15,10 +15,15 @@
       body-bg="white"
       class="py-1 mb-2"
     >
-      <template #header>
-        <span v-if="tariffProvider">Stromtarif: {{ tariffProvider }}</span>
-        <br v-if="tariffProvider && gridFeeProvider" />
-        <span v-if="gridFeeProvider">Netzentgelte: {{ gridFeeProvider }}</span>
+      <template #header> 
+        <div class="row" v-if="tariffProvider">
+          <div class="col-6 text-right">Stromtarif:</div>
+          <div class="col-6 text-right">{{ tariffProvider }}</div>
+        </div>
+        <div class="row" v-if="gridFeeProvider">
+          <div class="col-6 text-right">Netzentgelte:</div>
+          <div class="col-6 text-right">{{ tariffProvider }}</div>
+        </div>
       </template>
       <div class="openwb-chart">
         <chartjs-line
@@ -87,8 +92,8 @@ export default {
             unit: "ct/kWh",
             type: "line",
             stepped: true,
-            borderColor: "rgba(255, 149, 0, 0.9)",
-            backgroundColor: "rgba(255, 149, 0, 0.7)",
+            borderColor: "rgba(0, 149, 0, 0.9)",
+            backgroundColor: "rgba(0, 149, 0, 0.7)",
             fill: false,
             pointStyle: "circle",
             pointRadius: 0,
@@ -280,6 +285,7 @@ export default {
           });
         }
         dataObject.datasets[0].data = myData;
+        dataObject.todayEnd = new Date(this.chartDataObject.datasets[0].data[0].timestamp).setHours(23, 59, 59, 999).valueOf()
       } else {
         dataObject.datasets[0].hidden = true;
       }
@@ -322,11 +328,14 @@ export default {
       ) {
         var gridFeeEntries = this.$store.state.mqtt["openWB/optional/ep/grid_fee/get/prices"];
         var gridFeeData = [];
+        var lastTimestampPriceSums = dataObject.dataset[0].slice(-1).timestamp 
         for (const [key, value] of Object.entries(gridFeeEntries)) {
-          gridFeeData.push({
-            timestamp: key * 1000,
-            price: value * 100000,
-          });
+          if (key < lastTimestampPriceSums) { // skiping matching last entry makes results same length
+            gridFeeData.push({
+              timestamp: key * 1000,
+              price: value * 100000,
+            });
+          }
         }
         // repeat last dataset
         if (gridFeeData.length > 0) {
@@ -411,7 +420,7 @@ export default {
     formatTickLabel(timeValue) {
       const date = new Date(timeValue);
       // Prüfe ob das Datum zum nächsten Tag gehört
-      const isTomorrow = this.endOfToday < date;
+      const isTomorrow = this.chartDataObject.todayEnd < date;
       // Zeige nur den Zeitwert, wenn es nicht morgen ist
       return `${isTomorrow ? date.toLocaleDateString(undefined, { day: "2-digit", month: "2-digit" }) + " " : ""}${date.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}`;
     },
