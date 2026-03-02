@@ -637,6 +637,7 @@ export default {
       displayGroupName: "display",
       defaultAclAccess: [],
       showResetModal: false,
+      skipInit: false,
     };
   },
   computed: {
@@ -651,6 +652,7 @@ export default {
         return this.$store.state.mqtt["openWB/system/security/user_management_active"] === true;
       },
       set(value) {
+        this.skipInit = true;
         this.updateState("openWB/system/security/user_management_active", value);
       },
     },
@@ -972,6 +974,11 @@ export default {
   },
   methods: {
     init() {
+      if (this.skipInit) {
+        console.debug("Skipping initialization of Security view.");
+        this.skipInit = false;
+        return;
+      }
       this.clients = [];
       this.clientDetails = {};
       this.groups = [];
