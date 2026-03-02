@@ -389,7 +389,6 @@
                 </template>
               </openwb-base-range-input>
               <openwb-base-button-group-input
-                v-model="powerLimit"
                 title="Regellimit"
                 :buttons="[
                   {

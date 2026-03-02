@@ -304,7 +304,7 @@
               <div v-if="chargePointTemplate.valid_tags.length > 0">
                 <openwb-base-alert subtype="info">
                   Einstellungen zur Zugangskontrolle finden sich unter
-                  <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.
+                  <router-link to="/IdentificationConfiguration"> Einstellungen - Identifikation </router-link>.
                   <div
                     v-if="
                       $store.state.mqtt['openWB/optional/rfid/active'] === true &&
@@ -337,7 +337,7 @@
               <div v-else>
                 <openwb-base-alert subtype="info">
                   Einstellungen zur Zugangskontrolle finden sich unter
-                  <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.<br />
+                  <router-link to="/IdentificationConfiguration"> Einstellungen - Identifikation </router-link>.<br />
                   Dem Ladepunkt-Profil sind aktuell keine ID-Tags zum Entsperren zugeordnet.
                 </openwb-base-alert>
               </div>
