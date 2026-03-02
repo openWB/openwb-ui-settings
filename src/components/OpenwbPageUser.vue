@@ -100,6 +100,7 @@
         v-model="username"
         title="Benutzername"
         subtype="user"
+        empty-value=""
         required
         autocomplete="username"
       />
@@ -107,16 +108,25 @@
         v-model="token"
         title="Token"
         subtype="password"
+        empty-value=""
+        :readonly="username.length <= 0"
+        :disabled="username.length <= 0"
       />
       <openwb-base-text-input
         v-model="password"
         title="Neues Kennwort"
         subtype="password"
+        empty-value=""
+        :readonly="username.length === 0 || token.length === 0"
+        :disabled="username.length === 0 || token.length === 0"
       />
       <openwb-base-text-input
         v-model="passwordConfirm"
         title="Neues Kennwort bestätigen"
         subtype="password"
+        empty-value=""
+        :readonly="username.length === 0 || token.length === 0"
+        :disabled="username.length === 0 || token.length === 0"
         :validator="(value) => value === password || 'Kennwörter stimmen nicht überein'"
       />
     </form>
@@ -162,6 +172,8 @@ export default {
       password: "",
       token: "",
       passwordConfirm: "",
+      tokenRequested: false,
+      passwordResetRequested: false,
     };
   },
   computed: {
@@ -203,7 +215,7 @@ export default {
       return buttons;
     },
     requestTokenDisabled() {
-      return this.stringIsEmpty(this.username);
+      return this.stringIsEmpty(this.username) || this.tokenRequested;
     },
     resetPasswordDisabled() {
       return (
@@ -211,7 +223,8 @@ export default {
         this.stringIsEmpty(this.token) ||
         this.stringIsEmpty(this.password) ||
         this.stringIsEmpty(this.passwordConfirm) ||
-        this.password !== this.passwordConfirm
+        this.password !== this.passwordConfirm ||
+        this.passwordResetRequested
       );
     },
     modalBlockerVisible() {
@@ -285,6 +298,7 @@ export default {
           }
           console.warn("Requesting password reset token for:", this.username);
           // Implement token request logic here
+          this.tokenRequested = true;
           this.$emit("sendCommand", {
             command: "createPasswordResetToken",
             data: {
@@ -311,6 +325,11 @@ export default {
             "and new password:",
             this.password,
           );
+          this.passwordResetRequested = true;
+          this.$root.postClientMessage(
+            "Das Token wird geprüft und bei Erfolg das Passwort zurückgesetzt. Dieser Vorgang dauert ein paar Sekunden.",
+            "info",
+          );
           // Implement password reset logic here
           this.$emit("sendCommand", {
             command: "resetUserPassword",
@@ -326,6 +345,9 @@ export default {
           this.username = "";
           this.password = "";
           this.token = "";
+          this.passwordConfirm = "";
+          this.tokenRequested = false;
+          this.passwordResetRequested = false;
           this.showLoginModal = true;
           return;
       }
