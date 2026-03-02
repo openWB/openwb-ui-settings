@@ -1,6 +1,13 @@
 <template>
   <div class="device-mqtt-counter">
     <openwb-base-heading> Einstellungen für MQTT Zähler </openwb-base-heading>
+    <openwb-base-alert subtype="warning">
+      Ist die <strong>Benutzerverwaltung</strong> aktiviert, dann muss ein Benutzer mit Schreibrechten für die
+      entsprechenden Topics angelegt werden, damit openWB die Daten akzeptiert. Hierfür werden automatisch die
+      benötigten Berechtigungen in der Rolle
+      <strong>"Daten: Zähler '{{ component.name }}' ({{ component.id }}) schreiben"</strong> angelegt, die einem
+      Benutzer zugewiesen werden kann.
+    </openwb-base-alert>
     <openwb-base-alert subtype="info">
       Die folgenden Topics sind für einen reibungslosen Betrieb unbedingt erforderlich:
       <ul>
