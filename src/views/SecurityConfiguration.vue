@@ -103,6 +103,7 @@
             Einige Bereiche sind noch nicht kompatibel mit der Benutzerverwaltung. Bitte überprüfe vor der Aktivierung,
             ob Du eine oder mehrere dieser Funktionen nutzt:
             <ul>
+              <li>SmartHome</li>
               <li>SimpleAPI</li>
             </ul>
           </openwb-base-alert>
