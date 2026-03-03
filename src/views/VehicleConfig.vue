@@ -300,6 +300,32 @@
                   angesteckt ist.
                 </template>
               </openwb-base-button-group-input>
+              <openwb-base-number-input
+                title="Zeitschwelle zur Berechnung"
+                unit="Min."
+                :min="0"
+                required
+                :model-value="
+                  $store.state.mqtt['openWB/vehicle/' + vehicleId + '/soc_module/general_config']
+                    .request_calculation_threshold / 60
+                "
+                @update:model-value="
+                  updateState(
+                    'openWB/vehicle/' + vehicleId + '/soc_module/general_config',
+                    $event * 60,
+                    'request_calculation_threshold',
+                  )
+                "
+              >
+                <template #help>
+                  Wenn die Zeitschwelle 0 ist wird immer das Ergebnis der
+                  Online Abfrage verwendet, unabhängig vom Zeitstempel des Abfrageergebnisses.
+                  Wenn die Zeitschwelle größer 0 eingestellt ist wird das Alter des
+                  von der Online-Abfrage gelieferten Zeitstempels geprüft.
+                  Wenn der Zeitstempel älter ist als die
+                  Zeitschwelle, werden Ladestand und Reichweite berechnet.
+                </template>
+              </openwb-base-number-input>
               <openwb-vehicle-proxy
                 :vehicle-id="vehicleId"
                 :vehicle="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/soc_module/config']"
