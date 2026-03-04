@@ -24,6 +24,8 @@ export default {
     },
   },
   mounted() {
+    this.$root.doSubscribe(["openWB/system/version"]);
+
     if (this.mqttTopicsToSubscribe.length > 0) {
       this.$root.doSubscribe(this.mqttTopicsToSubscribe);
     }
