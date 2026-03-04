@@ -504,7 +504,6 @@ export default {
         "openWB/optional/rfid/active",
         "openWB/chargepoint/+/config",
         "openWB/chargepoint/template/+",
-        "openWB/system/version",
         "openWB/system/configurable/chargepoints",
         "openWB/system/configurable/chargepoints_internal",
       ],

@@ -792,7 +792,6 @@ export default {
         "openWB/general/range_unit",
         "openWB/general/temporary_charge_templates_active",
         "openWB/general/web_theme",
-        "openWB/system/version",
         "openWB/system/configurable/web_themes",
         "openWB/system/ip_address",
       ],

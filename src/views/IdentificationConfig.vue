@@ -264,7 +264,6 @@ export default {
         "openWB/vehicle/+/name",
         "openWB/vehicle/+/charge_template",
         "openWB/vehicle/+/tag_id",
-        "openWB/system/version",
       ],
       tempIdTagList: {},
     };

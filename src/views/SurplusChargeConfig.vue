@@ -276,7 +276,6 @@ export default {
         "openWB/general/chargemode_config/pv_charging/switch_off_threshold",
         "openWB/general/chargemode_config/pv_charging/switch_off_delay",
         "openWB/general/chargemode_config/pv_charging/phases_to_use",
-        "openWB/system/version",
       ],
       calculatedControlMode: undefined,
     };
