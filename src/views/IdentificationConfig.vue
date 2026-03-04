@@ -6,7 +6,7 @@
           <p>
             Eine ausführliche Anleitung findest Du hier:
             <a
-              href="https://wiki.openwb.de/doku.php?id=openwb:vc:2.1.9:software:einstell-konfig:einstellungen:identifikation"
+              :href="`https://wiki.openwb.de/doku.php?id=openwb:vc:${systemVersion}:software:einstell-konfig:einstellungen:identifikation`"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -264,6 +264,7 @@ export default {
         "openWB/vehicle/+/name",
         "openWB/vehicle/+/charge_template",
         "openWB/vehicle/+/tag_id",
+        "openWB/system/version",
       ],
       tempIdTagList: {},
     };
