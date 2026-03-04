@@ -18,7 +18,7 @@ export default {
       return ["success", "warning", "danger"];
     },
     systemVersion() {
-      const version = this.$store.state.mqtt["openWB/system/version"] || "2.1.8";
+      const version = this.$store.state.mqtt["openWB/system/version"];
       const match = version.match(/^\d+\.\d+\.\d+/);
       return match ? match[0] : "2.1.8";
     },
