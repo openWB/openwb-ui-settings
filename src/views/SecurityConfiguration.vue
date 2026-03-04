@@ -19,6 +19,15 @@
     <div v-else>
       <form name="accessForm">
         <openwb-base-card title="Allgemein">
+          <openwb-base-alert subtype="danger">
+            Der <strong>Safari Browser</strong> hat in der aktuellen <strong>MacOS/iOS Version 26.x</strong> Probleme
+            mit Websocket-Verbindungen über HTTPs, wenn eine IP anstelle des Hostnamens verwendet wird. Das äußert sich
+            darin, dass die Verbindung nicht zuverlässig hergestellt werden kann. Häufig sind mehrere
+            Verbindungsversuche (Seite neu laden) notwendig, damit die Verbindung steht. Sobald die Verbindung
+            hergestellt werden konnte, funktioniert der Zugriff für die aktuelle Sitzung auch mit Safari zuverlässig. Es
+            wird empfohlen, einen anderen Browser zu verwenden oder die openWB über einen Hostnamen aufzurufen, um
+            dieses Problem zu umgehen.
+          </openwb-base-alert>
           <openwb-base-button-group-input
             title="Unverschlüsselten Zugang erlauben"
             :model-value="$store.state.mqtt['openWB/general/allow_unencrypted_access']"
