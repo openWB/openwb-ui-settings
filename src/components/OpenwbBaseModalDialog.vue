@@ -12,6 +12,7 @@
       <div
         class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
         role="document"
+        @click.stop
       >
         <div class="modal-content">
           <!-- modal header -->
@@ -44,9 +45,10 @@
             <button
               v-for="button in myButtons"
               :key="button.text"
+              :disabled="button.disabled === true"
               type="button"
               class="btn"
-              :class="button.subtype ? 'btn-' + button.subtype : 'btn-secondary'"
+              :class="(button.disabled ? 'btn-outline-' : 'btn-') + (button.subtype ?? 'secondary')"
               data-dismiss="modal"
               :data-event="button.event ? button.event : 'close'"
               @click="handleClick"
@@ -88,9 +90,9 @@ export default {
     myButtons() {
       var buttons = [];
       if (this.buttons !== undefined) {
-        buttons = this.buttons;
+        buttons = [...this.buttons];
       }
-      if (!this.preventClose) {
+      if (buttons.findIndex((b) => b.event === "close") === -1 && !this.preventClose) {
         buttons.push({ text: "Schließen", event: "close" });
       }
       return buttons;

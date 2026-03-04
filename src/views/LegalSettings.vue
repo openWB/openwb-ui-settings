@@ -98,9 +98,9 @@ export default {
   emits: ["sendCommand", "save"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/system/dataprotection_acknowledged",
-        // "openWB/system/usage_terms_acknowledged", // already done in app.vue
+      mqttTopics: [
+        { topic: "openWB/system/dataprotection_acknowledged", writeable: true },
+        { topic: "openWB/system/usage_terms_acknowledged", writeable: true },
       ],
     };
   },
@@ -112,7 +112,7 @@ export default {
       });
     },
     async onSaveLegal() {
-      this.$emit("save");
+      this.$emit("save", this.mqttTopicsToPublish);
       await new Promise((resolve) => {
         const stopWatching = this.$watch(
           () => this.$store.state.local.savingData,

@@ -4,32 +4,18 @@ export default {
   emits: ["reset", "defaults", "save"],
   data() {
     return {
-      mqttTopicsToSubscribe: [],
+      mqttTopics: [],
+      weekdays: ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"],
+      chargeModes: ["instant_charging", "pv_charging", "scheduled_charging", "time_charging", "eco_charging", "stop"],
+      statusLevel: ["success", "warning", "danger"],
     };
   },
   computed: {
-    weekdays() {
-      return ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"];
+    mqttTopicsToSubscribe() {
+      return this.mqttTopics.map((topic) => topic.topic);
     },
-    chargeModes() {
-      return ["instant_charging", "pv_charging", "scheduled_charging", "time_charging", "eco_charging", "stop"];
-    },
-    statusLevel() {
-      return ["success", "warning", "danger"];
-    },
-    stateIcon: {
-      get() {
-        switch (this.$store.state.mqtt[this.baseTopic + "/get/fault_state"]) {
-          case 0:
-            return ["fas", "check-circle"];
-          case 1:
-            return ["fas", "exclamation-triangle"];
-          case 2:
-            return ["fas", "times-circle"];
-          default:
-            return ["fas", "check-circle"];
-        }
-      },
+    mqttTopicsToPublish() {
+      return this.mqttTopics.filter((topic) => topic.writeable).map((topic) => topic.topic);
     },
   },
   mounted() {
@@ -135,43 +121,16 @@ export default {
       }
     },
     translateChargeMode(value) {
-      switch (value) {
-        case "instant_charging":
-          return "Sofort";
-        case "pv_charging":
-          return "PV";
-        case "scheduled_charging":
-          return "Zielladen";
-        case "time_charging":
-          return "Zeitladen";
-        case "eco_charging":
-          return "Eco";
-        case "standby": // keep for backward compatibility!
-          return "Standby";
-        case "stop":
-          return "Stop";
-        default:
-          console.warn("unknown charge mode:", value);
-          return value;
-      }
-    },
-    getFaultStateSubtype(baseTopic) {
-      const faultState = this.$store.state.mqtt[baseTopic + "/get/fault_state"];
-
-      if (faultState === undefined) {
-        return "warning"; // Handle undefined case
-      }
-
-      switch (faultState) {
-        case 0:
-          return "success";
-        case 1:
-          return "warning";
-        case 2:
-          return "danger";
-        default:
-          return "dark"; // Default case for all other values
-      }
+      const chargeModeTranslations = {
+        instant_charging: "Sofort",
+        pv_charging: "PV",
+        scheduled_charging: "Zielladen",
+        time_charging: "Zeitladen",
+        eco_charging: "Eco",
+        standby: "Standby", // keep for backward compatibility!
+        stop: "Stop",
+      };
+      return chargeModeTranslations[value] || value;
     },
   },
 };

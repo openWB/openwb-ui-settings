@@ -158,6 +158,17 @@
               Ladepunkte angezeigt werden sollen.
             </template>
           </openwb-base-button-group-input>
+          <openwb-base-alert
+            subtype="info"
+            class="mb-3"
+          >
+            Wenn die Benutzerverwaltung aktiviert ist, werden nur die Ladepunkte angezeigt, für welche dem jeweiligen
+            Display-Benutzer auch Zugriffsrechte gegeben wurden. Ebenfalls ist es möglich, dass bestimmte Daten von
+            Wechselrichtern, Fahrzeugen, etc. nicht angezeigt werden, wenn der Benutzer hierfür keine Berechtigung
+            besitzt.<br />
+            Bei aktivierter Benutzerverwaltung wird empfohlen, die Anzeige auf "Alle" Ladepunkte zu setzen, damit es
+            nicht zu Überschneidungen zwischen diesen Einschränkungen kommt.
+          </openwb-base-alert>
           <hr />
           <div v-if="$store.state.mqtt['openWB/optional/int_display/theme'] !== undefined">
             <openwb-base-select-input
@@ -182,7 +193,7 @@
       </openwb-base-card>
       <openwb-base-submit-buttons
         form-name="optionalComponentsForm"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -201,29 +212,16 @@ export default {
   emits: ["save", "reset", "defaults"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/optional/led/active",
-        "ToDo/optional/led/instant_blocked",
-        "ToDo/optional/led/pv_blocked",
-        "ToDo/optional/led/scheduled_blocked",
-        "ToDo/optional/led/standby_blocked",
-        "ToDo/optional/led/stop_blocked",
-        "ToDo/optional/led/instant",
-        "ToDo/optional/led/pv",
-        "ToDo/optional/led/scheduled",
-        "ToDo/optional/led/standby",
-        "ToDo/optional/led/stop",
-        "openWB/optional/int_display/active",
-        "openWB/optional/int_display/on_if_plugged_in",
-        "openWB/optional/int_display/only_local_charge_points",
-        "openWB/optional/int_display/pin_active",
-        "openWB/optional/int_display/pin_code",
-        "openWB/optional/int_display/rotation",
-        "openWB/optional/int_display/standby",
-        "openWB/optional/int_display/theme",
-        "openWB/optional/rfid/active",
-        "openWB/system/configurable/display_themes",
+      mqttTopics: [
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/optional/int_display/active", writeable: true },
+        { topic: "openWB/optional/int_display/on_if_plugged_in", writeable: true }, // not yet implemented!
+        { topic: "openWB/optional/int_display/only_local_charge_points", writeable: true },
+        { topic: "openWB/optional/int_display/rotation", writeable: true },
+        { topic: "openWB/optional/int_display/standby", writeable: true },
+        { topic: "openWB/optional/int_display/theme", writeable: true },
+        { topic: "openWB/system/configurable/display_themes", writeable: false },
+        { topic: "openWB/system/security/user_management_active", writeable: false },
       ],
     };
   },
@@ -237,13 +235,20 @@ export default {
         { label: "Community", options: [] },
       ];
       this.displayThemeList?.forEach((theme) => {
+        if (
+          theme.defaults.userManagementSupported !== true &&
+          this.$store.state.mqtt["openWB/system/security/user_management_active"] === true
+        ) {
+          // skip themes that do not support user management if user management is active, as they would cause issues in this case
+          return;
+        }
         if (theme.official === true) {
           groups[0].options.push(theme);
         } else {
           groups[1].options.push(theme);
         }
       });
-      return groups;
+      return groups.filter((group) => group.options.length > 0);
     },
   },
   methods: {

@@ -81,8 +81,7 @@
           v-if="$store.state.mqtt['openWB/general/extern'] === true"
           subtype="info"
         >
-          Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary"
-          befindet.
+          Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
         </openwb-base-alert>
         <div v-else>
           <openwb-base-card
@@ -149,7 +148,7 @@
       </openwb-base-card>
       <openwb-base-submit-buttons
         form-name="ioConfigForm"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -186,14 +185,14 @@ export default {
   emits: ["save", "reset", "defaults", "send-command"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/system/configurable/io_devices",
-        "openWB/system/io/+/config",
-        "openWB/system/configurable/io_actions",
-        "openWB/io/action/+/config",
-        "openWB/chargepoint/+/config",
-        "openWB/system/device/+/component/+/config",
+      mqttTopics: [
+        { topic: "openWB/chargepoint/+/config", writeable: false },
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/io/action/+/config", writeable: true },
+        { topic: "openWB/system/configurable/io_actions", writeable: false },
+        { topic: "openWB/system/configurable/io_devices", writeable: false },
+        { topic: "openWB/system/device/+/component/+/config", writeable: false },
+        { topic: "openWB/system/io/+/config", writeable: true },
       ],
       showIoDeviceDeleteModal: false,
       modalIoDeviceIndex: undefined,
@@ -265,10 +264,7 @@ export default {
         : "I/O-Gerät " + ioDeviceIndex;
     },
     addIoDevice() {
-      this.$emit("send-command", {
-        command: "addIoDevice",
-        data: { type: this.ioDeviceToAdd },
-      });
+      this.sendSystemCommand("addIoDevice", { type: this.ioDeviceToAdd });
     },
     removeIoDeviceModal(ioDevice, event) {
       // prevent further processing of the click event
@@ -279,17 +275,11 @@ export default {
     removeIoDevice(ioDeviceIndex, event) {
       this.showIoDeviceDeleteModal = false;
       if (event == "confirm") {
-        this.$emit("send-command", {
-          command: "removeIoDevice",
-          data: { id: ioDeviceIndex },
-        });
+        this.sendSystemCommand("removeIoDevice", { id: ioDeviceIndex });
       }
     },
     addIoAction() {
-      this.$emit("send-command", {
-        command: "addIoAction",
-        data: { type: this.ioActionToAdd },
-      });
+      this.sendSystemCommand("addIoAction", { type: this.ioActionToAdd });
     },
     removeIoActionModal(ioAction, event) {
       // prevent further processing of the click event
@@ -300,10 +290,7 @@ export default {
     removeIoAction(ioActionIndex, event) {
       this.showIoActionDeleteModal = false;
       if (event == "confirm") {
-        this.$emit("send-command", {
-          command: "removeIoAction",
-          data: { id: ioActionIndex },
-        });
+        this.sendSystemCommand("removeIoAction", { id: ioActionIndex });
       }
     },
     sendSystemCommand(command, data) {

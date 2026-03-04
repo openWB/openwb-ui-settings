@@ -31,9 +31,20 @@
               class: 'btn-outline-success',
             },
           ]"
+          :disabled="disableExternModeSwitch"
           :model-value="$store.state.mqtt['openWB/general/extern']"
           @update:model-value="updateState('openWB/general/extern', $event)"
-        />
+        >
+        </openwb-base-button-group-input>
+        <openwb-base-alert
+          v-if="disableExternModeSwitch"
+          subtype="warning"
+        >
+          Die Benutzerverwaltung ist aktiviert oder der unverschlüsselte Zugriff ist nicht erlaubt. Um den
+          Steuerungsmodus ändern zu können, muss die Benutzerverwaltung im Bereich
+          <RouterLink to="/System/SecurityConfiguration">Sicherheit</RouterLink> zunächst deaktiviert und der
+          unverschlüsselte Zugang erlaubt werden.
+        </openwb-base-alert>
         <div v-if="!installAssistantActive">
           <openwb-base-button-group-input
             v-if="$store.state.mqtt['openWB/general/extern'] === true"
@@ -113,6 +124,14 @@
               </p>
             </template>
           </openwb-base-button-group-input>
+          <openwb-base-alert
+            v-if="$store.state.mqtt['openWB/system/security/user_management_active'] === true"
+            subtype="info"
+          >
+            Die Benutzerverwaltung ist aktiviert. Es muss bei jedem HTTP-API Zugriff ein gültiger Benutzername und
+            Passwort mittels HTTP Basic Auth übermittelt werden. Es wird empfohlen, hierfür einen separaten Benutzer mit
+            eingeschränkten Rechten anzulegen.
+          </openwb-base-alert>
         </div>
       </openwb-base-card>
       <div v-if="!installAssistantActive">
@@ -733,7 +752,7 @@
       </openwb-base-card>
       <openwb-base-submit-buttons
         form-name="generalConfigForm"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -774,26 +793,19 @@ export default {
   emits: ["save", "reset", "defaults"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/charge_log_data_config",
-        "openWB/general/control_interval",
-        "openWB/general/extern",
-        "openWB/general/external_buttons_hw",
-        "openWB/general/grid_protection_configured",
-        "openWB/general/http_api",
-        "openWB/general/modbus_control",
-        "openWB/general/notifications/configuration",
-        "openWB/general/notifications/plug",
-        "openWB/general/notifications/selected",
-        "openWB/general/notifications/smart_home",
-        "openWB/general/notifications/start_charging",
-        "openWB/general/notifications/stop_charging",
-        "openWB/general/price_kwh",
-        "openWB/general/range_unit",
-        "openWB/general/temporary_charge_templates_active",
-        "openWB/general/web_theme",
-        "openWB/system/configurable/web_themes",
-        "openWB/system/ip_address",
+      mqttTopics: [
+        { topic: "openWB/general/allow_unencrypted_access", writeable: false },
+        { topic: "openWB/general/charge_log_data_config", writeable: true },
+        { topic: "openWB/general/control_interval", writeable: true },
+        { topic: "openWB/general/extern", writeable: true },
+        { topic: "openWB/general/grid_protection_configured", writeable: true },
+        { topic: "openWB/general/http_api", writeable: true },
+        { topic: "openWB/general/modbus_control", writeable: true },
+        { topic: "openWB/general/range_unit", writeable: true },
+        { topic: "openWB/general/temporary_charge_templates_active", writeable: true },
+        { topic: "openWB/general/web_theme", writeable: true },
+        { topic: "openWB/system/configurable/web_themes", writeable: false },
+        { topic: "openWB/system/security/user_management_active", writeable: false },
       ],
     };
   },
@@ -810,20 +822,30 @@ export default {
           { label: "Community", options: [] },
         ];
         this.webThemeList?.forEach((theme) => {
+          if (
+            theme.defaults.userManagementSupported !== true &&
+            this.$store.state.mqtt["openWB/system/security/user_management_active"] === true
+          ) {
+            // skip themes that do not support user management if user management is active, as they would cause issues in this case
+            return;
+          }
           if (theme.official === true) {
             groups[0].options.push(theme);
           } else {
             groups[1].options.push(theme);
           }
         });
-        return groups;
+        return groups.filter((group) => group.options.length > 0);
       },
+    },
+    disableExternModeSwitch() {
+      return (
+        this.$store.state.mqtt["openWB/system/security/user_management_active"] === true ||
+        this.$store.state.mqtt["openWB/general/allow_unencrypted_access"] === false
+      );
     },
   },
   methods: {
-    getIpAddress() {
-      return this.$store.state.mqtt["openWB/system/ip_address"];
-    },
     getWebThemeDefaults(webThemeType) {
       const webThemeDefaults = this.webThemeList.find((element) => element.value == webThemeType);
       if (Object.prototype.hasOwnProperty.call(webThemeDefaults, "defaults")) {

@@ -15,18 +15,13 @@
     </template>
     <!-- Status -->
     <openwb-base-card
+      v-if="$store.state.mqtt[baseTopic + '/get/state_str']?.length > 0"
+      title="Status der aktiven Speichersteuerung"
       subtype="white"
       body-bg="white"
       class="py-1 mb-2"
     >
-      <div class="row py-2">
-        <div class="col col-auto font-weight-bold">Status</div>
-      </div>
-
-      <openwb-base-alert subtype="info">
-        Aktive Speichersteuerung:
-        <span style="white-space: pre-wrap">{{ $store.state.mqtt[baseTopic + "/get/state_str"] }}</span>
-      </openwb-base-alert>
+      {{ $store.state.mqtt[baseTopic + "/get/state_str"] }}
     </openwb-base-card>
     <!-- Aktuelle Werte -->
     <openwb-base-card
@@ -125,7 +120,7 @@ export default {
   },
   data() {
     return {
-      mqttTopicsToSubscribe: [`openWB/bat/${this.battery.id}/get/+`],
+      mqttTopics: [{ topic: `openWB/bat/${this.battery.id}/get/+`, writeable: false }],
     };
   },
   computed: {

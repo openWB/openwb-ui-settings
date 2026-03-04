@@ -13,6 +13,12 @@
     <font-awesome-icon :icon="['fas', 'people-group']" />
     Das ausgewählte Theme wird in unserer Community gepflegt. Rückfragen oder Probleme bitte im Forum diskutieren.
   </openwb-base-alert>
+  <openwb-base-alert :subtype="webTheme.userManagementSupported ? 'success' : 'warning'">
+    <font-awesome-icon :icon="['fas', webTheme.userManagementSupported ? 'user-check' : 'user-slash']" />
+    Das ausgewählte Web Theme "{{ webTheme.name }}" unterstützt die Benutzerverwaltung{{
+      webTheme.userManagementSupported ? "" : " nicht"
+    }}.
+  </openwb-base-alert>
   <openwb-base-heading> Einstellungen für Web Theme "{{ webTheme.name }}" </openwb-base-heading>
   <component
     :is="getThemeComponent()"
@@ -23,10 +29,15 @@
 
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faPeopleGroup as fasPeopleGroup, faCertificate as fasCertificate } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPeopleGroup as fasPeopleGroup,
+  faCertificate as fasCertificate,
+  faUserCheck as fasUserCheck,
+  faUserSlash as fasUserSlash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasPeopleGroup, fasCertificate);
+library.add(fasPeopleGroup, fasCertificate, fasUserCheck, fasUserSlash);
 
 import { defineAsyncComponent } from "vue";
 import OpenwbWebThemeFallback from "./OpenwbWebThemeFallback.vue";

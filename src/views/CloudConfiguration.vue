@@ -223,7 +223,7 @@
       <openwb-base-submit-buttons
         v-if="cloudBridgeKey"
         form-name="cloudConfigured"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -249,11 +249,11 @@ export default {
   emits: ["sendCommand", "save", "reset", "defaults"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/system/dataprotection_acknowledged",
-        "openWB/system/mqtt/bridge/+",
-        "openWB/system/mqtt/valid_partner_ids",
+      mqttTopics: [
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/system/dataprotection_acknowledged", writeable: false },
+        { topic: "openWB/system/mqtt/bridge/+", writeable: true },
+        { topic: "openWB/system/mqtt/valid_partner_ids", writeable: true },
       ],
       enableNewCloudButton: true,
       newCloudData: {
@@ -311,7 +311,7 @@ export default {
     },
     createCloud() {
       if (document.forms.cloudConfigCreateForm.reportValidity()) {
-        this.$emit("save");
+        this.$emit("save", this.mqttTopicsToPublish);
         this.$emit("sendCommand", {
           command: "initCloud",
           data: this.newCloudData,
@@ -321,7 +321,7 @@ export default {
     },
     connectCloud() {
       if (document.forms.cloudConfigConnectForm.reportValidity()) {
-        this.$emit("save");
+        this.$emit("save", this.mqttTopicsToPublish);
         this.$emit("sendCommand", {
           command: "connectCloud",
           data: this.connectCloudData,

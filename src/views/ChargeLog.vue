@@ -352,11 +352,12 @@ export default {
         minute: "2-digit",
         second: "2-digit",
       }),
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/general/charge_log_data_config",
-        "openWB/chargepoint/+/config",
-        "openWB/vehicle/+/name",
+      mqttTopics: [
+        { topic: "openWB/chargepoint/+/config", writeable: false },
+        { topic: "openWB/general/charge_log_data_config", writeable: false },
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/vehicle/+/info", writeable: false },
+        { topic: "openWB/vehicle/+/name", writeable: false },
       ],
       currentMonth: "",
       chargeLogRequestData: {
@@ -729,62 +730,136 @@ export default {
           text: this.translateChargeMode(mode),
         };
       });
+      const allModes = chargeModeList.map((item) => item.value);
       chargeModeList.unshift({
-        value: undefined,
+        value: allModes,
         text: "Alle",
       });
       return chargeModeList;
     },
     chargePointList() {
       let chargePoints = this.getWildcardTopics("openWB/chargepoint/+/config");
-      var chargePointList = [{ value: undefined, text: "Alle" }];
+      var chargePointList = [];
       for (const [, element] of Object.entries(chargePoints)) {
         chargePointList.push({ value: element.id, text: element.name });
+      }
+      if (chargePointList.length > 1) {
+        const allIds = chargePointList.map((item) => item.value);
+        chargePointList.unshift({ value: allIds, text: "Alle" });
       }
       return chargePointList;
     },
     vehicleList() {
-      let vehicles = this.getWildcardTopics("openWB/vehicle/+/name");
-      var vehicleList = [{ value: undefined, text: "Alle" }];
-      for (const [key, element] of Object.entries(vehicles)) {
-        let index = parseInt(key.match(/\/([0-9]+)\/name$/)[1]);
-        vehicleList.push({ value: index, text: element });
+      let vehicles = this.getWildcardTopics("openWB/vehicle/+/info");
+      var vehicleList = [];
+      for (const key of Object.keys(vehicles)) {
+        let index = parseInt(key.match(/\/([0-9]+)\/info$/)[1]);
+        const name = this.$store.state.mqtt["openWB/vehicle/" + index + "/name"];
+        vehicleList.push({ value: index, text: name || `Fahrzeug ${index}` });
+      }
+      if (vehicleList.length > 1) {
+        const allIds = vehicleList.map((item) => item.value);
+        vehicleList.unshift({ value: allIds, text: "Alle" });
       }
       return vehicleList;
     },
   },
   beforeMount() {
     // we need access to the mqttClientId which is not yet available in the data section
-    this.mqttTopicsToSubscribe.push("openWB/log/" + this.mqttClientId + "/data");
-  },
-  mounted() {
+    this.mqttTopics.push({ topic: "openWB/log/" + this.mqttClientId + "/data", writeable: false });
     const today = new Date();
     this.currentMonth = this.chargeLogDate = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, "0");
-    this.requestChargeLog();
+  },
+  mounted() {
+    // ugly hack as the vehicle and charge point list are not yet populated on first request
+    window.setTimeout(() => {
+      console.debug("initial charge log request");
+      console.debug("vehicle List on init:", JSON.stringify(this.vehicleList));
+      console.debug("charge Point List on init:", JSON.stringify(this.chargePointList));
+      this.requestChargeLog();
+    }, 500);
   },
   methods: {
     cleanRequestData() {
       if ("id" in this.chargeLogRequestData.filter.chargepoint) {
+        // remove undefined entries from charge point id filter
         this.chargeLogRequestData.filter.chargepoint.id = this.chargeLogRequestData.filter.chargepoint.id.filter(
           (element) => element != undefined,
         );
+        // if no entry, set filter to first available charge point in options
+        if (this.chargeLogRequestData.filter.chargepoint.id.length == 0) {
+          console.debug(
+            "no charge point id filter set, setting to first available",
+            JSON.stringify(this.chargePointList[0]),
+          );
+          if (this.chargePointList.length > 0) {
+            this.chargeLogRequestData.filter.chargepoint.id = this.chargePointList[0].value;
+          }
+        }
+        // flatten array if only one entry which is an array
+        if (this.chargeLogRequestData.filter.chargepoint.id.length == 1) {
+          if (Array.isArray(this.chargeLogRequestData.filter.chargepoint.id[0])) {
+            this.chargeLogRequestData.filter.chargepoint.id = this.chargeLogRequestData.filter.chargepoint.id[0];
+          }
+        }
       }
       if ("chargemode" in this.chargeLogRequestData.filter.vehicle) {
+        // remove undefined entries from chargemode filter
         this.chargeLogRequestData.filter.vehicle.chargemode =
           this.chargeLogRequestData.filter.vehicle.chargemode.filter((element) => element != undefined);
+        // if no entry, set filter to first available mode in options
+        if (this.chargeLogRequestData.filter.vehicle.chargemode.length == 0) {
+          console.debug(
+            "no vehicle chargemode filter set, setting to first available",
+            JSON.stringify(this.chargeModeList[0]),
+          );
+          if (this.chargeModeList.length > 0) {
+            this.chargeLogRequestData.filter.vehicle.chargemode = this.chargeModeList[0].value;
+          }
+        }
+        // flatten array if only one entry which is an array
+        if (this.chargeLogRequestData.filter.vehicle.chargemode.length == 1) {
+          if (Array.isArray(this.chargeLogRequestData.filter.vehicle.chargemode[0])) {
+            this.chargeLogRequestData.filter.vehicle.chargemode =
+              this.chargeLogRequestData.filter.vehicle.chargemode[0];
+          }
+        }
       }
       if ("id" in this.chargeLogRequestData.filter.vehicle) {
+        // remove undefined entries from vehicle id filter
         this.chargeLogRequestData.filter.vehicle.id = this.chargeLogRequestData.filter.vehicle.id.filter(
           (element) => element != undefined,
         );
+        // if no entry, set filter to first available vehicle in options
+        if (this.chargeLogRequestData.filter.vehicle.id.length == 0) {
+          console.debug("no vehicle id filter set, setting to first available", JSON.stringify(this.vehicleList[0]));
+          if (this.vehicleList.length > 0) {
+            this.chargeLogRequestData.filter.vehicle.id = this.vehicleList[0].value;
+          }
+        }
+        // flatten array if only one entry which is an array
+        if (this.chargeLogRequestData.filter.vehicle.id.length == 1) {
+          if (Array.isArray(this.chargeLogRequestData.filter.vehicle.id[0])) {
+            this.chargeLogRequestData.filter.vehicle.id = this.chargeLogRequestData.filter.vehicle.id[0];
+          }
+        }
+      }
+      if ("id" in this.chargeLogRequestData.filter.chargepoint) {
+        if (this.chargeLogRequestData.filter.chargepoint.id.length == 1) {
+          if (Array.isArray(this.chargeLogRequestData.filter.chargepoint.id[0])) {
+            this.chargeLogRequestData.filter.chargepoint.id = this.chargeLogRequestData.filter.chargepoint.id[0];
+          }
+        }
       }
       if ("prio" in this.chargeLogRequestData.filter.vehicle) {
         if (this.chargeLogRequestData.filter.vehicle.prio === null) {
           this.chargeLogRequestData.filter.vehicle.prio = undefined;
         }
       }
+      console.debug("cleaned request data", JSON.stringify(this.chargeLogRequestData));
     },
     requestChargeLog() {
+      console.debug("requesting charge log with data:", JSON.stringify(this.chargeLogRequestData));
       let myForm = document.forms["chargeLogForm"];
       if (!myForm.reportValidity()) {
         console.warn("form invalid");

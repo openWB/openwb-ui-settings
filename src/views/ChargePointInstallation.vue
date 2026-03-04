@@ -88,7 +88,7 @@
             />
           </span>
           <openwb-base-text-input
-            v-if="$store.state.mqtt['openWB/optional/ocpp/config']['active'] === true"
+            v-if="$store.state.mqtt['openWB/optional/ocpp/config']?.['active'] === true"
             title="OCPP-Chargebox ID"
             :model-value="installedChargePoint?.ocpp_chargebox_id"
             @update:model-value="updateState(installedChargePointKey, $event, 'ocpp_chargebox_id')"
@@ -304,7 +304,7 @@
               <div v-if="chargePointTemplate.valid_tags.length > 0">
                 <openwb-base-alert subtype="info">
                   Einstellungen zur Zugangskontrolle finden sich unter
-                  <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.
+                  <router-link to="/IdentificationConfiguration"> Einstellungen - Identifikation </router-link>.
                   <div
                     v-if="
                       $store.state.mqtt['openWB/optional/rfid/active'] === true &&
@@ -337,7 +337,7 @@
               <div v-else>
                 <openwb-base-alert subtype="info">
                   Einstellungen zur Zugangskontrolle finden sich unter
-                  <router-link to="/IdentificationConfig"> Einstellungen - Identifikation </router-link>.<br />
+                  <router-link to="/IdentificationConfiguration"> Einstellungen - Identifikation </router-link>.<br />
                   Dem Ladepunkt-Profil sind aktuell keine ID-Tags zum Entsperren zugeordnet.
                 </openwb-base-alert>
               </div>
@@ -450,7 +450,7 @@
 
       <openwb-base-submit-buttons
         form-name="chargePointInstallationForm"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -497,15 +497,15 @@ export default {
   emits: ["sendCommand", "save", "reset", "defaults"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/optional/dc_charging",
-        "openWB/optional/ocpp/config",
-        "openWB/optional/rfid/active",
-        "openWB/chargepoint/+/config",
-        "openWB/chargepoint/template/+",
-        "openWB/system/configurable/chargepoints",
-        "openWB/system/configurable/chargepoints_internal",
+      mqttTopics: [
+        { topic: "openWB/chargepoint/+/config", writeable: true },
+        { topic: "openWB/chargepoint/template/+", writeable: true },
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/optional/dc_charging", writeable: false },
+        { topic: "openWB/optional/ocpp/config", writeable: false },
+        { topic: "openWB/optional/rfid/active", writeable: false },
+        { topic: "openWB/system/configurable/chargepoints", writeable: false },
+        { topic: "openWB/system/configurable/chargepoints_internal", writeable: false },
       ],
       chargePointToAdd: undefined,
       showChargePointModal: false,
