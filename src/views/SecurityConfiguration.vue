@@ -143,8 +143,8 @@
             <template #help>
               Hiermit werden alle Benutzer, Gruppen und Rollen der openWB Benutzerverwaltung gelöscht und auf die
               Werkseinstellungen zurückgesetzt. Diese Aktion ist irreversibel!<br />
-              <strong>Hinweis:</strong> Die Benutzerverwaltung muss deaktiviert sein, um die Benutzerverwaltung
-              zurücksetzen zu können.
+              <strong>Hinweis:</strong> Die Benutzerverwaltung muss deaktiviert sein und danach ein erforderlicher
+              Neustart durchgeführt werden, um die Benutzerverwaltung zurücksetzen zu können.
             </template>
           </openwb-base-button-input>
           <template #footer>
