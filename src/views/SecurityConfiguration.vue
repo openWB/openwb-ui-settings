@@ -1092,15 +1092,23 @@ export default {
       if ([null, undefined, ""].includes(this.clientDetails[client].password)) {
         // remove password field to avoid resetting password to empty
         delete this.clientDetails[client].password;
+        this.queueControlCommand("modifyClient", { username: client, ...this.clientDetails[client] });
       } else if (this.clientDetails[client].username === "admin") {
+        console.warn("Admin password change requested, sending updateAdminPassword command to openWB.");
         this.$emit("sendCommand", {
           command: "updateAdminPassword",
           data: {
             newPassword: this.clientDetails[client].password,
           },
         });
+        // give backend some time to update the password, then update password in mosquitto dynsec plugin
+        setTimeout(() => {
+          console.warn(
+            "Admin password updated via openWB command, updating dynamic security plugin with new password.",
+          );
+          this.queueControlCommand("modifyClient", { username: client, ...this.clientDetails[client] });
+        }, 500);
       }
-      this.queueControlCommand("modifyClient", { username: client, ...this.clientDetails[client] });
     },
     getGroupList() {
       this.queueControlCommand("listGroups");
