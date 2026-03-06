@@ -10,8 +10,8 @@ This project is licensed under GPLv3. Any commercial use must be authorized by o
 
 - VS Code
 - VS Code Remote SSH Extension for development on the target system
-- npm 8.x
-- nodejs 18.x
+- current stable npm version
+- current stable nodejs version, min. v20.x!
 - Vue.js devtools browser extension for debugging
 
 ## Project setup
