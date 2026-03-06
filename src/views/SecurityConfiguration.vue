@@ -10,6 +10,61 @@
       Bist Du sicher, dass Du die openWB Benutzerverwaltung zurücksetzen möchtest? Hiermit werden alle Benutzer, Gruppen
       und Rollen gelöscht und auf die Werkseinstellungen zurückgesetzt. Diese Aktion ist irreversibel!
     </openwb-base-modal-dialog>
+    <openwb-base-modal-dialog
+      :show="showAddUserModal"
+      title="Benutzer hinzufügen"
+      subtype="success"
+      :buttons="[{ text: 'Benutzer hinzufügen', event: 'confirm', subtype: 'success', disabled: addUserDisabled }]"
+      @modal-result="createClient($event)"
+    >
+      <form name="addUserForm">
+        <openwb-base-alert subtype="info"> Der Benutzername kann nicht mehr geändert werden! </openwb-base-alert>
+        <openwb-base-text-input
+          v-model="newClientName"
+          title="Benutzername"
+          subtype="user"
+          required
+          :validator="(value) => (clients.includes(value) ? 'Dieser Benutzername ist bereits vergeben' : true)"
+        />
+        <openwb-base-text-input
+          v-model="newClientEmail"
+          title="E-Mail"
+          subtype="email"
+          required
+        />
+        <openwb-base-text-input
+          v-model="newClientPassword"
+          title="Passwort"
+          subtype="password"
+          required
+        />
+        <openwb-base-text-input
+          v-model="newClientPasswordConfirmation"
+          title="Passwort bestätigen"
+          subtype="password"
+          required
+          :validator="(value) => value === newClientPassword || 'Kennwörter stimmen nicht überein'"
+        />
+      </form>
+    </openwb-base-modal-dialog>
+    <openwb-base-modal-dialog
+      :show="showAddGroupModal"
+      title="Gruppe hinzufügen"
+      subtype="success"
+      :buttons="[{ text: 'Gruppe hinzufügen', event: 'confirm', subtype: 'success', disabled: addGroupDisabled }]"
+      @modal-result="createGroup($event)"
+    >
+      <form name="addGroupForm">
+        <openwb-base-alert subtype="info"> Der Gruppenname kann nicht mehr geändert werden! </openwb-base-alert>
+        <openwb-base-text-input
+          v-model="newGroupName"
+          title="Gruppenname"
+          subtype="user"
+          required
+          :validator="(value) => (groups.includes(value) ? 'Dieser Gruppenname ist bereits vergeben' : true)"
+        />
+      </form>
+    </openwb-base-modal-dialog>
     <openwb-base-alert
       v-if="$store.state.mqtt['openWB/general/extern'] !== false"
       subtype="info"
@@ -174,6 +229,16 @@
             <FontAwesomeIcon :icon="['fas', 'user']" />
             Benutzer
           </template>
+          <template #actions="slotProps">
+            <openwb-base-avatar
+              v-if="!slotProps.collapsed"
+              class="bg-success clickable"
+              title="Neuen Benutzer erstellen"
+              @click.stop="showAddUserModal = true"
+            >
+              <font-awesome-icon :icon="['fas', 'plus']" />
+            </openwb-base-avatar>
+          </template>
           <openwb-base-alert
             v-if="clients.length === 0"
             subtype="info"
@@ -181,19 +246,6 @@
             Es sind noch keine Benutzer angelegt oder Du hast nicht die benötigten Rechte, Daten anzuzeigen.
           </openwb-base-alert>
           <div v-else>
-            <openwb-base-text-input
-              v-model="newClientName"
-              title="Neuen Benutzer erstellen"
-              subtype="user"
-              add-button
-              @input:add="createClient()"
-            >
-              <template #help>
-                Hier kann ein neuer Benutzer für die openWB Benutzerverwaltung angelegt werden. Der Benutzername kann
-                nicht mehr geändert werden!
-              </template>
-            </openwb-base-text-input>
-            <hr />
             <openwb-base-card
               v-for="client in clients"
               :key="client"
@@ -338,6 +390,16 @@
             <FontAwesomeIcon :icon="['fas', 'users']" />
             Gruppen
           </template>
+          <template #actions="slotProps">
+            <openwb-base-avatar
+              v-if="!slotProps.collapsed"
+              class="bg-success clickable"
+              title="Neue Gruppe erstellen"
+              @click.stop="showAddGroupModal = true"
+            >
+              <font-awesome-icon :icon="['fas', 'plus']" />
+            </openwb-base-avatar>
+          </template>
           <openwb-base-alert
             v-if="groups.length === 0"
             subtype="info"
@@ -345,19 +407,6 @@
             Es sind noch keine Gruppen angelegt oder Du hast nicht die benötigten Rechte, Daten anzuzeigen.
           </openwb-base-alert>
           <div v-else>
-            <openwb-base-text-input
-              v-model="newGroupName"
-              title="Neue Gruppe erstellen"
-              subtype="group"
-              add-button
-              @input:add="createGroup()"
-            >
-              <template #help>
-                Hier kann eine neue Gruppe für die openWB Benutzerverwaltung angelegt werden. Der Gruppenname kann nicht
-                mehr geändert werden!
-              </template>
-            </openwb-base-text-input>
-            <hr />
             <openwb-base-card
               v-for="group in groups"
               :key="group"
@@ -638,7 +687,12 @@ export default {
       rawRoles: [],
       roleDetails: {},
       rolesVersion: null,
+      showAddUserModal: false,
       newClientName: null,
+      newClientEmail: null,
+      newClientPassword: null,
+      newClientPasswordConfirmation: null,
+      showAddGroupModal: false,
       newGroupName: null,
       anonymousGroupName: null,
       dynSecAdminRoleName: "dynsec-admin",
@@ -664,6 +718,19 @@ export default {
         this.skipInit = true;
         this.updateState("openWB/system/security/user_management_active", value);
       },
+    },
+    addUserDisabled() {
+      return (
+        !this.newClientName ||
+        !this.newClientEmail ||
+        !this.newClientPassword ||
+        !this.newClientPasswordConfirmation ||
+        this.newClientPassword !== this.newClientPasswordConfirmation ||
+        this.clients.includes(this.newClientName)
+      );
+    },
+    addGroupDisabled() {
+      return !this.newGroupName || this.groups.includes(this.newGroupName);
     },
     readableAcls() {
       return (acls) => {
@@ -1051,9 +1118,31 @@ export default {
     getClient(client) {
       this.queueControlCommand("getClient", { username: client });
     },
-    createClient() {
-      this.queueControlCommand("createClient", { username: this.newClientName });
+    createClient(event) {
+      if (event === "confirm") {
+        if (
+          !this.newClientName ||
+          !this.newClientEmail ||
+          !this.newClientPassword ||
+          this.newClientPassword !== this.newClientPasswordConfirmation
+        ) {
+          this.$root.postClientMessage(
+            "Ungültige Eingaben. Bitte stelle sicher, dass der Benutzername, die E-Mail-Adresse und das Passwort ausgefüllt sind und die Passwortbestätigung übereinstimmt.",
+            "danger",
+          );
+          return;
+        }
+        this.queueControlCommand("createClient", {
+          username: this.newClientName,
+          password: this.newClientPassword,
+          textname: this.newClientEmail,
+        });
+      }
+      this.showAddUserModal = false;
       this.newClientName = null;
+      this.newClientEmail = null;
+      this.newClientPassword = null;
+      this.newClientPasswordConfirmation = null;
     },
     deleteClient(client) {
       if (client === this.loggedInUser) {
@@ -1125,8 +1214,18 @@ export default {
     getGroup(group) {
       this.queueControlCommand("getGroup", { groupname: group });
     },
-    createGroup() {
-      this.queueControlCommand("createGroup", { groupname: this.newGroupName });
+    createGroup(event) {
+      if (event === "confirm") {
+        if (!this.newGroupName || this.groups.includes(this.newGroupName)) {
+          this.$root.postClientMessage(
+            "Ungültige Eingabe. Bitte stelle sicher, dass der Gruppenname ausgefüllt ist und noch nicht existiert.",
+            "danger",
+          );
+          return;
+        }
+        this.queueControlCommand("createGroup", { groupname: this.newGroupName });
+      }
+      this.showAddGroupModal = false;
       this.newGroupName = null;
     },
     deleteGroup(group) {
