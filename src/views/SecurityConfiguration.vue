@@ -1092,7 +1092,6 @@ export default {
       if ([null, undefined, ""].includes(this.clientDetails[client].password)) {
         // remove password field to avoid resetting password to empty
         delete this.clientDetails[client].password;
-        this.queueControlCommand("modifyClient", { username: client, ...this.clientDetails[client] });
       } else if (this.clientDetails[client].username === "admin") {
         console.warn("Admin password change requested, sending updateAdminPassword command to openWB.");
         this.$emit("sendCommand", {
@@ -1108,7 +1107,9 @@ export default {
           );
           this.queueControlCommand("modifyClient", { username: client, ...this.clientDetails[client] });
         }, 500);
+        return;
       }
+      this.queueControlCommand("modifyClient", { username: client, ...this.clientDetails[client] });
     },
     getGroupList() {
       this.queueControlCommand("listGroups");
