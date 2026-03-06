@@ -113,10 +113,6 @@
                 geben kann.
               </template>
             </openwb-base-text-input>
-            <openwb-base-alert subtype="info">
-              Ein anderes Fahrzeug-Profil wird erst NACH dem Abstecken übernommen, da es sonst durch die Änderung
-              bestimmter Einstellungen im laufenden Ladevorgang zu Widersprüchen kommen kann.
-            </openwb-base-alert>
             <openwb-base-select-input
               title="Fahrzeug-Profil"
               :options="evTemplateList"
@@ -344,12 +340,6 @@
           </openwb-base-alert>
         </div>
         <div v-else>
-          <openwb-base-alert subtype="info">
-            Ein anderes Fahrzeug-Profil wird erst
-            <span class="text-uppercase font-weight-bold"> nach dem Abstecken </span>
-            übernommen, da es sonst durch die Änderung bestimmter Einstellungen im laufenden Ladevorgang zu
-            Widersprüchen kommen kann.
-          </openwb-base-alert>
           <openwb-base-card
             v-for="(template, key) in evTemplates"
             :key="key"
