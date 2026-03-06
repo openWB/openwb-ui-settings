@@ -162,12 +162,22 @@
             subtype="info"
             class="mb-3"
           >
-            Wenn die Benutzerverwaltung aktiviert ist, werden nur die Ladepunkte angezeigt, für welche dem jeweiligen
-            Display-Benutzer auch Zugriffsrechte gegeben wurden. Ebenfalls ist es möglich, dass bestimmte Daten von
-            Wechselrichtern, Fahrzeugen, etc. nicht angezeigt werden, wenn der Benutzer hierfür keine Berechtigung
-            besitzt.<br />
-            Bei aktivierter Benutzerverwaltung wird empfohlen, die Anzeige auf "Alle" Ladepunkte zu setzen, damit es
-            nicht zu Überschneidungen zwischen diesen Einschränkungen kommt.
+            <p>
+              Wenn die <strong>Benutzerverwaltung</strong> aktiviert ist, werden nur die Ladepunkte angezeigt, für
+              welche dem jeweiligen Display-Benutzer auch Zugriffsrechte gegeben wurden. Ebenfalls ist es möglich, dass
+              bestimmte Daten von Wechselrichtern, Fahrzeugen, etc. nicht angezeigt werden, wenn der Benutzer hierfür
+              keine Berechtigung besitzt.
+            </p>
+            <p>
+              Bei aktivierter Benutzerverwaltung wird empfohlen, die Anzeige auf "Alle" Ladepunkte zu setzen, damit es
+              nicht zu Überschneidungen zwischen diesen Einschränkungen kommt.
+            </p>
+            <p>
+              Das <strong>integrierte Display</strong> einer openWB series2 oder standalone verwendet automatisch den
+              Benutzer "Display-Intern". Für <strong>externe openWB</strong> im Steuerungsmodus "secondary" werden
+              automatisch Benutzer mit dem Namen "Display-<i>IP</i>", wobei <i>IP</i> für die jeweilige IP-Adresse der
+              secondary openWB steht, angelegt.
+            </p>
           </openwb-base-alert>
           <hr />
           <div v-if="$store.state.mqtt['openWB/optional/int_display/theme'] !== undefined">
