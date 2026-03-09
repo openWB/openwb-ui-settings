@@ -844,6 +844,7 @@ export default {
           let id = parts[1];
           let type = componentTypeName(parts);
           let name = "";
+          let action = "";
           switch (parts[0]) {
             case "counter":
             case "inverter":
@@ -870,7 +871,15 @@ export default {
               }
               break;
           }
-          return `Daten: ${type} '${name}' (${id}) ${roleParts[roleParts.length - 2] == "write" ? "schreiben" : "lesen"}`;
+          if (roleParts[roleParts.length - 2] == "write") {
+            action = "MQTT-Input";
+          } else {
+            action = "lesen";
+            if (["chargepoint", "vehicle"].includes(parts[0])) {
+              action += " und bedienen";
+            }
+          }
+          return `Daten: ${type} '${name}' (${id}) ${action}`;
         };
 
         let view = null;
