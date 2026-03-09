@@ -793,7 +793,10 @@ export default {
             JSON.stringify(this.chargePointList[0]),
           );
           if (this.chargePointList.length > 0) {
-            this.chargeLogRequestData.filter.chargepoint.id = [this.chargePointList[0].value];
+            const chargePointIdValue = this.chargePointList[0].value;
+            this.chargeLogRequestData.filter.chargepoint.id = Array.isArray(chargePointIdValue)
+              ? chargePointIdValue
+              : [chargePointIdValue];
           }
         }
         // flatten array if only one entry which is an array
@@ -834,7 +837,10 @@ export default {
         if (this.chargeLogRequestData.filter.vehicle.id.length == 0) {
           console.debug("no vehicle id filter set, setting to first available", JSON.stringify(this.vehicleList[0]));
           if (this.vehicleList.length > 0) {
-            this.chargeLogRequestData.filter.vehicle.id = [this.vehicleList[0].value];
+            const vehicleIdValue = this.vehicleList[0].value;
+            this.chargeLogRequestData.filter.vehicle.id = Array.isArray(vehicleIdValue)
+              ? vehicleIdValue
+              : [vehicleIdValue];
           }
         }
         // flatten array if only one entry which is an array
