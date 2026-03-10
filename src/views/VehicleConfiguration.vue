@@ -178,6 +178,8 @@
                 Reload-Pfeil auf der Hauptseite ausgelöst werden.<br />
                 Wenn während des Ladens der mit der SoC-Abfrage gelieferte Zeitstempel älter ist als die letzte Abfrage wird das Ergebnis der Abfrage 
                 verworfen. Stattdessen eine Berechnung durchgeführt und auch so im Fahrzeugstatus vermerkt.<br />
+                Wenn während des Ladens der mit der SoC-Abfrage gelieferte Zeitstempel älter ist als die letzte Abfrage wird das Ergebnis der Abfrage 
+                verworfen. Stattdessen eine Berechnung durchgeführt und auch so im Fahrzeugstatus vermerkt.<br />
                 Wenn eine Abfrage fehlschlägt, wird noch drei weitere Male im Abstand von 5 Minuten versucht, den SoC
                 abzufragen. Wenn dies nicht erfolgreich ist, wird der SoC auf 0% gesetzt um zu vermeiden, dass ein Auto
                 beim SoC-basierten Laden nicht geladen wird. Die Abfrage erfolgt dann wieder in den oben genannten
