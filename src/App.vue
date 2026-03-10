@@ -211,15 +211,13 @@ export default {
           this.$store.commit("storeLocal", { name: "username", value: user });
         }
         // required for route guards
-        this.doSubscribe(
-          [
-            "openWB/system/boot_done",
-            "openWB/system/usage_terms_acknowledged",
-            "openWB/system/installAssistantDone",
-            "openWB/system/security/access/+",
-          ],
-          true,
-        );
+        this.doSubscribe([
+          "openWB/system/boot_done",
+          "openWB/system/dataprotection_acknowledged",
+          "openWB/system/usage_terms_acknowledged",
+          "openWB/system/installAssistantDone",
+          "openWB/system/security/access/+",
+        ]);
         // after one second check if we received any data, if not, the connection is probably not working and we should inform the user
         this.dataTimeout = setTimeout(() => {
           console.warn(
@@ -308,12 +306,10 @@ export default {
       }
       this.createConnection();
     },
-    doSubscribe(topics, forceResubscribe = false) {
+    doSubscribe(topics) {
       topics.forEach((topic) => {
-        if (!forceResubscribe) {
-          this.$store.commit("addSubscription", topic);
-        }
-        if (this.$store.getters.subscriptionCount(topic) === 1 || forceResubscribe) {
+        this.$store.commit("addSubscription", topic);
+        if (this.$store.getters.subscriptionCount(topic) === 1) {
           if (topic.includes("#") || topic.includes("+")) {
             console.debug("skipping init of wildcard topic:", topic);
           } else {
@@ -328,9 +324,7 @@ export default {
                 `Daten konnten nicht abonniert werden.<br />Topic: ${topic}<br />${error}`,
                 "danger",
               );
-              if (!forceResubscribe) {
-                this.$store.commit("removeSubscription", topic);
-              }
+              this.$store.commit("removeSubscription", topic);
               return;
             }
           });
