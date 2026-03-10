@@ -28,7 +28,7 @@
       Ist die <strong>Benutzerverwaltung</strong> aktiviert und sollen die Ausgänge über MQTT gesteuert werden, dann
       muss ein Benutzer mit Schreibrechten für die entsprechenden Topics angelegt werden, damit openWB die Daten
       akzeptiert. Hierfür werden automatisch die benötigten Berechtigungen in der Rolle
-      <strong>"Daten: Ein-/Ausgangs Gerät '{{ ioDevice.name }}' ({{ ioDevice.id }}) schreiben"</strong> angelegt, die
+      <strong>"Daten: Ein-/Ausgangs Gerät '{{ ioDevice.name }}' ({{ ioDevice.id }}) MQTT-Input"</strong> angelegt, die
       einem Benutzer zugewiesen werden kann.
     </openwb-base-alert>
     <component

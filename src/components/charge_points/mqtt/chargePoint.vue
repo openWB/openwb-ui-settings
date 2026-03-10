@@ -8,7 +8,7 @@
       Ist die <strong>Benutzerverwaltung</strong> aktiviert, dann muss ein Benutzer mit Schreibrechten für die
       entsprechenden Topics angelegt werden, damit openWB die Daten akzeptiert. Hierfür werden automatisch die
       benötigten Berechtigungen in der Rolle
-      <strong>"Daten: Ladepunkt '{{ chargePoint.name }}' ({{ chargePoint.id }}) schreiben"</strong> angelegt, die einem
+      <strong>"Daten: Ladepunkt '{{ chargePoint.name }}' ({{ chargePoint.id }}) MQTT-Input"</strong> angelegt, die einem
       Benutzer zugewiesen werden kann.
     </openwb-base-alert>
     <openwb-base-alert subtype="info">
@@ -18,7 +18,7 @@
         Zahlen mit Nachkommastellen (Float) verwenden einen Punkt als Dezimaltrenner (internationales Format).
       </p>
       <p>
-        Ab Version 2.1.8 wurden die Topics überarbeitet. Die bisherigen Topics "openWB/set/chargepoint/id/get/..." und
+        In Version 2.1.8 wurden die Topics überarbeitet. Die bisherigen Topics "openWB/set/chargepoint/id/get/..." und
         "openWB/chargepoint/set/..." bleiben aus Gründen der Abwärtskompatibilität weiterhin nutzbar. Wir empfehlen, auf
         die neuen Topics umzusteigen. Dies ermöglicht die Beseitigung von Einschränkungen, wie z. B. die fehlende
         Verrechnung bei Hybrid-Systemen oder die Berechnung fehlender Werte, wie der Phasen-Leistung aus Spannung und
