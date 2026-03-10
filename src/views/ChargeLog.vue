@@ -781,86 +781,36 @@ export default {
   },
   methods: {
     cleanRequestData() {
-      if ("id" in this.chargeLogRequestData.filter.chargepoint) {
-        // remove undefined entries from charge point id filter
-        this.chargeLogRequestData.filter.chargepoint.id = this.chargeLogRequestData.filter.chargepoint.id.filter(
-          (element) => element != undefined,
-        );
-        // if no entry, set filter to first available charge point in options
-        if (this.chargeLogRequestData.filter.chargepoint.id.length == 0) {
-          console.debug(
-            "no charge point id filter set, setting to first available",
-            JSON.stringify(this.chargePointList[0]),
-          );
-          if (this.chargePointList.length > 0) {
-            const chargePointIdValue = this.chargePointList[0].value;
-            this.chargeLogRequestData.filter.chargepoint.id = Array.isArray(chargePointIdValue)
-              ? chargePointIdValue
-              : [chargePointIdValue];
-          }
-        }
-        // flatten array if only one entry which is an array
-        if (this.chargeLogRequestData.filter.chargepoint.id.length == 1) {
-          if (Array.isArray(this.chargeLogRequestData.filter.chargepoint.id[0])) {
-            this.chargeLogRequestData.filter.chargepoint.id = this.chargeLogRequestData.filter.chargepoint.id[0];
-          }
-        }
+      const normalizeArray = (value) => {
+        // Case 1: undefined or null - no filter
+        if (value === undefined || value === null) return [];
+        // Case 2: scalar value (e.g. 0) - wrap in array
+        if (!Array.isArray(value)) return [value];
+        // Case 3: nested array from "Alle" selection - flatten - ( example: [[0,1]] ) -  flatten - [0,1]
+        if (value.length === 1 && Array.isArray(value[0])) return value[0];
+        return value;
+      };
+      const filter = this.chargeLogRequestData.filter;
+      // Normalize all filters so the backend always receives arrays.
+      // Also remove any undefined values that may appear from the UI components.
+      filter.vehicle.id = normalizeArray(filter.vehicle.id).filter((v) => v !== undefined);
+      filter.vehicle.chargemode = normalizeArray(filter.vehicle.chargemode).filter((v) => v !== undefined);
+      filter.chargepoint.id = normalizeArray(filter.chargepoint.id).filter((v) => v !== undefined);
+
+      // if no entry, set filter to first available vehicle in options
+      if (filter.vehicle.id.length === 0 && this.vehicleList.length > 0) {
+        const defaultVehicleFilter = this.vehicleList[0].value;
+        filter.vehicle.id = Array.isArray(defaultVehicleFilter) ? defaultVehicleFilter : [defaultVehicleFilter];
       }
-      if ("chargemode" in this.chargeLogRequestData.filter.vehicle) {
-        // remove undefined entries from chargemode filter
-        this.chargeLogRequestData.filter.vehicle.chargemode =
-          this.chargeLogRequestData.filter.vehicle.chargemode.filter((element) => element != undefined);
-        // if no entry, set filter to first available mode in options
-        if (this.chargeLogRequestData.filter.vehicle.chargemode.length == 0) {
-          console.debug(
-            "no vehicle chargemode filter set, setting to first available",
-            JSON.stringify(this.chargeModeList[0]),
-          );
-          if (this.chargeModeList.length > 0) {
-            this.chargeLogRequestData.filter.vehicle.chargemode = [this.chargeModeList[0].value];
-          }
-        }
-        // flatten array if only one entry which is an array
-        if (this.chargeLogRequestData.filter.vehicle.chargemode.length == 1) {
-          if (Array.isArray(this.chargeLogRequestData.filter.vehicle.chargemode[0])) {
-            this.chargeLogRequestData.filter.vehicle.chargemode =
-              this.chargeLogRequestData.filter.vehicle.chargemode[0];
-          }
-        }
+      // if no entry, set filter to first available chargepoint in options
+      if (filter.chargepoint.id.length === 0 && this.chargePointList.length > 0) {
+        const defaultChargePointFilter = this.chargePointList[0].value;
+        filter.chargepoint.id = Array.isArray(defaultChargePointFilter)
+          ? defaultChargePointFilter
+          : [defaultChargePointFilter];
       }
-      if ("id" in this.chargeLogRequestData.filter.vehicle) {
-        // remove undefined entries from vehicle id filter
-        this.chargeLogRequestData.filter.vehicle.id = this.chargeLogRequestData.filter.vehicle.id.filter(
-          (element) => element != undefined,
-        );
-        // if no entry, set filter to first available vehicle in options
-        if (this.chargeLogRequestData.filter.vehicle.id.length == 0) {
-          console.debug("no vehicle id filter set, setting to first available", JSON.stringify(this.vehicleList[0]));
-          if (this.vehicleList.length > 0) {
-            const vehicleIdValue = this.vehicleList[0].value;
-            this.chargeLogRequestData.filter.vehicle.id = Array.isArray(vehicleIdValue)
-              ? vehicleIdValue
-              : [vehicleIdValue];
-          }
-        }
-        // flatten array if only one entry which is an array
-        if (this.chargeLogRequestData.filter.vehicle.id.length == 1) {
-          if (Array.isArray(this.chargeLogRequestData.filter.vehicle.id[0])) {
-            this.chargeLogRequestData.filter.vehicle.id = this.chargeLogRequestData.filter.vehicle.id[0];
-          }
-        }
-      }
-      if ("id" in this.chargeLogRequestData.filter.chargepoint) {
-        if (this.chargeLogRequestData.filter.chargepoint.id.length == 1) {
-          if (Array.isArray(this.chargeLogRequestData.filter.chargepoint.id[0])) {
-            this.chargeLogRequestData.filter.chargepoint.id = this.chargeLogRequestData.filter.chargepoint.id[0];
-          }
-        }
-      }
-      if ("prio" in this.chargeLogRequestData.filter.vehicle) {
-        if (this.chargeLogRequestData.filter.vehicle.prio === null) {
-          this.chargeLogRequestData.filter.vehicle.prio = undefined;
-        }
+      if (filter.vehicle.prio === null) {
+        filter.vehicle.prio = undefined;
       }
       console.debug("cleaned request data", JSON.stringify(this.chargeLogRequestData));
     },
