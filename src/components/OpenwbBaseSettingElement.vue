@@ -8,13 +8,15 @@
       class="col-md-4 col-form-label"
     >
       <slot name="title" />
-      <font-awesome-icon
-        v-if="$slots.help"
-        :icon="showHelp ? ['fas', 'question-circle'] : ['far', 'question-circle']"
-        class="clickable ml-1"
-        :class="showHelp ? 'text-info' : ''"
-        @click.stop="toggleHelp"
-      />
+      <openwb-base-tooltip :description="`Hilfe ${showHelp ? 'verbergen' : 'anzeigen'}`">
+        <font-awesome-icon
+          v-if="$slots.help"
+          :icon="showHelp ? ['fas', 'question-circle'] : ['far', 'question-circle']"
+          class="clickable ml-1"
+          :class="showHelp ? 'text-info' : ''"
+          @click.stop="toggleHelp"
+        />
+      </openwb-base-tooltip>
     </div>
     <div :class="$slots.title ? 'col-md-8' : 'col px-0'">
       <div :class="{ 'form-row': $slots.title }">

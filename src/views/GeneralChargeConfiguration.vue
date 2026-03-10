@@ -84,6 +84,7 @@
             :step="0.001"
             :precision="3"
             unit="ct/kWh"
+            :min="0"
             required
             :model-value="$store.state.mqtt['openWB/general/prices/grid'] * 100000"
             @update:model-value="updateState('openWB/general/prices/grid', parseFloat(($event / 100000).toFixed(7)))"
@@ -93,6 +94,7 @@
             :step="0.001"
             :precision="3"
             unit="ct/kWh"
+            :min="0"
             required
             :model-value="$store.state.mqtt['openWB/general/prices/bat'] * 100000"
             @update:model-value="updateState('openWB/general/prices/bat', parseFloat(($event / 100000).toFixed(7)))"
@@ -102,6 +104,7 @@
             :step="0.001"
             :precision="3"
             unit="ct/kWh"
+            :min="0"
             required
             :model-value="$store.state.mqtt['openWB/general/prices/pv'] * 100000"
             @update:model-value="updateState('openWB/general/prices/pv', parseFloat(($event / 100000).toFixed(7)))"
@@ -218,7 +221,7 @@
       </openwb-base-card>
       <openwb-base-submit-buttons
         form-name="generalChargeConfigForm"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -241,18 +244,18 @@ export default {
   emits: ["save", "reset", "defaults"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/general/chargemode_config/unbalanced_load",
-        "openWB/general/chargemode_config/unbalanced_load_limit",
-        "openWB/general/prices/bat",
-        "openWB/general/prices/grid",
-        "openWB/general/prices/pv",
-        "openWB/optional/ep/flexible_tariff/provider",
-        "openWB/optional/ep/grid_fee/provider",
-        "openWB/optional/ocpp/config",
-        "openWB/system/configurable/flexible_tariffs",
-        "openWB/system/configurable/grid_fees",
+      mqttTopics: [
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/general/chargemode_config/unbalanced_load", writeable: true },
+        { topic: "openWB/general/chargemode_config/unbalanced_load_limit", writeable: true },
+        { topic: "openWB/general/prices/bat", writeable: true },
+        { topic: "openWB/general/prices/grid", writeable: true },
+        { topic: "openWB/general/prices/pv", writeable: true },
+        { topic: "openWB/optional/ep/flexible_tariff/provider", writeable: true },
+        { topic: "openWB/optional/ep/grid_fee/provider", writeable: true },
+        { topic: "openWB/optional/ocpp/config", writeable: true },
+        { topic: "openWB/system/configurable/flexible_tariffs", writeable: false },
+        { topic: "openWB/system/configurable/grid_fees", writeable: false },
       ],
     };
   },

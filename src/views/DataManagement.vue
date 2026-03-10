@@ -53,6 +53,7 @@
             form-name="backupPasswordForm"
             :hide-reset="true"
             :hide-defaults="true"
+            save-id="saveBackupPassword"
             @save="$emit('save', ['openWB/system/backup_password'])"
             @reset="$emit('reset')"
           />
@@ -231,7 +232,10 @@
               form-name="cloudBackupForm"
               :hide-reset="true"
               :hide-defaults="true"
-              @save="$emit('save')"
+              save-id="saveCloudBackup"
+              @save="
+                $emit('save', ['openWB/system/backup_cloud/backup_before_update', 'openWB/system/backup_cloud/config'])
+              "
               @reset="$emit('reset')"
               @defaults="$emit('defaults')"
             />
@@ -376,12 +380,12 @@
           :collapsible="true"
           :collapsed="true"
         >
-          <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-            <openwb-base-alert subtype="info">
-              Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary"
-              befindet.
-            </openwb-base-alert>
-          </div>
+          <openwb-base-alert
+            v-if="$store.state.mqtt['openWB/general/extern'] === true"
+            subtype="info"
+          >
+            Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
+          </openwb-base-alert>
           <div v-else>
             <openwb-base-alert subtype="info">
               Das Monitoring informiert Dich sofort per E-Mail, wenn eine Deiner Komponenten oder Ladepunkte ein Problem
@@ -410,11 +414,15 @@
               />
             </div>
           </div>
-          <template #footer>
+          <template
+            v-if="$store.state.mqtt['openWB/general/extern'] !== true"
+            #footer
+          >
             <openwb-base-submit-buttons
               form-name="monitoringForm"
               :hide-defaults="true"
-              @save="$emit('save')"
+              save-id="saveMonitoring"
+              @save="$emit('save', ['openWB/optional/monitoring/config'])"
               @reset="$emit('reset')"
             />
           </template>
@@ -463,19 +471,19 @@ export default {
   emits: ["sendCommand", "save", "reset", "defaults"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/system/configurable/backup_clouds",
-        "openWB/system/configurable/monitoring",
-        "openWB/system/backup_password",
-        "openWB/system/backup_cloud/config",
-        "openWB/system/backup_cloud/backup_before_update",
-        "openWB/system/device/+/component/+/config",
-        "openWB/chargepoint/+/config",
-        "openWB/optional/monitoring/config",
-        "openWB/vehicle/+/name",
-        "openWB/LegacySmartHome/config/get/Devices/+/device_configured",
-        "openWB/LegacySmartHome/config/get/Devices/+/device_name",
+      mqttTopics: [
+        { topic: "openWB/LegacySmartHome/config/get/Devices/+/device_configured", writeable: false },
+        { topic: "openWB/LegacySmartHome/config/get/Devices/+/device_name", writeable: false },
+        { topic: "openWB/chargepoint/+/config", writeable: false },
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/optional/monitoring/config", writeable: false },
+        { topic: "openWB/system/backup_cloud/backup_before_update", writeable: false },
+        { topic: "openWB/system/backup_cloud/config", writeable: false },
+        { topic: "openWB/system/backup_password", writeable: false },
+        { topic: "openWB/system/configurable/backup_clouds", writeable: false },
+        { topic: "openWB/system/configurable/monitoring", writeable: false },
+        { topic: "openWB/system/device/+/component/+/config", writeable: false },
+        { topic: "openWB/vehicle/+/name", writeable: false },
       ],
       warningAcknowledged: false,
       showRestoreSection: !this.installAssistantActive,

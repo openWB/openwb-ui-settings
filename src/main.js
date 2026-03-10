@@ -12,8 +12,16 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import VueAxios from "vue-axios";
 
+import VueCookies from "vue-cookies";
+
 const vApp = createApp(App);
-vApp.use(store).use(router).use(VueAxios, axios);
+vApp.use(store).use(router).use(VueAxios, axios).use(VueCookies, {
+  expire: "30d",
+  path: "/",
+  domain: "",
+  secure: true, // user management and cookie handling is only enabled in secure contexts
+  sameSite: "Lax",
+});
 
 // automatic global registering of our base components
 const componentFiles = import.meta.glob("./components/OpenwbBase*.vue", {

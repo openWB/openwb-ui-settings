@@ -1,6 +1,13 @@
 <template>
   <div class="device-mqtt-bat">
     <openwb-base-heading> Einstellungen für MQTT Batteriespeicher </openwb-base-heading>
+    <openwb-base-alert subtype="warning">
+      Ist die <strong>Benutzerverwaltung</strong> aktiviert, dann muss ein Benutzer mit Schreibrechten für die
+      entsprechenden Topics angelegt werden, damit openWB die Daten akzeptiert. Hierfür werden automatisch die
+      benötigten Berechtigungen in der Rolle
+      <strong>"Daten: Speicher '{{ component.name }}' ({{ component.id }}) MQTT-Input"</strong> angelegt, die einem
+      Benutzer zugewiesen werden kann.
+    </openwb-base-alert>
     <openwb-base-alert subtype="info">
       Die folgenden Topics sind für einen reibungslosen Betrieb unbedingt erforderlich:
       <ul>
@@ -84,7 +91,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            openWB/set/mqtt/bat/{{ component.id }}/set/power_limit
+            openWB/mqtt/bat/{{ component.id }}/set/power_limit
           </openwb-base-copy-to-clipboard>
           <br />
           Entladeleistung in Watt (Float), die im Speicher gesetzt werden muss.<br />

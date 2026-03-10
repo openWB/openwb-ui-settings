@@ -103,7 +103,7 @@ export default {
   },
   data() {
     return {
-      mqttTopicsToSubscribe: [`openWB/pv/${this.inverter.id}/get/+`],
+      mqttTopics: [{ topic: `openWB/pv/${this.inverter.id}/get/+`, writeable: false }],
     };
   },
   computed: {

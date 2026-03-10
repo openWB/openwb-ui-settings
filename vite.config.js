@@ -25,7 +25,7 @@ export default defineConfig(({ command, mode }) => {
       myConfiguration.server = {
         proxy: {
           "/ws": {
-            target: "ws://localhost:9001",
+            target: "ws://localhost:9003",
             ws: true,
           },
         },
@@ -68,9 +68,9 @@ export default defineConfig(({ command, mode }) => {
               if (id.includes("jquery")) {
                 return "vendor-jquery";
               }
-              if (id.includes("sortablejs")) {
-                return "vendor-sortablejs";
-              }
+              // if (id.includes("sortablejs")) {
+              //   return "vendor-sortablejs";
+              // }
               // if (id.includes("browserify")) {
               //   return "vendor-browserify";
               // }

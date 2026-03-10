@@ -4,14 +4,26 @@
       Dieser Ladepunkt-Typ darf nur in Kombination mit dem Simulator zur Fehleranalyse genutzt werden. Eine andere
       Verwendung ist laut den Nutzungsbedingungen untersagt.
     </openwb-base-alert>
+    <openwb-base-alert subtype="warning">
+      Ist die <strong>Benutzerverwaltung</strong> aktiviert, dann muss ein Benutzer mit Schreibrechten für die
+      entsprechenden Topics angelegt werden, damit openWB die Daten akzeptiert. Hierfür werden automatisch die
+      benötigten Berechtigungen in der Rolle
+      <strong>"Daten: Ladepunkt '{{ chargePoint.name }}' ({{ chargePoint.id }}) MQTT-Input"</strong> angelegt, die einem
+      Benutzer zugewiesen werden kann.
+    </openwb-base-alert>
     <openwb-base-alert subtype="info">
-      Das MQTT Modul stellt keine aktive Verbindung her, sondern erwartet, dass die Daten von speziellen Topics im
-      Broker gelesen bzw. geschrieben werden. Alle Daten werden als gültiges JSON gesendet und auch so erwartet! Zahlen
-      mit Nachkommastellen (Float) verwenden einen Punkt als Dezimaltrenner (internationales Format).<br />
-      Ab Version 2.1.8 wurden die Topics überarbeitet. Die bisherigen Topics openWB/set/chargepoint/id/get/... und
-      openWB/chargepoint/set/... bleiben aus Gründen der Abwärtskompatibilität weiterhin nutzbar. Wir empfehlen, auf die
-      neuen Topics umzusteigen. Dies ermöglicht die Beseitigung von Einschränkungen, wie z. B. die fehlende Verrechnung
-      bei Hybrid-Systemen oder die Berechnung fehlender Werte, wie der Phasen-Leistung aus Spannung und Stromstärken.
+      <p>
+        Das MQTT Modul stellt keine aktive Verbindung her, sondern erwartet, dass die Daten von speziellen Topics im
+        Broker gelesen bzw. geschrieben werden. Alle Daten werden als gültiges JSON gesendet und auch so erwartet!
+        Zahlen mit Nachkommastellen (Float) verwenden einen Punkt als Dezimaltrenner (internationales Format).
+      </p>
+      <p>
+        In Version 2.1.8 wurden die Topics überarbeitet. Die bisherigen Topics "openWB/set/chargepoint/id/get/..." und
+        "openWB/chargepoint/set/..." bleiben aus Gründen der Abwärtskompatibilität weiterhin nutzbar. Wir empfehlen, auf
+        die neuen Topics umzusteigen. Dies ermöglicht die Beseitigung von Einschränkungen, wie z. B. die fehlende
+        Verrechnung bei Hybrid-Systemen oder die Berechnung fehlender Werte, wie der Phasen-Leistung aus Spannung und
+        Stromstärken.
+      </p>
       <ol>
         <li>
           von openWB gesendete Topics

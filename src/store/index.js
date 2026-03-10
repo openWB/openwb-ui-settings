@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
 
-// ChartLegend-Modul for Legenden-States
+// ChartLegend-Modul for Legend-States
 const chartLegend = {
   namespaced: true,
   state: () => ({
@@ -24,8 +24,10 @@ let states = {
   mqtt: {}, // will be filled with mqtt data
   mqttSubscriptions: {}, // will be filled with mqtt subscriptions count
   local: {
+    modalBlockerVisible: false,
     reloadRequired: false,
     savingData: false,
+    username: null,
   },
 };
 
@@ -39,6 +41,7 @@ if (import.meta.env.MODE !== "production") {
     text5: "Benutzername",
     text6: "12:34",
     text7: "2021-10-31",
+    text8: "Text mit Add-Button",
     color1: "#ff0000",
     color2: "#0000ff",
     number1: 5,
@@ -142,6 +145,17 @@ export default createStore({
         }
       }
     },
+    addClientMessage(state, message) {
+      if (!state.local.messages) {
+        state.local.messages = {};
+      }
+      state.local.messages[message.timestamp] = message.payload;
+    },
+    removeClientMessage(state, timestamp) {
+      if (state.local.messages && timestamp in state.local.messages) {
+        delete state.local.messages[timestamp];
+      }
+    },
     addSubscription(state, topic) {
       // add subscription to list or increment count
       if (topic in state.mqttSubscriptions) {
@@ -209,6 +223,31 @@ export default createStore({
           }, 100);
         }
       });
+    },
+    accessAllowed(state) {
+      return (page) => {
+        return new Promise((resolve) => {
+          const topic = `openWB/system/security/access/${page}`;
+          if (state.mqtt[topic] !== undefined) {
+            resolve(state.mqtt[topic]);
+          } else {
+            var timer, interval;
+            // add general timeout if topic not set
+            timer = setTimeout(() => {
+              clearInterval(interval);
+              resolve(false);
+            }, 5000);
+            // check until we received valid data
+            interval = setInterval(() => {
+              if (state.mqtt[topic] !== undefined) {
+                clearTimeout(timer);
+                clearInterval(interval);
+                resolve(state.mqtt[topic]);
+              }
+            }, 100);
+          }
+        });
+      };
     },
     subscriptionCount: (state) => (topic) => {
       return state.mqttSubscriptions[topic] || 0;

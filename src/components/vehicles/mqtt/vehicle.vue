@@ -1,5 +1,12 @@
 <template>
   <div class="vehicle-soc-mqtt">
+    <openwb-base-alert subtype="warning">
+      Ist die <strong>Benutzerverwaltung</strong> aktiviert, dann muss ein Benutzer mit Schreibrechten für die
+      entsprechenden Topics angelegt werden, damit openWB die Daten akzeptiert. Hierfür werden automatisch die
+      benötigten Berechtigungen in der Rolle
+      <strong>"Daten: Fahrzeug '{{ vehicle.name }}' ({{ vehicleId }}) MQTT-Input"</strong> angelegt, die einem Benutzer
+      zugewiesen werden kann.
+    </openwb-base-alert>
     <openwb-base-alert subtype="info">
       <ul>
         <li>

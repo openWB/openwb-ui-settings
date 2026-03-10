@@ -29,7 +29,7 @@ export default {
   mixins: [ComponentState],
   emits: ["switchPage", "endAssistant", "sendCommand"],
   data: () => ({
-    mqttTopicsToSubscribe: [],
+    mqttTopics: [],
   }),
   methods: {
     nextPage() {

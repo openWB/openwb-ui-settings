@@ -10,6 +10,11 @@ describe("OpenwbBaseButtonInput.vue", () => {
   // check title prop
   it("render title", () => {
     const wrapper = mount(OpenwbBaseButtonInput, {
+      global: {
+        stubs: {
+          OpenwbBaseTooltip: { template: "<span><slot /></span>" },
+        },
+      },
       props: { title, buttonText, buttonSubtype },
     });
     const titleLabel = wrapper.find("div.col-form-label");

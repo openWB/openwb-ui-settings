@@ -77,70 +77,78 @@
       </openwb-base-card>
 
       <openwb-base-card title="Ein-/Ausgangs-Aktionen">
-        <openwb-base-card
-          v-for="(installedIoAction, installedIoActionKey) in installedIoActions"
-          :key="installedIoActionKey"
-          :title="installedIoAction?.name + ' (ID: ' + installedIoAction?.id + ')'"
-          :collapsible="true"
-          :collapsed="true"
-          subtype="primary"
-        >
-          <template #actions="slotProps">
-            <openwb-base-avatar
-              v-if="!slotProps.collapsed"
-              class="bg-danger clickable"
-              @click="removeIoActionModal(installedIoActionKey, $event)"
-            >
-              <font-awesome-icon :icon="['fas', 'trash']" />
-            </openwb-base-avatar>
-          </template>
-          <openwb-base-text-input
-            title="Bezeichnung"
-            subtype="text"
-            :model-value="installedIoAction?.name"
-            @update:model-value="updateState(installedIoActionKey, $event, 'name')"
-          />
-          <openwb-base-text-input
-            title="Modul"
-            subtype="text"
-            disabled
-            readonly
-            :model-value="[installedIoAction?.group, installedIoAction?.type].join(' / ')"
-          />
-          <hr />
-          <openwb-io-action-proxy
-            v-if="installedIoAction !== undefined"
-            :io-action="installedIoAction"
-            :io-devices="installedIoDevices"
-            :installed-charge-points="installedChargePoints"
-            :installed-components="installedComponents"
-            @update:configuration="updateConfiguration(installedIoActionKey, $event)"
-          />
-        </openwb-base-card>
-        <hr v-if="Object.keys(installedIoActions).length > 0" />
-        <openwb-base-select-input
-          v-if="Object.keys(installedIoDevices).length > 0"
-          title="Verfügbare Aktionen"
-          not-selected="Bitte auswählen"
-          :groups="ioActionList"
-          :model-value="ioActionToAdd"
-          :add-button="true"
-          @update:model-value="ioActionToAdd = $event"
-          @input:add="addIoAction"
-        >
-          <template #help> Bitte eine Ein-/Ausgangs-Aktion auswählen, die hinzugefügt werden soll. </template>
-        </openwb-base-select-input>
         <openwb-base-alert
-          v-else
-          subtype="warning"
+          v-if="$store.state.mqtt['openWB/general/extern'] === true"
+          subtype="info"
         >
-          Keine Ein-/Ausgangs-Geräte vorhanden!<br />
-          Bitte füge zuerst ein Ein-/Ausgangs-Gerät hinzu, bevor Du Aktionen konfigurierst.
+          Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
         </openwb-base-alert>
+        <div v-else>
+          <openwb-base-card
+            v-for="(installedIoAction, installedIoActionKey) in installedIoActions"
+            :key="installedIoActionKey"
+            :title="installedIoAction?.name + ' (ID: ' + installedIoAction?.id + ')'"
+            :collapsible="true"
+            :collapsed="true"
+            subtype="primary"
+          >
+            <template #actions="slotProps">
+              <openwb-base-avatar
+                v-if="!slotProps.collapsed"
+                class="bg-danger clickable"
+                @click="removeIoActionModal(installedIoActionKey, $event)"
+              >
+                <font-awesome-icon :icon="['fas', 'trash']" />
+              </openwb-base-avatar>
+            </template>
+            <openwb-base-text-input
+              title="Bezeichnung"
+              subtype="text"
+              :model-value="installedIoAction?.name"
+              @update:model-value="updateState(installedIoActionKey, $event, 'name')"
+            />
+            <openwb-base-text-input
+              title="Modul"
+              subtype="text"
+              disabled
+              readonly
+              :model-value="[installedIoAction?.group, installedIoAction?.type].join(' / ')"
+            />
+            <hr />
+            <openwb-io-action-proxy
+              v-if="installedIoAction !== undefined"
+              :io-action="installedIoAction"
+              :io-devices="installedIoDevices"
+              :installed-charge-points="installedChargePoints"
+              :installed-components="installedComponents"
+              @update:configuration="updateConfiguration(installedIoActionKey, $event)"
+            />
+          </openwb-base-card>
+          <hr v-if="Object.keys(installedIoActions).length > 0" />
+          <openwb-base-select-input
+            v-if="Object.keys(installedIoDevices).length > 0"
+            title="Verfügbare Aktionen"
+            not-selected="Bitte auswählen"
+            :groups="ioActionList"
+            :model-value="ioActionToAdd"
+            :add-button="true"
+            @update:model-value="ioActionToAdd = $event"
+            @input:add="addIoAction"
+          >
+            <template #help> Bitte eine Ein-/Ausgangs-Aktion auswählen, die hinzugefügt werden soll. </template>
+          </openwb-base-select-input>
+          <openwb-base-alert
+            v-else
+            subtype="warning"
+          >
+            Keine Ein-/Ausgangs-Geräte vorhanden!<br />
+            Bitte füge zuerst ein Ein-/Ausgangs-Gerät hinzu, bevor Du Aktionen konfigurierst.
+          </openwb-base-alert>
+        </div>
       </openwb-base-card>
       <openwb-base-submit-buttons
         form-name="ioConfigForm"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -177,13 +185,14 @@ export default {
   emits: ["save", "reset", "defaults", "send-command"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/system/configurable/io_devices",
-        "openWB/system/io/+/config",
-        "openWB/system/configurable/io_actions",
-        "openWB/io/action/+/config",
-        "openWB/chargepoint/+/config",
-        "openWB/system/device/+/component/+/config",
+      mqttTopics: [
+        { topic: "openWB/chargepoint/+/config", writeable: false },
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/io/action/+/config", writeable: true },
+        { topic: "openWB/system/configurable/io_actions", writeable: false },
+        { topic: "openWB/system/configurable/io_devices", writeable: false },
+        { topic: "openWB/system/device/+/component/+/config", writeable: false },
+        { topic: "openWB/system/io/+/config", writeable: true },
       ],
       showIoDeviceDeleteModal: false,
       modalIoDeviceIndex: undefined,
@@ -196,7 +205,12 @@ export default {
   computed: {
     ioDeviceList: {
       get() {
-        return this.$store.state.mqtt["openWB/system/configurable/io_devices"];
+        let deviceList = this.$store.state.mqtt["openWB/system/configurable/io_devices"];
+        if (this.$store.state.mqtt["openWB/general/extern"] === true) {
+          // filter out devices that are not compatible with secondary mode
+          return deviceList.filter((device) => device.value == "add_on");
+        }
+        return deviceList;
       },
     },
     installedIoDevices() {
@@ -250,10 +264,7 @@ export default {
         : "I/O-Gerät " + ioDeviceIndex;
     },
     addIoDevice() {
-      this.$emit("send-command", {
-        command: "addIoDevice",
-        data: { type: this.ioDeviceToAdd },
-      });
+      this.sendSystemCommand("addIoDevice", { type: this.ioDeviceToAdd });
     },
     removeIoDeviceModal(ioDevice, event) {
       // prevent further processing of the click event
@@ -264,17 +275,11 @@ export default {
     removeIoDevice(ioDeviceIndex, event) {
       this.showIoDeviceDeleteModal = false;
       if (event == "confirm") {
-        this.$emit("send-command", {
-          command: "removeIoDevice",
-          data: { id: ioDeviceIndex },
-        });
+        this.sendSystemCommand("removeIoDevice", { id: ioDeviceIndex });
       }
     },
     addIoAction() {
-      this.$emit("send-command", {
-        command: "addIoAction",
-        data: { type: this.ioActionToAdd },
-      });
+      this.sendSystemCommand("addIoAction", { type: this.ioActionToAdd });
     },
     removeIoActionModal(ioAction, event) {
       // prevent further processing of the click event
@@ -285,10 +290,7 @@ export default {
     removeIoAction(ioActionIndex, event) {
       this.showIoActionDeleteModal = false;
       if (event == "confirm") {
-        this.$emit("send-command", {
-          command: "removeIoAction",
-          data: { id: ioActionIndex },
-        });
+        this.sendSystemCommand("removeIoAction", { id: ioActionIndex });
       }
     },
     sendSystemCommand(command, data) {

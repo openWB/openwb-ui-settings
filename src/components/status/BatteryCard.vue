@@ -13,6 +13,16 @@
       {{ formatNumberTopic(baseTopic + "/get/power", 1, 1, 0.001) }}&nbsp;kW /
       {{ $store.state.mqtt[baseTopic + "/get/soc"] }}&nbsp;%
     </template>
+    <!-- Status -->
+    <openwb-base-card
+      v-if="$store.state.mqtt[baseTopic + '/get/state_str']?.length > 0"
+      title="Status der aktiven Speichersteuerung"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      {{ $store.state.mqtt[baseTopic + "/get/state_str"] }}
+    </openwb-base-card>
     <!-- Aktuelle Werte -->
     <openwb-base-card
       title="Aktuelle Werte"
@@ -110,7 +120,7 @@ export default {
   },
   data() {
     return {
-      mqttTopicsToSubscribe: [`openWB/bat/${this.battery.id}/get/+`],
+      mqttTopics: [{ topic: `openWB/bat/${this.battery.id}/get/+`, writeable: false }],
     };
   },
   computed: {
