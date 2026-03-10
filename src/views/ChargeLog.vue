@@ -793,7 +793,7 @@ export default {
             JSON.stringify(this.chargePointList[0]),
           );
           if (this.chargePointList.length > 0) {
-            this.chargeLogRequestData.filter.chargepoint.id = this.chargePointList[0].value;
+            this.chargeLogRequestData.filter.chargepoint.id = [this.chargePointList[0].value];
           }
         }
         // flatten array if only one entry which is an array
@@ -814,7 +814,7 @@ export default {
             JSON.stringify(this.chargeModeList[0]),
           );
           if (this.chargeModeList.length > 0) {
-            this.chargeLogRequestData.filter.vehicle.chargemode = this.chargeModeList[0].value;
+            this.chargeLogRequestData.filter.vehicle.chargemode = [this.chargeModeList[0].value];
           }
         }
         // flatten array if only one entry which is an array
@@ -834,7 +834,7 @@ export default {
         if (this.chargeLogRequestData.filter.vehicle.id.length == 0) {
           console.debug("no vehicle id filter set, setting to first available", JSON.stringify(this.vehicleList[0]));
           if (this.vehicleList.length > 0) {
-            this.chargeLogRequestData.filter.vehicle.id = this.vehicleList[0].value;
+            this.chargeLogRequestData.filter.vehicle.id = [this.vehicleList[0].value];
           }
         }
         // flatten array if only one entry which is an array
