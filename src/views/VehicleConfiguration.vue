@@ -176,6 +176,8 @@
                 Die SoC-Abfrage erfolgt automatisch beim Anstecken des Fahrzeuges und zusätzlich über einstellbare
                 Abfrageintervalle während des Ladens und Nichtladens. Die Abfrage kann auch manuell durch Klick auf den
                 Reload-Pfeil auf der Hauptseite ausgelöst werden.<br />
+                Während des Ladevorgangs wird der Zeitstempel der SoC-Abfrage geprüft.
+Ist dieser älter als der Zeitstempel der vorherigen Abfrage, wird das Ergebnis verworfen, stattdessen eine Berechnung durchgeführt und auch so im Fahrzeugstatus vermerkt.<br />
                 Wenn eine Abfrage fehlschlägt, wird noch drei weitere Male im Abstand von 5 Minuten versucht, den SoC
                 abzufragen. Wenn dies nicht erfolgreich ist, wird der SoC auf 0% gesetzt um zu vermeiden, dass ein Auto
                 beim SoC-basierten Laden nicht geladen wird. Die Abfrage erfolgt dann wieder in den oben genannten
