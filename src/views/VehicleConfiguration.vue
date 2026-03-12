@@ -1099,28 +1099,6 @@
                   verbaute Umschaltmöglichkeit zwischen einer und mehreren Phasen (sog. 1p3p).
                 </template>
               </openwb-base-button-group-input>
-              <openwb-base-button-group-input
-                title="Einspeisegrenze beachten"
-                :buttons="[
-                  {
-                    buttonValue: false,
-                    text: 'Nein',
-                    class: 'btn-outline-danger',
-                  },
-                  {
-                    buttonValue: true,
-                    text: 'Ja',
-                    class: 'btn-outline-success',
-                  },
-                ]"
-                :model-value="template.chargemode.pv_charging.feed_in_limit"
-                @update:model-value="updateState(templateKey, $event, 'chargemode.pv_charging.feed_in_limit')"
-              >
-                <template #help>
-                  Erläuterung siehe "Ladeeinstellungen" -> "Überschuss-Laden" -> "Regelparameter" -> "Regelpunkt
-                  Einspeisegrenze"
-                </template>
-              </openwb-base-button-group-input>
             </openwb-base-card>
             <openwb-base-card
               :ref="`card-${templateKey}-scheduled_charging`"
