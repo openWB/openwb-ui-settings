@@ -3,14 +3,18 @@
     <openwb-base-modal-dialog
       :show="showModalBlocker"
       :title="title"
-      subtype="dark"
+      :subtype="modalType"
       :prevent-close="true"
       :buttons="myButtons"
       @modal-result="handleModalResult($event)"
     >
       <p v-if="bootInProgress">Der Systemstart ist noch nicht abgeschlossen.</p>
-      <p v-if="updateInProgress">Es wird eine Systemaktualisierung ausgeführt.</p>
-      <p v-if="!(bootInProgress || updateInProgress) && reloadRequired">Bitte die Seite neu laden.</p>
+      <p v-else-if="updateInProgress">Es wird eine Systemaktualisierung ausgeführt.</p>
+      <p v-else-if="mqttClientDisconnected">
+        Die Verbindung zur openWB wurde unterbrochen.<br />
+        Es wird versucht, die Verbindung wieder herzustellen...
+      </p>
+      <p v-else-if="reloadRequired">Bitte die Seite neu laden.</p>
       <p v-else>Bitte warten...</p>
     </openwb-base-modal-dialog>
   </div>
@@ -34,13 +38,15 @@ export default {
     title() {
       if (this.bootInProgress || this.updateInProgress) {
         return "openWB ist noch nicht bereit";
+      } else if (this.mqttClientDisconnected) {
+        return "Verbindung zur openWB verloren";
       } else if (this.reloadRequired) {
         return "Neues Laden der Seite erforderlich";
       }
       return "???";
     },
     myButtons() {
-      if (!(this.bootInProgress || this.updateInProgress) && this.reloadRequired) {
+      if (!(this.bootInProgress || this.updateInProgress || this.mqttClientDisconnected) && this.reloadRequired) {
         return [
           {
             text: "Jetzt neu laden",
@@ -50,6 +56,9 @@ export default {
         ];
       }
       return [];
+    },
+    mqttClientDisconnected() {
+      return !this.$root.$data.connected;
     },
     bootInProgress() {
       if (this.$store.state.mqtt["openWB/system/boot_done"] == undefined) {
@@ -69,8 +78,17 @@ export default {
     showModalBlocker() {
       return this.$store.state.local.modalBlockerVisible;
     },
+    modalType() {
+      if (this.mqttClientDisconnected) {
+        return "danger";
+      }
+      return "dark";
+    },
   },
   watch: {
+    mqttClientDisconnected() {
+      this.updateLocalStore();
+    },
     bootInProgress() {
       this.updateLocalStore();
     },
@@ -85,7 +103,7 @@ export default {
     updateLocalStore() {
       this.$store.commit("storeLocal", {
         name: "modalBlockerVisible",
-        value: this.bootInProgress || this.updateInProgress || this.reloadRequired,
+        value: this.bootInProgress || this.updateInProgress || this.reloadRequired || this.mqttClientDisconnected,
       });
     },
     handleModalResult(event) {

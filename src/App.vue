@@ -17,6 +17,7 @@
     </div>
   </div>
   <page-footer />
+  <mqtt-connection-state :connected="connected" />
   <user-info @send-command="sendCommand" />
   <messages />
   <blocker />
@@ -26,6 +27,7 @@
 import NavBar from "./components/OpenwbPageNavbar.vue";
 import PageFooter from "./components/OpenwbPageFooter.vue";
 import UserInfo from "./components/OpenwbPageUser.vue";
+import MqttConnectionState from "./components/OpenwbPageMqttConnectionState.vue";
 import Messages from "./components/OpenwbPageMessages.vue";
 import Blocker from "./components/OpenwbPageBlocker.vue";
 import mqtt from "mqtt";
@@ -36,14 +38,14 @@ export default {
     NavBar,
     PageFooter,
     UserInfo,
+    MqttConnectionState,
     Messages,
     Blocker,
   },
   data() {
     return {
-      client: {
-        connected: false,
-      },
+      client: null,
+      connected: false,
       connection: {
         protocol: location.protocol == "https:" ? "wss" : "ws",
         protocolVersion: 5,
@@ -79,6 +81,8 @@ export default {
     topicList() {
       return Object.keys(this.$store.state.mqtt);
     },
+    // connected wird jetzt direkt aus data verwendet
+    // ...existing code...
     nodeEnv() {
       return import.meta.env.MODE;
     },
@@ -205,6 +209,7 @@ export default {
       console.debug("connecting to broker:", connectUrl);
       this.client = mqtt.connect(connectUrl, options);
       this.client.on("connect", () => {
+        this.connected = true;
         console.debug("Connection succeeded! ClientId: ", this.client.options.clientId);
         if (user) {
           this.postClientMessage(`Angemeldet als "${user}".`, "success");
@@ -218,30 +223,31 @@ export default {
           "openWB/system/installAssistantDone",
           "openWB/system/security/access/+",
         ]);
-        // after one second check if we received any data, if not, the connection is probably not working and we should inform the user
+        // after one second check if we received any data, if not, the connection is probably not working
         this.dataTimeout = setTimeout(() => {
           console.warn(
             "No data received after 1 second, connection might not be working. Removing mqtt cookie and trying again with anonymous connection.",
           );
           if (user) {
-            this.postClientMessage(
-              "Es wurden zwar Anmeldeinformationen gefunden, aber nach 1 Sekunde keine Daten empfangen. Die Verbindung scheint nicht zu funktionieren. " +
-                "Anmeldedaten werden entfernt und es wird erneut mit anonymer Verbindung versucht.",
-              "warning",
-            );
+            // this.postClientMessage(
+            //   "Es wurden zwar Anmeldeinformationen gefunden, aber nach 1 Sekunde keine Daten empfangen. Die Verbindung scheint nicht zu funktionieren. " +
+            //     "Anmeldedaten werden entfernt und es wird erneut mit anonymer Verbindung versucht.",
+            //   "warning",
+            // );
             this.$cookies.remove("mqtt");
             this.reconnectMqttClient();
           } else {
-            this.postClientMessage(
-              "Es wurden keine Anmeldeinformationen gefunden und nach 1 Sekunde keine Daten empfangen. Die Verbindung scheint nicht zu funktionieren.",
-              "danger",
-            );
+            // this.postClientMessage(
+            //   "Es wurden keine Anmeldeinformationen gefunden und nach 1 Sekunde keine Daten empfangen. Die Verbindung scheint nicht zu funktionieren.",
+            //   "danger",
+            // );
           }
         }, 1000);
       });
       this.client.on("error", (error) => {
+        this.connected = false;
         console.error("Connection failed", error);
-        this.postClientMessage("Verbindungsfehler:<br />" + error.message, "danger");
+        // this.postClientMessage("Verbindungsfehler:<br />" + error.message, "danger");
         this.$cookies.remove("mqtt");
         this.$store.commit("storeLocal", { name: "username", value: null });
         this.reconnectMqttClient();
@@ -272,15 +278,19 @@ export default {
         }
       });
       this.client.on("end", () => {
+        this.connected = false;
         console.error("mqtt connection ended");
       });
       this.client.on("close", () => {
+        this.connected = false;
         console.error("mqtt connection closed");
       });
       this.client.on("offline", () => {
+        this.connected = false;
         console.error("mqtt connection offline");
       });
       this.client.on("disconnect", () => {
+        this.connected = false;
         console.error("mqtt connection disconnected");
       });
       this.client.on("reconnect", () => {
@@ -288,9 +298,10 @@ export default {
       });
     },
     endConnection() {
-      if (this.client?.connected) {
+      if (this.connected) {
         console.warn("Ending mqtt connection...");
         this.client.end();
+        this.connected = false;
         this.$store.commit("storeLocal", { name: "username", value: null });
         if (this.dataTimeout) {
           clearTimeout(this.dataTimeout);
