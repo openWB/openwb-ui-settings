@@ -5,6 +5,22 @@
       Ladepunkt wird dann der aktuelle SoC errechnet. Ausschlaggebend für die Qualität dieses Moduls sind die beiden
       Einstellungen "Kapazität der Batterie" und "Wirkungsgrad der Ladeelektronik" in dem Fahrzeug-Profil.
     </openwb-base-alert>
+    <openwb-base-button-group-input
+      title="Beim nächsten Anstecken, wenn kein manueller SoC eingegben wird, ..."
+      :buttons="[
+        {
+          buttonValue: false,
+          text: 'vom letzten bekannten SoC weiter rechnen',
+        },
+        {
+          buttonValue: true,
+          text: 'nach dem Abstecken auf 0% zurücksetzen und in jedem Fall laden',
+        },
+      ]"
+      :model-value="vehicle.configuration.reset_after_unplug"
+      @update:model-value="updateConfiguration($event, 'configuration.reset_after_unplug')"
+    >
+    </openwb-base-button-group-input>
   </div>
 </template>
 
