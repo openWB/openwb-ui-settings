@@ -4,7 +4,10 @@
     defer
     to="#infobar"
   >
-    <div id="connection-state-indicator">
+    <div
+      id="connection-state-indicator"
+      class="ml-2"
+    >
       <openwb-base-tooltip :description="`Verbindung ${connected ? 'hergestellt' : 'getrennt'}`">
         <openwb-base-avatar :class="connected ? 'text-success' : 'bg-danger'">
           <FontAwesomeIcon :icon="connected ? ['fas', 'link'] : ['fas', 'link-slash']" />
