@@ -4,7 +4,10 @@
     defer
     to="#infobar"
   >
-    <div id="user-indicator">
+    <div
+      id="user-indicator"
+      class="ml-2"
+    >
       <span
         v-if="loggedInUser"
         class="pill bg-primary"
@@ -186,7 +189,7 @@ export default {
      * @returns boolean
      */
     userManagementActive() {
-      return this.$store.state.mqtt["openWB/system/security/user_management_active"] !== false;
+      return this.$store.state.mqtt["openWB/system/security/user_management_active"] === true;
     },
     accessAllowed() {
       if (this.$store.state.mqtt["openWB/system/security/access_allowed"] === undefined) {
