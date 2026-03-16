@@ -1709,7 +1709,7 @@ export default {
         console.debug("skipping dataset due to missing rights:", baseObject, objectKey, elementKey);
         return;
       }
-      var elementKeysToAdd = [];
+      let elementKeysToAdd;
       if (this.chartRange == "day") {
         elementKeysToAdd = {
           counter: ["power_average"],
@@ -1741,7 +1741,7 @@ export default {
       if (elementKeysToAdd[baseObject].includes(elementKey)) {
         var index = this.getDatasetIndex(datasetKey);
         if (index == undefined) {
-          index = this.addDataset(baseObject, objectKey, elementKey, datasetKey);
+          this.addDataset(baseObject, objectKey, elementKey, datasetKey);
         }
       } else {
         console.debug("skipping dataset:", datasetKey);

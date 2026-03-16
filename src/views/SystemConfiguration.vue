@@ -439,7 +439,7 @@ export default {
         { label: "Experimentell", options: [] },
       ];
       if (source !== undefined) {
-        var targetGroup = 0;
+        let targetGroup;
         for (const [key, value] of Object.entries(source)) {
           if (officialBranches.includes(key)) {
             targetGroup = 0;
@@ -463,7 +463,7 @@ export default {
         const splitVersion = (version) => {
           const versionParts = version.split("-");
           const versionSemver = versionParts[0].split(".");
-          let versionSuffix = [];
+          let versionSuffix;
           if (versionParts.length > 1) {
             versionSuffix = versionParts[1].split(".");
           } else {
