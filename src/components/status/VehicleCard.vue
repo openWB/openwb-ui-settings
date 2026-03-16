@@ -40,13 +40,19 @@
     >
       <div class="row">
         <div class="col pr-0 text-right">Ladestand</div>
-        <div class="col pr-0 text-right">Reichweite</div>
-        <div class="col pr-0 text-right">Letzter Zeitstempel</div>
+        <div class="col text-right text-monospace">{{ soc }}&nbsp;%</div>
       </div>
       <div class="row">
-        <div class="col text-right text-monospace">{{ soc }}&nbsp;%</div>
+        <div class="col pr-0 text-right">Reichweite</div>
         <div class="col text-right text-monospace">{{ socRange }}&nbsp;km</div>
+      </div>
+      <div class="row">
+        <div class="col pr-0 text-right">Letzter Zeitstempel</div>
         <div class="col text-right text-monospace">{{ socTimestamp }}</div>
+      </div>
+      <div class="row">
+        <div class="col pr-0 text-right">Km-Stand</div>
+        <div class="col text-right text-monospace">{{ socOdometer }}&nbsp;km</div>
       </div>
     </openwb-base-card>
   </status-card>
@@ -117,6 +123,16 @@ export default {
           return Math.round(this.$store.state.mqtt[this.baseTopic + "/get/range"]);
         } else {
           return 0;
+        }
+      },
+    },
+    socOdometer: {
+      get() {
+        if (this.$store.state.mqtt[this.baseTopic + "/get/odometer"] !== undefined
+            && this.$store.state.mqtt[this.baseTopic + "/get/odometer"] !== null ) {
+          return Math.round(this.$store.state.mqtt[this.baseTopic + "/get/odometer"]);
+        } else {
+          return "-";
         }
       },
     },
