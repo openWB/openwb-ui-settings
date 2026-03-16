@@ -124,7 +124,7 @@ export default createStore({
     updateTopic(state, message) {
       // helper function to update nested objects py path
       const setPath = (object, path, value) =>
-        path.split(".").reduce((o, p, i) => (o[p] = path.split(".").length === ++i ? value : o[p] || {}), object);
+        path.split(".").reduce((o, p, i) => (o[p] = path.split(".").length === i + 1 ? value : o[p] || {}), object);
 
       if (message.topic in state.mqtt || !(message.topic in state.examples)) {
         if (message.objectPath != undefined) {

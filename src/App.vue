@@ -258,7 +258,7 @@ export default {
           this.dataTimeout = null;
         }
         if (message.toString().length > 0) {
-          let myPayload = undefined;
+          let myPayload;
           try {
             myPayload = JSON.parse(message.toString());
           } catch (error) {

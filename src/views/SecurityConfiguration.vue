@@ -844,7 +844,7 @@ export default {
           let id = parts[1];
           let type = componentTypeName(parts);
           let name = "";
-          let action = "";
+          let action;
           switch (parts[0]) {
             case "counter":
             case "inverter":
