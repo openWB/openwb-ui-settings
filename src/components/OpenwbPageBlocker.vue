@@ -41,7 +41,7 @@ export default {
       } else if (this.mqttClientDisconnected) {
         return "Verbindung zur openWB verloren";
       } else if (this.reloadRequired) {
-        return "Neues Laden der Seite erforderlich";
+        return "Die Seite muss neu geladen werden";
       }
       return "???";
     },
@@ -79,7 +79,7 @@ export default {
       return this.$store.state.local.modalBlockerVisible;
     },
     modalType() {
-      if (this.mqttClientDisconnected) {
+      if (this.mqttClientDisconnected && !(this.bootInProgress || this.updateInProgress)) {
         return "danger";
       }
       return "dark";

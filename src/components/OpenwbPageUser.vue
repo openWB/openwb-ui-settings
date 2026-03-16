@@ -235,6 +235,9 @@ export default {
     },
   },
   watch: {
+    userManagementActive() {
+      this.checkAutoLogin();
+    },
     loggedInUser(newValue) {
       if (newValue) {
         this.checkAutoLogin();
