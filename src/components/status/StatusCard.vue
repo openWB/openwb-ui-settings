@@ -125,7 +125,7 @@ export default {
       }
     },
     hasMessageLineBreaks() {
-      return this.stateMessage.includes('\n'); // Prüft auf Zeilenumbrüche
+      return this.stateMessage.includes("\n"); // Prüft auf Zeilenumbrüche
     },
   },
 };

@@ -15,12 +15,18 @@
       body-bg="white"
       class="py-1 mb-2"
     >
-      <template #header> 
-        <div class="row" v-if="tariffProvider">
+      <template #header>
+        <div
+          v-if="tariffProvider"
+          class="row"
+        >
           <div class="col-6 text-right">Stromtarif:</div>
           <div class="col-6 text-right">{{ tariffProvider }}</div>
         </div>
-        <div class="row" v-if="gridFeeProvider">
+        <div
+          v-if="gridFeeProvider"
+          class="row"
+        >
           <div class="col-6 text-right">Netzentgelte:</div>
           <div class="col-6 text-right">{{ tariffProvider }}</div>
         </div>
@@ -285,7 +291,9 @@ export default {
           });
         }
         dataObject.datasets[0].data = myData;
-        dataObject.todayEnd = new Date(this.chartDataObject.datasets[0].data[0].timestamp).setHours(23, 59, 59, 999).valueOf()
+        dataObject.todayEnd = new Date(this.chartDataObject.datasets[0].data[0].timestamp)
+          .setHours(23, 59, 59, 999)
+          .valueOf();
       } else {
         dataObject.datasets[0].hidden = true;
       }
@@ -328,9 +336,10 @@ export default {
       ) {
         var gridFeeEntries = this.$store.state.mqtt["openWB/optional/ep/grid_fee/get/prices"];
         var gridFeeData = [];
-        var lastTimestampPriceSums = dataObject.dataset[0].slice(-1).timestamp 
+        var lastTimestampPriceSums = dataObject.dataset[0].slice(-1).timestamp;
         for (const [key, value] of Object.entries(gridFeeEntries)) {
-          if (key < lastTimestampPriceSums) { // skiping matching last entry makes results same length
+          if (key < lastTimestampPriceSums) {
+            // skipping matching last entry makes results same length
             gridFeeData.push({
               timestamp: key * 1000,
               price: value * 100000,
