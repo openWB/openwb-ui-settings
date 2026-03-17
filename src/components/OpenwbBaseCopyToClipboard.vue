@@ -38,7 +38,7 @@ export default {
   },
   computed: {
     contentText() {
-      return this.$refs["content"] ? this.$refs["content"].innerText.trim() : "";
+      return this.$refs["content"]?.innerText ? this.$refs["content"].innerText.trim() : "";
     },
     isCopied() {
       return copied.value && text.value === this.contentText;
