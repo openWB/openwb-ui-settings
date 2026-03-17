@@ -6,15 +6,15 @@
       Einstellungen "Kapazität der Batterie" und "Wirkungsgrad der Ladeelektronik" in dem Fahrzeug-Profil.
     </openwb-base-alert>
     <openwb-base-button-group-input
-      title="Beim nächsten Anstecken, wenn kein manueller SoC eingegben wird, ..."
+      title="SoC ohne manuelle Eingabe"
       :buttons="[
         {
           buttonValue: false,
-          text: 'vom letzten bekannten SoC weiter rechnen',
+          text: 'Letzten SoC beibehalten',
         },
         {
           buttonValue: true,
-          text: 'nach dem Abstecken auf 0% zurücksetzen und in jedem Fall laden',
+          text: 'nach dem Abstecken auf 0% zurücksetzen',
         },
       ]"
       :model-value="vehicle.configuration.reset_after_unplug"
