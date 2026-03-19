@@ -2,7 +2,7 @@
   <teleport
     v-if="userManagementActive === true"
     defer
-    to="#infobar"
+    to="#user-target"
   >
     <div
       id="user-indicator"
@@ -12,11 +12,18 @@
         v-if="loggedInUser"
         class="pill bg-primary"
       >
-        <FontAwesomeIcon
-          :icon="['fas', 'circle-user']"
-          size="lg"
-        />
-        <span class="non-selectable"> {{ loggedInUser }} </span>
+        <openwb-base-tooltip :description="`Angemeldet als ${loggedInUser}`">
+          <FontAwesomeIcon
+            :icon="['fas', 'circle-user']"
+            size="lg"
+          />
+          <span
+            v-if="!smallScreen"
+            class="non-selectable"
+          >
+            {{ loggedInUser }}
+          </span>
+        </openwb-base-tooltip>
         <openwb-base-tooltip description="Abmelden">
           <FontAwesomeIcon
             class="text-light clickable px-2"
@@ -177,6 +184,7 @@ export default {
       passwordConfirm: "",
       tokenRequested: false,
       passwordResetRequested: false,
+      smallScreen: false,
     };
   },
   computed: {
@@ -255,7 +263,17 @@ export default {
       this.checkAutoLogin();
     });
   },
+  beforeMount() {
+    window.addEventListener("resize", this.updateScreenSize);
+    this.updateScreenSize();
+  },
+  beforeUnmount() {
+    window.removeEventListener("resize", this.updateScreenSize);
+  },
   methods: {
+    updateScreenSize() {
+      this.smallScreen = window.innerWidth < 576;
+    },
     stringIsEmpty(myString) {
       return !myString || myString.length === 0;
     },

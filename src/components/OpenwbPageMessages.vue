@@ -1,7 +1,7 @@
 <template>
   <teleport
     defer
-    to="nav"
+    to="#message-target"
   >
     <div
       id="message-indicator"
