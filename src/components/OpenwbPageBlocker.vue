@@ -32,6 +32,7 @@ export default {
         { topic: "openWB/system/boot_done", writeable: false },
         { topic: "openWB/system/update_in_progress", writeable: false },
       ],
+      disconnectedTimeout: null,
     };
   },
   computed: {
@@ -86,13 +87,41 @@ export default {
     },
   },
   watch: {
-    mqttClientDisconnected() {
+    mqttClientDisconnected(newValue) {
+      if (newValue === true) {
+        // prevent flickering of the modal in case of short connection losses by waiting 2 seconds before showing the modal
+        // if connection is back in time, the modal will not be shown at all
+        this.disconnectedTimeout = window.setTimeout(() => {
+          if (this.mqttClientDisconnected) {
+            this.updateLocalStore();
+          }
+        }, 2000);
+      } else {
+        if (this.disconnectedTimeout) {
+          clearTimeout(this.disconnectedTimeout);
+          this.disconnectedTimeout = null;
+        }
+        this.updateLocalStore();
+      }
+    },
+    bootInProgress(newValue) {
+      // if reboot begins and update is still in progress, a reload is required after reboot to get the new version of the page
+      if (newValue === true && this.updateInProgress === true) {
+        this.$store.commit("storeLocal", {
+          name: "reloadRequired",
+          value: true,
+        });
+      }
       this.updateLocalStore();
     },
-    bootInProgress() {
-      this.updateLocalStore();
-    },
-    updateInProgress() {
+    updateInProgress(newValue) {
+      // remove required reload if update was aborted without reboot, this catches a failed automatic backup before update
+      if (newValue === false && this.bootInProgress === false) {
+        this.$store.commit("storeLocal", {
+          name: "reloadRequired",
+          value: false,
+        });
+      }
       this.updateLocalStore();
     },
     reloadRequired() {
