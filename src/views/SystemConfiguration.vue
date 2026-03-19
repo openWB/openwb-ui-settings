@@ -568,20 +568,14 @@ export default {
     },
     systemUpdate() {
       this.sendSystemCommand("systemUpdate", {});
-      this.$store.commit("storeLocal", {
-        name: "reloadRequired",
-        value: true,
-      });
+      // reload hint is handled by page blocker
     },
     switchBranch() {
       this.sendSystemCommand("systemUpdate", {
         branch: this.$store.state.mqtt["openWB/system/current_branch"],
         tag: this.selectedTag,
       });
-      this.$store.commit("storeLocal", {
-        name: "reloadRequired",
-        value: true,
-      });
+      // reload hint is handled by page blocker
     },
     filterComponentsByType(components, type) {
       return Object.keys(components)

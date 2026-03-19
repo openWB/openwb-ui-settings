@@ -291,9 +291,7 @@ export default {
           });
         }
         dataObject.datasets[0].data = myData;
-        dataObject.todayEnd = new Date(this.chartDataObject.datasets[0].data[0].timestamp)
-          .setHours(23, 59, 59, 999)
-          .valueOf();
+        dataObject.todayEnd = new Date(dataObject.datasets[0].data[0].timestamp).setHours(23, 59, 59, 999).valueOf();
       } else {
         dataObject.datasets[0].hidden = true;
       }
