@@ -51,7 +51,7 @@
         <div class="col text-right text-monospace">{{ socTimestamp }}</div>
       </div>
       <div class="row">
-        <div class="col pr-0 text-right">Km-Stand</div>
+        <div class="col pr-0 text-right">Kilometerstand</div>
         <div class="col text-right text-monospace">{{ socOdometer }}&nbsp;km</div>
       </div>
     </openwb-base-card>
