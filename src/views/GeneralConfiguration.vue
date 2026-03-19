@@ -508,7 +508,7 @@
           >
             <template #title>
               <font-awesome-icon :icon="['fas', 'car']" />
-              Km-Stand
+              Kilometerstand
             </template>
           </openwb-base-button-group-input>
           <openwb-base-button-group-input
