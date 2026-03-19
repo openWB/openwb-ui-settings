@@ -336,10 +336,11 @@
         </li>
       </ul>
     </div>
-    <div
-      id="infobar"
-      class="ml-auto d-flex flex-row align-items-center"
-    />
+    <div class="ml-auto d-flex flex-row align-items-center">
+      <div id="info-target" />
+      <div id="user-target" />
+      <div id="message-target" />
+    </div>
   </nav>
 </template>
 
