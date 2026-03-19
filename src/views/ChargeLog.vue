@@ -440,7 +440,7 @@ export default {
             sortable: true,
           },
           {
-            label: "Km-Stand",
+            label: "Kilometerstand",
             field: "vehicle_odometer",
             sortable: true,
           },
