@@ -29,8 +29,8 @@
       title="Anzahl Backups aufbewahren"
       :min="0"
       :step="1"
-      :model-value="backupCloud.configuration.max_backups"
-      @update:model-value="updateConfiguration($event, 'configuration.max_backups')"
+      :model-value="backupCloud.configuration.max_backups != null ? backupCloud.configuration.max_backups : 0"
+      @update:model-value="updateConfiguration($event == null || $event === '' ? 0 : Number($event) || 0, 'configuration.max_backups')"
     >
       <template #help>
         0 = keine automatische Löschung; sonst werden nur die neuesten N Backups behalten.
