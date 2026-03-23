@@ -274,6 +274,7 @@ export default {
         { topic: "openWB/general/chargemode_config/pv_charging/switch_off_threshold", writeable: true },
         { topic: "openWB/general/chargemode_config/pv_charging/switch_on_delay", writeable: true },
         { topic: "openWB/general/chargemode_config/pv_charging/switch_on_threshold", writeable: true },
+        { topic: "openWB/general/extern", writeable: false },
       ],
       calculatedControlMode: undefined,
     };
