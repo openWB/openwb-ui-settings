@@ -817,7 +817,7 @@ export default {
     requestChargeLog() {
       console.debug("requesting charge log with data:", JSON.stringify(this.chargeLogRequestData));
       let myForm = document.forms["chargeLogForm"];
-      if (!myForm.reportValidity()) {
+      if (!myForm?.reportValidity()) {
         console.warn("form invalid");
         return;
       } else {

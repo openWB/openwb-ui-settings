@@ -1763,7 +1763,7 @@ export default {
      */
     requestChart() {
       let myForm = document.forms["chartFilterForm"];
-      if (!myForm.reportValidity()) {
+      if (!myForm?.reportValidity()) {
         console.warn("form invalid");
         return;
       } else {
