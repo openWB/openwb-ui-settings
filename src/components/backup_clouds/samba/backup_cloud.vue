@@ -41,7 +41,7 @@
     />
     <openwb-base-number-input
       title="Anzahl Backups aufbewahren"
-      :model-value="backupCloud.configuration.max_backups != null ? backupCloud.configuration.max_backups : 0"
+      :model-value="backupCloud.configuration.max_backups ?? 0"
       :min="0"
       :max="100"
       required

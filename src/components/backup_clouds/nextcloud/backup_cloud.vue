@@ -29,7 +29,7 @@
       title="Anzahl Backups aufbewahren"
       :min="0"
       :step="1"
-      :model-value="backupCloud.configuration.max_backups != null ? backupCloud.configuration.max_backups : 0"
+      :model-value="backupCloud.configuration.max_backups ?? 0"
       @update:model-value="updateConfiguration($event == null || $event === '' ? 0 : Number($event) || 0, 'configuration.max_backups')"
     >
       <template #help>
