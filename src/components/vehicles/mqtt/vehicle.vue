@@ -45,6 +45,18 @@
           Diese Info ist optional.<br />
           Beispiel: <span class="text-info">356.5</span>
         </li>
+        <li>
+          <openwb-base-copy-to-clipboard
+            class="text-info"
+            tooltip="Topic kopieren"
+          >
+            openWB/set/mqtt/vehicle/{{ vehicleId }}/get/odometer
+          </openwb-base-copy-to-clipboard>
+          <br />
+          Aktueller Km-Stand des Fahrzeugs in km mit Nachkommastellen (Float) oder Ganzzahl<br />
+          Diese Info ist optional.<br />
+          Beispiel: <span class="text-info">20356.5</span>
+        </li>
       </ul>
     </openwb-base-alert>
     <openwb-base-button-group-input
