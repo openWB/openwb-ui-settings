@@ -208,7 +208,7 @@ export default {
         let deviceList = this.$store.state.mqtt["openWB/system/configurable/io_devices"];
         if (this.$store.state.mqtt["openWB/general/extern"] === true) {
           // filter out devices that are not compatible with secondary mode
-          return deviceList.filter((device) => device.value == "add_on");
+          return deviceList?.filter((device) => device.value == "add_on");
         }
         return deviceList;
       },
