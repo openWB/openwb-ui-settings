@@ -200,7 +200,7 @@
               {{ dashIfNotSet(data.value.vehicle_rfid) }}
             </template>
             <template #vehicle_odometer="data">
-              {{ formatOdometer(data.value.vehicle_odometer) }}
+              {{ dashIfNotSet(data.value.vehicle_odometer) }}
             </template>
             <template #vehicle_soc_at_start="data">
               <div class="td-end">
@@ -440,7 +440,7 @@ export default {
             sortable: true,
           },
           {
-            label: "Kilometerstand",
+            label: "Km-Stand",
             field: "vehicle_odometer",
             sortable: true,
           },
@@ -657,6 +657,7 @@ export default {
             '"Lademodus"',
             '"Priorität"',
             '"ID-Tag"',
+            '"Kilometerstand"',
             '"SoC Beginn"',
             '"SoC Ende"',
             '"Reichweite Beginn"',
@@ -827,7 +828,7 @@ export default {
     requestChargeLog() {
       console.debug("requesting charge log with data:", JSON.stringify(this.chargeLogRequestData));
       let myForm = document.forms["chargeLogForm"];
-      if (!myForm?.reportValidity()) {
+      if (!myForm.reportValidity()) {
         console.warn("form invalid");
         return;
       } else {
