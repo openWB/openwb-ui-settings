@@ -657,6 +657,7 @@ export default {
             '"Lademodus"',
             '"Priorität"',
             '"ID-Tag"',
+            '"Kilometerstand"',
             '"SoC Beginn"',
             '"SoC Ende"',
             '"Reichweite Beginn"',
