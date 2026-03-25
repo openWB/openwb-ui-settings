@@ -200,7 +200,7 @@
               {{ dashIfNotSet(data.value.vehicle_rfid) }}
             </template>
             <template #vehicle_odometer="data">
-              {{ dashIfNotSet(data.value.vehicle_odometer) }}
+              {{ formatOdometer(data.value.vehicle_odometer) }}
             </template>
             <template #vehicle_soc_at_start="data">
               <div class="td-end">
