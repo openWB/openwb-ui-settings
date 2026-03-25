@@ -324,7 +324,38 @@
             </router-link>
           </div>
         </li> -->
-        <li class="nav-item nav-separator-before">
+        <li class="nav-item dropdown nav-separator-before nav-separator-after">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            role="button"
+            data-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Abrechnung
+          </a>
+          <div class="dropdown-menu">
+            <!-- add access once implemented in backend
+              v-if="accessAllowed('TenantEnergyConfiguration')"  -->
+            <router-link
+              to="/Billing/TenantEnergy"
+              class="dropdown-item"
+              active-class="active disabled"
+            >
+              Mieterstrom
+            </router-link>
+            <!-- add access once implemented in backend
+              v-if="accessAllowed('CompanyVehicleBilling')"  -->
+            <router-link
+              to="/Billing/CompanyVehicleBilling"
+              class="dropdown-item"
+              active-class="active disabled"
+            >
+              Dienstwagenabrechnung
+            </router-link>
+          </div>
+        </li>
+        <li class="nav-item">
           <a
             class="nav-link"
             href="https://wiki.openwb.de/"

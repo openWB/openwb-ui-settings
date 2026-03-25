@@ -214,6 +214,26 @@ const routes = [
     component: () => import("../views/InstallAssistant.vue"),
   },
   {
+    path: "/Billing/TenantEnergy",
+    name: "TenantEnergy",
+    meta: {
+      heading: "Abrechnung - Mieterstrom",
+      // todo enable permission check for billing pages once implemented
+      checkPermissions: false,
+    },
+    component: () => import("../views/TenantEnergyBilling.vue"),
+  },
+  {
+    path: "/Billing/CompanyVehicleBilling",
+    name: "CompanyVehicleBilling",
+    meta: {
+      heading: "Abrechnung - Dienstwagenabrechnung",
+      // todo enable permission check for billing pages once implemented
+      checkPermissions: false,
+    },
+    component: () => import("../views/CompanyVehicleBilling.vue"),
+  },
+  {
     path: "/Error",
     name: "Error",
     meta: {
