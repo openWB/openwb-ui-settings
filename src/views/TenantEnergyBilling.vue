@@ -1,43 +1,38 @@
 <template>
   <div class="testingStore">
     <form name="testingStoreForm">
-      <openwb-base-card title="Elemente mit BaseSettingElement">
-        <OpenwbBaseHeading> Basiselement </OpenwbBaseHeading>
-        <OpenwbBaseSettingElement>
-          <template #title>
-            <span style="font-style: italic">
-              Styled
-              <span style="font-weight: bold">Title</span> Slot
-            </span>
-          </template>
-          <template #help>
-            Basis-Element für alle weiteren Elemente. Das ist ein
-            <a href="test">Link</a>.
-          </template>
-        </OpenwbBaseSettingElement>
-        <OpenwbBaseHeading> Abgeleitete Elemente </OpenwbBaseHeading>
+      <openwb-base-card title="Verbindung">
+        <openwb-base-text-input
+          title="Benutzername"
+          subtype="user"
+          :model-value="$store.state.examples.text5"
+          @update:model-value="updateState('text5', $event)"
+        >
+          <template #help> Eingabefeld für Benutzernamen </template>
+        </openwb-base-text-input>
+        <openwb-base-text-input
+          title="Passwort"
+          subtype="password"
+          :model-value="$store.state.examples.password1"
+          @update:model-value="updateState('password1', $event)"
+        >
+          <template #help> Das Passwort kann per Klick auf das Auge angezeigt werden. </template>
+        </openwb-base-text-input>
         <openwb-base-button-input
-          title="Button Input"
-          button-text="Klick mich"
+          title=""
+          button-text="Verbinden"
           subtype="info"
         >
-          <template #help> Einfacher Click-Button für Aktionen. </template>
+          <!-- <template #help> Einfacher Click-Button für Aktionen. </template> -->
         </openwb-base-button-input>
-        <openwb-base-button-group-input
-          title="Button Group Input"
-          :buttons="[
-            { buttonValue: 1, text: 'Eins' },
-            { buttonValue: 2, text: 'Zwei' },
-          ]"
-          :model-value="$store.state.examples.buttonGroup1"
-          @update:model-value="updateState('buttonGroup1', $event)"
-        >
-          <template #help>
-            Button-Group Element zur Auswahl weniger Optionen. Bei vielen Optionen besser ein Dropdown verwenden.
-            <a href="test">Link</a>.
-          </template>
-        </openwb-base-button-group-input>
       </openwb-base-card>
+
+      <openwb-base-card title="Status">
+        <OpenwbBaseHeading> Status </OpenwbBaseHeading>
+      </openwb-base-card>
+
+      <!-- ------------------------------------------------------- -->
+      <!-- ------------------------------------------------------- -->
       <openwb-base-card title="Einfache Eingabefelder">
         <openwb-base-text-input
           title="1. Text"
