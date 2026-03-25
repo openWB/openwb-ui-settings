@@ -1,5 +1,10 @@
 <script>
 export default {
+  props: {
+    vehicleId: { required: true, type: Number },
+    vehicle: { required: true, type: Object },
+  },
+  emits: ["update:configuration"],
   computed: {
     systemVersion() {
       const version = this.$store.state.mqtt["openWB/system/version"];
@@ -7,11 +12,6 @@ export default {
       return match ? match[0] : "2.1.8";
     },
   },
-  props: {
-    vehicleId: { required: true, type: Number },
-    vehicle: { required: true, type: Object },
-  },
-  emits: ["update:configuration"],
   methods: {
     updateConfiguration(event, path = undefined) {
       this.$emit("update:configuration", { value: event, object: path });

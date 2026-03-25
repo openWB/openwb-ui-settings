@@ -128,8 +128,10 @@ export default {
     },
     socOdometer: {
       get() {
-        if (this.$store.state.mqtt[this.baseTopic + "/get/odometer"] !== undefined
-            && this.$store.state.mqtt[this.baseTopic + "/get/odometer"] !== null ) {
+        if (
+          this.$store.state.mqtt[this.baseTopic + "/get/odometer"] !== undefined &&
+          this.$store.state.mqtt[this.baseTopic + "/get/odometer"] !== null
+        ) {
           return Math.round(this.$store.state.mqtt[this.baseTopic + "/get/odometer"]);
         } else {
           return "-";
