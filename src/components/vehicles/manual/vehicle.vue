@@ -10,7 +10,7 @@
       :buttons="[
         {
           buttonValue: false,
-          text: 'Letzten SoC beibehalten',
+          text: 'letzten SoC beibehalten',
         },
         {
           buttonValue: true,
