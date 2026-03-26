@@ -1,10 +1,34 @@
 <template>
   <div class="vehicle-soc-manual">
     <openwb-base-alert subtype="info">
-      Beim Anstecken des Fahrzeugs muss der aktuelle SoC über die Hauptseite angegeben werden. Anhand des Zählers im
-      Ladepunkt wird dann der aktuelle SoC errechnet. Ausschlaggebend für die Qualität dieses Moduls sind die beiden
-      Einstellungen "Kapazität der Batterie" und "Wirkungsgrad der Ladeelektronik" in dem Fahrzeug-Profil.
+      Beim Anstecken des Fahrzeugs muss der aktuelle SoC-Wert des Fahrzeugs über die Hauptseite oder (wenn verbaut) am
+      Display der openWB angegeben werden. Anhand des geladenen Stroms wird der aktuelle SoC-Wert des Fahrzeugs während
+      der Ladung berechnet. Ausschlaggebend für die Genauigkeit der Berechnung sind die beiden Einstellungen "Kapazität
+      der Batterie" und "Wirkungsgrad der Ladeelektronik" im Fahrzeug-Profil. Weitere Infos dazu im
+      <a
+        :href="`https://wiki.openwb.de/doku.php?id=openwb:vc:${systemVersion}:software:fahrzeug-infos:manueller-soc`"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Wiki-Beitrag zum manuellen SoC </a
+      >.<br />
     </openwb-base-alert>
+    <openwb-base-button-group-input
+      title="SoC ohne manuelle Eingabe"
+      :buttons="[
+        {
+          buttonValue: false,
+          text: 'letzten SoC beibehalten',
+        },
+        {
+          buttonValue: true,
+          text: 'nach dem Abstecken auf 0% zurücksetzen',
+        },
+      ]"
+      :model-value="vehicle.configuration.reset_after_unplug"
+      @update:model-value="updateConfiguration($event, 'configuration.reset_after_unplug')"
+    >
+    </openwb-base-button-group-input>
   </div>
 </template>
 
