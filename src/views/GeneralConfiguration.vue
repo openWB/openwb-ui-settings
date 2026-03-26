@@ -795,6 +795,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasCar, fasChargingStation, fasClock, fasCalendar, fasCoins, fasPieChart);
 import ComponentState from "../components/mixins/ComponentState.vue";
+import SystemVersion from "../components/mixins/SystemVersion.vue";
 import OpenwbWebThemeProxy from "../components/web_themes/OpenwbWebThemeProxy.vue";
 
 export default {
@@ -803,7 +804,7 @@ export default {
     OpenwbWebThemeProxy,
     FontAwesomeIcon,
   },
-  mixins: [ComponentState],
+  mixins: [ComponentState, SystemVersion],
   props: {
     installAssistantActive: {
       type: Boolean,

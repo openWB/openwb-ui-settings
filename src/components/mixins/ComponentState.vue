@@ -17,15 +17,8 @@ export default {
     mqttTopicsToPublish() {
       return this.mqttTopics.filter((topic) => topic.writeable).map((topic) => topic.topic);
     },
-    systemVersion() {
-      const version = this.$store.state.mqtt["openWB/system/version"];
-      const match = version?.match(/^\d+\.\d+\.\d+/);
-      return match ? match[0] : "2.1.8";
-    },
   },
   mounted() {
-    this.$root.doSubscribe(["openWB/system/version"]);
-
     if (this.mqttTopicsToSubscribe.length > 0) {
       this.$root.doSubscribe(this.mqttTopicsToSubscribe);
     }

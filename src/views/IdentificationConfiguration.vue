@@ -244,10 +244,11 @@
 
 <script>
 import ComponentState from "../components/mixins/ComponentState.vue";
+import SystemVersion from "../components/mixins/SystemVersion.vue";
 
 export default {
   name: "IdentificationConfigView",
-  mixins: [ComponentState],
+  mixins: [ComponentState, SystemVersion],
   emits: ["save", "reset", "defaults"],
   data() {
     return {

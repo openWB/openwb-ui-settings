@@ -475,6 +475,7 @@ import { FontAwesomeIcon, FontAwesomeLayers } from "@fortawesome/vue-fontawesome
 library.add(fasPlus, fasTrash, fasCopy, fasCalendarDay, fasCalendarAlt, fasCalendarWeek, fasChargingStation, farFile);
 
 import ComponentState from "../components/mixins/ComponentState.vue";
+import SystemVersion from "../components/mixins/SystemVersion.vue";
 import OpenwbChargePointProxy from "../components/charge_points/OpenwbChargePointProxy.vue";
 import TemplateAutoLockPlan from "../components/charge_points/TemplateAutoLockPlan.vue";
 
@@ -486,7 +487,7 @@ export default {
     OpenwbChargePointProxy,
     TemplateAutoLockPlan,
   },
-  mixins: [ComponentState],
+  mixins: [ComponentState, SystemVersion],
   props: {
     installAssistantActive: {
       type: Boolean,
