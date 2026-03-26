@@ -7,5 +7,8 @@ export default {
       return match ? match[0] : "2.1.8";
     },
   },
+  mounted() {
+    this.$root.doSubscribe(["openWB/system/version"]);
+  },
 };
 </script>
