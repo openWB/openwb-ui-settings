@@ -139,6 +139,24 @@ export default {
       };
       return chargeModeTranslations[value] || value;
     },
+    getContrastColor(hexColor) {
+      if (!hexColor) return "#000000";
+      hexColor = hexColor.replace("#", "");
+      const r = parseInt(hexColor.substr(0, 2), 16);
+      const g = parseInt(hexColor.substr(2, 2), 16);
+      const b = parseInt(hexColor.substr(4, 2), 16);
+      const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+      return brightness > 125 ? "#212529" : "#ffffff";
+    },
   },
 };
 </script>
+
+<style>
+:root {
+  --fa-border-radius: 0.25rem;
+  --fa-border-color: #495057;
+  --fa-border-width: 2px;
+  --fa-border-padding: 0.25em;
+}
+</style>
