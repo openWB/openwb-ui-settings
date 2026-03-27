@@ -104,13 +104,13 @@
       >
         <openwb-base-click-button
           class="btn btn-info w-100"
-          @click="openVehiclePortal"
+          href="https://wb-solution.de/produkt/dienstwagenabrechnung/"
         >
           Dienstwagenabrechnung Portal öffnen
         </openwb-base-click-button>
         <openwb-base-click-button
           class="btn btn-info w-100"
-          @click="openVehiclePortalAbrechnung"
+          href="https://openwb.de/main/mieterstromabrechnung-mit-openwb/"
         >
           Dienstwagenabrechnung Download Portal öffnen
         </openwb-base-click-button>
@@ -180,7 +180,7 @@
             <div class="col-auto">
               <openwb-base-click-button
                 class="btn btn-outline-secondary"
-                @click="openShopVehicle"
+                href="https://wb-solution.de/produkt/dienstwagenabrechnung/"
               >
                 JETZT BESTELLEN >
               </openwb-base-click-button>
@@ -255,15 +255,6 @@ export default {
       this.hasError = false;
       this.errorMessage = "";
       this.password = "";
-    },
-    openVehiclePortal() {
-      window.open("https://wb-solution.de/produkt/dienstwagenabrechnung/", "_blank");
-    },
-    openVehiclePortalAbrechnung() {
-      window.open("https://openwb.de/main/mieterstromabrechnung-mit-openwb/", "_blank");
-    },
-    openShopVehicle() {
-      window.open("https://wb-solution.de/produkt/dienstwagenabrechnung/", "_blank");
     },
   },
 };

@@ -104,13 +104,13 @@
       >
         <openwb-base-click-button
           class="btn btn-info w-100"
-          @click="openTenantPortal"
+          href="https://wb-solution.de/produkt/mieterstromabrechnung/"
         >
           Mieterstrom Portal öffnen
         </openwb-base-click-button>
         <openwb-base-click-button
           class="btn btn-info w-100"
-          @click="openTenantPortalAbrechnung"
+          href="https://openwb.de/main/mieterstromabrechnung-mit-openwb/"
         >
           Abrechnung Download Portal öffnen
         </openwb-base-click-button>
@@ -179,7 +179,7 @@
             <div class="col-auto">
               <openwb-base-click-button
                 class="btn btn-outline-secondary"
-                @click="openShopTenantEnergy"
+                href="https://wb-solution.de/produkt/mieterstromabrechnung/"
               >
                 JETZT BESTELLEN >
               </openwb-base-click-button>
@@ -254,15 +254,6 @@ export default {
       this.hasError = false;
       this.errorMessage = "";
       this.password = "";
-    },
-    openTenantPortal() {
-      window.open("https://wb-solution.de/produkt/mieterstromabrechnung/", "_blank");
-    },
-    openTenantPortalAbrechnung() {
-      window.open("https://openwb.de/main/mieterstromabrechnung-mit-openwb/", "_blank");
-    },
-    openShopTenantEnergy() {
-      window.open("https://wb-solution.de/produkt/mieterstromabrechnung/", "_blank");
     },
   },
 };

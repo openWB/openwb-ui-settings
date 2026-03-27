@@ -1,12 +1,16 @@
 <template>
-  <button
-    type="button"
+  <component
+    :is="href ? 'a' : 'button'"
+    :href="href || null"
+    :type="href ? null : 'button'"
     class="btn btn-block"
     :title="tooltip"
-    @click.prevent="click"
+    :target="href ? '_blank' : null"
+    rel="noopener noreferrer"
+    @click="handleClick"
   >
     <slot>{{ title }}</slot>
-  </button>
+  </component>
 </template>
 
 <script>
@@ -15,10 +19,15 @@ export default {
   props: {
     title: { type: String, required: false, default: "" },
     tooltip: { type: String, required: false, default: "" },
+    href: { type: String, default: null },
   },
   emits: ["buttonClicked"],
   methods: {
-    click(event) {
+    handleClick(event) {
+      if (!this.href) {
+        event.preventDefault();
+      }
+
       this.$emit("buttonClicked", event);
     },
   },
