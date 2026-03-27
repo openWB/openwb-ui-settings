@@ -227,7 +227,7 @@ const routes = [
     path: "/Billing/CompanyVehicleBilling",
     name: "CompanyVehicleBilling",
     meta: {
-      heading: "Abrechnung - Dienstwagenabrechnung",
+      heading: "Abrechnung - Dienstwagen",
       // todo enable permission check for billing pages once implemented
       checkPermissions: false,
     },

@@ -1,5 +1,5 @@
 <template>
-  <div class="testingStore">
+  <div>
     <openwb-base-card title="Verbindung">
       <openwb-base-text-input
         title="Benutzername"
@@ -38,7 +38,7 @@
                 class="btn btn-success w-100"
                 @click="fetchStatus"
               >
-                Daten aktualisieren
+                Aktualisieren
               </openwb-base-click-button>
             </div>
 
