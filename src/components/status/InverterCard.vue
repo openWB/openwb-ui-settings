@@ -6,7 +6,14 @@
     :state-message="$store.state.mqtt[baseTopic + '/get/fault_str']"
   >
     <template #header-left>
-      <font-awesome-icon :icon="['fas', 'solar-panel']" />
+      <font-awesome-icon
+        :icon="['fas', 'solar-panel']"
+        class="fa-border"
+        :style="{
+          backgroundColor: inverter.color,
+          color: getContrastColor(inverter.color),
+        }"
+      />
       {{ inverter.name }}
     </template>
     <template #header-right>{{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW</template>

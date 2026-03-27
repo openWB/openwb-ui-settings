@@ -63,9 +63,15 @@
                 <openwb-base-avatar
                   v-for="installedComponent in getMyInstalledComponents(installedDevice?.id)"
                   :key="installedComponent?.id"
-                  :class="'ml-1 bg-' + getComponentTypeClass(installedComponent?.type)"
+                  class="ml-1"
+                  :style="{
+                    backgroundColor: installedComponent?.color,
+                    color: getContrastColor(installedComponent?.color),
+                  }"
                 >
-                  <font-awesome-icon :icon="getComponentTypeIcon(installedComponent?.type)" />
+                  <openwb-base-tooltip :description="installedComponent?.name">
+                    <font-awesome-icon :icon="getComponentTypeIcon(installedComponent?.type)" />
+                  </openwb-base-tooltip>
                 </openwb-base-avatar>
               </div>
             </template>
@@ -96,7 +102,14 @@
               :subtype="getComponentTypeClass(installedComponent?.type)"
             >
               <template #header>
-                <font-awesome-icon :icon="getComponentTypeIcon(installedComponent?.type)" />
+                <font-awesome-icon
+                  :icon="getComponentTypeIcon(installedComponent?.type)"
+                  class="fa-border"
+                  :style="{
+                    backgroundColor: installedComponent?.color,
+                    color: getContrastColor(installedComponent?.color),
+                  }"
+                />
                 {{ installedComponent?.name }}
               </template>
               <template #actions="slotProps">
