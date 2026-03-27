@@ -127,7 +127,7 @@
         body-bg="white"
         class="py-2"
       >
-        <table class="table table-sm">
+        <table class="table table-sm table-bordered">
           <thead>
             <tr>
               <th>Verbraucher</th>
