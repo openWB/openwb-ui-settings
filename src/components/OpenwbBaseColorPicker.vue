@@ -93,7 +93,6 @@ export default {
   -moz-appearance: none;
   appearance: none;
   width: 30px;
-  height: 100%;
   background-color: transparent;
   border: none;
   padding: 0;

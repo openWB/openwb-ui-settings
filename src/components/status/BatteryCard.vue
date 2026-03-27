@@ -6,7 +6,14 @@
     :state-message="$store.state.mqtt[baseTopic + '/get/fault_str']"
   >
     <template #header-left>
-      <font-awesome-icon :icon="['fas', 'car-battery']" />
+      <font-awesome-icon
+        :icon="['fas', 'car-battery']"
+        class="fa-border"
+        :style="{
+          backgroundColor: battery.color,
+          color: getContrastColor(battery.color),
+        }"
+      />
       {{ battery.name }}
     </template>
     <template #header-right>

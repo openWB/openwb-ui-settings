@@ -47,11 +47,21 @@
         <openwb-base-card
           v-for="(installedChargePoint, installedChargePointKey) in installedChargePoints"
           :key="installedChargePointKey"
-          :title="installedChargePoint?.name + ' (ID: ' + installedChargePoint?.id + ')'"
           :collapsible="true"
           :collapsed="true"
           subtype="primary"
         >
+          <template #header>
+            <font-awesome-icon
+              :icon="['fas', 'charging-station']"
+              class="fa-border"
+              :style="{
+                backgroundColor: installedChargePoint.color,
+                color: getContrastColor(installedChargePoint.color),
+              }"
+            />
+            {{ installedChargePoint?.name }} (ID: {{ installedChargePoint?.id }})
+          </template>
           <template #actions="slotProps">
             <openwb-base-avatar
               v-if="!slotProps.collapsed"

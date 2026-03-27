@@ -7,7 +7,14 @@
     :state-message="$store.state.mqtt[baseTopic + '/get/fault_str']"
   >
     <template #header-left>
-      <font-awesome-icon :icon="['fas', 'charging-station']" />
+      <font-awesome-icon
+        :icon="['fas', 'charging-station']"
+        class="fa-border"
+        :style="{
+          backgroundColor: $store.state.mqtt[baseTopic + '/config'].color,
+          color: getContrastColor($store.state.mqtt[baseTopic + '/config'].color),
+        }"
+      />
       {{ chargePointConfig.name }}
     </template>
     <template #header-right>{{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW</template>

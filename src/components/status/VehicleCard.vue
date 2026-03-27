@@ -6,7 +6,14 @@
     :state-message="$store.state.mqtt[baseTopic + '/get/fault_str']"
   >
     <template #header-left>
-      <font-awesome-icon :icon="['fas', 'car']" />
+      <font-awesome-icon
+        :icon="['fas', 'car']"
+        class="fa-border"
+        :style="{
+          backgroundColor: color,
+          color: getContrastColor(color),
+        }"
+      />
       {{ name }}
     </template>
     <template
@@ -84,6 +91,7 @@ export default {
         { topic: `openWB/vehicle/${this.vehicleId}/get/+`, writeable: false },
         { topic: `openWB/vehicle/${this.vehicleId}/info`, writeable: false },
         { topic: `openWB/vehicle/${this.vehicleId}/name`, writeable: false },
+        { topic: `openWB/vehicle/${this.vehicleId}/color`, writeable: false },
       ],
     };
   },
@@ -100,6 +108,16 @@ export default {
           return this.$store.state.mqtt[nameTopic];
         } else {
           return `Fahrzeug ${this.vehicleId}`;
+        }
+      },
+    },
+    color: {
+      get() {
+        const colorTopic = this.baseTopic + "/color";
+        if (this.$store.state.mqtt[colorTopic] !== undefined) {
+          return this.$store.state.mqtt[colorTopic];
+        } else {
+          return "#17a2b8";
         }
       },
     },

@@ -6,7 +6,14 @@
     :state-message="$store.state.mqtt[baseTopic + '/get/fault_str']"
   >
     <template #header-left>
-      <font-awesome-icon :icon="['fas', 'gauge-high']" />
+      <font-awesome-icon
+        :icon="['fas', 'gauge-high']"
+        class="fa-border"
+        :style="{
+          backgroundColor: counter.color,
+          color: getContrastColor(counter.color),
+        }"
+      />
       {{ counter.name }}
     </template>
     <template #header-right>{{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW</template>
