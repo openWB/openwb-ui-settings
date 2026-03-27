@@ -67,6 +67,17 @@
             :collapsed="!($route.params.section == 'vehicle' && parseInt($route.params.section_index) == vehicleId)"
             subtype="info"
           >
+            <template #header>
+              <font-awesome-icon
+                :icon="['fas', 'car']"
+                class="fa-border"
+                :style="{
+                  backgroundColor: $store.state.mqtt['openWB/vehicle/' + vehicleId + '/color'],
+                  color: getContrastColor($store.state.mqtt['openWB/vehicle/' + vehicleId + '/color']),
+                }"
+              />
+              {{ getVehicleName(vehicleId) }}
+            </template>
             <template
               v-if="vehicleId !== 0"
               #actions="slotProps"
