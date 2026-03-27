@@ -2,7 +2,7 @@
   <teleport
     v-if="showIcon"
     defer
-    to="#infobar"
+    to="#info-target"
   >
     <div
       id="connection-state-indicator"

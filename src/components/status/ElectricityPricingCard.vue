@@ -15,22 +15,31 @@
       body-bg="white"
       class="py-1 mb-2"
     >
-      <template #header>
-        <div
-          v-if="tariffProvider"
-          class="row"
-        >
-          <div class="col-6 text-right">Stromtarif:</div>
-          <div class="col-6 text-right">{{ tariffProvider }}</div>
+      <template #header>Tarifinformationen</template>
+      <div
+        v-if="tariffProvider"
+        class="row"
+      >
+        <div class="col-xl-3 pr-0">Stromtarif:</div>
+        <div class="col ml-3">
+          {{ tariffProvider }}
         </div>
-        <div
-          v-if="gridFeeProvider"
-          class="row"
-        >
-          <div class="col-6 text-right">Netzentgelte:</div>
-          <div class="col-6 text-right">{{ tariffProvider }}</div>
+      </div>
+      <div
+        v-if="gridFeeProvider"
+        class="row"
+      >
+        <div class="col-xl-3 pr-0">Netzentgelte:</div>
+        <div class="col ml-3">
+          {{ gridFeeProvider }}
         </div>
-      </template>
+      </div>
+    </openwb-base-card>
+    <openwb-base-card
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
       <div class="openwb-chart">
         <chartjs-line
           v-if="chartDataRead"
@@ -261,8 +270,10 @@ export default {
     },
     chartDataObject() {
       const dataObject = JSON.parse(JSON.stringify(this.chartDatasets)); // Deep copy
+      const endOfToday = this.getEndOfToday();
 
       // Hauptpreis-Feed (Gesamtpreis)
+      let lastTimestampPriceSums = null;
       if (this.$store.state.mqtt["openWB/optional/ep/get/prices"]) {
         var chartEntries = this.$store.state.mqtt["openWB/optional/ep/get/prices"];
         var myData = [];
@@ -279,7 +290,7 @@ export default {
         if (myData.length > 0) {
           const lastData = myData.slice(-1)[0];
           // midnight as default
-          let nextTimestamp = this.endOfToday;
+          let nextTimestamp = endOfToday;
           if (myData.length > 1) {
             // same offset minus 1ms as the last one
             const previousData = myData.slice(-2, -1)[0];
@@ -291,9 +302,7 @@ export default {
           });
         }
         dataObject.datasets[0].data = myData;
-        dataObject.todayEnd = new Date(this.chartDataObject.datasets[0].data[0].timestamp)
-          .setHours(23, 59, 59, 999)
-          .valueOf();
+        lastTimestampPriceSums = dataObject.datasets[0].data.slice(-1)[0].timestamp;
       } else {
         dataObject.datasets[0].hidden = true;
       }
@@ -306,6 +315,10 @@ export default {
         var flexibleTariffEntries = this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/get/prices"];
         var flexibleTariffData = [];
         for (const [key, value] of Object.entries(flexibleTariffEntries)) {
+          if (lastTimestampPriceSums && key * 1000 > lastTimestampPriceSums) {
+            // ignore entries that are newer than the last timestamp of the main price feed
+            continue;
+          }
           flexibleTariffData.push({
             timestamp: key * 1000,
             price: value * 100000,
@@ -314,7 +327,7 @@ export default {
         // repeat last dataset
         if (flexibleTariffData.length > 0) {
           const lastData = flexibleTariffData.slice(-1)[0];
-          let nextTimestamp = this.endOfToday;
+          let nextTimestamp = endOfToday;
           if (flexibleTariffData.length > 1) {
             const previousData = flexibleTariffData.slice(-2, -1)[0];
             nextTimestamp = lastData.timestamp + lastData.timestamp - previousData.timestamp - 1;
@@ -336,20 +349,20 @@ export default {
       ) {
         var gridFeeEntries = this.$store.state.mqtt["openWB/optional/ep/grid_fee/get/prices"];
         var gridFeeData = [];
-        var lastTimestampPriceSums = dataObject.dataset[0].slice(-1).timestamp;
         for (const [key, value] of Object.entries(gridFeeEntries)) {
-          if (key < lastTimestampPriceSums) {
-            // skipping matching last entry makes results same length
-            gridFeeData.push({
-              timestamp: key * 1000,
-              price: value * 100000,
-            });
+          if (lastTimestampPriceSums && key * 1000 > lastTimestampPriceSums) {
+            // ignore entries that are newer than the last timestamp of the main price feed
+            continue;
           }
+          gridFeeData.push({
+            timestamp: key * 1000,
+            price: value * 100000,
+          });
         }
         // repeat last dataset
         if (gridFeeData.length > 0) {
           const lastData = gridFeeData.slice(-1)[0];
-          let nextTimestamp = this.endOfToday;
+          let nextTimestamp = endOfToday;
           if (gridFeeData.length > 1) {
             const previousData = gridFeeData.slice(-2, -1)[0];
             nextTimestamp = lastData.timestamp + lastData.timestamp - previousData.timestamp - 1;
@@ -371,9 +384,6 @@ export default {
         return this.formatNumber(0, 2);
       }
       return this.formatNumber(this.chartDataObject.datasets[0].data[0].price || 0, 2);
-    },
-    endOfToday() {
-      return new Date().setHours(23, 59, 59, 999).valueOf();
     },
     baseTopic: {
       get() {
@@ -426,10 +436,13 @@ export default {
     },
   },
   methods: {
+    getEndOfToday() {
+      return new Date().setHours(23, 59, 59, 999).valueOf();
+    },
     formatTickLabel(timeValue) {
       const date = new Date(timeValue);
       // Prüfe ob das Datum zum nächsten Tag gehört
-      const isTomorrow = this.chartDataObject.todayEnd < date;
+      const isTomorrow = this.getEndOfToday() < date;
       // Zeige nur den Zeitwert, wenn es nicht morgen ist
       return `${isTomorrow ? date.toLocaleDateString(undefined, { day: "2-digit", month: "2-digit" }) + " " : ""}${date.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}`;
     },

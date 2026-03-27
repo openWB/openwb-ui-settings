@@ -199,6 +199,9 @@
             <template #vehicle_rfid="data">
               {{ dashIfNotSet(data.value.vehicle_rfid) }}
             </template>
+            <template #vehicle_odometer="data">
+              {{ formatOdometer(data.value.vehicle_odometer) }}
+            </template>
             <template #vehicle_soc_at_start="data">
               <div class="td-end">
                 <span class="no-wrap">
@@ -437,6 +440,11 @@ export default {
             sortable: true,
           },
           {
+            label: "Kilometerstand",
+            field: "vehicle_odometer",
+            sortable: true,
+          },
+          {
             label: "SoC Beginn",
             field: "vehicle_soc_at_start",
             sortable: true,
@@ -596,6 +604,7 @@ export default {
               vehicle_name: entry["vehicle"]["name"],
               vehicle_chargemode: this.translateChargeMode(entry["vehicle"]["chargemode"]),
               vehicle_rfid: entry["vehicle"]["rfid"],
+              vehicle_odometer: entry["vehicle"]["odometer"],
               vehicle_prio: entry["vehicle"]["prio"],
               vehicle_soc_at_start: entry["vehicle"]["soc_at_start"],
               vehicle_soc_at_end: entry["vehicle"]["soc_at_end"],
@@ -648,6 +657,7 @@ export default {
             '"Lademodus"',
             '"Priorität"',
             '"ID-Tag"',
+            '"Kilometerstand"',
             '"SoC Beginn"',
             '"SoC Ende"',
             '"Reichweite Beginn"',
@@ -682,6 +692,7 @@ export default {
             '"' + row.vehicle_chargemode + '"',
             '"' + this.formatBool(row.vehicle_prio) + '"',
             row.vehicle_rfid == undefined ? "" : '"' + row.vehicle_rfid + '"',
+            row.vehicle_odometer == undefined ? "" : '"' + row.vehicle_odometer + '"',
             row.vehicle_soc_at_start == undefined ? "" : this.formatNumber(row.vehicle_soc_at_start, 0),
             row.vehicle_soc_at_end == undefined ? "" : this.formatNumber(row.vehicle_soc_at_end, 0),
             row.vehicle_range_at_start == undefined ? "" : this.formatNumber(row.vehicle_range_at_start, 0),
@@ -817,7 +828,7 @@ export default {
     requestChargeLog() {
       console.debug("requesting charge log with data:", JSON.stringify(this.chargeLogRequestData));
       let myForm = document.forms["chargeLogForm"];
-      if (!myForm.reportValidity()) {
+      if (!myForm?.reportValidity()) {
         console.warn("form invalid");
         return;
       } else {
@@ -875,6 +886,10 @@ export default {
     formatRange(value, unit = true) {
       let range = this.dashIfNotSet(this.formatNumber(value, 0));
       return unit ? range + "km" : range;
+    },
+    formatOdometer(value, unit = true) {
+      let odometer = this.dashIfNotSet(this.formatNumber(value, 0));
+      return unit ? odometer + "km" : odometer;
     },
     formatSoc(soc, unit = true) {
       let value = this.dashIfNotSet(this.formatNumber(soc, 0));

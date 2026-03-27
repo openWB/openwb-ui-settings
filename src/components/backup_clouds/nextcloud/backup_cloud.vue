@@ -25,6 +25,18 @@
       :model-value="backupCloud.configuration.password"
       @update:model-value="updateConfiguration($event, 'configuration.password')"
     />
+    <openwb-base-number-input
+      title="Anzahl Backups aufbewahren"
+      :min="0"
+      :step="1"
+      required
+      :model-value="backupCloud.configuration.max_backups ?? 0"
+      @update:model-value="
+        updateConfiguration($event == null || $event === '' ? 0 : Number($event) || 0, 'configuration.max_backups')
+      "
+    >
+      <template #help> 0 = keine automatische Löschung; sonst werden nur die neuesten N Backups behalten. </template>
+    </openwb-base-number-input>
   </div>
 </template>
 

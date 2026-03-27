@@ -503,6 +503,27 @@
                 class: 'btn-outline-success',
               },
             ]"
+            :model-value="$store.state.mqtt['openWB/general/charge_log_data_config']?.vehicle_odometer"
+            @update:model-value="updateState('openWB/general/charge_log_data_config', $event, 'vehicle_odometer')"
+          >
+            <template #title>
+              <font-awesome-icon :icon="['fas', 'car']" />
+              Kilometerstand
+            </template>
+          </openwb-base-button-group-input>
+          <openwb-base-button-group-input
+            :buttons="[
+              {
+                buttonValue: false,
+                text: 'Nein',
+                class: 'btn-outline-danger',
+              },
+              {
+                buttonValue: true,
+                text: 'Ja',
+                class: 'btn-outline-success',
+              },
+            ]"
             :model-value="$store.state.mqtt['openWB/general/charge_log_data_config']?.vehicle_soc_at_start"
             @update:model-value="updateState('openWB/general/charge_log_data_config', $event, 'vehicle_soc_at_start')"
           >

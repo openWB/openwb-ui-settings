@@ -401,10 +401,10 @@
                 @update:model-value="updateState(chargePointTemplateKey, $event, 'autolock.active')"
               >
                 <template #help>
-                  WirdSperren nach Uhrzeit aktiviert, können Fahrzeugladungen mittels Zeitplan auf gewünschte
+                  Wird Sperren nach Uhrzeit aktiviert, können Fahrzeugladungen mittels Zeitplan auf gewünschte
                   Zeitbereiche eingeschränkt werden. Dies kann z.B. bei Zugänglichkeiten zu Ladepunkten in öffentlichen
-                  oder halb-öffentlichen Bereichen sinnvoll sein. In dieser Zeit ist keine Freischaltung per RFID,
-                  Fahrzeugerkennung oder Pin möglich.
+                  oder halb-öffentlichen Bereichen sinnvoll sein. In dieser Zeit ist aber eine Freischaltung per RFID,
+                  Fahrzeugerkennung oder Pin möglich, wenn Identifikation aktiviert ist.
                 </template>
               </openwb-base-button-group-input>
               <openwb-base-button-group-input
