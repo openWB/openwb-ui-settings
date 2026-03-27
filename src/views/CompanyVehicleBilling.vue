@@ -1,216 +1,270 @@
 <template>
   <div class="testingStore">
-    <form name="testingStoreForm">
-      <openwb-base-card title="Elemente mit BaseSettingElement">
-        <OpenwbBaseHeading> Basiselement </OpenwbBaseHeading>
-        <OpenwbBaseSettingElement>
-          <template #title>
-            <span style="font-style: italic">
-              Styled
-              <span style="font-weight: bold">Title</span> Slot
-            </span>
-          </template>
-          <template #help>
-            Basis-Element für alle weiteren Elemente. Das ist ein
-            <a href="test">Link</a>.
-          </template>
-        </OpenwbBaseSettingElement>
-        <OpenwbBaseHeading> Abgeleitete Elemente </OpenwbBaseHeading>
-        <openwb-base-button-input
-          title="Button Input"
-          button-text="Klick mich"
-          subtype="info"
-        >
-          <template #help> Einfacher Click-Button für Aktionen. </template>
-        </openwb-base-button-input>
-        <openwb-base-button-group-input
-          title="Button Group Input"
-          :buttons="[
-            { buttonValue: 1, text: 'Eins' },
-            { buttonValue: 2, text: 'Zwei' },
-          ]"
-          :model-value="$store.state.examples.buttonGroup1"
-          @update:model-value="updateState('buttonGroup1', $event)"
-        >
-          <template #help>
-            Button-Group Element zur Auswahl weniger Optionen. Bei vielen Optionen besser ein Dropdown verwenden.
-            <a href="test">Link</a>.
-          </template>
-        </openwb-base-button-group-input>
-      </openwb-base-card>
-      <openwb-base-card title="Einfache Eingabefelder">
-        <openwb-base-text-input
-          title="1. Text"
-          :model-value="$store.state.examples.text1"
-          @update:model-value="updateState('text1', $event)"
-        >
-          <template #help>
-            Einfacher Text<br />
-            Diese Komponente hat einen Slot "append" für zusätzliche Elemente, die rechts vom Eingabefeld angezeigt
-            werden sollen. Das ist hier z.B. ein Farbauswahl-Element. Die Farbe kann zurückgesetzt werden, weil eine
-            Standardfarbe gesetzt ist. Das ist hier z.B. rot (#ff0000).
-          </template>
-          <template #append>
-            <openwb-base-color-picker
-              class="p-1"
-              :model-value="$store.state.examples.color1"
-              default-color="#ff0000"
-              @update:model-value="updateState('color1', $event)"
-            />
-          </template>
-        </openwb-base-text-input>
-        <openwb-base-text-input
-          title="2. Text (E-Mail)"
-          subtype="email"
-          :model-value="$store.state.examples.text2"
-          @update:model-value="updateState('text2', $event)"
-        >
-          <template #help> Eingabefeld für E-Mailadressen </template>
-        </openwb-base-text-input>
-        <openwb-base-text-input
-          title="3. Text (Host)"
-          subtype="host"
-          :model-value="$store.state.examples.text3"
-          @update:model-value="updateState('text3', $event)"
-        >
-          <template #help> Eingabefeld für Hosts (IP oder Namen) </template>
-        </openwb-base-text-input>
-        <openwb-base-text-input
-          title="4. Text (URL)"
-          subtype="url"
-          :model-value="$store.state.examples.text4"
-          @update:model-value="updateState('text4', $event)"
-        >
-          <template #help> Eingabefeld für URLs </template>
-        </openwb-base-text-input>
-        <openwb-base-text-input
-          title="5. Text (User)"
-          subtype="user"
-          :model-value="$store.state.examples.text5"
-          @update:model-value="updateState('text5', $event)"
-        >
-          <template #help> Eingabefeld für Benutzernamen </template>
-        </openwb-base-text-input>
-        <openwb-base-text-input
-          title="6. Text (Time)"
-          subtype="time"
-          :model-value="$store.state.examples.text6"
-          @update:model-value="updateState('text6', $event)"
-        >
-          <template #help> Eingabefeld für Zeiten </template>
-        </openwb-base-text-input>
-        <openwb-base-text-input
-          title="7. Text (Date)"
-          subtype="date"
-          :model-value="$store.state.examples.text7"
-          @update:model-value="updateState('text7', $event)"
-        >
-          <template #help> Eingabefeld für ein Datum </template>
-        </openwb-base-text-input>
-        <openwb-base-text-input
-          title="8. Text (mit Add-Button)"
-          subtype="text"
-          add-button
-          class="mb-2"
-          :model-value="$store.state.examples.text8"
-          @update:model-value="updateState('text8', $event)"
-          @input:add="alert('Add button clicked!')"
-        >
-          <template #help> Eingabefeld mit einem Add-Button </template>
-        </openwb-base-text-input>
-        <hr />
-        <openwb-base-number-input
-          title="1. Zahl"
-          :min="5"
-          :max="9"
-          :step="2"
-          unit="kW"
-          :model-value="$store.state.examples.number1"
-          @update:model-value="updateState('number1', $event)"
-        >
-          <template #help>
-            Zahl mit Einheit.<br />
-            Diese Komponente hat einen Slot "append" für zusätzliche Elemente, die rechts vom Eingabefeld angezeigt
-            werden sollen. Das ist hier z.B. ein Farbauswahl-Element. Ohne Standardfarbe kann die Farbe nicht
-            zurückgesetzt werden.
-          </template>
-          <template #append>
-            <openwb-base-color-picker
-              class="p-1"
-              :model-value="$store.state.examples.color2"
-              @update:model-value="updateState('color2', $event)"
-            />
-          </template>
-        </openwb-base-number-input>
-        <openwb-base-number-input
-          title="2. Zahl"
-          :min="10"
-          :max="32"
-          :step="2"
-          :model-value="$store.state.examples.number2"
-          @update:model-value="updateState('number2', $event)"
-        >
-          <template #help> Eingabefeld für Zahlen ohne Einheit </template>
-        </openwb-base-number-input>
-        <openwb-base-number-input
-          title="3. Zahl"
-          :min="-30"
-          :max="30"
-          :step="0.01"
-          :precision="2"
-          unit="ct/kWh"
-          :model-value="$store.state.examples.number3 * 100000"
-          @update:model-value="updateState('number3', parseFloat(($event / 100000).toFixed(7)))"
-        >
-          <template #help>
-            Eingabefeld für Zahlen mit Einheit und Nachkommastellen<br />
-            Zusätzlich zum optionalen Parameter "step" sollte immer auch "precision" gesetzt sein, um unvermeidbare
-            Darstellungsfehler zu vermeiden.<br />
-            Wenn der dargestellte Wert eine andere Genauigkeit/Einheit als der Wert im Backend hat (z.B. €/Wh &lt;-&gt;
-            ct/kWh), dann ist bei der Umrechnung darauf zu achten, dass es nicht erneut zu Ungenauigkeiten bei
-            Dezimalzahlen kommt.
-          </template>
-        </openwb-base-number-input>
-        <openwb-base-text-input
-          title="1. Passwort"
-          subtype="password"
-          :model-value="$store.state.examples.password1"
-          @update:model-value="updateState('password1', $event)"
-        >
-          <template #help> Das Passwort kann per Klick auf das Auge angezeigt werden. </template>
-        </openwb-base-text-input>
-        <hr />
-        <openwb-base-textarea
-          title="1. Textarea"
-          maxlength="50"
-          :model-value="$store.state.examples.textarea1"
-          @update:model-value="updateState('textarea1', $event)"
-        >
-          <template #help> Textarea mit maximaler Länge von 50 Zeichen. </template>
-        </openwb-base-textarea>
-      </openwb-base-card>
-
-      <openwb-base-submit-buttons
-        form-name="testingStoreForm"
-        @save="$emit('save')"
-        @reset="$emit('reset')"
-        @defaults="$emit('defaults')"
+    <openwb-base-card title="Verbindung">
+      <openwb-base-text-input
+        title="Benutzername"
+        subtype="user"
+        :model-value="username"
+        @update:model-value="username = $event"
+      >
+        <template #help> Eingabefeld für Benutzernamen </template>
+      </openwb-base-text-input>
+      <openwb-base-text-input
+        title="Passwort"
+        subtype="password"
+        :model-value="password"
+        @update:model-value="password = $event"
+      >
+        <template #help> Das Passwort kann per Klick auf das Auge angezeigt werden. </template>
+      </openwb-base-text-input>
+      <openwb-base-button-input
+        v-if="!isConnected"
+        class="mt-2"
+        title=""
+        button-text="Verbinden"
+        subtype="info"
+        @button-clicked="fetchStatus"
       />
-    </form>
+      <div
+        v-if="isConnected"
+        class="form-row mt-3"
+      >
+        <div class="col-md-4"></div>
+
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col">
+              <openwb-base-click-button
+                class="btn btn-success w-100"
+                @click="fetchStatus"
+              >
+                Daten aktualisieren
+              </openwb-base-click-button>
+            </div>
+
+            <div class="col">
+              <openwb-base-click-button
+                class="btn btn-danger w-100"
+                @click="disconnect"
+              >
+                Trennen
+              </openwb-base-click-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </openwb-base-card>
+    <openwb-base-card title="Status">
+      <openwb-base-card
+        title=""
+        subtype="white"
+        body-bg="white"
+        class="py-2"
+      >
+        <div class="row">
+          <div class="col">Verbindungsstatus</div>
+          <div class="col text-right">
+            <span :class="isConnected ? 'text-success' : 'text-danger'">
+              {{ isConnected ? "Verbunden" : "Nicht verbunden" }}
+            </span>
+          </div>
+        </div>
+        <hr />
+        <div class="row">
+          <div class="col">Vertrag aktiv</div>
+          <div class="col text-right">
+            {{ contractActive ? "Ja" : "Nein" }}
+          </div>
+        </div>
+        <hr />
+        <div class="row">
+          <div class="col">Letzte Synchronisation</div>
+          <div class="col text-right">
+            {{ lastSync || "-" }}
+          </div>
+        </div>
+        <hr />
+        <div class="mt-3">
+          <openwb-base-alert :subtype="hasError ? 'danger' : 'success'">
+            {{ hasError ? errorMessage : "Keine Fehlermeldung" }}
+          </openwb-base-alert>
+        </div>
+      </openwb-base-card>
+    </openwb-base-card>
+
+    <openwb-base-card
+      v-if="isConnected"
+      title="Portal"
+    >
+      <openwb-base-card
+        title=""
+        subtype="white"
+        body-bg="white"
+        class="py-2"
+      >
+        <openwb-base-click-button
+          class="btn btn-info w-100"
+          @click="openVehiclePortal"
+        >
+          Dienstwagenabrechnung Portal öffnen
+        </openwb-base-click-button>
+        <openwb-base-click-button
+          class="btn btn-info w-100"
+          @click="openVehiclePortalAbrechnung"
+        >
+          Dienstwagenabrechnung Download Portal öffnen
+        </openwb-base-click-button>
+      </openwb-base-card>
+    </openwb-base-card>
+
+    <openwb-base-card
+      v-if="isConnected && assignments.length"
+      title="Verbraucher-Zuordnung"
+    >
+      <openwb-base-card
+        title=""
+        subtype="white"
+        body-bg="white"
+        class="py-2"
+      >
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th>Ladepunkt</th>
+              <th class="text-center">Fahrzeug</th>
+              <th class="text-right">Mitarbeiter</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(item, index) in assignments"
+              :key="index"
+            >
+              <td>{{ item.Ladepunkt }}</td>
+              <td class="text-center">{{ item.Fahrzeug }}</td>
+              <td class="text-right">{{ item.Mitarbeiter }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </openwb-base-card>
+    </openwb-base-card>
+
+    <openwb-base-card
+      v-if="!isConnected"
+      title="OpenWB Shop"
+    >
+      <openwb-base-card
+        subtype="white"
+        body-bg="white"
+        class="py-3 px-3"
+      >
+        <div class="font-weight-bold mb-2">Noch kein Dienstwagenabrechnungs-Kunde?</div>
+        <div class="mb-3">
+          openWB ermöglicht die Abrechnung von zu Hause geladenem Strom für
+          <strong>Dienstwagen, mit oder ohne Abrechnungsdienstleister.</strong>
+          Voraussetzung: openWB mit software2.
+        </div>
+        <div class="mb-3">
+          <div class="font-weight-bold">Mögliche Modelle:</div>
+          <ul class="mb-2 pl-3">
+            <li>Manuelle Übermittlung (bei eigener oder geteilter Nutzung)</li>
+            <li>Automatischer Datenexport durch Ladelog (z.B. per RFID oder Fahrzeug-Zuordnung)</li>
+            <li>Anbindung an OCPP-Abrechnungsdienstleister</li>
+            <li>Komplettabrechnung durch openWB</li>
+          </ul>
+        </div>
+        <div class="mb-3">
+          <div class="font-weight-bold">Kosten:</div>
+          <div class="row align-items-center">
+            <div class="col"><strong>5,00 € im Monat</strong>pro Ladepunkt</div>
+            <div class="col-auto">
+              <openwb-base-click-button
+                class="btn btn-outline-secondary"
+                @click="openShopVehicle"
+              >
+                JETZT BESTELLEN >
+              </openwb-base-click-button>
+            </div>
+          </div>
+        </div>
+      </openwb-base-card>
+    </openwb-base-card>
   </div>
 </template>
 
 <script>
-import ComponentState from "../components/mixins/ComponentState.vue";
+import axios from "axios";
 
 export default {
-  name: "OpenwbTestingStoreView",
-  mixins: [ComponentState],
-  emits: ["save", "reset", "defaults"],
+  name: "TenantEnergyBilling",
   data() {
     return {
-      mqttTopics: [],
+      username: "",
+      password: "",
+      isConnected: false,
+      contractActive: false,
+      lastSync: null,
+      hasError: false,
+      errorMessage: "",
     };
+  },
+  methods: {
+    async fetchStatus() {
+      try {
+        const response = await axios.post(
+          "http://localhost:49539/openWB/web/settings/modules/billing_services/company_vehicle/companyVehicle.php",
+          {
+            username: this.username,
+            password: this.password,
+          },
+        );
+
+        const data = response.data;
+
+        this.applyStatus(data);
+
+        if (data.connected) {
+          this.$root.postClientMessage("Verbindung erfolgreich", "success");
+        } else {
+          this.$root.postClientMessage(data.error || "Login fehlgeschlagen", "danger");
+        }
+      } catch (error) {
+        console.error(error);
+        this.$root.postClientMessage("Serverfehler", "danger");
+      }
+    },
+
+    applyStatus(data) {
+      this.isConnected = data.connected;
+      this.contractActive = data.contract_active;
+      this.lastSync = this.formatDate(data.last_sync);
+      this.assignments = data.assignments || [];
+      this.hasError = !!data.error;
+      this.errorMessage = data.error || "";
+    },
+
+    formatDate(dateString) {
+      if (!dateString) return null;
+      return new Date(dateString).toLocaleString();
+    },
+
+    disconnect() {
+      this.isConnected = false;
+      this.contractActive = false;
+      this.lastSync = null;
+      this.hasError = false;
+      this.errorMessage = "";
+      this.password = "";
+    },
+    openVehiclePortal() {
+      window.open("https://wb-solution.de/produkt/dienstwagenabrechnung/", "_blank");
+    },
+    openVehiclePortalAbrechnung() {
+      window.open("https://openwb.de/main/mieterstromabrechnung-mit-openwb/", "_blank");
+    },
+    openShopVehicle() {
+      window.open("https://wb-solution.de/produkt/dienstwagenabrechnung/", "_blank");
+    },
   },
 };
 </script>
