@@ -71,9 +71,11 @@
         </div>
         <hr />
         <div class="row">
-          <div class="col">Vertrag aktiv</div>
+          <div class="col">Vertragsstatus</div>
           <div class="col text-right">
-            {{ contractActive ? "Ja" : "Nein" }}
+            <span :class="contractActive ? 'text-success' : 'text-danger'">
+              {{ contractActive ? "Aktiv" : "Inaktiv" }}
+            </span>
           </div>
         </div>
         <hr />
