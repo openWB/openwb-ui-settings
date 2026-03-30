@@ -93,7 +93,19 @@
                   :key="componentKey"
                 >
                   <openwb-base-heading v-if="groupKey !== 'hc'">
-                    {{ getTotalsLabel(groupKey, componentKey) }}
+                    <div class="header-left-wrapper">
+                      <font-awesome-icon
+                        v-if="componentKey != 'all'"
+                        :icon="getCardIcon(groupKey)"
+                        class="fa-border"
+                        :style="{
+                          backgroundColor: getComponentColor(groupKey, componentKey),
+                          color: getContrastColor(getComponentColor(groupKey, componentKey)),
+                          fontSize: '60%',
+                        }"
+                      />
+                      {{ getTotalsLabel(groupKey, componentKey) }}
+                    </div>
                   </openwb-base-heading>
                   <div
                     v-for="(measurement, measurementKey) in component"
@@ -1648,6 +1660,25 @@ export default {
           }
         : undefined;
     },
+    getComponentColor(groupKey, componentKey) {
+      let color = undefined;
+      console.info("getComponentColor:", groupKey, componentKey);
+      if (
+        Object.prototype.hasOwnProperty.call(
+          this.$store.state.mqtt[this.baseTopic + this.commandData.date],
+          "colors",
+        ) &&
+        Object.prototype.hasOwnProperty.call(
+          this.$store.state.mqtt[this.baseTopic + this.commandData.date].colors,
+          componentKey,
+        )
+      ) {
+        color = this.$store.state.mqtt[this.baseTopic + this.commandData.date].colors[componentKey];
+      }
+      console.info("getComponentColor:", groupKey, componentKey, color);
+      // mix colors with some opacity
+      return color ? color : "#000000";
+    },
     /**
      * Returns the index of the dataset with the specified dataset key.
      *
@@ -1871,5 +1902,15 @@ export default {
 <style scoped>
 .openwb-chart {
   min-height: 400px;
+}
+
+.header-left-wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.header-left-wrapper > *:last-child {
+  margin-right: 0.5rem;
 }
 </style>
