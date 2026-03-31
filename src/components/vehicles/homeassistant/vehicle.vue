@@ -13,18 +13,6 @@
       </template>
     </openwb-base-text-input>
     <openwb-base-text-input
-      title="Entitäts ID"
-      subtype="text"
-      required
-      :model-value="vehicle.configuration.entity_id"
-      @update:model-value="updateConfiguration($event, 'configuration.entity_id')"
-    >
-      <template #help>
-        Die Entitäts ID findet sich im HomeAssistant unter „Einstellungen“ → „Geräte & Dienste“ → im oberen Reiter
-        „Entitäten“ auswählen
-      </template>
-    </openwb-base-text-input>
-    <openwb-base-text-input
       title="Token"
       subtype="text"
       required
@@ -34,6 +22,40 @@
       <template #help>
         Das Token kann in HomeAssistant hier erstellt werden:<br />
         „Dein Profil“ → oberer Reiter „Sicherheit“ → ganz unten „Langlebiges Zugriffstoken erstellen“
+      </template>
+    </openwb-base-text-input>
+    <openwb-base-text-input
+      title="Entitäts-ID SoC"
+      subtype="text"
+      required
+      :model-value="vehicle.configuration.entity_soc"
+      @update:model-value="updateConfiguration($event, 'configuration.entity_soc')"
+    >
+      <template #help>
+        Die Entitäts ID findet sich im HomeAssistant unter „Einstellungen“ → „Geräte & Dienste“ → im oberen Reiter
+        „Entitäten“ auswählen
+      </template>
+    </openwb-base-text-input>
+    <openwb-base-text-input
+      title="Entitäts-ID Reichweite"
+      subtype="text"
+      :model-value="vehicle.configuration.entity_range"
+      @update:model-value="updateConfiguration($event, 'configuration.entity_range')"
+    >
+      <template #help>
+        Die Entitäts ID findet sich im HomeAssistant unter „Einstellungen“ → „Geräte & Dienste“ → im oberen Reiter
+        „Entitäten“ auswählen
+      </template>
+    </openwb-base-text-input>
+    <openwb-base-text-input
+      title="Entitäts-ID Kilometerstand"
+      subtype="text"
+      :model-value="vehicle.configuration.entity_odometer"
+      @update:model-value="updateConfiguration($event, 'configuration.entity_odometer')"
+    >
+      <template #help>
+        Die Entitäts ID findet sich im HomeAssistant unter „Einstellungen“ → „Geräte & Dienste“ → im oberen Reiter
+        „Entitäten“ auswählen
       </template>
     </openwb-base-text-input>
     <openwb-base-button-group-input
