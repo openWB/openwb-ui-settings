@@ -248,6 +248,7 @@
 
 <script>
 import ComponentState from "../components/mixins/ComponentState.vue";
+import SystemVersion from "../components/mixins/SystemVersion.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -261,7 +262,7 @@ library.add(fasCarBattery, fasCarSide, fasBatteryHalf);
 export default {
   name: "OpenwbSurplusChargeConfigView",
   components: {},
-  mixins: [ComponentState],
+  mixins: [ComponentState, SystemVersion],
   emits: ["save", "reset", "defaults"],
   data() {
     return {
