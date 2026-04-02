@@ -7,7 +7,7 @@
 
     <openwb-base-alert v-else subtype="warning">
       <b>Nicht verbunden</b><br />
-      Bitte BMW-Anmeldung durchführen.
+      Bitte BMW-Kopplung durchführen.
     </openwb-base-alert>
 
     <openwb-base-text-input
@@ -26,7 +26,6 @@
       title="VIN"
       subtype="text"
       required
-      pattern="^[A-HJ-NPR-Z0-9]{17}$"
       :model-value="vehicle.configuration.vin"
       @update:model-value="updateConfiguration($event, 'configuration.vin')"
     >
@@ -45,29 +44,31 @@
     </openwb-base-alert>
 
     <openwb-base-alert v-if="isConnected" subtype="info">
-      Die BMW-Verbindung ist aktiv. Eine erneute Anmeldung ist nur nötig, wenn die Verbindung verloren gegangen ist.
+      Die BMW-Verbindung ist aktiv. Eine erneute Kopplung ist nur nötig wenn die Verbindung verloren gegangen ist.
     </openwb-base-alert>
 
-    <openwb-base-button-input
-      title="BMW Anmeldung"
-      button-text="BMW koppeln"
-      subtype="primary"
-      @button-clicked="startAuth"
+    <openwb-base-button-group-input
+      title="BMW Auth"
+      :buttons="[
+        { buttonValue: 'start', text: 'BMW koppeln', class: 'btn-outline-primary' }
+      ]"
+      :model-value="null"
+      @update:model-value="handleAuthAction"
     >
       <template #help>
-        Startet die BMW-Anmeldung. Nur nötig bei erstmaliger Einrichtung oder wenn die Verbindung verloren gegangen ist.
+        Startet die BMW-Kopplung. Nur nötig bei erstmaliger Einrichtung oder wenn die Verbindung verloren gegangen ist.
       </template>
-    </openwb-base-button-input>
+    </openwb-base-button-group-input>
 
     <openwb-base-alert v-if="authStatus.user_code" subtype="info">
-      <b>BMW Anmeldung läuft</b><br />
+      <b>BMW Auth läuft</b><br />
       URL: {{ authStatus.verification_uri }}<br />
       Code: <b>{{ authStatus.user_code }}</b>
     </openwb-base-alert>
 
     <openwb-base-alert v-if="authStatus.justConnected" subtype="success">
       <b>BMW erfolgreich verbunden!</b><br />
-      Bitte jetzt auf <b>"Speichern"</b> klicken, um die Verbindung dauerhaft zu sichern.
+      Bitte jetzt auf <b>"Speichern"</b> klicken um die Verbindung dauerhaft zu sichern.
     </openwb-base-alert>
 
     <openwb-base-alert v-if="authStatus.error" subtype="danger">
@@ -114,7 +115,6 @@ export default {
         justConnected: false,
       },
       pollTimer: null,
-      pollInterval: 5000,
     };
   },
   computed: {
@@ -129,17 +129,21 @@ export default {
     }
   },
   methods: {
-    async startAuth() {
-      if (!this.vehicle.configuration.client_id) {
-        this.authStatus.error = "Bitte zuerst die Client ID eintragen und speichern.";
-        return;
+    async handleAuthAction(action) {
+      if (action === "start") {
+        if (!this.vehicle.configuration.client_id) {
+          this.authStatus.error = "Bitte zuerst die Client ID eintragen und speichern.";
+          return;
+        }
+        this.startAuth();
       }
+    },
 
-      this.authStatus = { message: "Anmeldung wird gestartet...", user_code: "", verification_uri: "", error: "", justConnected: false };
-      this.pollInterval = 5000;
+    async startAuth() {
+      this.authStatus = { message: "Auth wird gestartet...", user_code: "", verification_uri: "", error: "", justConnected: false };
 
       try {
-        const response = await fetch("/openWB/web/bmw_cardata/bmw_cardata_auth_start.php", {
+        const response = await fetch("/openWB/web/settings/modules/vehicles/bmw_cardata/bmw_cardata_auth_start.php", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ client_id: this.vehicle.configuration.client_id }),
@@ -157,11 +161,6 @@ export default {
         this.updateConfiguration(data.expires_at || 0, "configuration.auth_expires_at");
         this.updateConfiguration(false, "configuration.auth_connected");
 
-        // Polling-Intervall aus BMW-Antwort übernehmen
-        if (data.interval) {
-          this.pollInterval = (data.interval + 1) * 1000;
-        }
-
         this.authStatus = {
           message: data.message || "",
           user_code: data.user_code || "",
@@ -171,16 +170,17 @@ export default {
         };
 
         if (data.user_code && !this.pollTimer) {
-          this.pollTimer = setInterval(() => this.pollAuthStatus(), this.pollInterval);
+          this.pollTimer = setInterval(() => this.pollAuthStatus(), 5000);
         }
       } catch {
-        this.authStatus.error = "BMW Anmeldung konnte nicht gestartet werden.";
+        this.authStatus.error = "BMW Auth konnte nicht gestartet werden.";
       }
     },
 
     async pollAuthStatus() {
       try {
-        const response = await fetch("/openWB/web/bmw_cardata/bmw_cardata_auth_status.php", {
+        // Auth-Daten aus Broker an PHP senden
+        const response = await fetch("/openWB/web/settings/modules/vehicles/bmw_cardata/bmw_cardata_auth_status.php", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           cache: "no-store",
@@ -201,18 +201,11 @@ export default {
           return;
         }
 
-        // slow_down: Intervall erhöhen
-        if (data.slow_down) {
-          clearInterval(this.pollTimer);
-          this.pollInterval = Math.min(this.pollInterval + 5000, 30000);
-          this.pollTimer = setInterval(() => this.pollAuthStatus(), this.pollInterval);
-          return;
-        }
-
         if (data.connected && data.access_token) {
           clearInterval(this.pollTimer);
           this.pollTimer = null;
 
+          // Tokens + Auth-Cleanup im Broker speichern
           this.updateConfiguration(data.access_token, "configuration.access_token");
           this.updateConfiguration(data.refresh_token || "", "configuration.refresh_token");
           this.updateConfiguration(data.expires_at || 0, "configuration.expires_at");
@@ -235,7 +228,7 @@ export default {
         this.authStatus.message = data.message || "Warte auf BMW-Bestätigung...";
 
       } catch {
-        this.authStatus.error = "Anmeldungs-Status konnte nicht geladen werden.";
+        this.authStatus.error = "Auth-Status konnte nicht geladen werden.";
         clearInterval(this.pollTimer);
         this.pollTimer = null;
       }
