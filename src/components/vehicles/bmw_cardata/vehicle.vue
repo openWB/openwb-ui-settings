@@ -44,31 +44,29 @@
     </openwb-base-alert>
 
     <openwb-base-alert v-if="isConnected" subtype="info">
-      Die BMW-Verbindung ist aktiv. Eine erneute Kopplung ist nur nötig wenn die Verbindung verloren gegangen ist.
+      Die BMW-Verbindung ist aktiv. Eine erneute Kopplung ist nur nötig, wenn die Verbindung verloren gegangen ist.
     </openwb-base-alert>
 
-    <openwb-base-button-group-input
-      title="BMW Auth"
-      :buttons="[
-        { buttonValue: 'start', text: 'BMW koppeln', class: 'btn-outline-primary' }
-      ]"
-      :model-value="null"
-      @update:model-value="handleAuthAction"
+    <openwb-base-button-input
+      title="BMW Anmeldung"
+      button-text="BMW koppeln"
+      subtype="primary"
+      @button-clicked="startAuth"
     >
       <template #help>
-        Startet die BMW-Kopplung. Nur nötig bei erstmaliger Einrichtung oder wenn die Verbindung verloren gegangen ist.
+        Startet die BMW-Anmeldung. Nur nötig bei erstmaliger Einrichtung oder wenn die Verbindung verloren gegangen ist.
       </template>
-    </openwb-base-button-group-input>
+    </openwb-base-button-input>
 
     <openwb-base-alert v-if="authStatus.user_code" subtype="info">
-      <b>BMW Auth läuft</b><br />
+      <b>BMW Anmeldung läuft</b><br />
       URL: {{ authStatus.verification_uri }}<br />
       Code: <b>{{ authStatus.user_code }}</b>
     </openwb-base-alert>
 
     <openwb-base-alert v-if="authStatus.justConnected" subtype="success">
       <b>BMW erfolgreich verbunden!</b><br />
-      Bitte jetzt auf <b>"Speichern"</b> klicken um die Verbindung dauerhaft zu sichern.
+      Bitte jetzt auf <b>"Speichern"</b> klicken, um die Verbindung dauerhaft zu sichern.
     </openwb-base-alert>
 
     <openwb-base-alert v-if="authStatus.error" subtype="danger">
@@ -140,7 +138,7 @@ export default {
     },
 
     async startAuth() {
-      this.authStatus = { message: "Auth wird gestartet...", user_code: "", verification_uri: "", error: "", justConnected: false };
+      this.authStatus = { message: "Anmeldung wird gestartet...", user_code: "", verification_uri: "", error: "", justConnected: false };
 
       try {
         const response = await fetch("/openWB/web/settings/modules/vehicles/bmw_cardata/bmw_cardata_auth_start.php", {
@@ -173,7 +171,7 @@ export default {
           this.pollTimer = setInterval(() => this.pollAuthStatus(), 5000);
         }
       } catch {
-        this.authStatus.error = "BMW Auth konnte nicht gestartet werden.";
+        this.authStatus.error = "BMW Anmeldung konnte nicht gestartet werden.";
       }
     },
 
