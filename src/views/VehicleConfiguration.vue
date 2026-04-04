@@ -67,6 +67,17 @@
             :collapsed="!($route.params.section == 'vehicle' && parseInt($route.params.section_index) == vehicleId)"
             subtype="info"
           >
+            <template #header>
+              <font-awesome-icon
+                :icon="['fas', 'car']"
+                class="fa-border"
+                :style="{
+                  backgroundColor: $store.state.mqtt['openWB/vehicle/' + vehicleId + '/color'],
+                  color: getContrastColor($store.state.mqtt['openWB/vehicle/' + vehicleId + '/color']),
+                }"
+              />
+              {{ getVehicleName(vehicleId) }}
+            </template>
             <template
               v-if="vehicleId !== 0"
               #actions="slotProps"
@@ -91,6 +102,14 @@
                 #help
               >
                 Das Standard-Fahrzeug kann nicht umbenannt werden.
+              </template>
+              <template #append>
+                <openwb-base-color-picker
+                  class="p-1"
+                  :model-value="$store.state.mqtt['openWB/vehicle/' + vehicleId + '/color']"
+                  default-color="#17a2b8"
+                  @update:model-value="updateState('openWB/vehicle/' + vehicleId + '/color', $event)"
+                />
               </template>
             </openwb-base-text-input>
             <openwb-base-text-input
@@ -1447,6 +1466,7 @@ export default {
         { topic: "openWB/optional/rfid/active", writeable: false },
         { topic: "openWB/system/configurable/soc_modules", writeable: false },
         { topic: "openWB/vehicle/+/charge_template", writeable: true },
+        { topic: "openWB/vehicle/+/color", writeable: true },
         { topic: "openWB/vehicle/+/ev_template", writeable: true },
         { topic: "openWB/vehicle/+/info", writeable: true },
         { topic: "openWB/vehicle/+/name", writeable: true },
