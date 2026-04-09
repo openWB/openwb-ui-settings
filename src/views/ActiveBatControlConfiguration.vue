@@ -317,10 +317,10 @@
                     unit="kW"
                     required
                     :model-value="
-                      $store.state.mqtt['openWB/bat/' + batteryConfig.id + '/get/max_discharge_power'] / 1000
+                      $store.state.mqtt['openWB/bat/' + batteryConfig.id + '/get/max_discharge_power'] / -1000
                     "
                     @update:model-value="
-                      updateState('openWB/bat/' + batteryConfig.id + '/get/max_discharge_power', $event * 1000)
+                      updateState('openWB/bat/' + batteryConfig.id + '/get/max_discharge_power', $event * -1000)
                     "
                   />
                   <openwb-base-number-input
