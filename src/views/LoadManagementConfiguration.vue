@@ -182,6 +182,33 @@
               <template #help> Bei 0 kW erfolgt keine Berücksichtigung der maximalen Ausgangsleistung. </template>
             </openwb-base-number-input>
           </openwb-base-card>
+          <openwb-base-heading> Vorhandene Speichermodule </openwb-base-heading>
+          <openwb-base-card
+            v-for="bat in batConfigs"
+            :key="bat.id"
+            :collapsible="true"
+            :collapsed="true"
+            subtype="warning"
+          >
+            <template #header>
+              <font-awesome-icon :icon="['fas', 'car-battery']" />
+              {{ bat.name }}
+            </template>
+            <openwb-base-number-input
+              title="Maximale Leistung des Speichers"
+              :min="0"
+              :step="0.1"
+              unit="kW"
+              required
+              :model-value="$store.state.mqtt['openWB/bat/' + bat.id + '/config/max_power'] / 1000"
+              @update:model-value="updateState('openWB/bat/' + bat.id + '/config/max_power', $event * 1000)"
+            >
+              <template #help>
+                Die maximale Leistung wird lediglich für eine Plausibilitätsprüfung der Speicherwerte genutzt. Bei 0kW
+                erfolgt keine Prüfung.
+              </template>
+            </openwb-base-number-input>
+          </openwb-base-card>
         </div>
       </openwb-base-card>
       <openwb-base-card
@@ -253,6 +280,7 @@ export default {
   data() {
     return {
       mqttTopics: [
+        { topic: "openWB/bat/+/config/max_power", writeable: true },
         { topic: "openWB/chargepoint/+/config", writeable: false },
         { topic: "openWB/counter/+/config/max_currents", writeable: true },
         { topic: "openWB/counter/+/config/max_power_errorcase", writeable: true },
@@ -270,19 +298,26 @@ export default {
     componentConfigurations() {
       return this.getWildcardTopics("openWB/system/device/+/component/+/config");
     },
+    componentConfigs: {
+      get() {
+        return (type) => {
+          let installedComponentsConfigs = this.componentConfigurations;
+          return Object.keys(installedComponentsConfigs)
+            .filter((key) => {
+              return installedComponentsConfigs[key]?.type.includes(type);
+            })
+            .reduce((obj, key) => {
+              return {
+                ...obj,
+                [key]: installedComponentsConfigs[key],
+              };
+            }, {});
+        };
+      },
+    },
     counterConfigs: {
       get() {
-        let installedComponentsConfigs = this.getWildcardTopics("openWB/system/device/+/component/+/config");
-        return Object.keys(installedComponentsConfigs)
-          .filter((key) => {
-            return installedComponentsConfigs[key]?.type.includes("counter");
-          })
-          .reduce((obj, key) => {
-            return {
-              ...obj,
-              [key]: installedComponentsConfigs[key],
-            };
-          }, {});
+        return this.componentConfigs("counter");
       },
     },
     counterOptions() {
@@ -301,17 +336,12 @@ export default {
     },
     inverterConfigs: {
       get() {
-        let installedComponentsConfigs = this.getWildcardTopics("openWB/system/device/+/component/+/config");
-        return Object.keys(installedComponentsConfigs)
-          .filter((key) => {
-            return installedComponentsConfigs[key]?.type.includes("inverter");
-          })
-          .reduce((obj, key) => {
-            return {
-              ...obj,
-              [key]: installedComponentsConfigs[key],
-            };
-          }, {});
+        return this.componentConfigs("inverter");
+      },
+    },
+    batConfigs: {
+      get() {
+        return this.componentConfigs("bat");
       },
     },
     hierarchyLabels: {
