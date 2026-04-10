@@ -127,16 +127,6 @@ export default {
     }
   },
   methods: {
-    async handleAuthAction(action) {
-      if (action === "start") {
-        if (!this.vehicle.configuration.client_id) {
-          this.authStatus.error = "Bitte zuerst die Client ID eintragen und speichern.";
-          return;
-        }
-        this.startAuth();
-      }
-    },
-
     async startAuth() {
       this.authStatus = { message: "Anmeldung wird gestartet...", user_code: "", verification_uri: "", error: "", justConnected: false };
 
