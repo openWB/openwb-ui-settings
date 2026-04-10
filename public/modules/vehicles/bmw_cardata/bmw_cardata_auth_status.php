@@ -92,6 +92,7 @@ if ($error === 'slow_down') {
         'connected' => false,
         'message'   => 'Warte auf BMW-Bestätigung...',
         'error'     => '',
+        'interval'  => 10,
     ]);
     exit;
 }
@@ -114,7 +115,8 @@ if ($error === 'expired_token') {
     exit;
 }
 
-$details = $error !== '' ? $error : ($response ?: ('HTTP ' . $http_code));
+$details = $error !== '' ? $error : ('HTTP ' . $http_code);
+error_log('BMW auth_status error: ' . $response);
 
 echo json_encode([
     'connected' => false,
