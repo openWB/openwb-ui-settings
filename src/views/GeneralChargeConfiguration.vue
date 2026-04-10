@@ -112,13 +112,29 @@
           <hr />
           <openwb-base-heading> Variable Strompreise </openwb-base-heading>
           <openwb-base-alert subtype="info">
-            Ist in den Lademodi Eco und Zeitladen "Preisbasiertes Laden" gewählt, wird nur geladen, wenn der Strompreis
-            unter dem angegebenen maximalen Strompreis liegt. Für Zielladen wird die Ladedauer ermittelt und dann zu den
-            günstigsten Zeiten geladen.<br />
-            Wenn keine Preise abgefragt werden können oder "Preisbasiertes Laden" abgewählt wurde, wird in Modus Eco
-            immer geladen bzw. bei Zielladen zunächst mit PV-Überschuss und zum Erreichen des Zieltermins mit Netzstrom.
-            Wenn sowohl dynamische Stromtarife als auch dynamische Netzentgelte konfiguriert sind, werden beide zum
-            Gesamt-Strompreis addiert. Ist nur eines von beiden konfiguriert, wird dieses als Gesamtpreis verwendet.<br />
+            <p>
+              Ist in den Lademodi Eco und Zeitladen "Preisbasiertes Laden" gewählt, wird nur geladen, wenn der
+              Strompreis unter dem angegebenen maximalen Strompreis liegt. Für Zielladen wird die Ladedauer ermittelt
+              und dann zu den günstigsten Zeiten geladen.
+            </p>
+            <p>
+              Wenn keine Preise abgefragt werden können oder "Preisbasiertes Laden" abgewählt wurde, wird in Modus Eco
+              immer geladen bzw. bei Zielladen zunächst mit PV-Überschuss und zum Erreichen des Zieltermins mit
+              Netzstrom.
+            </p>
+            <p>
+              Wenn sowohl dynamische Stromtarife als auch Netzentgelte konfiguriert sind, werden beide zum
+              Gesamt-Strompreis verrechnet. Dabei wird angenommen, dass der Standardpreis der Netzentgelte in dem
+              Stromtarif enthalten ist. Dementsprechend wird die Differenz zwischen dem Standardpreis der Netzentgelte
+              und den aktuellen Netzentgelten zum Strompreis addiert, um den Gesamt-Strompreis zu ermitteln.
+            </p>
+            <p>Beispiel:</p>
+            <ul>
+              <li>Standardpreis der Netzentgelte: 10 ct/kWh</li>
+              <li>Aktueller Preis der Netzentgelte: 5 ct/kWh</li>
+              <li>Strompreis: 20 ct/kWh</li>
+              <li>Gesamt-Strompreis: 20 + (5 - 10) = 15 ct/kWh</li>
+            </ul>
           </openwb-base-alert>
           <openwb-base-heading> Dynamische Stromtarife </openwb-base-heading>
           <openwb-base-select-input
