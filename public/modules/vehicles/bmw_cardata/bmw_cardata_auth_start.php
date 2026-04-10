@@ -2,6 +2,11 @@
 header('Content-Type: application/json');
 
 $input = json_decode(file_get_contents('php://input'), true);
+if (!is_array($input)) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Ungültige Anfrage.']);
+    exit;
+}
 $client_id = $input['client_id'] ?? '';
 
 if (!$client_id) {
@@ -41,18 +46,24 @@ $curl_error = curl_error($ch);
 curl_close($ch);
 
 if ($curl_error) {
-    echo json_encode(['error' => 'Verbindungsfehler: ' . $curl_error]);
+    error_log('BMW auth_start cURL error: ' . $curl_error);
+    http_response_code(502);
+    echo json_encode(['error' => 'Verbindungsfehler zur BMW API.']);
     exit;
 }
 
 if ($http_code >= 400) {
-    echo json_encode(['error' => 'BMW API Fehler: HTTP ' . $http_code . ' – ' . $response]);
+    error_log('BMW auth_start HTTP error ' . $http_code . ': ' . $response);
+    http_response_code(502);
+    echo json_encode(['error' => 'BMW API Fehler: HTTP ' . $http_code . '.']);
     exit;
 }
 
 $data = json_decode($response, true);
 if (!$data || empty($data['device_code'])) {
-    echo json_encode(['error' => 'Ungültige Antwort von BMW: ' . $response]);
+    error_log('BMW auth_start invalid response: ' . $response);
+    http_response_code(502);
+    echo json_encode(['error' => 'Ungültige Antwort von BMW.']);
     exit;
 }
 
@@ -64,6 +75,6 @@ echo json_encode([
     'code_verifier'    => $code_verifier,
     'expires_at'       => time() + ($data['expires_in'] ?? 300),
     'interval'         => $data['interval'] ?? 5,
-    'message'          => 'BMW Auth gestartet. Bitte BMW-Seite öffnen und Code eingeben.',
+    'message'          => 'BMW Anmeldung gestartet. Bitte BMW-Seite öffnen und Code eingeben.',
     'error'            => '',
 ]);
