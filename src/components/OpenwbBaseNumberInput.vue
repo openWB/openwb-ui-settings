@@ -20,7 +20,7 @@
         </div>
         <input
           :id="`${uid}-number-input`"
-          v-model.number="value"
+          v-model.lazy.number="value"
           type="number"
           class="form-control"
           v-bind="$attrs"
