@@ -383,7 +383,7 @@
 
       <openwb-base-submit-buttons
         form-name="testingStoreForm"
-        @save="$emit('save')"
+        @save="$emit('save', [])"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />

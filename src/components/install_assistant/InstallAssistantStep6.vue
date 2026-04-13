@@ -37,7 +37,7 @@
       <ChargePointInstallationView
         :install-assistant-active="true"
         @send-command="$emit('sendCommand', $event)"
-        @save="$emit('save')"
+        @save="$emit('save', $event)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />

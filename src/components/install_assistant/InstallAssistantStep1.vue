@@ -16,7 +16,7 @@
         :install-assistant-active="true"
         :show-backup-cloud-section="false"
         @send-command="$emit('sendCommand', $event)"
-        @save="$emit('save')"
+        @save="$emit('save', $event)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />

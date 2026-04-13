@@ -32,7 +32,7 @@
         title="System Information"
         subtype="info"
         :collapsible="true"
-        :collapsed="true"
+        :collapsed="true && !installAssistantActive"
       >
         <form name="systemInfoForm">
           <openwb-base-text-input
@@ -150,9 +150,9 @@
             <hr />
             <openwb-base-heading>Automatisches Update von Secondary openWBs</openwb-base-heading>
             <openwb-base-alert subtype="info">
-              Die automatische Updatefunktion für Secondary openWBs ist nur verfügbar, wenn sich die Primary openWB auf
+              Die automatische Aktualisierung für Secondary openWBs ist nur verfügbar, wenn sich die Primary openWB auf
               dem Entwicklungszweig "Release" befindet. Das Update wird nur auf Secondary openWBs durchgeführt, welche
-              sich ebenfalls auf dem Entwicklungszweig "Release" befinden. Ist die dort installierte Releaseversion zu
+              sich ebenfalls auf dem Entwicklungszweig "Release" befinden. Ist die dort installierte Release-Version zu
               alt, muss ein einmaliges Update auf die aktuelle Version manuell auf der betroffenen openWB durchgeführt
               werden.
             </openwb-base-alert>
@@ -216,7 +216,7 @@
               <openwb-base-submit-buttons
                 form-name="versionInfoForm"
                 :hide-defaults="true"
-                @save="$emit('save')"
+                @save="$emit('save', ['openWB/system/secondary_auto_update'])"
                 @reset="$emit('reset')"
               />
             </div>
