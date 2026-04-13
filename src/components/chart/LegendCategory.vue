@@ -64,7 +64,7 @@ export default {
   opacity: 0.5;
 }
 .legend-dropdown {
-  max-height: 75vh;
+  max-height: 45vh;
   overflow-y: auto;
 }
 
