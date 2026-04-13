@@ -8,7 +8,7 @@
     >
       {{ label }}
     </button>
-    <ul class="dropdown-menu legend-dropdown-scroll">
+    <ul class="dropdown-menu legend-dropdown">
       <li
         v-for="item in items"
         :key="item.label"
@@ -63,8 +63,22 @@ export default {
 .legend-item-hidden {
   opacity: 0.5;
 }
-.legend-dropdown-scroll {
+.legend-dropdown {
   max-height: 30rem;
   overflow-y: auto;
+}
+
+@media (min-width: 1200px) {
+  .legend-dropdown {
+    max-height: 30rem;
+    overflow-y: auto;
+    column-count: 2;
+    column-gap: 0;
+  }
+
+  .legend-dropdown .dropdown-item {
+    display: inline-block;
+    width: 100%;
+  }
 }
 </style>
