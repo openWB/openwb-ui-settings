@@ -64,7 +64,7 @@ export default {
   opacity: 0.5;
 }
 .legend-dropdown-scroll {
-  max-height: 500px;
+  max-height: 30rem;
   overflow-y: auto;
 }
 </style>
