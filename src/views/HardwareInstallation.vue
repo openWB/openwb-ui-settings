@@ -30,7 +30,7 @@
         Wenn neue Komponenten - insbesondere Zähler - konfiguriert wurden, ist auch das
         <router-link to="/LoadManagementConfiguration"> Lastmanagement </router-link>
         zu prüfen!<br />
-        Je nach Hersteller muss eventuell die Kommunikation im Wechselrichter freigegeben werden (z.B. Aktivierung
+        Je nach Hersteller muss eventuell die Kommunikation im Wechselrichter freigegeben werden (z.B. Aktivierung von
         Modbus TCP, Portfreigaben o.Ä.)
       </openwb-base-alert>
       <openwb-base-card title="Geräte und Komponenten">

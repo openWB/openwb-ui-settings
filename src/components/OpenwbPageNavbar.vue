@@ -391,7 +391,6 @@ export default {
 
 /* hide dropdowns without items */
 .nav-item.dropdown:not(:has(.dropdown-menu a)) {
-  border: 2px solid #ff0000;
   display: none;
 }
 
