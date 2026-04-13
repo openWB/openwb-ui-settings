@@ -397,7 +397,7 @@
                   },
                   {
                     buttonValue: 'mode_discharge_home_consumption',
-                    text: 'Entladung in Fahrzeuge sperren',
+                    text: 'Nur Hausverbrauch entladen',
                   },
                   {
                     buttonValue: 'mode_charge_pv_production',
@@ -415,10 +415,10 @@
                   <div
                     v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'mode_discharge_home_consumption'"
                   >
-                    Die Speicherentladung in Fahrzeuge wird komplett gesperrt! Fahrzeugladung, die nicht durch
-                    PV-Überschuss gedeckt werden kann, erzeugt Netzbezug statt Speicherentladung. Weitere Verbraucher
-                    (bspw. Hausverbrauch) werden durch den Speicher ausgeglichen. Kann die Entladung am Speicher nur
-                    komplett gesperrt werden, verhält sich diese Einstellung wie "volle Entladesperre".
+                    Es wird nur der Hausverbrauch durch den Speicher ausgeglichen. Die Speicherentladung in Fahrzeuge
+                    wird komplett gesperrt! Fahrzeugladung, die nicht durch PV-Überschuss gedeckt werden kann, erzeugt
+                    Netzbezug statt Speicherentladung. Kann die Entladung am Speicher nur komplett gesperrt werden,
+                    verhält sich diese Einstellung wie "volle Entladesperre".
                   </div>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'mode_charge_pv_production'">
                     PV-Ertrag wird vorrangig in den Speicher geladen (aktive Ladung)! Weiterer Verbrauch (Hausverbrauch/
@@ -435,7 +435,7 @@
                   },
                   {
                     buttonValue: 'vehicle_charging',
-                    text: 'Fahrzeuge laden',
+                    text: 'Fahrzeugladung aktiv',
                   },
                   {
                     buttonValue: 'price_limit',
@@ -494,7 +494,7 @@
                 </openwb-base-button-group-input>
               </div>
               <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'vehicle_charging'">
-                <openwb-base-heading class="mt-0"> Fahrzeuge laden </openwb-base-heading>
+                <openwb-base-heading class="mt-0"> Fahrzeugladung aktiv </openwb-base-heading>
                 <openwb-base-alert subtype="info">
                   Dieser Modus bietet keine weiteren Einstellungen. Sobald mindestens ein Fahrzeug lädt greift das
                   weiter oben konfigurierte Regellimit.
