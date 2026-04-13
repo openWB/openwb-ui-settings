@@ -67,18 +67,4 @@ export default {
   max-height: 45vh;
   overflow-y: auto;
 }
-
-@media (min-width: 1200px) {
-  .legend-dropdown {
-    max-height: 45vh;
-    overflow-y: auto;
-    column-count: 2;
-    column-gap: 0;
-  }
-
-  .legend-dropdown .dropdown-item {
-    display: inline-block;
-    width: 100%;
-  }
-}
 </style>
