@@ -64,13 +64,13 @@ export default {
   opacity: 0.5;
 }
 .legend-dropdown {
-  max-height: 30rem;
+  max-height: 75vh;
   overflow-y: auto;
 }
 
 @media (min-width: 1200px) {
   .legend-dropdown {
-    max-height: 30rem;
+    max-height: 45vh;
     overflow-y: auto;
     column-count: 2;
     column-gap: 0;
