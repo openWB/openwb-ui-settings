@@ -77,7 +77,7 @@
               "
             >
               <template #help>
-                Unterhalb des Mindest SoC wird vorhandener PV-Überschuss bevorzugt in den Speicher geladen. Oberhalb des
+                Unterhalb des Mindest-SoC wird vorhandener PV-Überschuss bevorzugt in den Speicher geladen. Oberhalb des
                 Mindest-SoC hat die Fahrzeugladung Priorität.
               </template>
             </openwb-base-range-input>
@@ -187,7 +187,7 @@
                 v-if="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/bat_power_discharge_active']"
                 #help
               >
-                ACHTUNG: Der hier eingestellte Wert darf die maximale Entadeleistung des Speichers nicht überschreiten!
+                ACHTUNG: Der hier eingestellte Wert darf die maximale Entladeleistung des Speichers nicht überschreiten!
                 Wird der Maximal-SoC überschritten, wird die PV-Ladung mit der hier eingestellten
                 Speicherentladeleistung unterstützt. Der Speicher darf bis zum Mindest-SoC entladen werden. Die erlaubte
                 Entladeleistung des Speichers wird dem Überschuss zum Erreichen der Einschaltschwelle hinzugerechnet.
@@ -229,7 +229,7 @@
           >
             <p>
               Die aktive Speichersteuerung durch openWB basiert auf öffentlich zugänglichen Informationen zu den
-              verschiedenen Speichersystemen. Diese können auch nicht herstellerseitig freigegebene Informationen
+              verschiedenen Speichersystemen. Diese können auch nicht vom Hersteller freigegebene Informationen
               beinhalten.<br />
               Fragen bezüglich der Gewährleistung und Hardwarekompatibilität sind vor der Nutzung mit dem Hersteller zu
               klären. openWB übernimmt keine Haftung für Schäden, welche aus der Nutzung der "aktiven Speichersteuerung"
@@ -360,8 +360,7 @@
               >
                 <template #help>
                   Speicher, welche durch die aktive Steuerung entladen werden, schalten unterhalb des eingestellten SoC
-                  auf "Eigenregelung", um mögliche Tiefenentladung zu verhindern. Die aktive Ladung ist weiterhin
-                  möglich.
+                  auf "Eigenregelung", um mögliche Tiefentladung zu verhindern. Die aktive Ladung ist weiterhin möglich.
                 </template>
               </openwb-base-range-input>
               <openwb-base-range-input
@@ -530,7 +529,7 @@
                   @update:model-value="updateState('openWB/bat/config/price_limit_activated', $event)"
                 >
                   <template #help>
-                    Fällt der variable Strompreis unuter diesen Wert, greift das weiter oben konfigurierte Regellimit.
+                    Fällt der variable Strompreis unter diesen Wert, greift das weiter oben konfigurierte Regellimit.
                   </template>
                 </openwb-base-button-group-input>
                 <openwb-base-number-input

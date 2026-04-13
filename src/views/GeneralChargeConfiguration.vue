@@ -211,7 +211,7 @@
           <div v-if="$store.state.mqtt['openWB/optional/ocpp/config']?.active === true">
             <openwb-base-alert subtype="info">
               Die Ladepunkte übermitteln den ID-Tag, Heartbeat und den Zählerstand zum Zeitpunkt des Ansteckens,
-              Absteckens und alle 5 Minuten. Eine Steuerung per OCPP ist nicht möglich.<br />
+              Absteckens sowie alle 5 Minuten. Eine Steuerung per OCPP ist nicht möglich.<br />
               Alle Ladepunkte, die ihre Daten an das OCPP-Backend übermitteln sollen, müssen zunächst im OCPP-Backend
               angelegt werden. Die dort eingetragene Chargebox ID muss in der openWB unter Einstellungen ->
               Konfiguration im zugehörigen -> Ladepunkt eingetragen werden.

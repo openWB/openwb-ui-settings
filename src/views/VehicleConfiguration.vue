@@ -835,7 +835,7 @@
                 <template #help>
                   Hier kann eingestellt werden, ob Ladevorgänge mit einer Phase oder dem möglichen Maximum in
                   Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Voraussetzung ist die
-                  verbaute Umschaltmöglichkeit zwischen 1- und 3-phasig (s.g. 1p3p).
+                  verbaute Umschaltmöglichkeit zwischen einer und mehreren Phasen (s.g. 1p3p).
                 </template>
               </openwb-base-button-group-input>
               <openwb-base-button-group-input
@@ -1325,11 +1325,11 @@
                   <p>
                     Mit einem Zeitplan kann ein klar abgegrenzter Zeitbereich zum Fahrzeugladen definiert werden. Dies
                     wird häufig genutzt, um einem Fahrzeug kurz vor der Abfahrt Strom anzubieten, damit dessen
-                    Vorklimatisierung nicht aus dem Fahrzeugakku, sondern aus der openWB bezogen wird (Enteisung,
-                    Vorwärmung, Abkühlung). Nicht von der Vorklimatisierung benötigter Strom erhöht dabei den
+                    Vorklimatisierung nicht aus dem Fahrzeugakku, sondern aus der openWB bezogen wird (enteisen,
+                    vorwärmen, abkühlen). Nicht von der Vorklimatisierung benötigter Strom erhöht dabei den
                     Fahrzeug-SoC. Um das Stromnetz am Morgen nicht unnötig zu strapazieren, sollte eine moderate
                     Stromvorgabe und ein beschränkter Zeitbereich vorgegeben werden (z.B. max. 10A; 30min - in
-                    Übereinstimmung mit den Fahrzeug-App-Vorklimatisierungsvorgaben).
+                    Übereinstimmung mit den Einstellungen zur Vorklimatisierung in der Fahrzeug-App).
                   </p>
                 </template>
               </openwb-base-button-group-input>

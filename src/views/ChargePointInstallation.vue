@@ -523,7 +523,7 @@ export default {
     },
     installedChargePoints: {
       get() {
-        // only show internal chargepoint(s) when configured as external chargepoint
+        // only show internal charge point(s) when configured as external charge point
         let chargePoints = this.getWildcardTopics("openWB/chargepoint/+/config");
         let myObj = {};
         for (const [key, element] of Object.entries(chargePoints)) {

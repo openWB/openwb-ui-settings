@@ -23,7 +23,7 @@
           </label>
           <button
             :id="`${uid}-button`"
-            class="col-1 btn btn-block btn-info"
+            class="col-1 btn btn-block btn-info px-0"
             type="button"
             @click="decrement"
           >
@@ -41,7 +41,7 @@
             />
           </div>
           <button
-            class="col-1 btn btn-block btn-info"
+            class="col-1 btn btn-block btn-info px-0"
             type="button"
             @click="increment"
           >

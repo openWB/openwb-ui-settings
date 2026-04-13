@@ -41,15 +41,15 @@
                 Wenn angesteckte Fahrzeuge, die nicht oder nicht mit der Sollstromstärke laden, im Lastmanagement
                 berücksichtigt werden, wird für diese der Sollstrom reserviert. Dadurch können bei Eingreifen des
                 Lastmanagements andere Fahrzeuge möglicherweise nur mit reduzierter Stromstärke laden und der
-                reservierte Strom wird nicht genutzt. Wenn die Fahrzeuge wieder Leistung beziehen, z.B. um
-                vorzuklimatisieren, nutzen sie den für sie reservierten Strom.
+                reservierte Strom wird nicht genutzt. Wenn die Fahrzeuge wieder Leistung beziehen, z.B. um zu
+                klimatisieren, nutzen sie den für sie reservierten Strom.
               </p>
               <p>
                 Wenn angesteckte Fahrzeuge, die nicht oder nicht mit der Sollstromstärke laden, nicht im Lastmanagement
                 berücksichtigt werden, wird für diese auch kein Strom bei vorliegender Ladefreigabe reserviert bzw. es
                 wird nur der tatsächlich genutzte Strom im Lastmanagement berücksichtigt. Andere Fahrzeuge können
                 dadurch mit höherer Stromstärke laden. Wenn die maximalen Lastmanagement-Grenzen fast erreicht sind und
-                die Fahrzeuge wieder Leistung beziehen, z.B. um vorzuklimatisieren, kann es zu einer kurzzeitigen
+                die Fahrzeuge wieder Leistung beziehen, z.B. um zu klimatisieren, kann es zu einer kurzzeitigen
                 Überschreitung der Lastmanagement-Grenzen kommen, bis im nächsten Zyklus die Stromstärken aller
                 Ladepunkte an die neue Situation angepasst wurden. Das kurzzeitige Überschreiten der Maximal-Werte
                 stellt für die Sicherungen in der Regel kein Problem dar.
@@ -84,7 +84,7 @@
             Wenn ein Zähler nicht auslesbar ist, wird weiterhin versucht, diesen auszulesen und nach 60s die angenommene
             Leistung im Fehlerfall verwendet, die unten für jeden Zähler eingestellt wird, um eine Überlast zu
             vermeiden. Die angenommene Leistung wird gleichmäßig auf die Phasen verteilt.<br />
-            Überlicherweise sind Hausanschlüsse mit 24kW und 3*35A bzw. 43kW und 3*63A abgesichert.
+            Üblicherweise sind Hausanschlüsse mit 24kW und 3*35A bzw. 43kW und 3*63A abgesichert.
           </openwb-base-alert>
           <openwb-base-card
             v-for="counter in counterConfigs"
