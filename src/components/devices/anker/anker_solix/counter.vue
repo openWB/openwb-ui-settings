@@ -1,6 +1,9 @@
 <template>
   <div class="device-anker_solix-counter">
     <openwb-base-heading> Einstellungen für Anker Zähler </openwb-base-heading>
+    <openwb-base-alert subtype="info">
+      Nicht alle Zähler von Anker unterstützen Modbus TCP, in den Einstellungen muss es aktiviert sein.
+    </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
       subtype="host"
