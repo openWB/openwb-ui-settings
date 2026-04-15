@@ -46,6 +46,10 @@ export default {
     return {
       client: null,
       connected: false,
+      reconnecting: false,
+      reconnectAttempts: 0,
+      reconnectBackoff: 2000,
+      maxReconnectBackoff: 20000,
       connection: {
         protocol: location.protocol == "https:" ? "wss" : "ws",
         protocolVersion: 5,
@@ -53,7 +57,7 @@ export default {
         port: parseInt(location.port) || (location.protocol == "https:" ? 443 : 80),
         path: "/ws",
         connectTimeout: 4000,
-        reconnectPeriod: 4000,
+        reconnectPeriod: 0, // we handle reconnection manually with linear backoff
         resubscribe: true,
         properties: {
           requestResponseInformation: true,
@@ -182,6 +186,10 @@ export default {
      * Establishes a connection to the configured broker
      */
     createConnection() {
+      if (this.client) {
+        console.debug("MQTT client already exists, skipping createConnection.");
+        return;
+      }
       // Connect string, and specify the connection method used through protocol
       // ws not encrypted WebSocket connection
       // wss encrypted WebSocket connection
@@ -200,37 +208,35 @@ export default {
         options.password = pass;
         if (user === "admin" && pass === "openwb") {
           console.warn("Using default mqtt credentials! This is insecure and not recommended for production systems.");
-          this.postClientMessage(
-            "Warnung: Es werden die Standard-Zugangsdaten für MQTT verwendet! Dies ist unsicher und wird für Produktivsysteme nicht empfohlen.",
-            "warning",
-          );
+          if (!this.reconnecting) {
+            this.postClientMessage(
+              "Warnung: Es werden die Standard-Zugangsdaten für MQTT verwendet! Dies ist unsicher und wird für Produktivsysteme nicht empfohlen.",
+              "warning",
+            );
+          }
         }
       }
       console.debug("connecting to broker:", connectUrl);
       this.client = mqtt.connect(connectUrl, options);
+      // reset backoff on successful connection
       this.client.on("connect", () => {
         this.connected = true;
+        this.reconnectAttempts = 0;
+        this.reconnectBackoff = 2000;
+        this.reconnecting = false;
         console.debug("Connection succeeded! ClientId: ", this.client.options.clientId);
         if (user) {
           this.postClientMessage(`Angemeldet als "${user}".`, "success");
           this.$store.commit("storeLocal", { name: "username", value: user });
         }
-        // required for route guards
-        this.doSubscribe([
-          "openWB/system/boot_done",
-          "openWB/system/dataprotection_acknowledged",
-          "openWB/system/usage_terms_acknowledged",
-          "openWB/system/installAssistantDone",
-          "openWB/system/security/access/+",
-        ]);
-        // after one second check if we received any data, if not, the connection is probably not working
+        // after 5 seconds check if we received any data, if not, the connection is probably not working
         this.dataTimeout = setTimeout(() => {
           console.warn(
-            "No data received after 1 second, connection might not be working. Removing mqtt cookie and trying again with anonymous connection.",
+            "No data received after 5 seconds, connection might not be working. Removing mqtt cookie and trying again with anonymous connection.",
           );
           if (user) {
             // this.postClientMessage(
-            //   "Es wurden zwar Anmeldeinformationen gefunden, aber nach 1 Sekunde keine Daten empfangen. Die Verbindung scheint nicht zu funktionieren. " +
+            //   "Es wurden zwar Anmeldeinformationen gefunden, aber nach 5 Sekunden keine Daten empfangen. Die Verbindung scheint nicht zu funktionieren. " +
             //     "Anmeldedaten werden entfernt und es wird erneut mit anonymer Verbindung versucht.",
             //   "warning",
             // );
@@ -242,7 +248,18 @@ export default {
             //   "danger",
             // );
           }
-        }, 1000);
+        }, 5000);
+        // required for route guards
+        this.doSubscribe(
+          [
+            "openWB/system/boot_done",
+            "openWB/system/dataprotection_acknowledged",
+            "openWB/system/usage_terms_acknowledged",
+            "openWB/system/installAssistantDone",
+            "openWB/system/security/access/+",
+          ],
+          true,
+        );
       });
       this.client.on("error", (error) => {
         this.connected = false;
@@ -280,45 +297,68 @@ export default {
       this.client.on("end", () => {
         this.connected = false;
         console.error("mqtt connection ended");
+        this.reconnectMqttClient();
       });
       this.client.on("close", () => {
         this.connected = false;
         console.error("mqtt connection closed");
+        this.reconnectMqttClient();
       });
       this.client.on("offline", () => {
         this.connected = false;
         console.error("mqtt connection offline");
+        this.reconnectMqttClient();
       });
       this.client.on("disconnect", () => {
         this.connected = false;
         console.error("mqtt connection disconnected");
+        this.reconnectMqttClient();
       });
       this.client.on("reconnect", () => {
         console.error("mqtt connection reconnecting...");
       });
     },
-    endConnection() {
-      if (this.connected) {
+    endConnection(force = true) {
+      if (this.client) {
         console.warn("Ending mqtt connection...");
-        this.client.end();
+        try {
+          // force: true closes the client immediately without waiting for in-flight messages,
+          // which is what we want when we handle reconnection manually with linear backoff
+          this.client.end(force);
+        } catch (e) {
+          console.error("Error while ending client", e);
+        }
         this.connected = false;
         this.$store.commit("storeLocal", { name: "username", value: null });
         if (this.dataTimeout) {
           clearTimeout(this.dataTimeout);
           this.dataTimeout = null;
         }
+        this.client = null;
       } else {
         console.error("No mqtt connection to end.");
       }
     },
     reconnectMqttClient() {
-      if (this.client?.connected) {
-        this.endConnection();
+      if (this.reconnecting) {
+        console.debug("Reconnect already in progress, skipping.");
+        return;
       }
-      this.createConnection();
+      this.reconnecting = true;
+      // hard close existing connection to ensure clean state for next connection attempt
+      this.endConnection();
+      // linear backoff
+      const backoff = Math.min(this.reconnectBackoff * this.reconnectAttempts, this.maxReconnectBackoff);
+      console.warn(`Reconnect attempt #${this.reconnectAttempts + 1} in ${backoff / 1000}s ...`);
+      setTimeout(() => {
+        this.createConnection();
+        this.reconnectAttempts++;
+        this.reconnecting = false;
+      }, backoff);
     },
-    doSubscribe(topics) {
+    doSubscribe(topics, forceSubscribe = false) {
       topics.forEach((topic) => {
+        let subscribe = false;
         this.$store.commit("addSubscription", topic);
         if (this.$store.getters.subscriptionCount(topic) === 1) {
           if (topic.includes("#") || topic.includes("+")) {
@@ -329,6 +369,16 @@ export default {
               payload: undefined,
             });
           }
+          subscribe = true;
+        } else {
+          console.debug("Already subscribed to topic: ", topic);
+          if (forceSubscribe) {
+            console.debug("Force subscribing to topic: ", topic);
+            subscribe = true;
+          }
+        }
+        if (subscribe) {
+          console.debug("Subscribing to topic: ", topic);
           this.client.subscribe(topic, {}, (error) => {
             if (error) {
               this.postClientMessage(
@@ -339,8 +389,6 @@ export default {
               return;
             }
           });
-        } else {
-          console.debug("Already subscribed to topic: ", topic);
         }
       });
     },
