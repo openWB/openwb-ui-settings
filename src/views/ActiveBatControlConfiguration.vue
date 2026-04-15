@@ -388,7 +388,7 @@
                 </template>
               </openwb-base-range-input>
               <openwb-base-button-group-input
-                title="Regellimit"
+                title="Regelmodus"
                 :buttons="[
                   {
                     buttonValue: 'mode_no_discharge',
@@ -449,7 +449,7 @@
                     Der Speicher regelt direkt entsprechend der manuellen Einstellung.
                   </div>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'vehicle_charging'">
-                    Das oben eingestellte Regellimit wird angewendet, sobald ein oder mehrere Fahrzeuge Laden.
+                    Der oben eingestellte Regelmodus wird angewendet, sobald ein oder mehrere Fahrzeuge Laden.
                   </div>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'price_limit'">
                     Regelung nach Preisgrenze bei variablen Strompreisen.
@@ -464,15 +464,15 @@
                   :buttons="[
                     {
                       buttonValue: 'manual_disable',
-                      text: 'Aus',
+                      text: 'Eigenregelung',
                     },
                     {
                       buttonValue: 'manual_limit',
-                      text: 'Regellimit anwenden',
+                      text: 'Regelmodus anwenden',
                     },
                     {
                       buttonValue: 'manual_charge',
-                      text: 'Speicher laden',
+                      text: 'Speicher aktiv laden',
                     },
                   ]"
                   :model-value="$store.state.mqtt['openWB/bat/config/manual_mode']"
@@ -483,7 +483,7 @@
                       Aktive Speichersteuerung deaktivieren (Eigenregelung des Speichers).
                     </div>
                     <div v-if="$store.state.mqtt['openWB/bat/config/manual_mode'] === 'manual_limit'">
-                      Es wird das weiter oben konfigurierte Regellimit angewendet.
+                      Es wird der weiter oben konfigurierte Regelmodus angewendet.
                     </div>
                     <div v-if="$store.state.mqtt['openWB/bat/config/manual_mode'] === 'manual_charge'">
                       Alle Speicher werden mit ihrer eingestellten maximalen Ladeleistung beladen. Befinden sich die
@@ -495,8 +495,8 @@
               <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'vehicle_charging'">
                 <openwb-base-heading class="mt-0"> Fahrzeugladung aktiv </openwb-base-heading>
                 <openwb-base-alert subtype="info">
-                  Dieser Modus bietet keine weiteren Einstellungen. Sobald mindestens ein Fahrzeug lädt greift das
-                  weiter oben konfigurierte Regellimit.
+                  Dieser Modus bietet keine weiteren Einstellungen. Sobald mindestens ein Fahrzeug lädt greift der
+                  weiter oben konfigurierte Regelmodus.
                 </openwb-base-alert>
               </div>
               <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'price_limit'">
@@ -529,11 +529,11 @@
                   @update:model-value="updateState('openWB/bat/config/price_limit_activated', $event)"
                 >
                   <template #help>
-                    Fällt der variable Strompreis unter diesen Wert, greift das weiter oben konfigurierte Regellimit.
+                    Fällt der variable Strompreis unter diesen Wert, greift der weiter oben konfigurierte Regelmodus.
                   </template>
                 </openwb-base-button-group-input>
                 <openwb-base-number-input
-                  title="Preisgrenze für Netzbezug"
+                  title="Preisgrenze für Anwendung des Regelmodus"
                   :step="0.001"
                   :precision="3"
                   unit="ct/kWh"
@@ -544,7 +544,7 @@
                   "
                 />
                 <openwb-base-button-group-input
-                  title="Preisgrenze für Speicherladung mit Netzbezug"
+                  title="Preisgrenze für Regelmodus"
                   :buttons="[
                     {
                       buttonValue: false,
