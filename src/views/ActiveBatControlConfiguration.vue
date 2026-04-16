@@ -388,44 +388,6 @@
                 </template>
               </openwb-base-range-input>
               <openwb-base-button-group-input
-                title="Regelmodus"
-                :buttons="[
-                  {
-                    buttonValue: 'mode_no_discharge',
-                    text: 'volle Entladesperre',
-                  },
-                  {
-                    buttonValue: 'mode_discharge_home_consumption',
-                    text: 'Nur Hausverbrauch entladen',
-                  },
-                  {
-                    buttonValue: 'mode_charge_pv_production',
-                    text: 'PV-Ertrag speichern',
-                  },
-                ]"
-                :model-value="$store.state.mqtt['openWB/bat/config/power_limit_mode']"
-                @update:model-value="updateState('openWB/bat/config/power_limit_mode', $event)"
-              >
-                <template #help>
-                  <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'mode_no_discharge'">
-                    Die Speicherentladung wird komplett gesperrt! Alle Verbraucher (Fahrzeuge, Hausverbrauch) werden
-                    durch Netzstrom und ggfs. vorhandenen PV-Überschuss versorgt.
-                  </div>
-                  <div
-                    v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'mode_discharge_home_consumption'"
-                  >
-                    Es wird nur der Hausverbrauch durch den Speicher ausgeglichen. Die Speicherentladung in Fahrzeuge
-                    wird komplett gesperrt! Fahrzeugladung, die nicht durch PV-Überschuss gedeckt werden kann, erzeugt
-                    Netzbezug statt Speicherentladung. Kann die Entladung am Speicher nur komplett gesperrt werden,
-                    verhält sich diese Einstellung wie "volle Entladesperre".
-                  </div>
-                  <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'mode_charge_pv_production'">
-                    PV-Ertrag wird vorrangig in den Speicher geladen (aktive Ladung)! Weiterer Verbrauch (Hausverbrauch/
-                    Fahrzeugladung) erzeugt Netzbezug.
-                  </div>
-                </template>
-              </openwb-base-button-group-input>
-              <openwb-base-button-group-input
                 title="Regelbedingung"
                 :buttons="[
                   {
@@ -449,7 +411,7 @@
                     Der Speicher regelt direkt entsprechend der manuellen Einstellung.
                   </div>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'vehicle_charging'">
-                    Der oben eingestellte Regelmodus wird angewendet, sobald ein oder mehrere Fahrzeuge Laden.
+                    Der unten eingestellte Regelmodus wird angewendet, sobald ein oder mehrere Fahrzeuge Laden.
                   </div>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'price_limit'">
                     Regelung nach Preisgrenze bei variablen Strompreisen.
@@ -457,8 +419,19 @@
                 </template>
               </openwb-base-button-group-input>
               <hr />
-              <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'manual'">
-                <openwb-base-heading class="mt-0"> Manuell </openwb-base-heading>
+              <div
+                v-if="
+                  $store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'manual' ||
+                  $store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'vehicle_charging'
+                "
+              >
+                <openwb-base-heading class="mt-0">
+                  {{
+                    $store.state.mqtt["openWB/bat/config/power_limit_condition"] === "manual"
+                      ? "Manuell"
+                      : "Fahrzeugladung aktiv"
+                  }}
+                </openwb-base-heading>
                 <openwb-base-button-group-input
                   title="Speichersteuerung"
                   :buttons="[
@@ -483,7 +456,7 @@
                       Aktive Speichersteuerung deaktivieren (Eigenregelung des Speichers).
                     </div>
                     <div v-if="$store.state.mqtt['openWB/bat/config/manual_mode'] === 'manual_limit'">
-                      Es wird der weiter oben konfigurierte Regelmodus angewendet.
+                      Es wird der weiter unten konfigurierte Regelmodus angewendet.
                     </div>
                     <div v-if="$store.state.mqtt['openWB/bat/config/manual_mode'] === 'manual_charge'">
                       Alle Speicher werden mit ihrer eingestellten maximalen Ladeleistung beladen. Befinden sich die
@@ -491,21 +464,52 @@
                     </div>
                   </template>
                 </openwb-base-button-group-input>
-              </div>
-              <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'vehicle_charging'">
-                <openwb-base-heading class="mt-0"> Fahrzeugladung aktiv </openwb-base-heading>
-                <openwb-base-alert subtype="info">
-                  Dieser Modus bietet keine weiteren Einstellungen. Sobald mindestens ein Fahrzeug lädt greift der
-                  weiter oben konfigurierte Regelmodus.
-                </openwb-base-alert>
+                <openwb-base-button-group-input
+                  title="Regelmodus"
+                  :disabled="$store.state.mqtt['openWB/bat/config/manual_mode'] !== 'manual_limit'"
+                  :buttons="[
+                    {
+                      buttonValue: 'mode_no_discharge',
+                      text: 'volle Entladesperre',
+                    },
+                    {
+                      buttonValue: 'mode_discharge_home_consumption',
+                      text: 'Nur Hausverbrauch entladen',
+                    },
+                    {
+                      buttonValue: 'mode_charge_pv_production',
+                      text: 'PV-Ertrag speichern',
+                    },
+                  ]"
+                  :model-value="$store.state.mqtt['openWB/bat/config/power_limit_mode']"
+                  @update:model-value="updateState('openWB/bat/config/power_limit_mode', $event)"
+                >
+                  <template #help>
+                    <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'mode_no_discharge'">
+                      Die Speicherentladung wird komplett gesperrt! Alle Verbraucher (Fahrzeuge, Hausverbrauch) werden
+                      durch Netzstrom und ggfs. vorhandenen PV-Überschuss versorgt.
+                    </div>
+                    <div
+                      v-if="
+                        $store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'mode_discharge_home_consumption'
+                      "
+                    >
+                      Es wird nur der Hausverbrauch durch den Speicher ausgeglichen. Die Speicherentladung in Fahrzeuge
+                      wird komplett gesperrt! Fahrzeugladung, die nicht durch PV-Überschuss gedeckt werden kann, erzeugt
+                      Netzbezug statt Speicherentladung. Kann die Entladung am Speicher nur komplett gesperrt werden,
+                      verhält sich diese Einstellung wie "volle Entladesperre".
+                    </div>
+                    <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'mode_charge_pv_production'">
+                      PV-Ertrag wird vorrangig in den Speicher geladen (aktive Ladung)! Weiterer Verbrauch
+                      (Hausverbrauch/ Fahrzeugladung) erzeugt Netzbezug.
+                    </div>
+                  </template>
+                </openwb-base-button-group-input>
               </div>
               <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'price_limit'">
                 <openwb-base-heading class="mt-0"> Preisgrenze (Variable Strompreise) </openwb-base-heading>
                 <openwb-base-alert
-                  v-if="
-                    !$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'] ||
-                    !$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'].type
-                  "
+                  v-if="!$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider']?.type"
                   subtype="warning"
                 >
                   Bitte in den übergreifenden Ladeeinstellungen einen Strompreis-Anbieter konfigurieren. Ohne
@@ -529,11 +533,11 @@
                   @update:model-value="updateState('openWB/bat/config/price_limit_activated', $event)"
                 >
                   <template #help>
-                    Fällt der variable Strompreis unter diesen Wert, greift der weiter oben konfigurierte Regelmodus.
+                    Fällt der variable Strompreis unter diesen Wert, greift der unten konfigurierte Regelmodus.
                   </template>
                 </openwb-base-button-group-input>
                 <openwb-base-number-input
-                  title="Preisgrenze für Anwendung des Regelmodus"
+                  title="Eigenregelung für Strompreise über"
                   :step="0.001"
                   :precision="3"
                   unit="ct/kWh"
@@ -543,6 +547,46 @@
                     updateState('openWB/bat/config/price_limit', parseFloat(($event / 100000).toFixed(7)))
                   "
                 />
+                <openwb-base-button-group-input
+                  :title="`Regelmodus für Strompreise zwischen ${priceLimitLower} und ${priceLimitUpper} ct/kWh`"
+                  :buttons="[
+                    {
+                      buttonValue: 'mode_no_discharge',
+                      text: 'volle Entladesperre',
+                    },
+                    {
+                      buttonValue: 'mode_discharge_home_consumption',
+                      text: 'Nur Hausverbrauch entladen',
+                    },
+                    {
+                      buttonValue: 'mode_charge_pv_production',
+                      text: 'PV-Ertrag speichern',
+                    },
+                  ]"
+                  :model-value="$store.state.mqtt['openWB/bat/config/power_limit_mode']"
+                  @update:model-value="updateState('openWB/bat/config/power_limit_mode', $event)"
+                >
+                  <template #help>
+                    <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'mode_no_discharge'">
+                      Die Speicherentladung wird komplett gesperrt! Alle Verbraucher (Fahrzeuge, Hausverbrauch) werden
+                      durch Netzstrom und ggfs. vorhandenen PV-Überschuss versorgt.
+                    </div>
+                    <div
+                      v-if="
+                        $store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'mode_discharge_home_consumption'
+                      "
+                    >
+                      Es wird nur der Hausverbrauch durch den Speicher ausgeglichen. Die Speicherentladung in Fahrzeuge
+                      wird komplett gesperrt! Fahrzeugladung, die nicht durch PV-Überschuss gedeckt werden kann, erzeugt
+                      Netzbezug statt Speicherentladung. Kann die Entladung am Speicher nur komplett gesperrt werden,
+                      verhält sich diese Einstellung wie "volle Entladesperre".
+                    </div>
+                    <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'mode_charge_pv_production'">
+                      PV-Ertrag wird vorrangig in den Speicher geladen (aktive Ladung)! Weiterer Verbrauch
+                      (Hausverbrauch/ Fahrzeugladung) erzeugt Netzbezug.
+                    </div>
+                  </template>
+                </openwb-base-button-group-input>
                 <openwb-base-button-group-input
                   title="Preisgrenze für Regelmodus"
                   :buttons="[
@@ -567,7 +611,7 @@
                   </template>
                 </openwb-base-button-group-input>
                 <openwb-base-number-input
-                  title="Preisgrenze für Speicherladung"
+                  title="Speicher aktiv laden für Strompreise unter "
                   :step="0.001"
                   :precision="3"
                   unit="ct/kWh"
@@ -577,6 +621,17 @@
                     updateState('openWB/bat/config/charge_limit', parseFloat(($event / 100000).toFixed(7)))
                   "
                 />
+              </div>
+              <div v-if="batteryBehaviourDescription.length">
+                <openwb-base-heading class="mt-2"> Beschreibung des Verhaltens </openwb-base-heading>
+                <openwb-base-alert subtype="info">
+                  <div
+                    v-for="(line, index) in batteryBehaviourDescription"
+                    :key="index"
+                  >
+                    {{ line }}
+                  </div>
+                </openwb-base-alert>
               </div>
             </div>
             <div v-else>
@@ -645,6 +700,7 @@ export default {
         { topic: "openWB/general/chargemode_config/pv_charging/min_bat_soc", writeable: true },
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
+        { topic: "openWB/optional/ep/flexible_tariff/provider", writeable: false },
       ],
     };
   },
@@ -688,6 +744,62 @@ export default {
             .length > 0
         );
       },
+    },
+    priceLimitUpper() {
+      return (this.$store.state.mqtt["openWB/bat/config/price_limit"] * 100000).toFixed(0);
+    },
+    priceLimitLower() {
+      return (this.$store.state.mqtt["openWB/bat/config/charge_limit"] * 100000).toFixed(0);
+    },
+    batteryBehaviourDescription() {
+      const condition = this.$store.state.mqtt["openWB/bat/config/power_limit_condition"];
+      const mode = this.$store.state.mqtt["openWB/bat/config/power_limit_mode"];
+      const controlMode = this.$store.state.mqtt["openWB/bat/config/manual_mode"];
+      const lines = [];
+      // Condition
+      if (condition === "manual") {
+        lines.push("Die Konfiguration wird dauerhaft angewendet.");
+      }
+      if (condition === "vehicle_charging") {
+        lines.push("Die Konfiguration wird angewendet, sobald ein Fahrzeug lädt.");
+      }
+      if (condition === "price_limit") {
+        lines.push(
+          `Die Konfiguration wird abhängig vom Strompreis angewendet (zwischen ${this.priceLimitLower} und ${this.priceLimitUpper} ct/kWh).`,
+        );
+      }
+      // Storage control
+      if (condition === "manual" || condition === "vehicle_charging") {
+        if (controlMode === "manual_disable") {
+          lines.push("Der Speicher arbeitet in Eigenregelung.");
+        }
+        if (controlMode === "manual_limit") {
+          lines.push("Der konfigurierte Regelmodus wird angewendet.");
+        }
+        if (controlMode === "manual_charge") {
+          lines.push("Der Speicher wird aktiv geladen.");
+        }
+      }
+      // Mode
+      if (condition === "price_limit" || controlMode === "manual_limit") {
+        if (mode === "mode_no_discharge") {
+          lines.push(
+            "Die Speicherentladung ist vollständig gesperrt. Alle Verbraucher werden durch Netz oder PV versorgt.",
+          );
+        }
+        if (mode === "mode_discharge_home_consumption") {
+          lines.push(
+            "Der Speicher versorgt ausschließlich den Hausverbrauch. Fahrzeugladung erfolgt nicht aus dem Speicher.",
+          );
+        }
+        if (mode === "mode_charge_pv_production") {
+          lines.push(
+            "PV-Ertrag wird vorrangig im Speicher gespeichert. Verbraucher werden bei Bedarf aus dem Netz versorgt.",
+          );
+        }
+      }
+
+      return lines;
     },
   },
   methods: {
