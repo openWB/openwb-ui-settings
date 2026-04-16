@@ -195,7 +195,7 @@ export default {
       // wss encrypted WebSocket connection
       const { protocol, host, port, path, ...options } = this.connection;
       const connectUrl = `${protocol}://${host}:${port}${path}`;
-      const [user, pass] = this.$cookies
+      let [user, pass] = this.$cookies
         .get("mqtt")
         ?.match(/^([^:]+):(.+)$/)
         ?.slice(1) || [null, null];
@@ -264,10 +264,23 @@ export default {
       this.client.on("error", (error) => {
         this.connected = false;
         console.error("Connection failed", error);
-        // this.postClientMessage("Verbindungsfehler:<br />" + error.message, "danger");
-        this.$cookies.remove("mqtt");
-        this.$store.commit("storeLocal", { name: "username", value: null });
-        this.reconnectMqttClient();
+        if (error instanceof mqtt.ErrorWithReasonCode) {
+          console.error("Reason code:", error.code);
+        }
+        // handle not authorized error (code 135 or 137)
+        if ([135, 137].includes(error.code) && user != null) {
+          this.$cookies.remove("mqtt");
+          this.$store.commit("storeLocal", { name: "username", value: null });
+          this.postClientMessage(
+            "Fehler: Anmeldung fehlgeschlagen. Bitte überprüfen Sie die Zugangsdaten und melden Sie sich erneut an.",
+            "danger",
+          );
+          window.setTimeout(() => {
+            location.reload();
+          }, 1000);
+        } else {
+          this.reconnectMqttClient();
+        }
       });
       this.client.on("message", (topic, message) => {
         if (this.dataTimeout) {
@@ -297,7 +310,7 @@ export default {
       this.client.on("end", () => {
         this.connected = false;
         console.error("mqtt connection ended");
-        this.reconnectMqttClient();
+        // this.reconnectMqttClient();
       });
       this.client.on("close", () => {
         this.connected = false;
