@@ -465,8 +465,8 @@
                   </template>
                 </openwb-base-button-group-input>
                 <openwb-base-button-group-input
+                  v-if="$store.state.mqtt['openWB/bat/config/manual_mode'] === 'manual_limit'"
                   title="Regelmodus"
-                  :disabled="$store.state.mqtt['openWB/bat/config/manual_mode'] !== 'manual_limit'"
                   :buttons="[
                     {
                       buttonValue: 'mode_no_discharge',
