@@ -992,10 +992,12 @@ export default {
             case "createClient":
             case "disableClient":
             case "enableClient":
+              this.$root.postClientMessage("Änderungen wurden übernommen.", "success");
               this.getClientList();
               break;
             case "modifyClient":
             case "deleteClient":
+              this.$root.postClientMessage("Änderungen wurden übernommen.", "success");
               this.getClientList();
               // update groups after client modification/deletion as clients in groups may have changed
               this.getGroupsDetails();
@@ -1010,10 +1012,12 @@ export default {
               this.groupDetails[response.data.group.groupname] = JSON.parse(JSON.stringify(response.data.group));
               break;
             case "createGroup":
+              this.$root.postClientMessage("Änderungen wurden übernommen.", "success");
               this.getGroupList();
               break;
             case "modifyGroup":
             case "deleteGroup":
+              this.$root.postClientMessage("Änderungen wurden übernommen.", "success");
               this.getGroupList();
               // update clients after group modification/deletion as groups in clients may have changed
               this.getClientsDetails();
