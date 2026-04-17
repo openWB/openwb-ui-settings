@@ -124,9 +124,9 @@ export default {
       }
       this.updateLocalStore();
     },
-    reloadRequired() {
-      this.updateLocalStore();
-    },
+    // reloadRequired() {
+    //   this.updateLocalStore();
+    // },
   },
   methods: {
     updateLocalStore() {
