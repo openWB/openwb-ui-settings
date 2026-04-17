@@ -557,10 +557,6 @@ export default {
       this.updateState(key, event.value, event.object);
     },
     systemReboot() {
-      this.$store.commit("storeLocal", {
-        name: "reloadRequired",
-        value: true,
-      });
       this.sendSystemCommand("systemReboot");
     },
     systemShutdown() {
