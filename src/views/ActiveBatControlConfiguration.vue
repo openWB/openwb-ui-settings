@@ -798,7 +798,6 @@ export default {
           );
         }
       }
-
       return lines;
     },
   },
