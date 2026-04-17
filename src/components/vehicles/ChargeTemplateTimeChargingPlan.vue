@@ -222,6 +222,44 @@
         Zeitladen schon aktiv ist, neu gezählt.
       </template>
     </openwb-base-number-input>
+    <hr />
+    <openwb-base-range-input
+      v-model="plan.min_bat_soc"
+      title="Zeitladen bis Speicher entladen auf"
+      :min="0"
+      :max="19"
+      :step="1"
+      unit="%"
+      :labels="[
+        { label: '0', value: 0 },
+        { label: 5, value: 5 },
+        { label: 10, value: 10 },
+        { label: 15, value: 15 },
+        { label: 20, value: 20 },
+        { label: 25, value: 25 },
+        { label: 30, value: 30 },
+        { label: 35, value: 35 },
+        { label: 40, value: 40 },
+        { label: 45, value: 45 },
+        { label: 50, value: 50 },
+        { label: 55, value: 55 },
+        { label: 60, value: 60 },
+        { label: 65, value: 65 },
+        { label: 70, value: 70 },
+        { label: 75, value: 75 },
+        { label: 80, value: 80 },
+        { label: 85, value: 85 },
+        { label: 90, value: 90 },
+        { label: 95, value: 95 },
+        { label: 'Aus', value: null },
+      ]"
+    >
+      <template #help>
+        Zeitladen wird nur aktiviert, wenn der SoC des Hausspeichers über dem hier eingestellten SoC liegt. Lädt die
+        aktive Speichersteuerung gerade aktive den Speicher, wird kein Zeitladen gestartet. Da der Speicher nicht
+        gleichzeitig aktiv geladen und vom Fahrzeug entladen werden kann.
+      </template>
+    </openwb-base-range-input>
   </openwb-base-card>
 </template>
 
