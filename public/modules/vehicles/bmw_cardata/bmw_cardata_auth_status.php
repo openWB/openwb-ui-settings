@@ -2,6 +2,11 @@
 header('Content-Type: application/json');
 
 $input = json_decode(file_get_contents('php://input'), true);
+if (!is_array($input)) {
+    http_response_code(400);
+    echo json_encode(['connected' => false, 'message' => '', 'error' => 'Ungültige Anfrage.']);
+    exit;
+}
 
 $client_id = trim((string)($input['client_id'] ?? ''));
 $device_code = trim((string)($input['device_code'] ?? ''));
