@@ -26,6 +26,7 @@
       title="VIN"
       subtype="text"
       required
+      pattern="^[A-HJ-NPR-Z0-9]{17}$"
       :model-value="vehicle.configuration.vin"
       @update:model-value="updateConfiguration($event, 'configuration.vin')"
     >
@@ -113,6 +114,7 @@ export default {
         justConnected: false,
       },
       pollTimer: null,
+      pollInterval: 5,
     };
   },
   computed: {
@@ -158,7 +160,10 @@ export default {
         };
 
         if (data.user_code && !this.pollTimer) {
-          this.pollTimer = setInterval(() => this.pollAuthStatus(), 5000);
+          if (data.interval) {
+            this.pollInterval = data.interval;
+          }
+          this.pollTimer = setInterval(() => this.pollAuthStatus(), this.pollInterval * 1000);
         }
       } catch {
         this.authStatus.error = "BMW Anmeldung konnte nicht gestartet werden.";
@@ -213,10 +218,16 @@ export default {
           return;
         }
 
+        if (data.interval && data.interval !== this.pollInterval) {
+          this.pollInterval = data.interval;
+          clearInterval(this.pollTimer);
+          this.pollTimer = setInterval(() => this.pollAuthStatus(), this.pollInterval * 1000);
+        }
+
         this.authStatus.message = data.message || "Warte auf BMW-Bestätigung...";
 
       } catch {
-        this.authStatus.error = "Auth-Status konnte nicht geladen werden.";
+        this.authStatus.error = "Anmeldungs-Status konnte nicht geladen werden.";
         clearInterval(this.pollTimer);
         this.pollTimer = null;
       }
