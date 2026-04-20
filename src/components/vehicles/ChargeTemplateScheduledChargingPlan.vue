@@ -271,11 +271,7 @@
       ]"
     />
     <openwb-base-alert
-      v-if="
-        plan.et_active == true &&
-        (!$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'] ||
-          !$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'].type)
-      "
+      v-if="plan.et_active == true && !$store.state.mqtt['openWB/optional/ep/configured']"
       subtype="danger"
     >
       Bitte in den übergreifenden Ladeeinstellungen einen Strompreis-Anbieter konfigurieren.
@@ -377,7 +373,7 @@ export default {
   emits: ["update:modelValue", "sendCommand"],
   data() {
     return {
-      mqttTopics: [{ topic: "openWB/optional/ep/flexible_tariff/provider", writeable: false }],
+      mqttTopics: [{ topic: "openWB/optional/ep/configured", writeable: false }],
       showRemoveModal: false,
     };
   },

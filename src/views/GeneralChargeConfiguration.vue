@@ -69,10 +69,7 @@
             </template>
           </openwb-base-heading>
           <openwb-base-alert
-            v-if="
-              $store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'] &&
-              $store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'].type
-            "
+            v-if="$store.state.mqtt['openWB/optional/ep/configured']"
             subtype="info"
           >
             Für den Netzbezug wird der dynamische Strompreis des Anbieters für variable Stromtarife verwendet. Wenn
@@ -272,6 +269,7 @@ export default {
         { topic: "openWB/optional/ocpp/config", writeable: true },
         { topic: "openWB/system/configurable/flexible_tariffs", writeable: false },
         { topic: "openWB/system/configurable/grid_fees", writeable: false },
+        { topic: "openWB/optional/ep/configured", writeable: false },
       ],
     };
   },
