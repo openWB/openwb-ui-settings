@@ -238,12 +238,12 @@ export default {
           this.errorMessage = apiResponse.error || "Login fehlgeschlagen";
           this.connectionState = "error";
           this.clearData();
-          this.$root.postClientMessage(this.errorMessage, "danger");
+          //this.$root.postClientMessage(this.errorMessage, "danger");
           return;
         }
         const transformed = this.transformApiData(apiResponse.data);
         this.applyStatus(transformed);
-        this.$root.postClientMessage("Verbindung erfolgreich", "success");
+        //this.$root.postClientMessage("Verbindung erfolgreich", "success");
       } catch (error) {
         console.error(error);
         let message = "Serverfehler";
@@ -255,7 +255,7 @@ export default {
         this.errorMessage = message;
         this.connectionState = "error";
         this.clearData();
-        this.$root.postClientMessage(message, "danger");
+        //this.$root.postClientMessage(message, "danger");
       }
     },
 
@@ -266,16 +266,23 @@ export default {
       const contract = apiData[contractKey] || {};
       const countersKey = Object.keys(apiData).find((key) => key.includes("/stammdaten/counters"));
       const counters = apiData[countersKey] || {};
-      console.log("Gefundene Zählerdaten:", counters);
-      const assignments = Object.entries(counters).map(([key, value]) => ({
-        device: key,
-        assigned_to: value,
-      }));
+      const lastDataKey = Object.keys(apiData).find((key) => key.includes("/stammdaten/lastdata"));
+      const lastData = apiData[lastDataKey];
+      const assignments = Object.entries(counters)
+        .map(([key, value]) => {
+          const number = key.replace("counter", "");
+          return {
+            device: `Zähler ${number}`,
+            assigned_to: value,
+            sortKey: Number(number),
+          };
+        })
+        .sort((a, b) => a.sortKey - b.sortKey);
 
       return {
         name: name,
         contractActive: true, // API doesn’t provide this yet
-        lastSync: new Date().toISOString(),
+        lastSync: lastData ? lastData * 1000 : null,
         assignments,
         contractDetails: contract,
         error: null,
@@ -302,9 +309,9 @@ export default {
       return `- ${clientName} - ${address}`;
     },
 
-    formatDate(dateString) {
-      if (!dateString) return null;
-      return new Date(dateString).toLocaleString();
+    formatDate(timestamp) {
+      if (!timestamp) return null;
+      return new Date(timestamp).toLocaleString();
     },
 
     clearData() {
