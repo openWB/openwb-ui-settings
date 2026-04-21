@@ -1,6 +1,7 @@
 <template>
   <div>
-    <openwb-base-card title="Verbindung">
+    <openwb-base-card>
+      <template #header> Verbindung {{ titleText() }} </template>
       <openwb-base-text-input
         title="Benutzername"
         subtype="user"
@@ -18,15 +19,16 @@
         <template #help> Das Passwort kann per Klick auf das Auge angezeigt werden. </template>
       </openwb-base-text-input>
       <openwb-base-button-input
-        v-if="!isConnected"
+        v-if="!wasConnected"
         class="mt-2"
         title=""
-        button-text="Verbinden"
+        :button-text="connectionState === 'loading' ? 'wird verbunden...' : 'Verbinden'"
         subtype="info"
+        :disabled="connectionState === 'loading'"
         @button-clicked="fetchStatus"
       />
       <div
-        v-if="isConnected"
+        v-if="wasConnected"
         class="form-row mt-3"
       >
         <div class="col-md-4"></div>
@@ -36,9 +38,10 @@
             <div class="col">
               <openwb-base-click-button
                 class="btn btn-success w-100"
+                :disabled="connectionState === 'loading'"
                 @click="fetchStatus"
               >
-                Aktualisieren
+                {{ connectionState === "loading" ? "wird aktualisiert..." : "Aktualisieren" }}
               </openwb-base-click-button>
             </div>
 
@@ -64,8 +67,22 @@
         <div class="row">
           <div class="col">Verbindungsstatus</div>
           <div class="col text-right">
-            <span :class="isConnected ? 'text-success' : 'text-danger'">
-              {{ isConnected ? "Verbunden" : "Nicht verbunden" }}
+            <span
+              :class="
+                connectionState === 'success'
+                  ? 'text-success'
+                  : connectionState === 'loading'
+                    ? 'text-warning'
+                    : 'text-danger'
+              "
+            >
+              {{
+                connectionState === "loading"
+                  ? "Wird verbunden..."
+                  : connectionState === "success"
+                    ? "Verbunden"
+                    : "Nicht verbunden"
+              }}
             </span>
           </div>
         </div>
@@ -86,16 +103,19 @@
           </div>
         </div>
         <hr />
-        <div class="mt-3">
-          <openwb-base-alert :subtype="hasError ? 'danger' : 'success'">
-            {{ hasError ? errorMessage : "Keine Fehlermeldung" }}
+        <div
+          v-if="connectionState === 'success' || connectionState === 'error'"
+          class="mt-3"
+        >
+          <openwb-base-alert :subtype="connectionState === 'error' ? 'danger' : 'success'">
+            {{ connectionState === "error" ? errorMessage : "Verbindung erfolgreich" }}
           </openwb-base-alert>
         </div>
       </openwb-base-card>
     </openwb-base-card>
 
     <openwb-base-card
-      v-if="isConnected"
+      v-if="wasConnected"
       title="Portal"
     >
       <openwb-base-card
@@ -106,23 +126,21 @@
       >
         <openwb-base-click-button
           class="btn btn-info w-100"
-          :href="portalLinks[0]?.url || 'https://wb-solution.de/produkt/mieterstromabrechnung/'"
+          :href="'https://wb-solution.de/produkt/mieterstromabrechnung/'"
         >
-          {{ portalLinks[0]?.label || "Portal öffnen" }}
+          Mieterstrom Portal öffnen
         </openwb-base-click-button>
         <openwb-base-click-button
           class="btn btn-info w-100"
-          :href="portalLinks[1]?.url || 'https://openwb.de/main/mieterstromabrechnung-mit-openwb/'"
+          :href="contractDetails?.downloadUrl || 'https://openwb.de/main/mieterstromabrechnung-mit-openwb/'"
         >
-          {{ portalLinks[1]?.label || "Download Portal" }}
+          Abrechnung Download Portal öffnen
         </openwb-base-click-button>
       </openwb-base-card>
     </openwb-base-card>
 
-    <openwb-base-card
-      v-if="isConnected && assignments.length"
-      title="Verbraucher-Zuordnung"
-    >
+    <openwb-base-card v-if="wasConnected && assignments.length">
+      <template #header> Verbraucher -Zuordnung {{ titleText() }} </template>
       <openwb-base-card
         title=""
         subtype="white"
@@ -160,11 +178,11 @@
     </openwb-base-card>
     <tenant-billing-shop
       v-if="billingService === 'tenant'"
-      :is-connected="isConnected"
+      :is-connected="connectionState === 'success'"
     />
     <vehicle-billing-shop
       v-if="billingService === 'vehicle'"
-      :is-connected="isConnected"
+      :is-connected="connectionState === 'success'"
     />
   </div>
 </template>
@@ -182,7 +200,6 @@ export default {
   },
   props: {
     billingService: { type: String, required: true },
-    portalLinks: { type: Array, required: false, default: () => [] },
     apiUrl: {
       type: String,
       required: false,
@@ -198,44 +215,91 @@ export default {
     return {
       username: "",
       password: "",
-      isConnected: false,
+      name: "",
       contractActive: false,
       lastSync: null,
       assignments: [],
-      hasError: false,
+      contractDetails: {},
       errorMessage: "",
+      connectionState: "idle",
+      wasConnected: false,
     };
   },
   methods: {
     async fetchStatus() {
+      this.connectionState = "loading";
       try {
         const response = await axios.post(this.apiUrl, {
           username: this.username,
           password: this.password,
         });
-
-        const data = response.data;
-
-        this.applyStatus(data);
-
-        if (data.connected) {
-          this.$root.postClientMessage("Verbindung erfolgreich", "success");
-        } else {
-          this.$root.postClientMessage(data.error || "Login fehlgeschlagen", "danger");
+        const apiResponse = response.data;
+        if (!apiResponse.success) {
+          this.errorMessage = apiResponse.error || "Login fehlgeschlagen";
+          this.connectionState = "error";
+          this.clearData();
+          this.$root.postClientMessage(this.errorMessage, "danger");
+          return;
         }
+        const transformed = this.transformApiData(apiResponse.data);
+        this.applyStatus(transformed);
+        this.$root.postClientMessage("Verbindung erfolgreich", "success");
       } catch (error) {
         console.error(error);
-        this.$root.postClientMessage("Serverfehler", "danger");
+        let message = "Serverfehler";
+        if (error.response?.data?.error) {
+          message = error.response.data.error;
+        } else if (error.message) {
+          message = error.message;
+        }
+        this.errorMessage = message;
+        this.connectionState = "error";
+        this.clearData();
+        this.$root.postClientMessage(message, "danger");
       }
     },
 
+    transformApiData(apiData) {
+      const nameKey = Object.keys(apiData).find((key) => key.includes("/stammdaten/name"));
+      const name = apiData[nameKey] || "Unbekannt";
+      const contractKey = Object.keys(apiData).find((key) => key.includes("/stammdaten/pdftoken"));
+      const contract = apiData[contractKey] || {};
+      const countersKey = Object.keys(apiData).find((key) => key.includes("/stammdaten/counters"));
+      const counters = apiData[countersKey] || {};
+      console.log("Gefundene Zählerdaten:", counters);
+      const assignments = Object.entries(counters).map(([key, value]) => ({
+        device: key,
+        assigned_to: value,
+      }));
+
+      return {
+        name: name,
+        contractActive: true, // API doesn’t provide this yet
+        lastSync: new Date().toISOString(),
+        assignments,
+        contractDetails: contract,
+        error: null,
+      };
+    },
+
     applyStatus(data) {
-      this.isConnected = data.connected;
-      this.contractActive = data.contract_active;
-      this.lastSync = this.formatDate(data.last_sync);
+      this.name = data.name;
+      this.contractActive = data.contractActive;
+      this.lastSync = this.formatDate(data.lastSync);
       this.assignments = data.assignments || [];
-      this.hasError = !!data.error;
+      this.contractDetails = data.contractDetails || {};
+      this.connectionState = data.error ? "error" : "success";
+      this.wasConnected = !data.error;
       this.errorMessage = data.error || "";
+    },
+
+    titleText() {
+      if (!this.name) {
+        return "";
+      }
+      const clientName = this.name;
+      const address = this.contractDetails?.installation;
+      return `- ${clientName} - ${address}`;
     },
 
     formatDate(dateString) {
@@ -243,13 +307,20 @@ export default {
       return new Date(dateString).toLocaleString();
     },
 
-    disconnect() {
-      this.isConnected = false;
+    clearData() {
+      this.name = undefined;
+      this.contractDetails = {};
+      this.assignments = [];
       this.contractActive = false;
       this.lastSync = null;
-      this.hasError = false;
+    },
+
+    disconnect() {
+      this.connectionState = "idle";
+      this.wasConnected = false;
       this.errorMessage = "";
       this.password = "";
+      this.clearData();
     },
   },
 };

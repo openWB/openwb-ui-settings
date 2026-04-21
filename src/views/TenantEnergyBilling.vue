@@ -1,11 +1,7 @@
 <template>
   <base-status-page
     billing-service="tenant"
-    :api-url="'http://localhost:59563/openWB/web/settings/modules/billing_services/tenant_energy/tenantEnergy.php'"
-    :portal-links="[
-      { label: 'Mieterstrom Portal öffnen', url: 'https://wb-solution.de/produkt/mieterstromabrechnung/' },
-      { label: 'Abrechnung Download Portal', url: 'https://openwb.de/main/mieterstromabrechnung-mit-openwb/' },
-    ]"
+    :api-url="'https://mieterstrom-management.wb-solution.de/api/v1/mieterstrom-main'"
     :table-columns="[
       { label: 'Verbraucher', field: 'device' },
       { label: 'Zugeordnet zu', field: 'assigned_to', align: 'right' },
