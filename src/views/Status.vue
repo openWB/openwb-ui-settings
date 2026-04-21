@@ -82,8 +82,7 @@ export default {
         { topic: "openWB/chargepoint/+/config", writeable: false },
         { topic: "openWB/chargepoint/get/power", writeable: false },
         { topic: "openWB/general/extern", writeable: false },
-        { topic: "openWB/optional/ep/flexible_tariff/provider", writeable: false },
-        { topic: "openWB/optional/ep/grid_fee/provider", writeable: false },
+        { topic: "openWB/optional/ep/configured", writeable: false },
         { topic: "openWB/pv/get/power", writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
         { topic: "openWB/system/io/+/config", writeable: false },
@@ -180,8 +179,7 @@ export default {
     showElectricityPricingCard: {
       get() {
         return (
-          (this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/provider"]?.type ||
-            this.$store.state.mqtt["openWB/optional/ep/grid_fee/provider"]?.type) &&
+          this.$store.state.mqtt["openWB/optional/ep/configured"] === true &&
           this.$store.state.mqtt["openWB/general/extern"] === false
         );
       },

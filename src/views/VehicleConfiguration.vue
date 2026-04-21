@@ -1269,10 +1269,7 @@
                 <template #help> Die geladene Energiemenge wird nach dem Anstecken neu gezählt. </template>
               </openwb-base-number-input>
               <openwb-base-alert
-                v-if="
-                  !$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'] ||
-                  !$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'].type
-                "
+                v-if="!$store.state.mqtt['openWB/optional/ep/configured']"
                 subtype="warning"
               >
                 Bitte in den übergreifenden Ladeeinstellungen einen Strompreis-Anbieter konfigurieren. Ohne
@@ -1443,7 +1440,7 @@ export default {
       mqttTopics: [
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/optional/dc_charging", writeable: false },
-        { topic: "openWB/optional/ep/flexible_tariff/provider", writeable: false },
+        { topic: "openWB/optional/ep/configured", writeable: false },
         { topic: "openWB/optional/rfid/active", writeable: false },
         { topic: "openWB/system/configurable/soc_modules", writeable: false },
         { topic: "openWB/vehicle/+/charge_template", writeable: true },

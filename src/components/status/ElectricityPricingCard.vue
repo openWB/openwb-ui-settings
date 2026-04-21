@@ -90,6 +90,7 @@ export default {
   data() {
     return {
       mqttTopics: [
+        { topic: "openWB/optional/ep/configured", writeable: false },
         { topic: "openWB/optional/ep/flexible_tariff/get/fault_state", writeable: false },
         { topic: "openWB/optional/ep/flexible_tariff/get/fault_str", writeable: false },
         { topic: "openWB/optional/ep/flexible_tariff/get/prices", writeable: false },
@@ -255,13 +256,7 @@ export default {
   },
   computed: {
     electricityPricingConfigured() {
-      const flexible_tariff_provider = this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/provider"];
-      const grid_fee_provider = this.$store.state.mqtt["openWB/optional/ep/grid_fee/provider"];
-
-      // Zeige die Karte an, wenn mindestens ein Provider konfiguriert ist (auch mit Fehlern)
-      return (
-        (flexible_tariff_provider && flexible_tariff_provider.type) || (grid_fee_provider && grid_fee_provider.type)
-      );
+      return this.$store.state.mqtt["openWB/optional/ep/configured"];
     },
     chartDataRead() {
       const datasets = this.chartDataObject.datasets;
