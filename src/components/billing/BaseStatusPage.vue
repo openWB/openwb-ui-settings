@@ -1,12 +1,12 @@
 <template>
   <div>
     <openwb-base-card>
-      <template #header> Verbindung {{ titleText() }} </template>
+      <template #header> Verbindung {{ titleText }} </template>
       <openwb-base-text-input
         title="Benutzername"
         subtype="user"
         :model-value="username"
-        @update:model-value="username = $event"
+        @update:model-value="$emit('update:username', $event)"
       >
         <template #help> Eingabefeld für Benutzernamen </template>
       </openwb-base-text-input>
@@ -14,7 +14,7 @@
         title="Passwort"
         subtype="password"
         :model-value="password"
-        @update:model-value="password = $event"
+        @update:model-value="$emit('update:password', $event)"
       >
         <template #help> Das Passwort kann per Klick auf das Auge angezeigt werden. </template>
       </openwb-base-text-input>
@@ -25,7 +25,7 @@
         :button-text="connectionState === 'loading' ? 'wird verbunden...' : 'Verbinden'"
         subtype="info"
         :disabled="connectionState === 'loading'"
-        @button-clicked="fetchStatus"
+        @button-clicked="$emit('connect')"
       />
       <div
         v-if="wasConnected"
@@ -39,7 +39,7 @@
               <openwb-base-click-button
                 class="btn btn-success w-100"
                 :disabled="connectionState === 'loading'"
-                @click="fetchStatus"
+                @button-clicked="$emit('connect')"
               >
                 {{ connectionState === "loading" ? "wird aktualisiert..." : "Aktualisieren" }}
               </openwb-base-click-button>
@@ -48,7 +48,7 @@
             <div class="col">
               <openwb-base-click-button
                 class="btn btn-danger w-100"
-                @click="disconnect"
+                @button-clicked="$emit('disconnect')"
               >
                 Trennen
               </openwb-base-click-button>
@@ -90,8 +90,8 @@
         <div class="row">
           <div class="col">Vertragsstatus</div>
           <div class="col text-right">
-            <span :class="contractActive ? 'text-success' : 'text-danger'">
-              {{ contractActive ? "Aktiv" : "Inaktiv" }}
+            <span :class="contractStatus === 'active' ? 'text-success' : 'text-danger'">
+              {{ contractStatus }}
             </span>
           </div>
         </div>
@@ -99,7 +99,7 @@
         <div class="row">
           <div class="col">Letzte Synchronisation</div>
           <div class="col text-right">
-            {{ lastSync || "-" }}
+            {{ lastSync }}
           </div>
         </div>
         <hr />
@@ -126,13 +126,13 @@
       >
         <openwb-base-click-button
           class="btn btn-info w-100"
-          :href="'https://wb-solution.de/produkt/mieterstromabrechnung/'"
+          :href="'https://mieterstrom.openwb.de/'"
         >
           Mieterstrom Portal öffnen
         </openwb-base-click-button>
         <openwb-base-click-button
           class="btn btn-info w-100"
-          :href="contractDetails?.downloadUrl || 'https://openwb.de/main/mieterstromabrechnung-mit-openwb/'"
+          :href="contractDetails?.downloadUrl || 'https://mieterstrom.openwb.de/'"
         >
           Abrechnung Download Portal öffnen
         </openwb-base-click-button>
@@ -140,7 +140,7 @@
     </openwb-base-card>
 
     <openwb-base-card v-if="wasConnected && assignments.length">
-      <template #header> Verbraucher -Zuordnung {{ titleText() }} </template>
+      <template #header> Verbraucher - Zuordnung {{ titleText }} </template>
       <openwb-base-card
         title=""
         subtype="white"
@@ -178,157 +178,67 @@
     </openwb-base-card>
     <tenant-billing-shop
       v-if="billingService === 'tenant'"
-      :is-connected="connectionState === 'success'"
+      :is-connected="connectionState === 'success' || connectionState === 'loading'"
     />
     <vehicle-billing-shop
       v-if="billingService === 'vehicle'"
-      :is-connected="connectionState === 'success'"
+      :is-connected="connectionState === 'success' || connectionState === 'loading'"
     />
   </div>
 </template>
 
 <script>
-import axios from "axios";
 import TenantBillingShop from "./tenantBillingShop.vue";
 import VehicleBillingShop from "./VehicleBillingShop.vue";
 
 export default {
-  name: "TenantEnergyBilling",
+  name: "BaseStatusPage",
   components: {
     TenantBillingShop,
     VehicleBillingShop,
   },
   props: {
     billingService: { type: String, required: true },
-    apiUrl: {
+    username: {
       type: String,
-      required: false,
       default: "",
     },
+    password: {
+      type: String,
+      default: "",
+    },
+    connectionState: {
+      type: String,
+      default: "",
+    },
+    contractStatus: {
+      type: String,
+      default: "",
+    },
+    lastSync: {
+      type: String,
+      default: "",
+    },
+    assignments: {
+      type: Array,
+      default: () => [],
+    },
+    contractDetails: {
+      type: Object,
+      default: () => ({}),
+    },
+    errorMessage: {
+      type: String,
+      default: "",
+    },
+    wasConnected: Boolean,
+    titleText: { type: String, default: "" },
     tableColumns: {
       type: Array,
       required: false,
       default: () => [],
     },
   },
-  data() {
-    return {
-      username: "",
-      password: "",
-      name: "",
-      contractActive: false,
-      lastSync: null,
-      assignments: [],
-      contractDetails: {},
-      errorMessage: "",
-      connectionState: "idle",
-      wasConnected: false,
-    };
-  },
-  methods: {
-    async fetchStatus() {
-      this.connectionState = "loading";
-      try {
-        const response = await axios.post(this.apiUrl, {
-          username: this.username,
-          password: this.password,
-        });
-        const apiResponse = response.data;
-        if (!apiResponse.success) {
-          this.errorMessage = apiResponse.error || "Login fehlgeschlagen";
-          this.connectionState = "error";
-          this.clearData();
-          //this.$root.postClientMessage(this.errorMessage, "danger");
-          return;
-        }
-        const transformed = this.transformApiData(apiResponse.data);
-        this.applyStatus(transformed);
-        //this.$root.postClientMessage("Verbindung erfolgreich", "success");
-      } catch (error) {
-        console.error(error);
-        let message = "Serverfehler";
-        if (error.response?.data?.error) {
-          message = error.response.data.error;
-        } else if (error.message) {
-          message = error.message;
-        }
-        this.errorMessage = message;
-        this.connectionState = "error";
-        this.clearData();
-        //this.$root.postClientMessage(message, "danger");
-      }
-    },
-
-    transformApiData(apiData) {
-      const nameKey = Object.keys(apiData).find((key) => key.includes("/stammdaten/name"));
-      const name = apiData[nameKey] || "Unbekannt";
-      const contractKey = Object.keys(apiData).find((key) => key.includes("/stammdaten/pdftoken"));
-      const contract = apiData[contractKey] || {};
-      const countersKey = Object.keys(apiData).find((key) => key.includes("/stammdaten/counters"));
-      const counters = apiData[countersKey] || {};
-      const lastDataKey = Object.keys(apiData).find((key) => key.includes("/stammdaten/lastdata"));
-      const lastData = apiData[lastDataKey];
-      const assignments = Object.entries(counters)
-        .map(([key, value]) => {
-          const number = key.replace("counter", "");
-          return {
-            device: `Zähler ${number}`,
-            assigned_to: value,
-            sortKey: Number(number),
-          };
-        })
-        .sort((a, b) => a.sortKey - b.sortKey);
-
-      return {
-        name: name,
-        contractActive: true, // API doesn’t provide this yet
-        lastSync: lastData ? lastData * 1000 : null,
-        assignments,
-        contractDetails: contract,
-        error: null,
-      };
-    },
-
-    applyStatus(data) {
-      this.name = data.name;
-      this.contractActive = data.contractActive;
-      this.lastSync = this.formatDate(data.lastSync);
-      this.assignments = data.assignments || [];
-      this.contractDetails = data.contractDetails || {};
-      this.connectionState = data.error ? "error" : "success";
-      this.wasConnected = !data.error;
-      this.errorMessage = data.error || "";
-    },
-
-    titleText() {
-      if (!this.name) {
-        return "";
-      }
-      const clientName = this.name;
-      const address = this.contractDetails?.installation;
-      return `- ${clientName} - ${address}`;
-    },
-
-    formatDate(timestamp) {
-      if (!timestamp) return null;
-      return new Date(timestamp).toLocaleString();
-    },
-
-    clearData() {
-      this.name = undefined;
-      this.contractDetails = {};
-      this.assignments = [];
-      this.contractActive = false;
-      this.lastSync = null;
-    },
-
-    disconnect() {
-      this.connectionState = "idle";
-      this.wasConnected = false;
-      this.errorMessage = "";
-      this.password = "";
-      this.clearData();
-    },
-  },
+  emits: ["connect", "disconnect", "update:username", "update:password"],
 };
 </script>
