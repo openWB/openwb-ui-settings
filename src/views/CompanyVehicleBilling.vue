@@ -13,7 +13,7 @@ export default {
   },
   data() {
     return {
-      apiUrl: "https://mieterstrom-management.wb-solution.de/api/v1/mieterstrom-main",
+      apiUrl: "",
       username: "",
       password: "",
       name: "",
