@@ -235,7 +235,6 @@ export default {
     titleText: { type: String, default: "" },
     tableColumns: {
       type: Array,
-      required: false,
       default: () => [],
     },
   },

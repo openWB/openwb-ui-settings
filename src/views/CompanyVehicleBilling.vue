@@ -1,12 +1,7 @@
 <template>
   <base-status-page
     billing-service="vehicle"
-    :api-url="'http://localhost:59563/openWB/web/settings/modules/billing_services/company_vehicle/companyVehicle.php'"
-    :table-columns="[
-      { label: 'Ladepunkt', field: 'chargePoint' },
-      { label: 'Fahrzeug', field: 'vehicle', align: 'center' },
-      { label: 'Mitarbeiter', field: 'employee', align: 'right' },
-    ]"
+    :table-columns="tableColumns"
   />
 </template>
 
@@ -15,6 +10,27 @@ import BaseStatusPage from "../components/billing/BaseStatusPage.vue";
 export default {
   components: {
     BaseStatusPage,
+  },
+  data() {
+    return {
+      apiUrl: "https://mieterstrom-management.wb-solution.de/api/v1/mieterstrom-main",
+      username: "",
+      password: "",
+      name: "",
+      contractStatus: "",
+      lastSync: "",
+      rawAssignments: [],
+      contractDetails: {},
+      errorMessage: "",
+      // connection states: idle, loading, success, error
+      connectionState: "idle",
+      wasConnected: false,
+      tableColumns: [
+        { label: "Ladepunkt", field: "chargePoint" },
+        { label: "Fahrzeug", field: "vehicle", align: "center" },
+        { label: "Mitarbeiter", field: "employee", align: "right" },
+      ],
+    };
   },
 };
 </script>

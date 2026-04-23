@@ -10,10 +10,7 @@
     :contract-details="contractDetails"
     :error-message="errorMessage"
     :was-connected="wasConnected"
-    :table-columns="[
-      { label: 'Zähler', field: 'device' },
-      { label: 'Zugeordnet zu', field: 'assigned_to', align: 'right' },
-    ]"
+    :table-columns="tableColumns"
     :title-text="titleText"
     @connect="fetchStatus"
     @disconnect="disconnect"
@@ -46,6 +43,10 @@ export default {
       // connection states: idle, loading, success, error
       connectionState: "idle",
       wasConnected: false,
+      tableColumns: [
+        { label: "Zähler", field: "device" },
+        { label: "Zugeordnet zu", field: "assigned_to", align: "right" },
+      ],
     };
   },
   computed: {
@@ -86,6 +87,7 @@ export default {
   },
   methods: {
     async fetchStatus() {
+      this.errorMessage = "";
       this.connectionState = "loading";
       try {
         const response = await axios.post(this.apiUrl, {
