@@ -346,13 +346,13 @@
             </router-link>
             <!-- add access once implemented in backend
               v-if="accessAllowed('CompanyVehicleBilling')"  -->
-            <router-link
+            <!-- <router-link
               to="/Billing/CompanyVehicleBilling"
               class="dropdown-item"
               active-class="active disabled"
             >
               Dienstwagenabrechnung
-            </router-link>
+            </router-link> -->
           </div>
         </li>
         <li class="nav-item">
