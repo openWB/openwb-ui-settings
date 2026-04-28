@@ -18,21 +18,21 @@
       >
         <template #help> Das Passwort kann per Klick auf das Auge angezeigt werden. </template>
       </openwb-base-text-input>
-      <openwb-base-button-input
-        v-if="!wasConnected"
-        class="mt-2"
-        title=""
-        :button-text="connectionState === 'loading' ? 'wird verbunden...' : 'Verbinden'"
-        subtype="info"
-        :disabled="connectionState === 'loading'"
-        @button-clicked="$emit('connect')"
-      />
+      <div class="form-row mt-2 justify-content-end">
+        <div class="col-md-8">
+          <openwb-base-click-button
+            class="btn btn-info w-100"
+            :disabled="connectionState === 'loading'"
+            @button-clicked="$emit('connect')"
+          >
+            {{ connectionState === "loading" ? "wird verbunden..." : "Verbinden" }}
+          </openwb-base-click-button>
+        </div>
+      </div>
       <div
         v-if="wasConnected"
-        class="form-row mt-3"
+        class="form-row mt-3 justify-content-end"
       >
-        <div class="col-md-4"></div>
-
         <div class="col-md-8">
           <div class="row">
             <div class="col">
