@@ -539,7 +539,7 @@
                   </template>
                 </openwb-base-button-group-input>
                 <openwb-base-number-input
-                  title="Eigenregelung für Strompreise über"
+                  :title="`Eigenregelung für Strompreise über ${priceLimitUpper} ct/kWh`"
                   :step="0.001"
                   :precision="3"
                   unit="ct/kWh"
@@ -613,7 +613,7 @@
                   </template>
                 </openwb-base-button-group-input>
                 <openwb-base-number-input
-                  title="Speicher aktiv laden für Strompreise unter "
+                  :title="`Speicher aktiv laden für Strompreise unter ${priceLimitLower} ct/kWh`"
                   :step="0.001"
                   :precision="3"
                   unit="ct/kWh"
