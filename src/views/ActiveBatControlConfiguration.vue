@@ -404,12 +404,7 @@
                   },
                 ]"
                 :model-value="$store.state.mqtt['openWB/bat/config/power_limit_condition']"
-                @update:model-value="
-                  updateState('openWB/bat/config/power_limit_condition', $event);
-                  if ($event === 'vehicle_charging') {
-                    updateState('openWB/bat/config/manual_mode', 'manual_limit');
-                  }
-                "
+                @update:model-value="handlePowerLimitConditionChange"
               >
                 <template #help>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'manual'">
@@ -851,6 +846,12 @@ export default {
             [key]: components[key],
           };
         }, {});
+    },
+    handlePowerLimitConditionChange(value) {
+      this.updateState("openWB/bat/config/power_limit_condition", value);
+      if (value === "vehicle_charging") {
+        this.updateState("openWB/bat/config/manual_mode", "manual_limit");
+      }
     },
   },
 };
