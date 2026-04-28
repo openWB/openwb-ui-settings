@@ -59,7 +59,6 @@
     </openwb-base-card>
     <openwb-base-card title="Status">
       <openwb-base-card
-        title=""
         subtype="white"
         body-bg="white"
         class="py-2"
@@ -119,7 +118,6 @@
       title="Portal"
     >
       <openwb-base-card
-        title=""
         subtype="white"
         body-bg="white"
         class="py-2"
@@ -142,7 +140,6 @@
     <openwb-base-card v-if="wasConnected && assignments.length">
       <template #header> Verbraucher - Zuordnung {{ titleText }} </template>
       <openwb-base-card
-        title=""
         subtype="white"
         body-bg="white"
         class="py-2"
@@ -176,14 +173,10 @@
         </table>
       </openwb-base-card>
     </openwb-base-card>
-    <tenant-billing-shop
-      v-if="billingService === 'tenant'"
-      :is-connected="connectionState === 'success' || connectionState === 'loading'"
-    />
-    <vehicle-billing-shop
-      v-if="billingService === 'vehicle'"
-      :is-connected="connectionState === 'success' || connectionState === 'loading'"
-    />
+    <div v-if="!['success', 'loading'].includes(connectionState)">
+      <tenant-billing-shop v-if="billingService === 'tenant'" />
+      <vehicle-billing-shop v-if="billingService === 'vehicle'" />
+    </div>
   </div>
 </template>
 

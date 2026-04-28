@@ -1,8 +1,5 @@
 <template>
-  <openwb-base-card
-    v-if="!isConnected"
-    title="OpenWB Shop"
-  >
+  <openwb-base-card title="OpenWB Shop">
     <openwb-base-card
       subtype="white"
       body-bg="white"
@@ -44,11 +41,5 @@
 <script>
 export default {
   name: "TenantBillingShop",
-  props: {
-    isConnected: {
-      type: Boolean,
-      required: true,
-    },
-  },
 };
 </script>
