@@ -324,7 +324,7 @@
             </router-link>
           </div>
         </li> -->
-        <li class="nav-item dropdown nav-separator-before">
+        <li class="nav-item dropdown">
           <a
             class="nav-link dropdown-toggle"
             href="#"
