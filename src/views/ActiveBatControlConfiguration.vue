@@ -438,6 +438,7 @@
                     {
                       buttonValue: 'manual_disable',
                       text: 'Eigenregelung',
+                      disabled: $store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'vehicle_charging',
                     },
                     {
                       buttonValue: 'manual_limit',
@@ -446,6 +447,7 @@
                     {
                       buttonValue: 'manual_charge',
                       text: 'Speicher aktiv laden',
+                      disabled: $store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'vehicle_charging',
                     },
                   ]"
                   :model-value="$store.state.mqtt['openWB/bat/config/manual_mode']"
