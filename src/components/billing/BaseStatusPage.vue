@@ -58,120 +58,102 @@
       </div>
     </openwb-base-card>
     <openwb-base-card title="Status">
-      <openwb-base-card
-        subtype="white"
-        body-bg="white"
-        class="py-2"
+      <div class="row">
+        <div class="col">Verbindungsstatus</div>
+        <div class="col text-right">
+          <span
+            :class="
+              connectionState === 'success'
+                ? 'text-success'
+                : connectionState === 'loading'
+                  ? 'text-warning'
+                  : 'text-danger'
+            "
+          >
+            {{
+              connectionState === "loading"
+                ? "Wird verbunden..."
+                : connectionState === "success"
+                  ? "Verbunden"
+                  : "Nicht verbunden"
+            }}
+          </span>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col">Vertragsstatus</div>
+        <div class="col text-right">
+          <span :class="contractStatus === 'active' ? 'text-success' : 'text-danger'">
+            {{ contractStatus }}
+          </span>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col">Letzte Synchronisation</div>
+        <div class="col text-right">
+          {{ lastSync }}
+        </div>
+      </div>
+      <hr />
+      <div
+        v-if="connectionState === 'success' || connectionState === 'error'"
+        class="mt-3"
       >
-        <div class="row">
-          <div class="col">Verbindungsstatus</div>
-          <div class="col text-right">
-            <span
-              :class="
-                connectionState === 'success'
-                  ? 'text-success'
-                  : connectionState === 'loading'
-                    ? 'text-warning'
-                    : 'text-danger'
-              "
-            >
-              {{
-                connectionState === "loading"
-                  ? "Wird verbunden..."
-                  : connectionState === "success"
-                    ? "Verbunden"
-                    : "Nicht verbunden"
-              }}
-            </span>
-          </div>
-        </div>
-        <hr />
-        <div class="row">
-          <div class="col">Vertragsstatus</div>
-          <div class="col text-right">
-            <span :class="contractStatus === 'active' ? 'text-success' : 'text-danger'">
-              {{ contractStatus }}
-            </span>
-          </div>
-        </div>
-        <hr />
-        <div class="row">
-          <div class="col">Letzte Synchronisation</div>
-          <div class="col text-right">
-            {{ lastSync }}
-          </div>
-        </div>
-        <hr />
-        <div
-          v-if="connectionState === 'success' || connectionState === 'error'"
-          class="mt-3"
-        >
-          <openwb-base-alert :subtype="connectionState === 'error' ? 'danger' : 'success'">
-            {{ connectionState === "error" ? errorMessage : "Verbindung erfolgreich" }}
-          </openwb-base-alert>
-        </div>
-      </openwb-base-card>
+        <openwb-base-alert :subtype="connectionState === 'error' ? 'danger' : 'success'">
+          {{ connectionState === "error" ? errorMessage : "Verbindung erfolgreich" }}
+        </openwb-base-alert>
+      </div>
     </openwb-base-card>
 
     <openwb-base-card
       v-if="wasConnected"
       title="Portal"
     >
-      <openwb-base-card
-        subtype="white"
-        body-bg="white"
-        class="py-2"
+      <openwb-base-click-button
+        class="btn btn-info w-100"
+        :href="'https://mieterstrom.openwb.de/'"
       >
-        <openwb-base-click-button
-          class="btn btn-info w-100"
-          :href="'https://mieterstrom.openwb.de/'"
-        >
-          Mieterstrom Portal öffnen
-        </openwb-base-click-button>
-        <openwb-base-click-button
-          class="btn btn-info w-100"
-          :href="contractDetails?.downloadUrl || 'https://mieterstrom.openwb.de/'"
-        >
-          Abrechnung Download Portal öffnen
-        </openwb-base-click-button>
-      </openwb-base-card>
+        Mieterstrom Portal öffnen
+      </openwb-base-click-button>
+      <openwb-base-click-button
+        class="btn btn-info w-100"
+        :href="contractDetails?.downloadUrl || 'https://mieterstrom.openwb.de/'"
+      >
+        Abrechnung Download Portal öffnen
+      </openwb-base-click-button>
     </openwb-base-card>
 
     <openwb-base-card v-if="wasConnected && assignments.length">
       <template #header> Verbraucher - Zuordnung {{ titleText }} </template>
-      <openwb-base-card
-        subtype="white"
-        body-bg="white"
-        class="py-2"
-      >
-        <table class="table table-sm table-bordered">
-          <thead>
-            <tr>
-              <th
-                v-for="col in tableColumns"
-                :key="col.label"
-                :class="col.align === 'right' ? 'text-right' : col.align === 'center' ? 'text-center' : ''"
-              >
-                {{ col.label }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(row, index) in assignments"
-              :key="index"
+      <table class="table table-sm table-bordered">
+        <thead>
+          <tr>
+            <th
+              v-for="col in tableColumns"
+              :key="col.label"
+              :class="col.align === 'right' ? 'text-right' : col.align === 'center' ? 'text-center' : ''"
             >
-              <td
-                v-for="col in tableColumns"
-                :key="col.label"
-                :class="col.align === 'right' ? 'text-right' : col.align === 'center' ? 'text-center' : ''"
-              >
-                {{ row[col.field] }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </openwb-base-card>
+              {{ col.label }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(row, index) in assignments"
+            :key="index"
+          >
+            <td
+              v-for="col in tableColumns"
+              :key="col.label"
+              :class="col.align === 'right' ? 'text-right' : col.align === 'center' ? 'text-center' : ''"
+            >
+              {{ row[col.field] }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </openwb-base-card>
     <div v-if="!['success', 'loading'].includes(connectionState)">
       <tenant-billing-shop v-if="billingService === 'tenant'" />
