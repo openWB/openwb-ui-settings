@@ -113,7 +113,7 @@
     >
       <openwb-base-click-button
         class="btn btn-info w-100"
-        :href="'https://mieterstrom.openwb.de/'"
+        href="https://mieterstrom.openwb.de/"
       >
         Mieterstrom Portal öffnen
       </openwb-base-click-button>
