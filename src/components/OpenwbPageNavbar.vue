@@ -324,7 +324,7 @@
             </router-link>
           </div>
         </li> -->
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown nav-separator-before">
           <a
             class="nav-link dropdown-toggle"
             href="#"
@@ -355,7 +355,7 @@
             </router-link> -->
           </div>
         </li>
-        <li class="nav-item">
+        <li class="nav-item nav-separator-before">
           <a
             class="nav-link"
             href="https://wiki.openwb.de/"
