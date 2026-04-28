@@ -26,9 +26,8 @@ export default {
     handleClick(event) {
       if (!this.href) {
         event.preventDefault();
+        this.$emit("buttonClicked", event);
       }
-
-      this.$emit("buttonClicked", event);
     },
   },
 };
