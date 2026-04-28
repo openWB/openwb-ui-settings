@@ -748,10 +748,12 @@ export default {
       },
     },
     priceLimitUpper() {
-      return (this.$store.state.mqtt["openWB/bat/config/price_limit"] * 100000).toFixed(0);
+      const value = this.$store.state.mqtt["openWB/bat/config/price_limit"];
+      return value != null ? (value * 100000).toFixed(0) : 0;
     },
     priceLimitLower() {
-      return (this.$store.state.mqtt["openWB/bat/config/charge_limit"] * 100000).toFixed(0);
+      const value = this.$store.state.mqtt["openWB/bat/config/charge_limit"];
+      return value != null ? (value * 100000).toFixed(0) : 0;
     },
     batteryBehaviourDescription() {
       const condition = this.$store.state.mqtt["openWB/bat/config/power_limit_condition"];
