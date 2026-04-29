@@ -239,6 +239,18 @@
               Abhängigkeit in der Regelung berücksichtigt werden kann.
             </template>
           </sortable-list>
+          <hr />
+          <sortable-list
+            v-model="loadmanagementPrioList"
+            title="Prioritäten-Steuerung für das Lastmanagement"
+            :labels="loadmanagementPrioLabels"
+            :nesting="false"
+          >
+            <template #help>
+              Reihenfolge der Ladepunkt-Prioritäten für das Lastmanagement.<br />
+              Die Reihenfolge kann durch Drag & Drop geändert werden.
+            </template>
+          </sortable-list>
         </div>
       </openwb-base-card>
 
@@ -282,14 +294,17 @@ export default {
       mqttTopics: [
         { topic: "openWB/bat/+/config/max_power", writeable: true },
         { topic: "openWB/chargepoint/+/config", writeable: false },
+        { topic: "openWB/consumer/+/module", writeable: false },
         { topic: "openWB/counter/+/config/max_currents", writeable: true },
         { topic: "openWB/counter/+/config/max_power_errorcase", writeable: true },
         { topic: "openWB/counter/+/config/max_total_power", writeable: true },
         { topic: "openWB/counter/config/consider_less_charging", writeable: true },
         { topic: "openWB/counter/config/home_consumption_source_id", writeable: true },
         { topic: "openWB/counter/get/hierarchy", writeable: true },
+        { topic: "openWB/counter/get/loadmanagement_prios", writeable: true },
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/pv/+/config/max_ac_out", writeable: true },
+        { topic: "openWB/vehicle/+/name", writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
       ],
     };
@@ -356,6 +371,56 @@ export default {
         return labels;
       },
     },
+    loadmanagementPrioList: {
+      get() {
+        const prioList = this.$store.state.mqtt["openWB/counter/get/loadmanagement_prios"] || [];
+        if (!Array.isArray(prioList)) return [];
+        return prioList.map((item) => {
+          // Backward compatibility: legacy prio entries ... plain vehicle IDs (e.g. "ev3")
+          if (typeof item === "string") {
+            return { id: item, type: "vehicle" };
+          }
+          return item;
+        });
+      },
+      set(newList) {
+        this.updateState("openWB/counter/get/loadmanagement_prios", newList);
+      },
+    },
+    loadmanagementPrioLabels: {
+      get() {
+        return this.loadmanagementPrioList.reduce((labels, item, index) => {
+          switch (item.type) {
+            case "vehicle": {
+              const vehicleId = String(item.id).replace(/^ev/, "");
+              const name = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/name`];
+              const fullPower = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/full_power`];
+              if (name) {
+                const lightning = fullPower === true ? " ⚡" : "";
+                labels[item.id] = `${index + 1}. ${name}${lightning}`;
+              }
+              break;
+            }
+            case "consumer": {
+              const name = this.$store.state.mqtt[`openWB/consumer/${item.id}/module`]?.name;
+              if (name) {
+                labels[item.id] = `${index + 1}. ${name}`;
+              }
+              break;
+            }
+            case "counter": {
+              const component = this.getComponent(item.id);
+              const name = component?.name;
+              if (name) {
+                labels[item.id] = `${index + 1}. ${name}`;
+              }
+              break;
+            }
+          }
+          return labels;
+        }, {});
+      },
+    },
     getHcSourceIdOptions() {
       let options = [
         {
@@ -375,15 +440,26 @@ export default {
   methods: {
     getElementTreeNames(element) {
       let myNames = {};
-      if (element.type == "cp") {
-        let chargePoint = this.getChargePoint(element.id);
-        if (chargePoint) {
-          myNames[element.id] = chargePoint.name;
+      switch (element.type) {
+        case "cp": {
+          const chargePoint = this.getChargePoint(element.id);
+          if (chargePoint) {
+            myNames[element.id] = chargePoint.name;
+          }
+          break;
         }
-      } else {
-        let component = this.getComponent(element.id);
-        if (component) {
-          myNames[element.id] = component.name;
+        case "consumer": {
+          const consumer = this.$store.state.mqtt[`openWB/consumer/${element.id}/module`];
+          if (consumer?.name) {
+            myNames[element.id] = consumer.name;
+          }
+          break;
+        }
+        default: {
+          const component = this.getComponent(element.id);
+          if (component?.name) {
+            myNames[element.id] = component.name;
+          }
         }
       }
       element.children.forEach((child) => {
