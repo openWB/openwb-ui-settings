@@ -394,10 +394,8 @@ export default {
             case "vehicle": {
               const vehicleId = String(item.id).replace(/^ev/, "");
               const name = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/name`];
-              const fullPower = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/full_power`];
               if (name) {
-                const lightning = fullPower === true ? " ⚡" : "";
-                labels[item.id] = `${index + 1}. ${name}${lightning}`;
+                labels[item.id] = `${index + 1}. ${name}`;
               }
               break;
             }
