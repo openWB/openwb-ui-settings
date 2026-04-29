@@ -36,7 +36,12 @@
       required
       :model-value="device.configuration.password"
       @update:model-value="updateConfiguration($event, 'configuration.password')"
-    />
+    >
+      <template #help>
+        Das Passwort kann ein selbst vergebenes Passwort zum Account sein. Je nach Powerwall-Version können es initial
+        auch die letzten 5 Zeichen der Seriennummer des Tesla Gateways sein, die auf dem Typenschild steht.
+      </template>
+    </openwb-base-text-input>
   </div>
 </template>
 
