@@ -228,7 +228,7 @@
                 title="Während der Ladung"
                 unit="Min."
                 :min="1"
-                :max="30"
+                :max="60"
                 required
                 :model-value="
                   $store.state.mqtt['openWB/vehicle/' + vehicleId + '/soc_module/general_config']

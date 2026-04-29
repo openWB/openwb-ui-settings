@@ -1,11 +1,17 @@
 <template>
   <div class="vehicle-soc-bmw-cardata">
-    <openwb-base-alert v-if="isConnected" subtype="success">
+    <openwb-base-alert
+      v-if="isConnected"
+      subtype="success"
+    >
       <b>BMW verbunden</b><br />
       Tokens vorhanden. BMW CarData kann genutzt werden.
     </openwb-base-alert>
 
-    <openwb-base-alert v-else subtype="warning">
+    <openwb-base-alert
+      v-else
+      subtype="warning"
+    >
       <b>Nicht verbunden</b><br />
       Bitte BMW-Kopplung durchführen.
     </openwb-base-alert>
@@ -17,9 +23,7 @@
       :model-value="vehicle.configuration.client_id"
       @update:model-value="updateConfiguration($event, 'configuration.client_id')"
     >
-      <template #help>
-        BMW CarData Client ID aus dem BMW Portal.
-      </template>
+      <template #help> BMW CarData Client ID aus dem BMW Portal. </template>
     </openwb-base-text-input>
 
     <openwb-base-text-input
@@ -30,9 +34,7 @@
       :model-value="vehicle.configuration.vin"
       @update:model-value="updateConfiguration($event, 'configuration.vin')"
     >
-      <template #help>
-        Fahrzeug-Identifikationsnummer (17 Zeichen).
-      </template>
+      <template #help> Fahrzeug-Identifikationsnummer (17 Zeichen). </template>
     </openwb-base-text-input>
 
     <openwb-base-alert subtype="secondary">
@@ -44,7 +46,10 @@
       <span v-if="authStatus.message">{{ authStatus.message }}</span>
     </openwb-base-alert>
 
-    <openwb-base-alert v-if="isConnected" subtype="info">
+    <openwb-base-alert
+      v-if="isConnected"
+      subtype="info"
+    >
       Die BMW-Verbindung ist aktiv. Eine erneute Kopplung ist nur nötig, wenn die Verbindung verloren gegangen ist.
     </openwb-base-alert>
 
@@ -59,18 +64,27 @@
       </template>
     </openwb-base-button-input>
 
-    <openwb-base-alert v-if="authStatus.user_code" subtype="info">
+    <openwb-base-alert
+      v-if="authStatus.user_code"
+      subtype="info"
+    >
       <b>BMW Anmeldung läuft</b><br />
       URL: {{ authStatus.verification_uri }}<br />
       Code: <b>{{ authStatus.user_code }}</b>
     </openwb-base-alert>
 
-    <openwb-base-alert v-if="authStatus.justConnected" subtype="success">
+    <openwb-base-alert
+      v-if="authStatus.justConnected"
+      subtype="success"
+    >
       <b>BMW erfolgreich verbunden!</b><br />
       Bitte jetzt auf <b>"Speichern"</b> klicken, um die Verbindung dauerhaft zu sichern.
     </openwb-base-alert>
 
-    <openwb-base-alert v-if="authStatus.error" subtype="danger">
+    <openwb-base-alert
+      v-if="authStatus.error"
+      subtype="danger"
+    >
       <b>Fehler</b><br />
       {{ authStatus.error }}
     </openwb-base-alert>
@@ -79,14 +93,12 @@
       title="SoC während der Ladung berechnen"
       :buttons="[
         { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
-        { buttonValue: true, text: 'Ja', class: 'btn-outline-success' }
+        { buttonValue: true, text: 'Ja', class: 'btn-outline-success' },
       ]"
       :model-value="vehicle.configuration.calculate_soc"
       @update:model-value="updateConfiguration($event, 'configuration.calculate_soc')"
     >
-      <template #help>
-        openWB berechnet den Ladestand während der Ladung selbst.
-      </template>
+      <template #help> openWB berechnet den Ladestand während der Ladung selbst. </template>
     </openwb-base-button-group-input>
 
     <openwb-base-alert subtype="secondary">
@@ -130,7 +142,13 @@ export default {
   },
   methods: {
     async startAuth() {
-      this.authStatus = { message: "Anmeldung wird gestartet...", user_code: "", verification_uri: "", error: "", justConnected: false };
+      this.authStatus = {
+        message: "Anmeldung wird gestartet...",
+        user_code: "",
+        verification_uri: "",
+        error: "",
+        justConnected: false,
+      };
 
       try {
         const response = await fetch("/openWB/web/settings/modules/vehicles/bmw_cardata/bmw_cardata_auth_start.php", {
@@ -178,10 +196,10 @@ export default {
           headers: { "Content-Type": "application/json" },
           cache: "no-store",
           body: JSON.stringify({
-            client_id:     this.vehicle.configuration.client_id,
-            device_code:   this.vehicle.configuration.auth_device_code,
+            client_id: this.vehicle.configuration.client_id,
+            device_code: this.vehicle.configuration.auth_device_code,
             code_verifier: this.vehicle.configuration.auth_code_verifier,
-            expires_at:    this.vehicle.configuration.auth_expires_at,
+            expires_at: this.vehicle.configuration.auth_expires_at,
           }),
         });
         const data = await response.json();
@@ -225,7 +243,6 @@ export default {
         }
 
         this.authStatus.message = data.message || "Warte auf BMW-Bestätigung...";
-
       } catch {
         this.authStatus.error = "Anmeldungs-Status konnte nicht geladen werden.";
         clearInterval(this.pollTimer);
