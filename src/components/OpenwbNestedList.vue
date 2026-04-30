@@ -33,10 +33,12 @@
           </span> -->
         </div>
         <openwb-nested-list
-          v-if="nesting && element.children"
+          v-if="nesting && element.children && currentNestingDepth < maxNestingDepth"
           v-model="element.children"
           :labels="labels"
           :nesting="nesting"
+          :max-nesting-depth="maxNestingDepth"
+          :current-nesting-depth="currentNestingDepth + 1"
         />
       </li>
     </template>
@@ -69,6 +71,8 @@ export default {
     list: { type: Object, required: false, default: undefined },
     labels: { type: Object, required: false, default: undefined },
     nesting: { type: Boolean, default: true },
+    maxNestingDepth: { type: Number, default: Infinity },
+    currentNestingDepth: { type: Number, default: 0 },
   },
   methods: {
     classes(element) {
