@@ -18,6 +18,7 @@
       :nesting="nesting"
       :max-nesting-depth="maxNestingDepth"
       @delete-group="$emit('delete-group', $event)"
+      @rename-group="$emit('rename-group', $event)"
     />
     <div v-else>Warte auf Daten...</div>
   </openwb-base-setting-element>
@@ -41,7 +42,7 @@ export default {
     nesting: { type: Boolean, default: true },
     maxNestingDepth: { type: Number, default: Infinity },
   },
-  emits: ["update:modelValue", "delete-group"],
+  emits: ["update:modelValue", "delete-group", "rename-group"],
   computed: {
     value: {
       get() {
