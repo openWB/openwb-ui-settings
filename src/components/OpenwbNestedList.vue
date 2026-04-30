@@ -4,6 +4,7 @@
     tag="ul"
     :list="list"
     :group="{ name: 'g1' }"
+    :move="checkMove"
     item-key="id"
     handle=".handle"
   >
@@ -75,6 +76,15 @@ export default {
     currentNestingDepth: { type: Number, default: 0 },
   },
   methods: {
+    checkMove(event) {
+      if (!this.nesting) return true;
+      const dragged = event.draggedContext.element;
+      const target = event.relatedContext?.element;
+      if (dragged.type === "group" && target?.type === "group") {
+        return false;
+      }
+      return true;
+    },
     classes(element) {
       var myClasses = "";
       switch (element.type) {
