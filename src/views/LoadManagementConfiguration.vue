@@ -240,12 +240,20 @@
             </template>
           </sortable-list>
           <hr />
+          <openwb-base-text-input
+            v-model="newGroupName"
+            title="Gruppe hinzufügen"
+            subtype="group"
+            :empty-value="null"
+            :add-button="true"
+            @input:add="addGroup"
+          />
           <sortable-list
             v-model="loadmanagementPrioList"
             title="Prioritäten-Steuerung für das Lastmanagement"
             :labels="loadmanagementPrioLabels"
             :nesting="true"
-            max-nesting-depth="1"
+            :max-nesting-depth="1"
           >
             <template #help>
               Reihenfolge der Ladepunkt-Prioritäten für das Lastmanagement.<br />
@@ -274,12 +282,14 @@ library.add(fasSolarPanel, fasGaugeHigh);
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 import SortableList from "../components/OpenwbSortableList.vue";
+import OpenwbBaseTextInput from "../components/OpenwbBaseTextInput.vue";
 
 export default {
   name: "OpenwbLoadManagementConfigView",
   components: {
     SortableList,
     FontAwesomeIcon,
+    OpenwbBaseTextInput,
   },
   mixins: [ComponentState],
   props: {
@@ -308,6 +318,7 @@ export default {
         { topic: "openWB/vehicle/+/name", writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
       ],
+      newGroupName: null,
     };
   },
   computed: {
@@ -390,34 +401,39 @@ export default {
     },
     loadmanagementPrioLabels: {
       get() {
-        return this.loadmanagementPrioList.reduce((labels, item, index) => {
-          switch (item.type) {
-            case "vehicle": {
-              const vehicleId = String(item.id).replace(/^ev/, "");
-              const name = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/name`];
-              if (name) {
-                labels[item.id] = `${index + 1}. ${name}`;
+        const labels = {};
+        const processItems = (items) => {
+          items.forEach((item) => {
+            switch (item.type) {
+              case "group": {
+                if (item.label) {
+                  labels[item.id] = item.label;
+                }
+                if (Array.isArray(item.children)) {
+                  processItems(item.children);
+                }
+                break;
               }
-              break;
-            }
-            case "consumer": {
-              const name = this.$store.state.mqtt[`openWB/consumer/${item.id}/module`]?.name;
-              if (name) {
-                labels[item.id] = `${index + 1}. ${name}`;
+              case "vehicle": {
+                const vehicleId = String(item.id).replace(/^ev/, "");
+                const name = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/name`];
+                if (name) {
+                  labels[item.id] = name;
+                }
+                break;
               }
-              break;
-            }
-            case "counter": {
-              const component = this.getComponent(item.id);
-              const name = component?.name;
-              if (name) {
-                labels[item.id] = `${index + 1}. ${name}`;
+              case "load": {
+                const name = this.$store.state.mqtt[`openWB/consumer/${item.id}/module`]?.name;
+                if (name) {
+                  labels[item.id] = name;
+                }
+                break;
               }
-              break;
             }
-          }
-          return labels;
-        }, {});
+          });
+        };
+        processItems(this.loadmanagementPrioList);
+        return labels;
       },
     },
     getHcSourceIdOptions() {
@@ -486,6 +502,18 @@ export default {
     },
     isComponentType(componentType, verifier) {
       return componentType?.split("_").includes(verifier);
+    },
+    addGroup() {
+      if (!this.newGroupName) return;
+      const newGroup = {
+        type: "group",
+        id: `group-${Date.now()}`,
+        label: this.newGroupName,
+        children: [],
+      };
+      const updatedList = [...this.loadmanagementPrioList, newGroup];
+      this.loadmanagementPrioList = updatedList;
+      this.newGroupName = null;
     },
   },
 };
