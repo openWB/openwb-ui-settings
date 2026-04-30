@@ -268,7 +268,8 @@
             v-model="loadmanagementPrioList"
             title="Prioritäten-Steuerung für das Lastmanagement"
             :labels="loadmanagementPrioLabels"
-            :nesting="false"
+            :nesting="true"
+            max-nesting-depth="1"
           >
             <template #help>
               Reihenfolge der Ladepunkt-Prioritäten für das Lastmanagement.<br />
