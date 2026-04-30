@@ -22,7 +22,21 @@
               v-if="getElementIcon(element)"
               :icon="getElementIcon(element)"
             />
-            {{ getElementLabel(element.id) }}
+            <span v-if="editingGroupId !== element.id">
+              <span
+                style="cursor: pointer"
+                @click="startEditing(element)"
+              >
+                {{ getElementLabel(element.id) }}
+              </span>
+            </span>
+            <input
+              v-else
+              v-model="editingValue"
+              class="group-rename-input"
+              @keyup.enter="finishEditing(element.id)"
+              @blur="finishEditing(element.id)"
+            />
           </span>
           <span
             v-if="element.type === 'group'"
@@ -84,7 +98,13 @@ export default {
     maxNestingDepth: { type: Number, default: Infinity },
     currentNestingDepth: { type: Number, default: 0 },
   },
-  emits: ["update:modelValue", "delete-group"],
+  emits: ["update:modelValue", "delete-group", "rename-group"],
+  data() {
+    return {
+      editingGroupId: null,
+      editingValue: "",
+    };
+  },
   computed: {
     list: {
       get() {
@@ -149,6 +169,30 @@ export default {
           return undefined;
       }
     },
+    startEditing(element) {
+      if (element.type !== "group") return;
+
+      this.editingGroupId = element.id;
+      this.editingValue = element.label;
+
+      this.$nextTick(() => {
+        const input = this.$el.querySelector(".group-rename-input");
+        input?.focus();
+        input?.select();
+      });
+    },
+
+    finishEditing(groupId) {
+      if (!this.editingValue.trim()) {
+        this.editingGroupId = null;
+        return;
+      }
+      this.$emit("rename-group", {
+        id: groupId,
+        label: this.editingValue.trim(),
+      });
+      this.editingGroupId = null;
+    },
   },
 };
 </script>
@@ -211,6 +255,20 @@ export default {
 .element-titel.battery {
   background-color: var(--warning);
   color: var(--dark);
+}
+
+.element-titel.group {
+  background-color: var(--secondary);
+}
+
+.group-rename-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--light);
+  color: var(--light);
+  font: inherit;
+  outline: none;
+  width: 100%;
 }
 
 .element-actions {
