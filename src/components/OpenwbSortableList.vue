@@ -16,6 +16,7 @@
       v-model="value"
       :labels="labels"
       :nesting="nesting"
+      :max-nesting-depth="maxNestingDepth"
     />
     <div v-else>Warte auf Daten...</div>
   </openwb-base-setting-element>
@@ -37,6 +38,7 @@ export default {
     modelValue: { type: Array, required: false, default: undefined },
     labels: { type: Object, default: undefined },
     nesting: { type: Boolean, default: true },
+    maxNestingDepth: { type: Number, default: Infinity },
   },
   emits: ["update:modelValue"],
   computed: {
