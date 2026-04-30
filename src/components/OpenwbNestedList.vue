@@ -1,10 +1,9 @@
 <template>
   <draggable
+    v-model="list"
     class="dragArea w-100 mb-0"
     tag="ul"
-    :list="list"
-    :group="{ name: 'g1' }"
-    :move="checkMove"
+    :group="dragGroup"
     item-key="id"
     handle=".handle"
   >
@@ -25,6 +24,15 @@
             />
             {{ getElementLabel(element.id) }}
           </span>
+          <span
+            v-if="element.type === 'group'"
+            class="element-actions"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'trash']"
+              @click.stop="$emit('delete-group', element.id)"
+            />
+          </span>
           <!-- <span class="element-actions">
             <font-awesome-icon
 
@@ -40,6 +48,7 @@
           :nesting="nesting"
           :max-nesting-depth="maxNestingDepth"
           :current-nesting-depth="currentNestingDepth + 1"
+          @delete-group="$emit('delete-group', $event)"
         />
       </li>
     </template>
@@ -57,11 +66,11 @@ import {
   faCarBattery as fasCarBattery,
   faSolarPanel as fasSolarPanel,
   faGaugeHigh as fasGaugeHigh,
+  faTrash as fasTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasArrowsAlt, fasArrowsUpDown, fasChargingStation, fasCarBattery, fasSolarPanel, fasGaugeHigh);
-
+library.add(fasArrowsAlt, fasArrowsUpDown, fasChargingStation, fasCarBattery, fasSolarPanel, fasGaugeHigh, fasTrash);
 export default {
   name: "OpenwbNestedList",
   components: {
@@ -69,22 +78,42 @@ export default {
     FontAwesomeIcon,
   },
   props: {
-    list: { type: Object, required: false, default: undefined },
+    modelValue: { type: Array, required: false, default: () => [] },
     labels: { type: Object, required: false, default: undefined },
     nesting: { type: Boolean, default: true },
     maxNestingDepth: { type: Number, default: Infinity },
     currentNestingDepth: { type: Number, default: 0 },
   },
-  methods: {
-    checkMove(event) {
-      if (!this.nesting) return true;
-      const dragged = event.draggedContext.element;
-      const target = event.relatedContext?.element;
-      if (dragged.type === "group" && target?.type === "group") {
-        return false;
-      }
-      return true;
+  emits: ["update:modelValue", "delete-group"],
+  computed: {
+    list: {
+      get() {
+        return this.modelValue;
+      },
+      set(val) {
+        this.$emit("update:modelValue", val);
+      },
     },
+    dragGroup() {
+      if (this.currentNestingDepth === 0) {
+        return {
+          name: "g1",
+          pull: true,
+          put: true,
+        };
+      }
+      return {
+        name: "g1",
+        pull: true,
+        put: (to, from, dragEl) => {
+          const draggedItem = dragEl?.__draggable_context?.element;
+          if (!draggedItem) return true;
+          return draggedItem.type !== "group";
+        },
+      };
+    },
+  },
+  methods: {
     classes(element) {
       var myClasses = "";
       switch (element.type) {

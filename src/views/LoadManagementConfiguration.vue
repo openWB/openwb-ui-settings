@@ -254,6 +254,7 @@
             :labels="loadmanagementPrioLabels"
             :nesting="true"
             :max-nesting-depth="1"
+            @delete-group="deleteGroup"
           >
             <template #help>
               Reihenfolge der Ladepunkt-Prioritäten für das Lastmanagement.<br />
@@ -514,6 +515,30 @@ export default {
       const updatedList = [...this.loadmanagementPrioList, newGroup];
       this.loadmanagementPrioList = updatedList;
       this.newGroupName = null;
+    },
+    deleteGroup(groupId) {
+      const unwrapGroup = (items) => {
+        const result = [];
+        items.forEach((item) => {
+          if (item.type === "group" && item.id === groupId) {
+            // Promote children instead of keeping the group
+            if (Array.isArray(item.children)) {
+              result.push(...item.children);
+            }
+          } else if (item.type === "group" && Array.isArray(item.children)) {
+            // Recursively check nested groups
+            result.push({
+              ...item,
+              children: unwrapGroup(item.children),
+            });
+          } else {
+            result.push(item);
+          }
+        });
+        return result;
+      };
+      const updatedList = unwrapGroup(this.loadmanagementPrioList);
+      this.loadmanagementPrioList = updatedList;
     },
   },
 };
