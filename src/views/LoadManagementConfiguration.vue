@@ -357,12 +357,12 @@ export default {
   },
   computed: {
     componentConfigurations() {
-      return this.getWildcardTopics("openWB/system/device/+/component/+/config");
+      return this.getWildcardTopics("openWB/system/device/+/component/+/config") || {};
     },
     componentConfigs: {
       get() {
         return (type) => {
-          let installedComponentsConfigs = this.componentConfigurations;
+          let installedComponentsConfigs = this.componentConfigurations || {};
           return Object.keys(installedComponentsConfigs)
             .filter((key) => {
               return installedComponentsConfigs[key]?.type.includes(type);
@@ -408,7 +408,7 @@ export default {
     hierarchyLabels: {
       get() {
         let labels = {};
-        for (const element of Object.values(this.$store.state.mqtt["openWB/counter/get/hierarchy"])) {
+        for (const element of Object.values(this.$store.state.mqtt["openWB/counter/get/hierarchy"] || {})) {
           labels = {
             ...labels,
             ...this.getElementTreeNames(element),
