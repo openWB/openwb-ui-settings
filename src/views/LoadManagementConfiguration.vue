@@ -250,8 +250,10 @@
             @rename-group="renameGroup"
           >
             <template #help>
-              Reihenfolge der Ladepunkt-Prioritäten für das Lastmanagement.<br />
-              Die Reihenfolge kann durch Drag & Drop geändert werden.
+              Reihenfolge der Ladepunkt- und Verbraucher-Prioritäten für das Lastmanagement.<br />
+              Die Reihenfolge kann durch Drag & Drop geändert werden.<br />
+              Elemente können in Gruppen zusammengefasst werden. Alle Elemente innerhalb einer Gruppe erhalten die
+              gleiche Priorität und werden im Lastmanagement gleichrangig behandelt.
             </template>
           </sortable-list>
           <openwb-base-text-input
@@ -261,7 +263,14 @@
             :empty-value="null"
             :add-button="true"
             @input:add="addGroup"
-          />
+          >
+            <template #help>
+              Gruppen ermöglichen das Zusammenfassen von Fahrzeugen oder Verbrauchern für die Prioritäten-Steuerung.
+              Elemente können per Drag & Drop in eine Gruppe verschoben werden (maximal eine Verschachtelungsebene).
+              Gruppen können umbenannt (Stift-Symbol oder Klick auf den Namen) und gelöscht werden. Beim Löschen bleiben
+              die enthaltenen Elemente erhalten und werden eine Ebene nach oben verschoben.
+            </template>
+          </openwb-base-text-input>
         </div>
       </openwb-base-card>
       <openwb-base-submit-buttons
