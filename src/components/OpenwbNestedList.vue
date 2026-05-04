@@ -43,6 +43,11 @@
             class="element-actions"
           >
             <font-awesome-icon
+              class="mr-2"
+              :icon="['fas', 'pen']"
+              @click.stop="startEditing(element)"
+            />
+            <font-awesome-icon
               :icon="['fas', 'trash']"
               @click.stop="$emit('delete-group', element.id)"
             />
@@ -81,10 +86,20 @@ import {
   faSolarPanel as fasSolarPanel,
   faGaugeHigh as fasGaugeHigh,
   faTrash as fasTrash,
+  faPen as fasPen,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasArrowsAlt, fasArrowsUpDown, fasChargingStation, fasCarBattery, fasSolarPanel, fasGaugeHigh, fasTrash);
+library.add(
+  fasArrowsAlt,
+  fasArrowsUpDown,
+  fasChargingStation,
+  fasCarBattery,
+  fasSolarPanel,
+  fasGaugeHigh,
+  fasTrash,
+  fasPen,
+);
 export default {
   name: "OpenwbNestedList",
   components: {
