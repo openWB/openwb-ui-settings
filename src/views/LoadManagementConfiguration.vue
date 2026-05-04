@@ -240,14 +240,6 @@
             </template>
           </sortable-list>
           <hr />
-          <openwb-base-text-input
-            v-model="newGroupName"
-            title="Gruppe hinzufügen"
-            subtype="group"
-            :empty-value="null"
-            :add-button="true"
-            @input:add="addGroup"
-          />
           <sortable-list
             v-model="loadmanagementPrioList"
             title="Prioritäten-Steuerung für das Lastmanagement"
@@ -262,9 +254,16 @@
               Die Reihenfolge kann durch Drag & Drop geändert werden.
             </template>
           </sortable-list>
+          <openwb-base-text-input
+            v-model="newGroupName"
+            title="Gruppe hinzufügen"
+            subtype="group"
+            :empty-value="null"
+            :add-button="true"
+            @input:add="addGroup"
+          />
         </div>
       </openwb-base-card>
-
       <openwb-base-submit-buttons
         form-name="loadManagementConfigForm"
         @save="$emit('save', mqttTopicsToPublish)"
@@ -509,8 +508,8 @@ export default {
       if (!this.newGroupName) return;
       const newGroup = {
         type: "group",
-        id: `group-${Date.now()}`,
         label: this.newGroupName,
+        id: `group-${Date.now()}`,
         children: [],
       };
       const updatedList = [...this.loadmanagementPrioList, newGroup];
