@@ -169,7 +169,8 @@ import { nextTick, toRaw } from "vue";
 
 // list of keys in the chart data that contain objects with measurement values that should be included
 const baseObjectsToProcess = ["pv", "counter", "bat", "cp", "sh", "ev", "hc"];
-// regex to identify which keys in the chart data contain values that need to be converted from Wh to kWh
+// regex to identify which keys in the chart data contain values that need to be converted
+// from Wh to kWh, W to kW, or timestamps from seconds to milliseconds
 const measurementKeyRegex = /imported|exported|power/;
 
 const datasetTemplates = {
@@ -1086,9 +1087,7 @@ export default {
         if (
           Object.prototype.hasOwnProperty.call(this.$store.state.mqtt[this.baseTopic + this.commandData.date], "totals")
         ) {
-          var totals = JSON.parse(
-            JSON.stringify(this.$store.state.mqtt[this.baseTopic + this.commandData.date].totals),
-          );
+          var totals = structuredClone(toRaw(this.$store.state.mqtt[this.baseTopic + this.commandData.date].totals));
           // remove entries with no access rights
           Object.keys(totals).forEach((baseObject) => {
             Object.keys(totals[baseObject]).forEach((objectKey) => {
@@ -1155,7 +1154,7 @@ export default {
         if (Object.prototype.hasOwnProperty.call(chartEntries, "entries")) {
           chartEntries = chartEntries.entries;
         }
-        let myData = toRaw(chartEntries);
+        let myData = structuredClone(toRaw(chartEntries));
         myData.forEach((row) => {
           convertMeasurementValues(row);
         });
@@ -1699,7 +1698,7 @@ export default {
       }
       var datasetTemplate = baseObject + "-" + elementKey;
       if (datasetTemplates[datasetTemplate]) {
-        var newDataset = JSON.parse(JSON.stringify(datasetTemplates[datasetTemplate]));
+        var newDataset = structuredClone(toRaw(datasetTemplates[datasetTemplate]));
         newDataset.parsing.yAxisKey = datasetKey;
         newDataset.jsonKey = datasetKey;
         newDataset.data = this.chartDataObject;
