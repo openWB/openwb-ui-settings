@@ -68,6 +68,10 @@ export default {
           fileName: "/openWB/ramdisk/internal_chargepoint.log",
         },
         {
+          title: "Log des Ladeprotokolls",
+          fileName: "/openWB/ramdisk/chargelog.log",
+        },
+        {
           title: "MQTT-Log",
           fileName: "/openWB/ramdisk/mqtt.log",
         },
