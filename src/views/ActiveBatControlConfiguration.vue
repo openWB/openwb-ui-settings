@@ -239,12 +239,13 @@
           </p>
         </openwb-base-alert>
         <openwb-base-button-group-input
-          v-model="batControlEnabled"
           title="Speicher aktiv Steuern"
           :buttons="[
             { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
             { buttonValue: true, text: 'Ja', class: 'btn-outline-success' },
           ]"
+          :model-value="$store.state.mqtt['openWB/bat/config/bat_control_activated']"
+          @update:model-value="updateState('openWB/bat/config/bat_control_activated', $event)"
         >
           <template
             v-if="$store.state.mqtt['openWB/bat/config/bat_control_activated']"
@@ -261,7 +262,7 @@
           </template>
         </openwb-base-button-group-input>
         <div
-          v-if="$store.state.mqtt['openWB/bat/config/bat_control_permitted'] === true"
+          v-if="$store.state.mqtt['openWB/bat/config/bat_control_activated'] === true"
           class="mb-3"
         >
           <openwb-base-heading class="mt-0"> Regelmodi der aktiven Speichersteuerung </openwb-base-heading>
@@ -271,12 +272,7 @@
             überschrieben, da Speicherentladung unter Umständen aktiv begrenzt wird.
           </openwb-base-alert>
         </div>
-        <div
-          v-if="
-            $store.state.mqtt['openWB/bat/config/bat_control_activated'] &&
-            $store.state.mqtt['openWB/bat/config/bat_control_permitted']
-          "
-        >
+        <div v-if="$store.state.mqtt['openWB/bat/config/bat_control_activated']">
           <openwb-base-card title="Aktiv steuerbare Speicher">
             <openwb-base-alert
               v-if="containsNormalBatteries"
@@ -672,7 +668,6 @@ export default {
         { topic: "openWB/bat/config/bat_control_activated", writeable: true },
         { topic: "openWB/bat/config/bat_control_max_soc", writeable: true },
         { topic: "openWB/bat/config/bat_control_min_soc", writeable: true },
-        { topic: "openWB/bat/config/bat_control_permitted", writeable: true },
         { topic: "openWB/bat/config/charge_limit", writeable: true },
         { topic: "openWB/bat/config/manual_mode", writeable: true },
         { topic: "openWB/bat/config/power_limit_condition", writeable: true },
@@ -742,18 +737,6 @@ export default {
     priceLimitLower() {
       const value = this.$store.state.mqtt["openWB/bat/config/charge_limit"];
       return value != null ? (value * 100000).toFixed(0) : 0;
-    },
-    batControlEnabled: {
-      get() {
-        return (
-          this.$store.state.mqtt["openWB/bat/config/bat_control_permitted"] &&
-          this.$store.state.mqtt["openWB/bat/config/bat_control_activated"]
-        );
-      },
-      set(value) {
-        this.updateState("openWB/bat/config/bat_control_permitted", value);
-        this.updateState("openWB/bat/config/bat_control_activated", value);
-      },
     },
     batteryBehaviourDescription() {
       const condition = this.$store.state.mqtt["openWB/bat/config/power_limit_condition"];
