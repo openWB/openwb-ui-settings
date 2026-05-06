@@ -224,7 +224,7 @@
         </div>
         <openwb-base-alert
           v-else
-          subtype="info"
+          subtype="warning"
           class="mb-3"
         >
           <p>
@@ -233,58 +233,50 @@
             beinhalten.<br />
             Fragen bezüglich der Gewährleistung und Hardwarekompatibilität sind vor der Nutzung mit dem Hersteller zu
             klären. openWB übernimmt keine Haftung für Schäden, welche aus der Nutzung der "aktiven Speichersteuerung"
-            entstehen.
+            entstehen. Mit der Aktivierung der aktiven Speichersteuerung (Schalter unten) bestätigst du, dass du die
+            Hinweise gelesen und verstanden hast und die Verantwortung für die Nutzung der aktiven Speichersteuerung
+            übernimmst.
           </p>
-          <openwb-base-button-group-input
-            title="Hinweise zur aktiven Speichersteuerung gelesen und akzeptiert"
-            :buttons="[
-              { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
-              { buttonValue: true, text: 'Ja', class: 'btn-outline-success' },
-            ]"
-            :model-value="$store.state.mqtt['openWB/bat/config/bat_control_permitted']"
-            @update:model-value="updateState('openWB/bat/config/bat_control_permitted', $event)"
-          />
         </openwb-base-alert>
-        <div v-if="$store.state.mqtt['openWB/bat/config/bat_control_permitted'] === true">
+        <openwb-base-button-group-input
+          v-model="batControlEnabled"
+          title="Speicher aktiv Steuern"
+          :buttons="[
+            { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
+            { buttonValue: true, text: 'Ja', class: 'btn-outline-success' },
+          ]"
+        >
+          <template
+            v-if="$store.state.mqtt['openWB/bat/config/bat_control_activated']"
+            #help
+          >
+            Speicher wird aktiv gesteuert. Grundlage ist die nachfolgende Konfiguration.
+          </template>
+          <template
+            v-else
+            #help
+          >
+            Speicher wird nicht aktiv gesteuert, sondern regelt eigenständig.<br />
+            Es greifen die Regelparameter der Speicherbeachtung.
+          </template>
+        </openwb-base-button-group-input>
+        <div
+          v-if="$store.state.mqtt['openWB/bat/config/bat_control_permitted'] === true"
+          class="mb-3"
+        >
           <openwb-base-heading class="mt-0"> Regelmodi der aktiven Speichersteuerung </openwb-base-heading>
           <openwb-base-alert subtype="info">
             Die aktive Speichersteuerung kann Speicherentladung begrenzen oder den Speicher zur Ladung zwingen. Die
             erlaubte Entladeleistung des Speichers (Speicherbeachtung PV) wird bei aktiver Speichersteuerung
             überschrieben, da Speicherentladung unter Umständen aktiv begrenzt wird.
           </openwb-base-alert>
-          <openwb-base-button-group-input
-            title="Speicher aktiv Steuern"
-            :buttons="[
-              {
-                buttonValue: false,
-                text: 'Nein',
-                class: 'btn-outline-danger',
-              },
-              {
-                buttonValue: true,
-                text: 'Ja',
-                class: 'btn-outline-success',
-              },
-            ]"
-            :model-value="$store.state.mqtt['openWB/bat/config/bat_control_activated']"
-            @update:model-value="updateState('openWB/bat/config/bat_control_activated', $event)"
-          >
-            <template
-              v-if="$store.state.mqtt['openWB/bat/config/bat_control_activated']"
-              #help
-            >
-              Speicher wird aktiv gesteuert. Grundlage ist die nachfolgende Konfiguration.
-            </template>
-            <template
-              v-else
-              #help
-            >
-              Speicher wird nicht aktiv gesteuert, sondern regelt eigenständig.<br />
-              Es greifen die Regelparameter der Speicherbeachtung.
-            </template>
-          </openwb-base-button-group-input>
         </div>
-        <div v-if="$store.state.mqtt['openWB/bat/config/bat_control_activated']">
+        <div
+          v-if="
+            $store.state.mqtt['openWB/bat/config/bat_control_activated'] &&
+            $store.state.mqtt['openWB/bat/config/bat_control_permitted']
+          "
+        >
           <openwb-base-card title="Aktiv steuerbare Speicher">
             <openwb-base-alert
               v-if="containsNormalBatteries"
@@ -750,6 +742,18 @@ export default {
     priceLimitLower() {
       const value = this.$store.state.mqtt["openWB/bat/config/charge_limit"];
       return value != null ? (value * 100000).toFixed(0) : 0;
+    },
+    batControlEnabled: {
+      get() {
+        return (
+          this.$store.state.mqtt["openWB/bat/config/bat_control_permitted"] &&
+          this.$store.state.mqtt["openWB/bat/config/bat_control_activated"]
+        );
+      },
+      set(value) {
+        this.updateState("openWB/bat/config/bat_control_permitted", value);
+        this.updateState("openWB/bat/config/bat_control_activated", value);
+      },
     },
     batteryBehaviourDescription() {
       const condition = this.$store.state.mqtt["openWB/bat/config/power_limit_condition"];
