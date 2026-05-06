@@ -64,6 +64,10 @@
                   dass der Ladepunkt auch entsperrt wurde.
                 </li>
                 <li>
+                  Sollte die Benutzverwaltung aktiv sein teile uns bitte Zugangsdaten mit ausreichenden Rechten mit um eine ggf. erforderliche
+                  Remoteanalyse zu ermöglichen. Ohne Zugangsdaten ist ein Remotezugriff nicht möglich und der Supportprozess wird unnötig erschwert.
+                </li>
+                <li>
                   Das Auslesen der Systemkonfiguration erfolgt direkt nach den Klick auf Absenden und kann einige Zeit
                   in Anspruch nehmen. Du erhältst ca. 15 bis 30 Minuten nach Versand des Systemberichtes von uns
                   automatisch eine E-Mail mit der Ticketnummer unter der die Anfrage bei uns registriert wurde. Wir
