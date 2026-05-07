@@ -289,7 +289,6 @@
               class="mb-3"
             >
               <openwb-base-card
-                :key="key"
                 :title="batteryConfig.name + ' (ID: ' + batteryConfig.id + ')'"
                 :collapsible="true"
                 :collapsed="true"
@@ -300,7 +299,6 @@
                   {{ batteryConfig.name }} (ID: {{ batteryConfig.id }})
                 </template>
                 <openwb-base-number-input
-                  :key="index"
                   title="Maximale Entladeleistung"
                   :min="0.1"
                   :step="0.1"
@@ -314,7 +312,6 @@
                   "
                 />
                 <openwb-base-number-input
-                  :key="index"
                   title="Maximale Ladeleistung"
                   :min="0.1"
                   :step="0.1"
@@ -328,7 +325,7 @@
               </openwb-base-card>
             </div>
           </openwb-base-card>
-          <div v-if="Object.keys(controllableBatteryConfigs).length > 0">
+          <div v-if="hasControllableBatteries">
             <openwb-base-range-input
               title="Untere Entladeschranke"
               :min="5"
@@ -527,15 +524,13 @@
                 </template>
               </openwb-base-button-group-input>
               <openwb-base-number-input
-                :title="`Eigenregelung für Strompreise über ${priceLimitUpper} ct/kWh`"
+                title="Eigenregelung für Strompreise über"
                 :step="0.001"
                 :precision="3"
                 unit="ct/kWh"
                 required
                 :model-value="$store.state.mqtt['openWB/bat/config/price_limit'] * 100000"
-                @update:model-value="
-                  updateState('openWB/bat/config/price_limit', parseFloat(($event / 100000).toFixed(7)))
-                "
+                @update:model-value="updateState('openWB/bat/config/price_limit', $event / 100000)"
               />
               <openwb-base-button-group-input
                 :title="`Regelmodus für Strompreise zwischen ${priceLimitLower} und ${priceLimitUpper} ct/kWh`"
@@ -598,15 +593,13 @@
                 </template>
               </openwb-base-button-group-input>
               <openwb-base-number-input
-                :title="`Speicher aktiv laden für Strompreise unter ${priceLimitLower} ct/kWh`"
+                title="Speicher aktiv laden für Strompreise unter"
                 :step="0.001"
                 :precision="3"
                 unit="ct/kWh"
                 required
                 :model-value="$store.state.mqtt['openWB/bat/config/charge_limit'] * 100000"
-                @update:model-value="
-                  updateState('openWB/bat/config/charge_limit', parseFloat(($event / 100000).toFixed(7)))
-                "
+                @update:model-value="updateState('openWB/bat/config/charge_limit', $event / 100000)"
               />
             </div>
             <div v-if="batteryBehaviorDescription.length">
@@ -713,7 +706,7 @@ export default {
       }
       const controllableBatteries = Object.keys(this.batteryConfigs)
         .filter((key) => {
-          return this.batPowerLimitControllable(this.batteryConfigs[key].id) === true;
+          return this.batteryConfigs[key]?.configuration?.power_limit_controllable === true;
         })
         .reduce((obj, key) => {
           return {
@@ -729,13 +722,14 @@ export default {
       }
       return Object.keys(this.controllableBatteryConfigs).length < this.numBatteriesInstalled;
     },
+    hasControllableBatteries() {
+      return Object.keys(this.controllableBatteryConfigs).length > 0;
+    },
     priceLimitUpper() {
-      const value = this.$store.state.mqtt["openWB/bat/config/price_limit"];
-      return value != null ? (value * 100000).toFixed(0) : 0;
+      return this.formatPrice(this.$store.state.mqtt["openWB/bat/config/price_limit"]);
     },
     priceLimitLower() {
-      const value = this.$store.state.mqtt["openWB/bat/config/charge_limit"];
-      return value != null ? (value * 100000).toFixed(0) : 0;
+      return this.formatPrice(this.$store.state.mqtt["openWB/bat/config/charge_limit"]);
     },
     batteryBehaviorDescription() {
       const condition = this.$store.state.mqtt["openWB/bat/config/power_limit_condition"];
@@ -788,10 +782,6 @@ export default {
     },
   },
   methods: {
-    batPowerLimitControllable(id) {
-      const battery = Object.values(this.batteryConfigs).find((b) => b.id === id);
-      return battery?.configuration?.power_limit_controllable === true;
-    },
     filterComponentsByType(components, type) {
       return Object.keys(components)
         .filter((key) => {
@@ -809,6 +799,9 @@ export default {
       if (value === "vehicle_charging") {
         this.updateState("openWB/bat/config/manual_mode", "manual_limit");
       }
+    },
+    formatPrice(value) {
+      return ((value || 0) * 100000).toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 3 });
     },
   },
 };
