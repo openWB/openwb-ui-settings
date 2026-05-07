@@ -657,7 +657,6 @@ export default {
       mqttTopics: [
         { topic: "openWB/bat/+/get/max_charge_power", writeable: true },
         { topic: "openWB/bat/+/get/max_discharge_power", writeable: true },
-        { topic: "openWB/bat/+/get/power_limit_controllable", writeable: false },
         { topic: "openWB/bat/config/bat_control_activated", writeable: true },
         { topic: "openWB/bat/config/bat_control_max_soc", writeable: true },
         { topic: "openWB/bat/config/bat_control_min_soc", writeable: true },
@@ -668,7 +667,6 @@ export default {
         { topic: "openWB/bat/config/price_charge_activated", writeable: true },
         { topic: "openWB/bat/config/price_limit", writeable: true },
         { topic: "openWB/bat/config/price_limit_activated", writeable: true },
-        { topic: "openWB/bat/get/power_limit_controllable", writeable: false },
         { topic: "openWB/general/chargemode_config/pv_charging/bat_mode", writeable: true },
         { topic: "openWB/general/chargemode_config/pv_charging/bat_power_discharge", writeable: true },
         { topic: "openWB/general/chargemode_config/pv_charging/bat_power_discharge_active", writeable: true },
