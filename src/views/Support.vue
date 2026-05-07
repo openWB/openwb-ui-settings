@@ -64,10 +64,6 @@
                   dass der Ladepunkt auch entsperrt wurde.
                 </li>
                 <li>
-                  Sollte die Benutzverwaltung aktiv sein teile uns bitte Zugangsdaten mit ausreichenden Rechten mit um eine ggf. erforderliche
-                  Remoteanalyse zu ermöglichen. Ohne Zugangsdaten ist ein Remotezugriff nicht möglich und der Supportprozess wird unnötig erschwert.
-                </li>
-                <li>
                   Das Auslesen der Systemkonfiguration erfolgt direkt nach den Klick auf Absenden und kann einige Zeit
                   in Anspruch nehmen. Du erhältst ca. 15 bis 30 Minuten nach Versand des Systemberichtes von uns
                   automatisch eine E-Mail mit der Ticketnummer unter der die Anfrage bei uns registriert wurde. Wir
@@ -160,6 +156,15 @@
             v-if="$store.state.mqtt['openWB/system/dataprotection_acknowledged'] === true"
             #footer
           >
+            <openwb-base-alert
+              v-if="userManagementActive"
+              subtype="warning"
+            >
+              <strong>Die Benutzerverwaltung ist aktiv!</strong><br />
+              Bitte teile uns Zugangsdaten mit ausreichenden Rechten mit, um eine ggf. erforderliche Analyse über den
+              Fernzugriff zu ermöglichen. Ohne Zugangsdaten ist ein Zugriff durch unseren Support nicht möglich und der
+              Prozess wird unnötig erschwert und verzögert.
+            </openwb-base-alert>
             <div class="row justify-content-center">
               <openwb-base-click-button
                 class="col-4"
@@ -209,6 +214,7 @@ export default {
         { topic: "openWB/system/dataprotection_acknowledged", writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
         { topic: "openWB/system/device/+/config", writeable: false },
+        { topic: "openWB/system/security/user_management_active", writeable: false },
         { topic: "openWB/system/serial_number", writeable: false },
         { topic: "openWB/vehicle/+/info", writeable: false },
         { topic: "openWB/vehicle/+/name", writeable: false },
@@ -224,6 +230,9 @@ export default {
     };
   },
   computed: {
+    userManagementActive() {
+      return this.$store.state.mqtt["openWB/system/security/user_management_active"] || false;
+    },
     debugData() {
       return {
         email: this.email,
