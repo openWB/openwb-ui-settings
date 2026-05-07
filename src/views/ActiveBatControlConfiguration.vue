@@ -609,11 +609,11 @@
                 "
               />
             </div>
-            <div v-if="batteryBehaviourDescription.length">
+            <div v-if="batteryBehaviorDescription.length">
               <openwb-base-heading class="mt-2"> Beschreibung des Verhaltens </openwb-base-heading>
               <openwb-base-alert subtype="info">
                 <div
-                  v-for="(line, index) in batteryBehaviourDescription"
+                  v-for="(line, index) in batteryBehaviorDescription"
                   :key="index"
                 >
                   {{ line }}
@@ -738,7 +738,7 @@ export default {
       const value = this.$store.state.mqtt["openWB/bat/config/charge_limit"];
       return value != null ? (value * 100000).toFixed(0) : 0;
     },
-    batteryBehaviourDescription() {
+    batteryBehaviorDescription() {
       const condition = this.$store.state.mqtt["openWB/bat/config/power_limit_condition"];
       const mode = this.$store.state.mqtt["openWB/bat/config/power_limit_mode"];
       const controlMode = this.$store.state.mqtt["openWB/bat/config/manual_mode"];
