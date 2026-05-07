@@ -289,7 +289,7 @@
               class="mb-3"
             >
               <openwb-base-card
-                :key="index"
+                :key="key"
                 :title="batteryConfig.name + ' (ID: ' + batteryConfig.id + ')'"
                 :collapsible="true"
                 :collapsed="true"
@@ -698,18 +698,14 @@ export default {
         this.updateState("openWB/general/chargemode_config/pv_charging/bat_mode", newMode);
       },
     },
-    numBatteriesInstalled: {
-      get() {
-        return Object.keys(this.batteryConfigs).length;
-      },
+    numBatteriesInstalled() {
+      return Object.keys(this.batteryConfigs).length;
     },
-    batteryConfigs: {
-      get() {
-        if (this.$store.state.mqtt["openWB/general/extern"] === true) {
-          return {};
-        }
-        return this.filterComponentsByType(this.getWildcardTopics("openWB/system/device/+/component/+/config"), "bat");
-      },
+    batteryConfigs() {
+      if (this.$store.state.mqtt["openWB/general/extern"] === true) {
+        return {};
+      }
+      return this.filterComponentsByType(this.getWildcardTopics("openWB/system/device/+/component/+/config"), "bat");
     },
     controllableBatteryConfigs() {
       if (this.$store.state.mqtt["openWB/general/extern"] === true) {
@@ -725,7 +721,6 @@ export default {
             [key]: this.batteryConfigs[key],
           };
         }, {});
-      console.log("controllableBatteryConfigs:", controllableBatteries);
       return controllableBatteries;
     },
     hasNonControllableBatteries() {
