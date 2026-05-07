@@ -275,20 +275,20 @@
         <div v-if="$store.state.mqtt['openWB/bat/config/bat_control_activated']">
           <openwb-base-card title="Aktiv steuerbare Speicher">
             <openwb-base-alert
-              v-if="containsNormalBatteries"
+              v-if="hasNonControllableBatteries"
               subtype="danger"
             >
-              Es sind weitere, nicht steuerbare Speicher im System vorhanden. Solche Speicher führen gewöhnlich
-              eigenständig eine Nullpunktausregelung durch, versuchen also Überschuss zu speichern (Einspeisung zu
-              verhindern) und Netzbezug durch eigene Entladung zu vermeiden.<br />
+              Es gibt nicht steuerbare Speicher im System vorhanden. Solche Speicher führen gewöhnlich eigenständig eine
+              Nullpunktausregelung durch, versuchen also Überschuss zu speichern (Einspeisung zu verhindern) und
+              Netzbezug durch eigene Entladung zu vermeiden.<br />
               Ein solcher Speicher versucht ebenso aktiv gesteuerte Speicher auszugleichen.
             </openwb-base-alert>
             <div
-              v-for="(batteryConfig, index) in batteryConfigs"
-              :key="index"
+              v-for="(batteryConfig, key) in controllableBatteryConfigs"
+              :key="key"
+              class="mb-3"
             >
               <openwb-base-card
-                v-if="$store.state.mqtt['openWB/bat/' + batteryConfig.id + '/get/power_limit_controllable'] === true"
                 :key="index"
                 :title="batteryConfig.name + ' (ID: ' + batteryConfig.id + ')'"
                 :collapsible="true"
@@ -328,7 +328,7 @@
               </openwb-base-card>
             </div>
           </openwb-base-card>
-          <div v-if="$store.state.mqtt['openWB/bat/get/power_limit_controllable'] === true">
+          <div v-if="Object.keys(controllableBatteryConfigs).length > 0">
             <openwb-base-range-input
               title="Untere Entladeschranke"
               :min="5"
@@ -711,24 +711,28 @@ export default {
         return this.filterComponentsByType(this.getWildcardTopics("openWB/system/device/+/component/+/config"), "bat");
       },
     },
-    controllableBatteryConfigs: {
-      get() {
-        if (this.$store.state.mqtt["openWB/general/extern"] === true) {
-          return {};
-        }
-        return this.filterControllableBatteries(this.getWildcardTopics("openWB/system/device/+/component/+/config"));
-      },
+    controllableBatteryConfigs() {
+      if (this.$store.state.mqtt["openWB/general/extern"] === true) {
+        return {};
+      }
+      const controllableBatteries = Object.keys(this.batteryConfigs)
+        .filter((key) => {
+          return this.batPowerLimitControllable(this.batteryConfigs[key].id) === true;
+        })
+        .reduce((obj, key) => {
+          return {
+            ...obj,
+            [key]: this.batteryConfigs[key],
+          };
+        }, {});
+      console.log("controllableBatteryConfigs:", controllableBatteries);
+      return controllableBatteries;
     },
-    containsNormalBatteries: {
-      get() {
-        if (this.$store.state.mqtt["openWB/general/extern"] === true) {
-          return false;
-        }
-        return (
-          Object.keys(this.filterNormalBatteries(this.getWildcardTopics("openWB/system/device/+/component/+/config")))
-            .length > 0
-        );
-      },
+    hasNonControllableBatteries() {
+      if (this.$store.state.mqtt["openWB/general/extern"] === true) {
+        return false;
+      }
+      return Object.keys(this.controllableBatteryConfigs).length < this.numBatteriesInstalled;
     },
     priceLimitUpper() {
       const value = this.$store.state.mqtt["openWB/bat/config/price_limit"];
@@ -789,39 +793,14 @@ export default {
     },
   },
   methods: {
-    getLimitControllable(id) {
-      return this.$store.state.mqtt["openWB/bat/" + id + "/get/power_limit_controllable"];
+    batPowerLimitControllable(id) {
+      const battery = Object.values(this.batteryConfigs).find((b) => b.id === id);
+      return battery?.configuration?.power_limit_controllable === true;
     },
     filterComponentsByType(components, type) {
       return Object.keys(components)
         .filter((key) => {
           return components[key].type.includes(type);
-        })
-        .reduce((obj, key) => {
-          return {
-            ...obj,
-            [key]: components[key],
-          };
-        }, {});
-    },
-    filterControllableBatteries(components) {
-      return Object.keys(components)
-        .filter((key) => {
-          return (
-            components[key].type.includes("bat") && components[key].configuration.power_limit_controllable === true
-          );
-        })
-        .reduce((obj, key) => {
-          return {
-            ...obj,
-            [key]: components[key],
-          };
-        }, {});
-    },
-    filterNormalBatteries(components) {
-      return Object.keys(components)
-        .filter((key) => {
-          return components[key].type.includes("bat") && this.getLimitControllable(components[key].id) === false;
         })
         .reduce((obj, key) => {
           return {
