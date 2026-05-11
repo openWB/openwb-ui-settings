@@ -63,9 +63,15 @@
                 <openwb-base-avatar
                   v-for="installedComponent in getMyInstalledComponents(installedDevice?.id)"
                   :key="installedComponent?.id"
-                  :class="'ml-1 bg-' + getComponentTypeClass(installedComponent?.type)"
+                  class="ml-1"
+                  :style="{
+                    backgroundColor: installedComponent?.color,
+                    color: getContrastColor(installedComponent?.color),
+                  }"
                 >
-                  <font-awesome-icon :icon="getComponentTypeIcon(installedComponent?.type)" />
+                  <openwb-base-tooltip :description="installedComponent?.name">
+                    <font-awesome-icon :icon="getComponentTypeIcon(installedComponent?.type)" />
+                  </openwb-base-tooltip>
                 </openwb-base-avatar>
               </div>
             </template>
@@ -96,7 +102,14 @@
               :subtype="getComponentTypeClass(installedComponent?.type)"
             >
               <template #header>
-                <font-awesome-icon :icon="getComponentTypeIcon(installedComponent?.type)" />
+                <font-awesome-icon
+                  :icon="getComponentTypeIcon(installedComponent?.type)"
+                  class="fa-border"
+                  :style="{
+                    backgroundColor: installedComponent?.color,
+                    color: getContrastColor(installedComponent?.color),
+                  }"
+                />
                 {{ installedComponent?.name }}
               </template>
               <template #actions="slotProps">
@@ -121,7 +134,16 @@
                 subtype="text"
                 :model-value="installedComponent?.name"
                 @update:model-value="updateState(installedComponentKey, $event, 'name')"
-              />
+              >
+                <template #append>
+                  <openwb-base-color-picker
+                    class="p-1"
+                    :model-value="installedComponent?.color"
+                    :default-color="getComponentDefaultColor(installedComponent?.type)"
+                    @update:model-value="updateState(installedComponentKey, $event, 'color')"
+                  />
+                </template>
+              </openwb-base-text-input>
               <openwb-base-text-input
                 title="Hersteller"
                 subtype="text"
@@ -349,6 +371,18 @@ export default {
         return "warning";
       }
       return "dark";
+    },
+    getComponentDefaultColor(type) {
+      if (type.match(/^(.+_)?counter(_.+)?$/)) {
+        return "#dc3545";
+      }
+      if (type.match(/^(.+_)?inverter(_.+)?$/)) {
+        return "#28a745";
+      }
+      if (type.match(/^(.+_)?bat(_.+)?$/)) {
+        return "#ffc107";
+      }
+      return undefined;
     },
     getComponentTypeIcon(type) {
       if (type.match(/^(.+_)?counter(_.+)?$/)) {
