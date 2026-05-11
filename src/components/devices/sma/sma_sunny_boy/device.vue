@@ -1,6 +1,6 @@
 <template>
   <div class="device-sunnyboy">
-    <openwb-base-heading> Einstellungen für SMA Sunny Boy/Tripower </openwb-base-heading>
+    <openwb-base-heading> Einstellungen für SMA Sunny Boy / Tripower / Tesvolt </openwb-base-heading>
     <openwb-base-alert subtype="info">
       ModbusTCP muss entweder direkt am Wechselrichter, per Sunny Portal oder über das Tool "Sunny Explorer" aktiviert
       werden. Dies ist standardmäßig deaktiviert.
