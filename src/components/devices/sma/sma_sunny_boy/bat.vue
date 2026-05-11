@@ -1,6 +1,6 @@
 <template>
   <div class="device-sunnyboy-bat">
-    <openwb-base-heading> Einstellungen für SMA Sunny Boy/Tripower Batteriespeicher </openwb-base-heading>
+    <openwb-base-heading> Einstellungen für SMA Sunny Boy / Tripower / Tesvolt Batteriespeicher </openwb-base-heading>
     <openwb-base-number-input
       title="Modbus ID"
       required
