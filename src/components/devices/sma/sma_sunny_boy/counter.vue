@@ -1,6 +1,6 @@
 <template>
   <div class="device-sunnyboy-counter">
-    <openwb-base-heading> Einstellungen für SMA Sunny Boy/Tripower Zähler </openwb-base-heading>
+    <openwb-base-heading> Einstellungen für SMA Sunny Boy / Tripower Zähler </openwb-base-heading>
     <openwb-base-number-input
       title="Modbus ID"
       required
