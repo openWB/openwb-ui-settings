@@ -145,6 +145,22 @@
             </template>
           </openwb-base-button-group-input>
           <openwb-base-alert
+            v-if="!webThemeSupported"
+            subtype="danger"
+            class="mt-2"
+          >
+            Das ausgewählte Theme "{{ $store.state.mqtt["openWB/general/web_theme"]?.name }}" für die
+            <router-link to="/GeneralConfiguration">Hauptseite</router-link> unterstützt die Benutzerverwaltung nicht.
+          </openwb-base-alert>
+          <openwb-base-alert
+            v-if="!displayThemeSupported"
+            subtype="danger"
+            class="mt-2"
+          >
+            Das ausgewählte Theme "{{ $store.state.mqtt["openWB/optional/int_display/theme"]?.name }}" für das
+            <router-link to="/DisplayConfiguration">Display</router-link> unterstützt die Benutzerverwaltung nicht.
+          </openwb-base-alert>
+          <openwb-base-alert
             subtype="warning"
             class="mt-2"
           >
@@ -170,22 +186,6 @@
               <li>SmartHome</li>
               <li>SimpleAPI</li>
             </ul>
-          </openwb-base-alert>
-          <openwb-base-alert
-            v-if="!webThemeSupported"
-            subtype="danger"
-            class="mt-2"
-          >
-            Das ausgewählte Theme "{{ $store.state.mqtt["openWB/general/web_theme"]?.name }}" für die
-            <router-link to="/GeneralConfiguration">Hauptseite</router-link> unterstützt die Benutzerverwaltung nicht.
-          </openwb-base-alert>
-          <openwb-base-alert
-            v-if="!displayThemeSupported"
-            subtype="danger"
-            class="mt-2"
-          >
-            Das ausgewählte Theme "{{ $store.state.mqtt["openWB/optional/int_display/theme"]?.name }}" für das
-            <router-link to="/DisplayConfiguration">Display</router-link> unterstützt die Benutzerverwaltung nicht.
           </openwb-base-alert>
           <hr />
           <openwb-base-button-input
