@@ -239,9 +239,40 @@
               Abhängigkeit in der Regelung berücksichtigt werden kann.
             </template>
           </sortable-list>
+          <hr />
+          <sortable-list
+            v-model="loadmanagementPrioList"
+            title="Prioritäten-Steuerung für das Lastmanagement"
+            :labels="loadmanagementPrioLabels"
+            :nesting="true"
+            :max-nesting-depth="1"
+            @delete-group="deleteGroup"
+            @rename-group="renameGroup"
+          >
+            <template #help>
+              Reihenfolge der Ladepunkt- und Verbraucher-Prioritäten für das Lastmanagement.<br />
+              Die Reihenfolge kann durch Drag & Drop geändert werden.<br />
+              Elemente können in Gruppen zusammengefasst werden. Alle Elemente innerhalb einer Gruppe erhalten die
+              gleiche Priorität und werden im Lastmanagement gleichrangig behandelt.
+            </template>
+          </sortable-list>
+          <openwb-base-text-input
+            v-model="newGroupName"
+            title="Gruppe hinzufügen"
+            subtype="group"
+            :empty-value="null"
+            :add-button="true"
+            @input:add="addGroup"
+          >
+            <template #help>
+              Gruppen ermöglichen das Zusammenfassen von Fahrzeugen oder Verbrauchern für die Prioritäten-Steuerung.
+              Elemente können per Drag & Drop in eine Gruppe verschoben werden (maximal eine Verschachtelungsebene).
+              Gruppen können umbenannt (Stift-Symbol oder Klick auf den Namen) und gelöscht werden. Beim Löschen bleiben
+              die enthaltenen Elemente erhalten und werden eine Ebene nach oben verschoben.
+            </template>
+          </openwb-base-text-input>
         </div>
       </openwb-base-card>
-
       <openwb-base-submit-buttons
         form-name="loadManagementConfigForm"
         @save="$emit('save', mqttTopicsToPublish)"
@@ -261,12 +292,14 @@ library.add(fasSolarPanel, fasGaugeHigh);
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 import SortableList from "../components/OpenwbSortableList.vue";
+import OpenwbBaseTextInput from "../components/OpenwbBaseTextInput.vue";
 
 export default {
   name: "OpenwbLoadManagementConfigView",
   components: {
     SortableList,
     FontAwesomeIcon,
+    OpenwbBaseTextInput,
   },
   mixins: [ComponentState],
   props: {
@@ -282,26 +315,30 @@ export default {
       mqttTopics: [
         { topic: "openWB/bat/+/config/max_power", writeable: true },
         { topic: "openWB/chargepoint/+/config", writeable: false },
+        { topic: "openWB/consumer/+/module", writeable: false },
         { topic: "openWB/counter/+/config/max_currents", writeable: true },
         { topic: "openWB/counter/+/config/max_power_errorcase", writeable: true },
         { topic: "openWB/counter/+/config/max_total_power", writeable: true },
         { topic: "openWB/counter/config/consider_less_charging", writeable: true },
         { topic: "openWB/counter/config/home_consumption_source_id", writeable: true },
         { topic: "openWB/counter/get/hierarchy", writeable: true },
+        { topic: "openWB/counter/get/loadmanagement_prios", writeable: true },
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/pv/+/config/max_ac_out", writeable: true },
+        { topic: "openWB/vehicle/+/name", writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
       ],
+      newGroupName: null,
     };
   },
   computed: {
     componentConfigurations() {
-      return this.getWildcardTopics("openWB/system/device/+/component/+/config");
+      return this.getWildcardTopics("openWB/system/device/+/component/+/config") || {};
     },
     componentConfigs: {
       get() {
         return (type) => {
-          let installedComponentsConfigs = this.componentConfigurations;
+          let installedComponentsConfigs = this.componentConfigurations || {};
           return Object.keys(installedComponentsConfigs)
             .filter((key) => {
               return installedComponentsConfigs[key]?.type.includes(type);
@@ -347,12 +384,65 @@ export default {
     hierarchyLabels: {
       get() {
         let labels = {};
-        for (const element of Object.values(this.$store.state.mqtt["openWB/counter/get/hierarchy"])) {
+        for (const element of Object.values(this.$store.state.mqtt["openWB/counter/get/hierarchy"] || {})) {
           labels = {
             ...labels,
             ...this.getElementTreeNames(element),
           };
         }
+        return labels;
+      },
+    },
+    loadmanagementPrioList: {
+      get() {
+        const prioList = this.$store.state.mqtt["openWB/counter/get/loadmanagement_prios"] || [];
+        if (!Array.isArray(prioList)) return [];
+        return prioList.map((item) => {
+          // Backward compatibility: legacy prio entries ... plain vehicle IDs (e.g. "ev3")
+          if (typeof item === "string") {
+            return { id: item, type: "vehicle" };
+          }
+          return item;
+        });
+      },
+      set(newList) {
+        this.updateState("openWB/counter/get/loadmanagement_prios", newList);
+      },
+    },
+    loadmanagementPrioLabels: {
+      get() {
+        const labels = {};
+        const processItems = (items) => {
+          items.forEach((item) => {
+            switch (item.type) {
+              case "group": {
+                if (item.label) {
+                  labels[item.id] = item.label;
+                }
+                if (Array.isArray(item.children)) {
+                  processItems(item.children);
+                }
+                break;
+              }
+              case "vehicle": {
+                const vehicleId = String(item.id).replace(/^ev/, "");
+                const name = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/name`];
+                if (name) {
+                  labels[item.id] = name;
+                }
+                break;
+              }
+              case "load": {
+                const name = this.$store.state.mqtt[`openWB/consumer/${item.id}/module`]?.name;
+                if (name) {
+                  labels[item.id] = name;
+                }
+                break;
+              }
+            }
+          });
+        };
+        processItems(this.loadmanagementPrioList);
         return labels;
       },
     },
@@ -375,15 +465,26 @@ export default {
   methods: {
     getElementTreeNames(element) {
       let myNames = {};
-      if (element.type == "cp") {
-        let chargePoint = this.getChargePoint(element.id);
-        if (chargePoint) {
-          myNames[element.id] = chargePoint.name;
+      switch (element.type) {
+        case "cp": {
+          const chargePoint = this.getChargePoint(element.id);
+          if (chargePoint) {
+            myNames[element.id] = chargePoint.name;
+          }
+          break;
         }
-      } else {
-        let component = this.getComponent(element.id);
-        if (component) {
-          myNames[element.id] = component.name;
+        case "consumer": {
+          const consumer = this.$store.state.mqtt[`openWB/consumer/${element.id}/module`];
+          if (consumer?.name) {
+            myNames[element.id] = consumer.name;
+          }
+          break;
+        }
+        default: {
+          const component = this.getComponent(element.id);
+          if (component?.name) {
+            myNames[element.id] = component.name;
+          }
         }
       }
       element.children.forEach((child) => {
@@ -411,6 +512,56 @@ export default {
     },
     isComponentType(componentType, verifier) {
       return componentType?.split("_").includes(verifier);
+    },
+    addGroup() {
+      if (!this.newGroupName) return;
+      const newGroup = {
+        type: "group",
+        label: this.newGroupName,
+        id: `group-${Date.now()}`,
+        children: [],
+      };
+      const updatedList = [...this.loadmanagementPrioList, newGroup];
+      this.loadmanagementPrioList = updatedList;
+      this.newGroupName = null;
+    },
+    deleteGroup(groupId) {
+      const unwrapGroup = (items) => {
+        const result = [];
+        items.forEach((item) => {
+          if (item.type === "group" && item.id === groupId) {
+            // Promote children instead of keeping the group
+            if (Array.isArray(item.children)) {
+              result.push(...item.children);
+            }
+          } else if (item.type === "group" && Array.isArray(item.children)) {
+            // Recursively check nested groups
+            result.push({
+              ...item,
+              children: unwrapGroup(item.children),
+            });
+          } else {
+            result.push(item);
+          }
+        });
+        return result;
+      };
+      const updatedList = unwrapGroup(this.loadmanagementPrioList);
+      this.loadmanagementPrioList = updatedList;
+    },
+    renameGroup({ id, label }) {
+      const rename = (items) => {
+        return items.map((item) => {
+          if (item.type === "group" && item.id === id) {
+            return { ...item, label };
+          }
+          if (item.children) {
+            return { ...item, children: rename(item.children) };
+          }
+          return item;
+        });
+      };
+      this.loadmanagementPrioList = rename(this.loadmanagementPrioList);
     },
   },
 };
