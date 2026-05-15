@@ -291,6 +291,15 @@
             >
               System
             </router-link>
+            <!-- add access once implemented in backend
+              v-if="accessAllowed('TenantEnergyConfiguration')"  -->
+            <router-link
+              to="/System/Abrechnung"
+              class="dropdown-item"
+              active-class="active disabled"
+            >
+              Abrechnung
+            </router-link>
             <router-link
               v-if="accessAllowed('LegalSettings')"
               to="/System/LegalSettings"
