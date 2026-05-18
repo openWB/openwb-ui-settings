@@ -215,7 +215,7 @@ const routes = [
   },
   {
     path: "/System/Abrechnung",
-    name: "TenantEnergy",
+    name: "TenantEnergyConfiguration",
     meta: {
       heading: "Abrechnung - Mieterstrom",
       // todo enable permission check for billing pages once implemented
