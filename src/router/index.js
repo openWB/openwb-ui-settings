@@ -218,8 +218,7 @@ const routes = [
     name: "TenantEnergyConfiguration",
     meta: {
       heading: "Abrechnung - Mieterstrom",
-      // todo enable permission check for billing pages once implemented
-      checkPermissions: false,
+      checkPermissions: true,
     },
     component: () => import("../views/TenantEnergyBilling.vue"),
   },
