@@ -657,6 +657,7 @@ export default {
       mqttTopics: [
         { topic: "openWB/bat/+/get/max_charge_power", writeable: true },
         { topic: "openWB/bat/+/get/max_discharge_power", writeable: true },
+        { topic: "openWB/bat/+/get/power_limit_controllable", writeable: false },
         { topic: "openWB/bat/config/bat_control_activated", writeable: true },
         { topic: "openWB/bat/config/bat_control_max_soc", writeable: true },
         { topic: "openWB/bat/config/bat_control_min_soc", writeable: true },
@@ -702,9 +703,10 @@ export default {
       if (this.$store.state.mqtt["openWB/general/extern"] === true) {
         return {};
       }
-      const controllableBatteries = Object.keys(this.batteryConfigs)
+      return Object.keys(this.batteryConfigs)
         .filter((key) => {
-          return this.batteryConfigs[key]?.configuration?.power_limit_controllable === true;
+          const id = this.batteryConfigs[key].id;
+          return this.$store.state.mqtt[`openWB/bat/${id}/get/power_limit_controllable`] === true;
         })
         .reduce((obj, key) => {
           return {
@@ -712,13 +714,16 @@ export default {
             [key]: this.batteryConfigs[key],
           };
         }, {});
-      return controllableBatteries;
     },
     hasNonControllableBatteries() {
       if (this.$store.state.mqtt["openWB/general/extern"] === true) {
         return false;
       }
-      return Object.keys(this.controllableBatteryConfigs).length < this.numBatteriesInstalled;
+      return Object.keys(this.batteryConfigs).some((key) => {
+        const id = this.batteryConfigs[key].id;
+        const value = this.$store.state.mqtt[`openWB/bat/${id}/get/power_limit_controllable`];
+        return value === false;
+      });
     },
     hasControllableBatteries() {
       return Object.keys(this.controllableBatteryConfigs).length > 0;
