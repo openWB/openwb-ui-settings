@@ -6,10 +6,6 @@
       Unterstützte Hardware: QCells Q.VOLT HYB-G3-3P (Solax Gen4).<br />
       openWB übergibt die Speicherleistung direkt als Push-Power an den
       Wechselrichter (0W = Entladesperre).<br />
-      Bitte die Felder "Maximale Ladeleistung" und "Maximale
-      Entladeleistung" unter Ladeeinstellungen &gt; Speichersteuerung
-      entsprechend der Leistungsfähigkeit des Wechselrichters und der
-      angeschlossenen Batterie konfigurieren.
     </openwb-base-alert>
   </div>
 </template>
