@@ -1,11 +1,10 @@
 <template>
   <div class="device-qcells-bat">
     <openwb-base-alert subtype="info">
-      Die aktive Speichersteuerung erfolgt über das Solax Remote Control
-      Modbus-Protokoll (Mode 4, Push Power-Positive/Negative).<br />
+      Die aktive Speichersteuerung erfolgt über das Solax Remote Control Modbus-Protokoll (Mode 4, Push
+      Power-Positive/Negative).<br />
       Unterstützte Hardware: QCells Q.VOLT HYB-G3-3P (Solax Gen4).<br />
-      openWB übergibt die Speicherleistung direkt als Push-Power an den
-      Wechselrichter (0W = Entladesperre).<br />
+      openWB übergibt die Speicherleistung direkt als Push-Power an den Wechselrichter (0W = Entladesperre).
     </openwb-base-alert>
   </div>
 </template>
