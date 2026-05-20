@@ -23,8 +23,8 @@
       :precision="3"
       required
       unit="ct/kWh"
-      :model-value="flexibleTariff.configuration.surcharge"
-      @update:model-value="updateConfiguration(parseFloat($event.toFixed(3)), 'configuration.surcharge')"
+      :model-value="parseFloat((flexibleTariff.configuration.surcharge * 100000).toFixed(4))"
+      @update:model-value="updateConfiguration($event / 100000, 'configuration.surcharge')"
     >
       <template #help>
         Die Auswahl (Energy-Charts) kann für alle Stromanbieter ausgewählt werden, die die Börsenstrompreise in einem

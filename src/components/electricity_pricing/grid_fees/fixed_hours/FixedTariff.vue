@@ -25,8 +25,8 @@
       :precision="3"
       required
       unit="ct/kWh"
-      :model-value="tariff.price * 100"
-      @update:model-value="tariff.price = parseFloat(($event / 100).toFixed(5))"
+      :model-value="parseFloat((tariff.price * 100000).toFixed(4))"
+      @update:model-value="tariff.price = $event / 100000"
     />
     <openwb-base-select-input
       v-model="dates"
