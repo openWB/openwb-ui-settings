@@ -7,8 +7,8 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeCloud($event)"
   >
-    Willst du wirklich die Eingabefelder zurücksetzen? Du kannst Clouddaten danach neu eingeben. Das Zurücksetzen der
-    Eingabefelder macht deine Cloudddaten nicht ungültig. Gültige Clouddaten stehen auf einem Aufkleber in Deinem Gerät.
+    Willst Du wirklich die Eingabefelder zurücksetzen? Du kannst Clouddaten danach neu eingeben. Das Zurücksetzen der
+    Eingabefelder macht Deine Clouddaten nicht ungültig. Gültige Clouddaten stehen auf einem Aufkleber in Deinem Gerät.
     Du kannst selbst keine neuen Daten vergeben.
   </openwb-base-modal-dialog>
   <!-- main content -->
