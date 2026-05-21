@@ -2,12 +2,14 @@
   <!-- modal dialogs -->
   <openwb-base-modal-dialog
     :show="showCloudRemoveModal"
-    title="Cloud Zugang löschen"
+    title="Eingabefelder zurücksetzen"
     subtype="danger"
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeCloud($event)"
   >
-    Willst Du den vorhandenen Cloud Zugang wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht werden!
+    Willst du wirklich die Eingabefelder zurücksetzen? Du kannst Clouddaten danach neu eingeben. Das Zurücksetzen der
+    Eingabefelder macht deine Cloudddaten nicht ungültig. Gültige Clouddaten stehen auf einem Aufkleber in Deinem Gerät.
+    Du kannst selbst keine neuen Daten vergeben.
   </openwb-base-modal-dialog>
   <!-- main content -->
   <div class="cloud-config">
@@ -214,7 +216,7 @@
                 :disabled="!enableRemoveCloudButton"
                 @button-clicked="removeCloudModal($event)"
               >
-                Zugang löschen
+                Eingabefelder zurücksetzen
               </openwb-base-click-button>
             </div>
           </template>
