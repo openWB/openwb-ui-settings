@@ -6,7 +6,7 @@
       class="btn btn-same-size btn-centered"
       :class="[
         { active: modelValue === button.buttonValue },
-        { disabled: disabled },
+        { disabled: disabled || button.disabled },
         button.class ? button.class : 'btn-outline-info',
       ]"
       :for="`${uid}-${button.buttonValue}`"
@@ -18,7 +18,7 @@
           type="radio"
           :value="button.buttonValue"
           v-bind="$attrs"
-          :disabled="disabled"
+          :disabled="disabled || button.disabled"
           @click="$emit('button-click', button.buttonValue)"
         />
         <slot :name="'label-' + button.buttonValue">
