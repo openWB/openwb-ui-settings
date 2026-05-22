@@ -300,8 +300,8 @@
                 </template>
                 <openwb-base-number-input
                   title="Maximale Entladeleistung"
-                  :min="0.1"
-                  :step="0.1"
+                  :min="0.01"
+                  :step="0.01"
                   unit="kW"
                   required
                   :model-value="
@@ -313,8 +313,8 @@
                 />
                 <openwb-base-number-input
                   title="Maximale Ladeleistung"
-                  :min="0.1"
-                  :step="0.1"
+                  :min="0.01"
+                  :step="0.01"
                   unit="kW"
                   required
                   :model-value="$store.state.mqtt['openWB/bat/' + batteryConfig.id + '/get/max_charge_power'] / 1000"
