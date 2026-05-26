@@ -754,9 +754,10 @@ export default {
       for (const [, element] of Object.entries(chargePoints)) {
         chargePointList.push({ value: element.id, text: element.name });
       }
-      if (chargePointList.length > 1) {
-        const allIds = chargePointList.map((item) => item.value);
-        chargePointList.unshift({ value: allIds, text: "Alle" });
+      if (chargePointList.length >= 1) {
+        // "Alle" sends an empty filter ([]) so the backend shows all entries,
+        // including those of deleted charge points (not just currently existing IDs).
+        chargePointList.unshift({ value: [], text: "Alle" });
       }
       return chargePointList;
     },
@@ -768,9 +769,10 @@ export default {
         const name = this.$store.state.mqtt["openWB/vehicle/" + index + "/name"];
         vehicleList.push({ value: index, text: name || `Fahrzeug ${index}` });
       }
-      if (vehicleList.length > 1) {
-        const allIds = vehicleList.map((item) => item.value);
-        vehicleList.unshift({ value: allIds, text: "Alle" });
+      if (vehicleList.length >= 1) {
+        // "Alle" sends an empty filter ([]) so the backend shows all entries,
+        // including those of deleted vehicles (not just currently existing IDs).
+        vehicleList.unshift({ value: [], text: "Alle" });
       }
       return vehicleList;
     },
@@ -797,8 +799,9 @@ export default {
         if (value === undefined || value === null) return [];
         // Case 2: scalar value (e.g. 0) - wrap in array
         if (!Array.isArray(value)) return [value];
-        // Case 3: nested array from "Alle" selection - flatten - ( example: [[0,1]] ) -  flatten - [0,1]
-        if (value.length === 1 && Array.isArray(value[0])) return value[0];
+        // Case 3: "Alle" is a nested array element (e.g. [[]] or [[], 3]). If present,
+        // it means "no filter" and overrides any other selected items.
+        if (value.some((item) => Array.isArray(item))) return [];
         return value;
       };
       const filter = this.chargeLogRequestData.filter;
@@ -807,19 +810,6 @@ export default {
       filter.vehicle.id = normalizeArray(filter.vehicle.id).filter((v) => v !== undefined);
       filter.vehicle.chargemode = normalizeArray(filter.vehicle.chargemode).filter((v) => v !== undefined);
       filter.chargepoint.id = normalizeArray(filter.chargepoint.id).filter((v) => v !== undefined);
-
-      // if no entry, set filter to first available vehicle in options
-      if (filter.vehicle.id.length === 0 && this.vehicleList.length > 0) {
-        const defaultVehicleFilter = this.vehicleList[0].value;
-        filter.vehicle.id = Array.isArray(defaultVehicleFilter) ? defaultVehicleFilter : [defaultVehicleFilter];
-      }
-      // if no entry, set filter to first available chargepoint in options
-      if (filter.chargepoint.id.length === 0 && this.chargePointList.length > 0) {
-        const defaultChargePointFilter = this.chargePointList[0].value;
-        filter.chargepoint.id = Array.isArray(defaultChargePointFilter)
-          ? defaultChargePointFilter
-          : [defaultChargePointFilter];
-      }
       if (filter.vehicle.prio === null) {
         filter.vehicle.prio = undefined;
       }
