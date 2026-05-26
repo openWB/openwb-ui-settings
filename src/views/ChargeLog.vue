@@ -799,8 +799,9 @@ export default {
         if (value === undefined || value === null) return [];
         // Case 2: scalar value (e.g. 0) - wrap in array
         if (!Array.isArray(value)) return [value];
-        // Case 3: nested array from "Alle" selection - flatten - ( example: [[0,1]] ) -  flatten - [0,1]
-        if (value.length === 1 && Array.isArray(value[0])) return value[0];
+        // Case 3: "Alle" is a nested array element (e.g. [[]] or [[], 3]). If present,
+        // it means "no filter" and overrides any other selected items.
+        if (value.some((item) => Array.isArray(item))) return [];
         return value;
       };
       const filter = this.chargeLogRequestData.filter;
