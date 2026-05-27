@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import DeviceConfigMixin from "../../../../../web/settings/DeviceConfigMixin.vue";
+import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
 export default {
   name: "DeviceSunEnergyXT",
   mixins: [DeviceConfigMixin],
