@@ -16,34 +16,6 @@
         IP-Adresse des SunEnergyXT-Geräts im lokalen Netzwerk
       </template>
     </openwb-base-text-input>
-    <openwb-base-number-input
-      title="Port"
-      :min="1"
-      :max="65535"
-      required
-      :model-value="configuration.port"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.port')
-      "
-    >
-      <template #help>
-        HTTP-Port des Geräts (Standard: 80)
-      </template>
-    </openwb-base-number-input>
-    <openwb-base-number-input
-      title="Timeout"
-      :min="1"
-      :max="30"
-      required
-      :model-value="configuration.timeout"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.timeout')
-      "
-    >
-      <template #help>
-        HTTP-Timeout in Sekunden (Standard: 5)
-      </template>
-    </openwb-base-number-input>
   </div>
 </template>
 
