@@ -7,10 +7,8 @@
       title="IP-Adresse oder Hostname"
       subtype="host"
       required
-      :model-value="configuration.ip_address"
-      @update:model-value="
-        updateConfiguration($event, 'configuration.ip_address')
-      "
+      :model-value="device.configuration.ip_address"
+      @update:model-value="updateConfiguration($event, 'configuration.ip_address')"
     >
       <template #help>
         IP-Adresse des SunEnergyXT-Geräts im lokalen Netzwerk
