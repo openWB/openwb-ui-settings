@@ -214,6 +214,15 @@ const routes = [
     component: () => import("../views/InstallAssistant.vue"),
   },
   {
+    path: "/System/Abrechnung",
+    name: "TenantEnergyConfiguration",
+    meta: {
+      heading: "Abrechnung - Mieterstrom",
+      checkPermissions: true,
+    },
+    component: () => import("../views/TenantEnergyBilling.vue"),
+  },
+  {
     path: "/Error",
     name: "Error",
     meta: {
