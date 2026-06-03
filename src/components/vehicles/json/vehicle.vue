@@ -21,7 +21,7 @@
     >
       <template #help>
         Zur Analyse der Werte aus dem json-Objekt wird jq benutzt. Ist die Json Antwort z.B. {"response":{"soc":"39.8",
-        "range": "207", "timestamp":1734054449}} So muss hier .response.soc eingetragen werden.
+        "range": "207", "timestamp":1734054449, "odometer": "123456"}} So muss hier .response.soc eingetragen werden.
         <br />
         Es wird vom Server eine Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
         Dezimaltrennzeichen erwartet, welche den aktuellen Ladestand (SoC) darstellt.
@@ -35,7 +35,7 @@
     >
       <template #help>
         Zur Analyse der Werte aus dem json-Objekt wird jq benutzt. Ist die Json Antwort z.B. {"response":{"soc":"39.8",
-        "range": "207", "timestamp":1734054449}} So muss hier .response.range eingetragen werden.
+        "range": "207", "timestamp":1734054449, "odometer": "123456"}} So muss hier .response.range eingetragen werden.
         <br />
         Es wird vom Server eine Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
         Dezimaltrennzeichen erwartet, welche die aktuelle Reichweite darstellt.<br />
@@ -50,13 +50,29 @@
     >
       <template #help>
         Zur Analyse der Werte aus dem json-Objekt wird jq benutzt. Ist die Json Antwort z.B. {"response":{"soc":"39.8",
-        "range": "207", "timestamp":1734054449}} So muss hier .response.timestamp eingetragen werden.<br />
+        "range": "207", "timestamp":1734054449, "odometer": "123456"}} So muss hier .response.timestamp eingetragen werden.<br />
         Es wird vom Server entweder eine Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
         Dezimaltrennzeichen als Epoch Zeitstempel oder eine ISO 8601 formatierte Zeit erwartet welche den Zeitstempel
         der gelieferten Werte darstellt.<br />
         Ohne Angabe wird der Zeitpunkt des Datenabrufs als Zeitstempel verwendet.
       </template>
     </openwb-base-text-input>
+    <openwb-base-text-input
+      title="Abfrage für Kilometerstand"
+      subtype="text"
+      :model-value="vehicle.configuration.odometer_pattern"
+      @update:model-value="updateConfiguration($event, 'configuration.odometer_pattern')"
+    >
+      <template #help>
+        Zur Analyse der Werte aus dem json-Objekt wird jq benutzt. Ist die Json Antwort z.B. {"response":{"soc":"39.8",
+        "range": "207", "timestamp":1734054449, "odometer": "123456"}} So muss hier .response.odometer eingetragen werden.
+        <br />
+        Es wird vom Server eine Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
+        Dezimaltrennzeichen erwartet, welche den aktuellen Kilometerstand darstellt.<br />
+        Ohne Angabe wird der Kilometerstand nicht abgefragt und auf Null gesetzt.
+      </template>
+    </openwb-base-text-input>
+
     <openwb-base-button-group-input
       title="SoC während der Ladung berechnen"
       :buttons="[
