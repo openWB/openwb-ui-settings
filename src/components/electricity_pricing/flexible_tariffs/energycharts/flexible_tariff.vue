@@ -17,7 +17,7 @@
       @update:model-value="updateConfiguration($event, 'configuration.country')"
     />
     <openwb-base-number-input
-      title="Aufschlag zum Börsenstrompreis"
+      title="Aufschlag zum Börsenstrompreis (netto)"
       :min="0"
       :step="0.001"
       :precision="3"
@@ -32,6 +32,34 @@
         Strompreisen unter Berücksichtigung eines Aufschlags zu günstigen Zeiten automatisch geladen werden kann und
         somit die Preisschwankungen an der Börse optimal ausgenutzt werden.
       </template>
+    </openwb-base-number-input>
+
+    <openwb-base-button-group-input
+      title="Preisart"
+      :buttons="[
+        { buttonValue: true, text: 'Netto' },
+        { buttonValue: false, text: 'Brutto' },
+      ]"
+      :model-value="flexibleTariff.configuration.net"
+      @update:model-value="updateConfiguration($event, 'configuration.net')"
+    >
+      <template #help>
+        Netto: Börsenpreise inkl. Aufschlag ohne MwSt<br />
+        Brutto: Börsenpreise inkl. Aufschlag mit MwSt
+      </template>
+    </openwb-base-button-group-input>
+
+    <openwb-base-number-input
+      v-if="!flexibleTariff.configuration.net"
+      title="Mehrwertsteuer"
+      unit="%"
+      :min="0"
+      :max="50"
+      :step="0.01"
+      :model-value="flexibleTariff.configuration.tax"
+      @update:model-value="updateConfiguration($event, 'configuration.tax')"
+    >
+      <template #help> Mehrwertsteuer in Prozent (z.B. 20%) </template>
     </openwb-base-number-input>
   </div>
 </template>
