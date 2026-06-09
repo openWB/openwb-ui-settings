@@ -20,11 +20,9 @@
       title="Version"
       not-selected="Bitte auswählen"
       :options="[
-        {
-          value: 'inverter',
-          text: 'Wechselrichter ohne Speicheranbindung',
-        },
-        { value: 'hybrid', text: 'Hybridwechselrichter RHI/S Serie' },
+        { value: 'inverter', text: 'Stringwechselrichter' },
+        { value: 'hybrid', text: 'Hybridwechselrichter RHI Serie' },
+        { value: 'hybrid_s', text: 'Hybridwechselrichter S Serie' },
       ]"
       :model-value="device.configuration.version"
       @update:model-value="updateConfiguration($event, 'configuration.version')"
