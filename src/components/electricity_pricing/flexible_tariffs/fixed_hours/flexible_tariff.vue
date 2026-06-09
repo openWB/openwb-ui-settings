@@ -9,8 +9,8 @@
       :precision="3"
       required
       unit="ct/kWh"
-      :model-value="value.configuration.default_price * 100"
-      @update:model-value="value.configuration.default_price = parseFloat(($event / 100).toFixed(5))"
+      :model-value="parseFloat((value.configuration.default_price * 100000).toFixed(4))"
+      @update:model-value="value.configuration.default_price = $event / 100000"
     >
       <template #help> Standardpreis sofern kein anderer Tarif aktiv ist. </template>
     </openwb-base-number-input>
