@@ -9,6 +9,19 @@
       Diese Komponente kann nur in Verbindung mit der JSON-API v2 verwendet werden, da die anderen Schnittstellen die
       Daten nicht zur Verfügung stellen.
     </openwb-base-alert>
+    <openwb-base-heading> Einstellungen für Sonnenbatterie Verbrauchs-Zähler </openwb-base-heading>
+    <openwb-base-number-input
+      title="Sonnenbatterie-Zähler-ID"
+      :model-value="component.configuration.counter_id"
+      min="0"
+      max="4"
+      @update:model-value="updateConfiguration($event, 'configuration.counter_id')"
+    >
+      <template #help>
+        Der erste Verbrauchs-Zähler hat ID 0. Die IDs weiterer Verbrauchs-Zähler werden hochgezählt.
+        Der zweite Zähler hat ID 1, der Dritte ID 2 und so fort.
+      </template>
+    </openwb-base-number-input>
   </div>
 </template>
 
