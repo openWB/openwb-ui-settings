@@ -487,8 +487,9 @@
                     verhält sich diese Einstellung wie "volle Entladesperre".
                   </div>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'mode_charge_pv_production'">
-                    PV-Ertrag wird vorrangig in den Speicher geladen (aktive Ladung)! Weiterer Verbrauch (Hausverbrauch/
-                    Fahrzeugladung) erzeugt Netzbezug.
+                    Fahrzeuge werden mit Netzstrom geladen, der Hausverbrauch wird durch PV gedeckt und überschüssiger
+                    PV-Ertrag in den Speicher geladen. Ist der PV-Ertrag zu gering, wird der Hausverbrauch aus dem
+                    Speicher gedeckt.
                   </div>
                 </template>
               </openwb-base-button-group-input>
