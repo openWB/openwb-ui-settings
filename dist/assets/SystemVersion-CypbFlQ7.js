@@ -1,0 +1,1 @@
+const e={computed:{systemVersion(){const s=this.$store.state.mqtt["openWB/system/version"]?.match(/\d+\.\d+\.\d+/);return s?s[0]:"2.1.8"}},mounted(){this.$root.doSubscribe(["openWB/system/version"])}};export{e as _};
