@@ -1,20 +1,6 @@
 <template>
   <div class="device-sunnyboy-inverter">
-    <openwb-base-heading> Einstellungen für SMA Sunny Boy/Tripower Wechselrichter </openwb-base-heading>
-    <openwb-base-button-group-input
-      title="Hybrid-System"
-      :buttons="[
-        { buttonValue: false, text: 'nicht vorhanden' },
-        { buttonValue: true, text: 'vorhanden' },
-      ]"
-      :model-value="component.configuration.hybrid"
-      @update:model-value="updateConfiguration($event, 'configuration.hybrid')"
-    >
-      <template #help>
-        Diese Option aktivieren, wenn ein Tripower Smart Energy, Sunny Boy Smart Energy oder ein anderes Hybrid-System
-        verbaut ist.
-      </template>
-    </openwb-base-button-group-input>
+    <openwb-base-heading> Einstellungen für SMA Sunny Boy / Tripower Wechselrichter </openwb-base-heading>
     <openwb-base-select-input
       title="Version"
       not-selected="Bitte auswählen"
