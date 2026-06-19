@@ -2,8 +2,8 @@
   <div class="device-ankersolix">
     <openwb-base-heading> Einstellungen für Anker SOLIX Solarbank</openwb-base-heading>
     <openwb-base-alert subtype="info">
-      Es muss in den Einstellungen die Option Modbus TCP aktiviert werden. Nicht alle Anker Produkte
-      unterstützen dies bisher. Durch ein Firmware Update könnte diese Option zur Verfügung stehen.
+      Es muss in den Einstellungen die Option Modbus TCP aktiviert werden. Nicht alle Anker Produkte unterstützen dies
+      bisher. Durch ein Firmware Update könnte diese Option zur Verfügung stehen.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"

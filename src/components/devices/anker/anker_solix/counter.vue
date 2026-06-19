@@ -11,7 +11,7 @@
       :model-value="component.configuration.ip_address"
       @update:model-value="updateConfiguration($event, 'configuration.ip_address')"
     />
-        <openwb-base-number-input
+    <openwb-base-number-input
       title="Port"
       required
       :min="1"
