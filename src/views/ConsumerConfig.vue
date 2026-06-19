@@ -38,13 +38,13 @@
           @update:model-value="updateState('openWB/general/consumer/config/switch_off_delay', $event)"
         />
         <openwb-base-number-input
-          title="Ausschaltverzögerung"
-          :model-value="$store.state.mqtt['openWB/general/consumer/config/switch_off_threshold' / 1000]"
+          title="Ausschaltschwelle"
+          :model-value="$store.state.mqtt['openWB/general/consumer/config/switch_off_threshold']"
           :min="0"
           :max="30000"
           :step="1"
-          unit="kWh"
-          @update:model-value="updateState('openWB/general/consumer/config/switch_off_threshold', $event * 1000)"
+          unit="W"
+          @update:model-value="updateState('openWB/general/consumer/config/switch_off_threshold', $event)"
         />
       </openwb-base-card>
       <!-- Consumer section -->
@@ -232,15 +232,10 @@
 
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faHome as fasHome,
-  faPlus as fasPlus,
-  faTrash as fasTrash,
-  faCog as fasCog,
-} from "@fortawesome/free-solid-svg-icons";
+import { faHome as fasHome, faTrash as fasTrash, faCog as fasCog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasHome, fasPlus, fasTrash, fasCog);
+library.add(fasHome, fasTrash, fasCog);
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbConsumerConfigProxy from "../components/consumers/OpenwbConsumerConfigProxy.vue";
 
@@ -445,9 +440,7 @@ export default {
       const map = {
         meter_only: "Nur Messung",
         suspendable_onoff: "Schaltbar (Ein/Aus)",
-        suspendable_onoff_individual: "Schaltbar (Individuell)",
         suspendable_tunable: "Stufenlos regelbar",
-        suspendable_tunable_individual: "Stufenlos regelbar (Individuell)",
         continuous: "Dauerverbraucher",
       };
       return map[type] ?? type;
@@ -460,10 +453,6 @@ export default {
           usage,
         },
       });
-    },
-    updateConfiguration(key, event) {
-      console.debug("updateConfiguration", key, event);
-      this.updateState(key, event.value, event.object);
     },
   },
 };
