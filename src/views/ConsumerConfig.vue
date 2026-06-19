@@ -10,26 +10,6 @@
     Wollen Sie den Verbraucher "{{ modalConsumerName }}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig
     gemacht werden!
   </openwb-base-modal-dialog>
-  <openwb-base-modal-dialog
-    :show="showDeviceRemoveModal"
-    title="Komponente löschen"
-    subtype="danger"
-    :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
-    @modal-result="removeExtraMeterDevice"
-  >
-    Wollen Sie die Device "{{ modalExtraMeterDeviceName }}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig
-    gemacht werden!
-  </openwb-base-modal-dialog>
-  <openwb-base-modal-dialog
-    :show="showComponentRemoveModal"
-    title="Komponente löschen"
-    subtype="danger"
-    :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
-    @modal-result="removeExtraMeterComponent"
-  >
-    Wollen Sie die Komponente "{{ modalExtraMeterComponentName }}" wirklich entfernen? Dieser Vorgang kann nicht
-    rückgängig gemacht werden!
-  </openwb-base-modal-dialog>
   <!-- main content -->
   <div class="consumerConfig">
     <form name="consumerConfigForm">
@@ -176,166 +156,47 @@
               v-if="!hasIntegratedCounter[installedConsumer.id] && !hasExtraMeter(installedConsumer.id)"
               subtype="warning"
             >
-              Es wurde noch kein zusätzlicher Zähler hinzugefügt. Wenn kein zusätzlicher Zähler vorhanden ist, wird der
-              Verbraucher anhand der eingegebenen minimalen Leistung geschaltet.
+              Es ist kein separater Zähler verknüpft. Ohne separaten Zähler wird der Verbraucher anhand der eingegebenen
+              minimalen Leistung geschaltet.
             </openwb-base-alert>
             <openwb-base-alert
               v-if="!hasIntegratedCounter[installedConsumer.id] && hasExtraMeter(installedConsumer.id)"
               subtype="info"
             >
-              Diese Verbraucher verfügt über keinen integrierten Zähler. Ein zusätzlicher Zähler wurde hinzugefügt.
+              Dieser Verbraucher verfügt über keinen integrierten Zähler. Ein separater Zähler ist verknüpft.
             </openwb-base-alert>
             <openwb-base-alert
               v-if="hasIntegratedCounter[installedConsumer.id] && !hasExtraMeter(installedConsumer.id)"
               subtype="info"
             >
-              Es wurde noch kein zusätzlicher Zähler hinzugefügt. Falls gewünscht, kann ein zusätzlicher Zähler
-              hinzugefügt werden, der die Messwerte des integrierten Zählers überschreibt.
+              Es ist kein separater Zähler verknüpft. Falls gewünscht, kann ein separater Zähler verknüpft werden, der
+              die Messwerte des integrierten Zählers überschreibt.
             </openwb-base-alert>
             <openwb-base-alert
               v-if="hasIntegratedCounter[installedConsumer.id] && hasExtraMeter(installedConsumer.id)"
               subtype="info"
             >
-              Zusätzlicher Zähler hinzugefügt. Die Messwerte des integrierten Zählers werden durch die Werte des
-              zusätzlichen Zählers überschrieben.
+              Ein separater Zähler ist verknüpft. Die Messwerte des integrierten Zählers werden durch die Werte des
+              separaten Zählers überschrieben.
             </openwb-base-alert>
             <hr />
-            <openwb-base-heading> Zusätzliche Leistungsmessung </openwb-base-heading>
-            <openwb-base-alert
-              v-if="!hasExtraMeter(installedConsumer.id)"
-              subtype="info"
-            >
-              Es wurde noch kein zusätzlicher Zähler hinzugefügt.
+            <openwb-base-heading> Separate Leistungsmessung </openwb-base-heading>
+            <openwb-base-alert subtype="info">
+              Legen Sie den Zähler zuerst unter „Geräte und Komponenten" an und verknüpfen Sie ihn anschließend hier mit
+              dem Verbraucher. Der EVU-Zähler sowie Zähler, die bereits einem anderen Verbraucher zugeordnet sind,
+              stehen nicht zur Auswahl.
             </openwb-base-alert>
-            <!-- Extra Meter Device card -->
-            <openwb-base-card
-              v-if="hasExtraMeter(installedConsumer.id)"
-              subtype="dark"
-              :collapsible="true"
-              :collapsed="true"
+            <openwb-base-select-input
+              title="Zähler"
+              :options="availableCounterOptions(installedConsumer.id)"
+              :model-value="getExtraMeter(installedConsumer.id) ?? null"
+              @update:model-value="setExtraMeter(installedConsumer.id, $event)"
             >
-              <template #header>
-                <font-awesome-icon :icon="['fas', 'fa-network-wired']" />
-                {{ getExtraMeterDevice(installedConsumer.id)?.name }}
+              <template #help>
+                Der ausgewählte Zähler überschreibt die Messwerte eines ggf. integrierten Zählers. Konfiguriert wird der
+                Zähler unter „Geräte und Komponenten".
               </template>
-              <template #actions="slotProps">
-                <openwb-base-avatar
-                  v-if="!slotProps.collapsed"
-                  class="bg-danger clickable"
-                  @click="removeExtraMeterDeviceModal(installedConsumer?.id, $event)"
-                >
-                  <font-awesome-icon :icon="['fas', 'trash']" />
-                </openwb-base-avatar>
-              </template>
-              <openwb-consumer-config-proxy
-                :device="getExtraMeterDevice(installedConsumer.id)"
-                @update:configuration="updateExtraMeterDeviceConfiguration(installedConsumer.id, $event)"
-              />
-              <hr />
-              <!-- Extra Meter Component card -->
-              <openwb-base-card
-                v-if="getExtraMeterComponent(installedConsumer.id)"
-                subtype="danger"
-                :collapsible="true"
-                :collapsed="true"
-              >
-                <template #header>
-                  <font-awesome-icon :icon="['fas', 'fa-gauge-high']" />
-                  {{ getExtraMeterComponent(installedConsumer.id)?.name }}
-                </template>
-                <template #actions="slotProps">
-                  <openwb-base-avatar
-                    v-if="!slotProps.collapsed"
-                    class="bg-danger clickable"
-                    @click="removeExtraMeterComponentModal(installedConsumer.id, $event)"
-                  >
-                    <font-awesome-icon :icon="['fas', 'trash']" />
-                  </openwb-base-avatar>
-                </template>
-                <openwb-base-text-input
-                  title="Bezeichnung"
-                  :model-value="getExtraMeterComponent(installedConsumer.id)?.name"
-                  @update:model-value="
-                    updateState(
-                      `openWB/consumer/${installedConsumer.id}/extra_meter/device/component/config`,
-                      $event,
-                      'name',
-                    )
-                  "
-                />
-                <openwb-base-text-input
-                  title="Hersteller"
-                  :model-value="getExtraMeterComponent(installedConsumer.id)?.info?.manufacturer"
-                  @update:model-value="
-                    updateState(
-                      `openWB/consumer/${installedConsumer.id}/extra_meter/device/component/config`,
-                      $event,
-                      'info.manufacturer',
-                    )
-                  "
-                />
-                <openwb-base-text-input
-                  title="Modell"
-                  :model-value="getExtraMeterComponent(installedConsumer.id)?.info?.model"
-                  @update:model-value="
-                    updateState(
-                      `openWB/consumer/${installedConsumer.id}/extra_meter/device/component/config`,
-                      $event,
-                      'info.model',
-                    )
-                  "
-                />
-                <hr />
-                <openwb-consumer-config-proxy
-                  :device="getExtraMeterDevice(installedConsumer.id)"
-                  :component="getExtraMeterComponent(installedConsumer.id)"
-                  @update:configuration="updateExtraMeterComponentConfiguration(installedConsumer.id, $event)"
-                />
-              </openwb-base-card>
-              <hr />
-              <openwb-base-alert
-                v-if="!getExtraMeterComponent(installedConsumer.id)"
-                subtype="info"
-              >
-                Es wurde noch keine Zähler-Komponente hinzugefügt.
-              </openwb-base-alert>
-              <!-- Select extra meter component -->
-              <openwb-base-select-input
-                v-if="!getExtraMeterComponent(installedConsumer.id)"
-                v-model="extraMeterComponentToAdd"
-                title="Verfügbare Komponenten"
-                not-selected="Bitte auswählen"
-                :options="getExtraMeterComponentList(installedConsumer.id)"
-                :add-button="true"
-                @input:add="addExtraMeterComponent(installedConsumer.id)"
-              >
-                <template #help> Wählen Sie die Komponente aus, die die Messwerte liefert (z.B. Zähler). </template>
-              </openwb-base-select-input>
-            </openwb-base-card>
-            <hr />
-            <div v-if="!getExtraMeterDevice(installedConsumer.id)">
-              <openwb-base-heading> Zusätzlicher Zähler hinzufügen </openwb-base-heading>
-              <!-- Select extra meter device -->
-              <openwb-base-select-input
-                v-model="selectedExtraMeterVendor"
-                title="Hersteller (Zusätzlicher Zähler)"
-                not-selected="Bitte auswählen"
-                :groups="extraMeterVendorList"
-              />
-              <openwb-base-select-input
-                v-model="extraMeterDeviceToAdd"
-                title="Verfügbare Zählergeräte"
-                not-selected="Bitte auswählen"
-                :disabled="!selectedExtraMeterVendor"
-                :options="extraMeterDeviceList"
-                :add-button="true"
-                @input:add="addExtraMeterDevice(installedConsumer.id)"
-              >
-                <template #help>
-                  Wählen Sie das Gerät aus, über das die zusätzliche Leistungsmessung erfolgen soll.
-                </template>
-              </openwb-base-select-input>
-            </div>
+            </openwb-base-select-input>
           </openwb-base-card>
           <hr v-if="Object.keys(installedConsumers).length > 0" />
           <openwb-base-select-input
@@ -361,7 +222,7 @@
       </openwb-base-card>
       <openwb-base-submit-buttons
         form-name="consumerConfigForm"
-        @save="$emit('save')"
+        @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -376,12 +237,10 @@ import {
   faPlus as fasPlus,
   faTrash as fasTrash,
   faCog as fasCog,
-  faNetworkWired as fasNetworkWired,
-  faGaugeHigh as fasGaugeHigh,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasHome, fasPlus, fasTrash, fasCog, fasNetworkWired, fasGaugeHigh);
+library.add(fasHome, fasPlus, fasTrash, fasCog);
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbConsumerConfigProxy from "../components/consumers/OpenwbConsumerConfigProxy.vue";
 
@@ -395,31 +254,24 @@ export default {
   emits: ["sendCommand", "save", "reset", "defaults"],
   data() {
     return {
-      mqttTopicsToSubscribe: [
-        "openWB/general/extern",
-        "openWB/consumer/+/module",
-        "openWB/consumer/+/config",
-        "openWB/consumer/+/usage",
-        "openWB/system/configurable/consumers_extra_meter",
-        "openWB/consumer/+/extra_meter/device/config",
-        "openWB/consumer/+/extra_meter/device/component/config",
-        "openWB/general/consumer/config/switch_on_delay",
-        "openWB/general/consumer/config/switch_off_delay",
-        "openWB/general/consumer/config/switch_off_threshold",
-        "openWB/system/configurable/consumers",
+      mqttTopics: [
+        { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/consumer/+/module", writeable: true },
+        { topic: "openWB/consumer/+/config", writeable: true },
+        { topic: "openWB/consumer/+/usage", writeable: false },
+        { topic: "openWB/consumer/+/extra_meter", writeable: true },
+        { topic: "openWB/system/device/+/component/+/config", writeable: false },
+        { topic: "openWB/counter/get/hierarchy", writeable: false },
+        { topic: "openWB/general/consumer/config/switch_on_delay", writeable: true },
+        { topic: "openWB/general/consumer/config/switch_off_delay", writeable: true },
+        { topic: "openWB/general/consumer/config/switch_off_threshold", writeable: true },
+        { topic: "openWB/system/configurable/consumers", writeable: false },
       ],
       selectedVendor: undefined,
       consumerToAdd: undefined,
-      selectedExtraMeterVendor: undefined,
-      extraMeterDeviceToAdd: undefined,
-      extraMeterComponentToAdd: undefined,
       showConsumerRemoveModal: false,
-      showDeviceRemoveModal: false,
-      showComponentRemoveModal: false,
       modalConsumer: undefined,
       modalConsumerName: "",
-      modalExtraMeterDeviceName: "",
-      modelExtraMeterComponentName: "",
       CONSUMER_CONFIG_FIELDS: ["connected_phases", "phase_1", "max_power"],
     };
   },
@@ -496,37 +348,21 @@ export default {
           .sort((a, b) => a.text.localeCompare(b.text));
       },
     },
-    extraMeterVendorList() {
-      const consumerExtraMeterDevice = this.$store.state.mqtt["openWB/system/configurable/consumers_extra_meter"];
-      if (!consumerExtraMeterDevice) return [];
-      return Object.entries(consumerExtraMeterDevice)
-        .map(([, group]) => ({
-          label: group.group_name,
-          options: Object.entries(group.vendors)
-            .map(([vendorKey, vendor]) => ({
-              value: vendorKey,
-              text: vendor.vendor_name,
-            }))
-            .sort((a, b) => a.text.localeCompare(b.text)),
-        }))
-        .sort((a, b) => -a.label.localeCompare(b.label)); // reverse order to have "openWB" at the top
+    componentConfigurations() {
+      return this.getWildcardTopics("openWB/system/device/+/component/+/config");
     },
-    extraMeterDeviceList() {
-      if (!this.selectedExtraMeterVendor) return [];
-      const consumerExtraMeterConfigurable = this.$store.state.mqtt["openWB/system/configurable/consumers_extra_meter"];
-      if (!consumerExtraMeterConfigurable) return [];
-      for (const group of Object.values(consumerExtraMeterConfigurable)) {
-        const vendor = group.vendors?.[this.selectedExtraMeterVendor];
-        if (vendor?.devices) {
-          return Object.entries(vendor.devices)
-            .map(([deviceKey, device]) => ({
-              value: deviceKey,
-              text: device.device_name,
-            }))
-            .sort((a, b) => a.text.localeCompare(b.text));
-        }
-      }
-      return [];
+    // id of the EVU/grid counter (root of the counter hierarchy), which must not be selectable
+    evuCounterId() {
+      const hierarchy = this.$store.state.mqtt["openWB/counter/get/hierarchy"];
+      if (!Array.isArray(hierarchy) || hierarchy.length === 0) return undefined;
+      return hierarchy[0]?.id;
+    },
+    extraMeterLinks() {
+      const topics = this.getWildcardTopics("openWB/consumer/+/extra_meter");
+      return Object.entries(topics).map(([topic, counterId]) => {
+        const match = topic.match(/openWB\/consumer\/(\d+)\/extra_meter/);
+        return { consumerId: match ? parseInt(match[1]) : null, counterId };
+      });
     },
     hasIntegratedCounter() {
       const result = {};
@@ -563,101 +399,32 @@ export default {
         });
       }
     },
-    removeExtraMeterDeviceModal(consumerId, event) {
-      event.stopPropagation();
-      this.modalConsumer = consumerId;
-      this.modalExtraMeterDeviceName = this.getExtraMeterDevice(consumerId)?.name ?? "";
-      this.showDeviceRemoveModal = true;
-    },
-    removeExtraMeterDevice(event) {
-      this.showDeviceRemoveModal = false;
-      if (event == "confirm") {
-        this.$emit("sendCommand", {
-          command: "removeConsumerExtraMeterDevice",
-          data: { consumer_id: this.modalConsumer },
-        });
-      }
-    },
-    removeExtraMeterComponentModal(consumerId, event) {
-      event.stopPropagation();
-      this.modalConsumer = consumerId;
-      this.modalExtraMeterComponentName = this.getExtraMeterComponent(consumerId)?.name ?? "";
-      this.showComponentRemoveModal = true;
-    },
-    removeExtraMeterComponent(event) {
-      this.showComponentRemoveModal = false;
-      if (event == "confirm") {
-        this.$emit("sendCommand", {
-          command: "removeConsumerExtraMeterComponent",
-          data: { consumer_id: this.modalConsumer },
-        });
-      }
-    },
-    addExtraMeterDevice(consumerId) {
-      if (!this.selectedExtraMeterVendor || !this.extraMeterDeviceToAdd) return;
-
-      this.$emit("sendCommand", {
-        command: "addConsumerExtraMeterDevice",
-        data: {
-          vendor: this.selectedExtraMeterVendor,
-          type: this.extraMeterDeviceToAdd,
-          consumer_id: consumerId,
-        },
-      });
-      this.extraMeterDeviceToAdd = undefined;
-    },
-    getExtraMeterComponentList(consumerId) {
-      const device = this.getExtraMeterDevice(consumerId);
-      if (!device) return [];
-
-      const consumerExtraMeterConfigurable = this.$store.state.mqtt["openWB/system/configurable/consumers_extra_meter"];
-      if (!consumerExtraMeterConfigurable) return [];
-
-      for (const group of Object.values(consumerExtraMeterConfigurable)) {
-        const vendor = group.vendors?.[device.vendor];
-        const dev = vendor?.devices?.[device.type];
-
-        if (dev?.components) {
-          return Object.entries(dev.components).map(([key, component]) => ({
-            value: key,
-            text: component.component_name,
-          }));
-        }
-      }
-      return [];
-    },
-    addExtraMeterComponent(consumerId) {
-      if (!this.extraMeterComponentToAdd) return;
-
-      const device = this.getExtraMeterDevice(consumerId);
-      if (!device) return;
-
-      this.$emit("sendCommand", {
-        command: "addConsumerExtraMeterComponent",
-        data: {
-          deviceVendor: device.vendor,
-          deviceType: device.type,
-          type: this.extraMeterComponentToAdd,
-          consumer_id: consumerId,
-        },
-      });
-      this.extraMeterComponentToAdd = undefined;
-    },
-    getExtraMeterDevice(consumerId) {
-      return this.$store.state.mqtt[`openWB/consumer/${consumerId}/extra_meter/device/config`];
-    },
-
-    getExtraMeterComponent(consumerId) {
-      return this.$store.state.mqtt[`openWB/consumer/${consumerId}/extra_meter/device/component/config`];
+    getExtraMeter(consumerId) {
+      return this.$store.state.mqtt[`openWB/consumer/${consumerId}/extra_meter`];
     },
     hasExtraMeter(consumerId) {
-      return !!this.getExtraMeterDevice(consumerId);
+      return this.getExtraMeter(consumerId) != null;
     },
-    updateExtraMeterDeviceConfiguration(consumerId, event) {
-      this.updateState(`openWB/consumer/${consumerId}/extra_meter/device/config`, event.value, event.object);
+    setExtraMeter(consumerId, counterId) {
+      this.updateState(`openWB/consumer/${consumerId}/extra_meter`, counterId ?? null);
     },
-    updateExtraMeterComponentConfiguration(consumerId, event) {
-      this.updateState(`openWB/consumer/${consumerId}/extra_meter/device/component/config`, event.value, event.object);
+    // counters selectable for this consumer: type counter, excluding the EVU/grid
+    // counter and counters already linked to another consumer
+    availableCounterOptions(consumerId) {
+      const linkedElsewhere = this.extraMeterLinks
+        .filter((link) => link.consumerId !== consumerId && link.counterId != null)
+        .map((link) => link.counterId);
+      const counters = Object.values(this.componentConfigurations)
+        .filter((component) => component && this.isComponentType(component.type, "counter"))
+        .filter((component) => component.id !== this.evuCounterId)
+        .filter((component) => !linkedElsewhere.includes(component.id))
+        .map((component) => ({ value: component.id, text: component.name }))
+        .sort((a, b) => a.text.localeCompare(b.text));
+      // explicit selectable "none" entry so an existing link can be removed
+      return [{ value: null, text: "kein Zähler" }, ...counters];
+    },
+    isComponentType(componentType, verifier) {
+      return componentType.split("_").includes(verifier);
     },
     consumerDeviceConfiguration(consumer, event) {
       const { object, value } = event;
