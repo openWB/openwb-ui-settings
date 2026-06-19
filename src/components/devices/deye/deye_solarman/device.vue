@@ -3,8 +3,8 @@
     <openwb-base-heading>Einstellungen für Deye LSW Dongle</openwb-base-heading>
     <openwb-base-alert subtype="info">
       <span class="text-danger">
-        Deye Wechselrichter verfügen über keine Modbus-TCP Schnittstelle. Dieses Modul ermöglicht die Anbindung über einen
-        LSW-Dongle (WiFi Anbindung).
+        Deye Wechselrichter verfügen über keine Modbus-TCP Schnittstelle. Dieses Modul ermöglicht die Anbindung über
+        einen LSW-Dongle (WiFi Anbindung).
       </span>
     </openwb-base-alert>
     <openwb-base-text-input

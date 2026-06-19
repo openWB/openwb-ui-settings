@@ -18,8 +18,8 @@
       @update:model-value="updateConfiguration($event, 'configuration.counter_id')"
     >
       <template #help>
-        Der erste Verbrauchs-Zähler hat ID 0. Die IDs weiterer Verbrauchs-Zähler werden hochgezählt.
-        Der zweite Zähler hat ID 1, der Dritte ID 2 und so fort.
+        Der erste Verbrauchs-Zähler hat ID 0. Die IDs weiterer Verbrauchs-Zähler werden hochgezählt. Der zweite Zähler
+        hat ID 1, der Dritte ID 2 und so fort.
       </template>
     </openwb-base-number-input>
   </div>

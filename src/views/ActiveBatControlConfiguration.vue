@@ -278,7 +278,7 @@
               v-if="hasNonControllableBatteries"
               subtype="danger"
             >
-              Es gibt nicht steuerbare Speicher im System vorhanden. Solche Speicher führen gewöhnlich eigenständig eine
+              Es sind nicht steuerbare Speicher im System vorhanden. Solche Speicher führen gewöhnlich eigenständig eine
               Nullpunktausregelung durch, versuchen also Überschuss zu speichern (Einspeisung zu verhindern) und
               Netzbezug durch eigene Entladung zu vermeiden.<br />
               Ein solcher Speicher versucht ebenso aktiv gesteuerte Speicher auszugleichen.
