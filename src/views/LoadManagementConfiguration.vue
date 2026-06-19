@@ -395,13 +395,7 @@ export default {
       get() {
         const prioList = this.$store.state.mqtt["openWB/counter/get/loadmanagement_prios"] || [];
         if (!Array.isArray(prioList)) return [];
-        return prioList.map((item) => {
-          // Backward compatibility: legacy prio entries ... plain vehicle IDs (e.g. "ev3")
-          if (typeof item === "string") {
-            return { id: item, type: "vehicle" };
-          }
-          return item;
-        });
+        return prioList;
       },
       set(newList) {
         this.updateState("openWB/counter/get/loadmanagement_prios", newList);
