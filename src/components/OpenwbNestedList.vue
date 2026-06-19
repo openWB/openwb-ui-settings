@@ -52,13 +52,6 @@
               @click.stop="$emit('delete-group', element.id)"
             />
           </span>
-          <!-- <span class="element-actions">
-            <font-awesome-icon
-
-              :icon="['fas', 'edit']"
-              @click="elementEdit(element.id)"
-            />
-          </span> -->
         </div>
         <openwb-nested-list
           v-if="nesting && element.children && currentNestingDepth < maxNestingDepth"
