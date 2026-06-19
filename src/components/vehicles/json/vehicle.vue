@@ -50,7 +50,8 @@
     >
       <template #help>
         Zur Analyse der Werte aus dem json-Objekt wird jq benutzt. Ist die Json Antwort z.B. {"response":{"soc":"39.8",
-        "range": "207", "timestamp":1734054449, "odometer": "123456"}} So muss hier .response.timestamp eingetragen werden.<br />
+        "range": "207", "timestamp":1734054449, "odometer": "123456"}} So muss hier .response.timestamp eingetragen
+        werden.<br />
         Es wird vom Server entweder eine Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
         Dezimaltrennzeichen als Epoch Zeitstempel oder eine ISO 8601 formatierte Zeit erwartet welche den Zeitstempel
         der gelieferten Werte darstellt.<br />
@@ -65,8 +66,8 @@
     >
       <template #help>
         Zur Analyse der Werte aus dem json-Objekt wird jq benutzt. Ist die Json Antwort z.B. {"response":{"soc":"39.8",
-        "range": "207", "timestamp":1734054449, "odometer": "123456"}} So muss hier .response.odometer eingetragen werden.
-        <br />
+        "range": "207", "timestamp":1734054449, "odometer": "123456"}} So muss hier .response.odometer eingetragen
+        werden.<br />
         Es wird vom Server eine Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
         Dezimaltrennzeichen erwartet, welche den aktuellen Kilometerstand darstellt.<br />
         Ohne Angabe wird der Kilometerstand nicht abgefragt und auf Null gesetzt.
