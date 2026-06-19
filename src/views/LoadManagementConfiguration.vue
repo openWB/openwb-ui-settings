@@ -241,9 +241,9 @@
           </sortable-list>
           <hr />
           <sortable-list
-            v-model="loadManagementPrioList"
+            v-model="loadManagementPriorityList"
             title="Prioritäten-Steuerung für das Lastmanagement"
-            :labels="loadManagementPrioLabels"
+            :labels="loadManagementPriorityLabels"
             :nesting="true"
             :max-nesting-depth="1"
             @delete-group="deleteLoadManagementPriorityGroup"
@@ -391,17 +391,17 @@ export default {
         return labels;
       },
     },
-    loadManagementPrioList: {
+    loadManagementPriorityList: {
       get() {
-        const prioList = this.$store.state.mqtt["openWB/counter/get/loadmanagement_prios"] || [];
-        if (!Array.isArray(prioList)) return [];
-        return prioList;
+        const priorityList = this.$store.state.mqtt["openWB/counter/get/loadmanagement_prios"] || [];
+        if (!Array.isArray(priorityList)) return [];
+        return priorityList;
       },
       set(newList) {
         this.updateState("openWB/counter/get/loadmanagement_prios", newList);
       },
     },
-    loadManagementPrioLabels: {
+    loadManagementPriorityLabels: {
       get() {
         const labels = {};
         const processItems = (items) => {
@@ -434,7 +434,7 @@ export default {
             }
           });
         };
-        processItems(this.loadManagementPrioList);
+        processItems(this.loadManagementPriorityList);
         return labels;
       },
     },
@@ -513,8 +513,8 @@ export default {
         id: `group-${Date.now()}`,
         children: [],
       };
-      const updatedList = [...this.loadManagementPrioList, newGroup];
-      this.loadManagementPrioList = updatedList;
+      const updatedList = [...this.loadManagementPriorityList, newGroup];
+      this.loadManagementPriorityList = updatedList;
       this.newGroupName = null;
     },
     deleteLoadManagementPriorityGroup(groupId) {
@@ -538,8 +538,8 @@ export default {
         });
         return result;
       };
-      const updatedList = unwrapGroup(this.loadManagementPrioList);
-      this.loadManagementPrioList = updatedList;
+      const updatedList = unwrapGroup(this.loadManagementPriorityList);
+      this.loadManagementPriorityList = updatedList;
     },
     renameLoadManagementPriorityGroup({ id, label }) {
       const rename = (items) => {
@@ -553,7 +553,7 @@ export default {
           return item;
         });
       };
-      this.loadManagementPrioList = rename(this.loadManagementPrioList);
+      this.loadManagementPriorityList = rename(this.loadManagementPriorityList);
     },
   },
 };
