@@ -150,6 +150,57 @@
               :device="installedConsumer"
               @update:configuration="consumerDeviceConfiguration(installedConsumer, $event)"
             />
+            <template v-if="showModeSettings(installedConsumer)">
+              <hr />
+              <openwb-base-heading> Betriebsmodus </openwb-base-heading>
+              <openwb-base-button-group-input
+                title="Betriebsmodus"
+                :buttons="[
+                  { buttonValue: 'instant_charging', text: 'Sofort', class: 'btn-outline-danger' },
+                  { buttonValue: 'pv_charging', text: 'PV', class: 'btn-outline-success' },
+                  { buttonValue: 'eco_charging', text: 'Eco', class: 'btn-outline-warning' },
+                  { buttonValue: 'scheduled_charging', text: 'Ziel', class: 'btn-outline-primary' },
+                  { buttonValue: 'stop', text: 'Stop', class: 'btn-outline-dark' },
+                ]"
+                :model-value="installedConsumer.consumerUsage.chargemode"
+                @update:model-value="updateUsage(installedConsumer.id, $event, 'chargemode')"
+              >
+                <template #help>
+                  Sofort = dauerhaft an, Stop = dauerhaft aus. PV, Eco und Ziel schalten den Verbraucher nach
+                  Überschuss, Strompreis bzw. Zeitplan.
+                </template>
+              </openwb-base-button-group-input>
+              <openwb-base-number-input
+                title="Min Betriebsstrom"
+                unit="A"
+                :min="0"
+                :step="0.1"
+                :model-value="installedConsumer.consumerUsage.min_current"
+                @update:model-value="updateUsage(installedConsumer.id, $event, 'min_current')"
+              />
+              <openwb-base-number-input
+                title="Min Regelintervall"
+                unit="s"
+                :min="0"
+                :step="1"
+                :model-value="installedConsumer.consumerUsage.min_intervall"
+                @update:model-value="updateUsage(installedConsumer.id, $event, 'min_intervall')"
+              >
+                <template #help>
+                  Mindestzeit, die der Verbraucher in einem Schaltzustand bleibt. Träge Geräte (z. B. Wärmepumpen)
+                  benötigen hier größere Werte.
+                </template>
+              </openwb-base-number-input>
+              <openwb-base-button-group-input
+                title="Auf Startsignal warten"
+                :buttons="[
+                  { buttonValue: true, text: 'Ja' },
+                  { buttonValue: false, text: 'Nein' },
+                ]"
+                :model-value="installedConsumer.consumerUsage.wait_for_start_active"
+                @update:model-value="updateUsage(installedConsumer.id, $event, 'wait_for_start_active')"
+              />
+            </template>
             <hr />
             <openwb-base-heading> Integrierter Zähler </openwb-base-heading>
             <openwb-base-alert
@@ -253,7 +304,7 @@ export default {
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/consumer/+/module", writeable: true },
         { topic: "openWB/consumer/+/config", writeable: true },
-        { topic: "openWB/consumer/+/usage", writeable: false },
+        { topic: "openWB/consumer/+/usage", writeable: true },
         { topic: "openWB/consumer/+/extra_meter", writeable: true },
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
         { topic: "openWB/counter/get/hierarchy", writeable: false },
@@ -453,6 +504,13 @@ export default {
           usage,
         },
       });
+    },
+    showModeSettings(consumer) {
+      const type = consumer.consumerUsage?.type;
+      return type != null && type !== "meter_only";
+    },
+    updateUsage(consumerId, value, path) {
+      this.updateState(`openWB/consumer/${consumerId}/usage`, value, path);
     },
   },
 };
