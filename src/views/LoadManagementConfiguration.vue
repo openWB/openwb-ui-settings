@@ -270,8 +270,8 @@
             :labels="loadManagementPrioLabels"
             :nesting="true"
             :max-nesting-depth="1"
-            @delete-group="deleteGroup"
-            @rename-group="renameGroup"
+            @delete-group="deleteLoadManagementPriorityGroup"
+            @rename-group="renameLoadManagementPriorityGroup"
           >
             <template #help>
               Reihenfolge der Ladepunkt- und Verbraucher-Prioritäten für das Lastmanagement.<br />
@@ -286,7 +286,7 @@
             subtype="group"
             :empty-value="null"
             :add-button="true"
-            @input:add="addGroup"
+            @input:add="addLoadManagementPriorityGroup"
           >
             <template #help>
               Gruppen ermöglichen das Zusammenfassen von Fahrzeugen oder Verbrauchern für die Prioritäten-Steuerung.
@@ -529,7 +529,7 @@ export default {
     isComponentType(componentType, verifier) {
       return componentType?.split("_").includes(verifier);
     },
-    addGroup() {
+    addLoadManagementPriorityGroup() {
       if (!this.newGroupName) return;
       const newGroup = {
         type: "group",
@@ -541,7 +541,7 @@ export default {
       this.loadManagementPrioList = updatedList;
       this.newGroupName = null;
     },
-    deleteGroup(groupId) {
+    deleteLoadManagementPriorityGroup(groupId) {
       const unwrapGroup = (items) => {
         const result = [];
         items.forEach((item) => {
@@ -565,7 +565,7 @@ export default {
       const updatedList = unwrapGroup(this.loadManagementPrioList);
       this.loadManagementPrioList = updatedList;
     },
-    renameGroup({ id, label }) {
+    renameLoadManagementPriorityGroup({ id, label }) {
       const rename = (items) => {
         return items.map((item) => {
           if (item.type === "group" && item.id === id) {
