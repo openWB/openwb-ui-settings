@@ -300,6 +300,39 @@
                   Überschuss vorhanden ist."
                 </template>
               </openwb-base-button-group-input>
+              <hr />
+              <openwb-base-heading> Zeitladen </openwb-base-heading>
+              <openwb-base-button-group-input
+                title="Zeitladen aktiv"
+                :buttons="[
+                  { buttonValue: true, text: 'Ja', class: 'btn-outline-success' },
+                  { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
+                ]"
+                :model-value="installedConsumer.consumerUsage.time_charging.active"
+                @update:model-value="updateUsage(installedConsumer.id, $event, 'time_charging.active')"
+              >
+                <template #help>
+                  Zeitladen schaltet das Gerät innerhalb der festgelegten Zeitpläne ein, unabhängig vom oben gewählten
+                  Betriebsmodus.
+                </template>
+              </openwb-base-button-group-input>
+              <template v-if="installedConsumer.consumerUsage.time_charging.active">
+                <openwb-base-alert
+                  v-if="!installedConsumer.consumerUsage.time_charging.plans?.length"
+                  subtype="info"
+                >
+                  Es wurde noch kein Zeitladen-Plan angelegt.
+                </openwb-base-alert>
+                <openwb-base-card
+                  v-for="plan in installedConsumer.consumerUsage.time_charging.plans ?? []"
+                  :key="plan.id"
+                  :title="plan.name"
+                  subtype="dark"
+                >
+                  <!-- TODO: Add plan fields (time, repetition, min. storage SoC) + Add/Remove,
+                       as soon as there is a backend command for consumer time charging plans -->
+                </openwb-base-card>
+              </template>
             </template>
             <hr />
             <openwb-base-heading> Integrierter Zähler </openwb-base-heading>
