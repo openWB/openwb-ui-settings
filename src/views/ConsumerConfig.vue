@@ -192,14 +192,22 @@
                 </template>
               </openwb-base-number-input>
               <openwb-base-button-group-input
-                title="Auf Startsignal warten"
+                title="Anlauferkennung"
                 :buttons="[
-                  { buttonValue: true, text: 'Ja' },
-                  { buttonValue: false, text: 'Nein' },
+                  { buttonValue: true, text: 'Ja', class: 'btn-outline-success' },
+                  { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
                 ]"
                 :model-value="installedConsumer.consumerUsage.wait_for_start_active"
                 @update:model-value="updateUsage(installedConsumer.id, $event, 'wait_for_start_active')"
-              />
+              >
+                <template #help>
+                  "Durch diese Option wird das angeschlossene Gerät täglich um 0:01 Uhr eingeschaltet. Wenn erkannt
+                  wird, dass das Gerät … Leistungsaufnahme länger als 'Zeit im Standby' größer als 'Verbrauch im
+                  Standby' … wird es direkt ausgeschaltet, falls die Einschaltschwelle nicht erreicht ist … Somit kann
+                  z.B. eine Waschmaschine am Morgen im Standby befüllt … läuft aber erst richtig an, wenn genügend
+                  Überschuss vorhanden ist."
+                </template>
+              </openwb-base-button-group-input>
             </template>
             <hr />
             <openwb-base-heading> Integrierter Zähler </openwb-base-heading>
