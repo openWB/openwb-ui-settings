@@ -219,6 +219,42 @@
                   Jeder Plan führt einen Programm-Durchlauf des Geräts durch. Wenn der Preis vorher günstig ist oder
                   genug Überschuss da ist, wird vorher gestartet, sonst zu angegebenen Uhrzeit.
                 </openwb-base-alert>
+                <hr />
+                <openwb-base-heading>
+                  Zielpläne
+                  <template #actions>
+                    <openwb-base-avatar
+                      class="bg-success clickable"
+                      title="Neuen Zielladen-Plan hinzufügen"
+                      @click.stop="addUsagePlan(installedConsumer.id)"
+                    >
+                      <font-awesome-icon :icon="['fas', 'plus']" />
+                    </openwb-base-avatar>
+                  </template>
+                </openwb-base-heading>
+                <openwb-base-alert
+                  v-if="!installedConsumer.consumerUsage.scheduled_charging?.plans?.length"
+                  subtype="info"
+                >
+                  Es wurde noch kein Zielladen-Plan angelegt.
+                </openwb-base-alert>
+                <openwb-base-card
+                  v-for="plan in installedConsumer.consumerUsage.scheduled_charging?.plans ?? []"
+                  :key="plan.id"
+                  :title="plan.name"
+                  subtype="dark"
+                >
+                  <template #actions>
+                    <openwb-base-avatar
+                      class="bg-danger clickable"
+                      title="Plan entfernen"
+                      @click.stop="removeUsagePlan(installedConsumer.id, plan.id)"
+                    >
+                      <font-awesome-icon :icon="['fas', 'trash']" />
+                    </openwb-base-avatar>
+                  </template>
+                  <!-- TODO: Plan-Felder (Zeit, Wiederholung, Dauer) nach Klärung der Backend-Struktur -->
+                </openwb-base-card>
               </openwb-base-card>
               <openwb-base-card
                 v-if="installedConsumer.consumerUsage.chargemode === 'stop'"
@@ -347,10 +383,15 @@
 
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faHome as fasHome, faTrash as fasTrash, faCog as fasCog } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHome as fasHome,
+  faPlus as fasPlus,
+  faTrash as fasTrash,
+  faCog as fasCog,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasHome, fasTrash, fasCog);
+library.add(fasHome, fasPlus, fasTrash, fasCog);
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbConsumerConfigProxy from "../components/consumers/OpenwbConsumerConfigProxy.vue";
 
@@ -575,6 +616,18 @@ export default {
     },
     updateUsage(consumerId, value, path) {
       this.updateState(`openWB/consumer/${consumerId}/usage`, value, path);
+    },
+    addUsagePlan(consumerId) {
+      this.$emit("sendCommand", {
+        command: "addUsagePlan",
+        data: { consumer_id: consumerId },
+      });
+    },
+    removeUsagePlan(consumerId, planId) {
+      this.$emit("sendCommand", {
+        command: "removeUsagePlan",
+        data: { consumer_id: consumerId, plan: planId },
+      });
     },
   },
 };
