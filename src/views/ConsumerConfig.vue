@@ -170,6 +170,62 @@
                   Überschuss, Strompreis bzw. Zeitplan.
                 </template>
               </openwb-base-button-group-input>
+              <hr />
+              <openwb-base-card
+                v-if="installedConsumer.consumerUsage.chargemode === 'instant_charging'"
+                title="Sofort"
+              >
+                <openwb-base-alert subtype="info"> Das Gerät wird sofort eingeschaltet. </openwb-base-alert>
+              </openwb-base-card>
+              <openwb-base-card
+                v-if="installedConsumer.consumerUsage.chargemode === 'pv_charging'"
+                title="PV"
+              >
+                <openwb-base-alert subtype="info">
+                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
+                  überschritten wurde. Das Gerät wird frühestens wieder ausgeschaltet, wenn die minimale Betriebsdauer
+                  erreicht wurde, um sicherzustellen, dass das Programm vollständig durchlaufen kann.
+                </openwb-base-alert>
+              </openwb-base-card>
+              <openwb-base-card
+                v-if="installedConsumer.consumerUsage.chargemode === 'eco_charging'"
+                title="Eco"
+              >
+                <openwb-base-alert subtype="info">
+                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
+                  überschritten wurde oder der Preis unter die Strompreisgrenze fällt. Das Gerät wird frühestens wieder
+                  ausgeschaltet, wenn die minimale Betriebsdauer erreicht wurde, um sicherzustellen, dass das Programm
+                  vollständig durchlaufen kann.
+                </openwb-base-alert>
+                <openwb-base-number-input
+                  title="Strompreisgrenze"
+                  unit="ct/kWh"
+                  :min="0"
+                  :step="0.1"
+                  :model-value="installedConsumer.consumerUsage.eco_charging.price_limit * 100"
+                  @update:model-value="updateUsage(installedConsumer.id, $event / 100, 'eco_charging.price_limit')"
+                >
+                  <template #help>
+                    Eco schaltet den Verbraucher ein, sobald der variable Strompreis unter diesem Wert liegt. Dafür muss
+                    ein Strompreis-Anbieter konfiguriert sein.
+                  </template>
+                </openwb-base-number-input>
+              </openwb-base-card>
+              <openwb-base-card
+                v-if="installedConsumer.consumerUsage.chargemode === 'scheduled_charging'"
+                title="Ziel"
+              >
+                <openwb-base-alert subtype="info">
+                  Jeder Plan führt einen Programm-Durchlauf des Geräts durch. Wenn der Preis vorher günstig ist oder
+                  genug Überschuss da ist, wird vorher gestartet, sonst zu angegebenen Uhrzeit.
+                </openwb-base-alert>
+              </openwb-base-card>
+              <openwb-base-card
+                v-if="installedConsumer.consumerUsage.chargemode === 'stop'"
+                title="Stop"
+              >
+                <openwb-base-alert subtype="info"> Das Gerät wird dauerhaft ausgeschaltet. </openwb-base-alert>
+              </openwb-base-card>
               <openwb-base-number-input
                 title="Min Betriebsstrom"
                 unit="A"
