@@ -321,6 +321,61 @@
           </template>
         </openwb-base-card>
       </form>
+      <form
+        v-if="!installAssistantActive"
+        name="networkForm"
+      >
+        <openwb-base-card
+          title="Netzwerk"
+          :collapsible="true"
+          :collapsed="true"
+        >
+          <openwb-base-alert subtype="info">
+            Änderungen an diesen Einstellungen werden erst nach einem Neustart der Ladestation aktiv.
+          </openwb-base-alert>
+          <openwb-base-heading>
+            Plug&Play Einstellungen
+            <template #help>
+              Diese Einstellungen werden für die Erkennung von Zähler-Kits und anderen openWB-Netzwerkkomponenten
+              verwendet.<br />
+              Eine Änderung ist nur in Ausnahmefällen erforderlich, wenn es im Netzwerk mehrere primary openWB-Systeme
+              gibt.<br />
+              Die Standardeinstellung ist <strong>192.168.193.250</strong> mit dem Präfix <strong>24</strong>.
+            </template>
+          </openwb-base-heading>
+          <openwb-base-text-input
+            v-model="pnpIpAddress"
+            title="IP-Adresse"
+            subtype="ipv4"
+            required
+          />
+          <openwb-base-number-input
+            v-model="pnpIpPrefix"
+            title="Netzwerkpräfix"
+            :min="8"
+            :max="32"
+            :step="1"
+            required
+          />
+          <openwb-base-text-input
+            :model-value="pnpSubnetMask"
+            title="Subnetzmaske"
+            subtype="ipv4"
+            readonly
+          />
+          <template #footer>
+            <div class="row justify-content-center w-100">
+              <openwb-base-submit-buttons
+                form-name="networkForm"
+                :hide-defaults="true"
+                save-id="saveNetworkSettings"
+                @save="$emit('save', ['openWB/system/pnp_ip'])"
+                @reset="$emit('reset', ['openWB/system/pnp_ip'])"
+              />
+            </div>
+          </template>
+        </openwb-base-card>
+      </form>
     </div>
   </div>
 </template>
@@ -369,6 +424,7 @@ export default {
         { topic: "openWB/system/hostname", writeable: false },
         { topic: "openWB/system/ip_address", writeable: false },
         { topic: "openWB/system/mac_address", writeable: false },
+        { topic: "openWB/system/pnp_ip", writeable: true },
         { topic: "openWB/system/secondary_auto_update", writeable: false },
         { topic: "openWB/system/serial_number", writeable: false },
         { topic: "openWB/system/version", writeable: false },
@@ -378,6 +434,33 @@ export default {
     };
   },
   computed: {
+    pnpIp: {
+      get() {
+        return this.$store.state.mqtt["openWB/system/pnp_ip"] || { address: "", prefix: 8 };
+      },
+      set(value) {
+        this.updateState("openWB/system/pnp_ip", value);
+      },
+    },
+    pnpIpAddress: {
+      get() {
+        return this.pnpIp.address;
+      },
+      set(value) {
+        this.pnpIp = { ...this.pnpIp, address: value };
+      },
+    },
+    pnpIpPrefix: {
+      get() {
+        return this.pnpIp.prefix;
+      },
+      set(value) {
+        this.pnpIp = { ...this.pnpIp, prefix: value };
+      },
+    },
+    pnpSubnetMask() {
+      return this.cidrPrefixToSubnetMask(this.pnpIpPrefix);
+    },
     externalChargePoints: {
       get() {
         let chargePoints = this.getWildcardTopics("openWB/chargepoint/+/config");
@@ -546,6 +629,20 @@ export default {
     this.sendSystemCommand("systemFetchVersions");
   },
   methods: {
+    cidrPrefixToSubnetMask(prefix) {
+      const prefixNumber = Number(prefix);
+      if (!Number.isInteger(prefixNumber) || prefixNumber < 0 || prefixNumber > 32) {
+        return "";
+      }
+
+      if (prefixNumber === 0) {
+        return "0.0.0.0";
+      }
+
+      const mask = (0xffffffff << (32 - prefixNumber)) >>> 0;
+      const octets = [(mask >>> 24) & 255, (mask >>> 16) & 255, (mask >>> 8) & 255, mask & 255];
+      return octets.join(".");
+    },
     sendSystemCommand(command, data = {}) {
       this.$emit("sendCommand", {
         command: command,

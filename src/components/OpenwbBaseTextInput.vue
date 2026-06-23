@@ -25,7 +25,7 @@
                 :icon="['fas', 'envelope']"
               />
               <font-awesome-icon
-                v-if="subtype == 'host'"
+                v-if="subtype == 'host' || subtype == 'ipv4'"
                 :icon="['fas', 'network-wired']"
               />
               <font-awesome-icon
@@ -98,6 +98,16 @@
             class="form-control"
             v-bind="$attrs"
             :pattern="hostPattern"
+          />
+          <input
+            v-if="subtype == 'ipv4'"
+            :id="`${uid}-ipv4-input`"
+            ref="ipv4Input"
+            v-model="value"
+            type="text"
+            class="form-control"
+            v-bind="$attrs"
+            :pattern="ipv4Pattern"
           />
           <input
             v-if="['email', 'url'].includes(subtype)"
@@ -260,6 +270,7 @@ export default {
             "text",
             "email",
             "host",
+            "ipv4",
             "url",
             "user",
             "group",
@@ -356,6 +367,8 @@ export default {
           return this.$refs.passwordInput;
         case "host":
           return this.$refs.hostInput;
+        case "ipv4":
+          return this.$refs.ipv4Input;
         case "email":
         case "url":
           return this.$refs.urlInput;
@@ -372,11 +385,13 @@ export default {
       return this.$refs.textInput;
     },
     hostPattern() {
-      const ipPattern = "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
-      const hostOnlyPattern = "^(?=.*[a-zA-Z].*$)([a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])$";
+      const hostOnlyPattern = "(?=.*[a-zA-Z].*$)([a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])";
       const domainPattern =
-        "^((?=[^.]*[a-zA-Z][^.]*\\.)([a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9]\\.))+((?=[^.]*[a-zA-Z].*$)([a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9]))$";
-      return `(${ipPattern})|(${hostOnlyPattern})|(${domainPattern})`;
+        "((?=[^.]*[a-zA-Z][^.]*\\.)([a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9]\\.))+((?=[^.]*[a-zA-Z].*$)([a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9]))";
+      return `^((${this.ipv4Pattern.slice(1, -1)})|(${hostOnlyPattern})|(${domainPattern}))$`;
+    },
+    ipv4Pattern() {
+      return "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
     },
     addDisabled: {
       get() {
