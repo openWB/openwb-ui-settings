@@ -20,10 +20,10 @@
       <slot name="actions" />
     </span>
   </div>
-  <div class="">
+  <div class="form-row">
     <span
       v-if="showHelp"
-      class="form-row alert alert-info small flex-fill"
+      class="form-text alert alert-info small flex-fill"
     >
       <slot name="help" />
     </span>
