@@ -335,23 +335,14 @@
                 >
                   Es wurde noch kein Zeitladen-Plan angelegt.
                 </openwb-base-alert>
-                <openwb-base-card
-                  v-for="plan in installedConsumer.consumerUsage.time_charging.plans ?? []"
+                <consumer-time-charging-plan
+                  v-for="(plan, planKey) in installedConsumer.consumerUsage.time_charging.plans ?? []"
                   :key="plan.id"
-                  :title="plan.name"
-                  subtype="dark"
-                >
-                  <template #actions>
-                    <openwb-base-avatar
-                      class="bg-danger clickable"
-                      title="Plan entfernen"
-                      @click.stop="removeConsumerTimePlan(installedConsumer.id, plan.id)"
-                    >
-                      <font-awesome-icon :icon="['fas', 'trash']" />
-                    </openwb-base-avatar>
-                  </template>
-                  <!-- TODO: Plan-Felder (Zeit, Wiederholung, Mindest-Speicher-SoC) -->
-                </openwb-base-card>
+                  :model-value="plan"
+                  :consumer-id="installedConsumer.id"
+                  @update:model-value="updateUsage(installedConsumer.id, $event, `time_charging.plans.${planKey}`)"
+                  @send-command="$emit('sendCommand', $event)"
+                />
               </template>
             </template>
             <hr />
@@ -447,12 +438,14 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasHome, fasPlus, fasTrash, fasCog);
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbConsumerConfigProxy from "../components/consumers/OpenwbConsumerConfigProxy.vue";
+import ConsumerTimeChargingPlan from "../components/consumers/ConsumerTimeChargingPlan.vue";
 
 export default {
   name: "OpenwbConsumerConfigView",
   components: {
     FontAwesomeIcon,
     OpenwbConsumerConfigProxy,
+    ConsumerTimeChargingPlan,
   },
   mixins: [ComponentState],
   emits: ["sendCommand", "save", "reset", "defaults"],
@@ -686,12 +679,6 @@ export default {
       this.$emit("sendCommand", {
         command: "addConsumerTimePlan",
         data: { consumer_id: consumerId },
-      });
-    },
-    removeConsumerTimePlan(consumerId, planId) {
-      this.$emit("sendCommand", {
-        command: "removeConsumerTimePlan",
-        data: { consumer_id: consumerId, plan: planId },
       });
     },
   },
