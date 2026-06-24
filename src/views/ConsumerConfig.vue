@@ -226,7 +226,7 @@
                     <openwb-base-avatar
                       class="bg-success clickable"
                       title="Neuen Zielladen-Plan hinzufügen"
-                      @click.stop="addUsagePlan(installedConsumer.id)"
+                      @click.stop="addConsumerSchedulePlan(installedConsumer.id)"
                     >
                       <font-awesome-icon :icon="['fas', 'plus']" />
                     </openwb-base-avatar>
@@ -248,7 +248,7 @@
                     <openwb-base-avatar
                       class="bg-danger clickable"
                       title="Plan entfernen"
-                      @click.stop="removeUsagePlan(installedConsumer.id, plan.id)"
+                      @click.stop="removeConsumerSchedulePlan(installedConsumer.id, plan.id)"
                     >
                       <font-awesome-icon :icon="['fas', 'trash']" />
                     </openwb-base-avatar>
@@ -317,6 +317,18 @@
                 </template>
               </openwb-base-button-group-input>
               <template v-if="installedConsumer.consumerUsage.time_charging.active">
+                <openwb-base-heading>
+                  Zeitladen-Pläne
+                  <template #actions>
+                    <openwb-base-avatar
+                      class="bg-success clickable"
+                      title="Neuen Zeitladen-Plan hinzufügen"
+                      @click.stop="addConsumerTimePlan(installedConsumer.id)"
+                    >
+                      <font-awesome-icon :icon="['fas', 'plus']" />
+                    </openwb-base-avatar>
+                  </template>
+                </openwb-base-heading>
                 <openwb-base-alert
                   v-if="!installedConsumer.consumerUsage.time_charging.plans?.length"
                   subtype="info"
@@ -329,8 +341,16 @@
                   :title="plan.name"
                   subtype="dark"
                 >
-                  <!-- TODO: Add plan fields (time, repetition, min. storage SoC) + Add/Remove,
-                       as soon as there is a backend command for consumer time charging plans -->
+                  <template #actions>
+                    <openwb-base-avatar
+                      class="bg-danger clickable"
+                      title="Plan entfernen"
+                      @click.stop="removeConsumerTimePlan(installedConsumer.id, plan.id)"
+                    >
+                      <font-awesome-icon :icon="['fas', 'trash']" />
+                    </openwb-base-avatar>
+                  </template>
+                  <!-- TODO: Plan-Felder (Zeit, Wiederholung, Mindest-Speicher-SoC) -->
                 </openwb-base-card>
               </template>
             </template>
@@ -650,15 +670,27 @@ export default {
     updateUsage(consumerId, value, path) {
       this.updateState(`openWB/consumer/${consumerId}/usage`, value, path);
     },
-    addUsagePlan(consumerId) {
+    addConsumerSchedulePlan(consumerId) {
       this.$emit("sendCommand", {
-        command: "addUsagePlan",
+        command: "addConsumerSchedulePlan",
         data: { consumer_id: consumerId },
       });
     },
-    removeUsagePlan(consumerId, planId) {
+    removeConsumerSchedulePlan(consumerId, planId) {
       this.$emit("sendCommand", {
-        command: "removeUsagePlan",
+        command: "removeConsumerSchedulePlan",
+        data: { consumer_id: consumerId, plan: planId },
+      });
+    },
+    addConsumerTimePlan(consumerId) {
+      this.$emit("sendCommand", {
+        command: "addConsumerTimePlan",
+        data: { consumer_id: consumerId },
+      });
+    },
+    removeConsumerTimePlan(consumerId, planId) {
+      this.$emit("sendCommand", {
+        command: "removeConsumerTimePlan",
         data: { consumer_id: consumerId, plan: planId },
       });
     },
