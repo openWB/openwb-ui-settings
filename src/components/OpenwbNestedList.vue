@@ -80,6 +80,8 @@ import {
   faGaugeHigh as fasGaugeHigh,
   faTrash as fasTrash,
   faPen as fasPen,
+  faCar as fasCar,
+  faPlug as fasPlug,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -92,6 +94,8 @@ library.add(
   fasGaugeHigh,
   fasTrash,
   fasPen,
+  fasCar,
+  fasPlug,
 );
 export default {
   name: "OpenwbNestedList",
@@ -171,6 +175,10 @@ export default {
           return ["fas", "gauge-high"];
         case "cp":
           return ["fas", "charging-station"];
+        case "vehicle":
+          return ["fas", "car"];
+        case "consumer":
+          return ["fas", "plug"];
         case "inverter":
           return ["fas", "solar-panel"];
         default:
