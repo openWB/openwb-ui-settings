@@ -61,10 +61,10 @@
             :key="installedConsumerKey"
             :collapsible="true"
             :collapsed="true"
-            subtype="dark"
+            subtype="purple"
           >
             <template #header>
-              <font-awesome-icon :icon="['fas', 'home']" />
+              <font-awesome-icon :icon="['fas', 'plug']" />
               {{ installedConsumer?.name }}
             </template>
             <template #actions="slotProps">
@@ -428,14 +428,14 @@
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-  faHome as fasHome,
+  faPlug as fasPlug,
   faPlus as fasPlus,
   faTrash as fasTrash,
   faCog as fasCog,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasHome, fasPlus, fasTrash, fasCog);
+library.add(fasPlug, fasPlus, fasTrash, fasCog);
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbConsumerConfigProxy from "../components/consumers/OpenwbConsumerConfigProxy.vue";
 import ConsumerTimeChargingPlan from "../components/consumers/ConsumerTimeChargingPlan.vue";
