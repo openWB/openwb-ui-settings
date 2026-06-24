@@ -272,6 +272,10 @@ export default {
   gap: 0.5rem;
 }
 
+.element-titel.consumer {
+  background-color: var(--purple);
+}
+
 .element-titel.group {
   background-color: var(--secondary);
 }
