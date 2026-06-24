@@ -441,14 +441,14 @@ export default {
                 break;
               }
               case "vehicle": {
-                const vehicleId = String(item.id).replace(/^ev/, "");
+                const vehicleId = String(item.id);
                 const name = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/name`];
                 if (name) {
                   labels[item.id] = name;
                 }
                 break;
               }
-              case "load": {
+              case "consumer": {
                 const name = this.$store.state.mqtt[`openWB/consumer/${item.id}/module`]?.name;
                 if (name) {
                   labels[item.id] = name;
