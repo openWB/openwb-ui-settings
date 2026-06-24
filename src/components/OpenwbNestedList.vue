@@ -265,6 +265,10 @@ export default {
   color: var(--dark);
 }
 
+.element-titel.consumer {
+  background-color: var(--purple);
+}
+
 .element-titel.group {
   background-color: var(--secondary);
 }
