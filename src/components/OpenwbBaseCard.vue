@@ -132,6 +132,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   border-bottom: none;
+  min-height: 2.5em;
 }
 
 .card-header > .card-actions > .card-actions {
