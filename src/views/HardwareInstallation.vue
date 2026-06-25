@@ -135,11 +135,16 @@
                 :model-value="installedComponent?.name"
                 @update:model-value="updateState(installedComponentKey, $event, 'name')"
               >
-                <template #append>
+                <template
+                  v-if="installedComponent?.type == 'counter'"
+                  #append
+                >
                   <openwb-base-color-picker
                     class="p-1"
                     :model-value="installedComponent?.color"
                     :default-color="getComponentDefaultColor(installedComponent?.type)"
+                    :color-palette="getComponentColorPalette(installedComponent?.type)"
+                    :disabled="installedComponent?.id === gridId"
                     @update:model-value="updateState(installedComponentKey, $event, 'color')"
                   />
                 </template>
@@ -286,6 +291,7 @@ export default {
   data() {
     return {
       mqttTopics: [
+        { topic: "openWB/counter/get/hierarchy", writeable: false },
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/system/configurable/devices_components", writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: true },
@@ -314,6 +320,16 @@ export default {
       return Object.fromEntries(
         Object.entries(installedComponents).filter(([, template]) => template && typeof template === "object"),
       );
+    },
+    gridId() {
+      let hierarchy = this.$store.state.mqtt["openWB/counter/get/hierarchy"];
+      if (hierarchy !== undefined && Object.keys(hierarchy).length > 0) {
+        let index = Object.keys(this.$store.state.mqtt["openWB/counter/get/hierarchy"])[0];
+        if (this.$store.state.mqtt["openWB/counter/get/hierarchy"][index].type == "counter") {
+          return this.$store.state.mqtt["openWB/counter/get/hierarchy"][index].id;
+        }
+      }
+      return undefined;
     },
     vendorList: {
       get() {
@@ -381,6 +397,51 @@ export default {
       }
       if (type.match(/^(.+_)?bat(_.+)?$/)) {
         return "#ffc107";
+      }
+      return undefined;
+    },
+    getComponentColorPalette(type) {
+      if (type.match(/^(.+_)?counter(_.+)?$/)) {
+        return [
+          "#dc3545",
+          "#d32535",
+          "#c82333",
+          "#c01f2f",
+          "#bd2130",
+          "#b91f2d",
+          "#b21f2d",
+          "#ad1d2b",
+          "#a71d2a",
+          "#8f1923",
+        ];
+      }
+      if (type.match(/^(.+_)?inverter(_.+)?$/)) {
+        return [
+          "#28a745",
+          "#23913c",
+          "#218838",
+          "#1f8335",
+          "#1e7e34",
+          "#1d7a32",
+          "#1c7430",
+          "#186328",
+          "#155724",
+          "#12491f",
+        ];
+      }
+      if (type.match(/^(.+_)?bat(_.+)?$/)) {
+        return [
+          "#ffc107",
+          "#f2b701",
+          "#e0a800",
+          "#d9a400",
+          "#d39e00",
+          "#cd9a00",
+          "#c69500",
+          "#c08f00",
+          "#b8860b",
+          "#9d7309",
+        ];
       }
       return undefined;
     },

@@ -83,6 +83,7 @@
                 class="p-1"
                 :model-value="installedChargePoint.color"
                 default-color="#007bff"
+                :color-palette="chargePointColorPalette"
                 @update:model-value="updateState(installedChargePointKey, $event, 'color')"
               />
             </template>
@@ -532,6 +533,18 @@ export default {
       modalChargePointIndex: undefined,
       showChargePointTemplateModal: false,
       modalChargePointTemplateIndex: undefined,
+      chargePointColorPalette: [
+        "#0052a3",
+        "#0066cc",
+        "#0d79f2",
+        "#007bff",
+        "#2f90ff",
+        "#58a6ff",
+        "#7fbaff",
+        "#a3ccff",
+        "#c2dbff",
+        "#dce9ff",
+      ],
     };
   },
   computed: {
