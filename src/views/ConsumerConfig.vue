@@ -238,23 +238,14 @@
                 >
                   Es wurde noch kein Zielladen-Plan angelegt.
                 </openwb-base-alert>
-                <openwb-base-card
-                  v-for="plan in installedConsumer.consumerUsage.scheduled_charging?.plans ?? []"
+                <consumer-scheduled-plan
+                  v-for="(plan, planKey) in installedConsumer.consumerUsage.scheduled_charging?.plans ?? []"
                   :key="plan.id"
-                  :title="plan.name"
-                  subtype="dark"
-                >
-                  <template #actions>
-                    <openwb-base-avatar
-                      class="bg-danger clickable"
-                      title="Plan entfernen"
-                      @click.stop="removeConsumerSchedulePlan(installedConsumer.id, plan.id)"
-                    >
-                      <font-awesome-icon :icon="['fas', 'trash']" />
-                    </openwb-base-avatar>
-                  </template>
-                  <!-- TODO: Plan-Felder (Zeit, Wiederholung, Dauer) nach Klärung der Backend-Struktur -->
-                </openwb-base-card>
+                  :model-value="plan"
+                  :consumer-id="installedConsumer.id"
+                  @update:model-value="updateUsage(installedConsumer.id, $event, `scheduled_charging.plans.${planKey}`)"
+                  @send-command="$emit('sendCommand', $event)"
+                />
               </openwb-base-card>
               <openwb-base-card
                 v-if="installedConsumer.consumerUsage.chargemode === 'stop'"
@@ -439,6 +430,7 @@ library.add(fasPlug, fasPlus, fasTrash, fasCog);
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbConsumerConfigProxy from "../components/consumers/OpenwbConsumerConfigProxy.vue";
 import ConsumerTimeChargingPlan from "../components/consumers/ConsumerTimeChargingPlan.vue";
+import ConsumerScheduledPlan from "../components/consumers/ConsumerScheduledPlan.vue";
 
 export default {
   name: "OpenwbConsumerConfigView",
@@ -446,6 +438,7 @@ export default {
     FontAwesomeIcon,
     OpenwbConsumerConfigProxy,
     ConsumerTimeChargingPlan,
+    ConsumerScheduledPlan,
   },
   mixins: [ComponentState],
   emits: ["sendCommand", "save", "reset", "defaults"],
@@ -667,12 +660,6 @@ export default {
       this.$emit("sendCommand", {
         command: "addConsumerSchedulePlan",
         data: { consumer_id: consumerId },
-      });
-    },
-    removeConsumerSchedulePlan(consumerId, planId) {
-      this.$emit("sendCommand", {
-        command: "removeConsumerSchedulePlan",
-        data: { consumer_id: consumerId, plan: planId },
       });
     },
     addConsumerTimePlan(consumerId) {
