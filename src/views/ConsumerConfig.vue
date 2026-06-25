@@ -158,8 +158,8 @@
                 :buttons="[
                   { buttonValue: 'instant_charging', text: 'Sofort', class: 'btn-outline-danger' },
                   { buttonValue: 'pv_charging', text: 'PV', class: 'btn-outline-success' },
-                  { buttonValue: 'eco_charging', text: 'Eco', class: 'btn-outline-warning' },
                   { buttonValue: 'scheduled_charging', text: 'Ziel', class: 'btn-outline-primary' },
+                  { buttonValue: 'eco_charging', text: 'Eco', class: 'btn-outline-secondary' },
                   { buttonValue: 'stop', text: 'Stop', class: 'btn-outline-dark' },
                 ]"
                 :model-value="installedConsumer.consumerUsage.chargemode"
@@ -170,6 +170,58 @@
                   Überschuss, Strompreis bzw. Zeitplan.
                 </template>
               </openwb-base-button-group-input>
+              <hr />
+              <openwb-base-heading> Betriebsmodus umstellen </openwb-base-heading>
+              <openwb-base-button-group-input
+                title="Umstellen"
+                :buttons="[
+                  { buttonValue: 'never', text: 'Nie', class: 'btn-outline-secondary' },
+                  { buttonValue: 'midnight', text: 'Mitternacht', class: 'btn-outline-info' },
+                  { buttonValue: 'time', text: 'Zeitpunkt', class: 'btn-outline-info' },
+                ]"
+                :model-value="installedConsumer.consumerUsage.reset_chargemode?.mode ?? 'never'"
+                @update:model-value="updateUsage(installedConsumer.id, $event, 'reset_chargemode.mode')"
+              >
+                <template #help>
+                  <template v-if="installedConsumer.consumerUsage.reset_chargemode?.mode === 'midnight'">
+                    Stellt den Betriebsmodus automatisch auf einen anderen Modus um: "Mitternacht" täglich um 0:00 Uhr
+                  </template>
+                  <template v-else-if="installedConsumer.consumerUsage.reset_chargemode?.mode === 'time'">
+                    Stellt den Betriebsmodus automatisch auf einen anderen Modus um, einmalig zum angegebenen Zeitpunkt.
+                  </template>
+                  <template v-else> Stellt den Betriebsmodus nicht automatisch um. </template>
+                </template>
+              </openwb-base-button-group-input>
+              <template v-if="(installedConsumer.consumerUsage.reset_chargemode?.mode ?? 'never') !== 'never'">
+                <openwb-base-text-input
+                  v-if="installedConsumer.consumerUsage.reset_chargemode?.mode === 'time'"
+                  title="Datum"
+                  subtype="date"
+                  :model-value="resetDateParts(installedConsumer).date"
+                  @update:model-value="setResetDate(installedConsumer, $event)"
+                />
+                <openwb-base-text-input
+                  v-if="installedConsumer.consumerUsage.reset_chargemode?.mode === 'time'"
+                  title="Uhrzeit"
+                  subtype="time"
+                  :model-value="resetDateParts(installedConsumer).time"
+                  @update:model-value="setResetTime(installedConsumer, $event)"
+                />
+                <openwb-base-button-group-input
+                  title="Zielmodus"
+                  :buttons="[
+                    { buttonValue: 'instant_charging', text: 'Sofort', class: 'btn-outline-danger' },
+                    { buttonValue: 'pv_charging', text: 'PV', class: 'btn-outline-success' },
+                    { buttonValue: 'scheduled_charging', text: 'Ziel', class: 'btn-outline-primary' },
+                    { buttonValue: 'eco_charging', text: 'Eco', class: 'btn-outline-secondary' },
+                    { buttonValue: 'stop', text: 'Stop', class: 'btn-outline-dark' },
+                  ]"
+                  :model-value="installedConsumer.consumerUsage.reset_chargemode?.chargemode"
+                  @update:model-value="updateUsage(installedConsumer.id, $event, 'reset_chargemode.chargemode')"
+                >
+                  <template #help> Der Modus, auf den der Verbraucher umgestellt wird. </template>
+                </openwb-base-button-group-input>
+              </template>
               <hr />
               <openwb-base-card
                 v-if="installedConsumer.consumerUsage.chargemode === 'instant_charging'"
@@ -655,6 +707,29 @@ export default {
     },
     updateUsage(consumerId, value, path) {
       this.updateState(`openWB/consumer/${consumerId}/usage`, value, path);
+    },
+    // reset_chargemode.time is stored as an absolute epoch (seconds). Split it into
+    // the date/time strings the inputs expect, defaulting to "now" when unset.
+    resetDateParts(consumer) {
+      const epoch = consumer.consumerUsage?.reset_chargemode?.time;
+      const date = epoch ? new Date(epoch * 1000) : new Date();
+      const pad = (dateTimePart) => String(dateTimePart).padStart(2, "0");
+      return {
+        date: `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`,
+        time: `${pad(date.getHours())}:${pad(date.getMinutes())}`,
+      };
+    },
+    setResetDate(consumer, dateString) {
+      this.writeResetTime(consumer.id, dateString, this.resetDateParts(consumer).time);
+    },
+    setResetTime(consumer, timeString) {
+      this.writeResetTime(consumer.id, this.resetDateParts(consumer).date, timeString);
+    },
+    writeResetTime(consumerId, dateString, timeString) {
+      if (!dateString || !timeString) return;
+      const epoch = Math.floor(new Date(`${dateString}T${timeString}`).getTime() / 1000);
+      if (Number.isNaN(epoch)) return;
+      this.updateUsage(consumerId, epoch, "reset_chargemode.time");
     },
     addConsumerSchedulePlan(consumerId) {
       this.$emit("sendCommand", {
