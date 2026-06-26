@@ -321,7 +321,7 @@
                 </openwb-base-alert>
                 <hr />
                 <openwb-base-heading>
-                  Zielpläne
+                  Ziel-Pläne
                   <template #actions>
                     <openwb-base-avatar
                       class="bg-success clickable"
@@ -336,7 +336,7 @@
                   v-if="!installedConsumer.consumerUsage.scheduled_charging?.plans?.length"
                   subtype="info"
                 >
-                  Es wurde noch kein Zielladen-Plan angelegt.
+                  Es wurde noch kein Zielplan angelegt.
                 </openwb-base-alert>
                 <consumer-scheduled-plan
                   v-for="(plan, planKey) in installedConsumer.consumerUsage.scheduled_charging?.plans ?? []"
@@ -354,9 +354,9 @@
                 <openwb-base-alert subtype="info"> Das Gerät wird dauerhaft ausgeschaltet. </openwb-base-alert>
               </openwb-base-card>
               <hr />
-              <openwb-base-heading> Zeitladen </openwb-base-heading>
+              <openwb-base-heading> Zeit-Pläne </openwb-base-heading>
               <openwb-base-button-group-input
-                title="Zeitladen aktiv"
+                title="Zeit-Pläne aktiv"
                 :buttons="[
                   { buttonValue: true, text: 'Ja', class: 'btn-outline-success' },
                   { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
@@ -365,7 +365,7 @@
                 @update:model-value="updateUsage(installedConsumer.id, $event, 'time_charging.active')"
               >
                 <template #help>
-                  Zeitladen schaltet das Gerät innerhalb der festgelegten Zeitpläne ein, unabhängig vom oben gewählten
+                  Zeit-Pläne schalten das Gerät innerhalb der festgelegten Zeit-Plan ein, unabhängig vom oben gewählten
                   Betriebsmodus.
                 </template>
               </openwb-base-button-group-input>
@@ -374,7 +374,7 @@
                 :collapsed="true"
                 subtype="secondary"
               >
-                <template #header> Zeitladen-Pläne </template>
+                <template #header> Zeit-Pläne </template>
                 <template #actions>
                   <openwb-base-avatar
                     class="bg-success clickable"
@@ -388,7 +388,7 @@
                   v-if="!installedConsumer.consumerUsage.time_charging.plans?.length"
                   subtype="info"
                 >
-                  Es wurde noch kein Zeitladen-Plan angelegt.
+                  Es wurde noch kein Zeit-Plan angelegt.
                 </openwb-base-alert>
                 <consumer-time-charging-plan
                   v-for="(plan, planKey) in installedConsumer.consumerUsage.time_charging.plans ?? []"
