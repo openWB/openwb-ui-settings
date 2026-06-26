@@ -275,27 +275,73 @@
                 v-if="installedConsumer.consumerUsage.chargemode === 'instant_charging'"
                 title="Sofort"
               >
-                <openwb-base-alert subtype="info"> Das Gerät wird sofort eingeschaltet. </openwb-base-alert>
+                <openwb-base-alert
+                  v-if="installedConsumer.consumerUsage.type === 'suspendable_tunable'"
+                  subtype="info"
+                >
+                  Das Gerät wird sofort mit maximaler Leistung eingeschaltet.
+                </openwb-base-alert>
+                <openwb-base-alert
+                  v-else
+                  subtype="info"
+                >
+                  Das Gerät wird sofort eingeschaltet.
+                </openwb-base-alert>
               </openwb-base-card>
               <openwb-base-card
                 v-if="installedConsumer.consumerUsage.chargemode === 'pv_charging'"
                 title="PV"
               >
-                <openwb-base-alert subtype="info">
+                <openwb-base-alert
+                  v-if="installedConsumer.consumerUsage.type === 'suspendable_onoff'"
+                  subtype="info"
+                >
                   Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
                   überschritten wurde. Das Gerät wird frühestens wieder ausgeschaltet, wenn die minimale Betriebsdauer
                   erreicht wurde, um sicherzustellen, dass das Programm vollständig durchlaufen kann.
+                </openwb-base-alert>
+                <openwb-base-alert
+                  v-else-if="installedConsumer.consumerUsage.type === 'suspendable_tunable'"
+                  subtype="info"
+                >
+                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
+                  überschritten wurde und bei ausreichend Überschuss hoch geregelt.
+                </openwb-base-alert>
+                <openwb-base-alert
+                  v-else
+                  subtype="info"
+                >
+                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
+                  überschritten wurde.
                 </openwb-base-alert>
               </openwb-base-card>
               <openwb-base-card
                 v-if="installedConsumer.consumerUsage.chargemode === 'eco_charging'"
                 title="Eco"
               >
-                <openwb-base-alert subtype="info">
+                <openwb-base-alert
+                  v-if="installedConsumer.consumerUsage.type === 'suspendable_onoff'"
+                  subtype="info"
+                >
                   Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
                   überschritten wurde oder der Preis unter die Strompreisgrenze fällt. Das Gerät wird frühestens wieder
                   ausgeschaltet, wenn die minimale Betriebsdauer erreicht wurde, um sicherzustellen, dass das Programm
                   vollständig durchlaufen kann.
+                </openwb-base-alert>
+                <openwb-base-alert
+                  v-else-if="installedConsumer.consumerUsage.type === 'suspendable_tunable'"
+                  subtype="info"
+                >
+                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
+                  überschritten wurde und bei ausreichend Überschuss hoch geregelt oder mit maximaler Leistung
+                  eingeschaltet, wenn der Preis unter die Strompreisgrenze fällt.
+                </openwb-base-alert>
+                <openwb-base-alert
+                  v-else
+                  subtype="info"
+                >
+                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
+                  überschritten wurde oder der Preis unter die Strompreisgrenze fällt.
                 </openwb-base-alert>
                 <openwb-base-number-input
                   title="Strompreisgrenze"
@@ -315,7 +361,24 @@
                 v-if="installedConsumer.consumerUsage.chargemode === 'scheduled_charging'"
                 title="Ziel"
               >
-                <openwb-base-alert subtype="info">
+                <openwb-base-alert
+                  v-if="installedConsumer.consumerUsage.type === 'suspendable_onoff'"
+                  subtype="info"
+                >
+                  Wenn der Preis vorher günstig ist oder genug Überschuss da ist, wird vorher gestartet, sonst so, dass
+                  die Mindestlaufzeit erreicht wird.
+                </openwb-base-alert>
+                <openwb-base-alert
+                  v-else-if="installedConsumer.consumerUsage.type === 'suspendable_tunable'"
+                  subtype="info"
+                >
+                  Wenn der Preis vorher günstig ist oder genug Überschuss da ist, wird vorher gestartet, sonst mit
+                  maximaler Stromstärke, sodass die Mindestlaufzeit erreicht wird.
+                </openwb-base-alert>
+                <openwb-base-alert
+                  v-else
+                  subtype="info"
+                >
                   Jeder Plan führt einen Programm-Durchlauf des Geräts durch. Wenn der Preis vorher günstig ist oder
                   genug Überschuss da ist, wird vorher gestartet, sonst zu angegebenen Uhrzeit.
                 </openwb-base-alert>
