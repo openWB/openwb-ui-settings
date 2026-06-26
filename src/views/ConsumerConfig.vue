@@ -156,18 +156,30 @@
               </template>
             </openwb-base-number-input>
             <openwb-base-number-input
-              title="Min Regelintervall"
-              unit="s"
+              :title="
+                installedConsumer.consumerUsage?.type === 'suspendable_onoff'
+                  ? 'Min Programmdauer (vom längsten Programm)'
+                  : 'Min Regelintervall'
+              "
+              unit="min"
               :min="0"
               :step="1"
-              :model-value="installedConsumer.config?.min_intervall"
+              :model-value="
+                installedConsumer.config?.min_intervall != null ? installedConsumer.config.min_intervall / 60 : null
+              "
               @update:model-value="
-                updateState(`openWB/consumer/${installedConsumer.id}/config`, $event, 'min_intervall')
+                updateState(`openWB/consumer/${installedConsumer.id}/config`, $event * 60, 'min_intervall')
               "
             >
               <template #help>
-                Mindestzeit, die der Verbraucher in einem Schaltzustand bleibt. Träge Geräte (z. B. Wärmepumpen)
-                benötigen hier größere Werte.
+                <span v-if="installedConsumer.consumerUsage?.type === 'suspendable_onoff'">
+                  Mindestlaufzeit, die der Verbraucher nach dem Einschalten eingeschaltet bleibt. Auf die Dauer des
+                  längsten Programms einstellen, damit ein gestartetes Programm vollständig durchlaufen kann.
+                </span>
+                <span v-else>
+                  Mindestzeit, die der Verbraucher in einem Schaltzustand bleibt, bevor neu geregelt wird. Träge Geräte
+                  (z. B. Wärmepumpen) reagieren langsam und benötigen hier größere Werte.
+                </span>
               </template>
             </openwb-base-number-input>
             <hr />
