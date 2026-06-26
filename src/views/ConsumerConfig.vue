@@ -360,8 +360,11 @@
                   unit="ct/kWh"
                   :min="0"
                   :step="0.1"
+                  :precision="2"
                   :model-value="installedConsumer.consumerUsage.eco_charging.price_limit * 100"
-                  @update:model-value="updateUsage(installedConsumer.id, $event / 100, 'eco_charging.price_limit')"
+                  @update:model-value="
+                    updateUsage(installedConsumer.id, parseFloat(($event / 100).toFixed(5)), 'eco_charging.price_limit')
+                  "
                 >
                   <template #help>
                     Eco schaltet den Verbraucher ein, sobald der variable Strompreis unter diesem Wert liegt. Dafür muss
