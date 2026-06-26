@@ -369,19 +369,21 @@
                   Betriebsmodus.
                 </template>
               </openwb-base-button-group-input>
-              <template v-if="installedConsumer.consumerUsage.time_charging.active">
-                <openwb-base-heading>
-                  Zeitladen-Pläne
-                  <template #actions>
-                    <openwb-base-avatar
-                      class="bg-success clickable"
-                      title="Neuen Zeitladen-Plan hinzufügen"
-                      @click.stop="addConsumerTimePlan(installedConsumer.id)"
-                    >
-                      <font-awesome-icon :icon="['fas', 'plus']" />
-                    </openwb-base-avatar>
-                  </template>
-                </openwb-base-heading>
+              <openwb-base-card
+                :collapsible="true"
+                :collapsed="true"
+                subtype="secondary"
+              >
+                <template #header> Zeitladen-Pläne </template>
+                <template #actions>
+                  <openwb-base-avatar
+                    class="bg-success clickable"
+                    title="Neuen Zeitladen-Plan hinzufügen"
+                    @click.stop="addConsumerTimePlan(installedConsumer.id)"
+                  >
+                    <font-awesome-icon :icon="['fas', 'plus']" />
+                  </openwb-base-avatar>
+                </template>
                 <openwb-base-alert
                   v-if="!installedConsumer.consumerUsage.time_charging.plans?.length"
                   subtype="info"
@@ -396,7 +398,7 @@
                   @update:model-value="updateUsage(installedConsumer.id, $event, `time_charging.plans.${planKey}`)"
                   @send-command="$emit('sendCommand', $event)"
                 />
-              </template>
+              </openwb-base-card>
             </template>
             <hr />
             <openwb-base-heading> Integrierter Zähler </openwb-base-heading>
