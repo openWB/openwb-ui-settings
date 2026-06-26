@@ -98,18 +98,13 @@
             >
               <template #help> Optional: zusätzliche Information für den Systembericht. </template>
             </openwb-base-text-input>
-            <hr />
-            <openwb-base-heading> Verwendung Optionen </openwb-base-heading>
-            <openwb-base-select-input
-              title="Verwendung"
-              not-selected="Bitte auswählen"
-              :options="getUsageOptions(installedConsumer)"
-              :model-value="installedConsumer.consumerUsage?.type ?? null"
-              @update:model-value="setUsage(installedConsumer.id, $event)"
-            >
-              <template #help> Legt fest, wie dieser Verbraucher im Energiemanagement berücksichtigt wird. </template>
-            </openwb-base-select-input>
 
+            <hr />
+
+            <openwb-consumer-config-proxy
+              :device="installedConsumer"
+              @update:configuration="consumerDeviceConfiguration(installedConsumer, $event)"
+            />
             <hr />
             <openwb-base-heading> Elektrischer Anschluss </openwb-base-heading>
             <openwb-base-button-group-input
@@ -142,14 +137,50 @@
               :model-value="installedConsumer?.config?.max_power"
               @update:model-value="updateState(`openWB/consumer/${installedConsumer.id}/config`, $event, 'max_power')"
             >
+              <template #help>
+                Maximale Leistungsaufnahme des Geräts. Wird im Sofort-, Zeit- und Eco-Betrieb (bei günstigem Preis) als
+                Sollleistung verwendet.
+              </template>
             </openwb-base-number-input>
-
+            <openwb-base-number-input
+              title="Min Betriebsstrom"
+              unit="A"
+              :min="0"
+              :step="0.1"
+              :model-value="installedConsumer.config?.min_current"
+              @update:model-value="updateState(`openWB/consumer/${installedConsumer.id}/config`, $event, 'min_current')"
+            >
+              <template #help>
+                Mindeststrom, den das Gerät zum Betrieb benötigt. Im PV- und Eco-Betrieb wird das Gerät nur
+                eingeschaltet, wenn mindestens dieser Strom als Überschuss verfügbar ist.
+              </template>
+            </openwb-base-number-input>
+            <openwb-base-number-input
+              title="Min Regelintervall"
+              unit="s"
+              :min="0"
+              :step="1"
+              :model-value="installedConsumer.config?.min_intervall"
+              @update:model-value="
+                updateState(`openWB/consumer/${installedConsumer.id}/config`, $event, 'min_intervall')
+              "
+            >
+              <template #help>
+                Mindestzeit, die der Verbraucher in einem Schaltzustand bleibt. Träge Geräte (z. B. Wärmepumpen)
+                benötigen hier größere Werte.
+              </template>
+            </openwb-base-number-input>
             <hr />
-
-            <openwb-consumer-config-proxy
-              :device="installedConsumer"
-              @update:configuration="consumerDeviceConfiguration(installedConsumer, $event)"
-            />
+            <openwb-base-heading> Verwendung Optionen </openwb-base-heading>
+            <openwb-base-select-input
+              title="Verwendung"
+              not-selected="Bitte auswählen"
+              :options="getUsageOptions(installedConsumer)"
+              :model-value="installedConsumer.consumerUsage?.type"
+              @update:model-value="setUsage(installedConsumer.id, $event)"
+            >
+              <template #help> Legt fest, wie dieser Verbraucher im Energiemanagement berücksichtigt wird. </template>
+            </openwb-base-select-input>
             <template v-if="showModeSettings(installedConsumer)">
               <hr />
               <openwb-base-heading> Betriebsmodus </openwb-base-heading>
@@ -222,6 +253,23 @@
                   <template #help> Der Modus, auf den der Verbraucher umgestellt wird. </template>
                 </openwb-base-button-group-input>
               </template>
+              <hr />
+              <openwb-base-button-group-input
+                title="Anlauferkennung"
+                :buttons="[
+                  { buttonValue: true, text: 'Ja', class: 'btn-outline-success' },
+                  { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
+                ]"
+                :model-value="installedConsumer.consumerUsage.wait_for_start_active"
+                @update:model-value="updateUsage(installedConsumer.id, $event, 'wait_for_start_active')"
+              >
+                <template #help>
+                  Täglich um Mitternacht wird das Gerät kurz eingeschaltet, um seine Startsequenz (z. B. Befüllen,
+                  Türverriegelung) abzuwarten. Sobald es sich abschaltet, übernimmt der gewählte Betriebsmodus. So kann
+                  z. B. eine Waschmaschine morgens befüllt werden und läuft erst an, wenn genug Überschuss vorhanden
+                  ist. Für Geräte ohne Anlaufsequenz (z. B. Wärmepumpen) deaktivieren.
+                </template>
+              </openwb-base-button-group-input>
               <hr />
               <openwb-base-card
                 v-if="installedConsumer.consumerUsage.chargemode === 'instant_charging'"
@@ -305,44 +353,6 @@
               >
                 <openwb-base-alert subtype="info"> Das Gerät wird dauerhaft ausgeschaltet. </openwb-base-alert>
               </openwb-base-card>
-              <openwb-base-number-input
-                title="Min Betriebsstrom"
-                unit="A"
-                :min="0"
-                :step="0.1"
-                :model-value="installedConsumer.consumerUsage.min_current"
-                @update:model-value="updateUsage(installedConsumer.id, $event, 'min_current')"
-              />
-              <openwb-base-number-input
-                title="Min Regelintervall"
-                unit="s"
-                :min="0"
-                :step="1"
-                :model-value="installedConsumer.consumerUsage.min_intervall"
-                @update:model-value="updateUsage(installedConsumer.id, $event, 'min_intervall')"
-              >
-                <template #help>
-                  Mindestzeit, die der Verbraucher in einem Schaltzustand bleibt. Träge Geräte (z. B. Wärmepumpen)
-                  benötigen hier größere Werte.
-                </template>
-              </openwb-base-number-input>
-              <openwb-base-button-group-input
-                title="Anlauferkennung"
-                :buttons="[
-                  { buttonValue: true, text: 'Ja', class: 'btn-outline-success' },
-                  { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
-                ]"
-                :model-value="installedConsumer.consumerUsage.wait_for_start_active"
-                @update:model-value="updateUsage(installedConsumer.id, $event, 'wait_for_start_active')"
-              >
-                <template #help>
-                  "Durch diese Option wird das angeschlossene Gerät täglich um 0:01 Uhr eingeschaltet. Wenn erkannt
-                  wird, dass das Gerät … Leistungsaufnahme länger als 'Zeit im Standby' größer als 'Verbrauch im
-                  Standby' … wird es direkt ausgeschaltet, falls die Einschaltschwelle nicht erreicht ist … Somit kann
-                  z.B. eine Waschmaschine am Morgen im Standby befüllt … läuft aber erst richtig an, wenn genügend
-                  Überschuss vorhanden ist."
-                </template>
-              </openwb-base-button-group-input>
               <hr />
               <openwb-base-heading> Zeitladen </openwb-base-heading>
               <openwb-base-button-group-input
