@@ -207,6 +207,7 @@
                 ]"
                 :model-value="installedConsumer.consumerUsage.chargemode"
                 @update:model-value="updateUsage(installedConsumer.id, $event, 'chargemode')"
+                @button-click="openActiveModeCard(installedConsumer.id, $event)"
               >
                 <template #help>
                   Sofort = dauerhaft an, Stop = dauerhaft aus. PV, Eco und Ziel schalten den Verbraucher nach
@@ -284,8 +285,11 @@
               </openwb-base-button-group-input>
               <hr />
               <openwb-base-card
-                v-if="installedConsumer.consumerUsage.chargemode === 'instant_charging'"
+                :ref="`card-${installedConsumer.id}-instant_charging`"
+                :collapsible="true"
+                :collapsed="installedConsumer.consumerUsage.chargemode !== 'instant_charging'"
                 title="Sofort"
+                subtype="secondary"
               >
                 <openwb-base-alert
                   v-if="installedConsumer.consumerUsage.type === 'suspendable_tunable'"
@@ -301,8 +305,11 @@
                 </openwb-base-alert>
               </openwb-base-card>
               <openwb-base-card
-                v-if="installedConsumer.consumerUsage.chargemode === 'pv_charging'"
+                :ref="`card-${installedConsumer.id}-pv_charging`"
+                :collapsible="true"
+                :collapsed="installedConsumer.consumerUsage.chargemode !== 'pv_charging'"
                 title="PV"
+                subtype="secondary"
               >
                 <openwb-base-alert
                   v-if="installedConsumer.consumerUsage.type === 'suspendable_onoff'"
@@ -328,53 +335,11 @@
                 </openwb-base-alert>
               </openwb-base-card>
               <openwb-base-card
-                v-if="installedConsumer.consumerUsage.chargemode === 'eco_charging'"
-                title="Eco"
-              >
-                <openwb-base-alert
-                  v-if="installedConsumer.consumerUsage.type === 'suspendable_onoff'"
-                  subtype="info"
-                >
-                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
-                  überschritten wurde oder der Preis unter die Strompreisgrenze fällt. Das Gerät wird frühestens wieder
-                  ausgeschaltet, wenn die minimale Betriebsdauer erreicht wurde, um sicherzustellen, dass das Programm
-                  vollständig durchlaufen kann.
-                </openwb-base-alert>
-                <openwb-base-alert
-                  v-else-if="installedConsumer.consumerUsage.type === 'suspendable_tunable'"
-                  subtype="info"
-                >
-                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
-                  überschritten wurde und bei ausreichend Überschuss hoch geregelt oder mit maximaler Leistung
-                  eingeschaltet, wenn der Preis unter die Strompreisgrenze fällt.
-                </openwb-base-alert>
-                <openwb-base-alert
-                  v-else
-                  subtype="info"
-                >
-                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
-                  überschritten wurde oder der Preis unter die Strompreisgrenze fällt.
-                </openwb-base-alert>
-                <openwb-base-number-input
-                  title="Strompreisgrenze"
-                  unit="ct/kWh"
-                  :min="0"
-                  :step="0.1"
-                  :precision="2"
-                  :model-value="installedConsumer.consumerUsage.eco_charging.price_limit * 100"
-                  @update:model-value="
-                    updateUsage(installedConsumer.id, parseFloat(($event / 100).toFixed(5)), 'eco_charging.price_limit')
-                  "
-                >
-                  <template #help>
-                    Eco schaltet den Verbraucher ein, sobald der variable Strompreis unter diesem Wert liegt. Dafür muss
-                    ein Strompreis-Anbieter konfiguriert sein.
-                  </template>
-                </openwb-base-number-input>
-              </openwb-base-card>
-              <openwb-base-card
-                v-if="installedConsumer.consumerUsage.chargemode === 'scheduled_charging'"
+                :ref="`card-${installedConsumer.id}-scheduled_charging`"
+                :collapsible="true"
+                :collapsed="installedConsumer.consumerUsage.chargemode !== 'scheduled_charging'"
                 title="Ziel"
+                subtype="secondary"
               >
                 <openwb-base-alert
                   v-if="installedConsumer.consumerUsage.type === 'suspendable_onoff'"
@@ -426,10 +391,52 @@
                 />
               </openwb-base-card>
               <openwb-base-card
-                v-if="installedConsumer.consumerUsage.chargemode === 'stop'"
-                title="Stop"
+                :ref="`card-${installedConsumer.id}-eco_charging`"
+                :collapsible="true"
+                :collapsed="installedConsumer.consumerUsage.chargemode !== 'eco_charging'"
+                title="Eco"
+                subtype="secondary"
               >
-                <openwb-base-alert subtype="info"> Das Gerät wird dauerhaft ausgeschaltet. </openwb-base-alert>
+                <openwb-base-alert
+                  v-if="installedConsumer.consumerUsage.type === 'suspendable_onoff'"
+                  subtype="info"
+                >
+                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
+                  überschritten wurde oder der Preis unter die Strompreisgrenze fällt. Das Gerät wird frühestens wieder
+                  ausgeschaltet, wenn die minimale Betriebsdauer erreicht wurde, um sicherzustellen, dass das Programm
+                  vollständig durchlaufen kann.
+                </openwb-base-alert>
+                <openwb-base-alert
+                  v-else-if="installedConsumer.consumerUsage.type === 'suspendable_tunable'"
+                  subtype="info"
+                >
+                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
+                  überschritten wurde und bei ausreichend Überschuss hoch geregelt oder mit maximaler Leistung
+                  eingeschaltet, wenn der Preis unter die Strompreisgrenze fällt.
+                </openwb-base-alert>
+                <openwb-base-alert
+                  v-else
+                  subtype="info"
+                >
+                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
+                  überschritten wurde oder der Preis unter die Strompreisgrenze fällt.
+                </openwb-base-alert>
+                <openwb-base-number-input
+                  title="Strompreisgrenze"
+                  unit="ct/kWh"
+                  :min="0"
+                  :step="0.1"
+                  :precision="2"
+                  :model-value="installedConsumer.consumerUsage.eco_charging.price_limit * 100"
+                  @update:model-value="
+                    updateUsage(installedConsumer.id, parseFloat(($event / 100).toFixed(5)), 'eco_charging.price_limit')
+                  "
+                >
+                  <template #help>
+                    Eco schaltet den Verbraucher ein, sobald der variable Strompreis unter diesem Wert liegt. Dafür muss
+                    ein Strompreis-Anbieter konfiguriert sein.
+                  </template>
+                </openwb-base-number-input>
               </openwb-base-card>
               <hr />
               <openwb-base-heading> Zeit-Pläne </openwb-base-heading>
@@ -797,6 +804,19 @@ export default {
     },
     updateUsage(consumerId, value, path) {
       this.updateState(`openWB/consumer/${consumerId}/usage`, value, path);
+    },
+    openActiveModeCard(consumerId, activeMode) {
+      this.$nextTick(() => {
+        const modes = ["instant_charging", "pv_charging", "eco_charging", "scheduled_charging"];
+        modes.forEach((mode) => {
+          const refName = `card-${consumerId}-${mode}`;
+          const cardRef = this.$refs[refName];
+          const card = Array.isArray(cardRef) ? cardRef[0] : cardRef;
+          if (card) {
+            card.isCollapsed = mode !== activeMode;
+          }
+        });
+      });
     },
     // reset_chargemode.time is stored as an absolute epoch (seconds). Split it into
     // the date/time strings the inputs expect, defaulting to "now" when unset.
