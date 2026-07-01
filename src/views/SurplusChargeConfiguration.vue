@@ -204,19 +204,24 @@
             </template>
           </openwb-base-number-input>
           <hr />
-          <openwb-base-number-input
-            title="Regelpunkt Einspeisegrenze"
-            :min="-1000"
-            :step="0.05"
-            unit="kW"
-            required
-            :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/feed_in_yield'] / 1000"
-            @update:model-value="
-              updateState('openWB/general/chargemode_config/pv_charging/feed_in_yield', $event * 1000)
-            "
+          <openwb-base-button-group-input
+            title="Überschusseinspeisung ins Netz maximieren"
+            :buttons="[
+              {
+                buttonValue: false,
+                text: 'Nein',
+                class: 'btn-outline-danger',
+              },
+              {
+                buttonValue: true,
+                text: 'Ja',
+                class: 'btn-outline-success',
+              },
+            ]"
+            :model-value="template.chargemode.pv_charging.feed_in_limit"
+            @update:model-value="updateState(templateKey, $event, 'chargemode.pv_charging.feed_in_limit')"
           >
             <template #help>
-              Ein Wert größer 0kW bewirkt, dass weniger PV-Leistung zum Laden benutzt wird.<br />
               Die Nutzung dieser Option ergibt nur Sinn, wenn ein Wechselrichter in irgendeiner Form abgeregelt wird
               Weitere Infos dazu im
               <a
@@ -226,14 +231,8 @@
               >
                 Wiki-Beitrag zur Beachtung der Einspeisegrenze </a
               >.<br />
-              Bei Erreichen dieses Werts wird die PV-Ladung nacheinander für jedes Fahrzeug im PV-Modus gestartet, bei
-              welchem "Einspeisegrenze beachten" im Ladeprofil aktiviert ist, dies setzt die Einschaltschwelle außer
-              kraft!<br />
-              Zur optimalen Eigenverbrauchssteuerung sollte der Wert einige hundert Watt UNTER der im Wechselrichter
-              hinterlegten EVU-Einspeiseleistungsgrenze liegen, damit openWB die Ladung freigibt, BEVOR der
-              Wechselrichter begrenzt wird.
             </template>
-          </openwb-base-number-input>
+          </openwb-base-button-group-input>
         </div>
       </openwb-base-card>
       <openwb-base-submit-buttons
