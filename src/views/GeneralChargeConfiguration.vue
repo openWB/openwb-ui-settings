@@ -50,6 +50,53 @@
               gezielt einzelne Ladevorgänge in der Leistung begrenzt.
             </template>
           </openwb-base-range-input>
+          
+          <div class="form-row mb-2">
+            <div class="col">
+              <label class="form-label d-flex align-items-center flex-wrap">
+                Einspeisung von 
+                <input
+                  type="number"
+                  :min="-1000"
+                  :step="0.05"
+                  required
+                  class="form-control d-inline-block mx-2"
+                  style="width: 120px;"
+                  :value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/feed_in_yield'] / 1000"
+                  @input="updateState('openWB/general/chargemode_config/pv_charging/feed_in_yield', parseFloat($event.target.value) * 1000)"
+                /> 
+                kW des Überschusses ins Netz forcieren
+                <openwb-base-tooltip description="Hilfe anzeigen">
+                  <font-awesome-icon
+                    :icon="['far', 'question-circle']"
+                    class="clickable ml-2"
+                    @click="showFeedInHelp = !showFeedInHelp"
+                  />
+                </openwb-base-tooltip>
+              </label>
+              <div
+                v-if="showFeedInHelp"
+                class="form-text alert alert-info mt-2 small"
+              >
+              Ein Wert größer 0kW bewirkt, dass weniger PV-Leistung zum Laden benutzt wird.<br />
+              Die Nutzung dieser Option ergibt nur Sinn, wenn ein Wechselrichter in irgendeiner Form abgeregelt wird.
+              Weitere Infos dazu im
+              <a
+                :href="`https://wiki.openwb.de/doku.php?id=openwb:vc:${systemVersion}:software:einstell-konfig:ladeeinstellungen:pv-laden-speicherbeachtung#regelpunkt_einspeisegrenze`"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Wiki-Beitrag zur Beachtung der Einspeisegrenze </a
+              >.<br />
+              Bei Erreichen dieses Werts wird die PV-Ladung nacheinander für jedes Fahrzeug im PV-Modus gestartet, bei
+              welchem "Einspeisegrenze beachten" im Ladeprofil aktiviert ist, dies setzt die Einschaltschwelle außer
+              kraft!<br />
+              Zur optimalen Eigenverbrauchssteuerung sollte der Wert einige hundert Watt UNTER der im Wechselrichter
+              hinterlegten EVU-Einspeiseleistungsgrenze liegen, damit openWB die Ladung freigibt, BEVOR der
+              Wechselrichter begrenzt wird.
+              </div>
+            </div>
+          </div>
         </div>
       </openwb-base-card>
       <openwb-base-card title="Energiekosten">
@@ -257,10 +304,12 @@ export default {
   emits: ["save", "reset", "defaults"],
   data() {
     return {
+      showFeedInHelp: false,
       mqttTopics: [
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/general/chargemode_config/unbalanced_load", writeable: true },
         { topic: "openWB/general/chargemode_config/unbalanced_load_limit", writeable: true },
+        { topic: "openWB/general/chargemode_config/pv_charging/feed_in_yield", writeable: true },
         { topic: "openWB/general/prices/bat", writeable: true },
         { topic: "openWB/general/prices/grid", writeable: true },
         { topic: "openWB/general/prices/pv", writeable: true },
