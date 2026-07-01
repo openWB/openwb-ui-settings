@@ -299,6 +299,9 @@ export default {
   outline: none;
   width: 100%;
 }
+.element-titel.vehicle {
+  background-color: var(--info);
+}
 
 .element-actions {
   cursor: pointer;
