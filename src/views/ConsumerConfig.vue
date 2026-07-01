@@ -23,7 +23,7 @@
       <openwb-base-card>
         <template #header>
           <font-awesome-icon :icon="['fas', 'cog']" />
-          Allgemeine Einstellungen
+          Einstellungen für Überschuss-Betrieb
         </template>
         <openwb-base-number-input
           title="Einschaltverzögerung"
