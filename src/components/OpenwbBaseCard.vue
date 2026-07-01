@@ -76,9 +76,19 @@ export default {
     subtype: {
       validator: function (value) {
         return (
-          ["info", "success", "warning", "danger", "primary", "secondary", "light", "dark", "pink", "white"].indexOf(
-            value,
-          ) !== -1
+          [
+            "info",
+            "success",
+            "warning",
+            "danger",
+            "primary",
+            "secondary",
+            "light",
+            "dark",
+            "pink",
+            "purple",
+            "white",
+          ].indexOf(value) !== -1
         );
       },
       default: "secondary",
@@ -86,9 +96,19 @@ export default {
     bodyBg: {
       validator: function (value) {
         return (
-          ["info", "success", "warning", "danger", "primary", "secondary", "light", "dark", "pink", "white"].indexOf(
-            value,
-          ) !== -1
+          [
+            "info",
+            "success",
+            "warning",
+            "danger",
+            "primary",
+            "secondary",
+            "light",
+            "dark",
+            "pink",
+            "purple",
+            "white",
+          ].indexOf(value) !== -1
         );
       },
       default: "light",

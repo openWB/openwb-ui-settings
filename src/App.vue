@@ -511,7 +511,8 @@ export default {
 .bg-info,
 .bg-danger,
 .bg-success,
-.bg-dark {
+.bg-dark,
+.bg-purple {
   color: white;
 }
 
@@ -528,6 +529,14 @@ export default {
 
 .bg-pink {
   background-color: var(--pink) !important;
+}
+
+.border-purple {
+  border-color: var(--purple) !important;
+}
+
+.bg-purple {
+  background-color: var(--purple) !important;
 }
 
 @media (min-width: 1600px) {
