@@ -12,6 +12,12 @@
   </openwb-base-modal-dialog>
   <!-- main content -->
   <div class="consumerConfig">
+    <openwb-base-alert subtype="info">
+      Es gibt keine klassische Einschaltschwelle mehr für Verbraucher. Das Einschalten richtet sich stattdessen nach der
+      Rangfolge in der Prioritäten-Steuerung (Geräte werden von oben nach unten geschaltet) und dem Mindeststrom des
+      jeweiligen Geräts: Bei geringem Überschuss wird das erste Gerät in der Liste geschaltet, dessen Mindeststrom
+      erreicht ist. Die Rangfolge lässt sich unter „Lastmanagement“ anpassen.
+    </openwb-base-alert>
     <form name="consumerConfigForm">
       <!-- General Settings -->
       <openwb-base-card>
