@@ -294,10 +294,6 @@ export default {
   background-color: var(--info);
 }
 
-.element-titel.consumer {
-  background-color: var(--dark);
-}
-
 .element-actions {
   cursor: pointer;
 }
