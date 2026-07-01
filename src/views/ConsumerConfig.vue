@@ -429,7 +429,11 @@
                   :precision="2"
                   :model-value="installedConsumer.consumerUsage.eco_charging.price_limit * 100000"
                   @update:model-value="
-                    updateUsage(installedConsumer.id, parseFloat(($event / 100000).toFixed(7)), 'eco_charging.price_limit')
+                    updateUsage(
+                      installedConsumer.id,
+                      parseFloat(($event / 100000).toFixed(7)),
+                      'eco_charging.price_limit',
+                    )
                   "
                 >
                   <template #help>
