@@ -222,12 +222,12 @@
           </openwb-base-alert>
         </div>
         <div v-else>
-          <!-- ToDo: Fix: nested lists bypass store commits! -->
           <sortable-list
             title="Anordnung der Komponenten"
-            :model-value="$store.state.mqtt['openWB/counter/get/hierarchy']"
+            :model-value="hierarchyWorkingCopy"
             :labels="hierarchyLabels"
-            @update:model-value="updateState('openWB/counter/get/hierarchy', $event)"
+            :linked-meters="consumerLinkedMeterNames"
+            @update:model-value="hierarchyWorkingCopy = $event"
           >
             <template #help>
               Durch die Anordnung der Komponenten werden Abhängigkeiten abgebildet.<br />
@@ -314,6 +314,7 @@ export default {
         { topic: "openWB/bat/+/config/max_power", writeable: true },
         { topic: "openWB/chargepoint/+/config", writeable: false },
         { topic: "openWB/consumer/+/module", writeable: false },
+        { topic: "openWB/consumer/+/extra_meter", writeable: false },
         { topic: "openWB/counter/+/config/max_currents", writeable: true },
         { topic: "openWB/counter/+/config/max_power_errorcase", writeable: true },
         { topic: "openWB/counter/+/config/max_total_power", writeable: true },
@@ -327,6 +328,11 @@ export default {
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
       ],
       newGroupName: null,
+      // local, mutable copy of the (filtered) hierarchy that the sortable list drags in place;
+      // committed to the store via a deep watcher so nested reorders are persisted too
+      hierarchyWorkingCopy: null,
+      hierarchySeeded: false,
+      skipHierarchyCommit: false,
     };
   },
   computed: {
@@ -391,6 +397,56 @@ export default {
         return labels;
       },
     },
+    extraMeterLinks() {
+      const topics = this.getWildcardTopics("openWB/consumer/+/extra_meter") || {};
+      const links = [];
+      for (const [topic, counterId] of Object.entries(topics)) {
+        if (counterId === null || counterId === undefined) continue;
+        const match = topic.match(/^openWB\/consumer\/([^/]+)\/extra_meter$/);
+        if (!match) continue;
+        links.push({ consumerId: String(match[1]), counterId: String(counterId) });
+      }
+      return links;
+    },
+    linkedCounterIds() {
+      return new Set(this.extraMeterLinks.map((link) => link.counterId));
+    },
+    consumerLinkedMeterNames() {
+      const names = {};
+      for (const { consumerId, counterId } of this.extraMeterLinks) {
+        const component = this.getComponent(counterId);
+        names[consumerId] = component?.name ?? counterId;
+      }
+      return names;
+    },
+    // Store hierarchy with linked counters removed. Used to seed the local working copy that the
+    // sortable list mutates; the hidden counters are re-inserted on commit via reconcileHierarchy.
+    filteredStoreHierarchy() {
+      const hierarchy = this.$store.state.mqtt["openWB/counter/get/hierarchy"];
+      if (!Array.isArray(hierarchy) || this.linkedCounterIds.size === 0) return hierarchy;
+      const linked = this.linkedCounterIds;
+      const filter = (nodes) => {
+        let changed = false;
+        const out = [];
+        for (const node of nodes) {
+          if (node.type === "counter" && linked.has(String(node.id))) {
+            changed = true;
+            continue;
+          }
+          if (Array.isArray(node.children)) {
+            const newChildren = filter(node.children);
+            if (newChildren !== node.children) {
+              out.push({ ...node, children: newChildren });
+              changed = true;
+              continue;
+            }
+          }
+          out.push(node);
+        }
+        return changed ? out : nodes;
+      };
+      return filter(hierarchy);
+    },
     loadManagementPriorityList: {
       get() {
         const priorityList = this.$store.state.mqtt["openWB/counter/get/loadmanagement_prios"] || [];
@@ -454,6 +510,35 @@ export default {
       return { options: options, groups: groups };
     },
   },
+  watch: {
+    // Seed the working copy once the (filtered) store hierarchy is available. Re-seed only when
+    // the store value diverges from the working copy (e.g. an external update), never as an echo
+    // of our own commit, so we do not create a commit loop.
+    filteredStoreHierarchy: {
+      immediate: true,
+      handler(filtered) {
+        if (!Array.isArray(filtered)) return;
+        if (this.hierarchySeeded && JSON.stringify(filtered) === JSON.stringify(this.hierarchyWorkingCopy)) {
+          return;
+        }
+        this.skipHierarchyCommit = true;
+        this.hierarchyWorkingCopy = JSON.parse(JSON.stringify(filtered));
+        this.hierarchySeeded = true;
+        this.$nextTick(() => {
+          this.skipHierarchyCommit = false;
+        });
+      },
+    },
+    // Persist any drag (top-level or nested) by re-inserting the hidden linked counters and
+    // committing the full hierarchy to the store.
+    hierarchyWorkingCopy: {
+      deep: true,
+      handler(copy) {
+        if (this.skipHierarchyCommit || !Array.isArray(copy)) return;
+        this.updateState("openWB/counter/get/hierarchy", this.reconcileHierarchy(copy));
+      },
+    },
+  },
   methods: {
     getElementTreeNames(element) {
       let myNames = {};
@@ -504,6 +589,49 @@ export default {
     },
     isComponentType(componentType, verifier) {
       return componentType?.split("_").includes(verifier);
+    },
+    reconcileHierarchy(newList) {
+      const storeHierarchy = this.$store.state.mqtt["openWB/counter/get/hierarchy"];
+      if (!Array.isArray(storeHierarchy) || this.linkedCounterIds.size === 0) {
+        return newList;
+      }
+      const linked = this.linkedCounterIds;
+      const hidden = [];
+      const collect = (nodes, parentId) => {
+        nodes.forEach((node, index) => {
+          if (node.type === "counter" && linked.has(String(node.id))) {
+            hidden.push({ node: JSON.parse(JSON.stringify(node)), parentId, index });
+          }
+          if (Array.isArray(node.children)) {
+            collect(node.children, String(node.id));
+          }
+        });
+      };
+      collect(storeHierarchy, null);
+
+      const result = JSON.parse(JSON.stringify(newList));
+      const findChildren = (nodes, parentId) => {
+        for (const node of nodes) {
+          if (String(node.id) === parentId) {
+            if (!Array.isArray(node.children)) node.children = [];
+            return node.children;
+          }
+          if (Array.isArray(node.children)) {
+            const found = findChildren(node.children, parentId);
+            if (found) return found;
+          }
+        }
+        return null;
+      };
+      hidden.forEach(({ node, parentId, index }) => {
+        const target = parentId === null ? result : findChildren(result, parentId);
+        if (!target) {
+          result.push(node);
+          return;
+        }
+        target.splice(Math.min(index, target.length), 0, node);
+      });
+      return result;
     },
     addLoadManagementPriorityGroup() {
       if (!this.newGroupName) return;
