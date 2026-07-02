@@ -224,10 +224,11 @@
         <div v-else>
           <sortable-list
             title="Anordnung der Komponenten"
-            :model-value="hierarchyWorkingCopy"
+            :model-value="$store.state.mqtt['openWB/counter/get/hierarchy']"
             :labels="hierarchyLabels"
             :linked-meters="consumerLinkedMeterNames"
-            @update:model-value="hierarchyWorkingCopy = $event"
+            :hidden-ids="hiddenCounterIds"
+            @update:model-value="updateState('openWB/counter/get/hierarchy', $event)"
           >
             <template #help>
               Durch die Anordnung der Komponenten werden Abhängigkeiten abgebildet.<br />
@@ -328,11 +329,6 @@ export default {
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
       ],
       newGroupName: null,
-      // local, mutable copy of the (filtered) hierarchy that the sortable list drags in place;
-      // committed to the store via a deep watcher so nested reorders are persisted too
-      hierarchyWorkingCopy: null,
-      hierarchySeeded: false,
-      skipHierarchyCommit: false,
     };
   },
   computed: {
@@ -408,8 +404,8 @@ export default {
       }
       return links;
     },
-    linkedCounterIds() {
-      return new Set(this.extraMeterLinks.map((link) => link.counterId));
+    hiddenCounterIds() {
+      return Array.from(new Set(this.extraMeterLinks.map((link) => link.counterId)));
     },
     consumerLinkedMeterNames() {
       const names = {};
@@ -418,34 +414,6 @@ export default {
         names[consumerId] = component?.name ?? counterId;
       }
       return names;
-    },
-    // Store hierarchy with linked counters removed. Used to seed the local working copy that the
-    // sortable list mutates; the hidden counters are re-inserted on commit via reconcileHierarchy.
-    filteredStoreHierarchy() {
-      const hierarchy = this.$store.state.mqtt["openWB/counter/get/hierarchy"];
-      if (!Array.isArray(hierarchy) || this.linkedCounterIds.size === 0) return hierarchy;
-      const linked = this.linkedCounterIds;
-      const filter = (nodes) => {
-        let changed = false;
-        const out = [];
-        for (const node of nodes) {
-          if (node.type === "counter" && linked.has(String(node.id))) {
-            changed = true;
-            continue;
-          }
-          if (Array.isArray(node.children)) {
-            const newChildren = filter(node.children);
-            if (newChildren !== node.children) {
-              out.push({ ...node, children: newChildren });
-              changed = true;
-              continue;
-            }
-          }
-          out.push(node);
-        }
-        return changed ? out : nodes;
-      };
-      return filter(hierarchy);
     },
     loadManagementPriorityList: {
       get() {
@@ -510,35 +478,6 @@ export default {
       return { options: options, groups: groups };
     },
   },
-  watch: {
-    // Seed the working copy once the (filtered) store hierarchy is available. Re-seed only when
-    // the store value diverges from the working copy (e.g. an external update), never as an echo
-    // of our own commit, so we do not create a commit loop.
-    filteredStoreHierarchy: {
-      immediate: true,
-      handler(filtered) {
-        if (!Array.isArray(filtered)) return;
-        if (this.hierarchySeeded && JSON.stringify(filtered) === JSON.stringify(this.hierarchyWorkingCopy)) {
-          return;
-        }
-        this.skipHierarchyCommit = true;
-        this.hierarchyWorkingCopy = JSON.parse(JSON.stringify(filtered));
-        this.hierarchySeeded = true;
-        this.$nextTick(() => {
-          this.skipHierarchyCommit = false;
-        });
-      },
-    },
-    // Persist any drag (top-level or nested) by re-inserting the hidden linked counters and
-    // committing the full hierarchy to the store.
-    hierarchyWorkingCopy: {
-      deep: true,
-      handler(copy) {
-        if (this.skipHierarchyCommit || !Array.isArray(copy)) return;
-        this.updateState("openWB/counter/get/hierarchy", this.reconcileHierarchy(copy));
-      },
-    },
-  },
   methods: {
     getElementTreeNames(element) {
       let myNames = {};
@@ -589,49 +528,6 @@ export default {
     },
     isComponentType(componentType, verifier) {
       return componentType?.split("_").includes(verifier);
-    },
-    reconcileHierarchy(newList) {
-      const storeHierarchy = this.$store.state.mqtt["openWB/counter/get/hierarchy"];
-      if (!Array.isArray(storeHierarchy) || this.linkedCounterIds.size === 0) {
-        return newList;
-      }
-      const linked = this.linkedCounterIds;
-      const hidden = [];
-      const collect = (nodes, parentId) => {
-        nodes.forEach((node, index) => {
-          if (node.type === "counter" && linked.has(String(node.id))) {
-            hidden.push({ node: JSON.parse(JSON.stringify(node)), parentId, index });
-          }
-          if (Array.isArray(node.children)) {
-            collect(node.children, String(node.id));
-          }
-        });
-      };
-      collect(storeHierarchy, null);
-
-      const result = JSON.parse(JSON.stringify(newList));
-      const findChildren = (nodes, parentId) => {
-        for (const node of nodes) {
-          if (String(node.id) === parentId) {
-            if (!Array.isArray(node.children)) node.children = [];
-            return node.children;
-          }
-          if (Array.isArray(node.children)) {
-            const found = findChildren(node.children, parentId);
-            if (found) return found;
-          }
-        }
-        return null;
-      };
-      hidden.forEach(({ node, parentId, index }) => {
-        const target = parentId === null ? result : findChildren(result, parentId);
-        if (!target) {
-          result.push(node);
-          return;
-        }
-        target.splice(Math.min(index, target.length), 0, node);
-      });
-      return result;
     },
     addLoadManagementPriorityGroup() {
       if (!this.newGroupName) return;

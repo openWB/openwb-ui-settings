@@ -16,6 +16,7 @@
       v-model="value"
       :labels="labels"
       :linked-meters="linkedMeters"
+      :hidden-ids="hiddenIds"
       :nesting="nesting"
       :max-nesting-depth="maxNestingDepth"
       @delete-group="$emit('delete-group', $event)"
@@ -41,6 +42,7 @@ export default {
     modelValue: { type: Array, required: false, default: undefined },
     labels: { type: Object, default: undefined },
     linkedMeters: { type: Object, default: undefined },
+    hiddenIds: { type: Array, default: undefined },
     nesting: { type: Boolean, default: true },
     maxNestingDepth: { type: Number, default: Infinity },
   },
