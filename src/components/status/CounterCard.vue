@@ -12,6 +12,7 @@
         :style="{
           backgroundColor: counter.color,
           color: getContrastColor(counter.color),
+          '--fa-border-color': getContrastColor(counter.color),
         }"
       />
       {{ counter.name }}

@@ -58,6 +58,7 @@
               :style="{
                 backgroundColor: installedChargePoint.color,
                 color: getContrastColor(installedChargePoint.color),
+                '--fa-border-color': getContrastColor(installedChargePoint.color),
               }"
             />
             {{ installedChargePoint?.name }} (ID: {{ installedChargePoint?.id }})

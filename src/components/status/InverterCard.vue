@@ -12,6 +12,7 @@
         :style="{
           backgroundColor: inverter.color,
           color: getContrastColor(inverter.color),
+          '--fa-border-color': getContrastColor(inverter.color),
         }"
       />
       {{ inverter.name }}

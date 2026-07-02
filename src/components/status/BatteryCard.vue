@@ -12,6 +12,7 @@
         :style="{
           backgroundColor: battery.color,
           color: getContrastColor(battery.color),
+          '--fa-border-color': getContrastColor(battery.color),
         }"
       />
       {{ battery.name }}

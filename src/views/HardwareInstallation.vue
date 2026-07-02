@@ -108,6 +108,7 @@
                   :style="{
                     backgroundColor: installedComponent?.color,
                     color: getContrastColor(installedComponent?.color),
+                    '--fa-border-color': getContrastColor(installedComponent?.color),
                   }"
                 />
                 {{ installedComponent?.name }}

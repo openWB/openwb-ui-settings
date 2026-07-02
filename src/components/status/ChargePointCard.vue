@@ -13,6 +13,7 @@
         :style="{
           backgroundColor: $store.state.mqtt[baseTopic + '/config'].color,
           color: getContrastColor($store.state.mqtt[baseTopic + '/config'].color),
+          '--fa-border-color': getContrastColor($store.state.mqtt[baseTopic + '/config'].color),
         }"
       />
       {{ chargePointConfig.name }}

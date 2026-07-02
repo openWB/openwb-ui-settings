@@ -74,6 +74,7 @@
                 :style="{
                   backgroundColor: $store.state.mqtt['openWB/vehicle/' + vehicleId + '/color'],
                   color: getContrastColor($store.state.mqtt['openWB/vehicle/' + vehicleId + '/color']),
+                  '--fa-border-color': getContrastColor($store.state.mqtt['openWB/vehicle/' + vehicleId + '/color']),
                 }"
               />
               {{ getVehicleName(vehicleId) }}
