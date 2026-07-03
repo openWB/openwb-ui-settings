@@ -165,6 +165,15 @@
           >
             <hr v-if="vehicleId != vehicleIndexes[0]" />
             <openwb-base-heading class="mt-0">
+              <font-awesome-icon
+                :icon="['fas', 'car']"
+                class="fa-border"
+                size="xs"
+                :style="{
+                  backgroundColor: $store.state.mqtt['openWB/vehicle/' + vehicleId + '/color'],
+                  color: getContrastColor($store.state.mqtt['openWB/vehicle/' + vehicleId + '/color']),
+                }"
+              />
               {{ $store.state.mqtt["openWB/vehicle/" + vehicleId + "/name"] }}
             </openwb-base-heading>
             <openwb-base-array-input
@@ -243,11 +252,20 @@
 </template>
 
 <script>
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faCar as fasCar } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(fasCar);
+
 import ComponentState from "../components/mixins/ComponentState.vue";
 import SystemVersion from "../components/mixins/SystemVersion.vue";
 
 export default {
   name: "IdentificationConfigView",
+  components: {
+    FontAwesomeIcon,
+  },
   mixins: [ComponentState, SystemVersion],
   emits: ["save", "reset", "defaults"],
   data() {
@@ -262,6 +280,7 @@ export default {
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/optional/rfid/active", writeable: true },
         { topic: "openWB/vehicle/+/charge_template", writeable: false },
+        { topic: "openWB/vehicle/+/color", writeable: false },
         { topic: "openWB/vehicle/+/name", writeable: false },
         { topic: "openWB/vehicle/+/tag_id", writeable: true },
         { topic: "openWB/vehicle/template/charge_template/+", writeable: true },

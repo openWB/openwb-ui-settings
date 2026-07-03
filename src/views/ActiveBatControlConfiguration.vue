@@ -295,7 +295,15 @@
                 subtype="warning"
               >
                 <template #header>
-                  <font-awesome-icon :icon="['fas', 'fa-car-battery']" />
+                  <font-awesome-icon
+                    :icon="['fas', 'fa-car-battery']"
+                    class="fa-border"
+                    :style="{
+                      backgroundColor: batteryConfig.color,
+                      color: getContrastColor(batteryConfig.color),
+                      '--fa-border-color': getContrastColor(batteryConfig.color),
+                    }"
+                  />
                   {{ batteryConfig.name }} (ID: {{ batteryConfig.id }})
                 </template>
                 <openwb-base-number-input
