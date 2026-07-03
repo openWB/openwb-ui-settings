@@ -63,9 +63,15 @@
                 <openwb-base-avatar
                   v-for="installedComponent in getMyInstalledComponents(installedDevice?.id)"
                   :key="installedComponent?.id"
-                  :class="'ml-1 bg-' + getComponentTypeClass(installedComponent?.type)"
+                  class="ml-1"
+                  :style="{
+                    backgroundColor: installedComponent?.color,
+                    color: getContrastColor(installedComponent?.color),
+                  }"
                 >
-                  <font-awesome-icon :icon="getComponentTypeIcon(installedComponent?.type)" />
+                  <openwb-base-tooltip :description="installedComponent?.name">
+                    <font-awesome-icon :icon="getComponentTypeIcon(installedComponent?.type)" />
+                  </openwb-base-tooltip>
                 </openwb-base-avatar>
               </div>
             </template>
@@ -96,7 +102,15 @@
               :subtype="getComponentTypeClass(installedComponent?.type)"
             >
               <template #header>
-                <font-awesome-icon :icon="getComponentTypeIcon(installedComponent?.type)" />
+                <font-awesome-icon
+                  :icon="getComponentTypeIcon(installedComponent?.type)"
+                  class="fa-border"
+                  :style="{
+                    backgroundColor: installedComponent?.color,
+                    color: getContrastColor(installedComponent?.color),
+                    '--fa-border-color': getContrastColor(installedComponent?.color),
+                  }"
+                />
                 {{ installedComponent?.name }}
               </template>
               <template #actions="slotProps">
@@ -121,7 +135,21 @@
                 subtype="text"
                 :model-value="installedComponent?.name"
                 @update:model-value="updateState(installedComponentKey, $event, 'name')"
-              />
+              >
+                <template
+                  v-if="installedComponent?.type == 'counter'"
+                  #append
+                >
+                  <openwb-base-color-picker
+                    class="p-1"
+                    :model-value="installedComponent?.color"
+                    :default-color="getComponentDefaultColor(installedComponent?.type)"
+                    :color-palette="getComponentColorPalette(installedComponent?.type)"
+                    :disabled="installedComponent?.id === gridId"
+                    @update:model-value="updateState(installedComponentKey, $event, 'color')"
+                  />
+                </template>
+              </openwb-base-text-input>
               <openwb-base-text-input
                 title="Hersteller"
                 subtype="text"
@@ -264,6 +292,7 @@ export default {
   data() {
     return {
       mqttTopics: [
+        { topic: "openWB/counter/get/hierarchy", writeable: false },
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/system/configurable/devices_components", writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: true },
@@ -292,6 +321,16 @@ export default {
       return Object.fromEntries(
         Object.entries(installedComponents).filter(([, template]) => template && typeof template === "object"),
       );
+    },
+    gridId() {
+      let hierarchy = this.$store.state.mqtt["openWB/counter/get/hierarchy"];
+      if (hierarchy !== undefined && Object.keys(hierarchy).length > 0) {
+        let index = Object.keys(this.$store.state.mqtt["openWB/counter/get/hierarchy"])[0];
+        if (this.$store.state.mqtt["openWB/counter/get/hierarchy"][index].type == "counter") {
+          return this.$store.state.mqtt["openWB/counter/get/hierarchy"][index].id;
+        }
+      }
+      return undefined;
     },
     vendorList: {
       get() {
@@ -349,6 +388,63 @@ export default {
         return "warning";
       }
       return "dark";
+    },
+    getComponentDefaultColor(type) {
+      if (type.match(/^(.+_)?counter(_.+)?$/)) {
+        return "#dc3545";
+      }
+      if (type.match(/^(.+_)?inverter(_.+)?$/)) {
+        return "#28a745";
+      }
+      if (type.match(/^(.+_)?bat(_.+)?$/)) {
+        return "#ffc107";
+      }
+      return undefined;
+    },
+    getComponentColorPalette(type) {
+      if (type.match(/^(.+_)?counter(_.+)?$/)) {
+        return [
+          "#dc3545",
+          "#d32535",
+          "#c82333",
+          "#c01f2f",
+          "#bd2130",
+          "#b91f2d",
+          "#b21f2d",
+          "#ad1d2b",
+          "#a71d2a",
+          "#8f1923",
+        ];
+      }
+      if (type.match(/^(.+_)?inverter(_.+)?$/)) {
+        return [
+          "#28a745",
+          "#23913c",
+          "#218838",
+          "#1f8335",
+          "#1e7e34",
+          "#1d7a32",
+          "#1c7430",
+          "#186328",
+          "#155724",
+          "#12491f",
+        ];
+      }
+      if (type.match(/^(.+_)?bat(_.+)?$/)) {
+        return [
+          "#ffc107",
+          "#f2b701",
+          "#e0a800",
+          "#d9a400",
+          "#d39e00",
+          "#cd9a00",
+          "#c69500",
+          "#c08f00",
+          "#b8860b",
+          "#9d7309",
+        ];
+      }
+      return undefined;
     },
     getComponentTypeIcon(type) {
       if (type.match(/^(.+_)?counter(_.+)?$/)) {

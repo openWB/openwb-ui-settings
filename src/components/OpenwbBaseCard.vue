@@ -10,14 +10,16 @@
       @click="toggleBody"
     >
       <div class="form-group mb-0">
-        <div class="form-row vaRow mb-0 py-2">
+        <div class="form-row vaRow mb-0">
           <div class="col">
-            <slot
-              name="header"
-              :collapsed="isCollapsed"
-            >
-              {{ title }}
-            </slot>
+            <div class="header-left-wrapper">
+              <slot
+                name="header"
+                :collapsed="isCollapsed"
+              >
+                {{ title }}
+              </slot>
+            </div>
           </div>
         </div>
       </div>
@@ -130,6 +132,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   border-bottom: none;
+  min-height: 2.5em;
 }
 
 .card-header > .card-actions > .card-actions {
@@ -181,5 +184,15 @@ export default {
 .card-body.border-radius-bottom-inherit {
   border-bottom-left-radius: inherit;
   border-bottom-right-radius: inherit;
+}
+
+.header-left-wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.header-left-wrapper > *:last-child {
+  margin-right: 0.5rem;
 }
 </style>

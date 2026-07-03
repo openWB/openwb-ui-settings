@@ -18,11 +18,13 @@
               class="handle"
               :icon="['fas', nesting ? 'arrows-alt' : 'arrows-up-down']"
             />
-            <font-awesome-icon
-              v-if="getElementIcon(element)"
-              :icon="getElementIcon(element)"
-            />
-            {{ getElementLabel(element.id) }}
+            <div class="element-label">
+              <font-awesome-icon
+                v-if="getElementIcon(element)"
+                :icon="getElementIcon(element)"
+              />
+              {{ getElementLabel(element.id) }}
+            </div>
           </span>
           <!-- <span class="element-actions">
             <font-awesome-icon
@@ -168,6 +170,13 @@ export default {
 .element-titel.battery {
   background-color: var(--warning);
   color: var(--dark);
+}
+
+.element-label {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .element-actions {

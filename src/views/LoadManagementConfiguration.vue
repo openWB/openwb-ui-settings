@@ -94,7 +94,15 @@
             subtype="danger"
           >
             <template #header>
-              <font-awesome-icon :icon="['fas', 'gauge-high']" />
+              <font-awesome-icon
+                :icon="['fas', 'gauge-high']"
+                class="fa-border"
+                :style="{
+                  backgroundColor: counter.color,
+                  color: getContrastColor(counter.color),
+                  '--fa-border-color': getContrastColor(counter.color),
+                }"
+              />
               {{ counter.name }}
             </template>
             <openwb-base-number-input
@@ -167,7 +175,15 @@
             subtype="success"
           >
             <template #header>
-              <font-awesome-icon :icon="['fas', 'solar-panel']" />
+              <font-awesome-icon
+                :icon="['fas', 'solar-panel']"
+                class="fa-border"
+                :style="{
+                  backgroundColor: inverter.color,
+                  color: getContrastColor(inverter.color),
+                  '--fa-border-color': getContrastColor(inverter.color),
+                }"
+              />
               {{ inverter.name }}
             </template>
             <openwb-base-number-input
@@ -191,7 +207,15 @@
             subtype="warning"
           >
             <template #header>
-              <font-awesome-icon :icon="['fas', 'car-battery']" />
+              <font-awesome-icon
+                :icon="['fas', 'car-battery']"
+                class="fa-border"
+                :style="{
+                  backgroundColor: bat.color,
+                  color: getContrastColor(bat.color),
+                  '--fa-border-color': getContrastColor(bat.color),
+                }"
+              />
               {{ bat.name }}
             </template>
             <openwb-base-number-input

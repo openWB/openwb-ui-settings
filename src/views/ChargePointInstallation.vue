@@ -47,11 +47,22 @@
         <openwb-base-card
           v-for="(installedChargePoint, installedChargePointKey) in installedChargePoints"
           :key="installedChargePointKey"
-          :title="installedChargePoint?.name + ' (ID: ' + installedChargePoint?.id + ')'"
           :collapsible="true"
           :collapsed="true"
           subtype="primary"
         >
+          <template #header>
+            <font-awesome-icon
+              :icon="['fas', 'charging-station']"
+              class="fa-border"
+              :style="{
+                backgroundColor: installedChargePoint.color,
+                color: getContrastColor(installedChargePoint.color),
+                '--fa-border-color': getContrastColor(installedChargePoint.color),
+              }"
+            />
+            {{ installedChargePoint?.name }} (ID: {{ installedChargePoint?.id }})
+          </template>
           <template #actions="slotProps">
             <openwb-base-avatar
               v-if="!slotProps.collapsed"
@@ -67,7 +78,17 @@
             subtype="text"
             :model-value="installedChargePoint?.name"
             @update:model-value="updateState(installedChargePointKey, $event, 'name')"
-          />
+          >
+            <template #append>
+              <openwb-base-color-picker
+                class="p-1"
+                :model-value="installedChargePoint.color"
+                default-color="#007bff"
+                :color-palette="chargePointColorPalette"
+                @update:model-value="updateState(installedChargePointKey, $event, 'color')"
+              />
+            </template>
+          </openwb-base-text-input>
           <openwb-base-text-input
             title="Modul"
             subtype="text"
@@ -513,6 +534,18 @@ export default {
       modalChargePointIndex: undefined,
       showChargePointTemplateModal: false,
       modalChargePointTemplateIndex: undefined,
+      chargePointColorPalette: [
+        "#0052a3",
+        "#0066cc",
+        "#0d79f2",
+        "#007bff",
+        "#2f90ff",
+        "#58a6ff",
+        "#7fbaff",
+        "#a3ccff",
+        "#c2dbff",
+        "#dce9ff",
+      ],
     };
   },
   computed: {

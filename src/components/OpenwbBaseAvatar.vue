@@ -15,8 +15,8 @@ export default {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: 2.5em;
-  height: 2.5em;
+  width: 2.1em;
+  height: 2.1em;
   border-radius: 50%;
   border-width: 2px;
   border-style: solid;

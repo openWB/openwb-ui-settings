@@ -1,21 +1,37 @@
 <template>
   <div class="wrapper">
-    <input
-      :id="`${uid}-color-input`"
-      type="color"
-      class="custom-color-picker"
-      :value="modelValue"
-      :title="`Farbe: ${modelValue}`"
-      @input="changed($event.target.value)"
-    />
+    <popper>
+      <template #content>
+        <compact-picker
+          v-if="colorPalette !== undefined"
+          v-model="value"
+          :disable-alpha="true"
+          :palette="colorPalette"
+        />
+        <sketch-picker
+          v-else
+          v-model="value"
+          :disable-alpha="true"
+          :preset-colors="colorPalette"
+        />
+      </template>
+      <input
+        :id="`${uid}-color-input`"
+        type="button"
+        class="custom-color-picker"
+        :class="{ disabled: disabled }"
+        :disabled="disabled"
+      />
+    </popper>
     <openwb-base-tooltip
-      v-if="defaultColor"
+      v-if="defaultColor && !disabled"
       :description="`Zurücksetzen auf Standardfarbe (${defaultColor})`"
     >
       <font-awesome-icon
         class="ml-1 clickable"
         :icon="['fas', 'rotate-left']"
-        @click="changed(defaultColor)"
+        :disabled="value == defaultColor"
+        @click="value = defaultColor"
       />
     </openwb-base-tooltip>
   </div>
@@ -23,6 +39,9 @@
 
 <script>
 import BaseSettingComponents from "./mixins/BaseSettingComponents.vue";
+import { CompactPicker, SketchPicker } from "vue-color";
+import "vue-color/style.css";
+import Popper from "vue3-popper";
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -33,9 +52,20 @@ export default {
   name: "OpenwbColorPicker",
   components: {
     FontAwesomeIcon,
+    Popper,
+    CompactPicker,
+    SketchPicker,
   },
   mixins: [BaseSettingComponents],
   props: {
+    modelValue: {
+      type: String,
+      required: false,
+      default: undefined,
+      validator: (value) => {
+        return /^#[0-9A-F]{6}$/i.test(value);
+      },
+    },
     defaultColor: {
       type: String,
       required: false,
@@ -44,19 +74,27 @@ export default {
         return /^#[0-9A-F]{6}$/i.test(value);
       },
     },
-    modelValue: {
-      type: String,
+    colorPalette: {
+      type: Array,
       required: false,
-      default: "#000000",
-      validator: (value) => {
-        return /^#[0-9A-F]{6}$/i.test(value);
-      },
+      default: undefined,
+    },
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false,
     },
   },
   emits: ["update:model-value"],
-  methods: {
-    changed(event) {
-      this.$emit("update:model-value", event);
+  computed: {
+    value: {
+      get() {
+        // return the modelValue if set, otherwise return the defaultColor or a fallback color
+        return this.modelValue || this.defaultColor || "#000000";
+      },
+      set(newValue) {
+        this.$emit("update:model-value", newValue);
+      },
     },
   },
 };
@@ -67,28 +105,23 @@ export default {
   height: 100%;
   display: flex;
   align-items: center;
+  text-wrap: auto;
 }
 .custom-color-picker {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
   width: 30px;
-  height: 100%;
-  background-color: transparent;
-  border: none;
+  background-color: v-bind("value");
   padding: 0;
+  border-radius: 4px;
+  border: 2px solid #495057;
   cursor: pointer;
 }
-.custom-color-picker::-webkit-color-swatch-wrapper {
-  padding: 0;
-  margin: 0;
+
+.custom-color-picker.disabled {
+  cursor: not-allowed;
 }
-.custom-color-picker::-webkit-color-swatch {
-  border-radius: 4px;
-  border: 2px solid #495057;
-}
-.custom-color-picker::-moz-color-swatch {
-  border-radius: 4px;
-  border: 2px solid #495057;
+
+.wrapper :deep(.vc-compact-picker) {
+  width: auto;
+  max-width: 245px;
 }
 </style>
