@@ -137,7 +137,7 @@
                 @update:model-value="updateState(installedComponentKey, $event, 'name')"
               >
                 <template
-                  v-if="installedComponent?.type == 'counter'"
+                  v-if="installedComponent?.type?.toLowerCase().includes('counter')"
                   #append
                 >
                   <openwb-base-color-picker
