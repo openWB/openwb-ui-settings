@@ -243,7 +243,7 @@
           <hr />
           <sortable-list
             v-model="loadManagementPriorityList"
-            title="Prioritäten-Steuerung für das Lastmanagement"
+            title="Prioritätenliste"
             :labels="loadManagementPriorityLabels"
             :nesting="true"
             :max-nesting-depth="1"
