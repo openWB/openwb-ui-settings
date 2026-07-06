@@ -246,11 +246,12 @@
           </openwb-base-alert>
         </div>
         <div v-else>
-          <!-- ToDo: Fix: nested lists bypass store commits! -->
           <sortable-list
             title="Anordnung der Komponenten"
             :model-value="$store.state.mqtt['openWB/counter/get/hierarchy']"
             :labels="hierarchyLabels"
+            :linked-meters="consumerLinkedMeterNames"
+            :hidden-ids="hiddenCounterIds"
             @update:model-value="updateState('openWB/counter/get/hierarchy', $event)"
           >
             <template #help>
@@ -266,7 +267,7 @@
           <hr />
           <sortable-list
             v-model="loadManagementPriorityList"
-            title="Prioritäten-Steuerung für das Lastmanagement"
+            title="Prioritätenliste"
             :labels="loadManagementPriorityLabels"
             :nesting="true"
             :max-nesting-depth="1"
@@ -338,6 +339,7 @@ export default {
         { topic: "openWB/bat/+/config/max_power", writeable: true },
         { topic: "openWB/chargepoint/+/config", writeable: false },
         { topic: "openWB/consumer/+/module", writeable: false },
+        { topic: "openWB/consumer/+/extra_meter", writeable: false },
         { topic: "openWB/counter/+/config/max_currents", writeable: true },
         { topic: "openWB/counter/+/config/max_power_errorcase", writeable: true },
         { topic: "openWB/counter/+/config/max_total_power", writeable: true },
@@ -414,6 +416,28 @@ export default {
         }
         return labels;
       },
+    },
+    extraMeterLinks() {
+      const topics = this.getWildcardTopics("openWB/consumer/+/extra_meter") || {};
+      const links = [];
+      for (const [topic, counterId] of Object.entries(topics)) {
+        if (counterId === null || counterId === undefined) continue;
+        const match = topic.match(/^openWB\/consumer\/([^/]+)\/extra_meter$/);
+        if (!match) continue;
+        links.push({ consumerId: String(match[1]), counterId: String(counterId) });
+      }
+      return links;
+    },
+    hiddenCounterIds() {
+      return Array.from(new Set(this.extraMeterLinks.map((link) => link.counterId)));
+    },
+    consumerLinkedMeterNames() {
+      const names = {};
+      for (const { consumerId, counterId } of this.extraMeterLinks) {
+        const component = this.getComponent(counterId);
+        names[consumerId] = component?.name ?? counterId;
+      }
+      return names;
     },
     loadManagementPriorityList: {
       get() {
