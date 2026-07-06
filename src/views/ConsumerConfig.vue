@@ -12,12 +12,18 @@
   </openwb-base-modal-dialog>
   <!-- main content -->
   <div class="consumerConfig">
+    <openwb-base-alert subtype="info">
+      Das Einschalten der Verbraucher richtet sich nach der Rangfolge in der Prioritäten-Steuerung (Geräte werden von
+      oben nach unten geschaltet) und dem Mindeststrom des jeweiligen Geräts: Bei geringem Überschuss wird das erste
+      Gerät in der Liste geschaltet, dessen Mindeststrom erreicht ist. Die Rangfolge lässt sich unter „Lastmanagement“
+      anpassen.
+    </openwb-base-alert>
     <form name="consumerConfigForm">
       <!-- General Settings -->
       <openwb-base-card>
         <template #header>
           <font-awesome-icon :icon="['fas', 'cog']" />
-          Allgemeine Einstellungen
+          Einstellungen für Überschuss-Betrieb
         </template>
         <openwb-base-number-input
           title="Einschaltverzögerung"
@@ -429,7 +435,11 @@
                   :precision="2"
                   :model-value="installedConsumer.consumerUsage.eco_charging.price_limit * 100000"
                   @update:model-value="
-                    updateUsage(installedConsumer.id, parseFloat(($event / 100000).toFixed(7)), 'eco_charging.price_limit')
+                    updateUsage(
+                      installedConsumer.id,
+                      parseFloat(($event / 100000).toFixed(7)),
+                      'eco_charging.price_limit',
+                    )
                   "
                 >
                   <template #help>
