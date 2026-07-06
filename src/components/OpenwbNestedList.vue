@@ -8,7 +8,7 @@
     handle=".handle"
   >
     <template #item="{ element }">
-      <li>
+      <li v-show="!isHidden(element)">
         <div
           class="element-titel"
           :class="classes(element)"
@@ -52,11 +52,21 @@
               @click.stop="$emit('delete-group', element.id)"
             />
           </span>
+          <span
+            v-else-if="linkedMeterName(element.id)"
+            class="element-linked-meter"
+            :title="linkedMeterName(element.id)"
+          >
+            <span class="linked-meter-name">{{ linkedMeterName(element.id) }}</span>
+            <font-awesome-icon :icon="['fas', 'link']" />
+          </span>
         </div>
         <openwb-nested-list
           v-if="nesting && element.children && currentNestingDepth < maxNestingDepth"
           v-model="element.children"
           :labels="labels"
+          :linked-meters="linkedMeters"
+          :hidden-ids="hiddenIds"
           :nesting="nesting"
           :max-nesting-depth="maxNestingDepth"
           :current-nesting-depth="currentNestingDepth + 1"
@@ -82,6 +92,7 @@ import {
   faPen as fasPen,
   faCar as fasCar,
   faPlug as fasPlug,
+  faLink as fasLink,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -96,6 +107,7 @@ library.add(
   fasPen,
   fasCar,
   fasPlug,
+  fasLink,
 );
 export default {
   name: "OpenwbNestedList",
@@ -106,6 +118,8 @@ export default {
   props: {
     modelValue: { type: Array, required: false, default: () => [] },
     labels: { type: Object, required: false, default: undefined },
+    linkedMeters: { type: Object, required: false, default: undefined },
+    hiddenIds: { type: Array, required: false, default: undefined },
     nesting: { type: Boolean, default: true },
     maxNestingDepth: { type: Number, default: Infinity },
     currentNestingDepth: { type: Number, default: 0 },
@@ -166,6 +180,12 @@ export default {
         return this.labels[elementId];
       }
       return elementId;
+    },
+    linkedMeterName(elementId) {
+      return this.linkedMeters?.[elementId] ?? undefined;
+    },
+    isHidden(element) {
+      return element.type === "counter" && !!this.hiddenIds?.some((id) => String(id) === String(element.id));
     },
     getElementIcon(element) {
       switch (element.type) {
@@ -300,5 +320,26 @@ export default {
 
 .element-actions {
   cursor: pointer;
+}
+
+.element-linked-meter {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  margin-left: 8px;
+  opacity: 0.9;
+}
+
+.linked-meter-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 575.98px) {
+  .linked-meter-name {
+    display: none;
+  }
 }
 </style>
