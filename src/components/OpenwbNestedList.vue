@@ -173,7 +173,7 @@ export default {
 }
 
 .element-label {
-  display: flex;
+  display: inline-flex;
   justify-content: flex-start;
   align-items: center;
   gap: 0.5rem;
