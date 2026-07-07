@@ -67,34 +67,6 @@
       </div>
     </openwb-base-card>
     <openwb-base-card
-      v-if="hasMeterData"
-      title="Zählerstände"
-      subtype="white"
-      body-bg="white"
-      class="py-1 mb-2"
-    >
-      <div class="row justify-content-end">
-        <div class="col-4 text-right">Import</div>
-        <div class="col-4 text-right">Export</div>
-      </div>
-      <div class="row">
-        <div class="col text-right">Heute</div>
-        <div class="col-4 text-right text-monospace">
-          {{ formatNumberTopic(baseTopic + "/get/daily_imported", 3, 3, 0.001) }}&nbsp;kWh
-        </div>
-        <div class="col-4 text-right text-monospace">-</div>
-      </div>
-      <div class="row">
-        <div class="col text-right">Gesamt</div>
-        <div class="col-4 text-right text-monospace">
-          {{ formatNumberTopic(baseTopic + "/get/imported", 3, 3, 0.001) }}&nbsp;kWh
-        </div>
-        <div class="col-4 text-right text-monospace">
-          {{ formatNumberTopic(baseTopic + "/get/exported", 3, 3, 0.001) }}&nbsp;kWh
-        </div>
-      </div>
-    </openwb-base-card>
-    <openwb-base-card
       v-if="hasPhaseData"
       title="Werte pro Phase"
       subtype="white"
@@ -225,14 +197,6 @@ export default {
     prioritySharedGroup: {
       get() {
         return this.loadManagementPriorityShared("consumer", this.consumerId);
-      },
-    },
-    hasMeterData: {
-      get() {
-        return (
-          this.$store.state.mqtt[this.baseTopic + "/get/imported"] !== undefined ||
-          this.$store.state.mqtt[this.baseTopic + "/get/exported"] !== undefined
-        );
       },
     },
     hasPhaseData: {
