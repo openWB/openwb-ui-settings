@@ -100,7 +100,6 @@ export default {
         { topic: "openWB/system/io/+/config", writeable: false },
         { topic: "openWB/vehicle/+/info", writeable: false },
         { topic: "openWB/consumer/+/module", writeable: false },
-        { topic: "openWB/consumer/get/power", writeable: false },
       ],
     };
   },
@@ -200,11 +199,7 @@ export default {
     },
     showConsumerSumCard: {
       get() {
-        return (
-          this.$store.state.mqtt["openWB/consumer/get/power"] !== undefined &&
-          this.$store.state.mqtt["openWB/general/extern"] === false &&
-          this.installedConsumers.length > 1
-        );
+        return this.$store.state.mqtt["openWB/general/extern"] === false && this.installedConsumers.length > 1;
       },
     },
     ioDeviceConfigs: {
