@@ -67,6 +67,27 @@
       </div>
     </openwb-base-card>
     <openwb-base-card
+      title="Separate Leistungsmessung"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <div class="row">
+        <div class="col pr-0 text-right">Zähler</div>
+        <div class="col text-right text-monospace">
+          {{ hasExtraMeter ? extraMeterName : "keiner" }}
+        </div>
+      </div>
+      <div
+        v-if="hasExtraMeter"
+        class="row"
+      >
+        <div class="col text-right">
+          <small>Die angezeigten Leistungswerte stammen von diesem Zähler.</small>
+        </div>
+      </div>
+    </openwb-base-card>
+    <openwb-base-card
       v-if="hasPhaseData"
       title="Werte pro Phase"
       subtype="white"
@@ -146,6 +167,8 @@ export default {
         { topic: `openWB/consumer/${this.consumerId}/module`, writeable: false },
         { topic: `openWB/consumer/${this.consumerId}/usage`, writeable: false },
         { topic: `openWB/consumer/${this.consumerId}/get/+`, writeable: false },
+        { topic: `openWB/consumer/${this.consumerId}/extra_meter`, writeable: false },
+        { topic: "openWB/system/device/+/component/+/config", writeable: false },
         { topic: "openWB/counter/get/loadmanagement_prios", writeable: false },
       ],
     };
@@ -203,6 +226,28 @@ export default {
       get() {
         const currents = this.$store.state.mqtt[this.baseTopic + "/get/currents"];
         return Array.isArray(currents) && currents.length > 0;
+      },
+    },
+    extraMeterId: {
+      get() {
+        return this.$store.state.mqtt[this.baseTopic + "/extra_meter"] ?? null;
+      },
+    },
+    hasExtraMeter: {
+      get() {
+        return this.extraMeterId !== null;
+      },
+    },
+    extraMeterName: {
+      get() {
+        if (this.extraMeterId === null) {
+          return null;
+        }
+        const components = this.getWildcardTopics("openWB/system/device/+/component/+/config");
+        const component = Object.values(components).find(
+          (component) => component && component.id === this.extraMeterId,
+        );
+        return component?.name ?? `Zähler ${this.extraMeterId}`;
       },
     },
   },
