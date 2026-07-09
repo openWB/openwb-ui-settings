@@ -169,7 +169,6 @@ export default {
         { topic: `openWB/consumer/${this.consumerId}/get/+`, writeable: false },
         { topic: `openWB/consumer/${this.consumerId}/extra_meter`, writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
-        { topic: "openWB/counter/get/loadmanagement_prios", writeable: false },
       ],
     };
   },
