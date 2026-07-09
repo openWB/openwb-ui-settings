@@ -5,7 +5,7 @@
       Alle Verbraucher
     </template>
     <template #header-right>
-      <span class="text-right"> {{ formatNumber(totalPower, 3, 3, 0.001) }}&nbsp;kW </span>
+      <span class="text-right"> {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW </span>
     </template>
     <openwb-base-card
       subtype="white"
@@ -15,7 +15,9 @@
     >
       <div class="row">
         <div class="col pr-0 text-right">Leistung</div>
-        <div class="col text-right text-monospace">{{ formatNumber(totalPower, 3, 3, 0.001) }}&nbsp;kW</div>
+        <div class="col text-right text-monospace">
+          {{ formatNumberTopic(baseTopic + "/get/power", 3, 3, 0.001) }}&nbsp;kW
+        </div>
       </div>
     </openwb-base-card>
   </status-card>
@@ -40,15 +42,13 @@ export default {
   mixins: [ComponentState],
   data() {
     return {
-      mqttTopics: [{ topic: "openWB/consumer/+/get/power", writeable: false }],
+      mqttTopics: [{ topic: "openWB/consumer/get/power", writeable: false }],
     };
   },
   computed: {
-    totalPower: {
+    baseTopic: {
       get() {
-        return Object.values(this.getWildcardTopics("openWB/consumer/+/get/power")).reduce((sum, power) => {
-          return sum + (typeof power === "number" ? power : 0);
-        }, 0);
+        return "openWB/consumer";
       },
     },
   },
