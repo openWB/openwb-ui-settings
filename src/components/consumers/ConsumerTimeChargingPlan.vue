@@ -181,14 +181,6 @@ export default {
       return labels;
     },
   },
-  watch: {
-    plan: {
-      handler(newValue) {
-        this.$emit("update:modelValue", newValue);
-      },
-      deep: true,
-    },
-  },
   methods: {
     copyPlan() {
       this.$emit("sendCommand", {
