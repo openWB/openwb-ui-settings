@@ -1,14 +1,5 @@
 <template>
   <openwb-base-number-input
-    title="maximale Bezugsleistung"
-    unit="kW"
-    min="0"
-    step="0.01"
-    required
-    :model-value="(ioAction.configuration.max_import_power || 0) / 1000"
-    @update:model-value="updateConfiguration($event * 1000, 'configuration.max_import_power')"
-  />
-  <openwb-base-number-input
     title="maximale Bezugsleistung im Fehlerfall"
     unit="kW"
     min="0"
@@ -16,6 +7,15 @@
     required
     :model-value="(ioAction.configuration.max_power_on_failure || 0) / 1000"
     @update:model-value="updateConfiguration($event * 1000, 'configuration.max_power_on_failure')"
+  />
+  <openwb-base-number-input
+    title="maximale Ampere im Fehlerfall"
+    unit="A"
+    min="0"
+    step="0.01"
+    required
+    :model-value="(ioAction.configuration.max_current_on_failure || 0) / 1000"
+    @update:model-value="updateConfiguration($event * 1000, 'configuration.max_current_on_failure')"
   />
   <hr />
   <openwb-base-select-input
@@ -36,13 +36,9 @@
 
 <script>
 import OpenwbIoActionConfigMixin from "../../OpenwbIoActionConfigMixin.vue";
-import OpenwbIoSinglePattern from "../../OpenwbIoSinglePattern.vue";
 
 export default {
   name: "IoActionLoadManager",
-  components: {
-    OpenwbIoSinglePattern,
-  },
   mixins: [OpenwbIoActionConfigMixin],
   computed: {
     value: {
