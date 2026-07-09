@@ -40,6 +40,13 @@
         { value: '01-10;31-12', text: '4. Quartal' },
       ]"
     />
+    <openwb-base-select-input
+      v-model="weekdays"
+      title="Aktive Wochentage"
+      required
+      multiple
+      :options="weekdayOptions"
+    />
     <time-table
       v-model="tariff.active_times.times"
       title="Aktive Zeiten"
@@ -77,6 +84,9 @@ export default {
     },
     dates: {
       get() {
+        if (!Array.isArray(this.tariff.active_times?.dates)) {
+          return [];
+        }
         // convert date array from tariff to string for select input
         // [["01-01", "31-03"], ["01-04", "30-06"]] -> ["01-01;31-03", "01-04;30-06"]
         return this.tariff.active_times.dates.map(([begin, end]) => `${begin};${end}`);
@@ -86,6 +96,28 @@ export default {
         // ["01-01;31-03", "01-04;30-06"] -> [["01-01", "31-03"], ["01-04", "30-06"]]
         this.tariff.active_times.dates = newValue.map((date) => date.split(";"));
       },
+    },
+    weekdays: {
+      get() {
+        if (!Array.isArray(this.tariff.active_times?.weekdays)) {
+          return [];
+        }
+        return this.tariff.active_times.weekdays;
+      },
+      set(newValue) {
+        this.tariff.active_times.weekdays = newValue;
+      },
+    },
+    weekdayOptions() {
+      return [
+        { value: 0, text: "Montag" },
+        { value: 1, text: "Dienstag" },
+        { value: 2, text: "Mittwoch" },
+        { value: 3, text: "Donnerstag" },
+        { value: 4, text: "Freitag" },
+        { value: 5, text: "Samstag" },
+        { value: 6, text: "Sonntag" },
+      ];
     },
   },
 };
