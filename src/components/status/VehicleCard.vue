@@ -126,7 +126,6 @@ export default {
         { topic: `openWB/vehicle/${this.vehicleId}/info`, writeable: false },
         { topic: `openWB/vehicle/${this.vehicleId}/name`, writeable: false },
         { topic: `openWB/vehicle/${this.vehicleId}/color`, writeable: false },
-        { topic: "openWB/counter/get/loadmanagement_prios", writeable: false },
       ],
     };
   },
