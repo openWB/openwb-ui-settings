@@ -7,8 +7,8 @@
     :buttons="[{ text: 'Löschen', event: 'confirm', subtype: 'danger' }]"
     @modal-result="removeConsumer"
   >
-    Wollen Sie den Verbraucher "{{ modalConsumerName }}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig
-    gemacht werden!
+    Willst Du den Verbraucher "{{ modalConsumerName }}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht
+    werden!
   </openwb-base-modal-dialog>
   <!-- main content -->
   <div class="consumerConfig">
@@ -527,9 +527,9 @@
             <hr />
             <openwb-base-heading> Separate Leistungsmessung </openwb-base-heading>
             <openwb-base-alert subtype="info">
-              Legen Sie den Zähler zuerst unter „Geräte und Komponenten" an und verknüpfen Sie ihn anschließend hier mit
-              dem Verbraucher. Der EVU-Zähler sowie Zähler, die bereits einem anderen Verbraucher zugeordnet sind,
-              stehen nicht zur Auswahl.
+              Lege den Zähler zuerst unter „Geräte und Komponenten“ an und verknüpfe ihn anschließend hier mit dem
+              Verbraucher. Der EVU-Zähler sowie Zähler, die bereits einem anderen Verbraucher zugeordnet sind, stehen
+              nicht zur Auswahl.
             </openwb-base-alert>
             <openwb-base-select-input
               title="Zähler"
@@ -539,7 +539,7 @@
             >
               <template #help>
                 Der ausgewählte Zähler überschreibt die Messwerte eines ggf. integrierten Zählers. Konfiguriert wird der
-                Zähler unter „Geräte und Komponenten".
+                Zähler unter „Geräte und Komponenten“.
               </template>
             </openwb-base-select-input>
           </openwb-base-card>
