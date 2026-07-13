@@ -1,4 +1,29 @@
 <template>
+  <openwb-base-alert subtype="info">
+    <p>
+      Über dieses MQTT-Topic können die Parameter des Lastmanagers gesetzt werden.
+    </p>
+    <ol>
+            <li>
+              <openwb-base-copy-to-clipboard
+                class="text-info"
+                tooltip="Topic kopieren"
+              >
+                openWB/set/mqtt/loadmanager/{{ ioAction.id }}/set/loadmanager
+              </openwb-base-copy-to-clipboard>
+              <br />
+                Das Topic erwartet ein JSON-Objekt mit den Parametern des Lastmanagements. <br />
+              Beispiel:
+              <span class="text-info">
+          {
+            "max_power": 10000,
+            "max_current": [6, 6, 6],
+            "timestamp": 1783596593.635847
+          }
+              </span>
+            </li>
+    </ol>
+  </openwb-base-alert>
   <openwb-base-number-input
     title="maximale Bezugsleistung im Fehlerfall"
     unit="kW"
@@ -9,7 +34,7 @@
     @update:model-value="updateConfiguration($event * 1000, 'configuration.max_power_on_failure')"
   />
   <openwb-base-number-input
-    title="maximale Ampere im Fehlerfall"
+    title="maximaler Strom im Fehlerfall"
     unit="A"
     min="0"
     step="0.01"
@@ -27,8 +52,8 @@
     @update:model-value="updateConfiguration($event, 'configuration.devices')"
   >
     <template #help>
-      Bitte die Ladepunkte auswählen, die vom Lastmanager gesteuert werden sollen. Es können mehrere Einträge ausgewählt werden.
-      Die Ladepunkte werden so gesteuert, dass die konfigurierte Leistung am EVU-Punkt nicht überschritten wird.
+      Bitte die Ladepunkte und/oder digitalen Ausgänge auswählen, die vom Lastmanager gesteuert werden sollen. Es können mehrere Einträge ausgewählt werden.
+      Die ausgewählten Ladepunkte und/oder digitalen Ausgänge werden so gesteuert, dass die konfigurierte Leistung am EVU-Punkt nicht überschritten wird.
       Im Fehlerfall wird automatisch die konfigurierte Fehlerleistung ausgegeben.
     </template>
   </openwb-base-select-input>
@@ -41,17 +66,6 @@ export default {
   name: "IoActionLoadManager",
   mixins: [OpenwbIoActionConfigMixin],
   computed: {
-    value: {
-      get() {
-        return this.ioAction?.configuration?.input_pattern || [];
-      },
-      set(newValue) {
-        this.updateConfiguration(newValue, "configuration.input_pattern");
-      },
-    },
-    isPatternConfigured() {
-      return this.value?.length > 0 && this.value[0].matrix && Object.keys(this.value[0].matrix).length > 0;
-    },
     ioDevicesOutputOptions() {
       let deviceGroups = [];
       this.availableIoDevices?.forEach((device) => {
