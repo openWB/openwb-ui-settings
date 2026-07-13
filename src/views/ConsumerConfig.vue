@@ -101,7 +101,6 @@
                   class="p-1"
                   :model-value="installedConsumer.color"
                   :default-color="consumerDefaultColor"
-                  :color-palette="consumerColorPalette"
                   @update:model-value="updateState(installedConsumerKey, $event, 'color')"
                 />
               </template>
@@ -641,18 +640,6 @@ export default {
       modalConsumerName: "",
       CONSUMER_CONFIG_FIELDS: ["connected_phases", "phase_1", "max_power"],
       consumerDefaultColor: "#6f42c1",
-      consumerColorPalette: [
-        "#45287b",
-        "#57329a",
-        "#6f46b9",
-        "#6f42c1",
-        "#8862cc",
-        "#9f81d6",
-        "#b69fdf",
-        "#cabae8",
-        "#dcd1f0",
-        "#ebe5f6",
-      ],
     };
   },
   computed: {
