@@ -76,13 +76,13 @@ export default {
   data() {
     return {
       weekdayOptions: [
-        { value: 0, text: "Montag" },
-        { value: 1, text: "Dienstag" },
-        { value: 2, text: "Mittwoch" },
-        { value: 3, text: "Donnerstag" },
-        { value: 4, text: "Freitag" },
-        { value: 5, text: "Samstag" },
-        { value: 6, text: "Sonntag" },
+        { value: 1, text: "Montag" },
+        { value: 2, text: "Dienstag" },
+        { value: 3, text: "Mittwoch" },
+        { value: 4, text: "Donnerstag" },
+        { value: 5, text: "Freitag" },
+        { value: 6, text: "Samstag" },
+        { value: 0, text: "Sonntag" },
       ],
     };
   },
