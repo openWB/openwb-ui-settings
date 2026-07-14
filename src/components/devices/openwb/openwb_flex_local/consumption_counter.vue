@@ -1,6 +1,6 @@
 <template>
   <div class="device-openwb-flex-local-consumption-counter">
-    <openwb-base-heading> Einstellungen für openWB-Flex Verbrauchszähler </openwb-base-heading>
+    <openwb-base-heading> Einstellungen für Verbrauchszähler mit lokaler Auslesung </openwb-base-heading>
     <openwb-base-alert subtype="info">
       Bei Zählern, die nicht saldierend arbeiten (SDM630, SDM72D-M), wird der Zählerstand für den Bezug aus dem
       Zähler ausgelesen. Eine Messung der Einspeisung ist nicht möglich.
