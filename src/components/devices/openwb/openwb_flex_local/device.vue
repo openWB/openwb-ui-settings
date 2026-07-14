@@ -7,7 +7,7 @@
 import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
 
 export default {
-  name: "DeviceOpenwbFlex",
+  name: "DeviceOpenwbFlexLocal",
   mixins: [DeviceConfigMixin],
 };
 </script>

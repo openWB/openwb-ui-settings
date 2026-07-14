@@ -1,5 +1,5 @@
 <template>
-  <div class="device-openwb-flex-consumption-counter">
+  <div class="device-openwb-flex-local-consumption-counter">
     <openwb-base-heading> Einstellungen für openWB-Flex Verbrauchszähler </openwb-base-heading>
     <openwb-base-alert subtype="info">
       Bei Zählern, die nicht saldierend arbeiten (SDM630, SDM72D-M), wird der Zählerstand für den Bezug aus dem
