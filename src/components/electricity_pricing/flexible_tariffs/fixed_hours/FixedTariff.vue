@@ -73,6 +73,19 @@ export default {
     modelValue: { type: Object, required: true },
   },
   emits: ["update:modelValue", "delete"],
+  data() {
+    return {
+      weekdayOptions: [
+        { value: 0, text: "Montag" },
+        { value: 1, text: "Dienstag" },
+        { value: 2, text: "Mittwoch" },
+        { value: 3, text: "Donnerstag" },
+        { value: 4, text: "Freitag" },
+        { value: 5, text: "Samstag" },
+        { value: 6, text: "Sonntag" },
+      ],
+    };
+  },
   computed: {
     tariff: {
       get() {
@@ -107,17 +120,6 @@ export default {
       set(newValue) {
         this.tariff.active_times.weekdays = newValue;
       },
-    },
-    weekdayOptions() {
-      return [
-        { value: 0, text: "Montag" },
-        { value: 1, text: "Dienstag" },
-        { value: 2, text: "Mittwoch" },
-        { value: 3, text: "Donnerstag" },
-        { value: 4, text: "Freitag" },
-        { value: 5, text: "Samstag" },
-        { value: 6, text: "Sonntag" },
-      ];
     },
   },
 };

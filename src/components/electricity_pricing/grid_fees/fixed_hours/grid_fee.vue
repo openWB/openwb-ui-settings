@@ -78,6 +78,7 @@ export default {
         price: 0,
         active_times: {
           dates: [],
+          weekdays: [],
           times: [["", ""]],
         },
       });
