@@ -52,8 +52,8 @@
     @update:model-value="updateConfiguration($event, 'configuration.devices')"
   >
     <template #help>
-      Bitte die Ladepunkte und/oder digitalen Ausgänge auswählen, die vom Lastmanager gesteuert werden sollen. Es können mehrere Einträge ausgewählt werden.
-      Die ausgewählten Ladepunkte und/oder digitalen Ausgänge werden so gesteuert, dass die konfigurierte Leistung am EVU-Punkt nicht überschritten wird.
+      Bitte die Ladepunkte auswählen, die vom Lastmanager gesteuert werden sollen. Es können mehrere Einträge ausgewählt werden.
+      Die ausgewählten Ladepunkte werden so gesteuert, dass die konfigurierte Leistung am EVU-Punkt nicht überschritten wird.
       Im Fehlerfall wird automatisch die konfigurierte Fehlerleistung ausgegeben.
     </template>
   </openwb-base-select-input>
@@ -66,25 +66,6 @@ export default {
   name: "IoActionLoadManager",
   mixins: [OpenwbIoActionConfigMixin],
   computed: {
-    ioDevicesOutputOptions() {
-      let deviceGroups = [];
-      this.availableIoDevices?.forEach((device) => {
-        let options = [];
-        Object.keys(device?.output?.digital || {}).forEach((digitalOutput) => {
-          options.push({
-            text: `${digitalOutput}`,
-            value: { type: "io", id: device.id, digital_output: digitalOutput },
-          });
-        });
-        if (options.length > 0) {
-          deviceGroups.push({
-            label: device.name,
-            options: options,
-          });
-        }
-      });
-      return deviceGroups;
-    },
     availableDevices() {
       const chargePointsGroup = {
         label: "Ladepunkte",
@@ -94,7 +75,7 @@ export default {
             text: cp.text,
           })) || [],
       };
-      return [chargePointsGroup].concat(this.ioDevicesOutputOptions);
+      return [chargePointsGroup];
     },
   },
 };
