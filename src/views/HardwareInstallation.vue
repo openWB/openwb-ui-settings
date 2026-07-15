@@ -335,7 +335,6 @@ export default {
     },
     standaloneOnly() {
       const chargePoints = this.getWildcardTopics("openWB/chargepoint/+/config");
-      console.log(Object.values(chargePoints))
       const hasInternalChargePoint = Object.values(chargePoints).some(
         (cp) => cp && typeof cp === "object" && cp.type === "internal_openwb",
       );
