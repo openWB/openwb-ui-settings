@@ -210,9 +210,14 @@
             <openwb-base-select-input
               title="Verwendung"
               not-selected="Bitte auswählen"
-              :options="getUsageOptions(installedConsumer)"
-              :model-value="installedConsumer.consumerUsage?.type"
-              @update:model-value="setUsage(installedConsumer.id, $event)"
+              :options="[
+                        { value: 'meter_only', text: 'Nur Messung' },
+                        { value: 'suspendable_onoff', text: 'Schaltbar (Ein/Aus)' },
+                        { value: 'suspendable_tunable', text: 'Stufenlos regelbar' },
+                        { value: 'continuous', text: 'Dauerverbraucher' }
+                      ]"
+              :model-value="installedConsumer.consumerUsage.type"
+              @update:model-value="updateUsage(installedConsumer.id, $event, 'type')"
             >
               <template #help> Legt fest, wie dieser Verbraucher im Energiemanagement berücksichtigt wird. </template>
             </openwb-base-select-input>
@@ -748,7 +753,7 @@ export default {
     hasIntegratedCounter() {
       const result = {};
       Object.values(this.installedConsumers).forEach((consumer) => {
-        result[consumer.id] = consumer?.usage?.includes("meter_only") ?? false;
+        result[consumer.id] = consumer?.consumerUsage?.type === "meter_only";
       });
       return result;
     },
@@ -835,31 +840,6 @@ export default {
         ? `openWB/consumer/${consumer.id}/config`
         : `openWB/consumer/${consumer.id}/module`;
       this.updateState(targetTopic, value, object);
-    },
-    getUsageOptions(consumer) {
-      if (!Array.isArray(consumer.usage)) return [];
-      return consumer.usage.map((use) => ({
-        value: use,
-        text: this.usageLabels(use),
-      }));
-    },
-    usageLabels(type) {
-      const map = {
-        meter_only: "Nur Messung",
-        suspendable_onoff: "Schaltbar (Ein/Aus)",
-        suspendable_tunable: "Stufenlos regelbar",
-        continuous: "Dauerverbraucher",
-      };
-      return map[type] ?? type;
-    },
-    setUsage(consumerId, usage) {
-      this.$emit("sendCommand", {
-        command: "selectUsage",
-        data: {
-          consumer_id: consumerId,
-          usage,
-        },
-      });
     },
     showModeSettings(consumer) {
       const type = consumer.consumerUsage?.type;
