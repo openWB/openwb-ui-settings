@@ -76,7 +76,7 @@
     >
       <template #help>
         Legt fest, ob in der Tabellenansicht ein Suchfeld angezeigt wird. Mit diesem Suchfeld können die Felder
-        „Ladepunkt“ und „Fahrzeug“ durchsucht werden.
+        "Ladepunkt" und "Fahrzeug" durchsucht werden.
       </template>
     </openwb-base-button-group-input>
     <hr />
@@ -111,7 +111,7 @@
     >
       <template #help>
         Legt fest, ob in der Tabellenansicht ein Suchfeld angezeigt wird. Mit diesem Suchfeld können die Felder
-        „Fahrzeug“, „Hersteller“ und „Modell“ durchsucht werden.
+        "Fahrzeug", "Hersteller" und "Modell" durchsucht werden.
       </template>
     </openwb-base-button-group-input>
   </div>
