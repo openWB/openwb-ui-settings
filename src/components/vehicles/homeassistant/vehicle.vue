@@ -21,7 +21,7 @@
     >
       <template #help>
         Das Token kann in HomeAssistant hier erstellt werden:<br />
-        „Dein Profil“ → oberer Reiter „Sicherheit“ → ganz unten „Langlebiges Zugriffstoken erstellen“
+        "Dein Profil" → oberer Reiter "Sicherheit" → ganz unten "Langlebiges Zugriffstoken erstellen"
       </template>
     </openwb-base-text-input>
     <openwb-base-text-input
@@ -32,8 +32,8 @@
       @update:model-value="updateConfiguration($event, 'configuration.entity_soc')"
     >
       <template #help>
-        Die Entitäts ID findet sich im HomeAssistant unter „Einstellungen“ → „Geräte & Dienste“ → im oberen Reiter
-        „Entitäten“ auswählen
+        Die Entitäts ID findet sich im HomeAssistant unter "Einstellungen" → "Geräte & Dienste" → im oberen Reiter
+        "Entitäten" auswählen
       </template>
     </openwb-base-text-input>
     <openwb-base-text-input
@@ -43,8 +43,8 @@
       @update:model-value="updateConfiguration($event, 'configuration.entity_range')"
     >
       <template #help>
-        Die Entitäts ID findet sich im HomeAssistant unter „Einstellungen“ → „Geräte & Dienste“ → im oberen Reiter
-        „Entitäten“ auswählen
+        Die Entitäts ID findet sich im HomeAssistant unter "Einstellungen" → "Geräte & Dienste" → im oberen Reiter
+        "Entitäten" auswählen
       </template>
     </openwb-base-text-input>
     <openwb-base-text-input
@@ -54,8 +54,8 @@
       @update:model-value="updateConfiguration($event, 'configuration.entity_odometer')"
     >
       <template #help>
-        Die Entitäts ID findet sich im HomeAssistant unter „Einstellungen“ → „Geräte & Dienste“ → im oberen Reiter
-        „Entitäten“ auswählen
+        Die Entitäts ID findet sich im HomeAssistant unter "Einstellungen" → "Geräte & Dienste" → im oberen Reiter
+        "Entitäten" auswählen
       </template>
     </openwb-base-text-input>
     <openwb-base-button-group-input

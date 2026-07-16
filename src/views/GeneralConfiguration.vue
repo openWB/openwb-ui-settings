@@ -169,10 +169,10 @@
                 Sollten Probleme oder Fehlermeldungen auftauchen, stelle bitte zunächst das Regelintervall auf "Normal".
                 Werden Module genutzt, welche z.B. eine Online-API zur Abfrage nutzen (höhere Latenzzeiten) oder möchte
                 man weniger Regeleingriffe, so kann man das Regelintervall auf "Langsam" (20 Sekunden) herabsetzen. Die
-                Einstellung „Sehr Langsam“ führt zu einer Regelzeit von 60 Sekunden.<br />
+                Einstellung "Sehr Langsam" führt zu einer Regelzeit von 60 Sekunden.<br />
                 <span class="text-danger">
                   Nicht nur die Regelung der PV geführten Ladung, sondern auch die Ladestromänderung, beispielsweise
-                  “Stop“ etc., werden dann nur noch in diesem Intervall ausgeführt. Die Regelung wird insgesamt träger.
+                  "Stop" etc., werden dann nur noch in diesem Intervall ausgeführt. Die Regelung wird insgesamt träger.
                   Solange es keinen triftigen Grund gibt, sollte "Normal" gewählt werden.
                 </span>
               </template>
