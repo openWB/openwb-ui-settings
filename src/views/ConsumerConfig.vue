@@ -188,10 +188,10 @@
               :min="0"
               :step="1"
               :model-value="
-                installedConsumer.config?.min_intervall != null ? installedConsumer.config.min_intervall / 60 : null
+                installedConsumer.config?.min_interval != null ? installedConsumer.config.min_interval / 60 : null
               "
               @update:model-value="
-                updateState(`openWB/consumer/${installedConsumer.id}/config`, $event * 60, 'min_intervall')
+                updateState(`openWB/consumer/${installedConsumer.id}/config`, $event * 60, 'min_interval')
               "
             >
               <template #help>
