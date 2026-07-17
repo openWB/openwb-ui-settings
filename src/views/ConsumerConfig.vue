@@ -70,7 +70,15 @@
             subtype="purple"
           >
             <template #header>
-              <font-awesome-icon :icon="['fas', 'plug']" />
+              <font-awesome-icon
+                :icon="['fas', 'plug']"
+                class="fa-border"
+                :style="{
+                  backgroundColor: installedConsumer.color,
+                  color: getContrastColor(installedConsumer.color),
+                  '--fa-border-color': getContrastColor(installedConsumer.color),
+                }"
+              />
               {{ installedConsumer?.name }}
             </template>
             <template #actions="slotProps">
@@ -87,7 +95,16 @@
               subtype="text"
               :model-value="installedConsumer?.name"
               @update:model-value="updateState(installedConsumerKey, $event, 'name')"
-            />
+            >
+              <template #append>
+                <openwb-base-color-picker
+                  class="p-1"
+                  :model-value="installedConsumer.color"
+                  :default-color="consumerDefaultColor"
+                  @update:model-value="updateState(installedConsumerKey, $event, 'color')"
+                />
+              </template>
+            </openwb-base-text-input>
             <openwb-base-text-input
               title="Hersteller"
               subtype="text"
@@ -622,6 +639,7 @@ export default {
       modalConsumer: undefined,
       modalConsumerName: "",
       CONSUMER_CONFIG_FIELDS: ["connected_phases", "phase_1", "max_power"],
+      consumerDefaultColor: "#6f42c1",
     };
   },
   computed: {
@@ -638,6 +656,7 @@ export default {
             moduleTopic,
             {
               ...module,
+              color: module.color ?? this.consumerDefaultColor,
               config: configs[`openWB/consumer/${id}/config`] ?? {},
               consumerUsage: usages[`openWB/consumer/${id}/usage`] ?? null,
             },
