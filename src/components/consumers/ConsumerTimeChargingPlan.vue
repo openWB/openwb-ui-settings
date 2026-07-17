@@ -121,7 +121,7 @@
       :labels="minBatSocLabels"
     >
       <template #help>
-        Zeitladen wird nur ausgeführt, solange der Speicher-SoC über diesem Wert liegt. Bei „Aus" wird der Speicher-SoC
+        Zeitladen wird nur ausgeführt, solange der Speicher-SoC über diesem Wert liegt. Bei "Aus" wird der Speicher-SoC
         nicht berücksichtigt. Lädt die aktive Speichersteuerung gerade den Speicher, wird kein Zeitladen gestartet, da
         der Speicher nicht gleichzeitig geladen und entladen werden kann.
       </template>
@@ -179,14 +179,6 @@ export default {
         labels.push({ label: value, value: value });
       }
       return labels;
-    },
-  },
-  watch: {
-    plan: {
-      handler(newValue) {
-        this.$emit("update:modelValue", newValue);
-      },
-      deep: true,
     },
   },
   methods: {
