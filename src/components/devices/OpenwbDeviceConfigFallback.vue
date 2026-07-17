@@ -15,7 +15,7 @@
         title="Konfiguration"
         subtype="json"
         :model-value="device.configuration"
-        @update:model-value="updateFallbackConfiguration($event)"
+        @update:model-value="updateConfiguration($event, 'configuration')"
       >
         <template #help> Bitte prüfe, ob die Eingaben richtig interpretiert werden. </template>
       </openwb-base-textarea>
@@ -27,20 +27,10 @@
 </template>
 
 <script>
+import DeviceConfigMixin from "./DeviceConfigMixin.vue";
+
 export default {
   name: "DeviceFallback",
-  props: {
-    device: { type: Object, required: true },
-  },
-  emits: ["update:configuration"],
-  methods: {
-    updateFallbackConfiguration(value) {
-      this.$emit("update:configuration", {
-        value,
-        object: "configuration",
-        source: "fallback",
-      });
-    },
-  },
+  mixins: [DeviceConfigMixin],
 };
 </script>
