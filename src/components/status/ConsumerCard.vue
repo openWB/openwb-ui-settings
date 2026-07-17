@@ -6,7 +6,15 @@
     :state-message="$store.state.mqtt[baseTopic + '/get/fault_str']"
   >
     <template #header-left>
-      <font-awesome-icon :icon="['fas', 'plug']" />
+      <font-awesome-icon
+        :icon="['fas', 'plug']"
+        class="fa-border"
+        :style="{
+          backgroundColor: color,
+          color: getContrastColor(color),
+          '--fa-border-color': getContrastColor(color),
+        }"
+      />
       {{ name }}
     </template>
     <template #header-right>
@@ -182,6 +190,12 @@ export default {
       get() {
         const module = this.$store.state.mqtt[this.baseTopic + "/module"];
         return module?.name ?? `Verbraucher ${this.consumerId}`;
+      },
+    },
+    color: {
+      get() {
+        const module = this.$store.state.mqtt[this.baseTopic + "/module"];
+        return module?.color ?? "#6f42c1";
       },
     },
     power: {
