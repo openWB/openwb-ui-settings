@@ -1,13 +1,22 @@
 <template>
   <div class="vehicle-soc-vwid">
     <openwb-base-alert subtype="info">
-      Beschreibung der Konfiguration und weitere Hinweise im Wiki:
+      Das VWEUDA-Modul kann Fahrzeugdaten für mehrere Marken des VW-Konzenrs abrufen.
+      Das VWEUDA-Modul holt die Daten aus dem 
       <a
-        href="https://github.com/openWB/core/wiki/SoC-VWId"
+        href="https://eu-data-act.drivesomethinggreater.com/de/de"
         target="_blank"
         rel="noopener noreferrer"
-        >Wiki für SoC-Modul VWId</a
-      >
+        >VW-EU-DATA Portal</a
+      > ab.<br/>
+      Im Portal muss zuerst für jedes Fahrzeug ein "Benutzerdefinierter bzw. kontinuierlicher Datenabruf" eingerichtet werden mit folgenden Parametern:<br/>
+      - Data Clusters:All Data<br/>
+      - Intervall: 15 min<br/>
+      - kein Ende<br/>
+      Nach Einrichtung des Abrufs werden vom Portal im Abstand von ca. 15 Minuten zip-Dateien bereitgestellt.<br/>
+      Zu Beginn können die Dateien den Zusatz _no_content im Namen haben und sind weitgehend leer.<br/>
+      Nach einigen Stunden kommen dann die Dateien mit Inhalt.
+      Diese werden dann vom VWEUDA-Modul abgeholt.
     </openwb-base-alert>
     <openwb-base-text-input
       title="Benutzername"
@@ -16,7 +25,7 @@
       :model-value="vehicle.configuration.user_id"
       @update:model-value="updateConfiguration($event, 'configuration.user_id')"
     >
-      <template #help> Der Benutzername(Email-Adresse) für die Anmeldung an den VW-Servern. </template>
+      <template #help> Der Benutzername(Email-Adresse) für die Anmeldung im Account der VW-Marke. </template>
     </openwb-base-text-input>
     <openwb-base-text-input
       title="Kennwort"
@@ -25,7 +34,7 @@
       :model-value="vehicle.configuration.password"
       @update:model-value="updateConfiguration($event, 'configuration.password')"
     >
-      <template #help> Das Passwort für die Anmeldung an den VW-Servern. </template>
+      <template #help> Das Passwort für die Anmeldung im Account. </template>
     </openwb-base-text-input>
     <openwb-base-text-input
       title="VIN"
