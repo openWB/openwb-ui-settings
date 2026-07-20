@@ -1,5 +1,5 @@
 <template>
-  <div class="vehicle-soc-vwid">
+  <div class="vehicle-soc-vweuda">
     <openwb-base-alert subtype="info">
       Das VWEUDA-Modul kann Fahrzeugdaten für mehrere Marken des VW-Konzenrs abrufen.
       Das VWEUDA-Modul holt die Daten aus dem 
@@ -74,7 +74,7 @@
 import VehicleConfigMixin from "../VehicleConfigMixin.vue";
 
 export default {
-  name: "VehicleSocVwid",
+  name: "VehicleSocVweuda",
   mixins: [VehicleConfigMixin],
 };
 </script>
