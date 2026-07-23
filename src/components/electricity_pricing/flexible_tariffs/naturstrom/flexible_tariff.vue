@@ -2,11 +2,11 @@
   <div class="flexible-tariff-naturstrom">
     <openwb-base-alert subtype="info">
       Über die Naturstrom-Authentifizierung kannst Du Deine Stromtarif-Daten für die Ladeplanung nutzen. Nach der Anmeldung
-      bei Naturstrom wird eine Access- und Refresh-Token angezeigt, welche Du hier einfügen musst.
+      bei Naturstrom wird ein Access- und Refresh-Token angezeigt, welche Du hier einfügen musst.
     </openwb-base-alert>
     <openwb-base-alert subtype="warning">
-      Die Naturstrom-Authentifizierung kann nur über einen Computer oder die openWB-Cloud (remote.openwb.de) durchgeführt
-      werden. Das Eintragen von Kunden- und Vertragsnummer ist nicht ausreichend, da nach der Anmeldung bei Naturstrom noch
+      Die Naturstrom-Authentifizierung kann nur über einen Computer durchgeführt werden. 
+      Das Eintragen von Kunden- und Vertragsnummer ist nicht ausreichend, da nach der Anmeldung bei Naturstrom noch
       die Zustimmung erteilt werden muss.
     </openwb-base-alert>
 
@@ -22,7 +22,7 @@
     </openwb-base-button-input>
 
     <openwb-base-text-input
-      ref="tokenInput"
+      ref="accesstokenInput"
       title="Access-Token"
       required
       pattern="^ory_at_.*$"
@@ -30,13 +30,13 @@
       @update:model-value="updateConfiguration($event, 'configuration.token.access_token')"
     >
       <template #help>
-        Nachdem die Naturstrom-Authentifizierung abgeschlossen wurde, wird im geöffneten Browserfenster eine Access-Token
-        angezeigt. Dieses kopieren und hier einfügen. Dieses wird benötigt, um auf Ihre Tarif-Daten zugreifen zu können.
+        Nachdem die Naturstrom-Authentifizierung abgeschlossen wurde, wird im geöffneten Browserfenster ein Access-Token
+        angezeigt. Dieses kopieren und hier einfügen. Dieses wird benötigt, um auf Deine Tarif-Daten zugreifen zu können.
       </template>
     </openwb-base-text-input>
 
     <openwb-base-text-input
-      ref="tokenInput"
+      ref="refreshtokenInput"
       title="Refresh-Token"
       required
       pattern="^ory_rt_.*$"
@@ -44,20 +44,20 @@
       @update:model-value="updateConfiguration($event, 'configuration.token.refresh_token')"
     >
       <template #help>
-        Nachdem die Naturstrom-Authentifizierung abgeschlossen wurde, wird im geöffneten Browserfenster eine Refresh-Token
-        angezeigt. Dieses kopieren und hier einfügen. Dieses wird benötigt, um auf Ihre Tarif-Daten zugreifen zu können.
+        Nachdem die Naturstrom-Authentifizierung abgeschlossen wurde, wird im geöffneten Browserfenster ein Refresh-Token
+        angezeigt. Dieses kopieren und hier einfügen. Dieses wird benötigt, um auf Deine Tarif-Daten zugreifen zu können.
       </template>
     </openwb-base-text-input>
 
     <openwb-base-button-input
-      title="3. Accounts abrufen"
+      title="2. Accounts abrufen"
       button-text="Accounts laden"
       subtype="info"
-      :disabled="!flexibleTariff.configuration.token?.refresh_token"
+      :disabled="!flexibleTariff.configuration.token?.access_token"
       @button-clicked="fetch_accounts"
     >
       <template #help>
-        Mit dem Refresh-Token wird automatisch die zugehörige Account-Information von Naturstrom abgerufen.
+        Mit dem Access-Token wird automatisch die zugehörige Account-Information von Naturstrom abgerufen.
       </template>
     </openwb-base-button-input>
 
@@ -68,7 +68,7 @@
       @update:model-value="updateSelectedAccount"
     >
       <template #help>
-        Wähle eine der verfügbaren Accounts aus. Diese wird für den Zugriff auf die Tarif-Daten benötigt.
+        Wähle einen der verfügbaren Accounts aus. Dieser wird für den Zugriff auf die Tarif-Daten benötigt.
       </template>
     </openwb-base-select-input>
   </div>
@@ -121,7 +121,14 @@ export default {
         "NaturstromLogin",
         "width=800,height=600,status=yes,scrollbars=yes,resizable=yes",
       );
-      naturstromLogin.focus();
+      if (!naturstromLogin) {
+         this.$root.postClientMessage(
+           "Popup konnte nicht geöffnet werden. Bitte erlaube Popups für diese Seite.",
+           "danger",
+         );
+         return;
+       }
+      naturstromLogin.focus();      
 
       // Then get the auth URL and redirect the popup
       this.createAuthUrl()
@@ -132,7 +139,7 @@ export default {
           naturstromLogin.close();
           console.error("Fehler beim Erstellen des Naturstrom-Links:", error);
           this.$root.postClientMessage(
-            "Fehler beim Erstellen der NaturstromAuthentifizierung: " + (error.response?.data?.message || error.message),
+            "Fehler beim Erstellen der Naturstrom-Authentifizierung: " + (error.response?.data?.message || error.message),
             "danger",
           );
         });
@@ -140,11 +147,15 @@ export default {
 
     async createAuthUrl() {
       // Call local server endpoint
-      const response = await axios.post("https://naturstrom.openwb.de/naturstrom-auth.php", {
-        headers: {
-          "Content-Type": "application/json",
+      const response = await axios.post(
+        "https://naturstrom.openwb.de/naturstrom-auth.php",
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
 
       if (!response.data.success) {
         throw new Error("Server-Fehler beim Erstellen der Naturstrom-Authentifizierung");
@@ -153,8 +164,8 @@ export default {
     },
 
     async fetch_accounts() {
-      if (!this.flexibleTariff.configuration.token?.refresh_token) {
-        this.$root.postClientMessage("Bitte gib zuerst ein Refresh-Token ein.", "warning");
+      if (!this.flexibleTariff.configuration.token?.access_token) {
+         this.$root.postClientMessage("Bitte gib zuerst ein Access-Token ein.", "warning");
         return;
       }
 
@@ -198,7 +209,7 @@ export default {
             this.$root.postClientMessage("Account erfolgreich abgerufen: " + firstAccount.name, "success");
           }
         } else {
-          this.$root.postClientMessage("Keine Accounts für dieses Refresh-Token gefunden.", "warning");
+          this.$root.postClientMessage("Keine Accounts für das angegebene Token gefunden.", "warning");
         }
       } catch (error) {
         console.error("Fehler beim Abrufen der Accounts:", error);
