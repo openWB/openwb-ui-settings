@@ -218,8 +218,8 @@
                 class: 'btn-outline-success',
               },
             ]"
-            :model-value="template.chargemode.pv_charging.feed_in_limit"
-            @update:model-value="updateState(templateKey, $event, 'chargemode.pv_charging.feed_in_limit')"
+            :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/feed_in_limit']"
+            @update:model-value="updateState('openWB/general/chargemode_config/pv_charging/feed_in_limit', $event)"
           >
             <template #help>
               Die Nutzung dieser Option ergibt nur Sinn, wenn ein Wechselrichter in irgendeiner Form abgeregelt wird
@@ -267,7 +267,7 @@ export default {
     return {
       mqttTopics: [
         { topic: "openWB/general/chargemode_config/pv_charging/control_range", writeable: true },
-        { topic: "openWB/general/chargemode_config/pv_charging/feed_in_yield", writeable: true },
+        { topic: "openWB/general/chargemode_config/pv_charging/feed_in_limit", writeable: true },
         { topic: "openWB/general/chargemode_config/pv_charging/phase_switch_delay", writeable: true },
         { topic: "openWB/general/chargemode_config/pv_charging/retry_failed_phase_switches", writeable: true },
         { topic: "openWB/general/chargemode_config/pv_charging/switch_off_delay", writeable: true },
