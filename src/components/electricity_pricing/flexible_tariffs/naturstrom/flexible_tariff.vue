@@ -4,11 +4,6 @@
       Über die Naturstrom-Authentifizierung kannst Du Deine Stromtarif-Daten für die Ladeplanung nutzen. Nach der Anmeldung
       bei Naturstrom wird ein Access- und Refresh-Token angezeigt, welche Du hier einfügen musst.
     </openwb-base-alert>
-    <openwb-base-alert subtype="warning">
-      Die Naturstrom-Authentifizierung kann nur über einen Computer durchgeführt werden. 
-      Das Eintragen von Kunden- und Vertragsnummer ist nicht ausreichend, da nach der Anmeldung bei Naturstrom noch
-      die Zustimmung erteilt werden muss.
-    </openwb-base-alert>
 
     <openwb-base-button-input
       title="1. Bei Naturstrom anmelden"
