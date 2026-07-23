@@ -392,7 +392,13 @@
                     <openwb-base-avatar
                       class="bg-success clickable"
                       title="Neuen Zielladen-Plan hinzufügen"
-                      @click.stop="addConsumerSchedulePlan(installedConsumer.id)"
+                      @click.stop="
+                        commandAfterSavingConsumerUsage(
+                          'addConsumerSchedulePlan',
+                          { consumer_id: installedConsumer.id },
+                          true,
+                        )
+                      "
                     >
                       <font-awesome-icon :icon="['fas', 'plus']" />
                     </openwb-base-avatar>
@@ -410,7 +416,7 @@
                   :model-value="plan"
                   :consumer-id="installedConsumer.id"
                   @update:model-value="updateUsage(installedConsumer.id, $event, `scheduled_charging.plans.${planKey}`)"
-                  @send-command="$emit('sendCommand', $event)"
+                  @send-command="commandAfterSavingConsumerUsage($event.command, $event.data, true)"
                 />
               </openwb-base-card>
               <openwb-base-card
@@ -491,7 +497,13 @@
                   <openwb-base-avatar
                     class="bg-success clickable"
                     title="Neuen Zeitladen-Plan hinzufügen"
-                    @click.stop="addConsumerTimePlan(installedConsumer.id)"
+                    @click.stop="
+                      commandAfterSavingConsumerUsage(
+                        'addConsumerTimePlan',
+                        { consumer_id: installedConsumer.id },
+                        true,
+                      )
+                    "
                   >
                     <font-awesome-icon :icon="['fas', 'plus']" />
                   </openwb-base-avatar>
@@ -508,7 +520,7 @@
                   :model-value="plan"
                   :consumer-id="installedConsumer.id"
                   @update:model-value="updateUsage(installedConsumer.id, $event, `time_charging.plans.${planKey}`)"
-                  @send-command="$emit('sendCommand', $event)"
+                  @send-command="commandAfterSavingConsumerUsage($event.command, $event.data, true)"
                 />
               </openwb-base-card>
             </template>
@@ -639,6 +651,7 @@ export default {
       modalConsumer: undefined,
       modalConsumerName: "",
       CONSUMER_CONFIG_FIELDS: ["connected_phases", "phase_1", "max_power"],
+      commandQueue: [],
       consumerDefaultColor: "#6f42c1",
     };
   },
@@ -738,6 +751,27 @@ export default {
         result[consumer.id] = consumer?.usage?.includes("meter_only") ?? false;
       });
       return result;
+    },
+    savingData() {
+      return this.$store.state.local.savingData;
+    },
+  },
+  watch: {
+    savingData(newValue, oldValue) {
+      if (newValue === false && oldValue === true) {
+        // savingData changed from true to false, meaning the save operation has completed
+        // process any queued commands
+        while (this.commandQueue.length > 0) {
+          const command = this.commandQueue.shift();
+          console.debug(`Processing queued command: ${command.command}`);
+          this.$emit("sendCommand", command);
+        }
+        // reset the preventSavingDataModal flag to allow future modals to be shown
+        this.$store.commit("storeLocal", {
+          name: "preventSavingModal",
+          value: false,
+        });
+      }
     },
   },
   methods: {
@@ -870,17 +904,17 @@ export default {
       if (Number.isNaN(epoch)) return;
       this.updateUsage(consumerId, epoch, "reset_chargemode.time");
     },
-    addConsumerSchedulePlan(consumerId) {
-      this.$emit("sendCommand", {
-        command: "addConsumerSchedulePlan",
-        data: { consumer_id: consumerId },
-      });
-    },
-    addConsumerTimePlan(consumerId) {
-      this.$emit("sendCommand", {
-        command: "addConsumerTimePlan",
-        data: { consumer_id: consumerId },
-      });
+    commandAfterSavingConsumerUsage(command, data, hideSaveModal = false) {
+      this.commandQueue.push({ command, data });
+      if (hideSaveModal) {
+        console.debug(`Hiding save modal before executing command: ${command}`);
+        this.$store.commit("storeLocal", {
+          name: "preventSavingModal",
+          value: true,
+        });
+      }
+      console.debug(`Saving consumer usage data before executing command: ${command}`);
+      this.$emit("save", [`openWB/consumer/${data.consumer_id}/usage`]);
     },
   },
 };

@@ -27,6 +27,7 @@ let states = {
     modalBlockerVisible: false,
     reloadRequired: false,
     savingData: false,
+    preventSavingModal: false,
     username: null,
   },
 };
