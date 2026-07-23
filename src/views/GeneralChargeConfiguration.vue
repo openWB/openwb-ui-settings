@@ -62,8 +62,8 @@
                   required
                   class="form-control d-inline-block mx-2"
                   style="width: 120px;"
-                  :value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/feed_in_yield'] / 1000"
-                  @input="updateState('openWB/general/chargemode_config/pv_charging/feed_in_yield', parseFloat($event.target.value) * 1000)"
+                  :value="$store.state.mqtt['openWB/general/chargemode_config/feed_in_yield'] / 1000"
+                  @input="updateState('openWB/general/chargemode_config/feed_in_yield', parseFloat($event.target.value) * 1000)"
                 /> 
                 kW des Überschusses ins Netz forcieren
                 <openwb-base-tooltip description="Hilfe anzeigen">
@@ -309,7 +309,7 @@ export default {
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/general/chargemode_config/unbalanced_load", writeable: true },
         { topic: "openWB/general/chargemode_config/unbalanced_load_limit", writeable: true },
-        { topic: "openWB/general/chargemode_config/pv_charging/feed_in_yield", writeable: true },
+        { topic: "openWB/general/chargemode_config/feed_in_yield", writeable: true },
         { topic: "openWB/general/prices/bat", writeable: true },
         { topic: "openWB/general/prices/grid", writeable: true },
         { topic: "openWB/general/prices/pv", writeable: true },
