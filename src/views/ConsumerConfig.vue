@@ -211,11 +211,11 @@
               title="Verwendung"
               not-selected="Bitte auswählen"
               :options="[
-                        { value: 'meter_only', text: 'Nur Messung' },
-                        { value: 'suspendable_onoff', text: 'Schaltbar (Ein/Aus)' },
-                        { value: 'suspendable_tunable', text: 'Stufenlos regelbar' },
-                        { value: 'continuous', text: 'Dauerverbraucher' }
-                      ]"
+                { value: 'meter_only', text: 'Nur Messung' },
+                { value: 'suspendable_onoff', text: 'Schaltbar (Ein/Aus)' },
+                { value: 'suspendable_tunable', text: 'Stufenlos regelbar' },
+                { value: 'continuous', text: 'Dauerverbraucher' },
+              ]"
               :model-value="installedConsumer.consumerUsage.type"
               @update:model-value="updateUsage(installedConsumer.id, $event, 'type')"
             >
@@ -313,11 +313,13 @@
                 @update:model-value="updateUsage(installedConsumer.id, $event, 'wait_for_start_active')"
               >
                 <template #help>
-                  Das Gerät wird eingeschaltet, um seine Startsequenz (z. B. Befüllen,
-                  Türverriegelung) abzuwarten. Sobald der Strom den eingestellten Minimalstrom übersteigt, wird das Gerät als aktiv erkannt, das Gerät abgeschaltet und es übernimmt der gewählte Betriebsmodus. So kann
-                  z. B. eine Waschmaschine morgens befüllt werden und läuft erst an, wenn genug Überschuss vorhanden
-                  ist. Für Geräte ohne Anlaufsequenz (z. B. Wärmepumpen) deaktivieren.</br>
-                  Die Anlauferkennung wird bei Ablauf eines Ziel- oder Zeitplans und beim Ändern des Betriebsmodus zurückgesetzt.
+                  Das Gerät wird eingeschaltet, um seine Startsequenz (z. B. Befüllen, Türverriegelung) abzuwarten.
+                  Sobald der Strom den eingestellten Minimalstrom übersteigt, wird das Gerät als aktiv erkannt, das
+                  Gerät abgeschaltet und es übernimmt der gewählte Betriebsmodus. So kann z. B. eine Waschmaschine
+                  morgens befüllt werden und läuft erst an, wenn genug Überschuss vorhanden ist. Für Geräte ohne
+                  Anlaufsequenz (z. B. Wärmepumpen) deaktivieren.<br />
+                  Die Anlauferkennung wird bei Ablauf eines Ziel- oder Zeitplans und beim Ändern des Betriebsmodus
+                  zurückgesetzt.
                 </template>
               </openwb-base-button-group-input>
               <hr />
@@ -544,8 +546,8 @@
               v-if="!hasIntegratedCounter[installedConsumer.id] && !hasExtraMeter(installedConsumer.id)"
               subtype="warning"
             >
-              Der Verbraucher hat keinen integrierten Zähler und es ist kein separater Zähler verknüpft. Der Verbraucher anhand der eingegebenen
-              minimalen Leistung geschaltet.
+              Der Verbraucher hat keinen integrierten Zähler und es ist kein separater Zähler verknüpft. Der Verbraucher
+              anhand der eingegebenen minimalen Leistung geschaltet.
             </openwb-base-alert>
             <openwb-base-alert
               v-if="!hasIntegratedCounter[installedConsumer.id] && hasExtraMeter(installedConsumer.id)"
@@ -557,8 +559,8 @@
               v-if="hasIntegratedCounter[installedConsumer.id] && !hasExtraMeter(installedConsumer.id)"
               subtype="info"
             >
-              Die Messwerte werden aus dem integrierten Zähler des Verbrauchers ausgelesen. Falls gewünscht, kann ein separater Zähler verknüpft werden, der
-              die Messwerte des integrierten Zählers überschreibt.
+              Die Messwerte werden aus dem integrierten Zähler des Verbrauchers ausgelesen. Falls gewünscht, kann ein
+              separater Zähler verknüpft werden, der die Messwerte des integrierten Zählers überschreibt.
             </openwb-base-alert>
             <openwb-base-alert
               v-if="hasIntegratedCounter[installedConsumer.id] && hasExtraMeter(installedConsumer.id)"
