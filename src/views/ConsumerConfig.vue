@@ -167,7 +167,7 @@
               </template>
             </openwb-base-number-input>
             <openwb-base-number-input
-              v-if="showModeSettings(installedConsumer)"
+              v-if="showMinCurrent(installedConsumer)"
               title="Minimaler Betriebsstrom"
               unit="A"
               :min="0"
@@ -853,6 +853,10 @@ export default {
     showModeSettings(consumer) {
       const type = consumer.consumerUsage?.type;
       return type != null && type !== "meter_only";
+    },
+    showMinCurrent(consumer) {
+      const type = consumer.consumerUsage?.type;
+      return type !== "suspendable_onoff" && type !== "continuous";
     },
     getUsageOptions(consumer) {
       if (!Array.isArray(consumer.usage)) return [];
