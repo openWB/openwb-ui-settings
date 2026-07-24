@@ -61,10 +61,15 @@
                   :step="0.05"
                   required
                   class="form-control d-inline-block mx-2"
-                  style="width: 120px;"
+                  style="width: 120px"
                   :value="$store.state.mqtt['openWB/general/chargemode_config/feed_in_yield'] / 1000"
-                  @input="updateState('openWB/general/chargemode_config/feed_in_yield', parseFloat($event.target.value) * 1000)"
-                /> 
+                  @input="
+                    updateState(
+                      'openWB/general/chargemode_config/feed_in_yield',
+                      parseFloat($event.target.value) * 1000,
+                    )
+                  "
+                />
                 kW des Überschusses ins Netz forcieren
                 <openwb-base-tooltip description="Hilfe anzeigen">
                   <font-awesome-icon

@@ -22,7 +22,7 @@
         @click.stop="plan.active = !plan.active"
       >
         <font-awesome-icon :icon="['fas', 'clock']" />
-        {{ plan.time[0] }} - {{ plan.time[1] }}
+        {{ plan.time }}
         <span v-if="plan.frequency.selected == 'once'">
           <font-awesome-icon :icon="['fas', 'calendar-day']" />
         </span>
@@ -63,13 +63,8 @@
       ]"
     />
     <openwb-base-text-input
-      v-model="plan.time[0]"
-      title="Zeitfenster Beginn"
-      subtype="time"
-    />
-    <openwb-base-text-input
-      v-model="plan.time[1]"
-      title="Zeitfenster Ende"
+      v-model="plan.time"
+      title="Ziel-Termin"
       subtype="time"
     />
     <openwb-base-button-group-input
@@ -108,7 +103,6 @@
     </div>
     <hr />
     <openwb-base-number-input
-      v-if="plan.duration !== undefined"
       title="Gesamtlaufzeit"
       unit="min"
       :min="0"
