@@ -213,13 +213,8 @@
             <openwb-base-select-input
               title="Verwendung"
               not-selected="Bitte auswählen"
-              :options="[
-                { value: 'meter_only', text: 'Nur Messung' },
-                { value: 'suspendable_onoff', text: 'Schaltbar (Ein/Aus)' },
-                { value: 'suspendable_tunable', text: 'Stufenlos regelbar' },
-                { value: 'continuous', text: 'Dauerverbraucher' },
-              ]"
-              :model-value="installedConsumer.consumerUsage.type"
+              :options="getUsageOptions(installedConsumer)"
+              :model-value="installedConsumer.consumerUsage?.type"
               @update:model-value="updateUsage(installedConsumer.id, $event, 'type')"
             >
               <template #help>
@@ -858,6 +853,22 @@ export default {
     showModeSettings(consumer) {
       const type = consumer.consumerUsage?.type;
       return type != null && type !== "meter_only";
+    },
+    getUsageOptions(consumer) {
+      if (!Array.isArray(consumer.usage)) return [];
+      return consumer.usage.map((use) => ({
+        value: use,
+        text: this.usageLabels(use),
+      }));
+    },
+    usageLabels(type) {
+      const map = {
+        meter_only: "Nur Messung",
+        suspendable_onoff: "Schaltbar (Ein/Aus)",
+        suspendable_tunable: "Stufenlos regelbar",
+        continuous: "Dauerverbraucher",
+      };
+      return map[type] ?? type;
     },
     updateUsage(consumerId, value, path) {
       this.updateState(`openWB/consumer/${consumerId}/usage`, value, path);
