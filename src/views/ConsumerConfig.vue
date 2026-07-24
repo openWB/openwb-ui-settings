@@ -143,7 +143,7 @@
               "
             />
             <openwb-base-button-group-input
-              title="Phase 1 des Ladekabels"
+              title="Phase 1 des Verbraucheranschlusses"
               :buttons="[
                 { buttonValue: 1, text: 'EVU L1' },
                 { buttonValue: 2, text: 'EVU L2' },
@@ -154,7 +154,7 @@
             >
             </openwb-base-button-group-input>
             <openwb-base-number-input
-              title="Max Leistung"
+              title="Maximale Leistung"
               unit="W"
               :min="1"
               :model-value="installedConsumer?.config?.max_power"
@@ -166,7 +166,7 @@
               </template>
             </openwb-base-number-input>
             <openwb-base-number-input
-              title="Min Betriebsstrom"
+              title="Minimaler Betriebsstrom"
               unit="A"
               :min="0"
               :step="0.1"
@@ -181,17 +181,17 @@
             <openwb-base-number-input
               :title="
                 installedConsumer.consumerUsage?.type === 'suspendable_onoff'
-                  ? 'Min Programmdauer (vom längsten Programm)'
-                  : 'Min Regelintervall'
+                  ? 'Minimale Programmdauer (vom längsten Programm)'
+                  : 'Minimiales Regelintervall'
               "
               unit="min"
               :min="0"
               :step="1"
               :model-value="
-                installedConsumer.config?.min_intervall != null ? installedConsumer.config.min_intervall / 60 : null
+                installedConsumer.config?.min_interval != null ? installedConsumer.config.min_interval / 60 : null
               "
               @update:model-value="
-                updateState(`openWB/consumer/${installedConsumer.id}/config`, $event * 60, 'min_intervall')
+                updateState(`openWB/consumer/${installedConsumer.id}/config`, $event * 60, 'min_interval')
               "
             >
               <template #help>
@@ -210,11 +210,24 @@
             <openwb-base-select-input
               title="Verwendung"
               not-selected="Bitte auswählen"
-              :options="getUsageOptions(installedConsumer)"
-              :model-value="installedConsumer.consumerUsage?.type"
-              @update:model-value="setUsage(installedConsumer.id, $event)"
+              :options="[
+                { value: 'meter_only', text: 'Nur Messung' },
+                { value: 'suspendable_onoff', text: 'Schaltbar (Ein/Aus)' },
+                { value: 'suspendable_tunable', text: 'Stufenlos regelbar' },
+                { value: 'continuous', text: 'Dauerverbraucher' },
+              ]"
+              :model-value="installedConsumer.consumerUsage.type"
+              @update:model-value="updateUsage(installedConsumer.id, $event, 'type')"
             >
-              <template #help> Legt fest, wie dieser Verbraucher im Energiemanagement berücksichtigt wird. </template>
+              <template #help>
+                Nur Messung: Verbraucher, die nicht angesteuert werden können.<br />
+                Schaltbar (Ein/Aus): Geräte, die ein- und ausgeschaltet werden können (auch mit SG-Ready-Kontakt).
+                Unterbrechung im laufenden Betrieb ist möglich.<br />
+                Stufenlos regelbar: Geräte, denen eine Leistung vorgegeben werden kann. Unterbrechung im laufenden
+                Betrieb ist möglich.<br />
+                Dauerverbraucher: Geräte, die ein- und ausgeschaltet werden können, bei denen eine Unterbrechung im
+                laufenden Betrieb nicht möglich ist, z. B. Spülmaschine oder Trockner.
+              </template>
             </openwb-base-select-input>
             <template v-if="showModeSettings(installedConsumer)">
               <hr />
@@ -300,10 +313,13 @@
                 @update:model-value="updateUsage(installedConsumer.id, $event, 'wait_for_start_active')"
               >
                 <template #help>
-                  Täglich um Mitternacht wird das Gerät kurz eingeschaltet, um seine Startsequenz (z. B. Befüllen,
-                  Türverriegelung) abzuwarten. Sobald es sich abschaltet, übernimmt der gewählte Betriebsmodus. So kann
-                  z. B. eine Waschmaschine morgens befüllt werden und läuft erst an, wenn genug Überschuss vorhanden
-                  ist. Für Geräte ohne Anlaufsequenz (z. B. Wärmepumpen) deaktivieren.
+                Die Anlauferkennung ist in den Betriebsmodi PV, Eco und Ziel aktiv und wird bei Ablauf eines Zielplans sowie beim Ändern des Betriebsmodus
+                  zurückgesetzt.<br />
+                  Das Gerät wird eingeschaltet, um seine Startsequenz (z. B. Befüllen, Türverriegelung) abzuwarten.
+                  Sobald der Strom den eingestellten Minimalstrom übersteigt, wird das Gerät als aktiv erkannt, das
+                  Gerät abgeschaltet und es übernimmt der gewählte Betriebsmodus. So kann z. B. eine Waschmaschine
+                  morgens befüllt werden und läuft erst an, wenn genug Überschuss vorhanden ist. Für Geräte ohne
+                  Anlaufsequenz (z. B. Wärmepumpen) deaktivieren.
                 </template>
               </openwb-base-button-group-input>
               <hr />
@@ -530,8 +546,8 @@
               v-if="!hasIntegratedCounter[installedConsumer.id] && !hasExtraMeter(installedConsumer.id)"
               subtype="warning"
             >
-              Es ist kein separater Zähler verknüpft. Ohne separaten Zähler wird der Verbraucher anhand der eingegebenen
-              minimalen Leistung geschaltet.
+              Der Verbraucher hat keinen integrierten Zähler und es ist kein separater Zähler verknüpft. Der Verbraucher
+              anhand der eingegebenen minimalen Leistung geschaltet.
             </openwb-base-alert>
             <openwb-base-alert
               v-if="!hasIntegratedCounter[installedConsumer.id] && hasExtraMeter(installedConsumer.id)"
@@ -543,8 +559,8 @@
               v-if="hasIntegratedCounter[installedConsumer.id] && !hasExtraMeter(installedConsumer.id)"
               subtype="info"
             >
-              Es ist kein separater Zähler verknüpft. Falls gewünscht, kann ein separater Zähler verknüpft werden, der
-              die Messwerte des integrierten Zählers überschreibt.
+              Die Messwerte werden aus dem integrierten Zähler des Verbrauchers ausgelesen. Falls gewünscht, kann ein
+              separater Zähler verknüpft werden, der die Messwerte des integrierten Zählers überschreibt.
             </openwb-base-alert>
             <openwb-base-alert
               v-if="hasIntegratedCounter[installedConsumer.id] && hasExtraMeter(installedConsumer.id)"
@@ -748,7 +764,7 @@ export default {
     hasIntegratedCounter() {
       const result = {};
       Object.values(this.installedConsumers).forEach((consumer) => {
-        result[consumer.id] = consumer?.usage?.includes("meter_only") ?? false;
+        result[consumer.id] = consumer?.consumerUsage?.type === "meter_only";
       });
       return result;
     },
@@ -835,31 +851,6 @@ export default {
         ? `openWB/consumer/${consumer.id}/config`
         : `openWB/consumer/${consumer.id}/module`;
       this.updateState(targetTopic, value, object);
-    },
-    getUsageOptions(consumer) {
-      if (!Array.isArray(consumer.usage)) return [];
-      return consumer.usage.map((use) => ({
-        value: use,
-        text: this.usageLabels(use),
-      }));
-    },
-    usageLabels(type) {
-      const map = {
-        meter_only: "Nur Messung",
-        suspendable_onoff: "Schaltbar (Ein/Aus)",
-        suspendable_tunable: "Stufenlos regelbar",
-        continuous: "Dauerverbraucher",
-      };
-      return map[type] ?? type;
-    },
-    setUsage(consumerId, usage) {
-      this.$emit("sendCommand", {
-        command: "selectUsage",
-        data: {
-          consumer_id: consumerId,
-          usage,
-        },
-      });
     },
     showModeSettings(consumer) {
       const type = consumer.consumerUsage?.type;
