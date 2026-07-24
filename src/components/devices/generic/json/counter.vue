@@ -113,6 +113,12 @@
       :model-value="component.configuration.jq_voltage_l3"
       @update:model-value="updateConfiguration($event, 'configuration.jq_voltage_l3')"
     />
+    <openwb-base-text-input
+      title="Abfrage für Frequenz"
+      subtype="text"
+      :model-value="component.configuration.jq_frequency"
+      @update:model-value="updateConfiguration($event, 'configuration.jq_frequency')"
+    />
   </div>
 </template>
 
