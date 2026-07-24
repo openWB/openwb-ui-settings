@@ -1,14 +1,14 @@
 <template>
   <draggable
+    v-model="list"
     class="dragArea w-100 mb-0"
     tag="ul"
-    :list="list"
-    :group="{ name: 'g1' }"
+    :group="dragGroup"
     item-key="id"
     handle=".handle"
   >
     <template #item="{ element }">
-      <li>
+      <li v-show="!isHidden(element)">
         <div
           class="element-titel"
           :class="classes(element)"
@@ -18,27 +18,59 @@
               class="handle"
               :icon="['fas', nesting ? 'arrows-alt' : 'arrows-up-down']"
             />
-            <div class="element-label">
-              <font-awesome-icon
-                v-if="getElementIcon(element)"
-                :icon="getElementIcon(element)"
-              />
-              {{ getElementLabel(element.id) }}
-            </div>
-          </span>
-          <!-- <span class="element-actions">
             <font-awesome-icon
-
-              :icon="['fas', 'edit']"
-              @click="elementEdit(element.id)"
+              v-if="getElementIcon(element)"
+              :icon="getElementIcon(element)"
             />
-          </span> -->
+            <span v-if="editingGroupId !== element.id">
+              <span
+                style="cursor: pointer"
+                @click="startEditing(element)"
+              >
+                {{ getElementLabel(element.id) }}
+              </span>
+            </span>
+            <input
+              v-else
+              v-model="editingValue"
+              class="group-rename-input"
+              @keyup.enter="finishEditing(element.id)"
+              @blur="finishEditing(element.id)"
+            />
+          </span>
+          <span
+            v-if="element.type === 'group'"
+            class="element-actions"
+          >
+            <font-awesome-icon
+              class="mr-2"
+              :icon="['fas', 'pen']"
+              @click.stop="startEditing(element)"
+            />
+            <font-awesome-icon
+              :icon="['fas', 'trash']"
+              @click.stop="$emit('delete-group', element.id)"
+            />
+          </span>
+          <span
+            v-else-if="linkedMeterName(element.id)"
+            class="element-linked-meter"
+            :title="linkedMeterName(element.id)"
+          >
+            <span class="linked-meter-name">{{ linkedMeterName(element.id) }}</span>
+            <font-awesome-icon :icon="['fas', 'link']" />
+          </span>
         </div>
         <openwb-nested-list
-          v-if="nesting && element.children"
+          v-if="nesting && element.children && currentNestingDepth < maxNestingDepth"
           v-model="element.children"
           :labels="labels"
+          :linked-meters="linkedMeters"
+          :hidden-ids="hiddenIds"
           :nesting="nesting"
+          :max-nesting-depth="maxNestingDepth"
+          :current-nesting-depth="currentNestingDepth + 1"
+          @delete-group="$emit('delete-group', $event)"
         />
       </li>
     </template>
@@ -56,11 +88,27 @@ import {
   faCarBattery as fasCarBattery,
   faSolarPanel as fasSolarPanel,
   faGaugeHigh as fasGaugeHigh,
+  faTrash as fasTrash,
+  faPen as fasPen,
+  faCar as fasCar,
+  faPlug as fasPlug,
+  faLink as fasLink,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasArrowsAlt, fasArrowsUpDown, fasChargingStation, fasCarBattery, fasSolarPanel, fasGaugeHigh);
-
+library.add(
+  fasArrowsAlt,
+  fasArrowsUpDown,
+  fasChargingStation,
+  fasCarBattery,
+  fasSolarPanel,
+  fasGaugeHigh,
+  fasTrash,
+  fasPen,
+  fasCar,
+  fasPlug,
+  fasLink,
+);
 export default {
   name: "OpenwbNestedList",
   components: {
@@ -68,9 +116,48 @@ export default {
     FontAwesomeIcon,
   },
   props: {
-    list: { type: Object, required: false, default: undefined },
+    modelValue: { type: Array, required: false, default: () => [] },
     labels: { type: Object, required: false, default: undefined },
+    linkedMeters: { type: Object, required: false, default: undefined },
+    hiddenIds: { type: Array, required: false, default: undefined },
     nesting: { type: Boolean, default: true },
+    maxNestingDepth: { type: Number, default: Infinity },
+    currentNestingDepth: { type: Number, default: 0 },
+  },
+  emits: ["update:modelValue", "delete-group", "rename-group"],
+  data() {
+    return {
+      editingGroupId: null,
+      editingValue: "",
+    };
+  },
+  computed: {
+    list: {
+      get() {
+        return this.modelValue;
+      },
+      set(val) {
+        this.$emit("update:modelValue", val);
+      },
+    },
+    dragGroup() {
+      if (this.currentNestingDepth === 0) {
+        return {
+          name: "g1",
+          pull: true,
+          put: true,
+        };
+      }
+      return {
+        name: "g1",
+        pull: true,
+        put: (to, from, dragEl) => {
+          const draggedItem = dragEl?.__draggable_context?.element;
+          if (!draggedItem) return true;
+          return draggedItem.type !== "group";
+        },
+      };
+    },
   },
   methods: {
     classes(element) {
@@ -94,6 +181,12 @@ export default {
       }
       return elementId;
     },
+    linkedMeterName(elementId) {
+      return this.linkedMeters?.[elementId] ?? undefined;
+    },
+    isHidden(element) {
+      return element.type === "counter" && !!this.hiddenIds?.some((id) => String(id) === String(element.id));
+    },
     getElementIcon(element) {
       switch (element.type) {
         case "bat":
@@ -102,11 +195,39 @@ export default {
           return ["fas", "gauge-high"];
         case "cp":
           return ["fas", "charging-station"];
+        case "vehicle":
+          return ["fas", "car"];
+        case "consumer":
+          return ["fas", "plug"];
         case "inverter":
           return ["fas", "solar-panel"];
         default:
           return undefined;
       }
+    },
+    startEditing(element) {
+      if (element.type !== "group") return;
+
+      this.editingGroupId = element.id;
+      this.editingValue = element.label;
+
+      this.$nextTick(() => {
+        const input = this.$el.querySelector(".group-rename-input");
+        input?.focus();
+        input?.select();
+      });
+    },
+
+    finishEditing(groupId) {
+      if (!this.editingValue.trim()) {
+        this.editingGroupId = null;
+        return;
+      }
+      this.$emit("rename-group", {
+        id: groupId,
+        label: this.editingValue.trim(),
+      });
+      this.editingGroupId = null;
     },
   },
 };
@@ -179,7 +300,46 @@ export default {
   gap: 0.5rem;
 }
 
+.element-titel.consumer {
+  background-color: var(--purple);
+}
+
+.element-titel.group {
+  background-color: var(--secondary);
+}
+
+.group-rename-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--light);
+  color: var(--light);
+  font: inherit;
+  outline: none;
+  width: 100%;
+}
+
 .element-actions {
   cursor: pointer;
+}
+
+.element-linked-meter {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  margin-left: 8px;
+  opacity: 0.9;
+}
+
+.linked-meter-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 575.98px) {
+  .linked-meter-name {
+    display: none;
+  }
 }
 </style>
