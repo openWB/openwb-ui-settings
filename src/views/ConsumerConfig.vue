@@ -484,6 +484,14 @@
                     ein Strompreis-Anbieter konfiguriert sein.
                   </template>
                 </openwb-base-number-input>
+                <openwb-base-alert
+                  v-if="!$store.state.mqtt['openWB/optional/ep/configured']"
+                  class="mt-2"
+                  subtype="warning"
+                >
+                  Bitte in den übergreifenden Ladeeinstellungen einen Strompreis-Anbieter konfigurieren. Ohne
+                  Strompreis-Anbieter wird das Gerät im Modus Eco nur eingeschaltet, wenn Überschuss vorhanden ist.
+                </openwb-base-alert>
               </openwb-base-card>
               <hr />
               <openwb-base-heading> Zeit-Pläne </openwb-base-heading>
@@ -658,6 +666,7 @@ export default {
         { topic: "openWB/general/consumer/config/switch_off_delay", writeable: true },
         { topic: "openWB/general/consumer/config/switch_off_threshold", writeable: true },
         { topic: "openWB/system/configurable/consumers", writeable: false },
+        { topic: "openWB/optional/ep/configured", writeable: false },
       ],
       selectedVendor: undefined,
       consumerToAdd: undefined,
