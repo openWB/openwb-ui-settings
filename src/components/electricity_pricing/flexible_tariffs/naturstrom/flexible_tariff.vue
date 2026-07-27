@@ -1,8 +1,8 @@
 <template>
   <div class="flexible-tariff-naturstrom">
     <openwb-base-alert subtype="info">
-      Über die Naturstrom-Authentifizierung kannst Du Deine Stromtarif-Daten für die Ladeplanung nutzen. Nach der Anmeldung
-      bei Naturstrom wird ein Access- und Refresh-Token angezeigt, welche Du hier einfügen musst.
+      Über die Naturstrom-Authentifizierung kannst Du Deine Stromtarif-Daten für die Ladeplanung nutzen. Nach der
+      Anmeldung bei Naturstrom wird ein Access- und Refresh-Token angezeigt, welche Du hier einfügen musst.
     </openwb-base-alert>
 
     <openwb-base-button-input
@@ -12,7 +12,8 @@
       @button-clicked="() => naturstrom_login_window()"
     >
       <template #help>
-        Es wird ein neues Browserfenster geöffnet, in dem Du Dich bei Naturstrom mit Deinen Zugangsdaten anmelden kannst.
+        Es wird ein neues Browserfenster geöffnet, in dem Du Dich bei Naturstrom mit Deinen Zugangsdaten anmelden
+        kannst.
       </template>
     </openwb-base-button-input>
 
@@ -62,8 +63,9 @@
       @update:model-value="updateConfiguration($event, 'configuration.token.refresh_token')"
     >
       <template #help>
-        Nachdem die Naturstrom-Authentifizierung abgeschlossen wurde, wird im geöffneten Browserfenster ein Refresh-Token
-        angezeigt. Dieses kopieren und hier einfügen. Dieses wird benötigt, um auf Deine Tarif-Daten zugreifen zu können.
+        Nachdem die Naturstrom-Authentifizierung abgeschlossen wurde, wird im geöffneten Browserfenster ein
+        Refresh-Token angezeigt. Dieses kopieren und hier einfügen. Dieses wird benötigt, um auf Deine Tarif-Daten
+        zugreifen zu können.
       </template>
     </openwb-base-text-input>
 
@@ -106,7 +108,6 @@ const SCOPE = "email profile";
 const OAUTH_MAX_AGE_MS = 10 * 60 * 1000;
 const LOCAL_NATURSTROM_ENDPOINT = `${location.protocol}//${location.host}/openWB/web/settings/modules/electricity_pricing/flexible_tariffs/naturstrom/naturstrom.php`;
 
-
 export default {
   name: "FlexibleTariffNaturstrom",
   mixins: [FlexibleTariffConfigMixin],
@@ -127,7 +128,7 @@ export default {
       if (options.length === 0 && this.flexibleTariff.configuration.account_id) {
         options.push({
           value: this.flexibleTariff.configuration.account_id,
-          text: this.flexibleTariff.configuration.account_name ||  this.flexibleTariff.configuration.account_id,
+          text: this.flexibleTariff.configuration.account_name || this.flexibleTariff.configuration.account_id,
         });
       }
 
@@ -158,12 +159,12 @@ export default {
         "width=800,height=600,status=yes,scrollbars=yes,resizable=yes",
       );
       if (!naturstromLogin) {
-         this.$root.postClientMessage(
-           "Popup konnte nicht geöffnet werden. Bitte erlaube Popups für diese Seite.",
-           "danger",
-         );
-         return;
-       }
+        this.$root.postClientMessage(
+          "Popup konnte nicht geöffnet werden. Bitte erlaube Popups für diese Seite.",
+          "danger",
+        );
+        return;
+      }
       naturstromLogin.focus();
 
       // Build OAuth URL locally and redirect the popup
@@ -182,10 +183,9 @@ export default {
 
     async fetch_accounts() {
       if (!this.flexibleTariff.configuration.token?.access_token) {
-         this.$root.postClientMessage("Kein Access-Token vorhanden.", "warning");
+        this.$root.postClientMessage("Kein Access-Token vorhanden.", "warning");
         return;
       }
-
 
       try {
         const requestPayload = {
@@ -198,16 +198,12 @@ export default {
         };
 
         // Call the local Naturstrom PHP endpoint to get accounts
-        const response = await axios.post(
-          LOCAL_NATURSTROM_ENDPOINT,
-          JSON.parse(JSON.stringify(requestPayload)),
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "Accept": "application/json",
-            },
+        const response = await axios.post(LOCAL_NATURSTROM_ENDPOINT, JSON.parse(JSON.stringify(requestPayload)), {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
           },
-        );
+        });
 
         const rawData = response?.data;
         const parsedData = typeof rawData === "string" ? JSON.parse(rawData) : rawData;
@@ -237,7 +233,8 @@ export default {
             this.$root.postClientMessage("Account erfolgreich abgerufen: " + firstAccount.name, "success");
           }
         } else {
-          const responsePreview = typeof parsedData === "object" ? JSON.stringify(parsedData).slice(0, 300) : String(parsedData);
+          const responsePreview =
+            typeof parsedData === "object" ? JSON.stringify(parsedData).slice(0, 300) : String(parsedData);
           this.$root.postClientMessage(
             "Keine Accounts in der Antwort gefunden. Antwort (gekürzt): " + responsePreview,
             "warning",
@@ -306,24 +303,19 @@ export default {
           },
         };
 
-        const tokenResponse = await axios.post(
-          LOCAL_NATURSTROM_ENDPOINT,
-          JSON.parse(JSON.stringify(requestPayload)),
-          {
+        const tokenResponse = await axios.post(LOCAL_NATURSTROM_ENDPOINT, JSON.parse(JSON.stringify(requestPayload)), {
           headers: {
             "Content-Type": "application/json",
-            "Accept": "application/json",
+            Accept: "application/json",
           },
-          },
-        );
+        });
 
         console.log("Token-Antwort:", tokenResponse);
 
         const rawTokenData = tokenResponse?.data;
         const parsedTokenData = typeof rawTokenData === "string" ? JSON.parse(rawTokenData) : rawTokenData;
-        const tokenData = parsedTokenData?.data && typeof parsedTokenData.data === "object"
-          ? parsedTokenData.data
-          : parsedTokenData;
+        const tokenData =
+          parsedTokenData?.data && typeof parsedTokenData.data === "object" ? parsedTokenData.data : parsedTokenData;
 
         const accessToken = tokenData?.access_token;
         const refreshToken = tokenData?.refresh_token;
@@ -340,9 +332,15 @@ export default {
         this.clearOAuthSession();
         this.oauthCallbackUrl = "";
         if (refreshToken) {
-          this.$root.postClientMessage("OAuth erfolgreich abgeschlossen. Access- und Refresh-Token wurden gesetzt.", "success");
+          this.$root.postClientMessage(
+            "OAuth erfolgreich abgeschlossen. Access- und Refresh-Token wurden gesetzt.",
+            "success",
+          );
         } else {
-          this.$root.postClientMessage("OAuth erfolgreich abgeschlossen. Access-Token wurde gesetzt (kein Refresh-Token in der Antwort).", "warning");
+          this.$root.postClientMessage(
+            "OAuth erfolgreich abgeschlossen. Access-Token wurde gesetzt (kein Refresh-Token in der Antwort).",
+            "warning",
+          );
         }
       } catch (error) {
         console.error("Fehler beim Verarbeiten der Callback-URL:", error);
@@ -377,7 +375,7 @@ export default {
       }
 
       const { createHash } = await import("crypto");
-      const hash = createHash("sha256").update(Buffer.from(data)).digest();
+      const hash = createHash("sha256").update(data).digest();
       return new Uint8Array(hash);
     },
 
