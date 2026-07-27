@@ -28,6 +28,10 @@ export default defineConfig(({ command, mode }) => {
             target: "ws://localhost:9003",
             ws: true,
           },
+          "/openWB/web/settings/modules/electricity_pricing/flexible_tariffs/naturstrom/naturstrom.php": {
+            target: "http://localhost",
+            changeOrigin: true,
+          },
         },
       };
     }
