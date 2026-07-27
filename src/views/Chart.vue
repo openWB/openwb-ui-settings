@@ -51,13 +51,13 @@
             title="Diagramm"
             :collapsible="true"
             :collapsed="false"
-            @expanded="refreshLegend"
           >
             <div class="openwb-chart">
               <chartjs-line
                 ref="myChart"
                 :data="chartData"
                 :options="chartOptions"
+                :plugins="chartInstancePlugins"
                 @click="handleChartClick"
               />
             </div>
@@ -66,7 +66,7 @@
               :key="chartDatasets.datasets.length"
               ref="chartLegend"
               :range="chartRange"
-              :chart="getChartInstance()"
+              :chart="chartInstance"
             />
           </openwb-base-card>
           <openwb-base-card
@@ -177,7 +177,7 @@ Chart.register(
   ZoomPlugin,
 );
 import ChartLegend from "../components/chart/ChartLegend.vue";
-import { nextTick, toRaw } from "vue";
+import { markRaw, toRaw } from "vue";
 
 // list of keys in the chart data that contain objects with measurement values that should be included
 const baseObjectsToProcess = ["pv", "counter", "bat", "cp", "sh", "ev", "hc"];
@@ -784,6 +784,20 @@ export default {
   data() {
     return {
       chartInstance: null,
+      // Chart.js plugin that keeps chartInstance in sync with the live chart.
+      chartInstancePlugins: [
+        {
+          id: "captureChartInstance",
+          afterInit: (chart) => {
+            this.chartInstance = markRaw(chart);
+          },
+          afterDestroy: (chart) => {
+            if (this.chartInstance === chart) {
+              this.chartInstance = null;
+            }
+          },
+        },
+      ],
       mqttTopics: [
         { topic: "openWB/bat/+/get/power", writeable: false },
         { topic: "openWB/bat/get/power", writeable: false },
@@ -1259,28 +1273,10 @@ export default {
       immediate: true,
     },
   },
-  updated() {
-    this.$nextTick(() => {
-      if (this.$refs.myChart?.chart) {
-        this.chartInstance = this.$refs.myChart.chart;
-      }
-    });
-  },
   mounted() {
     this.init();
-    nextTick(() => {
-      this.chartInstance = this.$refs.myChart?.chart;
-    });
   },
   methods: {
-    getChartInstance() {
-      return this.$refs.myChart ? this.$refs.myChart.chart : null;
-    },
-    refreshLegend() {
-      this.$nextTick(() => {
-        this.chartInstance = this.$refs.myChart?.chart;
-      });
-    },
     handleChartClick(event) {
       if (this.chartRange == "day") {
         // no click actions for daily charts
