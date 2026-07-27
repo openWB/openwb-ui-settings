@@ -587,6 +587,22 @@
               :model-value="template.control_pilot_interruption_duration"
               @update:model-value="updateState(key, $event, 'control_pilot_interruption_duration')"
             />
+            <openwb-base-number-input
+              v-if="template.control_pilot_interruption"
+              title="Wiederholung der CP-Unterbrechung"
+              :min="0"
+              :max="900"
+              :step="30"
+              unit="s"
+              :model-value="template.control_pilot_interruption_retry_interval"
+              @update:model-value="updateState(key, $event, 'control_pilot_interruption_retry_interval')"
+            >
+              <template #help>
+                Wiederholt die CP-Unterbrechung, wenn das Fahrzeug trotz freigegebenem Ladestrom nach dieser Zeit
+                (in Sekunden) immer noch nicht lädt. 0 = deaktiviert. Empfehlenswerte Einstellungen liegen zwischen
+                3 und 5 min (= 180 bis 300 Sekunden).
+              </template>
+            </openwb-base-number-input>
             <openwb-base-button-group-input
               title="Phasenumschaltung blockieren"
               :buttons="[
