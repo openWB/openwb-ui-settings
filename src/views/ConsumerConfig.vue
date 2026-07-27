@@ -771,7 +771,7 @@ export default {
     hasIntegratedCounter() {
       const result = {};
       Object.values(this.installedConsumers).forEach((consumer) => {
-        result[consumer.id] = consumer?.consumerUsage?.type === "meter_only";
+        result[consumer.id] = consumer?.usage?.includes("meter_only") ?? false;
       });
       return result;
     },
