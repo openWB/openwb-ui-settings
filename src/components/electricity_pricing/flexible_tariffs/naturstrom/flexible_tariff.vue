@@ -12,45 +12,42 @@
       @button-clicked="() => naturstrom_login_window()"
     >
       <template #help>
-        Es wird ein neues Browserfenster geöffnet, in dem Du Dich bei Naturstrom mit Deinen Zugangsdaten anmelden
+        Es wird ein neues Browserfenster geöffnet, in dem du Dich bei Naturstrom mit Deinen Zugangsdaten anmelden
         kannst.
       </template>
     </openwb-base-button-input>
 
     <openwb-base-text-input
-      ref="oauthCallbackUrlInput"
-      title="2. Callback-URL nach Login"
-      :model-value="oauthCallbackUrl"
-      @update:model-value="oauthCallbackUrl = $event"
+      ref="oauthCallbackCodeInput"
+      title="2. Anmeldecode nach Login"
+      :model-value="oauthCallbackCode"
+      @update:model-value="oauthCallbackCode = $event"
     >
       <template #help>
-        Kopiere die komplette URL aus dem Login-Popup nach erfolgreicher Anmeldung und füge sie hier ein.
+        Kopiere den kompletten Code aus dem Login-Popup nach erfolgreicher Anmeldung und füge ihn hier ein.
       </template>
     </openwb-base-text-input>
 
     <openwb-base-button-input
-      title="3. Callback-URL prüfen und Token holen"
-      button-text="URL verarbeiten"
+      title="3. Anmeldecode prüfen und Token holen"
+      button-text="Anmeldecode verarbeiten"
       subtype="success"
-      @button-clicked="processOAuthCallbackUrl"
+      @button-clicked="processOAuthCallbackCode"
     >
-      <template #help>
-        Die URL wird lokal geparst, der State gegen den gespeicherten OAuth-State geprüft und anschließend per PKCE
-        Access- und Refresh-Token abgefragt.
-      </template>
+      <template #help> Der Code wird verwendet um das Access- und Refresh-Token abgefragt. </template>
     </openwb-base-button-input>
 
     <openwb-base-text-input
       ref="accesstokenInput"
       title="Access-Token"
       required
+      :disabled="true"
       pattern="^ory_at_.*$"
       :model-value="flexibleTariff.configuration.token?.access_token || ''"
       @update:model-value="updateConfiguration($event, 'configuration.token.access_token')"
     >
       <template #help>
-        Das Access-Token wird bei erfolgreicher URL-Verarbeitung automatisch gesetzt und kann hier bei Bedarf manuell
-        eingetragen werden.
+        Das Access-Token wird nach erfolgreicher Verarbeitung des Anmeldecodes automatisch gesetzt.
       </template>
     </openwb-base-text-input>
 
@@ -59,13 +56,12 @@
       title="Refresh-Token"
       required
       pattern="^ory_rt_.*$"
+      :disabled="true"
       :model-value="flexibleTariff.configuration.token?.refresh_token || ''"
       @update:model-value="updateConfiguration($event, 'configuration.token.refresh_token')"
     >
       <template #help>
-        Nachdem die Naturstrom-Authentifizierung abgeschlossen wurde, wird im geöffneten Browserfenster ein
-        Refresh-Token angezeigt. Dieses kopieren und hier einfügen. Dieses wird benötigt, um auf Deine Tarif-Daten
-        zugreifen zu können.
+        Das Refresh-Token wird nach erfolgreicher Verarbeitung des Anmeldecodes automatisch gesetzt.
       </template>
     </openwb-base-text-input>
 
@@ -114,7 +110,7 @@ export default {
   data() {
     return {
       accounts: [],
-      oauthCallbackUrl: "",
+      oauthCallbackCode: "",
     };
   },
   computed: {
@@ -249,37 +245,17 @@ export default {
       }
     },
 
-    async processOAuthCallbackUrl() {
+    async processOAuthCallbackCode() {
       try {
-        if (!this.oauthCallbackUrl) {
-          this.$root.postClientMessage("Bitte füge zuerst die Callback-URL ein.", "warning");
+        if (!this.oauthCallbackCode) {
+          this.$root.postClientMessage("Bitte füge zuerst den Anmeldecode ein.", "warning");
           return;
         }
 
-        const callbackUrl = new URL(this.oauthCallbackUrl);
-        const code = callbackUrl.searchParams.get("code");
-        const returnedState = callbackUrl.searchParams.get("state");
+        const code = this.oauthCallbackCode;
 
-        if (!code || !returnedState) {
-          this.$root.postClientMessage("Die URL enthält keinen gültigen Code oder State.", "danger");
-          return;
-        }
-
-        const expectedState = sessionStorage.getItem("oauth_state");
         const codeVerifier = sessionStorage.getItem("pkce_code_verifier");
         const startedAt = Number(sessionStorage.getItem("oauth_started_at"));
-
-        if (!expectedState || !codeVerifier) {
-          this.$root.postClientMessage("OAuth-Session fehlt. Bitte den Login erneut starten.", "danger");
-          return;
-        }
-
-        if (returnedState !== expectedState) {
-          this.$root.postClientMessage("State stimmt nicht mit der gestarteten OAuth-Session überein.", "danger");
-          return;
-        } else {
-          console.log("State validiert:", returnedState);
-        }
 
         if (Number.isFinite(startedAt) && startedAt > 0) {
           const ageMs = Date.now() - startedAt;
@@ -330,7 +306,7 @@ export default {
         }
 
         this.clearOAuthSession();
-        this.oauthCallbackUrl = "";
+        this.oauthCallbackCode = "";
         if (refreshToken) {
           this.$root.postClientMessage(
             "OAuth erfolgreich abgeschlossen. Access- und Refresh-Token wurden gesetzt.",
@@ -343,9 +319,9 @@ export default {
           );
         }
       } catch (error) {
-        console.error("Fehler beim Verarbeiten der Callback-URL:", error);
+        console.error("Fehler beim Verarbeiten des Anmeldecodes:", error);
         this.$root.postClientMessage(
-          "Fehler beim Verarbeiten der Callback-URL: " + (error.response?.data?.error_description || error.message),
+          "Fehler beim Verarbeiten des Anmeldecodes: " + (error.response?.data?.error_description || error.message),
           "danger",
         );
       }
