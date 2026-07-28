@@ -19,22 +19,23 @@
 
     <openwb-base-text-input
       ref="oauthCallbackCodeInput"
-      title="2. Anmeldecode nach Login"
+      title="2. JSON-Code nach Login"
+      subtype="json"
       :model-value="oauthCallbackCode"
       @update:model-value="oauthCallbackCode = $event"
     >
       <template #help>
-        Kopiere den kompletten Code aus dem Login-Popup nach erfolgreicher Anmeldung und füge ihn hier ein.
+        Kopiere den kompletten JSON-Code aus dem Login-Popup nach erfolgreicher Anmeldung und füge ihn hier ein.
       </template>
     </openwb-base-text-input>
 
     <openwb-base-button-input
-      title="3. Anmeldecode prüfen und Token holen"
+      title="3. JSON-Code prüfen und Token holen"
       button-text="Anmeldecode verarbeiten"
       subtype="success"
       @button-clicked="processOAuthCallbackCode"
     >
-      <template #help> Der Code wird verwendet um das Access- und Refresh-Token abgefragt. </template>
+      <template #help> Der JSON-Code wird verwendet um das Access- und Refresh-Token abgefragt. </template>
     </openwb-base-button-input>
 
     <openwb-base-text-input
@@ -252,10 +253,23 @@ export default {
           return;
         }
 
-        const code = this.oauthCallbackCode;
+        const code = this.oauthCallbackCode.code;
+        const returnedState = this.oauthCallbackCode.state;
+
+        if (!code) {
+          this.$root.postClientMessage("Im Anmeldecode wurde kein Feld 'code' gefunden.", "warning");
+          return;
+        }
 
         const codeVerifier = sessionStorage.getItem("pkce_code_verifier");
+        const expectedState = sessionStorage.getItem("oauth_state");
         const startedAt = Number(sessionStorage.getItem("oauth_started_at"));
+
+        if (expectedState && returnedState && expectedState !== returnedState) {
+          this.clearOAuthSession();
+          this.$root.postClientMessage("OAuth-Status ungültig. Bitte neu anmelden.", "danger");
+          return;
+        }
 
         if (Number.isFinite(startedAt) && startedAt > 0) {
           const ageMs = Date.now() - startedAt;
