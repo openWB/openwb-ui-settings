@@ -3,31 +3,18 @@
     <openwb-base-number-input
       title="Register Adresse"
       subtype="text"
-      pattern="^\\d+$"
+      :min="0"
+      :max="65535"
       :required="addressRequired"
       :model-value="modelValue.reg_address"
-      @update:model-value="emitFieldUpdate($event, 'reg_address')"
+      @update:model-value="emitModelUpdate($event, 'reg_address')"
     />
     <openwb-base-select-input
-      title="Register Type"
+      title="Datentyp"
       not-selected="Bitte auswählen"
       :options="registerTypeOptions"
-      :modelValue="modelValue.reg_type"
-      @update:modelValue="emitFieldUpdate($event, 'reg_type')"
-    />
-    <openwb-base-select-input
-      title="byteorder Type"
-      not-selected="Bitte auswählen"
-      :options="endianOptions"
-      :modelValue="modelValue.byteorder"
-      @update:modelValue="emitFieldUpdate($event, 'byteorder')"
-    />
-    <openwb-base-select-input
-      title="wordorder Type"
-      not-selected="Bitte auswählen"
-      :options="endianOptions"
-      :modelValue="modelValue.wordorder"
-      @update:modelValue="emitFieldUpdate($event, 'wordorder')"
+      :model-value="modelValue.reg_type"
+      @update:model-value="emitModelUpdate($event, 'reg_type')"
     />
   </div>
 </template>
@@ -47,11 +34,7 @@ const REGISTER_TYPE_OPTIONS = [
   { text: "float64", value: "FLOAT_64" },
 ];
 
-const ENDIAN_OPTIONS = [
-  { text: "Big endian", value: ">" },
-  { text: "Little endian", value: "<" },
-  { text: "Auto", value: "@" },
-];
+
 
 export default {
   name: "ModbusRegisterFields",
@@ -65,16 +48,15 @@ export default {
       default: false,
     },
   },
-  emits: ["update-field"],
+  emits: ["update:model-value"],
   data() {
     return {
       registerTypeOptions: REGISTER_TYPE_OPTIONS,
-      endianOptions: ENDIAN_OPTIONS,
     };
   },
   methods: {
-    emitFieldUpdate(value, field) {
-      this.$emit("update-field", { field, value });
+    emitModelUpdate(value, field) {
+      this.$emit("update:model-value", { field, value });
     },
   },
 };

@@ -5,8 +5,8 @@
       title="Modbus ID"
       required
       :model-value="component.configuration.modbus_id"
-      min="1"
-      max="255"
+      :min="0"
+      :max="255"
       @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
     />
 
@@ -22,7 +22,7 @@
           <modbus-register-fields
             :model-value="component.configuration[entry.key]"
             :address-required="Boolean(entry.addressRequired)"
-            @update-field="handleRegisterFieldUpdate(entry.key, $event)"
+            @update:model-value="handleRegisterModelUpdate(entry.key, $event)"
           />
         </div>
       </template>
@@ -112,7 +112,7 @@ export default {
     };
   },
   methods: {
-    handleRegisterFieldUpdate(configKey, { field, value }) {
+    handleRegisterModelUpdate(configKey, { field, value }) {
       this.updateConfiguration(value, `configuration.${configKey}.${field}`);
     },
   },
