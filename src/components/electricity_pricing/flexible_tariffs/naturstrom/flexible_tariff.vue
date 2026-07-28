@@ -111,7 +111,7 @@ export default {
   data() {
     return {
       accounts: [],
-      oauthCallbackCode: "",
+      oauthCallbackCode: undefined,
     };
   },
   computed: {
