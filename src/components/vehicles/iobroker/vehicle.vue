@@ -52,7 +52,7 @@
       :model-value="vehicle.configuration.state_range"
       @update:model-value="updateConfiguration($event, 'configuration.state_range')"
     >
-      <template #help>Optional. Leer lassen, wenn nicht verfügbar – openWB behält dann den bisherigen Wert.</template>
+      <template #help>Optional. Leer lassen, wenn nicht verfügbar.</template>
     </openwb-base-text-input>
     <openwb-base-text-input
       title="State-ID Kilometerstand"
@@ -60,7 +60,7 @@
       :model-value="vehicle.configuration.state_odometer"
       @update:model-value="updateConfiguration($event, 'configuration.state_odometer')"
     >
-      <template #help>Optional. Leer lassen, wenn nicht verfügbar – openWB behält dann den bisherigen Wert.</template>
+      <template #help>Optional. Leer lassen, wenn nicht verfügbar.</template>
     </openwb-base-text-input>
     <openwb-base-button-group-input
       title="SoC während der Ladung berechnen"
