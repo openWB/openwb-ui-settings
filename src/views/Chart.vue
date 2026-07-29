@@ -627,6 +627,75 @@ const datasetTemplates = {
       yAxisKey: null,
     },
   },
+  "consumer-energy_imported_grid": {
+    label: "Verbraucher (Netzanteil)",
+    category: "consumer",
+    unit: "kWh",
+    type: "bar",
+    jsonKey: null,
+    borderColor: "#dc3545b2",
+    backgroundColor: "#6f42c14c",
+    fill: true,
+    pointStyle: "circle",
+    pointRadius: 0,
+    pointHoverRadius: 4,
+    cubicInterpolationMode: "monotone",
+    hidden: true,
+    borderWidth: 3,
+    data: null,
+    yAxisID: "y2",
+    stack: "#-energy-imported-source",
+    parsing: {
+      xAxisKey: "timestamp",
+      yAxisKey: null,
+    },
+  },
+  "consumer-energy_imported_pv": {
+    label: "Verbraucher (PV-Anteil)",
+    category: "consumer",
+    unit: "kWh",
+    type: "bar",
+    jsonKey: null,
+    borderColor: "#28a745b2",
+    backgroundColor: "#6f42c14c",
+    fill: true,
+    pointStyle: "circle",
+    pointRadius: 0,
+    pointHoverRadius: 4,
+    cubicInterpolationMode: "monotone",
+    hidden: true,
+    borderWidth: 3,
+    data: null,
+    yAxisID: "y2",
+    stack: "#-energy-imported-source",
+    parsing: {
+      xAxisKey: "timestamp",
+      yAxisKey: null,
+    },
+  },
+  "consumer-energy_imported_bat": {
+    label: "Verbraucher (Speicher-Anteil)",
+    category: "consumer",
+    unit: "kWh",
+    type: "bar",
+    jsonKey: null,
+    borderColor: "#ffc107b2",
+    backgroundColor: "#6f42c14c",
+    fill: true,
+    pointStyle: "circle",
+    pointRadius: 0,
+    pointHoverRadius: 4,
+    cubicInterpolationMode: "monotone",
+    hidden: true,
+    borderWidth: 3,
+    data: null,
+    yAxisID: "y2",
+    stack: "#-energy-imported-source",
+    parsing: {
+      xAxisKey: "timestamp",
+      yAxisKey: null,
+    },
+  },
   "ev-soc": {
     label: "Fahrzeug SoC",
     category: "vehicle",
@@ -1715,6 +1784,27 @@ export default {
           }
           break;
         case "consumer":
+          switch (elementKey) {
+            case "energy_imported":
+              details.push("Verbrauch");
+              break;
+            case "energy_exported":
+              details.push("Erzeugung");
+              break;
+            case "energy_imported_grid":
+              details.push("Netz-Anteil");
+              break;
+            case "energy_imported_pv":
+              details.push("PV-Anteil");
+              break;
+            case "energy_imported_bat":
+              details.push("Speicher-Anteil");
+              break;
+            case "energy_imported_cp":
+              details.push("Ladepunkt-Anteil");
+              break;
+          }
+          break;
         case "sh":
           switch (elementKey) {
             case "energy_imported":
@@ -1916,7 +2006,13 @@ export default {
           pv: ["energy_exported"],
           bat: ["energy_imported", "energy_exported"],
           cp: ["energy_imported", "energy_imported_grid", "energy_imported_pv", "energy_imported_bat"],
-          consumer: ["energy_imported", "energy_exported"],
+          consumer: [
+            "energy_imported",
+            "energy_exported",
+            "energy_imported_grid",
+            "energy_imported_pv",
+            "energy_imported_bat",
+          ],
           sh: ["energy_imported", "energy_exported"],
           ev: [],
           hc: ["energy_imported", "energy_imported_grid", "energy_imported_pv", "energy_imported_bat"],
