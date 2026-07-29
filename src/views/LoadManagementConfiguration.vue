@@ -157,6 +157,29 @@
                 Angenommen Leistung für diesen (Zwischen-)Zähler, falls vom Zähler keine Werte abgefragt werden können.
               </template>
             </openwb-base-number-input>
+            <openwb-base-button-group-input
+              title="Miest Hausverbrauch?"
+              :buttons="[
+              {
+                buttonValue: true,
+                text: 'Ja',
+                class: 'btn-outline-success',
+              },
+              {
+                buttonValue: false,
+                text: 'Nein',
+                class: 'btn-outline-danger',
+              }
+            ]"
+              :model-value="$store.state.mqtt['openWB/counter/' + counter.id + '/config/is_home_consumption_counter']"
+              @update:model-value="
+                updateState('openWB/counter/' + counter.id + '/config/is_home_consumption_counter', $event)
+              "
+            >
+              <template #help>
+                Todo
+              </template>
+            </openwb-base-button-group-input>
           </openwb-base-card>
           <openwb-base-heading> Vorhandene Wechselrichtermodule </openwb-base-heading>
           <openwb-base-card
@@ -285,6 +308,7 @@ export default {
         { topic: "openWB/counter/+/config/max_currents", writeable: true },
         { topic: "openWB/counter/+/config/max_power_errorcase", writeable: true },
         { topic: "openWB/counter/+/config/max_total_power", writeable: true },
+        { topic: "openWB/counter/+/config/is_home_consumption_counter", writeable: true },
         { topic: "openWB/counter/config/consider_less_charging", writeable: true },
         { topic: "openWB/counter/config/home_consumption_source_id", writeable: true },
         { topic: "openWB/counter/get/hierarchy", writeable: true },
