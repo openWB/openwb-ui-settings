@@ -1558,6 +1558,25 @@ export default {
             }
             break;
           case "consumer":
+            switch (measurementKey) {
+              case "imported":
+              case "energy_imported":
+                return "Verbrauch";
+              case "exported":
+              case "energy_exported":
+                return "Erzeugung";
+              case "energy_imported_grid":
+                return "Verbrauch (Netz-Anteil)";
+              case "energy_imported_pv":
+                return "Verbrauch (PV-Anteil)";
+              case "energy_imported_bat":
+                return "Verbrauch (Speicher-Anteil)";
+              case "energy_imported_cp":
+                return "Verbrauch (Ladepunkt-Anteil)";
+              default:
+                console.warn("unknown measurement key:", groupKey, measurementKey);
+            }
+            break;
           case "sh":
             switch (measurementKey) {
               case "imported":
