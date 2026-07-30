@@ -18,7 +18,6 @@
     </openwb-base-button-input>
 
     <openwb-base-text-input
-      ref="oauthCallbackCodeInput"
       title="2. JSON-Code nach Login"
       subtype="json"
       :model-value="oauthCallbackCode"
@@ -33,13 +32,13 @@
       title="3. JSON-Code prüfen und Token holen"
       button-text="Anmeldecode verarbeiten"
       subtype="success"
+      :disabled="!oauthCallbackCode"
       @button-clicked="processOAuthCallbackCode"
     >
       <template #help> Der JSON-Code wird verwendet um das Access- und Refresh-Token abgefragt. </template>
     </openwb-base-button-input>
 
     <openwb-base-text-input
-      ref="accesstokenInput"
       title="Access-Token"
       required
       :disabled="true"
@@ -53,7 +52,6 @@
     </openwb-base-text-input>
 
     <openwb-base-text-input
-      ref="refreshtokenInput"
       title="Refresh-Token"
       required
       pattern="^ory_rt_.*$"
@@ -94,9 +92,6 @@
 <script>
 import axios from "axios";
 import FlexibleTariffConfigMixin from "../FlexibleTariffConfigMixin.vue";
-import { ref } from "vue";
-
-const loading = ref(false);
 
 const OAUTH_BASE_URL = "https://naturstrom-staging.powerquartier.de";
 const CLIENT_ID = "exnaton-public";
@@ -320,7 +315,7 @@ export default {
         }
 
         this.clearOAuthSession();
-        this.oauthCallbackCode = "";
+        this.oauthCallbackCode = undefined;
         if (refreshToken) {
           this.$root.postClientMessage(
             "OAuth erfolgreich abgeschlossen. Access- und Refresh-Token wurden gesetzt.",
@@ -370,7 +365,6 @@ export default {
     },
 
     async startOAuth() {
-      loading.value = true;
       try {
         const state = this.randomString(64);
         const codeVerifier = this.randomString(96);
@@ -395,8 +389,6 @@ export default {
       } catch (err) {
         console.error("OAuth Start fehlgeschlagen:", err);
         throw err;
-      } finally {
-        loading.value = false;
       }
     },
   },
