@@ -1,11 +1,10 @@
 <template>
-  <div class="device-idm">
-    <openwb-base-heading> Einstellungen für IDM Wärmepumpe </openwb-base-heading>
+  <div class="device-lambda">
+    <openwb-base-heading> Einstellungen für Lambda Wärmepumpe </openwb-base-heading>
     <openwb-base-alert subtype="info">
-      ModbusTCP muss in der Fachmannebene aktiviert sein. Soll openWB PV-Erzeugung, Hausverbrauch und
-      Batteriewerte an die Wärmepumpe senden, muss zusätzlich in der Fachmannebene unter "PV Signal" die
-      Option "Gebäudeleittechnik / Smartfox" ausgewählt sein - ohne diese Einstellung wertet die Wärmepumpe
-      die gesendeten Werte nicht aus.
+      Modbus TCP muss in der Fachmannebene aktiviert sein. Soll openWB den PV-Überschuss senden, muss
+      zusätzlich am E-Manager der Wärmepumpe die Datenquelle auf "Modbus Client" umgestellt werden - ohne
+      diese Einstellung wertet die Wärmepumpe den gesendeten Wert nicht aus.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
@@ -30,15 +29,8 @@
       max="255"
       @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
     />
-    <openwb-base-number-input
-      title="Version"
-      required
-      :model-value="device.configuration.version"
-      min="1"
-      @update:model-value="updateConfiguration($event, 'configuration.version')"
-    />
     <openwb-base-select-input
-      title="PV-Überschuss/Systemwerte senden"
+      title="PV-Überschuss senden"
       not-selected="Bitte auswählen"
       :options="[
         { value: true, text: 'ja' },
@@ -49,9 +41,8 @@
       @update:model-value="updateConfiguration($event, 'configuration.send_values')"
     >
       <template #help>
-        Sendet PV-Erzeugung, Hausverbrauch, Batterieleistung und -SOC an die Gebäudeleittechnik/Smartfox-Schnittstelle
-        der Wärmepumpe, damit diese ihre Überschuss- und Speicherstrategie selbst berechnen kann. Setzt voraus, dass
-        "PV Signal" in der Fachmannebene auf "Gebäudeleittechnik / Smartfox" eingestellt ist (siehe Hinweis oben).
+        Sendet den aktuellen PV-Überschuss an den E-Manager der Wärmepumpe. Setzt voraus, dass die
+        Datenquelle des E-Managers auf "Modbus Client" eingestellt ist (siehe Hinweis oben).
       </template>
     </openwb-base-select-input>
   </div>
@@ -61,7 +52,7 @@
 import ConsumerDeviceConfigMixin from "../../ConsumerDeviceConfigMixin.vue";
 
 export default {
-  name: "ConsumerIDM",
+  name: "ConsumerLambda",
   mixins: [ConsumerDeviceConfigMixin],
 };
 </script>
