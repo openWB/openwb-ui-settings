@@ -137,26 +137,27 @@
               </template>
             </openwb-base-number-input>
             <openwb-base-button-group-input
-              title="Miest Hausverbrauch?"
+              title="Misst Hausverbrauch?"
               :buttons="[
-              {
-                buttonValue: true,
-                text: 'Ja',
-                class: 'btn-outline-success',
-              },
-              {
-                buttonValue: false,
-                text: 'Nein',
-                class: 'btn-outline-danger',
-              }
-            ]"
+                {
+                  buttonValue: true,
+                  text: 'Ja',
+                  class: 'btn-outline-success',
+                },
+                {
+                  buttonValue: false,
+                  text: 'Nein',
+                  class: 'btn-outline-danger',
+                },
+              ]"
               :model-value="$store.state.mqtt['openWB/counter/' + counter.id + '/config/is_home_consumption_counter']"
               @update:model-value="
                 updateState('openWB/counter/' + counter.id + '/config/is_home_consumption_counter', $event)
               "
             >
               <template #help>
-                Todo
+                Wenn dieser Zähler den Hausverbrauch misst, werden alle Verbraucher, die nicht als Batterie, Ladepunkte
+                oder Wechselrichter erfasst sind, dem Hausverbrauch zugeordnet.
               </template>
             </openwb-base-button-group-input>
           </openwb-base-card>
