@@ -129,6 +129,25 @@
               @update:configuration="consumerDeviceConfiguration(installedConsumer, $event)"
             />
             <hr />
+            <openwb-base-heading> Verwendung Optionen </openwb-base-heading>
+            <openwb-base-select-input
+              title="Verwendung"
+              not-selected="Bitte auswählen"
+              :options="getUsageOptions(installedConsumer)"
+              :model-value="installedConsumer.consumerUsage?.type"
+              @update:model-value="updateUsage(installedConsumer.id, $event, 'type')"
+            >
+              <template #help>
+                Nur Messung: Verbraucher, die nicht angesteuert werden können.<br />
+                Schaltbar (Ein/Aus): Geräte, die ein- und ausgeschaltet werden können (auch mit SG-Ready-Kontakt).
+                Unterbrechung im laufenden Betrieb ist möglich.<br />
+                Stufenlos regelbar: Geräte, denen eine Leistung vorgegeben werden kann. Unterbrechung im laufenden
+                Betrieb ist möglich.<br />
+                Dauerverbraucher: Geräte, die ein- und ausgeschaltet werden können, bei denen eine Unterbrechung im
+                laufenden Betrieb nicht möglich ist, z. B. Spülmaschine oder Trockner.
+              </template>
+            </openwb-base-select-input>
+            <hr />
             <openwb-base-heading> Elektrischer Anschluss </openwb-base-heading>
             <openwb-base-button-group-input
               title="Anzahl angeschlossener Phasen"
@@ -208,25 +227,6 @@
                 </span>
               </template>
             </openwb-base-number-input>
-            <hr />
-            <openwb-base-heading> Verwendung Optionen </openwb-base-heading>
-            <openwb-base-select-input
-              title="Verwendung"
-              not-selected="Bitte auswählen"
-              :options="getUsageOptions(installedConsumer)"
-              :model-value="installedConsumer.consumerUsage?.type"
-              @update:model-value="updateUsage(installedConsumer.id, $event, 'type')"
-            >
-              <template #help>
-                Nur Messung: Verbraucher, die nicht angesteuert werden können.<br />
-                Schaltbar (Ein/Aus): Geräte, die ein- und ausgeschaltet werden können (auch mit SG-Ready-Kontakt).
-                Unterbrechung im laufenden Betrieb ist möglich.<br />
-                Stufenlos regelbar: Geräte, denen eine Leistung vorgegeben werden kann. Unterbrechung im laufenden
-                Betrieb ist möglich.<br />
-                Dauerverbraucher: Geräte, die ein- und ausgeschaltet werden können, bei denen eine Unterbrechung im
-                laufenden Betrieb nicht möglich ist, z. B. Spülmaschine oder Trockner.
-              </template>
-            </openwb-base-select-input>
             <template v-if="showModeSettings(installedConsumer)">
               <hr />
               <openwb-base-heading> Betriebsmodus </openwb-base-heading>
