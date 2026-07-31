@@ -15,7 +15,7 @@
     <openwb-base-alert subtype="info">
       Das Einschalten der Verbraucher richtet sich nach der Rangfolge in der Prioritäten-Steuerung (Geräte werden von
       oben nach unten geschaltet) und dem Mindeststrom des jeweiligen Geräts: Bei geringem Überschuss wird das erste
-      Gerät in der Liste geschaltet, dessen Mindeststrom erreicht ist. Die Rangfolge lässt sich unter "Lastmanagement"
+      Gerät in der Liste geschaltet, dessen Mindeststrom erreicht ist. Die Rangfolge lässt sich unter <router-link to="/LoadManagementConfiguration"> Lastmanagement </router-link>
       anpassen.
     </openwb-base-alert>
     <form name="consumerConfigForm">
@@ -154,6 +154,7 @@
             >
             </openwb-base-button-group-input>
             <openwb-base-number-input
+              v-if="showModeSettings(installedConsumer)"
               title="Maximale Leistung"
               unit="W"
               :min="1"
@@ -166,6 +167,7 @@
               </template>
             </openwb-base-number-input>
             <openwb-base-number-input
+              v-if="showModeSettings(installedConsumer)"
               title="Minimaler Betriebsstrom"
               unit="A"
               :min="0"
@@ -179,10 +181,11 @@
               </template>
             </openwb-base-number-input>
             <openwb-base-number-input
+              v-if="showModeSettings(installedConsumer)"
               :title="
-                installedConsumer.consumerUsage?.type === 'suspendable_onoff'
+                installedConsumer.consumerUsage?.type === 'continuous'
                   ? 'Minimale Programmdauer (vom längsten Programm)'
-                  : 'Minimiales Regelintervall'
+                  : 'Minimales Regelintervall'
               "
               unit="min"
               :min="0"
@@ -195,7 +198,7 @@
               "
             >
               <template #help>
-                <span v-if="installedConsumer.consumerUsage?.type === 'suspendable_onoff'">
+                <span v-if="installedConsumer.consumerUsage?.type === 'continuous'">
                   Mindestlaufzeit, die der Verbraucher nach dem Einschalten eingeschaltet bleibt. Auf die Dauer des
                   längsten Programms einstellen, damit ein gestartetes Programm vollständig durchlaufen kann.
                 </span>
@@ -547,7 +550,7 @@
               subtype="warning"
             >
               Der Verbraucher hat keinen integrierten Zähler und es ist kein separater Zähler verknüpft. Der Verbraucher
-              anhand der eingegebenen minimalen Leistung geschaltet.
+              wird anhand der eingegebenen minimalen Leistung geschaltet.
             </openwb-base-alert>
             <openwb-base-alert
               v-if="!hasIntegratedCounter[installedConsumer.id] && hasExtraMeter(installedConsumer.id)"
