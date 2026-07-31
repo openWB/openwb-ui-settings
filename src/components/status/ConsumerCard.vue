@@ -29,16 +29,13 @@
     </template>
     <!-- Status -->
     <openwb-base-card
+      v-if="statusMessage"
+      title="Status"
       subtype="white"
       body-bg="white"
       class="py-1 mb-2"
     >
-      <div class="row py-2">
-        <div class="col col-auto font-weight-bold">Status</div>
-        <div class="col text-right">{{ statusText }}</div>
-      </div>
       <openwb-base-alert
-        v-if="statusMessage"
         subtype="info"
         class="mb-0"
       >
@@ -217,15 +214,6 @@ export default {
     power: {
       get() {
         return this.formatNumberTopic(this.baseTopic + "/get/power", 3, 3, 0.001);
-      },
-    },
-    statusText: {
-      get() {
-        const power = this.$store.state.mqtt[this.baseTopic + "/get/power"];
-        if (power === undefined) {
-          return "-";
-        }
-        return power > 0 ? "Eingeschaltet" : "Ausgeschaltet";
       },
     },
     statusMessage: {
