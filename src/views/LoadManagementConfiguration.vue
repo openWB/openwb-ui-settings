@@ -56,27 +56,6 @@
               </p>
             </template>
           </openwb-base-button-group-input>
-          <openwb-base-select-input
-            title="Hausverbrauch"
-            :options="getHcSourceIdOptions.options"
-            :groups="getHcSourceIdOptions.groups"
-            :model-value="$store.state.mqtt['openWB/counter/config/home_consumption_source_id']"
-            @update:model-value="updateState('openWB/counter/config/home_consumption_source_id', $event)"
-          >
-            <template #help>
-              Meist ist der Zähler am EVU-Punkt installiert, dann muss hier 'von openWB berechnen' ausgewählt werden.
-              Wenn der Zähler im Hausverbrauchszweig installiert ist, die Struktur wie im
-              <a
-                :href="`https://wiki.openwb.de/doku.php?id=openwb:vc:${systemVersion}:software:einstell-konfig:konfiguration:hausverbrauch`"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Wiki
-              </a>
-              beschrieben anordnen und hier den Hausverbrauchszähler auswählen. Dann wird dieser Wert abzüglich der
-              Ladeleistung als Hausverbrauch erfasst.
-            </template>
-          </openwb-base-select-input>
           <openwb-base-heading> Vorhandene Zählermodule </openwb-base-heading>
           <openwb-base-alert subtype="info">
             Die maximale Leistung wird nur für den EVU-Zähler berücksichtigt. Bei Zwischenzählern begrenzt das
@@ -371,7 +350,6 @@ export default {
         { topic: "openWB/counter/+/config/max_total_power", writeable: true },
         { topic: "openWB/counter/+/config/is_home_consumption_counter", writeable: true },
         { topic: "openWB/counter/config/consider_less_charging", writeable: true },
-        { topic: "openWB/counter/config/home_consumption_source_id", writeable: true },
         { topic: "openWB/counter/get/hierarchy", writeable: true },
         { topic: "openWB/counter/get/loadmanagement_prios", writeable: true },
         { topic: "openWB/general/extern", writeable: false },
