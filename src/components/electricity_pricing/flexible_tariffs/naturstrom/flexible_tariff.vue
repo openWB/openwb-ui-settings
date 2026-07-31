@@ -93,7 +93,7 @@
 import axios from "axios";
 import FlexibleTariffConfigMixin from "../FlexibleTariffConfigMixin.vue";
 
-const OAUTH_BASE_URL = "https://naturstrom-staging.powerquartier.de";
+const OAUTH_BASE_URL = "https://smart.naturstrom.de";
 const CLIENT_ID = "exnaton-public";
 const REDIRECT_URI = "https://naturstrom.openwb.de/naturstrom-callback.php";
 const SCOPE = "email profile";
