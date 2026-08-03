@@ -129,7 +129,7 @@
                   class: 'btn-outline-success',
                 },
               ]"
-              :model-value="$store.state.mqtt['openWB/general/chargemode_config/bat/power_reserve
+              :model-value="$store.state.mqtt['openWB/general/chargemode_config/bat/power_reserve']"
               @update:model-value="
                 updateState('openWB/general/chargemode_config/bat/power_reserve_active', $event)
               "
@@ -177,14 +177,13 @@
                 },
               ]"
               :model-value="
-                $store.state.mqtt['openWB/general/chargemode_config/bat/power_discharge
+                $store.state.mqtt['openWB/general/chargemode_config/bat/power_discharge_active']
               "
               @update:model-value="
-                updateState('openWB/general/chargemode_config/bat/power_discharge
-              "
+                updateState('openWB/general/chargemode_config/bat/power_discharge_active', $event)
             >
               <template
-                v-if="$store.state.mqtt['openWB/general/chargemode_config/bat/power_discharge
+                v-if="$store.state.mqtt['openWB/general/chargemode_config/bat/power_discharge_active']"
                 #help
               >
                 ACHTUNG: Der hier eingestellte Wert darf die maximale Entladeleistung des Speichers nicht überschreiten!
