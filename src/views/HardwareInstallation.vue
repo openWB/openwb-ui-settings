@@ -297,6 +297,7 @@ export default {
         { topic: "openWB/system/configurable/devices_components", writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: true },
         { topic: "openWB/system/device/+/config", writeable: true },
+        { topic: "openWB/chargepoint/+/config", writeable: false },
       ],
       selectedVendor: undefined,
       deviceToAdd: undefined,
@@ -331,6 +332,14 @@ export default {
         }
       }
       return undefined;
+    },
+    standaloneOnly() {
+      const chargePoints = this.getWildcardTopics("openWB/chargepoint/+/config");
+      const hasInternalChargePoint = Object.values(chargePoints).some(
+        (cp) => cp && typeof cp === "object" && cp.type === "internal_openwb",
+      );
+      // Standalone = kein einziger interner Ladepunkt vorhanden
+      return !hasInternalChargePoint;
     },
     vendorList: {
       get() {
@@ -368,6 +377,7 @@ export default {
           return [];
         }
         return Object.entries(devices)
+          .filter(([deviceKey]) => !this.isHiddenDevice(deviceKey))
           .map(([deviceKey, device]) => ({
             value: [vendorKey, deviceKey],
             text: device.device_name,
@@ -377,6 +387,10 @@ export default {
     },
   },
   methods: {
+    isHiddenDevice(deviceKey) {
+        const HIDDEN_DEVICE_KEY = "openwb_flex_local";
+        return !this.standaloneOnly && deviceKey === HIDDEN_DEVICE_KEY;
+    },
     getComponentTypeClass(type) {
       if (type.match(/^(.+_)?counter(_.+)?$/)) {
         return "danger";
