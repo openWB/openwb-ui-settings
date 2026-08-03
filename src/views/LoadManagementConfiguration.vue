@@ -137,7 +137,7 @@
               </template>
             </openwb-base-number-input>
             <openwb-base-button-group-input
-              title="Misst Hausverbrauch?"
+              title="Im Hausverbrauch berücksichtigen?"
               :buttons="[
                 {
                   buttonValue: true,
@@ -155,9 +155,12 @@
                 updateState('openWB/counter/' + counter.id + '/config/is_home_consumption_counter', $event)
               "
             >
-              <template #help>
-                Wenn dieser Zähler den Hausverbrauch misst, werden alle Verbraucher, die nicht als Batterie, Ladepunkte
-                oder Wechselrichter erfasst sind, dem Hausverbrauch zugeordnet.
+              <template #help>               
+                Zähler, die den Hausverbrauch berücksichtigen, erfassen die Leistung des Zählers sowie 
+                der darunterliegenden Zähler als Hausverbrauch. Ausgenommen sind die Leistungen von Batterien, Ladepunkten und Wechselrichtern. 
+                Ist die Berücksichtigung deaktiviert, wird der Zähler bei der Hausverbrauchsberechnung nicht berücksichtigt.
+
+
               </template>
             </openwb-base-button-group-input>
           </openwb-base-card>
