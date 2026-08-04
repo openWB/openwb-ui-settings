@@ -18,7 +18,7 @@
     />
     <openwb-base-number-input
       title="Faktor"
-      :step="0.001"
+      step="any"
       :required="addressRequired"
       :model-value="modelValue.reg_factor"
       @update:model-value="emitModelUpdate($event, 'reg_factor')"
