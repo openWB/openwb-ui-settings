@@ -288,10 +288,10 @@ export default {
       mqttTopics: [
         { topic: "openWB/bat/+/config/max_power", writeable: true },
         { topic: "openWB/chargepoint/+/config", writeable: false },
+        { topic: "openWB/counter/+/config/is_home_consumption_counter", writeable: true },
         { topic: "openWB/counter/+/config/max_currents", writeable: true },
         { topic: "openWB/counter/+/config/max_power_errorcase", writeable: true },
         { topic: "openWB/counter/+/config/max_total_power", writeable: true },
-        { topic: "openWB/counter/+/config/is_home_consumption_counter", writeable: true },
         { topic: "openWB/counter/config/consider_less_charging", writeable: true },
         { topic: "openWB/counter/get/hierarchy", writeable: true },
         { topic: "openWB/general/extern", writeable: false },
