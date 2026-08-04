@@ -587,6 +587,44 @@
               :model-value="template.control_pilot_interruption_duration"
               @update:model-value="updateState(key, $event, 'control_pilot_interruption_duration')"
             />
+            <openwb-base-range-input
+              v-if="template.control_pilot_interruption"
+              title="Wiederholung der CP-Unterbrechung"
+              :min="0"
+              :max="1200"
+              :step="60"
+              unit="min"
+              :labels="[
+                { label: 'Aus', value: 0 },
+                { label: 1, value: 60 },
+                { label: 2, value: 120 },
+                { label: 3, value: 180 },
+                { label: 4, value: 240 },
+                { label: 5, value: 300 },
+                { label: 6, value: 360 },
+                { label: 7, value: 420 },
+                { label: 8, value: 480 },
+                { label: 9, value: 540 },
+                { label: 10, value: 600 },
+                { label: 11, value: 660 },
+                { label: 12, value: 720 },
+                { label: 13, value: 780 },
+                { label: 14, value: 840 },
+                { label: 15, value: 900 },
+                { label: 16, value: 960 },
+                { label: 17, value: 1020 },
+                { label: 18, value: 1080 },
+                { label: 19, value: 1140 },
+                { label: 20, value: 1200 },
+              ]"
+              :model-value="template.control_pilot_interruption_retry_interval"
+              @update:model-value="updateState(key, $event, 'control_pilot_interruption_retry_interval')"
+            >
+              <template #help>
+                Wiederholt die CP-Unterbrechung, wenn das Fahrzeug trotz freigegebenem Ladestrom nach dieser Zeit
+                immer noch nicht lädt. "Aus" deaktiviert die Wiederholung. Empfehlenswert sind 3 bis 5 Minuten.
+              </template>
+            </openwb-base-range-input>
             <openwb-base-button-group-input
               title="Phasenumschaltung blockieren"
               :buttons="[
