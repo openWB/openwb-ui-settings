@@ -50,9 +50,9 @@ export default {
       let categories = {};
       const hidden = this.$store.state.chartLegend.hiddenDatasets;
       if (this.range === "day") {
-        categories = { chargepoint: [], vehicle: [], component: [] };
+        categories = { chargepoint: [], vehicle: [], consumer: [], component: [] };
       } else {
-        categories = { chargepoint: [], component: [] };
+        categories = { chargepoint: [], consumer: [], component: [] };
       }
       const datasets = this.chart?.data?.datasets || [];
       datasets.forEach((dataset, index) => {
@@ -66,7 +66,8 @@ export default {
           borderDash: dataset.borderDash,
         });
       });
-      return categories;
+      // drop categories without any datasets to avoid empty dropdowns
+      return Object.fromEntries(Object.entries(categories).filter(([, items]) => items.length > 0));
     },
     showStandardLegend() {
       return this.legendItems.length < 12;
