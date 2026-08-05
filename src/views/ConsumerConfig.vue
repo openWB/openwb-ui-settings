@@ -865,7 +865,7 @@ export default {
     },
     showMinCurrent(consumer) {
       const type = consumer.consumerUsage?.type;
-      return type !== "suspendable_onoff" && type !== "continuous";
+      return type !== "suspendable_onoff" && type !== "continuous" && type !== "meter_only";
     },
     getUsageOptions(consumer) {
       if (!Array.isArray(consumer.usage)) return [];
