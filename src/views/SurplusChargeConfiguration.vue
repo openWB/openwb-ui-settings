@@ -91,15 +91,7 @@
               </div>
             </div>
           </div>
-        </div>
-      </openwb-base-card>
-      <openwb-base-card title="Fahrzeuge">
-        <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-          <openwb-base-alert subtype="info">
-            Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
-          </openwb-base-alert>
-        </div>
-        <div v-else>
+          <hr />
           <openwb-base-button-group-input
             v-model="controlMode"
             title="Regelmodus"
@@ -157,7 +149,15 @@
           >
             <template #help> Obere Grenze des Regelbereichs. </template>
           </openwb-base-number-input>
-          <hr />
+        </div>
+      </openwb-base-card>
+      <openwb-base-card title="Fahrzeuge">
+        <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+          <openwb-base-alert subtype="info">
+            Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
+          </openwb-base-alert>
+        </div>
+        <div v-else>
           <openwb-base-alert :subtype="chargingSwitchRange < 1400 ? 'danger' : 'info'">
             Die Differenzleistung zw. Ein- und Abschaltschwelle sollte mind. 1,4 kW (230V x 6A) betragen. (Konfiguriert:
             {{ (chargingSwitchRange / 1000).toLocaleString(undefined) }}&nbsp;kW)
