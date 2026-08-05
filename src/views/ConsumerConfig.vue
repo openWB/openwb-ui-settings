@@ -129,6 +129,25 @@
               @update:configuration="consumerDeviceConfiguration(installedConsumer, $event)"
             />
             <hr />
+            <openwb-base-heading> Verwendung Optionen </openwb-base-heading>
+            <openwb-base-select-input
+              title="Verwendung"
+              not-selected="Bitte auswählen"
+              :options="getUsageOptions(installedConsumer)"
+              :model-value="installedConsumer.consumerUsage?.type"
+              @update:model-value="updateUsage(installedConsumer.id, $event, 'type')"
+            >
+              <template #help>
+                Nur Messung: Verbraucher, die nicht angesteuert werden können.<br />
+                Schaltbar (Ein/Aus): Geräte, die ein- und ausgeschaltet werden können (auch mit SG-Ready-Kontakt).
+                Unterbrechung im laufenden Betrieb ist möglich.<br />
+                Stufenlos regelbar: Geräte, denen eine Leistung vorgegeben werden kann. Unterbrechung im laufenden
+                Betrieb ist möglich.<br />
+                Dauerverbraucher: Geräte, die ein- und ausgeschaltet werden können, bei denen eine Unterbrechung im
+                laufenden Betrieb nicht möglich ist, z. B. Spülmaschine oder Trockner.
+              </template>
+            </openwb-base-select-input>
+            <hr />
             <openwb-base-heading> Elektrischer Anschluss </openwb-base-heading>
             <openwb-base-button-group-input
               title="Anzahl angeschlossener Phasen"
@@ -167,7 +186,7 @@
               </template>
             </openwb-base-number-input>
             <openwb-base-number-input
-              v-if="showModeSettings(installedConsumer)"
+              v-if="showMinCurrent(installedConsumer)"
               title="Minimaler Betriebsstrom"
               unit="A"
               :min="0"
@@ -208,30 +227,6 @@
                 </span>
               </template>
             </openwb-base-number-input>
-            <hr />
-            <openwb-base-heading> Verwendung Optionen </openwb-base-heading>
-            <openwb-base-select-input
-              title="Verwendung"
-              not-selected="Bitte auswählen"
-              :options="[
-                { value: 'meter_only', text: 'Nur Messung' },
-                { value: 'suspendable_onoff', text: 'Schaltbar (Ein/Aus)' },
-                { value: 'suspendable_tunable', text: 'Stufenlos regelbar' },
-                { value: 'continuous', text: 'Dauerverbraucher' },
-              ]"
-              :model-value="installedConsumer.consumerUsage.type"
-              @update:model-value="updateUsage(installedConsumer.id, $event, 'type')"
-            >
-              <template #help>
-                Nur Messung: Verbraucher, die nicht angesteuert werden können.<br />
-                Schaltbar (Ein/Aus): Geräte, die ein- und ausgeschaltet werden können (auch mit SG-Ready-Kontakt).
-                Unterbrechung im laufenden Betrieb ist möglich.<br />
-                Stufenlos regelbar: Geräte, denen eine Leistung vorgegeben werden kann. Unterbrechung im laufenden
-                Betrieb ist möglich.<br />
-                Dauerverbraucher: Geräte, die ein- und ausgeschaltet werden können, bei denen eine Unterbrechung im
-                laufenden Betrieb nicht möglich ist, z. B. Spülmaschine oder Trockner.
-              </template>
-            </openwb-base-select-input>
             <template v-if="showModeSettings(installedConsumer)">
               <hr />
               <openwb-base-heading> Betriebsmodus </openwb-base-heading>
@@ -489,6 +484,14 @@
                     ein Strompreis-Anbieter konfiguriert sein.
                   </template>
                 </openwb-base-number-input>
+                <openwb-base-alert
+                  v-if="!$store.state.mqtt['openWB/optional/ep/configured']"
+                  class="mt-2"
+                  subtype="warning"
+                >
+                  Bitte in den übergreifenden Ladeeinstellungen einen Strompreis-Anbieter konfigurieren. Ohne
+                  Strompreis-Anbieter wird das Gerät im Modus Eco nur eingeschaltet, wenn Überschuss vorhanden ist.
+                </openwb-base-alert>
               </openwb-base-card>
               <hr />
               <openwb-base-heading> Zeit-Pläne </openwb-base-heading>
@@ -663,6 +666,7 @@ export default {
         { topic: "openWB/general/consumer/config/switch_off_delay", writeable: true },
         { topic: "openWB/general/consumer/config/switch_off_threshold", writeable: true },
         { topic: "openWB/system/configurable/consumers", writeable: false },
+        { topic: "openWB/optional/ep/configured", writeable: false },
       ],
       selectedVendor: undefined,
       consumerToAdd: undefined,
@@ -767,7 +771,7 @@ export default {
     hasIntegratedCounter() {
       const result = {};
       Object.values(this.installedConsumers).forEach((consumer) => {
-        result[consumer.id] = consumer?.consumerUsage?.type === "meter_only";
+        result[consumer.id] = consumer?.usage?.includes("meter_only") ?? false;
       });
       return result;
     },
@@ -858,6 +862,26 @@ export default {
     showModeSettings(consumer) {
       const type = consumer.consumerUsage?.type;
       return type != null && type !== "meter_only";
+    },
+    showMinCurrent(consumer) {
+      const type = consumer.consumerUsage?.type;
+      return type !== "suspendable_onoff" && type !== "continuous" && type !== "meter_only";
+    },
+    getUsageOptions(consumer) {
+      if (!Array.isArray(consumer.usage)) return [];
+      return consumer.usage.map((use) => ({
+        value: use,
+        text: this.usageLabels(use),
+      }));
+    },
+    usageLabels(type) {
+      const map = {
+        meter_only: "Nur Messung",
+        suspendable_onoff: "Schaltbar (Ein/Aus)",
+        suspendable_tunable: "Stufenlos regelbar",
+        continuous: "Dauerverbraucher",
+      };
+      return map[type] ?? type;
     },
     updateUsage(consumerId, value, path) {
       this.updateState(`openWB/consumer/${consumerId}/usage`, value, path);
