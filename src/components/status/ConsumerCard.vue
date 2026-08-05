@@ -27,6 +27,23 @@
       </span>
       {{ power }}&nbsp;kW
     </template>
+    <!-- Status -->
+    <openwb-base-card
+      v-if="statusMessage"
+      title="Status"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <openwb-base-alert
+        subtype="info"
+        class="mb-0"
+      >
+        Statusmeldung:
+        <span style="white-space: pre-wrap">{{ statusMessage }}</span>
+      </openwb-base-alert>
+    </openwb-base-card>
+    <!-- Aktuelle Werte -->
     <openwb-base-card
       title="Aktuelle Werte"
       subtype="white"
@@ -36,10 +53,6 @@
       <div class="row">
         <div class="col pr-0 text-right">Leistung</div>
         <div class="col text-right text-monospace">{{ power }}&nbsp;kW</div>
-      </div>
-      <div class="row">
-        <div class="col pr-0 text-right">Status</div>
-        <div class="col text-right text-monospace">{{ statusText }}</div>
       </div>
       <div
         v-if="chargemode !== null"
@@ -203,17 +216,9 @@ export default {
         return this.formatNumberTopic(this.baseTopic + "/get/power", 3, 3, 0.001);
       },
     },
-    statusText: {
+    statusMessage: {
       get() {
-        const stateString = this.$store.state.mqtt[this.baseTopic + "/get/state_str"];
-        if (stateString) {
-          return stateString;
-        }
-        const state = this.$store.state.mqtt[this.baseTopic + "/get/state"];
-        if (state === undefined) {
-          return "-";
-        }
-        return state ? "Eingeschaltet" : "Ausgeschaltet";
+        return this.$store.state.mqtt[this.baseTopic + "/get/state_str"] ?? null;
       },
     },
     chargemode: {
