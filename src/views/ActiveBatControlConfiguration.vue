@@ -130,9 +130,7 @@
                 },
               ]"
               :model-value="$store.state.mqtt['openWB/general/chargemode_config/bat/power_reserve']"
-              @update:model-value="
-                updateState('openWB/general/chargemode_config/bat/power_reserve_active', $event)
-              "
+              @update:model-value="updateState('openWB/general/chargemode_config/bat/power_reserve_active', $event)"
             >
               <template
                 v-if="$store.state.mqtt['openWB/general/chargemode_config/bat/power_reserve_active']"
@@ -157,9 +155,7 @@
               unit="kW"
               required
               :model-value="$store.state.mqtt['openWB/general/chargemode_config/bat/power_reserve'] / 1000"
-              @update:model-value="
-                updateState('openWB/general/chargemode_config/bat/power_reserve', $event * 1000)
-              "
+              @update:model-value="updateState('openWB/general/chargemode_config/bat/power_reserve', $event * 1000)"
             />
             <openwb-base-heading> Speicher-SoC oberhalb Maximal-SoC </openwb-base-heading>
             <openwb-base-button-group-input
@@ -176,11 +172,8 @@
                   class: 'btn-outline-success',
                 },
               ]"
-              :model-value="
-                $store.state.mqtt['openWB/general/chargemode_config/bat/power_discharge_active']
-              "
-              @update:model-value="
-                updateState('openWB/general/chargemode_config/bat/power_discharge_active', $event)
+              :model-value="$store.state.mqtt['openWB/general/chargemode_config/bat/power_discharge_active']"
+              @update:model-value="updateState('openWB/general/chargemode_config/bat/power_discharge_active', $event)"
             >
               <template
                 v-if="$store.state.mqtt['openWB/general/chargemode_config/bat/power_discharge_active']"
@@ -205,12 +198,8 @@
               :step="0.1"
               unit="kW"
               required
-              :model-value="
-                $store.state.mqtt['openWB/general/chargemode_config/bat/power_discharge'] / 1000
-              "
-              @update:model-value="
-                updateState('openWB/general/chargemode_config/bat/power_discharge', $event * 1000)
-              "
+              :model-value="$store.state.mqtt['openWB/general/chargemode_config/bat/power_discharge'] / 1000"
+              @update:model-value="updateState('openWB/general/chargemode_config/bat/power_discharge', $event * 1000)"
             />
           </div>
         </div>
