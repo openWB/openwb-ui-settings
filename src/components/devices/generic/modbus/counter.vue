@@ -15,7 +15,10 @@
       :key="section.id"
     >
       <h4>{{ section.title }}</h4>
-      <template v-for="entry in section.entries" :key="entry.key">
+      <template
+        v-for="entry in section.entries"
+        :key="entry.key"
+      >
         <hr class="modbus-divider" />
         <div>
           <h5 v-if="entry.label">{{ entry.label }}</h5>
@@ -38,9 +41,7 @@ const REGISTER_SECTIONS = [
   {
     id: "power_total",
     title: "Leistung",
-    entries: [
-      { key: "power", addressRequired: true },
-    ],
+    entries: [{ key: "power", addressRequired: true }],
   },
   {
     id: "voltage",

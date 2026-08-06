@@ -621,8 +621,8 @@
               @update:model-value="updateState(key, $event, 'control_pilot_interruption_retry_interval')"
             >
               <template #help>
-                Wiederholt die CP-Unterbrechung, wenn das Fahrzeug trotz freigegebenem Ladestrom nach dieser Zeit
-                immer noch nicht lädt. "Aus" deaktiviert die Wiederholung. Empfehlenswert sind 3 bis 5 Minuten.
+                Wiederholt die CP-Unterbrechung, wenn das Fahrzeug trotz freigegebenem Ladestrom nach dieser Zeit immer
+                noch nicht lädt. "Aus" deaktiviert die Wiederholung. Empfehlenswert sind 3 bis 5 Minuten.
               </template>
             </openwb-base-range-input>
             <openwb-base-button-group-input

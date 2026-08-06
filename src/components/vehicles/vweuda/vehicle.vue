@@ -1,22 +1,31 @@
 <template>
   <div class="vehicle-soc-vweuda">
     <openwb-base-alert subtype="info">
-      Das VWEUDA-Modul kann Fahrzeugdaten für mehrere Marken des VW-Konzenrs abrufen.
-      Das VWEUDA-Modul holt die Daten aus dem 
-      <a
-        href="https://eu-data-act.drivesomethinggreater.com/de/de"
-        target="_blank"
-        rel="noopener noreferrer"
-        >VW-EU-DATA Portal</a
-      > ab.<br/>
-      Im Portal muss zuerst für jedes Fahrzeug ein "Benutzerdefinierter bzw. kontinuierlicher Datenabruf" eingerichtet werden mit folgenden Parametern:<br/>
-      - Data Clusters:All Data<br/>
-      - Intervall: 15 min<br/>
-      - kein Ende<br/>
-      Nach Einrichtung des Abrufs werden vom Portal im Abstand von ca. 15 Minuten zip-Dateien bereitgestellt.<br/>
-      Zu Beginn können die Dateien den Zusatz _no_content im Namen haben und sind weitgehend leer.<br/>
-      Nach einigen Stunden kommen dann die Dateien mit Inhalt.
-      Diese werden dann vom VWEUDA-Modul abgeholt.
+      <p>
+        Das VWEUDA-Modul kann Fahrzeugdaten für mehrere Marken des VW-Konzerns abrufen. Das VWEUDA-Modul holt die Daten
+        aus dem
+        <a
+          href="https://eu-data-act.drivesomethinggreater.com/de/de"
+          target="_blank"
+          rel="noopener noreferrer"
+          >VW-EU-DATA Portal</a
+        >
+        ab.
+      </p>
+      <p>
+        Im Portal muss zuerst für jedes Fahrzeug ein "Benutzerdefinierter bzw. kontinuierlicher Datenabruf" eingerichtet
+        werden mit folgenden Parametern:
+      </p>
+      <ul>
+        <li>Data Clusters:All Data</li>
+        <li>Intervall: 15 min</li>
+        <li>kein Ende</li>
+      </ul>
+      <p>
+        Nach Einrichtung des Abrufs werden vom Portal im Abstand von ca. 15 Minuten zip-Dateien bereitgestellt.<br />
+        Zu Beginn können die Dateien den Zusatz _no_content im Namen haben und sind weitgehend leer.<br />
+        Nach einigen Stunden kommen dann die Dateien mit Inhalt. Diese werden dann vom VWEUDA-Modul abgeholt.
+      </p>
     </openwb-base-alert>
     <openwb-base-text-input
       title="Benutzername"
