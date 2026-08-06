@@ -257,6 +257,7 @@ export default {
   emits: ["save", "reset", "defaults"],
   data() {
     return {
+      showFeedInHelp: false,
       mqttTopics: [
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/general/chargemode_config/unbalanced_load", writeable: true },

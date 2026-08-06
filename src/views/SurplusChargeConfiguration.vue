@@ -1,13 +1,97 @@
 <template>
   <div class="pvChargeConfig">
     <form name="pvChargeConfigForm">
-      <openwb-base-card title="Regelparameter">
+      <openwb-base-card title="Allgemein">
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
           <openwb-base-alert subtype="info">
             Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
           </openwb-base-alert>
         </div>
         <div v-else>
+          <openwb-base-button-group-input
+            title="Überschusseinspeisung ins Netz maximieren"
+            :buttons="[
+              {
+                buttonValue: false,
+                text: 'Nein',
+                class: 'btn-outline-danger',
+              },
+              {
+                buttonValue: true,
+                text: 'Ja',
+                class: 'btn-outline-success',
+              },
+            ]"
+            :model-value="$store.state.mqtt['openWB/general/chargemode_config/surplus/feed_in_limit']"
+            @update:model-value="updateState('openWB/general/chargemode_config/surplus/feed_in_limit', $event)"
+          >
+            <template #help>
+              Die Nutzung dieser Option ergibt nur Sinn, wenn ein Wechselrichter in irgendeiner Form abgeregelt wird
+              Weitere Infos dazu im
+              <a
+                :href="`https://wiki.openwb.de/doku.php?id=openwb:vc:${systemVersion}:software:einstell-konfig:ladeeinstellungen:pv-laden-speicherbeachtung#regelpunkt_einspeisegrenze`"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Wiki-Beitrag zur Beachtung der Einspeisegrenze </a
+              >.<br />
+            </template>
+          </openwb-base-button-group-input>
+          <div
+            v-if="$store.state.mqtt['openWB/general/chargemode_config/surplus/feed_in_limit']"
+            class="form-row mb-2"
+          >
+            <div class="col">
+              <label class="form-label d-flex align-items-center flex-wrap">
+                Einspeisung von
+                <input
+                  type="number"
+                  :min="-1000"
+                  :step="0.05"
+                  required
+                  class="form-control d-inline-block mx-2"
+                  style="width: 120px"
+                  :value="$store.state.mqtt['openWB/general/chargemode_config/surplus/feed_in_yield'] / 1000"
+                  @input="
+                    updateState(
+                      'openWB/general/chargemode_config/surplus/feed_in_yield',
+                      parseFloat($event.target.value) * 1000,
+                    )
+                  "
+                />
+                kW des Überschusses ins Netz forcieren
+                <openwb-base-tooltip description="Hilfe anzeigen">
+                  <font-awesome-icon
+                    :icon="['far', 'question-circle']"
+                    class="clickable ml-2"
+                    @click="showFeedInHelp = !showFeedInHelp"
+                  />
+                </openwb-base-tooltip>
+              </label>
+              <div
+                v-if="showFeedInHelp"
+                class="form-text alert alert-info mt-2 small"
+              >
+                Ein Wert größer 0kW bewirkt, dass weniger PV-Leistung zum Laden benutzt wird.<br />
+                Die Nutzung dieser Option ergibt nur Sinn, wenn ein Wechselrichter in irgendeiner Form abgeregelt wird.
+                Weitere Infos dazu im
+                <a
+                  :href="`https://wiki.openwb.de/doku.php?id=openwb:vc:${systemVersion}:software:einstell-konfig:ladeeinstellungen:pv-laden-speicherbeachtung#regelpunkt_einspeisegrenze`"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Wiki-Beitrag zur Beachtung der Einspeisegrenze </a
+                >.<br />
+                Bei Erreichen dieses Werts wird die PV-Ladung nacheinander für jedes Fahrzeug im PV-Modus gestartet, bei
+                welchem "Einspeisegrenze beachten" im Ladeprofil aktiviert ist, dies setzt die Einschaltschwelle außer
+                kraft!<br />
+                Zur optimalen Eigenverbrauchssteuerung sollte der Wert einige hundert Watt UNTER der im Wechselrichter
+                hinterlegten EVU-Einspeiseleistungsgrenze liegen, damit openWB die Ladung freigibt, BEVOR der
+                Wechselrichter begrenzt wird.
+              </div>
+            </div>
+          </div>
+          <hr />
           <openwb-base-button-group-input
             v-model="controlMode"
             title="Regelmodus"
@@ -37,12 +121,12 @@
             unit="kW"
             required
             :model-value="
-              Array.isArray($store.state.mqtt['openWB/general/chargemode_config/pv_charging/control_range'])
-                ? $store.state.mqtt['openWB/general/chargemode_config/pv_charging/control_range'][0] / 1000
+              Array.isArray($store.state.mqtt['openWB/general/chargemode_config/surplus/control_range'])
+                ? $store.state.mqtt['openWB/general/chargemode_config/surplus/control_range'][0] / 1000
                 : undefined
             "
             @update:model-value="
-              updateState('openWB/general/chargemode_config/pv_charging/control_range', $event * 1000, '0')
+              updateState('openWB/general/chargemode_config/surplus/control_range', $event * 1000, '0')
             "
           >
             <template #help> Untere Grenze des Regelbereichs. </template>
@@ -55,17 +139,25 @@
             unit="kW"
             required
             :model-value="
-              Array.isArray($store.state.mqtt['openWB/general/chargemode_config/pv_charging/control_range'])
-                ? $store.state.mqtt['openWB/general/chargemode_config/pv_charging/control_range'][1] / 1000
+              Array.isArray($store.state.mqtt['openWB/general/chargemode_config/surplus/control_range'])
+                ? $store.state.mqtt['openWB/general/chargemode_config/surplus/control_range'][1] / 1000
                 : undefined
             "
             @update:model-value="
-              updateState('openWB/general/chargemode_config/pv_charging/control_range', $event * 1000, '1')
+              updateState('openWB/general/chargemode_config/surplus/control_range', $event * 1000, '1')
             "
           >
             <template #help> Obere Grenze des Regelbereichs. </template>
           </openwb-base-number-input>
-          <hr />
+        </div>
+      </openwb-base-card>
+      <openwb-base-card title="Fahrzeuge">
+        <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+          <openwb-base-alert subtype="info">
+            Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
+          </openwb-base-alert>
+        </div>
+        <div v-else>
           <openwb-base-alert :subtype="chargingSwitchRange < 1400 ? 'danger' : 'info'">
             Die Differenzleistung zw. Ein- und Abschaltschwelle sollte mind. 1,4 kW (230V x 6A) betragen. (Konfiguriert:
             {{ (chargingSwitchRange / 1000).toLocaleString(undefined) }}&nbsp;kW)
@@ -76,9 +168,11 @@
             :step="0.05"
             unit="kW"
             required
-            :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/switch_on_threshold'] / 1000"
+            :model-value="
+              $store.state.mqtt['openWB/general/chargemode_config/surplus/vehicle/switch_on_threshold'] / 1000
+            "
             @update:model-value="
-              updateState('openWB/general/chargemode_config/pv_charging/switch_on_threshold', $event * 1000)
+              updateState('openWB/general/chargemode_config/surplus/vehicle/switch_on_threshold', $event * 1000)
             "
           >
             <template #help>
@@ -93,8 +187,10 @@
             :step="1"
             unit="s"
             required
-            :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/switch_on_delay']"
-            @update:model-value="updateState('openWB/general/chargemode_config/pv_charging/switch_on_delay', $event)"
+            :model-value="$store.state.mqtt['openWB/general/chargemode_config/surplus/vehicle/switch_on_delay']"
+            @update:model-value="
+              updateState('openWB/general/chargemode_config/surplus/vehicle/switch_on_delay', $event)
+            "
           >
             <template #help>
               Die Einschaltschwelle muss für die hier angegebene Zeit dauerhaft überschritten werden, bevor ein
@@ -110,7 +206,7 @@
           <hr />
           <openwb-base-alert
             :subtype="
-              $store.state.mqtt['openWB/general/chargemode_config/pv_charging/switch_off_threshold'] / 1000 > 0
+              $store.state.mqtt['openWB/general/chargemode_config/surplus/vehicle/switch_off_threshold'] / 1000 > 0
                 ? 'danger'
                 : 'info'
             "
@@ -123,9 +219,11 @@
             :step="0.05"
             unit="kW"
             required
-            :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/switch_off_threshold'] / 1000"
+            :model-value="
+              $store.state.mqtt['openWB/general/chargemode_config/surplus/vehicle/switch_off_threshold'] / 1000
+            "
             @update:model-value="
-              updateState('openWB/general/chargemode_config/pv_charging/switch_off_threshold', $event * 1000)
+              updateState('openWB/general/chargemode_config/surplus/vehicle/switch_off_threshold', $event * 1000)
             "
           >
             <template #help>
@@ -141,8 +239,10 @@
             :step="1"
             unit="s"
             required
-            :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/switch_off_delay']"
-            @update:model-value="updateState('openWB/general/chargemode_config/pv_charging/switch_off_delay', $event)"
+            :model-value="$store.state.mqtt['openWB/general/chargemode_config/surplus/vehicle/switch_off_delay']"
+            @update:model-value="
+              updateState('openWB/general/chargemode_config/surplus/vehicle/switch_off_delay', $event)
+            "
           >
             <template #help>
               Die Abschaltschwelle muss für die hier angegebene Zeit dauerhaft unterschritten werden, bevor ein
@@ -170,9 +270,11 @@
                 class: 'btn-outline-success',
               },
             ]"
-            :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/retry_failed_phase_switches']"
+            :model-value="
+              $store.state.mqtt['openWB/general/chargemode_config/surplus/vehicle/retry_failed_phase_switches']
+            "
             @update:model-value="
-              updateState('openWB/general/chargemode_config/pv_charging/retry_failed_phase_switches', $event)
+              updateState('openWB/general/chargemode_config/surplus/vehicle/retry_failed_phase_switches', $event)
             "
           >
             <template #help>
@@ -190,8 +292,10 @@
             :min="5"
             :max="180"
             :step="1"
-            :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/phase_switch_delay']"
-            @update:model-value="updateState('openWB/general/chargemode_config/pv_charging/phase_switch_delay', $event)"
+            :model-value="$store.state.mqtt['openWB/general/chargemode_config/surplus/vehicle/phase_switch_delay']"
+            @update:model-value="
+              updateState('openWB/general/chargemode_config/surplus/vehicle/phase_switch_delay', $event)
+            "
           >
             <template #help>
               Um zu viele Umschaltungen zu vermeiden, wird mindestens die hier eingestellte Zeit zwischen zwei
@@ -201,37 +305,6 @@
               wird nur bei der automatischen Phasenumschaltung bei Überschuss-Laden abgewartet.<br />
               Ist ausreichend Überschuss vorhanden, wird beim Ladestart die Umschaltverzögerung nicht abgewartet,
               sondern direkt mit mehrphasiger Ladung begonnen.
-            </template>
-          </openwb-base-number-input>
-          <hr />
-          <openwb-base-number-input
-            title="Regelpunkt Einspeisegrenze"
-            :min="-1000"
-            :step="0.05"
-            unit="kW"
-            required
-            :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/feed_in_yield'] / 1000"
-            @update:model-value="
-              updateState('openWB/general/chargemode_config/pv_charging/feed_in_yield', $event * 1000)
-            "
-          >
-            <template #help>
-              Ein Wert größer 0kW bewirkt, dass weniger PV-Leistung zum Laden benutzt wird.<br />
-              Die Nutzung dieser Option ergibt nur Sinn, wenn ein Wechselrichter in irgendeiner Form abgeregelt wird
-              Weitere Infos dazu im
-              <a
-                :href="`https://wiki.openwb.de/doku.php?id=openwb:vc:${systemVersion}:software:einstell-konfig:ladeeinstellungen:pv-laden-speicherbeachtung#regelpunkt_einspeisegrenze`"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Wiki-Beitrag zur Beachtung der Einspeisegrenze </a
-              >.<br />
-              Bei Erreichen dieses Werts wird die PV-Ladung nacheinander für jedes Fahrzeug im PV-Modus gestartet, bei
-              welchem "Einspeisegrenze beachten" im Ladeprofil aktiviert ist, dies setzt die Einschaltschwelle außer
-              kraft!<br />
-              Zur optimalen Eigenverbrauchssteuerung sollte der Wert einige hundert Watt UNTER der im Wechselrichter
-              hinterlegten EVU-Einspeiseleistungsgrenze liegen, damit openWB die Ladung freigibt, BEVOR der
-              Wechselrichter begrenzt wird.
             </template>
           </openwb-base-number-input>
         </div>
@@ -267,14 +340,14 @@ export default {
   data() {
     return {
       mqttTopics: [
-        { topic: "openWB/general/chargemode_config/pv_charging/control_range", writeable: true },
-        { topic: "openWB/general/chargemode_config/pv_charging/feed_in_yield", writeable: true },
-        { topic: "openWB/general/chargemode_config/pv_charging/phase_switch_delay", writeable: true },
-        { topic: "openWB/general/chargemode_config/pv_charging/retry_failed_phase_switches", writeable: true },
-        { topic: "openWB/general/chargemode_config/pv_charging/switch_off_delay", writeable: true },
-        { topic: "openWB/general/chargemode_config/pv_charging/switch_off_threshold", writeable: true },
-        { topic: "openWB/general/chargemode_config/pv_charging/switch_on_delay", writeable: true },
-        { topic: "openWB/general/chargemode_config/pv_charging/switch_on_threshold", writeable: true },
+        { topic: "openWB/general/chargemode_config/surplus/control_range", writeable: true },
+        { topic: "openWB/general/chargemode_config/pv_charging/surplus/feed_in_limit", writeable: true },
+        { topic: "openWB/general/chargemode_config/surplus/vehicle/phase_switch_delay", writeable: true },
+        { topic: "openWB/general/chargemode_config/surplus/vehicle/retry_failed_phase_switches", writeable: true },
+        { topic: "openWB/general/chargemode_config/surplus/vehicle/switch_off_delay", writeable: true },
+        { topic: "openWB/general/chargemode_config/surplus/vehicle/switch_off_threshold", writeable: true },
+        { topic: "openWB/general/chargemode_config/surplus/vehicle/switch_on_delay", writeable: true },
+        { topic: "openWB/general/chargemode_config/surplus/vehicle/switch_on_threshold", writeable: true },
         { topic: "openWB/general/extern", writeable: false },
       ],
       calculatedControlMode: undefined,
@@ -286,7 +359,7 @@ export default {
         if (this.calculatedControlMode !== undefined) {
           return this.calculatedControlMode;
         }
-        const topic = "openWB/general/chargemode_config/pv_charging/control_range";
+        const topic = "openWB/general/chargemode_config/surplus/control_range";
         let state = this.$store.state.mqtt[topic];
         var controlMode = "individual";
         if (typeof state != "undefined") {
@@ -303,7 +376,7 @@ export default {
         return controlMode;
       },
       set(newMode) {
-        const topic = "openWB/general/chargemode_config/pv_charging/control_range";
+        const topic = "openWB/general/chargemode_config/surplus/control_range";
         this.calculatedControlMode = newMode;
         switch (newMode) {
           case "export":
@@ -323,8 +396,8 @@ export default {
     chargingSwitchRange: {
       get() {
         return (
-          this.$store.state.mqtt["openWB/general/chargemode_config/pv_charging/switch_on_threshold"] +
-          this.$store.state.mqtt["openWB/general/chargemode_config/pv_charging/switch_off_threshold"]
+          this.$store.state.mqtt["openWB/general/chargemode_config/surplus/vehicle/switch_on_threshold"] +
+          this.$store.state.mqtt["openWB/general/chargemode_config/surplus/vehicle/switch_off_threshold"]
         );
       },
     },
