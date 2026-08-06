@@ -28,6 +28,10 @@ export default defineConfig(({ command, mode }) => {
             target: "ws://localhost:9003",
             ws: true,
           },
+          "^/.+\\.php$": {
+            target: "http://localhost",
+            changeOrigin: true,
+          },
         },
       };
     }
