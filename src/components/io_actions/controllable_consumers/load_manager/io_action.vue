@@ -1,8 +1,6 @@
 <template>
   <openwb-base-alert subtype="info">
-    <p>
-      Über dieses MQTT-Topic können die Parameter des Lastmanagers gesetzt werden.
-    </p>
+    <p>Über dieses MQTT-Topic können die Parameter des Lastmanagers gesetzt werden.</p>
     <ol>
       <li>
         <openwb-base-copy-to-clipboard
@@ -12,15 +10,11 @@
           openWB/set/mqtt/loadmanager/{{ ioAction.id }}/set/loadmanager
         </openwb-base-copy-to-clipboard>
         <br />
-          Das Topic erwartet ein JSON-Objekt mit den Parametern des Lastmanagements. 
+        Das Topic erwartet ein JSON-Objekt mit den Parametern des Lastmanagements.
         <br />
         Beispiel:
         <span class="text-info">
-          {
-            "max_power": 10000,
-            "max_current": [6, 6, 6],
-            "timestamp": 1783596593.635847
-          }
+          { "max_power": 10000, "max_current": [6, 6, 6], "timestamp": 1783596593.635847 }
         </span>
       </li>
     </ol>

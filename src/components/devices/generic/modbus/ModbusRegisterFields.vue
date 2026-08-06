@@ -41,8 +41,6 @@ const REGISTER_TYPE_OPTIONS = [
   { text: "float64", value: "FLOAT_64" },
 ];
 
-
-
 export default {
   name: "ModbusRegisterFields",
   props: {

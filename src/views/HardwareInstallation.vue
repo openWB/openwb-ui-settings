@@ -388,8 +388,8 @@ export default {
   },
   methods: {
     isHiddenDevice(deviceKey) {
-        const HIDDEN_DEVICE_KEY = "openwb_flex_local";
-        return !this.standaloneOnly && deviceKey === HIDDEN_DEVICE_KEY;
+      const HIDDEN_DEVICE_KEY = "openwb_flex_local";
+      return !this.standaloneOnly && deviceKey === HIDDEN_DEVICE_KEY;
     },
     getComponentTypeClass(type) {
       if (type.match(/^(.+_)?counter(_.+)?$/)) {

@@ -2,7 +2,12 @@
   <div class="vehicle-soc-iobroker">
     <openwb-base-alert subtype="info">
       Für diese Anbindung wird der Adapter
-      <a href="https://github.com/ioBroker/ioBroker.rest-api" target="_blank" rel="noopener">ioBroker.rest-api</a>
+      <a
+        href="https://github.com/ioBroker/ioBroker.rest-api"
+        target="_blank"
+        rel="noopener"
+        >ioBroker.rest-api</a
+      >
       benötigt. Bitte in ioBroker installieren und starten, Standardport ist <strong>8093</strong>.
     </openwb-base-alert>
     <openwb-base-text-input

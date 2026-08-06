@@ -29,12 +29,11 @@
       :options="endianOptions"
       :model-value="device.configuration.wordorder"
       @update:model-value="updateConfiguration($event, 'configuration.wordorder')"
-    /> 
+    />
   </div>
 </template>
 
 <script>
-
 const ENDIAN_OPTIONS = [
   { text: "Big endian", value: ">" },
   { text: "Little endian", value: "<" },
@@ -53,5 +52,3 @@ export default {
   },
 };
 </script>
-
-
