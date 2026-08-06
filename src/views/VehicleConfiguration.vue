@@ -591,8 +591,8 @@
               v-if="template.control_pilot_interruption"
               title="Wiederholung der CP-Unterbrechung"
               :min="0"
-              :max="1200"
-              :step="60"
+              :max="20"
+              :step="1"
               unit="min"
               :labels="[
                 { label: 'Aus', value: 0 },
