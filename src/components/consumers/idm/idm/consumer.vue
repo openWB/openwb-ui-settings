@@ -2,10 +2,11 @@
   <div class="device-idm">
     <openwb-base-heading> Einstellungen für IDM Wärmepumpe </openwb-base-heading>
     <openwb-base-alert subtype="info">
-      ModbusTCP muss in der Fachmannebene aktiviert sein. Soll openWB PV-Erzeugung, Hausverbrauch und
-      Batteriewerte an die Wärmepumpe senden, muss zusätzlich in der Fachmannebene unter "PV Signal" die
-      Option "Gebäudeleittechnik / Smartfox" ausgewählt sein - ohne diese Einstellung wertet die Wärmepumpe
-      die gesendeten Werte nicht aus.
+      ModbusTCP muss in der Fachmannebene aktiviert sein. Ist als Verwendungszweck "Wärmepumpe in
+      Eigensteuerung" gewählt, sendet openWB PV-Erzeugung, Hausverbrauch und Batteriewerte an die
+      Wärmepumpe - dafür muss zusätzlich in der Fachmannebene unter "PV Signal" die Option
+      "Gebäudeleittechnik / Smartfox" ausgewählt sein, sonst wertet die Wärmepumpe die gesendeten
+      Werte nicht aus.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
@@ -37,23 +38,6 @@
       min="1"
       @update:model-value="updateConfiguration($event, 'configuration.version')"
     />
-    <openwb-base-select-input
-      title="PV-Überschuss/Systemwerte senden"
-      not-selected="Bitte auswählen"
-      :options="[
-        { value: true, text: 'ja' },
-        { value: false, text: 'nein' },
-      ]"
-      :model-value="device.configuration.send_values"
-      required
-      @update:model-value="updateConfiguration($event, 'configuration.send_values')"
-    >
-      <template #help>
-        Sendet PV-Erzeugung, Hausverbrauch, Batterieleistung und -SOC an die Gebäudeleittechnik/Smartfox-Schnittstelle
-        der Wärmepumpe, damit diese ihre Überschuss- und Speicherstrategie selbst berechnen kann. Setzt voraus, dass
-        "PV Signal" in der Fachmannebene auf "Gebäudeleittechnik / Smartfox" eingestellt ist (siehe Hinweis oben).
-      </template>
-    </openwb-base-select-input>
   </div>
 </template>
 
