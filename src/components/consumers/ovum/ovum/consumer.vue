@@ -3,6 +3,9 @@
     <openwb-base-heading> Einstellungen für OVUM Wärmepumpe (CubeSpeicher/MPlus) </openwb-base-heading>
     <openwb-base-alert subtype="info">
       Modbus TCP muss am Regler unter "Fachmann/SYS/TCP" mit fester IP-Adresse eingerichtet sein.
+      Bei Verwendungszweck "Ein/Aus schaltbar" steuert openWB SG-Ready über Modbus TCP - stelle
+      sicher, dass SG-Ready an der Wärmepumpe nicht zusätzlich über physische Kontakte extern
+      verdrahtet ist, da sich beide Wege gegenseitig überschreiben können.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
@@ -27,23 +30,6 @@
       max="255"
       @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
     />
-    <openwb-base-select-input
-      title="Netzsaldo zusätzlich senden"
-      not-selected="Bitte auswählen"
-      :options="[
-        { value: true, text: 'ja' },
-        { value: false, text: 'nein' },
-      ]"
-      :model-value="device.configuration.send_values"
-      required
-      @update:model-value="updateConfiguration($event, 'configuration.send_values')"
-    >
-      <template #help>
-        Sendet zusätzlich zur Leistungsvorgabe den aktuellen Netzsaldo, damit geräteeigene Anzeigen
-        (PV-Watch Messwert, Autarkiegrad) auch bei aktiver externer Steuerung sinnvolle Werte zeigen.
-        Ohne Einfluss auf die eigentliche Leistungsregelung.
-      </template>
-    </openwb-base-select-input>
   </div>
 </template>
 
