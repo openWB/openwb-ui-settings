@@ -145,6 +145,7 @@
                 Betrieb ist möglich.<br />
                 Dauerverbraucher: Geräte, die ein- und ausgeschaltet werden können, bei denen eine Unterbrechung im
                 laufenden Betrieb nicht möglich ist, z. B. Spülmaschine oder Trockner.
+                Wärmepumpe in Eigensteuerung: Die Wärmepumpe übernimmt die Steuerung selbst. Die dafür notwendigen Messwerte, wie zB EVU- und PV-Leistung, erhält sie von der openWB. Zwei unabhängige Regelsysteme können zu Schwingungen und unerwünschten Effekten führen.
               </template>
             </openwb-base-select-input>
             <hr />
@@ -861,11 +862,11 @@ export default {
     },
     showModeSettings(consumer) {
       const type = consumer.consumerUsage?.type;
-      return type != null && type !== "meter_only";
+      return type != null && type !== "meter_only" && type !== "self_controlled";
     },
     showMinCurrent(consumer) {
       const type = consumer.consumerUsage?.type;
-      return type !== "suspendable_onoff" && type !== "continuous" && type !== "meter_only";
+      return type !== "suspendable_onoff" && type !== "continuous" && type !== "meter_only" && type !== "self_controlled";
     },
     getUsageOptions(consumer) {
       if (!Array.isArray(consumer.usage)) return [];
@@ -880,6 +881,7 @@ export default {
         suspendable_onoff: "Schaltbar (Ein/Aus)",
         suspendable_tunable: "Stufenlos regelbar",
         continuous: "Dauerverbraucher",
+        self_controlled: "Wärmepumpe in Eigensteuerung",
       };
       return map[type] ?? type;
     },
