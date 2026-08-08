@@ -1,16 +1,4 @@
 <template>
-  <openwb-base-alert
-    v-if="forecast.official"
-    subtype="success"
-  >
-    Das ausgewählte Modul "{{ forecast.name }}" wird von openWB gepflegt.
-  </openwb-base-alert>
-  <openwb-base-alert
-    v-else
-    subtype="info"
-  >
-    Das ausgewählte Modul "{{ forecast.name }}" wird in unserer Community gepflegt.
-  </openwb-base-alert>
   <openwb-base-heading> Einstellungen für Modul "{{ forecast.name }}" </openwb-base-heading>
   <component
     :is="getForecastComponent()"

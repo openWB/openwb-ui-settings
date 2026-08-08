@@ -303,9 +303,9 @@ export default {
             "Fehler: Anmeldung fehlgeschlagen. Bitte überprüfen Sie die Zugangsdaten und melden Sie sich erneut an.",
             "danger",
           );
-          window.setTimeout(() => {
-            location.reload();
-          }, 1000);
+          // Do not hard-reload the page here; reconnect with cleared credentials
+          // so unsaved UI state is not lost in a reload loop.
+          this.reconnectMqttClient();
         } else {
           this.reconnectMqttClient();
         }

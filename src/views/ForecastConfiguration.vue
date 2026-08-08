@@ -12,6 +12,11 @@
           :model-value="selectedProviderType"
           @update:model-value="updateProviderType"
         />
+        <openwb-base-click-button
+          class="btn btn-outline-danger"
+          title="Anbieter entfernen und Forecast zuruecksetzen"
+          @button-clicked="resetProviderAndForecastData"
+        />
 
         <div v-if="currentForecastProvider.type">
           <openwb-forecast-proxy
@@ -51,12 +56,6 @@
           title="Status"
           readonly
           :model-value="faultStatusText"
-        />
-        <openwb-base-textarea
-          title="Tageswerte (kWh)"
-          subtype="json"
-          :model-value="$store.state.mqtt['openWB/optional/forecast/get/daily_kwh'] || {}"
-          readonly
         />
         <openwb-base-click-button
           class="btn btn-outline-primary"
@@ -189,6 +188,11 @@ export default {
         { topic: "openWB/optional/forecast/get/fault_str", writeable: false },
         { topic: "openWB/optional/forecast/get/next_query_time", writeable: false },
       ],
+      providerConfigCache: {
+        openmeteo: null,
+        forecastsolar: null,
+        pvnode: null,
+      },
     };
   },
   computed: {
@@ -223,11 +227,21 @@ export default {
       const values = this.$store.state.mqtt["openWB/optional/forecast/get/values"];
       return values && typeof values === "object" ? values : {};
     },
+    forecastValues48h() {
+      const nowSeconds = Math.floor(Date.now() / 1000);
+      const endSeconds = nowSeconds + 48 * 3600;
+      return Object.fromEntries(
+        Object.entries(this.forecastValues).filter(([timestamp]) => {
+          const ts = Number(timestamp);
+          return Number.isFinite(ts) && ts >= nowSeconds && ts <= endSeconds;
+        }),
+      );
+    },
     hasForecastValues() {
-      return Object.keys(this.forecastValues).length > 0;
+      return Object.keys(this.forecastValues48h).length > 0;
     },
     forecastChartData() {
-      const points = Object.entries(this.forecastValues)
+      const points = Object.entries(this.forecastValues48h)
         .map(([timestamp, value]) => ({
           x: Number(timestamp) * 1000,
           y: Number(value) / 1000,
@@ -298,6 +312,7 @@ export default {
   },
   watch: {
     currentForecastProviderRaw() {
+      this.cacheProviderConfiguration(this.currentForecastProviderRaw);
       this.normalizeProviderTopic();
     },
   },
@@ -305,6 +320,35 @@ export default {
     this.normalizeProviderTopic();
   },
   methods: {
+    resetProviderAndForecastData() {
+      this.providerConfigCache = {
+        openmeteo: null,
+        forecastsolar: null,
+        pvnode: null,
+      };
+      this.updateState("openWB/optional/forecast/provider", { type: null, configuration: {} });
+      this.updateState("openWB/optional/forecast/configured", false);
+      this.updateState("openWB/optional/forecast/get/values", {});
+      this.updateState("openWB/optional/forecast/get/today_values", {});
+      this.updateState("openWB/optional/forecast/get/tomorrow_values", {});
+      this.updateState("openWB/optional/forecast/get/daily_kwh", {});
+      this.updateState("openWB/optional/forecast/get/today_kwh", 0);
+      this.updateState("openWB/optional/forecast/get/tomorrow_kwh", 0);
+      this.updateState("openWB/optional/forecast/get/next_query_time", null);
+      this.updateState("openWB/optional/forecast/get/fault_state", 0);
+      this.updateState("openWB/optional/forecast/get/fault_str", "Kein Fehler.");
+      this.$emit("save", this.mqttTopicsToPublish);
+    },
+    cacheProviderConfiguration(provider) {
+      if (!provider || typeof provider !== "object" || !provider.type || !PROVIDER_DEFINITIONS[provider.type]) {
+        return;
+      }
+      this.providerConfigCache[provider.type] = {
+        ...provider,
+        configuration:
+          provider.configuration && typeof provider.configuration === "object" ? { ...provider.configuration } : {},
+      };
+    },
     ensureProviderConfiguration(type, configuration = {}) {
       const nextConfiguration = {
         ...configuration,
@@ -329,12 +373,18 @@ export default {
       if (!definition) {
         return { type: null, configuration: {} };
       }
+      const cachedProvider = this.providerConfigCache[type];
+      const cachedConfiguration =
+        cachedProvider && cachedProvider.configuration && typeof cachedProvider.configuration === "object"
+          ? cachedProvider.configuration
+          : {};
       return {
         name: definition.name,
         type: definition.type,
         official: definition.official,
         configuration: this.ensureProviderConfiguration(type, {
           ...definition.configuration,
+          ...cachedConfiguration,
           ...(configuration && typeof configuration === "object" ? configuration : {}),
         }),
       };
@@ -346,6 +396,7 @@ export default {
       }
     },
     updateProviderType(type) {
+      this.cacheProviderConfiguration(this.currentForecastProviderRaw);
       if (!type) {
         this.updateState("openWB/optional/forecast/provider", { type: null, configuration: {} });
         return;
