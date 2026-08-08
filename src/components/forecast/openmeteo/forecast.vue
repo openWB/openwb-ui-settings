@@ -60,7 +60,7 @@
     <openwb-base-number-input
       title="Installierte Gesamtleistung"
       unit="kWp"
-      :min="0.001"
+      :min="0"
       :step="0.01"
       required
       :model-value="forecast.configuration.peak_power_kw"
@@ -91,7 +91,7 @@
     <openwb-base-card
       v-for="(row, index) in stringRows"
       :key="`om-string-${index}`"
-      :title="`Ausrichtung ${index + 1}`"
+      :title="row.name && row.name.trim() ? row.name : `Ausrichtung ${index + 1}`"
       class="mb-2"
     >
       <openwb-base-text-input
@@ -102,7 +102,7 @@
       <openwb-base-number-input
         title="Leistung Ausrichtung/String"
         unit="kWp"
-        :min="0.001"
+        :min="0"
         :step="0.01"
         required
         :model-value="row.peak_power_kw"
