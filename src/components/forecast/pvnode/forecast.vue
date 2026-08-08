@@ -1,8 +1,8 @@
 <template>
   <div>
     <openwb-base-alert subtype="info">
-      PVNode liefert die Prognoseleistung direkt aus dem API-Response. Es sind keine lokalen Verlust- oder
-      Skalierungsparameter erforderlich.
+      PVNode wird von der Community gepflegt und liefert die Prognosewerte direkt aus der API-Response. Bitte richte
+      vorher Standort und PV-Flaechen auf https://pvnode.com ein und erstelle dort einen Account.
     </openwb-base-alert>
     <openwb-base-text-input
       title="API Key"

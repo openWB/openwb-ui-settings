@@ -29,9 +29,9 @@
         <hr />
 
         <openwb-base-click-button
-          class="btn btn-outline-primary"
-          title="Forecast Jetzt Aktualisieren"
-          @button-clicked="triggerForecastUpdate"
+          class="btn btn-success"
+          title="Einstellungen Speichern"
+          @button-clicked="$emit('save', mqttTopicsToPublish)"
         />
       </openwb-base-card>
 
@@ -57,6 +57,11 @@
           subtype="json"
           :model-value="$store.state.mqtt['openWB/optional/forecast/get/daily_kwh'] || {}"
           readonly
+        />
+        <openwb-base-click-button
+          class="btn btn-outline-primary"
+          title="Forecast Jetzt Aktualisieren"
+          @button-clicked="triggerForecastUpdate"
         />
       </openwb-base-card>
 
@@ -110,7 +115,7 @@ const PROVIDER_DEFINITIONS = {
   openmeteo: {
     name: "Open-Meteo PV Forecast",
     type: "openmeteo",
-    official: true,
+    official: false,
     configuration: {
       latitude: 0,
       longitude: 0,
@@ -120,26 +125,40 @@ const PROVIDER_DEFINITIONS = {
       azimuth: 0,
       system_loss: 0.14,
       irradiance_to_power_factor: 0.2,
-      strings: [],
+      strings: [
+        {
+          name: "Ausrichtung 1",
+          peak_power_kw: 9.5,
+          tilt: 30,
+          azimuth: 0,
+        },
+      ],
     },
   },
   forecastsolar: {
     name: "Forecast.Solar",
     type: "forecastsolar",
-    official: true,
+    official: false,
     configuration: {
       latitude: 0,
       longitude: 0,
       peak_power_kw: 9.5,
       azimuth: 0,
       tilt: 30,
-      strings: [],
+      strings: [
+        {
+          name: "Ausrichtung 1",
+          peak_power_kw: 9.5,
+          tilt: 30,
+          azimuth: 0,
+        },
+      ],
     },
   },
   pvnode: {
     name: "PVNode V2",
     type: "pvnode",
-    official: true,
+    official: false,
     configuration: {
       api_key: "",
       plant_id: "",
@@ -286,6 +305,25 @@ export default {
     this.normalizeProviderTopic();
   },
   methods: {
+    ensureProviderConfiguration(type, configuration = {}) {
+      const nextConfiguration = {
+        ...configuration,
+      };
+      if (["openmeteo", "forecastsolar"].includes(type)) {
+        const hasStrings = Array.isArray(nextConfiguration.strings) && nextConfiguration.strings.length > 0;
+        if (!hasStrings) {
+          nextConfiguration.strings = [
+            {
+              name: "Ausrichtung 1",
+              peak_power_kw: nextConfiguration.peak_power_kw || 1,
+              tilt: nextConfiguration.tilt ?? 30,
+              azimuth: nextConfiguration.azimuth ?? 0,
+            },
+          ];
+        }
+      }
+      return nextConfiguration;
+    },
     createProviderByType(type, configuration = undefined) {
       const definition = PROVIDER_DEFINITIONS[type];
       if (!definition) {
@@ -295,10 +333,10 @@ export default {
         name: definition.name,
         type: definition.type,
         official: definition.official,
-        configuration: {
+        configuration: this.ensureProviderConfiguration(type, {
           ...definition.configuration,
           ...(configuration && typeof configuration === "object" ? configuration : {}),
-        },
+        }),
       };
     },
     normalizeProviderTopic() {

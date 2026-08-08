@@ -1,37 +1,28 @@
 <template>
   <div>
     <openwb-base-alert subtype="info">
-      Fuer Forecast.Solar kann eine einzelne Ausrichtung oder optional eine JSON-Liste mehrerer Dachflaechen
-      konfiguriert werden.
+      Forecast.Solar wird von der Community gepflegt. Es wird kein API Key benoetigt.
     </openwb-base-alert>
     <openwb-base-number-input
-      title="Latitude"
+      title="Breitengrad"
       :step="0.000001"
       required
       :model-value="forecast.configuration.latitude"
       @update:model-value="updateConfiguration($event, 'configuration.latitude')"
-    />
+    >
+      <template #help> Dezimalgrad, z.B. 51.123456 </template>
+    </openwb-base-number-input>
     <openwb-base-number-input
-      title="Longitude"
+      title="Laengengrad"
       :step="0.000001"
       required
       :model-value="forecast.configuration.longitude"
       @update:model-value="updateConfiguration($event, 'configuration.longitude')"
-    />
-    <openwb-base-number-input
-      title="Tilt"
-      unit="Grad"
-      :min="0"
-      :max="90"
-      :step="1"
-      required
-      :model-value="forecast.configuration.tilt"
-      @update:model-value="updateConfiguration($event, 'configuration.tilt')"
     >
-      <template #help> Typischer Startwert fuer Schraegdaecher: 30 Grad. </template>
+      <template #help> Dezimalgrad, z.B. 7.654321 </template>
     </openwb-base-number-input>
     <openwb-base-number-input
-      title="Peak Power gesamt"
+      title="Installierte Gesamtleistung"
       unit="kWp"
       :min="0.001"
       :step="0.01"
@@ -39,13 +30,10 @@
       :model-value="forecast.configuration.peak_power_kw"
       @update:model-value="updateConfiguration($event, 'configuration.peak_power_kw')"
     >
-      <template #help>
-        Wird verwendet, wenn keine Mehrfach-Ausrichtungen konfiguriert sind. Typischer Bereich: 5 - 15 kWp.
-      </template>
+      <template #help> Dient als Referenzwert und Standard fuer neu hinzugefuegte Ausrichtungen. </template>
     </openwb-base-number-input>
     <openwb-base-alert subtype="info">
-      Mehrere Ausrichtungen: Falls mindestens ein Eintrag vorhanden ist, werden diese Einzelflaechen verwendet und die
-      Summenwerte oben ignoriert.
+      Jede Ausrichtung wird einzeln angelegt. Auch bei nur einer Dachflaeche bitte eine Ausrichtung erfassen.
     </openwb-base-alert>
     <openwb-base-click-button
       class="btn btn-outline-success mb-2"
@@ -70,8 +58,13 @@
       :title="`Ausrichtung ${index + 1}`"
       class="mb-2"
     >
+      <openwb-base-text-input
+        title="Name der Ausrichtung"
+        :model-value="row.name"
+        @update:model-value="updateStringField(index, 'name', $event)"
+      />
       <openwb-base-number-input
-        title="Peak Power"
+        title="Leistung Ausrichtung/String"
         unit="kWp"
         :min="0.001"
         :step="0.01"
@@ -98,25 +91,17 @@
         required
         :model-value="row.azimuth"
         @update:model-value="updateStringField(index, 'azimuth', $event)"
-      />
+      >
+        <template #help>
+          Forecast.Solar Azimut in Grad: 0 = Sueden, -90 = Osten, 90 = Westen, -180/180 = Norden.
+        </template>
+      </openwb-base-number-input>
       <openwb-base-click-button
         class="btn btn-outline-danger"
         title="Ausrichtung Entfernen"
         @button-clicked="removeStringRow(index)"
       />
     </openwb-base-card>
-    <openwb-base-number-input
-      title="Azimuth"
-      unit="Grad"
-      :min="-180"
-      :max="180"
-      :step="1"
-      required
-      :model-value="forecast.configuration.azimuth"
-      @update:model-value="updateConfiguration($event, 'configuration.azimuth')"
-    >
-      <template #help> -180..180, wobei 0 = Sueden, -90 = Osten, 90 = Westen. </template>
-    </openwb-base-number-input>
   </div>
 </template>
 
@@ -139,6 +124,7 @@ export default {
       const next = [
         ...this.stringRows,
         {
+          name: `Ausrichtung ${this.stringRows.length + 1}`,
           peak_power_kw: this.forecast.configuration.peak_power_kw || 1,
           tilt: this.forecast.configuration.tilt ?? 30,
           azimuth: this.forecast.configuration.azimuth ?? 0,
