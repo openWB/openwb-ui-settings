@@ -309,6 +309,19 @@ export default {
     this.normalizeProviderTopic();
   },
   methods: {
+    areProvidersEqual(a, b) {
+      if (!a || !b || typeof a !== "object" || typeof b !== "object") {
+        return a === b;
+      }
+      const aConfig = a.configuration && typeof a.configuration === "object" ? a.configuration : {};
+      const bConfig = b.configuration && typeof b.configuration === "object" ? b.configuration : {};
+      return (
+        (a.type || null) === (b.type || null) &&
+        (a.name || null) === (b.name || null) &&
+        Boolean(a.official) === Boolean(b.official) &&
+        JSON.stringify(aConfig) === JSON.stringify(bConfig)
+      );
+    },
     normalizeProviderType(type) {
       if (typeof type !== "string") {
         return null;
@@ -448,7 +461,7 @@ export default {
       }
       const normalizedProvider = this.normalizeProviderObject(provider);
       this.cacheProviderConfiguration(normalizedProvider);
-      if (provider && normalizedProvider !== provider) {
+      if (provider && !this.areProvidersEqual(normalizedProvider, provider)) {
         this.updateState("openWB/optional/forecast/provider", normalizedProvider);
       }
     },
