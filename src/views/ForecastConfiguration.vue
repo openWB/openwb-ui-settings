@@ -452,6 +452,11 @@ export default {
     updateProviderType(type) {
       this.cacheProviderConfiguration(this.currentForecastProviderRaw);
       if (!type) {
+        // Ignore empty initialization events from the select component.
+        // A real user-triggered reset only happens when a provider was selected before.
+        if (!this.selectedProviderType) {
+          return;
+        }
         const resetProvider = { type: null, configuration: {} };
         this.updateState("openWB/optional/forecast/provider", resetProvider);
         this.publishForecastProvider(resetProvider);
