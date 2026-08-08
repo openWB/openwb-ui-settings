@@ -446,13 +446,22 @@ export default {
               );
             }
           });
+          const isCoveredByWildcard = this.isTopicCoveredByActiveWildcardSubscription(topic);
           if (topic.includes("#") || topic.includes("+")) {
             console.debug("expanding wildcard topic:", topic);
             Object.keys(this.getWildcardTopics(topic)).forEach((wildcardTopic) => {
+              if (this.isTopicCoveredByActiveWildcardSubscription(wildcardTopic, topic)) {
+                console.debug("keeping wildcardTopic due to active overlapping subscription:", wildcardTopic);
+                return;
+              }
               console.debug("removing wildcardTopic:", wildcardTopic);
               this.$store.commit("removeTopic", wildcardTopic);
             });
           } else {
+            if (isCoveredByWildcard) {
+              console.debug("keeping topic due to active wildcard subscription:", topic);
+              return;
+            }
             console.debug("removing topic:", topic);
             this.$store.commit("removeTopic", topic);
           }
@@ -510,6 +519,20 @@ export default {
             [key]: this.$store.state.mqtt[key],
           };
         }, {});
+    },
+    isTopicCoveredByActiveWildcardSubscription(topic, excludedSubscription = undefined) {
+      const subscriptions = this.$store.state.mqttSubscriptions || {};
+      return Object.entries(subscriptions).some(([subscription, count]) => {
+        if (count <= 0 || subscription === excludedSubscription) {
+          return false;
+        }
+        if (!subscription.includes("#") && !subscription.includes("+")) {
+          return false;
+        }
+        const regex =
+          "^" + subscription.replaceAll("/", "\\/").replaceAll("+", "[^+/]+").replaceAll("#", ".*") + "$";
+        return new RegExp(regex).test(topic);
+      });
     },
   },
 };
