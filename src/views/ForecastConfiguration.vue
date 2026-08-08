@@ -399,11 +399,14 @@ export default {
       this.cacheProviderConfiguration(this.currentForecastProviderRaw);
       if (!type) {
         this.updateState("openWB/optional/forecast/provider", { type: null, configuration: {} });
+        this.$emit("save", this.mqttTopicsToPublish);
         return;
       }
       const existing = this.currentForecastProvider;
       const nextProvider = this.createProviderByType(type, existing.type === type ? existing.configuration : {});
       this.updateState("openWB/optional/forecast/provider", nextProvider);
+      // Persist provider switch immediately so backend and retained topics stay in sync.
+      this.$emit("save", this.mqttTopicsToPublish);
     },
     updateConfiguration(topic, event) {
       this.updateState(topic, event.value, event.object);
