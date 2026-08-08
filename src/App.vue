@@ -462,8 +462,9 @@ export default {
               console.debug("keeping topic due to active wildcard subscription:", topic);
               return;
             }
-            console.debug("removing topic:", topic);
-            this.$store.commit("removeTopic", topic);
+            // Keep last known value for concrete topics to avoid blank UI states
+            // when switching routes and waiting for retained refresh.
+            console.debug("keeping topic value on unsubscribe:", topic);
           }
         } else {
           console.debug("Still subscribed to topic: ", topic);
