@@ -126,72 +126,6 @@ import {
 
 Chart.register(Tooltip, Legend, LineController, LineElement, PointElement, LinearScale, TimeScale, Filler);
 
-const PROVIDER_DEFINITIONS = {
-  openmeteo: {
-    name: "Open-Meteo PV Forecast",
-    type: "openmeteo",
-    official: false,
-    configuration: {
-      latitude: 0,
-      longitude: 0,
-      timezone: "Europe/Berlin",
-      peak_power_kw: 9.5,
-      tilt: 30,
-      azimuth: 0,
-      system_loss: 0.14,
-      irradiance_to_power_factor: 0.2,
-      strings: [
-        {
-          name: "Ausrichtung 1",
-          peak_power_kw: 9.5,
-          tilt: 30,
-          azimuth: 0,
-        },
-      ],
-    },
-  },
-  forecastsolar: {
-    name: "Forecast.Solar",
-    type: "forecastsolar",
-    official: false,
-    configuration: {
-      latitude: 0,
-      longitude: 0,
-      peak_power_kw: 9.5,
-      azimuth: 0,
-      tilt: 30,
-      strings: [
-        {
-          name: "Ausrichtung 1",
-          peak_power_kw: 9.5,
-          tilt: 30,
-          azimuth: 0,
-        },
-      ],
-    },
-  },
-  pvnode: {
-    name: "PVNode V2",
-    type: "pvnode",
-    official: false,
-    configuration: {
-      api_key: "",
-      plant_id: "",
-    },
-  },
-};
-
-const PROVIDER_TYPE_ALIASES = {
-  "forecast.solar": "forecastsolar",
-  forecastsolar: "forecastsolar",
-  forecast_solar: "forecastsolar",
-  "open-meteo": "openmeteo",
-  open_meteo: "openmeteo",
-  openmeteo: "openmeteo",
-  pvnode: "pvnode",
-  pv_node: "pvnode",
-};
-
 export default {
   name: "OpenwbForecastConfiguration",
   components: {
@@ -203,6 +137,7 @@ export default {
   data() {
     return {
       mqttTopics: [
+        { topic: "openWB/system/configurable/forecasts", writeable: false },
         { topic: "openWB/optional/forecast/configured", writeable: false },
         { topic: "openWB/optional/forecast/provider", writeable: true },
         { topic: "openWB/optional/forecast/get/values", writeable: false },
@@ -215,21 +150,37 @@ export default {
         { topic: "openWB/optional/forecast/get/fault_str", writeable: false },
         { topic: "openWB/optional/forecast/get/next_query_time", writeable: false },
       ],
-      providerConfigCache: {
-        openmeteo: null,
-        forecastsolar: null,
-        pvnode: null,
-      },
+      providerConfigCache: {},
     };
   },
   computed: {
+    configurableForecasts() {
+      const options = this.$store.state.mqtt["openWB/system/configurable/forecasts"];
+      return Array.isArray(options) ? options : [];
+    },
+    providerDefinitionByType() {
+      return this.configurableForecasts.reduce((definitions, option) => {
+        if (!option || typeof option !== "object" || typeof option.value !== "string") {
+          return definitions;
+        }
+        return {
+          ...definitions,
+          [option.value]: option,
+        };
+      }, {});
+    },
     providerOptions() {
-      return [
-        { value: "", text: "Kein Anbieter" },
-        { value: "openmeteo", text: "Open-Meteo" },
-        { value: "forecastsolar", text: "Forecast.Solar" },
-        { value: "pvnode", text: "PVNode" },
-      ];
+      const options = this.configurableForecasts.map((option) => {
+        const isEmpty = option?.value === null || option?.value === undefined || option?.value === "";
+        return {
+          value: isEmpty ? "" : option.value,
+          text: option?.text || (isEmpty ? "Kein Anbieter" : option.value),
+        };
+      });
+      if (options.some((option) => option.value === "")) {
+        return options;
+      }
+      return [{ value: "", text: "Kein Anbieter" }, ...options];
     },
     currentForecastProviderRaw() {
       return this.$store.state.mqtt["openWB/optional/forecast/provider"];
@@ -241,7 +192,7 @@ export default {
       }
       if (typeof provider === "string") {
         const normalizedType = this.normalizeProviderType(provider);
-        if (normalizedType && PROVIDER_DEFINITIONS[normalizedType]) {
+        if (normalizedType) {
           return this.createProviderByType(normalizedType);
         }
       }
@@ -358,30 +309,32 @@ export default {
       if (!trimmed) {
         return null;
       }
-      if (PROVIDER_DEFINITIONS[trimmed]) {
+      if (this.providerDefinitionByType[trimmed]) {
         return trimmed;
       }
       const lowered = trimmed.toLowerCase();
-      if (PROVIDER_TYPE_ALIASES[lowered]) {
-        return PROVIDER_TYPE_ALIASES[lowered];
+      const knownTypes = Object.keys(this.providerDefinitionByType);
+      if (knownTypes.includes(lowered)) {
+        return lowered;
       }
-      const simplified = lowered.replace(/[^a-z0-9]/g, "_");
-      return PROVIDER_TYPE_ALIASES[simplified] || null;
+      const simplified = lowered.replace(/[^a-z0-9]/g, "");
+      const match = knownTypes.find((providerType) => providerType.toLowerCase().replace(/[^a-z0-9]/g, "") === simplified);
+      return match || null;
     },
     normalizeProviderObject(provider) {
       if (!provider || typeof provider !== "object") {
         return { type: null, configuration: {} };
       }
       const normalizedType = this.normalizeProviderType(provider.type || provider.name);
-      if (!normalizedType || !PROVIDER_DEFINITIONS[normalizedType]) {
+      if (!normalizedType) {
         return provider;
       }
-      const definition = PROVIDER_DEFINITIONS[normalizedType];
+      const definition = this.providerDefinitionByType[normalizedType];
       return {
         ...provider,
-        name: provider.name || definition.name,
+        name: provider.name || definition?.text || normalizedType,
         type: normalizedType,
-        official: typeof provider.official === "boolean" ? provider.official : definition.official,
+        official: typeof provider.official === "boolean" ? provider.official : definition?.official,
         configuration: this.ensureProviderConfiguration(normalizedType, provider.configuration || {}),
       };
     },
@@ -389,11 +342,7 @@ export default {
       this.$root.doPublish("openWB/set/optional/forecast/provider", providerConfig);
     },
     resetProviderAndForecastData() {
-      this.providerConfigCache = {
-        openmeteo: null,
-        forecastsolar: null,
-        pvnode: null,
-      };
+      this.providerConfigCache = {};
       const resetProvider = { type: null, configuration: {} };
       this.updateState("openWB/optional/forecast/provider", resetProvider);
       this.publishForecastProvider(resetProvider);
@@ -414,7 +363,7 @@ export default {
         return;
       }
       const normalizedType = this.normalizeProviderType(provider.type || provider.name);
-      if (!normalizedType || !PROVIDER_DEFINITIONS[normalizedType]) {
+      if (!normalizedType) {
         return;
       }
       this.providerConfigCache[normalizedType] = {
@@ -428,7 +377,8 @@ export default {
       const nextConfiguration = {
         ...configuration,
       };
-      if (["openmeteo", "forecastsolar"].includes(type)) {
+      const hasStringsKey = Object.prototype.hasOwnProperty.call(nextConfiguration, "strings");
+      if (hasStringsKey) {
         const hasStrings = Array.isArray(nextConfiguration.strings) && nextConfiguration.strings.length > 0;
         if (!hasStrings) {
           nextConfiguration.strings = [
@@ -444,7 +394,7 @@ export default {
       return nextConfiguration;
     },
     createProviderByType(type, configuration = undefined) {
-      const definition = PROVIDER_DEFINITIONS[type];
+      const definition = this.providerDefinitionByType[type];
       if (!definition) {
         return { type: null, configuration: {} };
       }
@@ -453,12 +403,17 @@ export default {
         cachedProvider && cachedProvider.configuration && typeof cachedProvider.configuration === "object"
           ? cachedProvider.configuration
           : {};
+      const defaults =
+        definition.defaults && typeof definition.defaults === "object"
+          ? JSON.parse(JSON.stringify(definition.defaults))
+          : { type, configuration: {} };
       return {
-        name: definition.name,
-        type: definition.type,
-        official: definition.official,
+        ...defaults,
+        name: defaults.name || definition.text || type,
+        type,
+        official: typeof defaults.official === "boolean" ? defaults.official : Boolean(definition.official),
         configuration: this.ensureProviderConfiguration(type, {
-          ...definition.configuration,
+          ...(defaults.configuration && typeof defaults.configuration === "object" ? defaults.configuration : {}),
           ...cachedConfiguration,
           ...(configuration && typeof configuration === "object" ? configuration : {}),
         }),
@@ -468,7 +423,7 @@ export default {
       const provider = this.currentForecastProviderRaw;
       if (typeof provider === "string") {
         const normalizedType = this.normalizeProviderType(provider);
-        if (normalizedType && PROVIDER_DEFINITIONS[normalizedType]) {
+        if (normalizedType) {
           this.updateState("openWB/optional/forecast/provider", this.createProviderByType(normalizedType));
         }
         return;
@@ -488,10 +443,11 @@ export default {
       const fallbackType =
         this.selectedProviderType ||
         (typeof this.currentForecastProviderRaw === "string" ? this.currentForecastProviderRaw : null);
-      if (!fallbackType || !PROVIDER_DEFINITIONS[fallbackType]) {
+      const normalizedType = this.normalizeProviderType(fallbackType);
+      if (!normalizedType) {
         return;
       }
-      this.updateState(topic, this.createProviderByType(fallbackType));
+      this.updateState(topic, this.createProviderByType(normalizedType));
     },
     updateProviderType(type) {
       this.cacheProviderConfiguration(this.currentForecastProviderRaw);
@@ -501,8 +457,15 @@ export default {
         this.publishForecastProvider(resetProvider);
         return;
       }
+      const normalizedType = this.normalizeProviderType(type);
+      if (!normalizedType) {
+        return;
+      }
       const existing = this.currentForecastProvider;
-      const nextProvider = this.createProviderByType(type, existing.type === type ? existing.configuration : {});
+      const nextProvider = this.createProviderByType(
+        normalizedType,
+        existing.type === normalizedType ? existing.configuration : {},
+      );
       this.updateState("openWB/optional/forecast/provider", nextProvider);
       // Persist provider switch immediately to avoid race conditions with retained state.
       this.publishForecastProvider(nextProvider);

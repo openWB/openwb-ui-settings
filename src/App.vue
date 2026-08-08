@@ -77,6 +77,7 @@ export default {
         "openWB/system/security/access/ActiveBatControlConfiguration",
         "openWB/system/security/access/HardwareInstallation",
         "openWB/system/security/access/LoadManagementConfiguration",
+        "openWB/system/security/access/ForecastConfiguration",
         "openWB/system/security/access/ChargePointInstallation",
         "openWB/system/security/access/VehicleConfiguration",
         "openWB/system/security/access/IoConfiguration",

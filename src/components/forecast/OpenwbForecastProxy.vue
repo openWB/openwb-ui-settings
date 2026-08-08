@@ -11,22 +11,7 @@
 import { defineAsyncComponent, markRaw } from "vue";
 import OpenwbForecastConfigFallback from "./OpenwbForecastConfigFallback.vue";
 
-const FORECAST_COMPONENT_LOADERS = {
-  openmeteo: () => import("./openmeteo/forecast.vue"),
-  forecastsolar: () => import("./forecastsolar/forecast.vue"),
-  pvnode: () => import("./pvnode/forecast.vue"),
-};
-
-const FORECAST_PROVIDER_ALIASES = {
-  "forecast.solar": "forecastsolar",
-  forecastsolar: "forecastsolar",
-  forecast_solar: "forecastsolar",
-  "open-meteo": "openmeteo",
-  open_meteo: "openmeteo",
-  openmeteo: "openmeteo",
-  pvnode: "pvnode",
-  pv_node: "pvnode",
-};
+const FORECAST_COMPONENT_MODULES = import.meta.glob("./*/forecast.vue");
 
 export default {
   name: "OpenwbForecastProxy",
@@ -40,6 +25,18 @@ export default {
     };
   },
   computed: {
+    providerComponentLoaders() {
+      return Object.entries(FORECAST_COMPONENT_MODULES).reduce((loaders, [path, loader]) => {
+        const match = path.match(/^\.\/([^/]+)\/forecast\.vue$/);
+        if (!match) {
+          return loaders;
+        }
+        return {
+          ...loaders,
+          [match[1]]: loader,
+        };
+      }, {});
+    },
     normalizedProviderType() {
       const rawType =
         typeof this.forecast?.type === "string" && this.forecast.type.trim().length > 0
@@ -52,19 +49,25 @@ export default {
       if (!trimmed) {
         return null;
       }
-      const lowered = trimmed.toLowerCase();
-      if (FORECAST_PROVIDER_ALIASES[lowered]) {
-        return FORECAST_PROVIDER_ALIASES[lowered];
+      const loaderTypes = Object.keys(this.providerComponentLoaders);
+      if (loaderTypes.includes(trimmed)) {
+        return trimmed;
       }
-      const simplified = lowered.replace(/[^a-z0-9]/g, "_");
-      return FORECAST_PROVIDER_ALIASES[simplified] || null;
+      const lowered = trimmed.toLowerCase();
+      if (loaderTypes.includes(lowered)) {
+        return lowered;
+      }
+      const simplified = lowered.replace(/[^a-z0-9]/g, "");
+      return (
+        loaderTypes.find((providerType) => providerType.toLowerCase().replace(/[^a-z0-9]/g, "") === simplified) || null
+      );
     },
     forecastComponent() {
       const providerType = this.normalizedProviderType;
       if (!providerType) {
         return OpenwbForecastConfigFallback;
       }
-      const loader = FORECAST_COMPONENT_LOADERS[providerType];
+      const loader = this.providerComponentLoaders[providerType];
       if (!loader) {
         return OpenwbForecastConfigFallback;
       }

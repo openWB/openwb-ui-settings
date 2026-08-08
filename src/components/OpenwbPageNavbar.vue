@@ -176,7 +176,7 @@
               Lastmanagement
             </router-link>
             <router-link
-              v-if="accessAllowed('LoadManagementConfiguration')"
+              v-if="accessAllowed('ForecastConfiguration')"
               to="/ForecastConfiguration"
               class="dropdown-item"
               active-class="active disabled"
@@ -389,6 +389,7 @@ export default {
         { topic: "openWB/system/security/access/ActiveBatControlConfiguration", writeable: false },
         { topic: "openWB/system/security/access/HardwareInstallation", writeable: false },
         { topic: "openWB/system/security/access/LoadManagementConfiguration", writeable: false },
+        { topic: "openWB/system/security/access/ForecastConfiguration", writeable: false },
         { topic: "openWB/system/security/access/ChargePointInstallation", writeable: false },
         { topic: "openWB/system/security/access/VehicleConfiguration", writeable: false },
         { topic: "openWB/system/security/access/IoConfiguration", writeable: false },

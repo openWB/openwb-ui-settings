@@ -110,7 +110,7 @@ const routes = [
     name: "ForecastConfiguration",
     meta: {
       heading: "Konfiguration - PV-Prognose",
-      checkPermissions: false,
+      checkPermissions: true,
     },
     component: () => import("../views/ForecastConfiguration.vue"),
   },
