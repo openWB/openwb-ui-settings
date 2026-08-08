@@ -32,6 +32,36 @@ import Messages from "./components/OpenwbPageMessages.vue";
 import Blocker from "./components/OpenwbPageBlocker.vue";
 import mqtt from "mqtt";
 
+const SECURITY_ACCESS_TOPICS = [
+  "openWB/system/security/access/Settings",
+  "openWB/system/security/access/Status",
+  "openWB/system/security/access/ChargeLog",
+  "openWB/system/security/access/Chart",
+  "openWB/system/security/access/GeneralConfiguration",
+  "openWB/system/security/access/DisplayConfiguration",
+  "openWB/system/security/access/IdentificationConfiguration",
+  "openWB/system/security/access/GeneralChargeConfiguration",
+  "openWB/system/security/access/SurplusChargeConfiguration",
+  "openWB/system/security/access/ActiveBatControlConfiguration",
+  "openWB/system/security/access/HardwareInstallation",
+  "openWB/system/security/access/LoadManagementConfiguration",
+  "openWB/system/security/access/ForecastConfiguration",
+  "openWB/system/security/access/ChargePointInstallation",
+  "openWB/system/security/access/VehicleConfiguration",
+  "openWB/system/security/access/IoConfiguration",
+  "openWB/system/security/access/LegacySmartHomeConfiguration",
+  "openWB/system/security/access/InstallAssistant",
+  "openWB/system/security/access/TenantEnergyConfiguration",
+  "openWB/system/security/access/CloudConfiguration",
+  "openWB/system/security/access/MqttBridgeConfiguration",
+  "openWB/system/security/access/DebugConfiguration",
+  "openWB/system/security/access/Support",
+  "openWB/system/security/access/DataManagement",
+  "openWB/system/security/access/SecurityConfiguration",
+  "openWB/system/security/access/SystemConfiguration",
+  "openWB/system/security/access/LegalSettings",
+];
+
 export default {
   name: "OpenwbSettingsApp",
   components: {
@@ -64,6 +94,7 @@ export default {
           requestProblemInformation: true,
         },
       },
+      securityAccessTopics: SECURITY_ACCESS_TOPICS,
       dataTimeout: null,
     };
   },
@@ -256,7 +287,7 @@ export default {
             "openWB/system/dataprotection_acknowledged",
             "openWB/system/usage_terms_acknowledged",
             "openWB/system/installAssistantDone",
-            "openWB/system/security/access/+",
+            ...this.securityAccessTopics,
           ],
           true,
         );

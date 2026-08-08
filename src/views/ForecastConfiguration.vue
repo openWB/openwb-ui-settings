@@ -85,7 +85,7 @@
           v-if="!hasForecastValues"
           subtype="info"
         >
-          Noch keine Forecast-Werte vorhanden. Fuehre ggf. "Forecast Jetzt Aktualisieren" aus.
+          Noch keine Forecast-Werte vorhanden. Fuehre ggf. "Forecast aktualisieren" aus.
         </openwb-base-alert>
         <div
           v-else
