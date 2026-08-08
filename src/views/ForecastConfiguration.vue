@@ -100,8 +100,6 @@ const PROVIDER_DEFINITIONS = {
     configuration: {
       api_key: "",
       plant_id: "",
-      peak_power_kw: 9.5,
-      system_loss: 0.14,
     },
   },
 };
