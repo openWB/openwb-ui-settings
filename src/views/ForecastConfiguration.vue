@@ -72,9 +72,12 @@ const PROVIDER_DEFINITIONS = {
       latitude: 0,
       longitude: 0,
       timezone: "Europe/Berlin",
-      peak_power_kw: 0,
-      system_loss: 0,
-      irradiance_to_power_factor: 1,
+      peak_power_kw: 9.5,
+      tilt: 30,
+      azimuth: 0,
+      system_loss: 0.14,
+      irradiance_to_power_factor: 0.2,
+      strings: [],
     },
   },
   forecastsolar: {
@@ -84,9 +87,10 @@ const PROVIDER_DEFINITIONS = {
     configuration: {
       latitude: 0,
       longitude: 0,
-      peak_power_kw: 0,
+      peak_power_kw: 9.5,
       azimuth: 0,
       tilt: 30,
+      strings: [],
     },
   },
   pvnode: {
@@ -96,8 +100,8 @@ const PROVIDER_DEFINITIONS = {
     configuration: {
       api_key: "",
       plant_id: "",
-      peak_power_kw: 0,
-      system_loss: 0,
+      peak_power_kw: 9.5,
+      system_loss: 0.14,
     },
   },
 };
