@@ -396,7 +396,25 @@ export default {
     },
     normalizeProviderTopic() {
       const provider = this.currentForecastProviderRaw;
+      if (typeof provider === "string" && PROVIDER_DEFINITIONS[provider]) {
+        this.updateState("openWB/optional/forecast/provider", this.createProviderByType(provider));
+        return;
+      }
       this.cacheProviderConfiguration(provider);
+    },
+    ensureEditableProviderTopic() {
+      const topic = "openWB/optional/forecast/provider";
+      const provider = this.$store.state.mqtt[topic];
+      if (provider && typeof provider === "object") {
+        return;
+      }
+      const fallbackType =
+        this.selectedProviderType ||
+        (typeof this.currentForecastProviderRaw === "string" ? this.currentForecastProviderRaw : null);
+      if (!fallbackType || !PROVIDER_DEFINITIONS[fallbackType]) {
+        return;
+      }
+      this.updateState(topic, this.createProviderByType(fallbackType));
     },
     updateProviderType(type) {
       this.cacheProviderConfiguration(this.currentForecastProviderRaw);
@@ -413,6 +431,9 @@ export default {
       this.publishForecastProvider(nextProvider);
     },
     updateConfiguration(topic, event) {
+      if (topic === "openWB/optional/forecast/provider" && event?.object) {
+        this.ensureEditableProviderTopic();
+      }
       this.updateState(topic, event.value, event.object);
     },
     triggerForecastUpdate() {
