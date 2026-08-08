@@ -12,11 +12,6 @@
           :model-value="selectedProviderType"
           @update:model-value="updateProviderType"
         />
-        <openwb-base-click-button
-          class="btn btn-outline-danger"
-          title="Anbieter entfernen und Forecast zuruecksetzen"
-          @button-clicked="resetProviderAndForecastData"
-        />
 
         <div v-if="currentForecastProvider.type">
           <openwb-forecast-proxy
@@ -33,11 +28,26 @@
 
         <hr />
 
-        <openwb-base-click-button
-          class="btn btn-success"
-          title="Einstellungen Speichern"
-          @button-clicked="$emit('save', mqttTopicsToPublish)"
-        />
+        <div class="row justify-content-center mb-1 w-100">
+          <div class="col-md-4 d-flex py-1 justify-content-center">
+            <button
+              type="button"
+              class="btn btn-success btn-block btn-sm"
+              @click="$emit('save', mqttTopicsToPublish)"
+            >
+              Einstellungen Speichern
+            </button>
+          </div>
+          <div class="col-md-4 d-flex py-1 justify-content-center">
+            <button
+              type="button"
+              class="btn btn-outline-danger btn-block btn-sm"
+              @click="resetProviderAndForecastData"
+            >
+              Anbieter entfernen und Forecast zuruecksetzen
+            </button>
+          </div>
+        </div>
       </openwb-base-card>
 
       <openwb-base-card title="Aktuelle Forecast-Werte">
@@ -57,11 +67,17 @@
           readonly
           :model-value="faultStatusText"
         />
-        <openwb-base-click-button
-          class="btn btn-outline-primary"
-          title="Forecast Jetzt Aktualisieren"
-          @button-clicked="triggerForecastUpdate"
-        />
+        <div class="row justify-content-center mb-1 w-100">
+          <div class="col-md-4 d-flex py-1 justify-content-center">
+            <button
+              type="button"
+              class="btn btn-outline-primary btn-block btn-sm"
+              @click="triggerForecastUpdate"
+            >
+              Forecast aktualisieren
+            </button>
+          </div>
+        </div>
       </openwb-base-card>
 
       <openwb-base-card title="Forecast-Verlauf (Leistung)">
@@ -165,6 +181,17 @@ const PROVIDER_DEFINITIONS = {
   },
 };
 
+const PROVIDER_TYPE_ALIASES = {
+  "forecast.solar": "forecastsolar",
+  forecastsolar: "forecastsolar",
+  forecast_solar: "forecastsolar",
+  "open-meteo": "openmeteo",
+  open_meteo: "openmeteo",
+  openmeteo: "openmeteo",
+  pvnode: "pvnode",
+  pv_node: "pvnode",
+};
+
 export default {
   name: "OpenwbForecastConfiguration",
   components: {
@@ -210,18 +237,21 @@ export default {
     currentForecastProvider() {
       const provider = this.currentForecastProviderRaw;
       if (provider && typeof provider === "object") {
-        return provider;
+        return this.normalizeProviderObject(provider);
       }
-      if (typeof provider === "string" && PROVIDER_DEFINITIONS[provider]) {
-        return this.createProviderByType(provider);
+      if (typeof provider === "string") {
+        const normalizedType = this.normalizeProviderType(provider);
+        if (normalizedType && PROVIDER_DEFINITIONS[normalizedType]) {
+          return this.createProviderByType(normalizedType);
+        }
       }
       return { type: null, configuration: {} };
     },
     selectedProviderType() {
       if (typeof this.currentForecastProviderRaw === "string") {
-        return this.currentForecastProviderRaw;
+        return this.normalizeProviderType(this.currentForecastProviderRaw) || "";
       }
-      return this.currentForecastProvider.type || "";
+      return this.normalizeProviderType(this.currentForecastProvider?.type) || "";
     },
     forecastValues() {
       const values = this.$store.state.mqtt["openWB/optional/forecast/get/values"];
@@ -320,6 +350,41 @@ export default {
     this.normalizeProviderTopic();
   },
   methods: {
+    normalizeProviderType(type) {
+      if (typeof type !== "string") {
+        return null;
+      }
+      const trimmed = type.trim();
+      if (!trimmed) {
+        return null;
+      }
+      if (PROVIDER_DEFINITIONS[trimmed]) {
+        return trimmed;
+      }
+      const lowered = trimmed.toLowerCase();
+      if (PROVIDER_TYPE_ALIASES[lowered]) {
+        return PROVIDER_TYPE_ALIASES[lowered];
+      }
+      const simplified = lowered.replace(/[^a-z0-9]/g, "_");
+      return PROVIDER_TYPE_ALIASES[simplified] || null;
+    },
+    normalizeProviderObject(provider) {
+      if (!provider || typeof provider !== "object") {
+        return { type: null, configuration: {} };
+      }
+      const normalizedType = this.normalizeProviderType(provider.type || provider.name);
+      if (!normalizedType || !PROVIDER_DEFINITIONS[normalizedType]) {
+        return provider;
+      }
+      const definition = PROVIDER_DEFINITIONS[normalizedType];
+      return {
+        ...provider,
+        name: provider.name || definition.name,
+        type: normalizedType,
+        official: typeof provider.official === "boolean" ? provider.official : definition.official,
+        configuration: this.ensureProviderConfiguration(normalizedType, provider.configuration || {}),
+      };
+    },
     publishForecastProvider(providerConfig) {
       this.$root.doPublish("openWB/set/optional/forecast/provider", providerConfig);
     },
@@ -345,11 +410,16 @@ export default {
       this.$emit("save", this.mqttTopicsToPublish);
     },
     cacheProviderConfiguration(provider) {
-      if (!provider || typeof provider !== "object" || !provider.type || !PROVIDER_DEFINITIONS[provider.type]) {
+      if (!provider || typeof provider !== "object") {
         return;
       }
-      this.providerConfigCache[provider.type] = {
+      const normalizedType = this.normalizeProviderType(provider.type || provider.name);
+      if (!normalizedType || !PROVIDER_DEFINITIONS[normalizedType]) {
+        return;
+      }
+      this.providerConfigCache[normalizedType] = {
         ...provider,
+        type: normalizedType,
         configuration:
           provider.configuration && typeof provider.configuration === "object" ? { ...provider.configuration } : {},
       };
@@ -396,11 +466,18 @@ export default {
     },
     normalizeProviderTopic() {
       const provider = this.currentForecastProviderRaw;
-      if (typeof provider === "string" && PROVIDER_DEFINITIONS[provider]) {
-        this.updateState("openWB/optional/forecast/provider", this.createProviderByType(provider));
+      if (typeof provider === "string") {
+        const normalizedType = this.normalizeProviderType(provider);
+        if (normalizedType && PROVIDER_DEFINITIONS[normalizedType]) {
+          this.updateState("openWB/optional/forecast/provider", this.createProviderByType(normalizedType));
+        }
         return;
       }
-      this.cacheProviderConfiguration(provider);
+      const normalizedProvider = this.normalizeProviderObject(provider);
+      this.cacheProviderConfiguration(normalizedProvider);
+      if (provider && normalizedProvider !== provider) {
+        this.updateState("openWB/optional/forecast/provider", normalizedProvider);
+      }
     },
     ensureEditableProviderTopic() {
       const topic = "openWB/optional/forecast/provider";
