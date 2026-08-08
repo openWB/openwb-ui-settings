@@ -94,7 +94,6 @@ export default {
           requestProblemInformation: true,
         },
       },
-      securityWildcardFallbackActive: false,
       dataTimeout: null,
     };
   },
@@ -251,7 +250,6 @@ export default {
       this.client = mqtt.connect(connectUrl, options);
       // reset backoff on successful connection
       this.client.on("connect", () => {
-        this.securityWildcardFallbackActive = false;
         this.connected = true;
         this.reconnectAttempts = 0;
         this.reconnectBackoff = 2000;
@@ -288,8 +286,7 @@ export default {
             "openWB/system/dataprotection_acknowledged",
             "openWB/system/usage_terms_acknowledged",
             "openWB/system/installAssistantDone",
-            "openWB/system/security/access/+",
-            "openWB/system/security/access/ForecastConfiguration",
+            ...SECURITY_ACCESS_FALLBACK_TOPICS,
           ],
           true,
         );
@@ -432,11 +429,6 @@ export default {
                 "danger",
               );
               this.$store.commit("removeSubscription", topic);
-              if (topic === "openWB/system/security/access/+" && this.securityWildcardFallbackActive === false) {
-                this.securityWildcardFallbackActive = true;
-                console.warn("Security wildcard subscription failed, falling back to explicit access topics.");
-                this.doSubscribe(SECURITY_ACCESS_FALLBACK_TOPICS, true);
-              }
               return;
             }
           });
@@ -540,8 +532,7 @@ export default {
         if (!subscription.includes("#") && !subscription.includes("+")) {
           return false;
         }
-        const regex =
-          "^" + subscription.replaceAll("/", "\\/").replaceAll("+", "[^+/]+").replaceAll("#", ".*") + "$";
+        const regex = "^" + subscription.replaceAll("/", "\\/").replaceAll("+", "[^+/]+").replaceAll("#", ".*") + "$";
         return new RegExp(regex).test(topic);
       });
     },

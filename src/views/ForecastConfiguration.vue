@@ -177,6 +177,13 @@ export default {
           text: option?.text || (isEmpty ? "Kein Anbieter" : option.value),
         };
       });
+      const selectedType = this.selectedProviderType;
+      if (selectedType && !options.some((option) => option.value === selectedType)) {
+        options.unshift({
+          value: selectedType,
+          text: `Unbekannter Anbieter (${selectedType})`,
+        });
+      }
       if (options.some((option) => option.value === "")) {
         return options;
       }
@@ -200,9 +207,10 @@ export default {
     },
     selectedProviderType() {
       if (typeof this.currentForecastProviderRaw === "string") {
-        return this.normalizeProviderType(this.currentForecastProviderRaw) || "";
+        return this.normalizeProviderType(this.currentForecastProviderRaw) || this.currentForecastProviderRaw || "";
       }
-      return this.normalizeProviderType(this.currentForecastProvider?.type) || "";
+      const currentType = this.currentForecastProvider?.type;
+      return this.normalizeProviderType(currentType) || currentType || "";
     },
     forecastValues() {
       const values = this.$store.state.mqtt["openWB/optional/forecast/get/values"];
@@ -318,8 +326,10 @@ export default {
         return lowered;
       }
       const simplified = lowered.replace(/[^a-z0-9]/g, "");
-      const match = knownTypes.find((providerType) => providerType.toLowerCase().replace(/[^a-z0-9]/g, "") === simplified);
-      return match || null;
+      const match = knownTypes.find(
+        (providerType) => providerType.toLowerCase().replace(/[^a-z0-9]/g, "") === simplified,
+      );
+      return match || trimmed;
     },
     normalizeProviderObject(provider) {
       if (!provider || typeof provider !== "object") {
@@ -395,14 +405,22 @@ export default {
     },
     createProviderByType(type, configuration = undefined) {
       const definition = this.providerDefinitionByType[type];
-      if (!definition) {
-        return { type: null, configuration: {} };
-      }
       const cachedProvider = this.providerConfigCache[type];
       const cachedConfiguration =
         cachedProvider && cachedProvider.configuration && typeof cachedProvider.configuration === "object"
           ? cachedProvider.configuration
           : {};
+      if (!definition) {
+        return {
+          name: type,
+          type,
+          official: false,
+          configuration: this.ensureProviderConfiguration(type, {
+            ...cachedConfiguration,
+            ...(configuration && typeof configuration === "object" ? configuration : {}),
+          }),
+        };
+      }
       const defaults =
         definition.defaults && typeof definition.defaults === "object"
           ? JSON.parse(JSON.stringify(definition.defaults))
