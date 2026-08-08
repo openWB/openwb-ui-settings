@@ -320,13 +320,18 @@ export default {
     this.normalizeProviderTopic();
   },
   methods: {
+    publishForecastProvider(providerConfig) {
+      this.$root.doPublish("openWB/set/optional/forecast/provider", providerConfig);
+    },
     resetProviderAndForecastData() {
       this.providerConfigCache = {
         openmeteo: null,
         forecastsolar: null,
         pvnode: null,
       };
-      this.updateState("openWB/optional/forecast/provider", { type: null, configuration: {} });
+      const resetProvider = { type: null, configuration: {} };
+      this.updateState("openWB/optional/forecast/provider", resetProvider);
+      this.publishForecastProvider(resetProvider);
       this.updateState("openWB/optional/forecast/configured", false);
       this.updateState("openWB/optional/forecast/get/values", {});
       this.updateState("openWB/optional/forecast/get/today_values", {});
@@ -391,22 +396,21 @@ export default {
     },
     normalizeProviderTopic() {
       const provider = this.currentForecastProviderRaw;
-      if (typeof provider === "string" && PROVIDER_DEFINITIONS[provider]) {
-        this.updateState("openWB/optional/forecast/provider", this.createProviderByType(provider));
-      }
+      this.cacheProviderConfiguration(provider);
     },
     updateProviderType(type) {
       this.cacheProviderConfiguration(this.currentForecastProviderRaw);
       if (!type) {
-        this.updateState("openWB/optional/forecast/provider", { type: null, configuration: {} });
-        this.$emit("save", this.mqttTopicsToPublish);
+        const resetProvider = { type: null, configuration: {} };
+        this.updateState("openWB/optional/forecast/provider", resetProvider);
+        this.publishForecastProvider(resetProvider);
         return;
       }
       const existing = this.currentForecastProvider;
       const nextProvider = this.createProviderByType(type, existing.type === type ? existing.configuration : {});
       this.updateState("openWB/optional/forecast/provider", nextProvider);
-      // Persist provider switch immediately so backend and retained topics stay in sync.
-      this.$emit("save", this.mqttTopicsToPublish);
+      // Persist provider switch immediately to avoid race conditions with retained state.
+      this.publishForecastProvider(nextProvider);
     },
     updateConfiguration(topic, event) {
       this.updateState(topic, event.value, event.object);
