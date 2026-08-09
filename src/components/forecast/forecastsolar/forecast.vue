@@ -21,17 +21,6 @@
     >
       <template #help> Dezimalgrad, z.B. 7.654321 </template>
     </openwb-base-number-input>
-    <openwb-base-number-input
-      title="Installierte Gesamtleistung"
-      unit="kWp"
-      :min="0"
-      :step="0.01"
-      required
-      :model-value="forecast.configuration.peak_power_kw"
-      @update:model-value="updateConfiguration($event, 'configuration.peak_power_kw')"
-    >
-      <template #help> Dient als Referenzwert und Standard fuer neu hinzugefuegte Ausrichtungen. </template>
-    </openwb-base-number-input>
     <openwb-base-alert subtype="info">
       Jede Ausrichtung wird einzeln angelegt. Auch bei nur einer Dachflaeche bitte eine Ausrichtung erfassen.
     </openwb-base-alert>
