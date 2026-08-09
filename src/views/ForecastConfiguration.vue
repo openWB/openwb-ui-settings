@@ -296,7 +296,18 @@ export default {
     },
     faultStatusText() {
       const faultText = this.$store.state.mqtt["openWB/optional/forecast/get/fault_str"];
-      return faultText && faultText.length > 0 ? faultText : "OK";
+      if (!faultText || faultText.length === 0) {
+        return "OK";
+      }
+      const nextQueryTime = this.$store.state.mqtt["openWB/optional/forecast/get/next_query_time"];
+      if (nextQueryTime) {
+        const timeStr = new Date(Number(nextQueryTime) * 1000).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        return `${faultText} Naechster Versuch: ${timeStr} Uhr.`;
+      }
+      return faultText;
     },
   },
   watch: {
