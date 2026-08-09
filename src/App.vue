@@ -32,36 +32,6 @@ import Messages from "./components/OpenwbPageMessages.vue";
 import Blocker from "./components/OpenwbPageBlocker.vue";
 import mqtt from "mqtt";
 
-const SECURITY_ACCESS_FALLBACK_TOPICS = [
-  "openWB/system/security/access/Settings",
-  "openWB/system/security/access/Status",
-  "openWB/system/security/access/ChargeLog",
-  "openWB/system/security/access/Chart",
-  "openWB/system/security/access/GeneralConfiguration",
-  "openWB/system/security/access/DisplayConfiguration",
-  "openWB/system/security/access/IdentificationConfiguration",
-  "openWB/system/security/access/GeneralChargeConfiguration",
-  "openWB/system/security/access/SurplusChargeConfiguration",
-  "openWB/system/security/access/ActiveBatControlConfiguration",
-  "openWB/system/security/access/HardwareInstallation",
-  "openWB/system/security/access/LoadManagementConfiguration",
-  "openWB/system/security/access/ForecastConfiguration",
-  "openWB/system/security/access/ChargePointInstallation",
-  "openWB/system/security/access/VehicleConfiguration",
-  "openWB/system/security/access/IoConfiguration",
-  "openWB/system/security/access/LegacySmartHomeConfiguration",
-  "openWB/system/security/access/InstallAssistant",
-  "openWB/system/security/access/TenantEnergyConfiguration",
-  "openWB/system/security/access/CloudConfiguration",
-  "openWB/system/security/access/MqttBridgeConfiguration",
-  "openWB/system/security/access/DebugConfiguration",
-  "openWB/system/security/access/Support",
-  "openWB/system/security/access/DataManagement",
-  "openWB/system/security/access/SecurityConfiguration",
-  "openWB/system/security/access/SystemConfiguration",
-  "openWB/system/security/access/LegalSettings",
-];
-
 export default {
   name: "OpenwbSettingsApp",
   components: {
@@ -286,7 +256,7 @@ export default {
             "openWB/system/dataprotection_acknowledged",
             "openWB/system/usage_terms_acknowledged",
             "openWB/system/installAssistantDone",
-            ...SECURITY_ACCESS_FALLBACK_TOPICS,
+            "openWB/system/security/access/+",
           ],
           true,
         );
@@ -448,25 +418,15 @@ export default {
               );
             }
           });
-          const isCoveredByWildcard = this.isTopicCoveredByActiveWildcardSubscription(topic);
           if (topic.includes("#") || topic.includes("+")) {
             console.debug("expanding wildcard topic:", topic);
             Object.keys(this.getWildcardTopics(topic)).forEach((wildcardTopic) => {
-              if (this.isTopicCoveredByActiveWildcardSubscription(wildcardTopic, topic)) {
-                console.debug("keeping wildcardTopic due to active overlapping subscription:", wildcardTopic);
-                return;
-              }
               console.debug("removing wildcardTopic:", wildcardTopic);
               this.$store.commit("removeTopic", wildcardTopic);
             });
           } else {
-            if (isCoveredByWildcard) {
-              console.debug("keeping topic due to active wildcard subscription:", topic);
-              return;
-            }
-            // Keep last known value for concrete topics to avoid blank UI states
-            // when switching routes and waiting for retained refresh.
-            console.debug("keeping topic value on unsubscribe:", topic);
+            console.debug("removing topic:", topic);
+            this.$store.commit("removeTopic", topic);
           }
         } else {
           console.debug("Still subscribed to topic: ", topic);
@@ -522,19 +482,6 @@ export default {
             [key]: this.$store.state.mqtt[key],
           };
         }, {});
-    },
-    isTopicCoveredByActiveWildcardSubscription(topic, excludedSubscription = undefined) {
-      const subscriptions = this.$store.state.mqttSubscriptions || {};
-      return Object.entries(subscriptions).some(([subscription, count]) => {
-        if (count <= 0 || subscription === excludedSubscription) {
-          return false;
-        }
-        if (!subscription.includes("#") && !subscription.includes("+")) {
-          return false;
-        }
-        const regex = "^" + subscription.replaceAll("/", "\\/").replaceAll("+", "[^+/]+").replaceAll("#", ".*") + "$";
-        return new RegExp(regex).test(topic);
-      });
     },
   },
 };
