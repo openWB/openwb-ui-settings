@@ -99,28 +99,44 @@
         :model-value="row.azimuth"
         @update:model-value="updateStringField(index, 'azimuth', $event)"
       />
-      <p class="small text-muted mx-3 mb-2">
-        Azimut: 0° = Sueden &bull; -90° = Osten &bull; 90° = Westen &bull; 180° = Norden
-      </p>
-      <openwb-base-click-button
-        class="btn btn-outline-danger btn-sm"
-        title="Dachflaeche Entfernen"
-        @button-clicked="removeStringRow(index)"
-      />
+      <openwb-base-alert subtype="info">
+        Ausrichtung: 0&deg; = S&uuml;den | -90&deg; = Osten | 90&deg; = Westen | 180&deg; = Norden
+      </openwb-base-alert>
+      <div class="d-flex justify-content-end">
+        <button
+          type="button"
+          class="btn btn-danger btn-sm"
+          title="Dachflaeche entfernen"
+          @click="removeStringRow(index)"
+        >
+          <font-awesome-icon :icon="['fas', 'trash']" />
+        </button>
+      </div>
     </openwb-base-card>
-    <openwb-base-click-button
-      class="btn btn-outline-success btn-sm mb-2"
-      title="Dachflaeche Hinzufuegen"
-      @button-clicked="addStringRow"
-    />
+    <button
+      type="button"
+      class="btn btn-success btn-sm mb-2"
+      :disabled="stringRows.length >= 6"
+      title="Dachflaeche hinzufuegen"
+      @click="addStringRow"
+    >
+      <font-awesome-icon :icon="['fas', 'plus']" />
+      Dachflaeche hinzufuegen
+    </button>
   </div>
 </template>
 
 <script>
 import ForecastConfigMixin from "../ForecastConfigMixin.vue";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faPlus as fasPlus, faTrash as fasTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(fasPlus, fasTrash);
 
 export default {
   name: "OpenMeteoForecastConfig",
+  components: { FontAwesomeIcon },
   mixins: [ForecastConfigMixin],
   computed: {
     stringRows() {
