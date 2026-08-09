@@ -50,13 +50,19 @@
         </div>
       </openwb-base-card>
 
-      <openwb-base-card title="Aktuelle Forecast-Werte">
+      <openwb-base-card title="Prognose-Info">
         <openwb-base-alert subtype="info">
-          Heute: {{ formatNumber($store.state.mqtt["openWB/optional/forecast/get/today_kwh"], 2, 2) || "0.00" }}
+          Aktuelle Prognose: Heute
+          {{ formatNumber($store.state.mqtt["openWB/optional/forecast/get/today_kwh"], 2, 2) || "0.00" }}
           kWh, morgen:
           {{ formatNumber($store.state.mqtt["openWB/optional/forecast/get/tomorrow_kwh"], 2, 2) || "0.00" }}
           kWh
         </openwb-base-alert>
+        <openwb-base-text-input
+          title="Letzte Aktualisierung"
+          readonly
+          :model-value="lastUpdateTimeText"
+        />
         <openwb-base-text-input
           title="Naechste Aktualisierung"
           readonly
@@ -80,7 +86,32 @@
         </div>
       </openwb-base-card>
 
-      <openwb-base-card title="Forecast-Verlauf (Leistung)">
+      <openwb-base-card title="Prognose-Verlauf (Leistung)">
+        <div class="d-flex justify-content-center mb-2">
+          <div class="btn-group btn-group-sm">
+            <button
+              :class="['btn', forecastDayFilter === 'both' ? 'btn-primary' : 'btn-outline-primary']"
+              type="button"
+              @click="forecastDayFilter = 'both'"
+            >
+              Heute + Morgen
+            </button>
+            <button
+              :class="['btn', forecastDayFilter === 'today' ? 'btn-primary' : 'btn-outline-primary']"
+              type="button"
+              @click="forecastDayFilter = 'today'"
+            >
+              Heute
+            </button>
+            <button
+              :class="['btn', forecastDayFilter === 'tomorrow' ? 'btn-primary' : 'btn-outline-primary']"
+              type="button"
+              @click="forecastDayFilter = 'tomorrow'"
+            >
+              Morgen
+            </button>
+          </div>
+        </div>
         <openwb-base-alert
           v-if="!hasForecastValues"
           subtype="info"
@@ -149,8 +180,10 @@ export default {
         { topic: "openWB/optional/forecast/get/fault_state", writeable: false },
         { topic: "openWB/optional/forecast/get/fault_str", writeable: false },
         { topic: "openWB/optional/forecast/get/next_query_time", writeable: false },
+        { topic: "openWB/optional/forecast/get/last_update_time", writeable: false },
       ],
       providerConfigCache: {},
+      forecastDayFilter: "both",
     };
   },
   computed: {
@@ -217,12 +250,18 @@ export default {
       return values && typeof values === "object" ? values : {};
     },
     forecastValues48h() {
-      const nowSeconds = Math.floor(Date.now() / 1000);
-      const endSeconds = nowSeconds + 48 * 3600;
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+      const todayStartSec = todayStart.getTime() / 1000;
+      const tomorrowStartSec = todayStartSec + 86400;
+      const dayAfterStartSec = tomorrowStartSec + 86400;
       return Object.fromEntries(
         Object.entries(this.forecastValues).filter(([timestamp]) => {
           const ts = Number(timestamp);
-          return Number.isFinite(ts) && ts >= nowSeconds && ts <= endSeconds;
+          if (!Number.isFinite(ts)) return false;
+          if (this.forecastDayFilter === "today") return ts >= todayStartSec && ts < tomorrowStartSec;
+          if (this.forecastDayFilter === "tomorrow") return ts >= tomorrowStartSec && ts < dayAfterStartSec;
+          return ts >= todayStartSec && ts < dayAfterStartSec;
         }),
       );
     },
@@ -259,9 +298,20 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
         parsing: false,
+        interaction: {
+          mode: "index",
+          intersect: false,
+        },
         plugins: {
-          legend: {
-            display: true,
+          legend: { display: true },
+          tooltip: {
+            callbacks: {
+              title: (items) =>
+                items[0]
+                  ? new Date(items[0].parsed.x).toLocaleString([], { dateStyle: "short", timeStyle: "short" })
+                  : "",
+              label: (item) => ` ${item.parsed.y.toFixed(2)} kW`,
+            },
           },
         },
         scales: {
@@ -286,6 +336,11 @@ export default {
           },
         },
       };
+    },
+    lastUpdateTimeText() {
+      const timestamp = this.$store.state.mqtt["openWB/optional/forecast/get/last_update_time"];
+      if (!timestamp) return "-";
+      return new Date(Number(timestamp) * 1000).toLocaleString();
     },
     nextQueryTimeText() {
       const timestamp = this.$store.state.mqtt["openWB/optional/forecast/get/next_query_time"];
@@ -532,6 +587,6 @@ export default {
 
 <style scoped>
 .openwb-chart {
-  min-height: 320px;
+  min-height: 420px;
 }
 </style>
