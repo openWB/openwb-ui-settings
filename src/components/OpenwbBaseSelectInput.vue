@@ -112,7 +112,7 @@ export default {
     notSelected: { type: String, default: undefined },
     addButton: { type: Boolean, default: false },
   },
-  emits: ["update:modelValue", "update:model-value", "input:add"],
+  emits: ["update:modelValue", "input:add"],
   computed: {
     value: {
       get() {
@@ -120,7 +120,6 @@ export default {
       },
       set(newValue) {
         this.$emit("update:modelValue", newValue);
-        this.$emit("update:model-value", newValue);
       },
     },
     addDisabled: {

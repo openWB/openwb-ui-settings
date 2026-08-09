@@ -9,11 +9,11 @@ export default defineConfig([
   js.configs.recommended,
   ...pluginVue.configs["flat/recommended"],
   {
-    ignores: ["dist/**", "public/modules/legacy_smart_home/", "public/dataProtection-usageTerms.html"],
+    ignores: ["public/modules/legacy_smart_home/", "public/dataProtection-usageTerms.html"],
   },
   {
     files: ["**/*.{vue,js,jsx,cjs,mjs}"],
-    ignores: ["dist/**", "public/modules/legacy_smart_home/**", "public/dataProtection-usageTerms.html"],
+    ignores: ["public/modules/legacy_smart_home/**", "public/dataProtection-usageTerms.html"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
