@@ -41,10 +41,10 @@
           <div class="col-md-4 d-flex py-1 justify-content-center">
             <button
               type="button"
-              class="btn btn-outline-danger btn-block btn-sm"
+              class="btn btn-danger btn-block btn-sm"
               @click="resetProviderAndForecastData"
             >
-              Anbieter entfernen und Forecast zurücksetzen
+              Anbieter entfernen und Prognose zurücksetzen
             </button>
           </div>
         </div>
