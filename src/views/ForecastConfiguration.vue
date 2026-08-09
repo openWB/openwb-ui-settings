@@ -91,6 +91,11 @@
         <openwb-base-alert subtype="warning">
           Je nach Anbieter ist die Anzahl der API-Aufrufe pro Stunde begrenzt (z.B. Forecast.Solar: 12 Aufrufe/Stunde).
           Ein manuelles Aktualisieren kann daher fehlschlagen, wenn das Limit bereits erreicht wurde.
+          <br />
+          <br />
+          <strong>Hinweis Forecast.Solar:</strong> Die kostenlose API zeigt nur noch die verbleibenden Stunden des aktuellen Tages.
+          Bei mehrfachen Abfragen pro Tag verringert sich daher der Prognosewert kontinuierlich. Mit einem kostenpflichtigen API-Key 
+          erhält man die vollständige Tageshistorie und dieser Effekt tritt nicht auf.
         </openwb-base-alert>
       </openwb-base-card>
 
