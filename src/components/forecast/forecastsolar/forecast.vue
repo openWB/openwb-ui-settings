@@ -22,38 +22,33 @@
       <template #help> Dezimalgrad, z.B. 7.654321 </template>
     </openwb-base-number-input>
     <openwb-base-alert subtype="info">
-      Jede Ausrichtung wird einzeln angelegt. Auch bei nur einer Dachflaeche bitte eine Ausrichtung erfassen.
+      Jede Dachflaeche muss einzeln erfasst werden, auch wenn es nur eine Dachflaeche gibt.
     </openwb-base-alert>
-    <openwb-base-click-button
-      class="btn btn-outline-success mb-2"
-      title="Ausrichtung Hinzufuegen"
-      @button-clicked="addStringRow"
-    />
     <openwb-base-alert
       v-if="stringRows.length >= 6"
       subtype="warning"
     >
-      Maximal 6 Ausrichtungen sind erlaubt.
+      Maximal 6 Dachflaechen sind erlaubt.
     </openwb-base-alert>
     <openwb-base-alert
       v-if="stringRows.length === 0"
       subtype="secondary"
     >
-      Keine zusaetzlichen Ausrichtungen konfiguriert.
+      Noch keine Dachflaechen konfiguriert.
     </openwb-base-alert>
     <openwb-base-card
       v-for="(row, index) in stringRows"
       :key="`fs-string-${index}`"
-      :title="row.name && row.name.trim() ? row.name : `Ausrichtung ${index + 1}`"
+      :title="row.name && row.name.trim() ? row.name : `Dachflaeche ${index + 1}`"
       class="mb-2"
     >
       <openwb-base-text-input
-        title="Name der Ausrichtung"
+        title="Name der Dachflaeche"
         :model-value="row.name"
         @update:model-value="updateStringField(index, 'name', $event)"
       />
       <openwb-base-number-input
-        title="Leistung Ausrichtung/String"
+        title="Leistung Dachflaeche/String"
         unit="kWp"
         :min="0"
         :step="0.01"
@@ -80,17 +75,21 @@
         required
         :model-value="row.azimuth"
         @update:model-value="updateStringField(index, 'azimuth', $event)"
-      >
-        <template #help>
-          Forecast.Solar Azimut in Grad: 0 = Sueden, -90 = Osten, 90 = Westen, -180/180 = Norden.
-        </template>
-      </openwb-base-number-input>
+      />
+      <p class="small text-muted mx-3 mb-2">
+        Azimut: 0° = Sueden &bull; -90° = Osten &bull; 90° = Westen &bull; 180° = Norden
+      </p>
       <openwb-base-click-button
-        class="btn btn-outline-danger"
-        title="Ausrichtung Entfernen"
+        class="btn btn-outline-danger btn-sm"
+        title="Dachflaeche Entfernen"
         @button-clicked="removeStringRow(index)"
       />
     </openwb-base-card>
+    <openwb-base-click-button
+      class="btn btn-outline-success btn-sm mb-2"
+      title="Dachflaeche Hinzufuegen"
+      @button-clicked="addStringRow"
+    />
   </div>
 </template>
 
