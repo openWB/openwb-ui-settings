@@ -71,6 +71,11 @@ export default {
       if (!loader) {
         return OpenwbForecastConfigFallback;
       }
+      return this.getProviderComponent(providerType, loader);
+    },
+  },
+  methods: {
+    getProviderComponent(providerType, loader) {
       if (!this.providerComponentCache[providerType]) {
         this.providerComponentCache[providerType] = markRaw(
           defineAsyncComponent({
@@ -81,8 +86,6 @@ export default {
       }
       return this.providerComponentCache[providerType];
     },
-  },
-  methods: {
     updateConfiguration(event) {
       this.$emit("update:configuration", event);
     },
