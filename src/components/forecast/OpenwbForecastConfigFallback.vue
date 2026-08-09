@@ -8,8 +8,8 @@
     </openwb-base-alert>
     <div v-else>
       <openwb-base-alert subtype="warning">
-        Es wurde keine Konfigurationsseite für den Anbieter "{{ forecast.name }}" gefunden. Die Einstellungen koennen
-        als JSON direkt bearbeitet werden.
+        Es wurde keine Konfigurationsseite für den Anbieter "{{ forecast.name }}" gefunden. Die Einstellungen können als
+        JSON direkt bearbeitet werden.
       </openwb-base-alert>
       <openwb-base-textarea
         title="Konfiguration"

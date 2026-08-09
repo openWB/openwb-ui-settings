@@ -1,7 +1,7 @@
 <template>
   <div>
     <openwb-base-alert subtype="info">
-      Forecast.Solar wird von der Community gepflegt. Es wird kein API Key benoetigt.
+      Forecast.Solar wird von der Community gepflegt. Es wird kein API Key benötigt.
     </openwb-base-alert>
     <openwb-base-number-input
       title="Breitengrad"
@@ -94,11 +94,11 @@
       type="button"
       class="btn btn-success btn-sm mb-2"
       :disabled="stringRows.length >= 6"
-      title="Dachfläche hinzufuegen"
+      title="Dachfläche hinzufügen"
       @click="addStringRow"
     >
       <font-awesome-icon :icon="['fas', 'plus']" />
-      Dachfläche hinzufuegen
+      Dachfläche hinzufügen
     </button>
   </div>
 </template>

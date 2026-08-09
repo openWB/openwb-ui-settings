@@ -1,7 +1,7 @@
 <template>
   <div>
     <openwb-base-alert subtype="info">
-      Open-Meteo wird von der Community gepflegt. Es wird kein Account und kein API Key benoetigt.
+      Open-Meteo wird von der Community gepflegt. Es wird kein Account und kein API Key benötigt.
     </openwb-base-alert>
     <openwb-base-number-input
       title="Breitengrad"
@@ -41,7 +41,7 @@
       @update:model-value="updateConfiguration($event, 'configuration.system_loss')"
     >
       <template #help>
-        Verlustfaktor als Dezimalzahl. Typischer Startwert: 0.14 (14%). Uebliche Spanne: 0.10 bis 0.20.
+        Verlustfaktor als Dezimalzahl. Typischer Startwert: 0.14 (14%). Übliche Spanne: 0.10 bis 0.20.
       </template>
     </openwb-base-number-input>
     <openwb-base-alert subtype="info">
@@ -117,11 +117,11 @@
       type="button"
       class="btn btn-success btn-sm mb-2"
       :disabled="stringRows.length >= 6"
-      title="Dachfläche hinzufuegen"
+      title="Dachfläche hinzufügen"
       @click="addStringRow"
     >
       <font-awesome-icon :icon="['fas', 'plus']" />
-      Dachfläche hinzufuegen
+      Dachfläche hinzufügen
     </button>
   </div>
 </template>

@@ -124,7 +124,7 @@
           v-if="!hasForecastValues"
           subtype="info"
         >
-          Noch keine Prognose-Werte vorhanden. Fuehre ggf. "Prognose aktualisieren" aus.
+          Noch keine Prognose-Werte vorhanden. Führe ggf. "Prognose aktualisieren" aus.
         </openwb-base-alert>
         <div
           v-else
