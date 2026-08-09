@@ -4,6 +4,11 @@
       PVNode wird von der Community gepflegt und liefert die Prognosewerte direkt aus der API-Response. Bitte richte
       vorher Standort und PV-Flächen auf https://pvnode.com ein und erstelle dort einen Account.
     </openwb-base-alert>
+    <openwb-base-alert subtype="info">
+      <strong>API-Limits:</strong> Bei kostenlosen Accounts ist nur 1 Prognoseabruf pro Tag möglich. Weitere Abrufe
+      werden vom API gecacht und zählen nicht gegen das Limit. Bei kostenpflichtigen Tarifen sind mehr Abrufe pro Tag
+      möglich.
+    </openwb-base-alert>
     <openwb-base-text-input
       title="Plant ID"
       required
