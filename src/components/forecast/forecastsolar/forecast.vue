@@ -3,6 +3,11 @@
     <openwb-base-alert subtype="info">
       Forecast.Solar wird von der Community gepflegt. Ohne API Key sind 12 Anfragen pro Stunde möglich.
     </openwb-base-alert>
+    <openwb-base-alert subtype="warning">
+      <strong>Hinweis zur kostenlosen API:</strong> Die kostenlose API zeigt nur noch die verbleibenden Stunden des aktuellen Tages.
+      Bei mehrfachen Abfragen pro Tag verringert sich daher der Prognosewert kontinuierlich. Mit einem kostenpflichtigen API-Key 
+      erhält man die vollständige Tageshistorie und dieser Effekt tritt nicht auf.
+    </openwb-base-alert>
     <openwb-base-number-input
       title="Breitengrad"
       :step="0.000001"
