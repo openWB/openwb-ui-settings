@@ -8,17 +8,17 @@
       Aus Sicherheitsgruenden werden API Key und Plant ID nach dem Speichern nicht erneut im Klartext angezeigt.
     </openwb-base-alert>
     <openwb-base-text-input
+      title="Plant ID"
+      required
+      :model-value="forecast.configuration.plant_id"
+      @update:model-value="updateConfiguration($event, 'configuration.plant_id')"
+    />
+    <openwb-base-text-input
       title="API Key"
       subtype="password"
       required
       :model-value="forecast.configuration.api_key"
       @update:model-value="updateConfiguration($event, 'configuration.api_key')"
-    />
-    <openwb-base-text-input
-      title="Plant ID"
-      required
-      :model-value="forecast.configuration.plant_id"
-      @update:model-value="updateConfiguration($event, 'configuration.plant_id')"
     />
   </div>
 </template>
