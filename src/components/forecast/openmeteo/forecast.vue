@@ -13,7 +13,7 @@
       <template #help> Dezimalgrad, z.B. 51.123456 </template>
     </openwb-base-number-input>
     <openwb-base-number-input
-      title="Laengengrad"
+      title="Längengrad"
       :step="0.000001"
       required
       :model-value="forecast.configuration.longitude"
@@ -22,7 +22,7 @@
       <template #help> Dezimalgrad, z.B. 7.654321 </template>
     </openwb-base-number-input>
     <openwb-base-text-input
-      title="Timezone"
+      title="Zeitzone"
       required
       :model-value="forecast.configuration.timezone"
       @update:model-value="updateConfiguration($event, 'configuration.timezone')"
@@ -45,33 +45,33 @@
       </template>
     </openwb-base-number-input>
     <openwb-base-alert subtype="info">
-      Jede Dachflaeche muss einzeln erfasst werden, auch wenn es nur eine Dachflaeche gibt.
+      Jede Dachfläche muss einzeln erfasst werden, auch wenn es nur eine Dachfläche gibt.
     </openwb-base-alert>
     <openwb-base-alert
       v-if="stringRows.length >= 6"
       subtype="warning"
     >
-      Maximal 6 Dachflaechen sind erlaubt.
+      Maximal 6 Dachflächen sind erlaubt.
     </openwb-base-alert>
     <openwb-base-alert
       v-if="stringRows.length === 0"
       subtype="secondary"
     >
-      Noch keine Dachflaechen konfiguriert.
+      Noch keine Dachflächen konfiguriert.
     </openwb-base-alert>
     <openwb-base-card
       v-for="(row, index) in stringRows"
       :key="`om-string-${index}`"
-      :title="row.name && row.name.trim() ? row.name : `Dachflaeche ${index + 1}`"
+      :title="row.name && row.name.trim() ? row.name : `Dachfläche ${index + 1}`"
       class="mb-2"
     >
       <openwb-base-text-input
-        title="Name der Dachflaeche"
+        title="Name der Dachfläche"
         :model-value="row.name"
         @update:model-value="updateStringField(index, 'name', $event)"
       />
       <openwb-base-number-input
-        title="Leistung Dachflaeche/String"
+        title="Leistung Dachfläche/String"
         unit="kWp"
         :min="0"
         :step="0.01"
@@ -106,7 +106,7 @@
         <button
           type="button"
           class="btn btn-danger btn-sm"
-          title="Dachflaeche entfernen"
+          title="Dachfläche entfernen"
           @click="removeStringRow(index)"
         >
           <font-awesome-icon :icon="['fas', 'trash']" />
@@ -117,11 +117,11 @@
       type="button"
       class="btn btn-success btn-sm mb-2"
       :disabled="stringRows.length >= 6"
-      title="Dachflaeche hinzufuegen"
+      title="Dachfläche hinzufuegen"
       @click="addStringRow"
     >
       <font-awesome-icon :icon="['fas', 'plus']" />
-      Dachflaeche hinzufuegen
+      Dachfläche hinzufuegen
     </button>
   </div>
 </template>

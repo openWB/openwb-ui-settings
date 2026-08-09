@@ -44,7 +44,7 @@
               class="btn btn-outline-danger btn-block btn-sm"
               @click="resetProviderAndForecastData"
             >
-              Anbieter entfernen und Forecast zuruecksetzen
+              Anbieter entfernen und Forecast zurücksetzen
             </button>
           </div>
         </div>
@@ -64,10 +64,14 @@
           :model-value="lastUpdateTimeText"
         />
         <openwb-base-text-input
-          title="Naechste Aktualisierung"
+          title="Nächste Aktualisierung"
           readonly
           :model-value="nextQueryTimeText"
-        />
+        >
+          <template #help>
+            Die Prognose wird automatisch um 05:00, 08:00, 11:00, 14:00, 17:00 und 20:00 Uhr aktualisiert.
+          </template>
+        </openwb-base-text-input>
         <openwb-base-text-input
           title="Status"
           readonly
@@ -80,10 +84,14 @@
               class="btn btn-outline-primary btn-block btn-sm"
               @click="triggerForecastUpdate"
             >
-              Forecast aktualisieren
+              Prognose aktualisieren
             </button>
           </div>
         </div>
+        <openwb-base-alert subtype="warning">
+          Je nach Anbieter ist die Anzahl der API-Aufrufe pro Stunde begrenzt (z.B. Forecast.Solar: 12 Aufrufe/Stunde).
+          Ein manuelles Aktualisieren kann daher fehlschlagen, wenn das Limit bereits erreicht wurde.
+        </openwb-base-alert>
       </openwb-base-card>
 
       <openwb-base-card title="Prognose-Verlauf (Leistung)">
@@ -116,7 +124,7 @@
           v-if="!hasForecastValues"
           subtype="info"
         >
-          Noch keine Forecast-Werte vorhanden. Fuehre ggf. "Forecast aktualisieren" aus.
+          Noch keine Prognose-Werte vorhanden. Fuehre ggf. "Prognose aktualisieren" aus.
         </openwb-base-alert>
         <div
           v-else
@@ -280,7 +288,7 @@ export default {
       return {
         datasets: [
           {
-            label: "Forecast Leistung",
+            label: "Prognose Leistung",
             borderColor: "#28a745",
             backgroundColor: "rgba(40, 167, 69, 0.2)",
             fill: true,
@@ -360,7 +368,7 @@ export default {
           hour: "2-digit",
           minute: "2-digit",
         });
-        return `${faultText} Naechster Versuch: ${timeStr} Uhr.`;
+        return `${faultText} Nächster Versuch: ${timeStr} Uhr.`;
       }
       return faultText;
     },
