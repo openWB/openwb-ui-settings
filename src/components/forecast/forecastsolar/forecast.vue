@@ -1,7 +1,7 @@
 <template>
   <div>
     <openwb-base-alert subtype="info">
-      Forecast.Solar wird von der Community gepflegt. Es wird kein API Key benötigt.
+      Forecast.Solar wird von der Community gepflegt. Ohne API Key sind 12 Anfragen pro Stunde möglich.
     </openwb-base-alert>
     <openwb-base-number-input
       title="Breitengrad"
@@ -21,6 +21,16 @@
     >
       <template #help> Dezimalgrad, z.B. 7.654321 </template>
     </openwb-base-number-input>
+    <openwb-base-text-input
+      title="API Key (optional)"
+      subtype="password"
+      :model-value="forecast.configuration.api_key"
+      @update:model-value="updateConfiguration($event || null, 'configuration.api_key')"
+    >
+      <template #help>
+        Optional: API Key für einen bezahlten Forecast.Solar Account. Ohne Key gelten die Limits des Free Tiers.
+      </template>
+    </openwb-base-text-input>
     <openwb-base-alert subtype="info">
       Jede Dachfläche muss einzeln erfasst werden, auch wenn es nur eine Dachfläche gibt.
     </openwb-base-alert>
