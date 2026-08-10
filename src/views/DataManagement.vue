@@ -178,7 +178,7 @@
               primary als auch von einer secondary durchgeführt.<br />
               Die Anleitung zur Konfiguration des Cloud-Dienstes findest Du
               <a
-                href="https://github.com/openWB/core/wiki/Cloud-Sicherung"
+                :href="`https://wiki.openwb.de/doku.php?id=openwb:vc:${systemVersion}:software:system:datenverwaltung`"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -445,6 +445,7 @@ library.add(fasSkullCrossbones, fasArchive, fasFileArchive, fasUpload, fasBoxOpe
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import ComponentState from "../components/mixins/ComponentState.vue";
+import SystemVersion from "../components/mixins/SystemVersion.vue";
 import OpenwbBackupCloudProxy from "../components/backup_clouds/OpenwbBackupCloudProxy.vue";
 import OpenwbMonitoringProxy from "../components/monitoring/OpenwbMonitoringProxy.vue";
 
@@ -455,7 +456,7 @@ export default {
     OpenwbBackupCloudProxy,
     OpenwbMonitoringProxy,
   },
-  mixins: [ComponentState],
+  mixins: [ComponentState, SystemVersion],
   props: {
     installAssistantActive: {
       type: Boolean,
