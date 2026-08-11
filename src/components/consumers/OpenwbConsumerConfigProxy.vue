@@ -18,7 +18,7 @@ export default {
   emits: ["update:configuration"],
   data() {
     return {
-      SHARED_DEVICE_VENDORS: ["openwb", "generic"],
+      SHARED_DEVICE_VENDORS: ["openwb"],
     };
   },
   methods: {

@@ -308,6 +308,76 @@
           </openwb-base-number-input>
         </div>
       </openwb-base-card>
+      <openwb-base-card title="Verbraucher">
+        <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+          <openwb-base-alert subtype="info">
+            Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
+          </openwb-base-alert>
+        </div>
+        <div v-else>
+          <openwb-base-number-input
+            title="Wartezeit Einschalten"
+            :min="0"
+            :step="1"
+            unit="s"
+            required
+            :model-value="$store.state.mqtt['openWB/general/chargemode_config/surplus/consumer/switch_on_delay']"
+            @update:model-value="
+              updateState('openWB/general/chargemode_config/surplus/consumer/switch_on_delay', $event)
+            "
+          >
+            <template #help>
+              Der Überschuss muss für die hier angegebene Zeit dauerhaft über der minimalen Betriebsleistung liegen, bevor ein
+              Verbraucher eingeschaltet wird.
+            </template>
+          </openwb-base-number-input>
+          <hr />
+          <openwb-base-alert
+            :subtype="
+              $store.state.mqtt['openWB/general/chargemode_config/surplus/consumer/switch_off_threshold'] / 1000 > 0
+                ? 'danger'
+                : 'info'
+            "
+          >
+            Ist ein Speicher im System vorhanden, kann eine Abschaltschwelle größer Null zur Speicherentladung führen.
+            (Siehe Fragezeichentext)
+          </openwb-base-alert>
+          <openwb-base-number-input
+            title="Abschaltschwelle"
+            :step="0.05"
+            unit="kW"
+            required
+            :model-value="
+              $store.state.mqtt['openWB/general/chargemode_config/surplus/consumer/switch_off_threshold'] / 1000
+            "
+            @update:model-value="
+              updateState('openWB/general/chargemode_config/surplus/consumer/switch_off_threshold', $event * 1000)
+            "
+          >
+            <template #help>
+              Übersteigt der Netzbezug die Abschaltschwelle, wird der Betrieb beendet, sofern das minimale Regelintervall überschritten wurde. Eine Abschaltschwelle, die
+              Netzbezug erlaubt, führt in einem System ohne steuerbaren Speicher zur Entladung des Speichers. Der
+              Speicher wird dann auch über den eingestellten Mindest-SoC hinaus entladen (siehe Speicherbeachtung
+              unten).
+            </template>
+          </openwb-base-number-input>
+          <openwb-base-number-input
+            title="Wartezeit Ausschalten"
+            :min="0"
+            :step="1"
+            unit="s"
+            required
+            :model-value="$store.state.mqtt['openWB/general/chargemode_config/surplus/consumer/switch_off_delay']"
+            @update:model-value="
+              updateState('openWB/general/chargemode_config/surplus/consumer/switch_off_delay', $event)
+            "
+          >
+            <template #help>
+              Die Abschaltschwelle muss für die hier angegebene Zeit dauerhaft unterschritten werden, bevor der Betrieb beendet wird.
+            </template>
+          </openwb-base-number-input>
+        </div>
+      </openwb-base-card>
       <openwb-base-submit-buttons
         form-name="pvChargeConfigForm"
         @save="$emit('save', mqttTopicsToPublish)"
@@ -349,6 +419,9 @@ export default {
         { topic: "openWB/general/chargemode_config/surplus/vehicle/switch_off_threshold", writeable: true },
         { topic: "openWB/general/chargemode_config/surplus/vehicle/switch_on_delay", writeable: true },
         { topic: "openWB/general/chargemode_config/surplus/vehicle/switch_on_threshold", writeable: true },
+        { topic: "openWB/general/chargemode_config/surplus/consumer/switch_off_delay", writeable: true },
+        { topic: "openWB/general/chargemode_config/surplus/consumer/switch_off_threshold", writeable: true },
+        { topic: "openWB/general/chargemode_config/surplus/consumer/switch_on_delay", writeable: true },
         { topic: "openWB/general/extern", writeable: false },
       ],
       calculatedControlMode: undefined,
