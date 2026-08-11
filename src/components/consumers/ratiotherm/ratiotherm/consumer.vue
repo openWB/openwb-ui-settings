@@ -1,9 +1,7 @@
 <template>
-  <div class="device-idm">
-    <openwb-base-heading> Einstellungen für Askoheat</openwb-base-heading>
-        <openwb-base-alert subtype="info">
-Im Web-Frontend des Heizstab smuss unter Expertsetup / Setup 3 eine statische IP Adresse und der Modbus TCP Port 502 (nicht 520) erfasst werden. 
-    </openwb-base-alert>
+  <div class="device-ratiotherm">
+    <openwb-base-heading>Einstellungen für Ratiotherm Wärmepumpe</openwb-base-heading>
+    <openwb-base-alert subtype="info">Anschluss via Modbus RTU (Elfin-EE11) auf CAN-EZ3</openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
       subtype="host"
@@ -34,7 +32,7 @@ Im Web-Frontend des Heizstab smuss unter Expertsetup / Setup 3 eine statische IP
 import ConsumerDeviceConfigMixin from "../../ConsumerDeviceConfigMixin.vue";
 
 export default {
-  name: "ConsumerAskoheat",
+  name: "ConsumerRatiotherm",
   mixins: [ConsumerDeviceConfigMixin],
 };
 </script>

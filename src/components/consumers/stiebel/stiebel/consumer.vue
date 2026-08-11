@@ -1,8 +1,10 @@
 <template>
-  <div class="device-idm">
-    <openwb-base-heading> Einstellungen für Askoheat</openwb-base-heading>
-        <openwb-base-alert subtype="info">
-Im Web-Frontend des Heizstab smuss unter Expertsetup / Setup 3 eine statische IP Adresse und der Modbus TCP Port 502 (nicht 520) erfasst werden. 
+  <div class="device-stiebel">
+    <openwb-base-heading
+      >Einstellungen für Stiebel Wärmepumpe mit ISG (Servicewelt über Modbus) und SG Ready Eingang</openwb-base-heading
+    >
+    <openwb-base-alert subtype="info">
+      Im ISG-Web muss unter "Einstellungen / Energiemanagement" der Parameter "SGREADY = Ein" gesetzt werden
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
@@ -34,7 +36,7 @@ Im Web-Frontend des Heizstab smuss unter Expertsetup / Setup 3 eine statische IP
 import ConsumerDeviceConfigMixin from "../../ConsumerDeviceConfigMixin.vue";
 
 export default {
-  name: "ConsumerAskoheat",
+  name: "ConsumerStiebel",
   mixins: [ConsumerDeviceConfigMixin],
 };
 </script>
