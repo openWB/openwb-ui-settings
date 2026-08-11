@@ -1,23 +1,12 @@
 <template>
-  <div class="device-idm">
-    <openwb-base-heading> Einstellungen für Askoheat</openwb-base-heading>
-        <openwb-base-alert subtype="info">
-Im Web-Frontend des Heizstab smuss unter Expertsetup / Setup 3 eine statische IP Adresse und der Modbus TCP Port 502 (nicht 520) erfasst werden. 
-    </openwb-base-alert>
+  <div class="device-nibe">
+    <openwb-base-heading>Einstellungen für Nibe S-Series Wärmepumpe</openwb-base-heading>
     <openwb-base-text-input
       title="IP oder Hostname"
       subtype="host"
       required
       :model-value="device.configuration.ip_address"
       @update:model-value="updateConfiguration($event, 'configuration.ip_address')"
-    />
-    <openwb-base-number-input
-      title="Port"
-      required
-      :min="1"
-      :max="65535"
-      :model-value="device.configuration.port"
-      @update:model-value="updateConfiguration($event, 'configuration.port')"
     />
     <openwb-base-number-input
       title="Modbus ID"
@@ -34,7 +23,7 @@ Im Web-Frontend des Heizstab smuss unter Expertsetup / Setup 3 eine statische IP
 import ConsumerDeviceConfigMixin from "../../ConsumerDeviceConfigMixin.vue";
 
 export default {
-  name: "ConsumerAskoheat",
+  name: "ConsumerNibeSSeries",
   mixins: [ConsumerDeviceConfigMixin],
 };
 </script>
