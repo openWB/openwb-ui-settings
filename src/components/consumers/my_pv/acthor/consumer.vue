@@ -1,6 +1,11 @@
 <template>
   <div class="device-idm">
-    <openwb-base-heading> Einstellungen für my-PV Acthor oder Elwa2 Heizstab </openwb-base-heading>
+    <openwb-base-heading> Einstellungen für my-PV Acthor </openwb-base-heading>
+    <openwb-base-alert subtype="info">
+      Im Web Frontend des Heizstabs muss unter "Steuerungs-Einstellungen" der Parameter "Ansteuerungs-Typ = Modbus TCP"
+      und "Zeitablauf Ansteuerung = 120 Sek" gesetzt werden. Für die Ausschaltschwelle werden 500W und die
+      Ausschaltverzögerung 180s empfohlen, um die Regelung von Acthor nicht zu stören.
+    </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
       subtype="host"
