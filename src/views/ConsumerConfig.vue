@@ -15,7 +15,8 @@
     <openwb-base-alert subtype="info">
       Das Einschalten der Verbraucher richtet sich nach der Rangfolge in der Prioritäten-Steuerung (Geräte werden von
       oben nach unten geschaltet) und dem Mindeststrom des jeweiligen Geräts: Bei geringem Überschuss wird das erste
-      Gerät in der Liste geschaltet, dessen Mindeststrom erreicht ist. Die Rangfolge lässt sich unter <router-link to="/LoadManagementConfiguration"> Lastmanagement </router-link>
+      Gerät in der Liste geschaltet, dessen Mindeststrom erreicht ist. Die Rangfolge lässt sich unter
+      <router-link to="/LoadManagementConfiguration"> Lastmanagement </router-link>
       anpassen.
     </openwb-base-alert>
     <form name="consumerConfigForm">
@@ -137,17 +138,46 @@
               :model-value="installedConsumer.consumerUsage?.type"
               @update:model-value="updateUsage(installedConsumer.id, $event, 'type')"
             >
-              <template #help>
-                Nur Messung: Verbraucher, die nicht angesteuert werden können.<br />
-                Schaltbar (Ein/Aus): Geräte, die ein- und ausgeschaltet werden können (auch mit SG-Ready-Kontakt).
-                Unterbrechung im laufenden Betrieb ist möglich.<br />
-                Stufenlos regelbar: Geräte, denen eine Leistung vorgegeben werden kann. Unterbrechung im laufenden
-                Betrieb ist möglich.<br />
-                Dauerverbraucher: Geräte, die ein- und ausgeschaltet werden können, bei denen eine Unterbrechung im
-                laufenden Betrieb nicht möglich ist, z. B. Spülmaschine oder Trockner.
-                Wärmepumpe in Eigensteuerung: Die Wärmepumpe übernimmt die Steuerung selbst. Die dafür notwendigen Messwerte, wie zB EVU- und PV-Leistung, erhält sie von der openWB. Zwei unabhängige Regelsysteme können zu Schwingungen und unerwünschten Effekten führen.
-              </template>
             </openwb-base-select-input>
+            <openwb-base-alert subtype="info">
+              <span v-if="installedConsumer.consumerUsage?.type === 'meter_only'">
+                <ul class="mb-0">
+                  <li>Es werden nur Messwerte erfasst.</li>
+                </ul>
+              </span>
+              <span v-else-if="installedConsumer.consumerUsage?.type === 'suspendable_onoff'">
+                <ul class="mb-0">
+                  <li>Steuerung über Ein/Aus-Signale und Geräte mit SG-Ready-Kontakt</li>
+                  <li>Unterbrechung im laufenden Betrieb möglich</li>
+                  <li>Wärempumpen, die durch die openWB gesteuert werden sollen (wie im SmartHome)</li>
+                </ul>
+              </span>
+              <span v-else-if="installedConsumer.consumerUsage?.type === 'suspendable_tunable'">
+                <ul class="mb-0">
+                  <li>Steuerung durch Vorgabe einer Sollleistung</li>
+                  <li>Unterbrechung im laufenden Betrieb möglich</li>
+                </ul>
+              </span>
+              <span v-else-if="installedConsumer.consumerUsage?.type === 'continuous'">
+                <ul class="mb-0">
+                  <li>Steuerung über Ein/Aus-Signale</li>
+                  <li>Laufende Programme sollen nicht unterbrochen werden, z. B. Spülmaschine oder Trockner</li>
+                </ul>
+              </span>
+              <span v-else-if="installedConsumer.consumerUsage?.type === 'self_controlled'">
+                <ul class="mb-0">
+                  <li>Die Wärmepumpe übernimmt die Steuerung selbst.</li>
+                  <li>openWB liefert sendet Regelparameter, wie zB EVU- und PV-Leistung</li>
+                  <li>Zwei unabhängige Regelsysteme können zu Schwingungen und unerwünschten
+                Effekten führen.</li>
+                </ul>
+              </span>
+              <span v-else>
+                <ul class="mb-0">
+                  <li>Bitte zuerst einen Verwendungstyp auswählen.</li>
+                </ul>
+              </span>
+            </openwb-base-alert>
             <hr />
             <openwb-base-heading> Elektrischer Anschluss </openwb-base-heading>
             <openwb-base-button-group-input
@@ -866,7 +896,9 @@ export default {
     },
     showMinCurrent(consumer) {
       const type = consumer.consumerUsage?.type;
-      return type !== "suspendable_onoff" && type !== "continuous" && type !== "meter_only" && type !== "self_controlled";
+      return (
+        type !== "suspendable_onoff" && type !== "continuous" && type !== "meter_only" && type !== "self_controlled"
+      );
     },
     getUsageOptions(consumer) {
       if (!Array.isArray(consumer.usage)) return [];
