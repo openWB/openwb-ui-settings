@@ -1,10 +1,9 @@
 <template>
-  <div class="device-idm">
-    <openwb-base-heading> Einstellungen für my-PV Acthor </openwb-base-heading>
+  <div class="consumer-generic-dac">
+    <openwb-base-heading>Einstellungen für DAC-Verbraucher</openwb-base-heading>
     <openwb-base-alert subtype="info">
-      Im Web Frontend des Heizstabs muss unter "Steuerungs-Einstellungen" der Parameter "Ansteuerungs-Typ = Modbus TCP"
-      und "Zeitablauf Ansteuerung = 120 Sek" gesetzt werden. Für die Ausschaltschwelle werden 500W und die
-      Ausschaltverzögerung 180s empfohlen, um die Regelung von Acthor nicht zu stören.
+      Der anliegende Überschuss wird in eine Voltzahl zwischen 0.01V und 10.0V umgewandelt. Bezug wird als 0 Volt
+      übertragen.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
@@ -29,19 +28,12 @@
       max="255"
       @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
     />
-    <openwb-base-text-input
-      title="Model"
-      subtype="text"
-      required
+    <openwb-base-select-input
+      title="Modell"
+      not-selected="Bitte auswählen"
+      :options="modelOptions"
       :model-value="device.configuration.model"
       @update:model-value="updateConfiguration($event, 'configuration.model')"
-    />
-    <openwb-base-number-input
-      title="Max Leistung"
-      required
-      :model-value="device.configuration.max_power"
-      min="1"
-      @update:model-value="updateConfiguration($event, 'configuration.max_power')"
     />
   </div>
 </template>
@@ -49,8 +41,20 @@
 <script>
 import ConsumerDeviceConfigMixin from "../../ConsumerDeviceConfigMixin.vue";
 
+const MODEL_OPTIONS = [
+  { text: "N4Dac02", value: "N4Dac02" },
+  { text: "DA02", value: "DA02" },
+  { text: "M120T", value: "M120T" },
+  { text: "AA02B", value: "AA02B" },
+];
+
 export default {
-  name: "ConsumerMyPvActhor",
+  name: "ConsumerGenericDac",
   mixins: [ConsumerDeviceConfigMixin],
+  data() {
+    return {
+      modelOptions: MODEL_OPTIONS,
+    };
+  },
 };
 </script>

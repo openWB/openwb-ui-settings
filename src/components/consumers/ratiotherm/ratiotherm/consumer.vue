@@ -1,11 +1,7 @@
 <template>
-  <div class="device-idm">
-    <openwb-base-heading> Einstellungen für my-PV Elwa2 Heizstab</openwb-base-heading>
-    <openwb-base-alert subtype="info">
-      Im Web Frontend des Heizstabs muss unter "Steuerungs-Einstellungen" der Parameter "Ansteuerungs-Typ = Modbus TCP"
-      und "Zeitablauf Ansteuerung = 120 Sek" gesetzt werden. Für die Ausschaltschwelle werden 500W und die
-      Ausschaltverzögerung 180s empfohlen, um die Regelung von Elwa nicht zu stören.
-    </openwb-base-alert>
+  <div class="device-ratiotherm">
+    <openwb-base-heading>Einstellungen für Ratiotherm Wärmepumpe</openwb-base-heading>
+    <openwb-base-alert subtype="info">Anschluss via Modbus RTU (Elfin-EE11) auf CAN-EZ3</openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
       subtype="host"
@@ -36,7 +32,7 @@
 import ConsumerDeviceConfigMixin from "../../ConsumerDeviceConfigMixin.vue";
 
 export default {
-  name: "ConsumerMyPvElwaE",
+  name: "ConsumerRatiotherm",
   mixins: [ConsumerDeviceConfigMixin],
 };
 </script>

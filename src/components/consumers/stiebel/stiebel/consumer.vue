@@ -1,10 +1,10 @@
 <template>
-  <div class="device-idm">
-    <openwb-base-heading> Einstellungen für my-PV Acthor </openwb-base-heading>
+  <div class="device-stiebel">
+    <openwb-base-heading
+      >Einstellungen für Stiebel Wärmepumpe mit ISG (Servicewelt über Modbus) und SG Ready Eingang</openwb-base-heading
+    >
     <openwb-base-alert subtype="info">
-      Im Web Frontend des Heizstabs muss unter "Steuerungs-Einstellungen" der Parameter "Ansteuerungs-Typ = Modbus TCP"
-      und "Zeitablauf Ansteuerung = 120 Sek" gesetzt werden. Für die Ausschaltschwelle werden 500W und die
-      Ausschaltverzögerung 180s empfohlen, um die Regelung von Acthor nicht zu stören.
+      Im ISG-Web muss unter "Einstellungen / Energiemanagement" der Parameter "SGREADY = Ein" gesetzt werden
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
@@ -29,20 +29,6 @@
       max="255"
       @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
     />
-    <openwb-base-text-input
-      title="Model"
-      subtype="text"
-      required
-      :model-value="device.configuration.model"
-      @update:model-value="updateConfiguration($event, 'configuration.model')"
-    />
-    <openwb-base-number-input
-      title="Max Leistung"
-      required
-      :model-value="device.configuration.max_power"
-      min="1"
-      @update:model-value="updateConfiguration($event, 'configuration.max_power')"
-    />
   </div>
 </template>
 
@@ -50,7 +36,7 @@
 import ConsumerDeviceConfigMixin from "../../ConsumerDeviceConfigMixin.vue";
 
 export default {
-  name: "ConsumerMyPvActhor",
+  name: "ConsumerStiebel",
   mixins: [ConsumerDeviceConfigMixin],
 };
 </script>

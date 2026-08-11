@@ -15,7 +15,8 @@
     <openwb-base-alert subtype="info">
       Das Einschalten der Verbraucher richtet sich nach der Rangfolge in der Prioritäten-Steuerung (Geräte werden von
       oben nach unten geschaltet) und dem Mindeststrom des jeweiligen Geräts: Bei geringem Überschuss wird das erste
-      Gerät in der Liste geschaltet, dessen Mindeststrom erreicht ist. Die Rangfolge lässt sich unter <router-link to="/LoadManagementConfiguration"> Lastmanagement </router-link>
+      Gerät in der Liste geschaltet, dessen Mindeststrom erreicht ist. Die Rangfolge lässt sich unter
+      <router-link to="/LoadManagementConfiguration"> Lastmanagement </router-link>
       anpassen.
     </openwb-base-alert>
     <form name="consumerConfigForm">
@@ -144,8 +145,10 @@
                 Stufenlos regelbar: Geräte, denen eine Leistung vorgegeben werden kann. Unterbrechung im laufenden
                 Betrieb ist möglich.<br />
                 Dauerverbraucher: Geräte, die ein- und ausgeschaltet werden können, bei denen eine Unterbrechung im
-                laufenden Betrieb nicht möglich ist, z. B. Spülmaschine oder Trockner.
-                Wärmepumpe in Eigensteuerung: Die Wärmepumpe übernimmt die Steuerung selbst. Die dafür notwendigen Messwerte, wie zB EVU- und PV-Leistung, erhält sie von der openWB. Zwei unabhängige Regelsysteme können zu Schwingungen und unerwünschten Effekten führen.
+                laufenden Betrieb nicht möglich ist, z. B. Spülmaschine oder Trockner. Wärmepumpe in Eigensteuerung: Die
+                Wärmepumpe übernimmt die Steuerung selbst. Die dafür notwendigen Messwerte, wie zB EVU- und PV-Leistung,
+                erhält sie von der openWB. Zwei unabhängige Regelsysteme können zu Schwingungen und unerwünschten
+                Effekten führen.
               </template>
             </openwb-base-select-input>
             <hr />
@@ -866,7 +869,9 @@ export default {
     },
     showMinCurrent(consumer) {
       const type = consumer.consumerUsage?.type;
-      return type !== "suspendable_onoff" && type !== "continuous" && type !== "meter_only" && type !== "self_controlled";
+      return (
+        type !== "suspendable_onoff" && type !== "continuous" && type !== "meter_only" && type !== "self_controlled"
+      );
     },
     getUsageOptions(consumer) {
       if (!Array.isArray(consumer.usage)) return [];
