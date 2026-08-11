@@ -2,11 +2,11 @@
   <div class="device-idm">
     <openwb-base-heading> Einstellungen für IDM Wärmepumpe </openwb-base-heading>
     <openwb-base-alert subtype="info">
-      ModbusTCP muss in der Fachmannebene aktiviert sein. Ist als Verwendungszweck "Wärmepumpe in
-      Eigensteuerung" gewählt, sendet openWB PV-Erzeugung, Hausverbrauch und Batteriewerte an die
-      Wärmepumpe - dafür muss zusätzlich in der Fachmannebene unter "PV Signal" die Option
-      "Gebäudeleittechnik / Smartfox" ausgewählt sein, sonst wertet die Wärmepumpe die gesendeten
-      Werte nicht aus.
+      ModbusTCP muss in der Fachmannebene aktiviert sein. Bei Verwendung "Die Wärmepumpe übernimmt die Steuerung
+      selbst." sendet openWB PV-Erzeugung, Hausverbrauch und Batteriewerte an die Wärmepumpe - zusätzlich muss in der
+      Fachmannebene unter "PV Signal" die Option "Gebäudeleittechnik / Smartfox" gewählt sein, sonst wertet die
+      Wärmepumpe die Werte nicht aus. Bei "Steuerung durch Vorgabe einer Sollleistung" schreibt openWB die Sollleistung
+      als PV-Überschuss in die Regelung, was die PV-Eigenverbrauchs-Statistik im IDM-Portal verfälscht.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
