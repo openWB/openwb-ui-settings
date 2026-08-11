@@ -18,46 +18,40 @@
       required
       :model-value="device.configuration.username"
       @update:model-value="updateConfiguration($event, 'configuration.username')"
-    />
+    >
+      <template #help>
+        Nur auszufüllen, wenn im Shelly die Authentifizierung aktiviert wurde. Funktioniert nicht für Shelly
+        Plus.</template
+      >
+    </openwb-base-text-input>
     <openwb-base-text-input
       title="Passwort"
       subtype="password"
       required
       :model-value="device.configuration.password"
       @update:model-value="updateConfiguration($event, 'configuration.password')"
-    />
-    <openwb-base-number-input
-      title="Channel"
-      required
-      :max="3"
-      :model-value="device.configuration.channel"
-      @update:model-value="updateConfiguration($event, 'configuration.channel')"
     >
       <template #help>
-        Gibt an an welcher Phase des Hausanschlusses die (erste) Phase des Shelly angeschlossen ist.
-      </template>
-    </openwb-base-number-input>
+        Nur auszufüllen, wenn im Shelly die Authentifizierung aktiviert wurde. Funktioniert nicht für Shelly
+        Plus.</template
+      >
+    </openwb-base-text-input>
     <openwb-base-number-input
-      title="Phase"
+      title="Phase 1 des Verbraucheranschlusses"
       required
       :min="1"
       :max="3"
       :model-value="device.configuration.phase"
       @update:model-value="updateConfiguration($event, 'configuration.phase')"
     >
-      <template #help>
-        Gibt an an welcher Phase des Hausanschlusses die (erste) Phase des Shelly angeschlossen ist.
-      </template>
     </openwb-base-number-input>
     <openwb-base-number-input
       title="Faktor"
       required
-      :min="1"
-      :max="3"
+      step="any"
       :model-value="device.configuration.factor"
       @update:model-value="updateConfiguration($event, 'configuration.factor')"
     >
-      <template #help> Gibt an an welcher Faktor der Shelly Messwerte skaliert werden sollen. </template>
     </openwb-base-number-input>
   </div>
 </template>
