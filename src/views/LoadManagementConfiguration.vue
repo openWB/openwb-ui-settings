@@ -145,14 +145,19 @@
                   class: 'btn-outline-success',
                 },
                 {
+                  buttonValue: 'auto',
+                  text: 'Automatisch',
+                  class: 'btn-outline-info',
+                },
+                {
                   buttonValue: false,
                   text: 'Nein',
                   class: 'btn-outline-danger',
                 },
               ]"
-              :model-value="$store.state.mqtt['openWB/counter/' + counter.id + '/config/is_home_consumption_counter']"
+              :model-value="getHomeConsumptionCounterMode(counter.id)"
               @update:model-value="
-                updateState('openWB/counter/' + counter.id + '/config/is_home_consumption_counter', $event)
+                setHomeConsumptionCounterMode(counter.id, $event)
               "
             >
               <template #help>               
@@ -289,6 +294,7 @@ export default {
         { topic: "openWB/bat/+/config/max_power", writeable: true },
         { topic: "openWB/chargepoint/+/config", writeable: false },
         { topic: "openWB/counter/+/config/is_home_consumption_counter", writeable: true },
+        { topic: "openWB/counter/+/config/is_home_consumption_counter_auto", writeable: true },
         { topic: "openWB/counter/+/config/max_currents", writeable: true },
         { topic: "openWB/counter/+/config/max_power_errorcase", writeable: true },
         { topic: "openWB/counter/+/config/max_total_power", writeable: true },
@@ -417,6 +423,35 @@ export default {
     },
     isComponentType(componentType, verifier) {
       return componentType?.split("_").includes(verifier);
+    },
+    getHomeConsumptionCounterMode(counterId) {
+      const autoTopic = `openWB/counter/${counterId}/config/is_home_consumption_counter_auto`;
+      const boolTopic = `openWB/counter/${counterId}/config/is_home_consumption_counter`;
+      const autoValue = this.$store.state.mqtt[autoTopic];
+
+      // Frontend default: solange kein Wert vorhanden ist, wird "Automatisch" vorausgewählt.
+      if (autoValue === undefined || autoValue === null) {
+        return "auto";
+      }
+
+      if (autoValue === true) {
+        return "auto";
+      }
+
+      return this.$store.state.mqtt[boolTopic] === true;
+    },
+    setHomeConsumptionCounterMode(counterId, value) {
+      const autoTopic = `openWB/counter/${counterId}/config/is_home_consumption_counter_auto`;
+      const boolTopic = `openWB/counter/${counterId}/config/is_home_consumption_counter`;
+
+      if (value === "auto") {
+        this.updateState(autoTopic, true);
+        this.updateState(boolTopic, false);
+        return;
+      }
+
+      this.updateState(autoTopic, false);
+      this.updateState(boolTopic, value === true);
     },
   },
 };
