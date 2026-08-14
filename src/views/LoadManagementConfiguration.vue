@@ -161,10 +161,17 @@
               "
             >
               <template #help>               
-                Zähler, die den Hausverbrauch berücksichtigen, erfassen die Leistung des Zählers sowie 
-                der darunterliegenden Zähler als Hausverbrauch. Ausgenommen sind die Leistungen von Batterien, Ladepunkten und Wechselrichtern. 
-                Ist die Berücksichtigung deaktiviert, wird der Zähler bei der Hausverbrauchsberechnung nicht berücksichtigt.
+                Mit dieser Einstellung legen Sie fest, ob ein Zähler in die Hausverbrauchsberechnung einfließt. <br>
+                Ja: Der lokale Verbrauch dieses Zählers wird als Hausverbrauch berücksichtigt. <br>
+                Nein: Der Zähler wird nicht als Hausverbrauch berücksichtigt. <br>
+                Automatisch: Der Zähler übernimmt die Einstellung des übergeordneten Zählers. <br>
 
+                Der Hausverbrauch entspricht dem Verbrauch am jeweiligen Zähler abzüglich der Leistungen von Batterien, Ladepunkten, Wechselrichtern und Unterzählern.
+                "Automatisch" ist die Standardeinstellung und eignet sich, wenn die Einstellung für mehrere Zähler übernommen werden soll.
+
+                Wichtig: Wenn alle Zähler auf "Automatisch" stehen, wird die Einstellung entlang der Zählerhierarchie weitervererbt. 
+                Für den obersten Zähler wird "Automatisch" wie "Nein" behandelt. Dadurch wird zunächst kein Hausverbrauch erfasst.
+                Daher muss mindestens ein relevanter Zähler explizit auf "Ja" gesetzt werden, damit der Hausverbrauch erfasst wird.
 
               </template>
             </openwb-base-button-group-input>
