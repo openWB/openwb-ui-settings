@@ -82,9 +82,8 @@
                 >
                   Wiki-Beitrag zur Beachtung der Einspeisegrenze </a
                 >.<br />
-                Bei Erreichen dieses Werts wird die PV-Ladung nacheinander für jedes Fahrzeug im PV-Modus gestartet, bei
-                welchem "Einspeisegrenze beachten" im Ladeprofil aktiviert ist, dies setzt die Einschaltschwelle außer
-                kraft!<br />
+                Bei Erreichen dieses Werts wird die PV-Ladung nacheinander für jedes Fahrzeug im PV-Modus gestartet. Dies
+                setzt die Einschaltschwelle außer Kraft!<br />
                 Zur optimalen Eigenverbrauchssteuerung sollte der Wert einige hundert Watt UNTER der im Wechselrichter
                 hinterlegten EVU-Einspeiseleistungsgrenze liegen, damit openWB die Ladung freigibt, BEVOR der
                 Wechselrichter begrenzt wird.
@@ -339,9 +338,11 @@ export default {
   emits: ["save", "reset", "defaults"],
   data() {
     return {
+      showFeedInHelp: false,
       mqttTopics: [
         { topic: "openWB/general/chargemode_config/surplus/control_range", writeable: true },
-        { topic: "openWB/general/chargemode_config/pv_charging/surplus/feed_in_limit", writeable: true },
+        { topic: "openWB/general/chargemode_config/surplus/feed_in_limit", writeable: true },
+        { topic: "openWB/general/chargemode_config/surplus/feed_in_yield", writeable: true },
         { topic: "openWB/general/chargemode_config/surplus/vehicle/phase_switch_delay", writeable: true },
         { topic: "openWB/general/chargemode_config/surplus/vehicle/retry_failed_phase_switches", writeable: true },
         { topic: "openWB/general/chargemode_config/surplus/vehicle/switch_off_delay", writeable: true },
