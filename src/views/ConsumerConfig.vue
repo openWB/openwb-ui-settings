@@ -168,8 +168,7 @@
                 <ul class="mb-0">
                   <li>Die Wärmepumpe übernimmt die Steuerung selbst.</li>
                   <li>openWB liefert sendet Regelparameter, wie zB EVU- und PV-Leistung</li>
-                  <li>Zwei unabhängige Regelsysteme können zu Schwingungen und unerwünschten
-                Effekten führen.</li>
+                  <li>Zwei unabhängige Regelsysteme können zu Schwingungen und unerwünschten Effekten führen.</li>
                 </ul>
               </span>
               <span v-else>
@@ -239,12 +238,18 @@
               "
               unit="min"
               :min="0"
-              :step="1"
+              :step="0.1"
               :model-value="
-                installedConsumer.config?.min_interval != null ? installedConsumer.config.min_interval / 60 : null
+                installedConsumer.config?.min_interval != null
+                  ? parseFloat(installedConsumer.config.min_interval / 60).toFixed(2)
+                  : null
               "
               @update:model-value="
-                updateState(`openWB/consumer/${installedConsumer.id}/config`, $event * 60, 'min_interval')
+                updateState(
+                  `openWB/consumer/${installedConsumer.id}/config`,
+                  parseFloat($event * 60).toFixed(0),
+                  'min_interval',
+                )
               "
             >
               <template #help>
