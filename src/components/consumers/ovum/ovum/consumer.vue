@@ -1,12 +1,11 @@
 <template>
-  <div class="device-idm">
-    <openwb-base-heading> Einstellungen für IDM Wärmepumpe </openwb-base-heading>
+  <div class="device-ovum">
+    <openwb-base-heading> Einstellungen für OVUM Wärmepumpe (CubeSpeicher/MPlus) </openwb-base-heading>
     <openwb-base-alert subtype="info">
-      ModbusTCP muss in der Fachmannebene aktiviert sein. Bei Verwendung "Wärmepumpe in Eigensteuerung" sendet 
-      openWB PV-Erzeugung, Hausverbrauch und Batteriewerte an die Wärmepumpe - zusätzlich muss in der
-      Fachmannebene unter "PV Signal" die Option "Gebäudeleittechnik / Smartfox" gewählt sein, sonst wertet die
-      Wärmepumpe die Werte nicht aus. Bei "	Stufenlos regelbar" schreibt openWB die Sollleistung
-      als PV-Überschuss in die Regelung, was die PV-Eigenverbrauchs-Statistik im IDM-Portal verfälscht.
+      Modbus TCP muss am Regler unter "Fachmann/SYS/TCP" mit fester IP-Adresse eingerichtet sein.
+      Bei Verwendungszweck "Ein/Aus schaltbar" steuert openWB SG-Ready über Modbus TCP - stelle
+      sicher, dass SG-Ready an der Wärmepumpe nicht zusätzlich über physische Kontakte extern
+      verdrahtet ist, da sich beide Wege gegenseitig überschreiben können.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
@@ -31,13 +30,6 @@
       max="255"
       @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
     />
-    <openwb-base-number-input
-      title="Version"
-      required
-      :model-value="device.configuration.version"
-      min="1"
-      @update:model-value="updateConfiguration($event, 'configuration.version')"
-    />
   </div>
 </template>
 
@@ -45,7 +37,7 @@
 import ConsumerDeviceConfigMixin from "../../ConsumerDeviceConfigMixin.vue";
 
 export default {
-  name: "ConsumerIDM",
+  name: "ConsumerOvum",
   mixins: [ConsumerDeviceConfigMixin],
 };
 </script>
