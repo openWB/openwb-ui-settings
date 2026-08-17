@@ -327,8 +327,8 @@
             "
           >
             <template #help>
-              Der Überschuss muss für die hier angegebene Zeit dauerhaft über der minimalen Betriebsleistung liegen, bevor ein
-              Verbraucher eingeschaltet wird.
+              Der Überschuss muss für die hier angegebene Zeit dauerhaft über der minimalen Betriebsleistung liegen,
+              bevor ein Verbraucher eingeschaltet wird.
             </template>
           </openwb-base-number-input>
           <hr />
@@ -355,10 +355,10 @@
             "
           >
             <template #help>
-              Übersteigt der Netzbezug die Abschaltschwelle, wird der Betrieb beendet, sofern das minimale Regelintervall überschritten wurde. Eine Abschaltschwelle, die
-              Netzbezug erlaubt, führt in einem System ohne steuerbaren Speicher zur Entladung des Speichers. Der
-              Speicher wird dann auch über den eingestellten Mindest-SoC hinaus entladen (siehe Speicherbeachtung
-              unten).
+              Übersteigt der Netzbezug die Abschaltschwelle, wird der Betrieb beendet, sofern das minimale
+              Regelintervall überschritten wurde. Eine Abschaltschwelle, die Netzbezug erlaubt, führt in einem System
+              ohne steuerbaren Speicher zur Entladung des Speichers. Der Speicher wird dann auch über den eingestellten
+              Mindest-SoC hinaus entladen (siehe Speicherbeachtung unten).
             </template>
           </openwb-base-number-input>
           <openwb-base-number-input
@@ -373,7 +373,8 @@
             "
           >
             <template #help>
-              Die Abschaltschwelle muss für die hier angegebene Zeit dauerhaft unterschritten werden, bevor der Betrieb beendet wird.
+              Die Abschaltschwelle muss für die hier angegebene Zeit dauerhaft unterschritten werden, bevor der Betrieb
+              beendet wird.
             </template>
           </openwb-base-number-input>
         </div>
