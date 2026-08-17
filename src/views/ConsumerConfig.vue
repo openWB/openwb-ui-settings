@@ -20,41 +20,6 @@
       anpassen.
     </openwb-base-alert>
     <form name="consumerConfigForm">
-      <!-- General Settings -->
-      <openwb-base-card>
-        <template #header>
-          <font-awesome-icon :icon="['fas', 'cog']" />
-          Einstellungen für Überschuss-Betrieb
-        </template>
-        <openwb-base-number-input
-          title="Einschaltverzögerung"
-          :model-value="$store.state.mqtt['openWB/general/consumer/config/switch_on_delay']"
-          :min="0"
-          :max="300"
-          :step="1"
-          unit="s"
-          @update:model-value="updateState('openWB/general/consumer/config/switch_on_delay', $event)"
-        />
-        <openwb-base-number-input
-          title="Ausschaltverzögerung"
-          :model-value="$store.state.mqtt['openWB/general/consumer/config/switch_off_delay']"
-          :min="0"
-          :max="300"
-          :step="1"
-          unit="s"
-          @update:model-value="updateState('openWB/general/consumer/config/switch_off_delay', $event)"
-        />
-        <openwb-base-number-input
-          title="Ausschaltschwelle"
-          :model-value="$store.state.mqtt['openWB/general/consumer/config/switch_off_threshold']"
-          :min="0"
-          :max="30000"
-          :step="1"
-          unit="W"
-          @update:model-value="updateState('openWB/general/consumer/config/switch_off_threshold', $event)"
-        />
-      </openwb-base-card>
-      <!-- Consumer section -->
       <openwb-base-card title="Verbraucher">
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
           <openwb-base-alert subtype="info">
@@ -698,9 +663,6 @@ export default {
         { topic: "openWB/consumer/+/extra_meter", writeable: true },
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
         { topic: "openWB/counter/get/hierarchy", writeable: false },
-        { topic: "openWB/general/consumer/config/switch_on_delay", writeable: true },
-        { topic: "openWB/general/consumer/config/switch_off_delay", writeable: true },
-        { topic: "openWB/general/consumer/config/switch_off_threshold", writeable: true },
         { topic: "openWB/system/configurable/consumers", writeable: false },
         { topic: "openWB/optional/ep/configured", writeable: false },
       ],
