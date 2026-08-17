@@ -239,7 +239,7 @@
               "
               unit="min"
               :min="0"
-              :step="1"
+              :step="0.1"
               :model-value="
                 installedConsumer.config?.min_interval != null ? installedConsumer.config.min_interval / 60 : null
               "
