@@ -2,10 +2,9 @@
   <div class="device-ovum">
     <openwb-base-heading> Einstellungen für OVUM Wärmepumpe (CubeSpeicher/MPlus) </openwb-base-heading>
     <openwb-base-alert subtype="info">
-      Modbus TCP muss am Regler unter "Fachmann/SYS/TCP" mit fester IP-Adresse eingerichtet sein.
-      Bei Verwendungszweck "Ein/Aus schaltbar" steuert openWB SG-Ready über Modbus TCP - stelle
-      sicher, dass SG-Ready an der Wärmepumpe nicht zusätzlich über physische Kontakte extern
-      verdrahtet ist, da sich beide Wege gegenseitig überschreiben können.
+      Modbus TCP muss am Regler unter "Fachmann/SYS/TCP" mit fester IP-Adresse eingerichtet sein. Bei Verwendungszweck
+      "Ein/Aus schaltbar" steuert openWB SG-Ready über Modbus TCP - stelle sicher, dass SG-Ready an der Wärmepumpe nicht
+      zusätzlich über physische Kontakte extern verdrahtet ist, da sich beide Wege gegenseitig überschreiben können.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
