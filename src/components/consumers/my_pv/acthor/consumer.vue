@@ -4,7 +4,8 @@
     <openwb-base-alert subtype="info">
       Im Web Frontend des Heizstabs muss unter "Steuerungs-Einstellungen" der Parameter "Ansteuerungs-Typ = Modbus TCP"
       und "Zeitablauf Ansteuerung = 120 Sek" gesetzt werden. Für die Ausschaltschwelle werden 500W und die
-      Ausschaltverzögerung 180s empfohlen, um die Regelung von Acthor nicht zu stören. Das minimale Regelintervall sollte auf 30s gestellt werden.
+      Ausschaltverzögerung 180s empfohlen, um die Regelung von Acthor nicht zu stören. Das minimale Regelintervall
+      sollte auf 30s gestellt werden.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"

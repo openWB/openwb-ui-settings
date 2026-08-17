@@ -168,8 +168,7 @@
                 <ul class="mb-0">
                   <li>Die Wärmepumpe übernimmt die Steuerung selbst.</li>
                   <li>openWB liefert sendet Regelparameter, wie zB EVU- und PV-Leistung</li>
-                  <li>Zwei unabhängige Regelsysteme können zu Schwingungen und unerwünschten
-                Effekten führen.</li>
+                  <li>Zwei unabhängige Regelsysteme können zu Schwingungen und unerwünschten Effekten führen.</li>
                 </ul>
               </span>
               <span v-else>
