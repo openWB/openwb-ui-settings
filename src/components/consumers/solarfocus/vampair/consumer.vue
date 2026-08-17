@@ -1,10 +1,13 @@
 <template>
-  <div class="device-ovum">
-    <openwb-base-heading> Einstellungen für OVUM Wärmepumpe (CubeSpeicher/MPlus) </openwb-base-heading>
+  <div class="device-vampair">
+    <openwb-base-heading>Einstellungen für Vampair Wärmepumpe</openwb-base-heading>
     <openwb-base-alert subtype="info">
-      Modbus TCP muss am Regler unter "Fachmann/SYS/TCP" mit fester IP-Adresse eingerichtet sein. Bei Verwendungszweck
-      "Ein/Aus schaltbar" steuert openWB SG-Ready über Modbus TCP - stelle sicher, dass SG-Ready an der Wärmepumpe nicht
-      zusätzlich über physische Kontakte extern verdrahtet ist, da sich beide Wege gegenseitig überschreiben können.
+      Im Servicemenü muss (durch eine Fachkraft) die Überstromnutzung aktiviert und auf ModbusTCP gestellt werden.
+      Danach muss lediglich eine Ein- und Ausschaltschwelle für die Überstromnutzung eingestellt werden. Für die
+      Verwendung "Wärmepumpe in Eigensteuerung" muss dann die Ein- und Ausschaltschwelle für die Überstromnutzung
+      eingestellt werden. Eine negative Ausschaltschwelle bedeutet, dass die Wärmepumpe die fehlende Leistung aus dem
+      Netz bezieht. Für die Verwendung "Stufenlos regelbar" sollte die Ein- und Ausschaltschwelle auf die maximale
+      Leistung der Wärmepumpe gestellt werden. openWB gibt dann der Wärmepumpe die Leistung vor.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
@@ -36,7 +39,7 @@
 import ConsumerDeviceConfigMixin from "../../ConsumerDeviceConfigMixin.vue";
 
 export default {
-  name: "ConsumerOvum",
+  name: "ConsumerVampair",
   mixins: [ConsumerDeviceConfigMixin],
 };
 </script>
