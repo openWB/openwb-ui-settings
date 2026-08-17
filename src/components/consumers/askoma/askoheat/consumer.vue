@@ -2,7 +2,7 @@
   <div class="device-idm">
     <openwb-base-heading> Einstellungen für Askoheat</openwb-base-heading>
     <openwb-base-alert subtype="info">
-      Im Web-Frontend des Heizstab smuss unter Expertsetup / Setup 3 eine statische IP Adresse und der Modbus TCP Port
+      Im Web-Frontend des Heizstabs muss unter Expertsetup / Setup 3 eine statische IP-Adresse und der Modbus TCP Port
       502 (nicht 520) erfasst werden.
     </openwb-base-alert>
     <openwb-base-text-input

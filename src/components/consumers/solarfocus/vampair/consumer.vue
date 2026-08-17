@@ -4,10 +4,10 @@
     <openwb-base-alert subtype="info">
       Im Servicemenü muss (durch eine Fachkraft) die Überstromnutzung aktiviert und auf ModbusTCP gestellt werden.
       Danach muss lediglich eine Ein- und Ausschaltschwelle für die Überstromnutzung eingestellt werden. Für die
-      Verwendung "Wärmepumpe in Eigentsteuerung" muss dann die Ein- und Ausschaltschwelle für die Überstromnutzung
+      Verwendung "Wärmepumpe in Eigensteuerung" muss dann die Ein- und Ausschaltschwelle für die Überstromnutzung
       eingestellt werden. Eine negative Ausschaltschwelle bedeutet, dass die Wärmepumpe die fehlende Leistung aus dem
       Netz bezieht. Für die Verwendung "Stufenlos regelbar" sollte die Ein- und Ausschaltschwelle auf die maximale
-      Leistung der Wärmepumpe gestellt werden. Die openWB gibt dann der Wärmepumpe die Leistung vor.
+      Leistung der Wärmepumpe gestellt werden. openWB gibt dann der Wärmepumpe die Leistung vor.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"

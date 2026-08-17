@@ -1,12 +1,12 @@
 <template>
   <div class="device-avm">
     <openwb-base-heading>Einstellungen für Viessmann Wärmepumpe</openwb-base-heading>
-    <openwb-base-alert subtype="info"
-      >Vitalcal 200-s Wärmepumpe mit LON Kommunikationsmodul und Vitogate 300. Wenn die Einschaltbedingung erreicht ist,
+    <openwb-base-alert subtype="info">
+      Vitalcal 200-s Wärmepumpe mit LON Kommunikationsmodul und Vitogate 300. Wenn die Einschaltbedingung erreicht ist,
       wird Komfortfunktion "Einmalige Warmwasserbereitung" außerhalb des Zeitprogramms gestartet. Für die "Einmalige
       Warmwasserbereitung" wird der Warmwassertemperatur-Sollwert 2 genutzt. In der Wärmepumpe kann eingestellt werden,
-      ob für diese Funktion die Elektroheizung (Heizstab) benutzt werden soll.</openwb-base-alert
-    >
+      ob für diese Funktion die Elektroheizung (Heizstab) benutzt werden soll.
+    </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
       subtype="host"
