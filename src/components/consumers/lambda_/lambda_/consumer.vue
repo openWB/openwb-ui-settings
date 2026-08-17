@@ -2,11 +2,11 @@
   <div class="device-lambda">
     <openwb-base-heading> Einstellungen für Lambda Wärmepumpe </openwb-base-heading>
     <openwb-base-alert subtype="info">
-      Modbus TCP muss in der Fachmannebene aktiviert sein. Bei Verwendung "Wärmepumpe in Eigensteuerung" sendet 
-      openWB den aktuellen Netzbezug an den E-Manager der Wärmepumpe - zusätzlich muss am E-Manager die
-      Datenquelle auf "Modbus Client" umgestellt werden, sonst wertet die Wärmepumpe den Wert nicht aus. Bei 
-      "Stufenlos regelbar" schreibt openWB stattdessen die Sollleistung in dasselbe Register, wodurch der
-      an die Wärmepumpe gemeldete Netzbezug verfälscht wird.
+      Modbus TCP muss in der Fachmannebene aktiviert sein. Bei Verwendung "Wärmepumpe in Eigensteuerung" sendet openWB
+      den aktuellen Netzbezug an den E-Manager der Wärmepumpe - zusätzlich muss am E-Manager die Datenquelle auf "Modbus
+      Client" umgestellt werden, sonst wertet die Wärmepumpe den Wert nicht aus. Bei "Stufenlos regelbar" schreibt
+      openWB stattdessen die Sollleistung in dasselbe Register, wodurch der an die Wärmepumpe gemeldete Netzbezug
+      verfälscht wird.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
