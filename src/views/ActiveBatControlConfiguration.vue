@@ -129,7 +129,7 @@
                   class: 'btn-outline-success',
                 },
               ]"
-              :model-value="$store.state.mqtt['openWB/general/chargemode_config/bat/power_reserve']"
+              :model-value="$store.state.mqtt['openWB/general/chargemode_config/bat/power_reserve_active']"
               @update:model-value="updateState('openWB/general/chargemode_config/bat/power_reserve_active', $event)"
             >
               <template
