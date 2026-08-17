@@ -633,11 +633,10 @@ import {
   faPlug as fasPlug,
   faPlus as fasPlus,
   faTrash as fasTrash,
-  faCog as fasCog,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasPlug, fasPlus, fasTrash, fasCog);
+library.add(fasPlug, fasPlus, fasTrash);
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbConsumerConfigProxy from "../components/consumers/OpenwbConsumerConfigProxy.vue";
 import ConsumerTimeChargingPlan from "../components/consumers/ConsumerTimeChargingPlan.vue";
