@@ -1,6 +1,6 @@
 <template>
-  <div class="device-ankersolix">
-    <openwb-base-heading> Einstellungen für Anker SOLIX Solarbank</openwb-base-heading>
+  <div class="device-solarbank_max_ac">
+    <openwb-base-heading> Einstellungen für Anker SOLIX Solarbank Max AC</openwb-base-heading>
     <openwb-base-alert subtype="info">
       Es muss in den Einstellungen die Option Modbus TCP aktiviert werden. Nicht alle Anker Produkte unterstützen dies
       bisher. Durch ein Firmware Update könnte diese Option zur Verfügung stehen.
@@ -20,6 +20,14 @@
       :model-value="device.configuration.port"
       @update:model-value="updateConfiguration($event, 'configuration.port')"
     />
+    <openwb-base-number-input
+      title="Modbus ID"
+      required
+      :min="1"
+      :max="255"
+      :model-value="device.configuration.modbus_id"
+      @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
+    />
   </div>
 </template>
 
@@ -27,7 +35,7 @@
 import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
 
 export default {
-  name: "DeviceAnkerSH",
+  name: "DeviceAnkerSolarbankMaxAc",
   mixins: [DeviceConfigMixin],
 };
 </script>
