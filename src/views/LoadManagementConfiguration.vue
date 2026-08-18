@@ -458,7 +458,7 @@ export default {
             switch (item.type) {
               case "group": {
                 if (item.label) {
-                  labels[item.id] = item.label;
+                  labels[`group-${item.id}`] = item.label;
                 }
                 if (Array.isArray(item.children)) {
                   processItems(item.children);
@@ -469,14 +469,14 @@ export default {
                 const vehicleId = String(item.id);
                 const name = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/name`];
                 if (name) {
-                  labels[item.id] = name;
+                  labels[`vehicle-${item.id}`] = name;
                 }
                 break;
               }
               case "consumer": {
                 const name = this.$store.state.mqtt[`openWB/consumer/${item.id}/module`]?.name;
                 if (name) {
-                  labels[item.id] = name;
+                  labels[`consumer-${item.id}`] = name;
                 }
                 break;
               }

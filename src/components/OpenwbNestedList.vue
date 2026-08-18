@@ -33,7 +33,7 @@
                 style="cursor: pointer"
                 @click="startEditing(element)"
               >
-                {{ getElementLabel(element.id) }}
+                {{ getElementLabel(element) }}
               </span>
             </span>
             <input
@@ -59,11 +59,11 @@
             />
           </span>
           <span
-            v-else-if="linkedMeterName(element.id)"
+            v-else-if="linkedMeterName(element)"
             class="element-linked-meter"
-            :title="linkedMeterName(element.id)"
+            :title="linkedMeterName(element)"
           >
-            <span class="linked-meter-name">{{ linkedMeterName(element.id) }}</span>
+            <span class="linked-meter-name">{{ linkedMeterName(element) }}</span>
             <font-awesome-icon :icon="['fas', 'link']" />
           </span>
         </div>
@@ -186,14 +186,23 @@ export default {
       }
       return myClasses;
     },
-    getElementLabel(elementId) {
-      if (this.labels && elementId in this.labels) {
-        return this.labels[elementId];
+    // ids are only unique per type (a vehicle and a consumer may share an id), so maps are
+    // looked up by "<type>-<id>" first. Lists without such collisions may key by plain id.
+    lookupByElement(map, element) {
+      if (!map) {
+        return undefined;
       }
-      return elementId;
+      const typedKey = `${element.type}-${element.id}`;
+      if (typedKey in map) {
+        return map[typedKey];
+      }
+      return map[element.id];
     },
-    linkedMeterName(elementId) {
-      return this.linkedMeters?.[elementId] ?? undefined;
+    getElementLabel(element) {
+      return this.lookupByElement(this.labels, element) ?? element.id;
+    },
+    linkedMeterName(element) {
+      return this.lookupByElement(this.linkedMeters, element) ?? undefined;
     },
     isHidden(element) {
       return element.type === "counter" && !!this.hiddenIds?.some((id) => String(id) === String(element.id));
