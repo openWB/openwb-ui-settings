@@ -16,46 +16,48 @@
         <div class="input-group">
           <div class="input-group-prepend">
             <div class="input-group-text">
-              <font-awesome-icon
-                v-if="subtype == 'text'"
-                :icon="['fas', 'keyboard']"
-              />
-              <font-awesome-icon
-                v-if="subtype == 'email'"
-                :icon="['fas', 'envelope']"
-              />
-              <font-awesome-icon
-                v-if="subtype == 'host' || subtype == 'ipv4'"
-                :icon="['fas', 'network-wired']"
-              />
-              <font-awesome-icon
-                v-if="subtype == 'url'"
-                :icon="['fas', 'globe']"
-              />
-              <font-awesome-icon
-                v-if="subtype == 'user'"
-                :icon="['fas', 'user']"
-              />
-              <font-awesome-icon
-                v-if="subtype == 'group'"
-                :icon="['fas', 'users']"
-              />
-              <font-awesome-icon
-                v-if="subtype == 'json'"
-                :icon="['fas', 'code']"
-              />
-              <font-awesome-icon
-                v-if="subtype == 'password'"
-                :icon="showPassword ? ['fas', 'unlock'] : ['fas', 'lock']"
-              />
-              <font-awesome-icon
-                v-if="subtype == 'time'"
-                :icon="['fas', 'clock']"
-              />
-              <font-awesome-icon
-                v-if="subtype == 'date' || subtype == 'month' || subtype == 'year'"
-                :icon="['fas', 'calendar-day']"
-              />
+              <slot name="prepend">
+                <font-awesome-icon
+                  v-if="subtype == 'text'"
+                  :icon="['fas', 'keyboard']"
+                />
+                <font-awesome-icon
+                  v-else-if="subtype == 'email'"
+                  :icon="['fas', 'envelope']"
+                />
+                <font-awesome-icon
+                  v-else-if="subtype == 'host' || subtype == 'ipv4'"
+                  :icon="['fas', 'network-wired']"
+                />
+                <font-awesome-icon
+                  v-else-if="subtype == 'url'"
+                  :icon="['fas', 'globe']"
+                />
+                <font-awesome-icon
+                  v-else-if="subtype == 'user'"
+                  :icon="['fas', 'user']"
+                />
+                <font-awesome-icon
+                  v-else-if="subtype == 'group'"
+                  :icon="['fas', 'users']"
+                />
+                <font-awesome-icon
+                  v-else-if="subtype == 'json'"
+                  :icon="['fas', 'code']"
+                />
+                <font-awesome-icon
+                  v-else-if="subtype == 'password'"
+                  :icon="showPassword ? ['fas', 'unlock'] : ['fas', 'lock']"
+                />
+                <font-awesome-icon
+                  v-else-if="subtype == 'time'"
+                  :icon="['fas', 'clock']"
+                />
+                <font-awesome-icon
+                  v-else-if="subtype == 'date' || subtype == 'month' || subtype == 'year'"
+                  :icon="['fas', 'calendar-day']"
+                />
+              </slot>
             </div>
           </div>
           <input
@@ -70,7 +72,7 @@
             :pattern="pattern"
           />
           <input
-            v-if="subtype == 'json'"
+            v-else-if="subtype == 'json'"
             :id="`${uid}-json-input`"
             ref="jsonInput"
             v-model="value"
@@ -80,7 +82,7 @@
             :pattern="pattern"
           />
           <input
-            v-if="subtype == 'password'"
+            v-else-if="subtype == 'password'"
             :id="`${uid}-password-input`"
             ref="passwordInput"
             v-model="value"
@@ -90,7 +92,7 @@
             :pattern="pattern"
           />
           <input
-            v-if="subtype == 'host'"
+            v-else-if="subtype == 'host'"
             :id="`${uid}-host-input`"
             ref="hostInput"
             v-model="value"
@@ -100,7 +102,7 @@
             :pattern="hostPattern"
           />
           <input
-            v-if="subtype == 'ipv4'"
+            v-else-if="subtype == 'ipv4'"
             :id="`${uid}-ipv4-input`"
             ref="ipv4Input"
             v-model="value"
@@ -110,7 +112,7 @@
             :pattern="ipv4Pattern"
           />
           <input
-            v-if="['email', 'url'].includes(subtype)"
+            v-else-if="['email', 'url'].includes(subtype)"
             :id="`${uid}-url-input`"
             ref="urlInput"
             v-model="value"
@@ -119,7 +121,7 @@
             v-bind="$attrs"
           />
           <input
-            v-if="subtype == 'time'"
+            v-else-if="subtype == 'time'"
             :id="`${uid}-time-input`"
             ref="timeInput"
             v-model="value"
@@ -128,7 +130,7 @@
             v-bind="$attrs"
           />
           <input
-            v-if="subtype == 'date'"
+            v-else-if="subtype == 'date'"
             :id="`${uid}-date-input`"
             ref="dateInput"
             v-model="value"
@@ -137,7 +139,7 @@
             v-bind="$attrs"
           />
           <input
-            v-if="subtype == 'month'"
+            v-else-if="subtype == 'month'"
             :id="`${uid}-month-input`"
             ref="monthInput"
             v-model="value"
@@ -146,7 +148,7 @@
             v-bind="$attrs"
           />
           <input
-            v-if="subtype == 'year'"
+            v-else-if="subtype == 'year'"
             :id="`${uid}-year-input`"
             ref="yearInput"
             v-model="value"
