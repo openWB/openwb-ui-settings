@@ -7,13 +7,19 @@
     item-key="id"
     handle=".handle"
   >
-    <template #item="{ element }">
+    <template #item="{ element, index }">
       <li v-show="!isHidden(element)">
         <div
           class="element-titel"
           :class="classes(element)"
         >
           <span>
+            <span
+              v-if="showPriority"
+              class="badge badge-pill badge-light mr-1"
+            >
+              {{ parentPriority ?? index + 1 }}
+            </span>
             <font-awesome-icon
               class="handle"
               :icon="['fas', nesting ? 'arrows-alt' : 'arrows-up-down']"
@@ -70,7 +76,10 @@
           :nesting="nesting"
           :max-nesting-depth="maxNestingDepth"
           :current-nesting-depth="currentNestingDepth + 1"
+          :show-priority="showPriority"
+          :parent-priority="parentPriority ?? index + 1"
           @delete-group="$emit('delete-group', $event)"
+          @rename-group="$emit('rename-group', $event)"
         />
       </li>
     </template>
@@ -123,6 +132,8 @@ export default {
     nesting: { type: Boolean, default: true },
     maxNestingDepth: { type: Number, default: Infinity },
     currentNestingDepth: { type: Number, default: 0 },
+    showPriority: { type: Boolean, default: false },
+    parentPriority: { type: Number, required: false, default: null },
   },
   emits: ["update:modelValue", "delete-group", "rename-group"],
   data() {

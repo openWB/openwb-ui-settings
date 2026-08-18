@@ -19,6 +19,7 @@
       :hidden-ids="hiddenIds"
       :nesting="nesting"
       :max-nesting-depth="maxNestingDepth"
+      :show-priority="showPriority"
       @delete-group="$emit('delete-group', $event)"
       @rename-group="$emit('rename-group', $event)"
     />
@@ -45,6 +46,7 @@ export default {
     hiddenIds: { type: Array, default: undefined },
     nesting: { type: Boolean, default: true },
     maxNestingDepth: { type: Number, default: Infinity },
+    showPriority: { type: Boolean, default: false },
   },
   emits: ["update:modelValue", "delete-group", "rename-group"],
   computed: {

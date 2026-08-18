@@ -271,6 +271,7 @@
             :labels="loadManagementPriorityLabels"
             :nesting="true"
             :max-nesting-depth="1"
+            :show-priority="true"
             @delete-group="deleteLoadManagementPriorityGroup"
             @rename-group="renameLoadManagementPriorityGroup"
           >
