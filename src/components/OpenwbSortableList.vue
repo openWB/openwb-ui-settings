@@ -11,6 +11,13 @@
     >
       <slot name="help" />
     </template>
+    <div
+      v-if="showPriority && value !== undefined"
+      class="priority-arrow"
+    >
+      <span class="priority-arrow-head" />
+      <span class="priority-arrow-shaft" />
+    </div>
     <openwb-nested-list
       v-if="value !== undefined"
       v-model="value"
@@ -61,3 +68,39 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.priority-arrow {
+  display: flex;
+  flex: 0 0 22px;
+  flex-direction: column;
+  align-items: center;
+  margin: 6px 8px 6px 0;
+}
+
+.priority-arrow-head {
+  width: 0;
+  height: 0;
+  border-right: 11px solid transparent;
+  border-bottom: 13px solid var(--success);
+  border-left: 11px solid transparent;
+}
+
+.priority-arrow-shaft {
+  width: 100%;
+  clip-path: polygon(34% 0, 66% 0, 84% 100%, 16% 100%);
+  background: linear-gradient(to bottom, var(--success), var(--warning), var(--danger));
+  flex: 1 1 auto;
+}
+
+:deep(.dragArea) {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+@media (max-width: 575px) {
+  .priority-arrow {
+    display: none;
+  }
+}
+</style>
