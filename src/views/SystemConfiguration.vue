@@ -39,7 +39,11 @@
             v-model="$store.state.mqtt['openWB/system/serial_number']"
             title="Seriennummer"
             readonly
-          />
+          >
+            <template #prepend>
+              <font-awesome-icon :icon="['fas', 'hashtag']" />
+            </template>
+          </openwb-base-text-input>
           <openwb-base-text-input
             v-model="$store.state.mqtt['openWB/system/ip_address']"
             title="IP-Adresse"
@@ -78,23 +82,48 @@
             v-model="$store.state.mqtt['openWB/system/current_branch']"
             title="Entwicklungszweig"
             readonly
-          />
+          >
+            <template #prepend>
+              <font-awesome-icon :icon="['fas', 'code-branch']" />
+            </template>
+          </openwb-base-text-input>
           <openwb-base-text-input
             v-model="$store.state.mqtt['openWB/system/version']"
             title="Bezeichnung"
             readonly
-          />
+          >
+            <template #prepend>
+              <font-awesome-icon :icon="['fas', 'tag']" />
+            </template>
+          </openwb-base-text-input>
           <openwb-base-text-input
             v-model="$store.state.mqtt['openWB/system/current_commit']"
             title="installierte Version"
             readonly
             :class="updateAvailable ? 'text-danger' : 'text-success'"
-          />
+          >
+            <template #prepend>
+              <font-awesome-icon :icon="['fas', 'code-commit']" />
+            </template>
+          </openwb-base-text-input>
           <openwb-base-text-input
             v-model="$store.state.mqtt['openWB/system/current_branch_commit']"
             title="aktuellste Version"
             readonly
-          />
+          >
+            <template #prepend>
+              <font-awesome-icon :icon="['fab', 'github']" />
+            </template>
+          </openwb-base-text-input>
+          <openwb-base-text-input
+            v-model="$store.state.mqtt['openWB/system/python_runtime_version']"
+            title="Python Runtime Version"
+            readonly
+          >
+            <template #prepend>
+              <font-awesome-icon :icon="['fab', 'python']" />
+            </template>
+          </openwb-base-text-input>
           <openwb-base-card
             v-if="updateAvailable"
             title="Änderungen"
@@ -298,12 +327,20 @@
             :groups="branchGroups"
             :model-value="$store.state.mqtt['openWB/system/current_branch']"
             @update:model-value="updateState('openWB/system/current_branch', $event)"
-          />
+          >
+            <template #prefix>
+              <font-awesome-icon :icon="['fas', 'code-branch']" />
+            </template>
+          </openwb-base-select-input>
           <openwb-base-select-input
             v-model="selectedTag"
             title="Tag"
             :options="branchTagOptions"
-          />
+          >
+            <template #prefix>
+              <font-awesome-icon :icon="['fas', 'tag']" />
+            </template>
+          </openwb-base-select-input>
           <template #footer>
             <div class="row justify-content-center">
               <div class="col-md-4 d-flex py-1 justify-content-center">
@@ -388,8 +425,25 @@ import {
   faPowerOff as fasPowerOff,
   faDownload as fasDownload,
   faSkullCrossbones as fasSkullCrossbones,
+  faCodeBranch as fasCodeBranch,
+  faCodeCommit as fasCodeCommit,
+  faTag as fasTag,
+  faHashtag as fasHashtag,
 } from "@fortawesome/free-solid-svg-icons";
-library.add(fasArrowAltCircleUp, fasUndo, fasPowerOff, fasDownload, fasSkullCrossbones);
+import { faPython as fabPython, faGithub as fabGithub } from "@fortawesome/free-brands-svg-icons";
+library.add(
+  fasArrowAltCircleUp,
+  fasUndo,
+  fasPowerOff,
+  fasDownload,
+  fasHashtag,
+  fasSkullCrossbones,
+  fasCodeBranch,
+  fabPython,
+  fabGithub,
+  fasTag,
+  fasCodeCommit,
+);
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import ComponentState from "../components/mixins/ComponentState.vue";
@@ -425,6 +479,7 @@ export default {
         { topic: "openWB/system/ip_address", writeable: false },
         { topic: "openWB/system/mac_address", writeable: false },
         { topic: "openWB/system/pnp_ip", writeable: true },
+        { topic: "openWB/system/python_runtime_version", writeable: false },
         { topic: "openWB/system/secondary_auto_update", writeable: false },
         { topic: "openWB/system/serial_number", writeable: false },
         { topic: "openWB/system/version", writeable: false },
