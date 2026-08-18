@@ -301,7 +301,6 @@ export default {
         { topic: "openWB/bat/+/config/max_power", writeable: true },
         { topic: "openWB/chargepoint/+/config", writeable: false },
         { topic: "openWB/counter/+/config/is_home_consumption_counter", writeable: true },
-        { topic: "openWB/counter/+/config/is_home_consumption_counter_auto", writeable: true },
         { topic: "openWB/counter/+/config/max_currents", writeable: true },
         { topic: "openWB/counter/+/config/max_power_errorcase", writeable: true },
         { topic: "openWB/counter/+/config/max_total_power", writeable: true },
@@ -432,33 +431,35 @@ export default {
       return componentType?.split("_").includes(verifier);
     },
     getHomeConsumptionCounterMode(counterId) {
-      const autoTopic = `openWB/counter/${counterId}/config/is_home_consumption_counter_auto`;
-      const boolTopic = `openWB/counter/${counterId}/config/is_home_consumption_counter`;
-      const autoValue = this.$store.state.mqtt[autoTopic];
-
+      const counterModeTopic = `openWB/counter/${counterId}/config/is_home_consumption_counter`;
+      const counterModeValue = this.$store.state.mqtt[counterModeTopic];
       // Frontend default: solange kein Wert vorhanden ist, wird "Automatisch" vorausgewählt.
-      if (autoValue === undefined || autoValue === null) {
+      if (counterModeValue === undefined || counterModeValue === null) {
         return "auto";
       }
-
-      if (autoValue === true) {
+      
+      if (counterModeValue === 0) {
+        return false;
+      }
+      else if (counterModeValue === 1) {
+        return true;
+      }
+      else {
         return "auto";
       }
-
-      return this.$store.state.mqtt[boolTopic] === true;
     },
     setHomeConsumptionCounterMode(counterId, value) {
-      const autoTopic = `openWB/counter/${counterId}/config/is_home_consumption_counter_auto`;
-      const boolTopic = `openWB/counter/${counterId}/config/is_home_consumption_counter`;
-
-      if (value === "auto") {
-        this.updateState(autoTopic, true);
-        this.updateState(boolTopic, false);
+      const counterModeTopic = `openWB/counter/${counterId}/config/is_home_consumption_counter`;
+      if (value === true) {
+        this.updateState(counterModeTopic, 1);
+        return;
+      }
+      else if (value === false) {
+        this.updateState(counterModeTopic, 0);
         return;
       }
 
-      this.updateState(autoTopic, false);
-      this.updateState(boolTopic, value === true);
+      this.updateState(counterModeTopic, 2);
     },
   },
 };
