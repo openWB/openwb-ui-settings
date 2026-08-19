@@ -823,6 +823,7 @@ export default {
         { topic: "openWB/pv/+/get/power", writeable: false },
         { topic: "openWB/pv/get/power", writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
+        { topic: "openWB/system/security/user_management_active", writeable: false },
         { topic: "openWB/vehicle/+/info", writeable: false },
         { topic: "openWB/vehicle/+/name", writeable: false },
       ],
@@ -1317,6 +1318,12 @@ export default {
           // The topic is missing, so the object is either not accessible for this user
           // or it no longer exists. Log data of a deleted component has to stay visible,
           // therefore only hide the object while it is still part of the configuration.
+          // With the user management enabled a missing topic is ambiguous: the acl role of a
+          // deleted component is removed as well, so we can no longer tell an inaccessible
+          // component from a deleted one. In that case we keep the restrictive behavior.
+          if (this.$store.state.mqtt["openWB/system/security/user_management_active"] === true) {
+            return false;
+          }
           return !this.objectConfigured(baseObject, objectKey);
         }
         return true;
