@@ -1,6 +1,6 @@
 <template>
-  <div class="device-anker_solix-counter">
-    <openwb-base-heading> Einstellungen für Anker Zähler </openwb-base-heading>
+  <div class="device-smartmeter_gen2">
+    <openwb-base-heading> Einstellungen für Anker SOLIX Smart Meter Gen 2</openwb-base-heading>
     <openwb-base-alert subtype="info">
       Nicht alle Zähler von Anker unterstützen Modbus TCP, in den Einstellungen muss es aktiviert sein.
     </openwb-base-alert>
@@ -8,7 +8,7 @@
       title="IP oder Hostname"
       subtype="host"
       required
-      :model-value="component.configuration.ip_address"
+      :model-value="device.configuration.ip_address"
       @update:model-value="updateConfiguration($event, 'configuration.ip_address')"
     />
     <openwb-base-number-input
@@ -22,19 +22,19 @@
     <openwb-base-number-input
       title="Modbus ID"
       required
-      :model-value="component.configuration.modbus_id"
-      min="1"
-      max="255"
+      :min="1"
+      :max="255"
+      :model-value="device.configuration.modbus_id"
       @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
     />
   </div>
 </template>
 
 <script>
-import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
+import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
 
 export default {
-  name: "DeviceAnkerCounter",
-  mixins: [ComponentConfigMixin],
+  name: "DeviceAnkerSmartmeterGen2",
+  mixins: [DeviceConfigMixin],
 };
 </script>
