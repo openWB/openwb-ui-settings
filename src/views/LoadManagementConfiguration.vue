@@ -275,7 +275,7 @@
             @rename-group="renameLoadManagementPriorityGroup"
           >
             <template #help>
-              Reihenfolge der Ladepunkt- und Verbraucher-Prioritäten für das Lastmanagement.<br />
+              Reihenfolge der Fahrzeug- und Verbraucher-Prioritäten für das Lastmanagement.<br />
               Die Reihenfolge kann durch Drag & Drop geändert werden.<br />
               Elemente können in Gruppen zusammengefasst werden. Alle Elemente innerhalb einer Gruppe erhalten die
               gleiche Priorität und werden im Lastmanagement gleichrangig behandelt.
