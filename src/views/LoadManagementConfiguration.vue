@@ -555,10 +555,11 @@ export default {
       return componentType?.split("_").includes(verifier);
     },
     addLoadManagementPriorityGroup() {
-      if (!this.newGroupName) return;
+      const label = this.newGroupName?.trim();
+      if (!label) return;
       const newGroup = {
         type: "group",
-        label: this.newGroupName,
+        label: label,
         id: `group-${Date.now()}`,
         children: [],
       };
