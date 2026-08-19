@@ -4,7 +4,7 @@
     class="dragArea w-100 mb-0"
     tag="ul"
     :group="dragGroup"
-    item-key="id"
+    :item-key="elementKey"
     handle=".handle"
   >
     <template #item="{ element, index }">
@@ -188,11 +188,14 @@ export default {
     },
     // ids are only unique per type (a vehicle and a consumer may share an id), so maps are
     // looked up by "<type>-<id>" first. Lists without such collisions may key by plain id.
+    elementKey(element) {
+      return element.type === undefined ? String(element.id) : `${element.type}-${element.id}`;
+    },
     lookupByElement(map, element) {
       if (!map) {
         return undefined;
       }
-      const typedKey = `${element.type}-${element.id}`;
+      const typedKey = this.elementKey(element);
       if (typedKey in map) {
         return map[typedKey];
       }
