@@ -182,6 +182,16 @@ import { markRaw, toRaw } from "vue";
 // list of keys in the chart data that contain objects with measurement values that should be included
 const baseObjectsToProcess = ["pv", "counter", "bat", "cp", "sh", "ev", "hc"];
 
+// maps the base objects above to the component type used in the counter hierarchy.
+// only these can be checked against the current configuration; there is no
+// unrestricted topic listing the configured vehicles or smart home devices.
+const hierarchyTypes = {
+  counter: "counter",
+  pv: "inverter",
+  bat: "bat",
+  cp: "cp",
+};
+
 const datasetTemplates = {
   "counter-power_average": {
     label: "Zähler",
@@ -804,6 +814,7 @@ export default {
         { topic: "openWB/chargepoint/+/config", writeable: false },
         { topic: "openWB/chargepoint/get/power", writeable: false },
         { topic: "openWB/counter/+/get/power", writeable: false },
+        { topic: "openWB/counter/get/hierarchy", writeable: false },
         { topic: "openWB/counter/set/home_consumption", writeable: false },
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/log/daily/#", writeable: false },
@@ -1207,6 +1218,52 @@ export default {
       }
       return undefined;
     },
+    /**
+     * Collects the components currently placed in the counter hierarchy as a set of
+     * "<type><id>" keys, e.g. "counter0", "inverter1", "bat2", "cp3".
+     *
+     * @returns {Set<string>|undefined}
+     */
+    configuredComponents() {
+      const hierarchy = this.$store.state.mqtt["openWB/counter/get/hierarchy"];
+      if (!Array.isArray(hierarchy)) {
+        return undefined;
+      }
+      const components = new Set();
+      const collect = (elements) => {
+        if (!Array.isArray(elements)) {
+          return;
+        }
+        elements.forEach((element) => {
+          components.add(`${element.type}${element.id}`);
+          collect(element.children);
+        });
+      };
+      collect(hierarchy);
+      return components;
+    },
+    /**
+     * Checks whether an object of the log data still exists in the current configuration.
+     * Objects that cannot be checked against the hierarchy are assumed to still exist.
+     *
+     * @param {string} baseObject - The base object of the dataset.
+     * @param {string} objectKey - The object key of the dataset.
+     * @returns {boolean} - True if the object is still configured.
+     */
+    objectConfigured() {
+      return (baseObject, objectKey) => {
+        if (this.configuredComponents === undefined) {
+          return true;
+        }
+        const hierarchyType = hierarchyTypes[baseObject];
+        const id = parseInt(objectKey.match(/\d+$/)?.[0] || "");
+        if (hierarchyType === undefined || isNaN(id)) {
+          // totals ("all"), home consumption, vehicles and smart home devices
+          return true;
+        }
+        return this.configuredComponents.has(`${hierarchyType}${id}`);
+      };
+    },
     objectAccessible() {
       return (baseObject, objectKey) => {
         let validationTopic = undefined;
@@ -1254,7 +1311,13 @@ export default {
             break;
         }
         if (validationTopic) {
-          return this.$store.state.mqtt[validationTopic] !== undefined;
+          if (this.$store.state.mqtt[validationTopic] !== undefined) {
+            return true;
+          }
+          // The topic is missing, so the object is either not accessible for this user
+          // or it no longer exists. Log data of a deleted component has to stay visible,
+          // therefore only hide the object while it is still part of the configuration.
+          return !this.objectConfigured(baseObject, objectKey);
         }
         return true;
       };
