@@ -78,6 +78,7 @@
           :current-nesting-depth="currentNestingDepth + 1"
           :show-priority="showPriority"
           :parent-priority="parentPriority ?? index + 1"
+          :group-name="resolvedGroupName"
           @delete-group="$emit('delete-group', $event)"
           @rename-group="$emit('rename-group', $event)"
         />
@@ -118,6 +119,10 @@ library.add(
   fasPlug,
   fasLink,
 );
+// each top level list gets its own SortableJS group name, otherwise items could be dragged
+// between unrelated lists (e.g. from the hierarchy into the priority list)
+let nextSortableGroupId = 0;
+
 export default {
   name: "OpenwbNestedList",
   components: {
@@ -134,12 +139,14 @@ export default {
     currentNestingDepth: { type: Number, default: 0 },
     showPriority: { type: Boolean, default: false },
     parentPriority: { type: Number, required: false, default: null },
+    groupName: { type: String, required: false, default: undefined },
   },
   emits: ["update:modelValue", "delete-group", "rename-group"],
   data() {
     return {
       editingGroupId: null,
       editingValue: "",
+      ownGroupName: `openwb-sortable-${++nextSortableGroupId}`,
     };
   },
   computed: {
@@ -151,18 +158,23 @@ export default {
         this.$emit("update:modelValue", val);
       },
     },
+    // nested lists inherit the name from their root, so items move within one list only
+    resolvedGroupName() {
+      return this.groupName ?? this.ownGroupName;
+    },
     dragGroup() {
       if (this.currentNestingDepth === 0) {
         return {
-          name: "g1",
+          name: this.resolvedGroupName,
           pull: true,
-          put: true,
+          put: [this.resolvedGroupName],
         };
       }
       return {
-        name: "g1",
+        name: this.resolvedGroupName,
         pull: true,
         put: (to, from, dragEl) => {
+          if (to.options.group.name !== from.options.group.name) return false;
           const draggedItem = dragEl?.__draggable_context?.element;
           if (!draggedItem) return true;
           return draggedItem.type !== "group";
