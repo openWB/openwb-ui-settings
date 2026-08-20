@@ -1,9 +1,14 @@
 <template>
-  <div class="device-solarbank_max_ac">
-    <openwb-base-heading> Einstellungen für Anker SOLIX Solarbank Max AC</openwb-base-heading>
+  <div class="device-solarbank">
+    <openwb-base-heading> Einstellungen für Anker SOLIX Solarbank</openwb-base-heading>
     <openwb-base-alert subtype="info">
       Es muss in den Einstellungen die Option Modbus TCP aktiviert werden. Nicht alle Anker Produkte unterstützen dies
       bisher. Durch ein Firmware Update könnte diese Option zur Verfügung stehen.
+    </openwb-base-alert>
+    <openwb-base-alert subtype="info">
+      Aktuell werden die Anker SOLIX Solarbank 4 E5000 Pro und die Anker SOLIX Solarbank Max AC unterstützt.
+      Weitere Modelle könnten zukünftig unterstützt werden, sobald Anker die entsprechende Modbus-Schnittstelle
+      freigibt.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
@@ -35,7 +40,7 @@
 import DeviceConfigMixin from "../../DeviceConfigMixin.vue";
 
 export default {
-  name: "DeviceAnkerSolarbankMaxAc",
+  name: "DeviceAnkerSolarbank",
   mixins: [DeviceConfigMixin],
 };
 </script>
