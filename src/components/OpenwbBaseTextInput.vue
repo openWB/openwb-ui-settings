@@ -395,7 +395,7 @@ export default {
     },
     addDisabled: {
       get() {
-        return this.value === this.emptyValue;
+        return this.value === this.emptyValue || this.inputInvalid;
       },
     },
   },
