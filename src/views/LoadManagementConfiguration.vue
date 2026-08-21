@@ -286,6 +286,7 @@
             v-model="newGroupName"
             title="Gruppe hinzufügen"
             subtype="group"
+            :validator="validateGroupName"
             :empty-value="null"
             :add-button="true"
             @input:add="addLoadManagementPriorityGroup"
@@ -553,6 +554,13 @@ export default {
     },
     isComponentType(componentType, verifier) {
       return componentType?.split("_").includes(verifier);
+    },
+    validateGroupName(value) {
+      return (
+        value &&
+        value.trim().length > 0 &&
+        !this.loadManagementPriorityList.some((item) => item.type === "group" && item.label === value.trim())
+      );
     },
     addLoadManagementPriorityGroup() {
       const label = this.newGroupName?.trim();
