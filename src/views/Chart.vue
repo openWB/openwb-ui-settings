@@ -1188,33 +1188,60 @@ export default {
       }
       return undefined;
     },
+    /**
+     * Collects every object and measurement that occurs anywhere in the chart data.
+     * Components can be added or removed while a period is still being logged, so the
+     * last entry alone does not necessarily contain all objects of the period.
+     *
+     * @returns {Object} - base object -> object key -> set of measurement keys, both
+     *                     in order of their first appearance in the data.
+     */
+    chartDataStructure() {
+      const structure = {};
+      if (!this.chartDataObject) {
+        return structure;
+      }
+      baseObjectsToProcess.forEach((baseObject) => {
+        const objects = {};
+        this.chartDataObject.forEach((entry) => {
+          if (!Object.prototype.hasOwnProperty.call(entry, baseObject)) {
+            return;
+          }
+          Object.entries(entry[baseObject]).forEach(([objectKey, measurements]) => {
+            if (objects[objectKey] === undefined) {
+              objects[objectKey] = new Set();
+            }
+            Object.keys(measurements).forEach((measurementKey) => {
+              objects[objectKey].add(measurementKey);
+            });
+          });
+        });
+        if (Object.keys(objects).length > 0) {
+          structure[baseObject] = objects;
+        }
+      });
+      return structure;
+    },
     chartData() {
       if (this.chartDataObject) {
-        const lastElement = this.chartDataObject[this.chartDataObject.length - 1];
-        if (lastElement) {
-          baseObjectsToProcess.forEach((baseObject) => {
-            if (Object.prototype.hasOwnProperty.call(lastElement, baseObject)) {
-              if (Object.prototype.hasOwnProperty.call(lastElement[baseObject], "all")) {
-                // remove "all" key if we only have one component of type "bat" or "pv"
-                if (["bat", "pv"].includes(baseObject) && Object.keys(lastElement[baseObject]).length <= 2) {
-                  delete lastElement[baseObject].all;
-                } else {
-                  // move "all" key to the beginning
-                  lastElement[baseObject] = {
-                    all: lastElement[baseObject].all,
-                    ...lastElement[baseObject],
-                  };
-                }
-              }
-              // add all datasets available in the last entry
-              Object.entries(lastElement[baseObject]).forEach(([key, value]) => {
-                Object.keys(value).forEach((entryKey) => {
-                  this.initDataset(baseObject, key, entryKey);
-                });
-              });
+        Object.entries(this.chartDataStructure).forEach(([baseObject, objects]) => {
+          let objectKeys = Object.keys(objects);
+          if (objectKeys.includes("all")) {
+            // remove "all" key if we only have one component of type "bat" or "pv"
+            if (["bat", "pv"].includes(baseObject) && objectKeys.length <= 2) {
+              objectKeys = objectKeys.filter((objectKey) => objectKey !== "all");
+            } else {
+              // move "all" key to the beginning
+              objectKeys = ["all", ...objectKeys.filter((objectKey) => objectKey !== "all")];
             }
+          }
+          // add all datasets available in the period, not only those of the last entry
+          objectKeys.forEach((objectKey) => {
+            objects[objectKey].forEach((measurementKey) => {
+              this.initDataset(baseObject, objectKey, measurementKey);
+            });
           });
-        }
+        });
         return this.chartDatasets;
       }
       return undefined;
