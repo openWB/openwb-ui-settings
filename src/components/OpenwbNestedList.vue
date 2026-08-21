@@ -273,7 +273,7 @@ export default {
   min-height: 40px;
   color: #e9ecef;
   list-style-type: none;
-  border: 1px solid var(--secondary);
+  border: 1px solid #ced4da;
   border-radius: 3px;
   padding: 0px;
 }

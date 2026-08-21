@@ -11,26 +11,31 @@
     >
       <slot name="help" />
     </template>
-    <div
-      v-if="showPriority && value !== undefined"
-      class="priority-arrow"
-    >
-      <span class="priority-arrow-head" />
-      <span class="priority-arrow-shaft" />
+    <div class="input-group">
+      <div
+        v-if="showPriority && value !== undefined"
+        class="input-group-prepend"
+      >
+        <div class="input-group-text priority-arrow">
+          <span class="priority-arrow-head" />
+          <span class="priority-arrow-shaft" />
+        </div>
+      </div>
+      <openwb-nested-list
+        v-if="value !== undefined"
+        v-model="value"
+        class="form-control variable-height"
+        :labels="labels"
+        :linked-meters="linkedMeters"
+        :hidden-ids="hiddenIds"
+        :nesting="nesting"
+        :max-nesting-depth="maxNestingDepth"
+        :show-priority="showPriority"
+        @delete-group="$emit('delete-group', $event)"
+        @rename-group="$emit('rename-group', $event)"
+      />
+      <div v-else>Warte auf Daten...</div>
     </div>
-    <openwb-nested-list
-      v-if="value !== undefined"
-      v-model="value"
-      :labels="labels"
-      :linked-meters="linkedMeters"
-      :hidden-ids="hiddenIds"
-      :nesting="nesting"
-      :max-nesting-depth="maxNestingDepth"
-      :show-priority="showPriority"
-      @delete-group="$emit('delete-group', $event)"
-      @rename-group="$emit('rename-group', $event)"
-    />
-    <div v-else>Warte auf Daten...</div>
   </openwb-base-setting-element>
 </template>
 
@@ -70,20 +75,23 @@ export default {
 </script>
 
 <style scoped>
+.form-control.variable-height {
+  height: auto;
+}
+
 .priority-arrow {
   display: flex;
   flex: 0 0 22px;
   flex-direction: column;
   align-items: center;
-  margin: 6px 8px 6px 0;
 }
 
 .priority-arrow-head {
   width: 0;
   height: 0;
-  border-right: 11px solid transparent;
+  border-right: 10px solid transparent;
   border-bottom: 13px solid var(--success);
-  border-left: 11px solid transparent;
+  border-left: 10px solid transparent;
 }
 
 .priority-arrow-shaft {
