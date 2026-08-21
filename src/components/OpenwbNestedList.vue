@@ -15,10 +15,10 @@
         >
           <span>
             <span
-              v-if="showPriority"
+              v-if="showPriority && currentNestingDepth === 0"
               class="badge badge-pill badge-light mr-1"
             >
-              {{ parentPriority ?? index + 1 }}
+              {{ index + 1 }}
             </span>
             <font-awesome-icon
               class="handle"
@@ -77,7 +77,6 @@
           :max-nesting-depth="maxNestingDepth"
           :current-nesting-depth="currentNestingDepth + 1"
           :show-priority="showPriority"
-          :parent-priority="parentPriority ?? index + 1"
           :group-name="resolvedGroupName"
           @delete-group="$emit('delete-group', $event)"
           @rename-group="$emit('rename-group', $event)"
@@ -138,7 +137,6 @@ export default {
     maxNestingDepth: { type: Number, default: Infinity },
     currentNestingDepth: { type: Number, default: 0 },
     showPriority: { type: Boolean, default: false },
-    parentPriority: { type: Number, required: false, default: null },
     groupName: { type: String, required: false, default: undefined },
   },
   emits: ["update:modelValue", "delete-group", "rename-group"],
