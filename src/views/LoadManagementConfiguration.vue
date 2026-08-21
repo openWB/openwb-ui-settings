@@ -271,6 +271,7 @@
             :labels="loadManagementPriorityLabels"
             :nesting="true"
             :max-nesting-depth="1"
+            :show-priority="true"
             @delete-group="deleteLoadManagementPriorityGroup"
             @rename-group="renameLoadManagementPriorityGroup"
           >
@@ -285,6 +286,7 @@
             v-model="newGroupName"
             title="Gruppe hinzufügen"
             subtype="group"
+            :validator="validateGroupName"
             :empty-value="null"
             :add-button="true"
             @input:add="addLoadManagementPriorityGroup"
@@ -457,7 +459,7 @@ export default {
             switch (item.type) {
               case "group": {
                 if (item.label) {
-                  labels[item.id] = item.label;
+                  labels[`group-${item.id}`] = item.label;
                 }
                 if (Array.isArray(item.children)) {
                   processItems(item.children);
@@ -468,14 +470,14 @@ export default {
                 const vehicleId = String(item.id);
                 const name = this.$store.state.mqtt[`openWB/vehicle/${vehicleId}/name`];
                 if (name) {
-                  labels[item.id] = name;
+                  labels[`vehicle-${item.id}`] = name;
                 }
                 break;
               }
               case "consumer": {
                 const name = this.$store.state.mqtt[`openWB/consumer/${item.id}/module`]?.name;
                 if (name) {
-                  labels[item.id] = name;
+                  labels[`consumer-${item.id}`] = name;
                 }
                 break;
               }
@@ -553,11 +555,19 @@ export default {
     isComponentType(componentType, verifier) {
       return componentType?.split("_").includes(verifier);
     },
+    validateGroupName(value) {
+      return (
+        value &&
+        value.trim().length > 0 &&
+        !this.loadManagementPriorityList.some((item) => item.type === "group" && item.label === value.trim())
+      );
+    },
     addLoadManagementPriorityGroup() {
-      if (!this.newGroupName) return;
+      const label = this.newGroupName?.trim();
+      if (!label) return;
       const newGroup = {
         type: "group",
-        label: this.newGroupName,
+        label: label,
         id: `group-${Date.now()}`,
         children: [],
       };

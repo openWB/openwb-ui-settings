@@ -4,16 +4,22 @@
     class="dragArea w-100 mb-0"
     tag="ul"
     :group="dragGroup"
-    item-key="id"
+    :item-key="elementKey"
     handle=".handle"
   >
-    <template #item="{ element }">
+    <template #item="{ element, index }">
       <li v-show="!isHidden(element)">
         <div
           class="element-titel"
           :class="classes(element)"
         >
           <span>
+            <span
+              v-if="showPriority"
+              class="badge badge-pill badge-light mr-1"
+            >
+              {{ parentPriority ?? index + 1 }}
+            </span>
             <font-awesome-icon
               class="handle"
               :icon="['fas', nesting ? 'arrows-alt' : 'arrows-up-down']"
@@ -27,7 +33,7 @@
                 style="cursor: pointer"
                 @click="startEditing(element)"
               >
-                {{ getElementLabel(element.id) }}
+                {{ getElementLabel(element) }}
               </span>
             </span>
             <input
@@ -53,11 +59,11 @@
             />
           </span>
           <span
-            v-else-if="linkedMeterName(element.id)"
+            v-else-if="linkedMeterName(element)"
             class="element-linked-meter"
-            :title="linkedMeterName(element.id)"
+            :title="linkedMeterName(element)"
           >
-            <span class="linked-meter-name">{{ linkedMeterName(element.id) }}</span>
+            <span class="linked-meter-name">{{ linkedMeterName(element) }}</span>
             <font-awesome-icon :icon="['fas', 'link']" />
           </span>
         </div>
@@ -70,7 +76,11 @@
           :nesting="nesting"
           :max-nesting-depth="maxNestingDepth"
           :current-nesting-depth="currentNestingDepth + 1"
+          :show-priority="showPriority"
+          :parent-priority="parentPriority ?? index + 1"
+          :group-name="resolvedGroupName"
           @delete-group="$emit('delete-group', $event)"
+          @rename-group="$emit('rename-group', $event)"
         />
       </li>
     </template>
@@ -109,6 +119,10 @@ library.add(
   fasPlug,
   fasLink,
 );
+// each top level list gets its own SortableJS group name, otherwise items could be dragged
+// between unrelated lists (e.g. from the hierarchy into the priority list)
+let nextSortableGroupId = 0;
+
 export default {
   name: "OpenwbNestedList",
   components: {
@@ -123,12 +137,16 @@ export default {
     nesting: { type: Boolean, default: true },
     maxNestingDepth: { type: Number, default: Infinity },
     currentNestingDepth: { type: Number, default: 0 },
+    showPriority: { type: Boolean, default: false },
+    parentPriority: { type: Number, required: false, default: null },
+    groupName: { type: String, required: false, default: undefined },
   },
   emits: ["update:modelValue", "delete-group", "rename-group"],
   data() {
     return {
       editingGroupId: null,
       editingValue: "",
+      ownGroupName: `openwb-sortable-${++nextSortableGroupId}`,
     };
   },
   computed: {
@@ -140,18 +158,23 @@ export default {
         this.$emit("update:modelValue", val);
       },
     },
+    // nested lists inherit the name from their root, so items move within one list only
+    resolvedGroupName() {
+      return this.groupName ?? this.ownGroupName;
+    },
     dragGroup() {
       if (this.currentNestingDepth === 0) {
         return {
-          name: "g1",
+          name: this.resolvedGroupName,
           pull: true,
-          put: true,
+          put: [this.resolvedGroupName],
         };
       }
       return {
-        name: "g1",
+        name: this.resolvedGroupName,
         pull: true,
         put: (to, from, dragEl) => {
+          if (to.options.group.name !== from.options.group.name) return false;
           const draggedItem = dragEl?.__draggable_context?.element;
           if (!draggedItem) return true;
           return draggedItem.type !== "group";
@@ -175,14 +198,26 @@ export default {
       }
       return myClasses;
     },
-    getElementLabel(elementId) {
-      if (this.labels && elementId in this.labels) {
-        return this.labels[elementId];
-      }
-      return elementId;
+    // ids are only unique per type (a vehicle and a consumer may share an id), so maps are
+    // looked up by "<type>-<id>" first. Lists without such collisions may key by plain id.
+    elementKey(element) {
+      return element.type === undefined ? String(element.id) : `${element.type}-${element.id}`;
     },
-    linkedMeterName(elementId) {
-      return this.linkedMeters?.[elementId] ?? undefined;
+    lookupByElement(map, element) {
+      if (!map) {
+        return undefined;
+      }
+      const typedKey = this.elementKey(element);
+      if (typedKey in map) {
+        return map[typedKey];
+      }
+      return map[element.id];
+    },
+    getElementLabel(element) {
+      return this.lookupByElement(this.labels, element) ?? element.id;
+    },
+    linkedMeterName(element) {
+      return this.lookupByElement(this.linkedMeters, element) ?? undefined;
     },
     isHidden(element) {
       return element.type === "counter" && !!this.hiddenIds?.some((id) => String(id) === String(element.id));
@@ -238,7 +273,7 @@ export default {
   min-height: 40px;
   color: #e9ecef;
   list-style-type: none;
-  border: 1px solid var(--secondary);
+  border: 1px solid #ced4da;
   border-radius: 3px;
   padding: 0px;
 }
