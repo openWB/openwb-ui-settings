@@ -126,7 +126,7 @@ export default createStore({
       const setPath = (object, path, value) =>
         path.split(".").reduce((o, p, i) => (o[p] = path.split(".").length === i + 1 ? value : o[p] || {}), object);
 
-      if (message.topic in state.mqtt || !(message.topic in state.examples)) {
+      if (message.topic in state.mqtt || !state.examples || !(message.topic in state.examples)) {
         if (message.objectPath != undefined) {
           setPath(state.mqtt[message.topic], message.objectPath, message.payload);
         } else {
