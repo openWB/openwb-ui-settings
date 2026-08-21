@@ -140,17 +140,17 @@
               title="Im Hausverbrauch berücksichtigen?"
               :buttons="[
                 {
-                  buttonValue: true,
+                  buttonValue: 'home_consumption',
                   text: 'Ja',
                   class: 'btn-outline-success',
                 },
                 {
-                  buttonValue: 'auto',
+                  buttonValue: 'auto_home_consumption',
                   text: 'Automatisch',
                   class: 'btn-outline-info',
                 },
                 {
-                  buttonValue: false,
+                  buttonValue: 'no_home_consumption',
                   text: 'Nein',
                   class: 'btn-outline-danger',
                 },
@@ -435,31 +435,31 @@ export default {
       const counterModeValue = this.$store.state.mqtt[counterModeTopic];
       // Frontend default: solange kein Wert vorhanden ist, wird "Automatisch" vorausgewählt.
       if (counterModeValue === undefined || counterModeValue === null) {
-        return "auto";
+        return "auto_home_consumption";
       }
-      
-      if (counterModeValue === 0) {
-        return false;
+
+      if (counterModeValue === "home_consumption"){
+        return "home_consumption";
       }
-      else if (counterModeValue === 1) {
-        return true;
+      else if (counterModeValue === "no_home_consumption" ){
+        return "no_home_consumption";
       }
-      else {
-        return "auto";
+      else{
+        return "auto_home_consumption"
       }
     },
     setHomeConsumptionCounterMode(counterId, value) {
       const counterModeTopic = `openWB/counter/${counterId}/config/is_home_consumption_counter`;
-      if (value === true) {
-        this.updateState(counterModeTopic, 1);
+      if (value === "home_consumption") {
+        this.updateState(counterModeTopic, "home_consumption");
         return;
       }
-      else if (value === false) {
-        this.updateState(counterModeTopic, 0);
+      else if (value === "no_home_consumption") {
+        this.updateState(counterModeTopic, "no_home_consumption");
         return;
       }
 
-      this.updateState(counterModeTopic, 2);
+      this.updateState(counterModeTopic, "auto_home_consumption");
     },
   },
 };
