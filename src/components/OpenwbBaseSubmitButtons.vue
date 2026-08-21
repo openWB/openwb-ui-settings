@@ -110,7 +110,7 @@ export default {
   },
   computed: {
     showModalSave() {
-      return this.$store.state.local.savingData;
+      return this.$store.state.local.savingData && this.$store.state.local.preventSavingModal === false;
     },
   },
   methods: {

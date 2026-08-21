@@ -33,6 +33,7 @@ export default {
         component: "Komponenten",
         chargepoint: "Ladepunkte",
         vehicle: "Fahrzeuge",
+        consumer: "Verbraucher",
       },
     };
   },
