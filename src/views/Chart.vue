@@ -1348,7 +1348,11 @@ export default {
           // With the user management enabled a missing topic is ambiguous: the acl role of a
           // deleted component is removed as well, so we can no longer tell an inaccessible
           // component from a deleted one. In that case we keep the restrictive behavior.
-          if (this.$store.state.mqtt["openWB/system/security/user_management_active"] === true) {
+          // An unknown state is treated as enabled: the flag and the hierarchy are separate
+          // retained topics, so the hierarchy can arrive first and we must not show log data
+          // of deleted components in that window.
+          const userManagementActive = this.$store.state.mqtt["openWB/system/security/user_management_active"];
+          if (userManagementActive !== false) {
             return false;
           }
           return !this.objectConfigured(baseObject, objectKey);
