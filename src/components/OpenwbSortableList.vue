@@ -17,8 +17,8 @@
         class="input-group-prepend"
       >
         <div class="input-group-text priority-arrow">
-          <span class="priority-arrow-head" />
           <span class="priority-arrow-shaft" />
+          <span class="priority-arrow-head" />
         </div>
       </div>
       <openwb-nested-list
@@ -90,14 +90,14 @@ export default {
   width: 0;
   height: 0;
   border-right: 10px solid transparent;
-  border-bottom: 13px solid var(--success);
+  border-top: 13px solid var(--dark);
   border-left: 10px solid transparent;
 }
 
 .priority-arrow-shaft {
   width: 100%;
-  clip-path: polygon(34% 0, 66% 0, 84% 100%, 16% 100%);
-  background: linear-gradient(to bottom, var(--success), var(--warning), var(--danger));
+  clip-path: polygon(16% 0, 84% 0, 66% 100%, 34% 100%);
+  background: var(--dark);
   flex: 1 1 auto;
 }
 
