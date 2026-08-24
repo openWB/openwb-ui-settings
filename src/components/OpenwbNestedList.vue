@@ -18,7 +18,7 @@
               v-if="showPriority && currentNestingDepth === 0"
               class="badge badge-pill badge-light mr-1"
             >
-              {{ index + 1 }}
+              <span class="priority-prefix">Prio&nbsp;</span>{{ index + 1 }}
             </span>
             <font-awesome-icon
               class="handle"
@@ -371,6 +371,7 @@ export default {
 }
 
 @media (max-width: 575.98px) {
+  .priority-prefix,
   .linked-meter-name {
     display: none;
   }
