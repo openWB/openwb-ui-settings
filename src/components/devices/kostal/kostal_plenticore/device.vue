@@ -4,6 +4,8 @@
     <openwb-base-alert subtype="info">
       Wenn am Kostal Plenticore-Wechselrichter ein EM300 oder Kostal Smart Energy Meter (KSEM) angeschlossen ist, muss
       eine Zähler-und eine Wechselrichter-Komponente angelegt werden.
+      Die Endianess muss in der Nutzeroberfläche des Kostal Plenticore auf 
+      Little Endian eingestellt sein (Standardeinstellung).
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
