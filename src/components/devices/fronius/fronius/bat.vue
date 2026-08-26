@@ -16,7 +16,7 @@
       @update:model-value="updateConfiguration($event, 'configuration.username')"
     >
       <template #help>
-        Für die aktive Speichersteuerung sind Nutzername und Passwort des Installateurszugangs erforderlich.
+        Für die aktive Speichersteuerung sind Nutzername und Passwort des Installateurzugangs erforderlich.
       </template>
     </openwb-base-text-input>
     <openwb-base-text-input
@@ -27,7 +27,7 @@
       @update:model-value="updateConfiguration($event, 'configuration.password')"
     >
       <template #help>
-        Für die aktive Speichersteuerung sind Nutzername und Passwort des Installateurszugangs erforderlich.
+        Für die aktive Speichersteuerung sind Nutzername und Passwort des Installateurzugangs erforderlich.
       </template>
     </openwb-base-text-input>
   </div>
