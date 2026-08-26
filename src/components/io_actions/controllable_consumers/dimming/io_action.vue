@@ -33,8 +33,9 @@
       berücksichtigt und zusätzlich genutzt.<br />
       Zugeordnete digitale Ausgänge werden im nicht gedimmten Zustand aktiviert und im gedimmten Zustand deaktiviert. So
       ist sichergestellt, dass bei einem Verbindungsabbruch oder einem Ausfall der Steuerung die Verbraucher nicht
-      ungewollt mit voller Leistung betrieben werden. Ein mit "NO" bezeichneter digitaler Ausgang ist also für den nicht
-      gedimmten Zustand geschlossen und bei aktivierter Dimmung geöffnet.
+      ungewollt mit voller Leistung betrieben werden. An den digitalen Ausgängen gibt es Anschlussmöglichkeiten für
+      Normalzustand offen ("NO") und Normalzustand geschlossen ("NC"). Ein mit "NO" bezeichneter digitaler Ausgang ist
+      also für den nicht gedimmten Zustand geschlossen und bei aktivierter Dimmung geöffnet.
     </template>
   </openwb-base-select-input>
 </template>
