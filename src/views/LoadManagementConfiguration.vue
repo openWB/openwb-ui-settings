@@ -67,7 +67,7 @@
               Meist ist der Zähler am EVU-Punkt installiert, dann muss hier 'von openWB berechnen' ausgewählt werden.
               Wenn der Zähler im Hausverbrauchszweig installiert ist, die Struktur wie im
               <a
-                href="https://github.com/openWB/core/wiki/Hausverbrauchs-Zähler"
+                :href="`https://wiki.openwb.de/doku.php?id=openwb:vc:${systemVersion}:software:einstell-konfig:konfiguration:hausverbrauch`"
                 target="_blank"
                 rel="noopener noreferrer"
               >

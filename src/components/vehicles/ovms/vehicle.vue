@@ -3,7 +3,7 @@
     <openwb-base-alert subtype="info">
       Beschreibung der Konfiguration und weitere Hinweise im Wiki:
       <a
-        href="https://github.com/openWB/core/wiki/SoC-OVMS"
+        :href="`https://wiki.openwb.de/doku.php?id=openwb:vc:${systemVersion}:software:fahrzeug-infos:ovms`"
         target="_blank"
         rel="noopener noreferrer"
         >Wiki für SoC-Modul OVMS</a
