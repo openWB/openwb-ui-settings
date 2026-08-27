@@ -57,6 +57,11 @@ import VehicleConfigMixin from "../VehicleConfigMixin.vue";
 
 export default {
   name: "VehicleSocOVMS",
-  mixins: [VehicleConfigMixin],
+import VehicleConfigMixin from "../VehicleConfigMixin.vue";
+import SystemVersion from "../../mixins/SystemVersion.vue";
+
+export default {
+  name: "VehicleSocOVMS",
+  mixins: [VehicleConfigMixin, SystemVersion],
 };
 </script>

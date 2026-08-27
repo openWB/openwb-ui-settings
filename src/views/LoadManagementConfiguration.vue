@@ -284,6 +284,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasSolarPanel, fasGaugeHigh);
 
 import ComponentState from "../components/mixins/ComponentState.vue";
+import SystemVersion from "../components/mixins/SystemVersion.vue";
 import SortableList from "../components/OpenwbSortableList.vue";
 
 export default {
@@ -292,7 +293,7 @@ export default {
     SortableList,
     FontAwesomeIcon,
   },
-  mixins: [ComponentState],
+  mixins: [ComponentState, SystemVersion],
   props: {
     installAssistantActive: {
       type: Boolean,
