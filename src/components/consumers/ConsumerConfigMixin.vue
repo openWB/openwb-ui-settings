@@ -1,7 +1,7 @@
 <script>
 export default {
   props: {
-    device: { type: Object, required: true },
+    consumer: { type: Object, required: true },
   },
   emits: ["update:configuration"],
   methods: {

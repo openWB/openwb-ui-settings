@@ -91,7 +91,7 @@
             <hr />
 
             <openwb-consumer-config-proxy
-              :device="installedConsumer"
+              :consumer="installedConsumer"
               @update:configuration="consumerDeviceConfiguration(installedConsumer, $event)"
             />
             <hr />
@@ -629,11 +629,7 @@
 
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faPlug as fasPlug,
-  faPlus as fasPlus,
-  faTrash as fasTrash,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPlug as fasPlug, faPlus as fasPlus, faTrash as fasTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasPlug, fasPlus, fasTrash);
