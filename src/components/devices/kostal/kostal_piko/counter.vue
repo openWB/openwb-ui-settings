@@ -15,10 +15,6 @@
 
 <script>
 import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
-
-export default {
-  name: "DeviceKostalPikoCounter",
-import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
 import SystemVersion from "../../../mixins/SystemVersion.vue";
 
 export default {

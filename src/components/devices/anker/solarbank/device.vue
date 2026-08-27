@@ -6,9 +6,8 @@
       bisher. Durch ein Firmware Update könnte diese Option zur Verfügung stehen.
     </openwb-base-alert>
     <openwb-base-alert subtype="info">
-      Aktuell werden die Anker SOLIX Solarbank 4 E5000 Pro und die Anker SOLIX Solarbank Max AC unterstützt.
-      Weitere Modelle könnten zukünftig unterstützt werden, sobald Anker die entsprechende Modbus-Schnittstelle
-      freigibt.
+      Aktuell werden die Anker SOLIX Solarbank 4 E5000 Pro und die Anker SOLIX Solarbank Max AC unterstützt. Weitere
+      Modelle könnten zukünftig unterstützt werden, sobald Anker die entsprechende Modbus-Schnittstelle freigibt.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
