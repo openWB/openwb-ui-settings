@@ -56,27 +56,6 @@
               </p>
             </template>
           </openwb-base-button-group-input>
-          <openwb-base-select-input
-            title="Hausverbrauch"
-            :options="getHcSourceIdOptions.options"
-            :groups="getHcSourceIdOptions.groups"
-            :model-value="$store.state.mqtt['openWB/counter/config/home_consumption_source_id']"
-            @update:model-value="updateState('openWB/counter/config/home_consumption_source_id', $event)"
-          >
-            <template #help>
-              Meist ist der Zähler am EVU-Punkt installiert, dann muss hier 'von openWB berechnen' ausgewählt werden.
-              Wenn der Zähler im Hausverbrauchszweig installiert ist, die Struktur wie im
-              <a
-                href="https://github.com/openWB/core/wiki/Hausverbrauchs-Zähler"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Wiki
-              </a>
-              beschrieben anordnen und hier den Hausverbrauchszähler auswählen. Dann wird dieser Wert abzüglich der
-              Ladeleistung als Hausverbrauch erfasst.
-            </template>
-          </openwb-base-select-input>
           <openwb-base-heading> Vorhandene Zählermodule </openwb-base-heading>
           <openwb-base-alert subtype="info">
             Die maximale Leistung wird nur für den EVU-Zähler berücksichtigt. Bei Zwischenzählern begrenzt das
@@ -165,6 +144,45 @@
                 Angenommen Leistung für diesen (Zwischen-)Zähler, falls vom Zähler keine Werte abgefragt werden können.
               </template>
             </openwb-base-number-input>
+            <openwb-base-button-group-input
+              title="Im Hausverbrauch berücksichtigen?"
+              :buttons="[
+                {
+                  buttonValue: 'home_consumption',
+                  text: 'Ja',
+                  class: 'btn-outline-success',
+                },
+                {
+                  buttonValue: 'auto_home_consumption',
+                  text: 'Automatisch',
+                  class: 'btn-outline-info',
+                },
+                {
+                  buttonValue: 'no_home_consumption',
+                  text: 'Nein',
+                  class: 'btn-outline-danger',
+                },
+              ]"
+              :model-value="getHomeConsumptionCounterMode(counter.id)"
+              @update:model-value="
+                setHomeConsumptionCounterMode(counter.id, $event)
+              "
+            >
+              <template #help>               
+                Mit dieser Einstellung legen Sie fest, ob ein Zähler in die Hausverbrauchsberechnung einfließt. <br>
+                Ja: Der lokale Verbrauch dieses Zählers wird als Hausverbrauch berücksichtigt. <br>
+                Nein: Der Zähler wird nicht als Hausverbrauch berücksichtigt. <br>
+                Automatisch: Der Zähler übernimmt die Einstellung des übergeordneten Zählers. <br>
+
+                Der Hausverbrauch entspricht dem Verbrauch am jeweiligen Zähler abzüglich der Leistungen von Batterien, Ladepunkten, Wechselrichtern und Unterzählern.
+                "Automatisch" ist die Standardeinstellung und eignet sich, wenn die Einstellung für mehrere Zähler übernommen werden soll.
+
+                Wichtig: Wenn alle Zähler auf "Automatisch" stehen, wird die Einstellung entlang der Zählerhierarchie weitervererbt. 
+                Für den obersten Zähler wird "Automatisch" wie "Nein" behandelt. Dadurch wird zunächst kein Hausverbrauch erfasst.
+                Daher muss mindestens ein relevanter Zähler explizit auf "Ja" gesetzt werden, damit der Hausverbrauch erfasst wird.
+
+              </template>
+            </openwb-base-button-group-input>
           </openwb-base-card>
           <openwb-base-heading> Vorhandene Wechselrichtermodule </openwb-base-heading>
           <openwb-base-card
@@ -306,11 +324,11 @@ export default {
       mqttTopics: [
         { topic: "openWB/bat/+/config/max_power", writeable: true },
         { topic: "openWB/chargepoint/+/config", writeable: false },
+        { topic: "openWB/counter/+/config/is_home_consumption_counter", writeable: true },
         { topic: "openWB/counter/+/config/max_currents", writeable: true },
         { topic: "openWB/counter/+/config/max_power_errorcase", writeable: true },
         { topic: "openWB/counter/+/config/max_total_power", writeable: true },
         { topic: "openWB/counter/config/consider_less_charging", writeable: true },
-        { topic: "openWB/counter/config/home_consumption_source_id", writeable: true },
         { topic: "openWB/counter/get/hierarchy", writeable: true },
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/pv/+/config/max_ac_out", writeable: true },
@@ -435,6 +453,37 @@ export default {
     },
     isComponentType(componentType, verifier) {
       return componentType?.split("_").includes(verifier);
+    },
+    getHomeConsumptionCounterMode(counterId) {
+      const counterModeTopic = `openWB/counter/${counterId}/config/is_home_consumption_counter`;
+      const counterModeValue = this.$store.state.mqtt[counterModeTopic];
+      // Frontend default: solange kein Wert vorhanden ist, wird "Automatisch" vorausgewählt.
+      if (counterModeValue === undefined || counterModeValue === null) {
+        return "auto_home_consumption";
+      }
+
+      if (counterModeValue === "home_consumption"){
+        return "home_consumption";
+      }
+      else if (counterModeValue === "no_home_consumption" ){
+        return "no_home_consumption";
+      }
+      else{
+        return "auto_home_consumption"
+      }
+    },
+    setHomeConsumptionCounterMode(counterId, value) {
+      const counterModeTopic = `openWB/counter/${counterId}/config/is_home_consumption_counter`;
+      if (value === "home_consumption") {
+        this.updateState(counterModeTopic, "home_consumption");
+        return;
+      }
+      else if (value === "no_home_consumption") {
+        this.updateState(counterModeTopic, "no_home_consumption");
+        return;
+      }
+
+      this.updateState(counterModeTopic, "auto_home_consumption");
     },
   },
 };
