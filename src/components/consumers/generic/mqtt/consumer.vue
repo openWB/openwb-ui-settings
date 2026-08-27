@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import ConsumerDeviceConfigMixin from "../../ConsumerDeviceConfigMixin.vue";
+import ConsumerDeviceConfigMixin from "../../ConsumerConfigMixin.vue";
 
 export default {
   name: "ConsumerGenericMqtt",
