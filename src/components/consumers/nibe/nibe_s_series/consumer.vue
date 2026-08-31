@@ -1,17 +1,17 @@
 <template>
-  <div class="device-nibe">
+  <div class="consumer-nibe">
     <openwb-base-heading>Einstellungen für Nibe S-Series Wärmepumpe</openwb-base-heading>
     <openwb-base-text-input
       title="IP oder Hostname"
       subtype="host"
       required
-      :model-value="device.configuration.ip_address"
+      :model-value="consumer.configuration.ip_address"
       @update:model-value="updateConfiguration($event, 'configuration.ip_address')"
     />
     <openwb-base-number-input
       title="Modbus ID"
       required
-      :model-value="device.configuration.modbus_id"
+      :model-value="consumer.configuration.modbus_id"
       min="1"
       max="255"
       @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
@@ -20,10 +20,10 @@
 </template>
 
 <script>
-import ConsumerDeviceConfigMixin from "../../ConsumerDeviceConfigMixin.vue";
+import ConsumerConfigMixin from "../../ConsumerConfigMixin.vue";
 
 export default {
   name: "ConsumerNibeSSeries",
-  mixins: [ConsumerDeviceConfigMixin],
+  mixins: [ConsumerConfigMixin],
 };
 </script>
