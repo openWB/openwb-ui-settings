@@ -182,6 +182,16 @@ import { markRaw, toRaw } from "vue";
 // list of keys in the chart data that contain objects with measurement values that should be included
 const baseObjectsToProcess = ["pv", "counter", "bat", "cp", "sh", "ev", "hc"];
 
+// maps the base objects above to the component type used in the counter hierarchy.
+// only these can be checked against the current configuration; there is no
+// unrestricted topic listing the configured vehicles or smart home devices.
+const hierarchyTypes = {
+  counter: "counter",
+  pv: "inverter",
+  bat: "bat",
+  cp: "cp",
+};
+
 const datasetTemplates = {
   "counter-power_average": {
     label: "Zähler",
@@ -804,6 +814,7 @@ export default {
         { topic: "openWB/chargepoint/+/config", writeable: false },
         { topic: "openWB/chargepoint/get/power", writeable: false },
         { topic: "openWB/counter/+/get/power", writeable: false },
+        { topic: "openWB/counter/get/hierarchy", writeable: false },
         { topic: "openWB/counter/set/home_consumption", writeable: false },
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/log/daily/#", writeable: false },
@@ -812,6 +823,7 @@ export default {
         { topic: "openWB/pv/+/get/power", writeable: false },
         { topic: "openWB/pv/get/power", writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
+        { topic: "openWB/system/security/user_management_active", writeable: false },
         { topic: "openWB/vehicle/+/info", writeable: false },
         { topic: "openWB/vehicle/+/name", writeable: false },
       ],
@@ -1176,36 +1188,109 @@ export default {
       }
       return undefined;
     },
+    /**
+     * Collects every object and measurement that occurs anywhere in the chart data.
+     * Components can be added or removed while a period is still being logged, so the
+     * last entry alone does not necessarily contain all objects of the period.
+     *
+     * @returns {Object} - base object -> object key -> set of measurement keys, both
+     *                     in order of their first appearance in the data.
+     */
+    chartDataStructure() {
+      const structure = {};
+      if (!this.chartDataObject) {
+        return structure;
+      }
+      baseObjectsToProcess.forEach((baseObject) => {
+        const objects = {};
+        this.chartDataObject.forEach((entry) => {
+          if (!Object.prototype.hasOwnProperty.call(entry, baseObject)) {
+            return;
+          }
+          Object.entries(entry[baseObject]).forEach(([objectKey, measurements]) => {
+            if (objects[objectKey] === undefined) {
+              objects[objectKey] = new Set();
+            }
+            Object.keys(measurements).forEach((measurementKey) => {
+              objects[objectKey].add(measurementKey);
+            });
+          });
+        });
+        if (Object.keys(objects).length > 0) {
+          structure[baseObject] = objects;
+        }
+      });
+      return structure;
+    },
     chartData() {
       if (this.chartDataObject) {
-        const lastElement = this.chartDataObject[this.chartDataObject.length - 1];
-        if (lastElement) {
-          baseObjectsToProcess.forEach((baseObject) => {
-            if (Object.prototype.hasOwnProperty.call(lastElement, baseObject)) {
-              if (Object.prototype.hasOwnProperty.call(lastElement[baseObject], "all")) {
-                // remove "all" key if we only have one component of type "bat" or "pv"
-                if (["bat", "pv"].includes(baseObject) && Object.keys(lastElement[baseObject]).length <= 2) {
-                  delete lastElement[baseObject].all;
-                } else {
-                  // move "all" key to the beginning
-                  lastElement[baseObject] = {
-                    all: lastElement[baseObject].all,
-                    ...lastElement[baseObject],
-                  };
-                }
-              }
-              // add all datasets available in the last entry
-              Object.entries(lastElement[baseObject]).forEach(([key, value]) => {
-                Object.keys(value).forEach((entryKey) => {
-                  this.initDataset(baseObject, key, entryKey);
-                });
-              });
+        Object.entries(this.chartDataStructure).forEach(([baseObject, objects]) => {
+          let objectKeys = Object.keys(objects);
+          if (objectKeys.includes("all")) {
+            // remove "all" key if we only have one component of type "bat" or "pv"
+            if (["bat", "pv"].includes(baseObject) && objectKeys.length <= 2) {
+              objectKeys = objectKeys.filter((objectKey) => objectKey !== "all");
+            } else {
+              // move "all" key to the beginning
+              objectKeys = ["all", ...objectKeys.filter((objectKey) => objectKey !== "all")];
             }
+          }
+          // add all datasets available in the period, not only those of the last entry
+          objectKeys.forEach((objectKey) => {
+            objects[objectKey].forEach((measurementKey) => {
+              this.initDataset(baseObject, objectKey, measurementKey);
+            });
           });
-        }
+        });
         return this.chartDatasets;
       }
       return undefined;
+    },
+    /**
+     * Collects the components currently placed in the counter hierarchy as a set of
+     * "<type><id>" keys, e.g. "counter0", "inverter1", "bat2", "cp3".
+     *
+     * @returns {Set<string>|undefined}
+     */
+    configuredComponents() {
+      const hierarchy = this.$store.state.mqtt["openWB/counter/get/hierarchy"];
+      if (!Array.isArray(hierarchy)) {
+        return undefined;
+      }
+      const components = new Set();
+      const collect = (elements) => {
+        if (!Array.isArray(elements)) {
+          return;
+        }
+        elements.forEach((element) => {
+          components.add(`${element.type}${element.id}`);
+          collect(element.children);
+        });
+      };
+      collect(hierarchy);
+      return components;
+    },
+    /**
+     * Checks whether an object of the log data still exists in the current configuration.
+     * Objects that cannot be checked against the hierarchy are assumed to still exist.
+     *
+     * @param {string} baseObject - The base object of the dataset.
+     * @param {string} objectKey - The object key of the dataset.
+     * @returns {boolean} - True if the object is still configured.
+     */
+    objectConfigured() {
+      return (baseObject, objectKey) => {
+        if (this.configuredComponents === undefined) {
+          return true;
+        }
+        const hierarchyType = hierarchyTypes[baseObject];
+        const id = parseInt(objectKey.match(/\d+$/)?.[0] || "");
+        if (hierarchyType === undefined || isNaN(id)) {
+          // totals ("all"), home consumption, vehicles and smart home devices
+          return true;
+        }
+        return this.configuredComponents.has(`${hierarchyType}${id}`);
+      };
     },
     objectAccessible() {
       return (baseObject, objectKey) => {
@@ -1254,7 +1339,23 @@ export default {
             break;
         }
         if (validationTopic) {
-          return this.$store.state.mqtt[validationTopic] !== undefined;
+          if (this.$store.state.mqtt[validationTopic] !== undefined) {
+            return true;
+          }
+          // The topic is missing, so the object is either not accessible for this user
+          // or it no longer exists. Log data of a deleted component has to stay visible,
+          // therefore only hide the object while it is still part of the configuration.
+          // With the user management enabled a missing topic is ambiguous: the acl role of a
+          // deleted component is removed as well, so we can no longer tell an inaccessible
+          // component from a deleted one. In that case we keep the restrictive behavior.
+          // An unknown state is treated as enabled: the flag and the hierarchy are separate
+          // retained topics, so the hierarchy can arrive first and we must not show log data
+          // of deleted components in that window.
+          const userManagementActive = this.$store.state.mqtt["openWB/system/security/user_management_active"];
+          if (userManagementActive !== false) {
+            return false;
+          }
+          return !this.objectConfigured(baseObject, objectKey);
         }
         return true;
       };
