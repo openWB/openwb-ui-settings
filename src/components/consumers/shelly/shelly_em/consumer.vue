@@ -1,5 +1,5 @@
 <template>
-  <div class="device-shelly">
+  <div class="consumer-shelly-em">
     <openwb-base-heading> Einstellungen für Shelly EM (Messen) </openwb-base-heading>
     <openwb-base-alert subtype="info">
       Unterstützt werden theoretisch alle ein- und dreiphasigen Shelly der Generation 1-3. Getestete Modelle sind Shelly
@@ -9,14 +9,14 @@
       title="IP oder Hostname"
       subtype="host"
       required
-      :model-value="device.configuration.ip_address"
+      :model-value="consumer.configuration.ip_address"
       @update:model-value="updateConfiguration($event, 'configuration.ip_address')"
     />
     <openwb-base-text-input
       title="Benutzername"
       subtype="user"
       required
-      :model-value="device.configuration.username"
+      :model-value="consumer.configuration.username"
       @update:model-value="updateConfiguration($event, 'configuration.username')"
     >
       <template #help>
@@ -28,7 +28,7 @@
       title="Passwort"
       subtype="password"
       required
-      :model-value="device.configuration.password"
+      :model-value="consumer.configuration.password"
       @update:model-value="updateConfiguration($event, 'configuration.password')"
     >
       <template #help>
@@ -41,7 +41,7 @@
       required
       :min="1"
       :max="3"
-      :model-value="device.configuration.phase"
+      :model-value="consumer.configuration.phase"
       @update:model-value="updateConfiguration($event, 'configuration.phase')"
     >
     </openwb-base-number-input>
@@ -49,7 +49,7 @@
       title="Faktor"
       required
       step="any"
-      :model-value="device.configuration.factor"
+      :model-value="consumer.configuration.factor"
       @update:model-value="updateConfiguration($event, 'configuration.factor')"
     >
     </openwb-base-number-input>
@@ -57,10 +57,10 @@
 </template>
 
 <script>
-import ConsumerDeviceConfigMixin from "../../ConsumerDeviceConfigMixin.vue";
+import ConsumerConfigMixin from "../../ConsumerConfigMixin.vue";
 
 export default {
   name: "ConsumerShellyEm",
-  mixins: [ConsumerDeviceConfigMixin],
+  mixins: [ConsumerConfigMixin],
 };
 </script>
