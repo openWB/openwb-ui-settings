@@ -139,10 +139,11 @@ import {
   faGaugeHigh as fasGaugeHigh,
   faHouseSignal as fasHouseSignal,
   faHouse as fasHouse,
+  faPlug as fasPlug,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasChargingStation, fasCarBattery, fasSolarPanel, fasGaugeHigh, fasHouseSignal, fasHouse);
+library.add(fasChargingStation, fasCarBattery, fasSolarPanel, fasGaugeHigh, fasHouseSignal, fasHouse, fasPlug);
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 
@@ -180,7 +181,7 @@ import ChartLegend from "../components/chart/ChartLegend.vue";
 import { markRaw, toRaw } from "vue";
 
 // list of keys in the chart data that contain objects with measurement values that should be included
-const baseObjectsToProcess = ["pv", "counter", "bat", "cp", "sh", "ev", "hc"];
+const baseObjectsToProcess = ["pv", "counter", "bat", "cp", "consumer", "sh", "ev", "hc"];
 
 const datasetTemplates = {
   "counter-power_average": {
@@ -452,7 +453,7 @@ const datasetTemplates = {
     category: "chargepoint",
     unit: "kW",
     jsonKey: null,
-    borderColor: "#0000ff4c",
+    borderColor: "#00539c",
     backgroundColor: "#0000ff4c",
     fill: true,
     pointStyle: "circle",
@@ -474,7 +475,7 @@ const datasetTemplates = {
     category: "chargepoint",
     unit: "kWh",
     jsonKey: null,
-    borderColor: "#0000ff4c",
+    borderColor: "#00539c",
     backgroundColor: "#0000ff4c",
     fill: true,
     pointStyle: "circle",
@@ -555,6 +556,141 @@ const datasetTemplates = {
     data: null,
     yAxisID: "y2",
     stack: "charge-point-imported-source",
+    parsing: {
+      xAxisKey: "timestamp",
+      yAxisKey: null,
+    },
+  },
+  "consumer-power_average": {
+    label: "Verbraucher",
+    category: "consumer",
+    unit: "kW",
+    jsonKey: null,
+    borderColor: "#6f42c1b2",
+    backgroundColor: "#6f42c14c",
+    fill: true,
+    pointStyle: "circle",
+    pointRadius: 0,
+    pointHoverRadius: 4,
+    cubicInterpolationMode: "monotone",
+    hidden: true,
+    borderWidth: 1,
+    data: null,
+    yAxisID: "y",
+    stack: "consumer-power",
+    parsing: {
+      xAxisKey: "timestamp",
+      yAxisKey: null,
+    },
+  },
+  "consumer-energy_imported": {
+    label: "Verbraucher",
+    category: "consumer",
+    unit: "kWh",
+    jsonKey: null,
+    borderColor: "#6f42c1b2",
+    backgroundColor: "#6f42c14c",
+    fill: true,
+    pointStyle: "circle",
+    pointRadius: 0,
+    pointHoverRadius: 4,
+    cubicInterpolationMode: "monotone",
+    hidden: true,
+    borderWidth: 1,
+    data: null,
+    yAxisID: "y2",
+    stack: "consumer-imported",
+    parsing: {
+      xAxisKey: "timestamp",
+      yAxisKey: null,
+    },
+  },
+  "consumer-energy_exported": {
+    label: "Verbraucher",
+    category: "consumer",
+    unit: "kWh",
+    jsonKey: null,
+    borderColor: "#6f42c1b2",
+    backgroundColor: "#6f42c14c",
+    fill: true,
+    pointStyle: "circle",
+    pointRadius: 0,
+    pointHoverRadius: 4,
+    cubicInterpolationMode: "monotone",
+    hidden: true,
+    borderWidth: 1,
+    data: null,
+    yAxisID: "y2",
+    stack: "consumer-exported",
+    parsing: {
+      xAxisKey: "timestamp",
+      yAxisKey: null,
+    },
+  },
+  "consumer-energy_imported_grid": {
+    label: "Verbraucher (Netzanteil)",
+    category: "consumer",
+    unit: "kWh",
+    type: "bar",
+    jsonKey: null,
+    borderColor: "#dc3545b2",
+    backgroundColor: "#6f42c14c",
+    fill: true,
+    pointStyle: "circle",
+    pointRadius: 0,
+    pointHoverRadius: 4,
+    cubicInterpolationMode: "monotone",
+    hidden: true,
+    borderWidth: 3,
+    data: null,
+    yAxisID: "y2",
+    stack: "#-energy-imported-source",
+    parsing: {
+      xAxisKey: "timestamp",
+      yAxisKey: null,
+    },
+  },
+  "consumer-energy_imported_pv": {
+    label: "Verbraucher (PV-Anteil)",
+    category: "consumer",
+    unit: "kWh",
+    type: "bar",
+    jsonKey: null,
+    borderColor: "#28a745b2",
+    backgroundColor: "#6f42c14c",
+    fill: true,
+    pointStyle: "circle",
+    pointRadius: 0,
+    pointHoverRadius: 4,
+    cubicInterpolationMode: "monotone",
+    hidden: true,
+    borderWidth: 3,
+    data: null,
+    yAxisID: "y2",
+    stack: "#-energy-imported-source",
+    parsing: {
+      xAxisKey: "timestamp",
+      yAxisKey: null,
+    },
+  },
+  "consumer-energy_imported_bat": {
+    label: "Verbraucher (Speicher-Anteil)",
+    category: "consumer",
+    unit: "kWh",
+    type: "bar",
+    jsonKey: null,
+    borderColor: "#ffc107b2",
+    backgroundColor: "#6f42c14c",
+    fill: true,
+    pointStyle: "circle",
+    pointRadius: 0,
+    pointHoverRadius: 4,
+    cubicInterpolationMode: "monotone",
+    hidden: true,
+    borderWidth: 3,
+    data: null,
+    yAxisID: "y2",
+    stack: "#-energy-imported-source",
     parsing: {
       xAxisKey: "timestamp",
       yAxisKey: null,
@@ -803,6 +939,8 @@ export default {
         { topic: "openWB/bat/get/power", writeable: false },
         { topic: "openWB/chargepoint/+/config", writeable: false },
         { topic: "openWB/chargepoint/get/power", writeable: false },
+        { topic: "openWB/consumer/+/get/power", writeable: false },
+        { topic: "openWB/consumer/get/power", writeable: false },
         { topic: "openWB/counter/+/get/power", writeable: false },
         { topic: "openWB/counter/set/home_consumption", writeable: false },
         { topic: "openWB/general/extern", writeable: false },
@@ -1135,8 +1273,8 @@ export default {
           // check if "all" key is present and necessary
           Object.keys(totals).forEach((key) => {
             if (Object.prototype.hasOwnProperty.call(totals[key], "all")) {
-              // delete key "all" if we only have one component of type "bat" or "pv"
-              if (Object.keys(totals[key]).length <= 2 && ["bat", "pv"].includes(key)) {
+              // delete key "all" if we only have one component of type "bat", "pv" or "consumer"
+              if (Object.keys(totals[key]).length <= 2 && ["bat", "pv", "consumer"].includes(key)) {
                 delete totals[key].all;
               } else {
                 // move key "all" to the beginning
@@ -1183,8 +1321,11 @@ export default {
           baseObjectsToProcess.forEach((baseObject) => {
             if (Object.prototype.hasOwnProperty.call(lastElement, baseObject)) {
               if (Object.prototype.hasOwnProperty.call(lastElement[baseObject], "all")) {
-                // remove "all" key if we only have one component of type "bat" or "pv"
-                if (["bat", "pv"].includes(baseObject) && Object.keys(lastElement[baseObject]).length <= 2) {
+                // remove "all" key if we only have one component of type "bat", "pv" or "consumer"
+                if (
+                  ["bat", "pv", "consumer"].includes(baseObject) &&
+                  Object.keys(lastElement[baseObject]).length <= 2
+                ) {
                   delete lastElement[baseObject].all;
                 } else {
                   // move "all" key to the beginning
@@ -1221,6 +1362,15 @@ export default {
             } else {
               if (!isNaN(id)) {
                 validationTopic = `openWB/chargepoint/${id}/config`;
+              }
+            }
+            break;
+          case "consumer":
+            if (objectKey == "all") {
+              validationTopic = "openWB/consumer/get/power";
+            } else {
+              if (!isNaN(id)) {
+                validationTopic = `openWB/consumer/${id}/get/power`;
               }
             }
             break;
@@ -1320,6 +1470,8 @@ export default {
           return "warning";
         case "counter":
           return "danger";
+        case "consumer":
+          return "purple";
         case "cp":
           return "primary";
         case "pv":
@@ -1342,6 +1494,8 @@ export default {
           return ["fas", "car-battery"];
         case "counter":
           return ["fas", "gauge-high"];
+        case "consumer":
+          return ["fas", "plug"];
         case "cp":
           return ["fas", "charging-station"];
         case "pv":
@@ -1364,8 +1518,8 @@ export default {
      */
     hideDataset(baseObject, objectKey, elementKey) {
       // if dataset "all" is present, hide component datasets
-      if (["bat", "pv", "cp"].includes(baseObject)) {
-        if (Object.prototype.hasOwnProperty.call(this.chartTotals[baseObject], "all") && objectKey != "all") {
+      if (["bat", "pv", "cp", "consumer"].includes(baseObject)) {
+        if (Object.prototype.hasOwnProperty.call(this.chartTotals?.[baseObject] ?? {}, "all") && objectKey != "all") {
           return true;
         }
       }
@@ -1395,6 +1549,8 @@ export default {
             return "Wechselrichter";
           case "cp":
             return "Ladepunkte";
+          case "consumer":
+            return "Verbraucher";
           case "sh":
             return "SmartHome-Geräte";
           case "hc":
@@ -1470,6 +1626,26 @@ export default {
                 console.warn("unknown measurement key:", groupKey, measurementKey);
             }
             break;
+          case "consumer":
+            switch (measurementKey) {
+              case "imported":
+              case "energy_imported":
+                return "Verbrauch";
+              case "exported":
+              case "energy_exported":
+                return "Erzeugung";
+              case "energy_imported_grid":
+                return "Verbrauch (Netz-Anteil)";
+              case "energy_imported_pv":
+                return "Verbrauch (PV-Anteil)";
+              case "energy_imported_bat":
+                return "Verbrauch (Speicher-Anteil)";
+              case "energy_imported_cp":
+                return "Verbrauch (Ladepunkt-Anteil)";
+              default:
+                console.warn("unknown measurement key:", groupKey, measurementKey);
+            }
+            break;
           case "sh":
             switch (measurementKey) {
               case "imported":
@@ -1536,6 +1712,9 @@ export default {
           case "cp":
             label = ["Ladepunkte"];
             break;
+          case "consumer":
+            label = ["Verbraucher"];
+            break;
           case "hc":
             label = ["Hausverbrauch"];
             break;
@@ -1589,6 +1768,28 @@ export default {
               break;
             case "energy_exported":
               details.push("Einspeisung/Erzeugung");
+              break;
+            case "energy_imported_grid":
+              details.push("Netz-Anteil");
+              break;
+            case "energy_imported_pv":
+              details.push("PV-Anteil");
+              break;
+            case "energy_imported_bat":
+              details.push("Speicher-Anteil");
+              break;
+            case "energy_imported_cp":
+              details.push("Ladepunkt-Anteil");
+              break;
+          }
+          break;
+        case "consumer":
+          switch (elementKey) {
+            case "energy_imported":
+              details.push("Verbrauch");
+              break;
+            case "energy_exported":
+              details.push("Erzeugung");
               break;
             case "energy_imported_grid":
               details.push("Netz-Anteil");
@@ -1788,6 +1989,7 @@ export default {
           pv: ["power_exported"],
           bat: ["power_average", "soc"],
           cp: ["power_average"],
+          consumer: ["power_average"],
           sh: ["power_average"],
           ev: ["soc"],
           hc: ["power_imported"],
@@ -1804,6 +2006,13 @@ export default {
           pv: ["energy_exported"],
           bat: ["energy_imported", "energy_exported"],
           cp: ["energy_imported", "energy_imported_grid", "energy_imported_pv", "energy_imported_bat"],
+          consumer: [
+            "energy_imported",
+            "energy_exported",
+            "energy_imported_grid",
+            "energy_imported_pv",
+            "energy_imported_bat",
+          ],
           sh: ["energy_imported", "energy_exported"],
           ev: [],
           hc: ["energy_imported", "energy_imported_grid", "energy_imported_pv", "energy_imported_bat"],

@@ -1,0 +1,273 @@
+<template>
+  <status-card
+    subtype="purple"
+    :component-id="consumerId"
+    :state="$store.state.mqtt[baseTopic + '/get/fault_state']"
+    :state-message="$store.state.mqtt[baseTopic + '/get/fault_str']"
+  >
+    <template #header-left>
+      <font-awesome-icon
+        :icon="['fas', 'plug']"
+        class="fa-border"
+        :style="{
+          backgroundColor: color,
+          color: getContrastColor(color),
+          '--fa-border-color': getContrastColor(color),
+        }"
+      />
+      {{ name }}
+    </template>
+    <template #header-right>
+      <span
+        v-if="priority !== null"
+        class="badge badge-pill badge-light mr-2"
+        title="Rangfolge in der Prioritäten-Steuerung"
+      >
+        Prio {{ priority }}
+      </span>
+      {{ power }}&nbsp;kW
+    </template>
+    <!-- Status -->
+    <openwb-base-card
+      v-if="statusMessage"
+      title="Status"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <openwb-base-alert
+        subtype="info"
+        class="mb-0"
+      >
+        Statusmeldung:
+        <span style="white-space: pre-wrap">{{ statusMessage }}</span>
+      </openwb-base-alert>
+    </openwb-base-card>
+    <!-- Aktuelle Werte -->
+    <openwb-base-card
+      title="Aktuelle Werte"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <div class="row">
+        <div class="col pr-0 text-right">Leistung</div>
+        <div class="col text-right text-monospace">{{ power }}&nbsp;kW</div>
+      </div>
+      <div
+        v-if="chargemode !== null"
+        class="row"
+      >
+        <div class="col pr-0 text-right">Betriebsmodus</div>
+        <div class="col text-right text-monospace">{{ chargemode }}</div>
+      </div>
+    </openwb-base-card>
+    <openwb-base-card
+      v-if="priority !== null"
+      title="Priorität"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <div class="row">
+        <div class="col pr-0 text-right">Rangfolge</div>
+        <div class="col text-right text-monospace">Prio {{ priority }}</div>
+      </div>
+      <div
+        v-if="prioritySharedGroup"
+        class="row"
+      >
+        <div class="col text-right">
+          <small>Gleichrangig mit anderen Geräten der selben Gruppe.</small>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-right">
+          <small>Die Rangfolge lässt sich unter „Lastmanagement“ anpassen.</small>
+        </div>
+      </div>
+    </openwb-base-card>
+    <openwb-base-card
+      title="Separate Leistungsmessung"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <div class="row">
+        <div class="col pr-0 text-right">Zähler</div>
+        <div class="col text-right text-monospace">
+          {{ hasExtraMeter ? extraMeterName : "keiner" }}
+        </div>
+      </div>
+      <div
+        v-if="hasExtraMeter"
+        class="row"
+      >
+        <div class="col text-right">
+          <small>Die angezeigten Leistungswerte stammen von diesem Zähler.</small>
+        </div>
+      </div>
+    </openwb-base-card>
+    <openwb-base-card
+      v-if="hasPhaseData"
+      title="Werte pro Phase"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <div class="row">
+        <div class="col-md-4 pr-0 text-center text-md-right">Spannung [V]</div>
+        <div class="col">
+          <div class="row">
+            <div
+              v-for="(value, index) in formatPhaseArrayNumberTopic(baseTopic + '/get/voltages', 1)"
+              :key="index"
+              class="col text-right text-monospace pl-0"
+            >
+              {{ value }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 pr-0 text-center text-md-right">Strom [A]</div>
+        <div class="col">
+          <div class="row">
+            <div
+              v-for="(value, index) in formatPhaseArrayNumberTopic(baseTopic + '/get/currents', 2)"
+              :key="index"
+              class="col text-right text-monospace pl-0"
+            >
+              {{ value }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 pr-0 text-center text-md-right">Leistung [kW]</div>
+        <div class="col">
+          <div class="row">
+            <div
+              v-for="(value, index) in formatPhaseArrayNumberTopic(baseTopic + '/get/powers', 3, 3, 0.001)"
+              :key="index"
+              class="col text-right text-monospace pl-0"
+            >
+              {{ value }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </openwb-base-card>
+  </status-card>
+</template>
+
+<script>
+import ComponentState from "../mixins/ComponentState.vue";
+import LoadManagementPriority from "../mixins/LoadManagementPriority.vue";
+import StatusCard from "./StatusCard.vue";
+
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faPlug as fasPlug } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(fasPlug);
+
+export default {
+  name: "ConsumerCard",
+  components: {
+    StatusCard,
+    FontAwesomeIcon,
+  },
+  mixins: [ComponentState, LoadManagementPriority],
+  props: {
+    consumerId: { type: Number, required: true },
+  },
+  data() {
+    return {
+      mqttTopics: [
+        { topic: `openWB/consumer/${this.consumerId}/module`, writeable: false },
+        { topic: `openWB/consumer/${this.consumerId}/usage`, writeable: false },
+        { topic: `openWB/consumer/${this.consumerId}/get/+`, writeable: false },
+        { topic: `openWB/consumer/${this.consumerId}/extra_meter`, writeable: false },
+        { topic: "openWB/system/device/+/component/+/config", writeable: false },
+      ],
+    };
+  },
+  computed: {
+    baseTopic: {
+      get() {
+        return `openWB/consumer/${this.consumerId}`;
+      },
+    },
+    name: {
+      get() {
+        const module = this.$store.state.mqtt[this.baseTopic + "/module"];
+        return module?.name ?? `Verbraucher ${this.consumerId}`;
+      },
+    },
+    color: {
+      get() {
+        const module = this.$store.state.mqtt[this.baseTopic + "/module"];
+        return module?.color ?? "#6f42c1";
+      },
+    },
+    power: {
+      get() {
+        return this.formatNumberTopic(this.baseTopic + "/get/power", 3, 3, 0.001);
+      },
+    },
+    statusMessage: {
+      get() {
+        return this.$store.state.mqtt[this.baseTopic + "/get/state_str"] ?? null;
+      },
+    },
+    chargemode: {
+      get() {
+        const usage = this.$store.state.mqtt[this.baseTopic + "/usage"];
+        if (!usage || usage.chargemode === undefined) {
+          return null;
+        }
+        return this.translateChargeMode(usage.chargemode);
+      },
+    },
+    priority: {
+      get() {
+        return this.loadManagementPriority("consumer", this.consumerId);
+      },
+    },
+    prioritySharedGroup: {
+      get() {
+        return this.loadManagementPriorityShared("consumer", this.consumerId);
+      },
+    },
+    hasPhaseData: {
+      get() {
+        const currents = this.$store.state.mqtt[this.baseTopic + "/get/currents"];
+        return Array.isArray(currents) && currents.length > 0;
+      },
+    },
+    extraMeterId: {
+      get() {
+        return this.$store.state.mqtt[this.baseTopic + "/extra_meter"] ?? null;
+      },
+    },
+    hasExtraMeter: {
+      get() {
+        return this.extraMeterId !== null;
+      },
+    },
+    extraMeterName: {
+      get() {
+        if (this.extraMeterId === null) {
+          return null;
+        }
+        const components = this.getWildcardTopics("openWB/system/device/+/component/+/config");
+        const component = Object.values(components).find(
+          (component) => component && component.id === this.extraMeterId,
+        );
+        return component?.name ?? `Zähler ${this.extraMeterId}`;
+      },
+    },
+  },
+};
+</script>
