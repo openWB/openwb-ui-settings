@@ -1,5 +1,5 @@
 <template>
-  <div class="device-idm">
+  <div class="consumer-elwae">
     <openwb-base-heading> Einstellungen für my-PV Elwa2 Heizstab</openwb-base-heading>
     <openwb-base-alert subtype="info">
       Im Web Frontend des Heizstabs muss unter "Steuerungs-Einstellungen" der Parameter "Ansteuerungs-Typ = Modbus TCP"
@@ -11,7 +11,7 @@
       title="IP oder Hostname"
       subtype="host"
       required
-      :model-value="device.configuration.ip_address"
+      :model-value="consumer.configuration.ip_address"
       @update:model-value="updateConfiguration($event, 'configuration.ip_address')"
     />
     <openwb-base-number-input
@@ -19,13 +19,13 @@
       required
       :min="1"
       :max="65535"
-      :model-value="device.configuration.port"
+      :model-value="consumer.configuration.port"
       @update:model-value="updateConfiguration($event, 'configuration.port')"
     />
     <openwb-base-number-input
       title="Modbus ID"
       required
-      :model-value="device.configuration.modbus_id"
+      :model-value="consumer.configuration.modbus_id"
       min="1"
       max="255"
       @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
@@ -34,10 +34,10 @@
 </template>
 
 <script>
-import ConsumerDeviceConfigMixin from "../../ConsumerDeviceConfigMixin.vue";
+import ConsumerConfigMixin from "../../ConsumerConfigMixin.vue";
 
 export default {
   name: "ConsumerMyPvElwaE",
-  mixins: [ConsumerDeviceConfigMixin],
+  mixins: [ConsumerConfigMixin],
 };
 </script>
