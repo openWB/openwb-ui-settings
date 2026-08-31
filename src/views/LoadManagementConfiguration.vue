@@ -67,7 +67,7 @@
               Meist ist der Zähler am EVU-Punkt installiert, dann muss hier 'von openWB berechnen' ausgewählt werden.
               Wenn der Zähler im Hausverbrauchszweig installiert ist, die Struktur wie im
               <a
-                href="https://github.com/openWB/core/wiki/Hausverbrauchs-Zähler"
+                :href="`https://wiki.openwb.de/doku.php?id=openwb:vc:${systemVersion}:software:einstell-konfig:konfiguration:hausverbrauch`"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -284,6 +284,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasSolarPanel, fasGaugeHigh);
 
 import ComponentState from "../components/mixins/ComponentState.vue";
+import SystemVersion from "../components/mixins/SystemVersion.vue";
 import SortableList from "../components/OpenwbSortableList.vue";
 
 export default {
@@ -292,7 +293,7 @@ export default {
     SortableList,
     FontAwesomeIcon,
   },
-  mixins: [ComponentState],
+  mixins: [ComponentState, SystemVersion],
   props: {
     installAssistantActive: {
       type: Boolean,

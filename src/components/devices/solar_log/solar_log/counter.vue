@@ -8,7 +8,7 @@
       Solar-Log Zähler sind Hausverbrauchs-Zähler. Um die Werte am EVU-Punkt zu ermitteln, muss ein virtueller Zähler
       konfiguriert werden. Eine Beispiel-Konfiguration mit Solar-Log Zähler findest Du im
       <a
-        href="https://github.com/openWB/core/wiki/Hausverbrauchs-Z%C3%A4hler"
+        :href="`https://wiki.openwb.de/doku.php?id=openwb:vc:${systemVersion}:software:einstell-konfig:konfiguration:hausverbrauch`"
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -20,9 +20,10 @@
 
 <script>
 import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
+import SystemVersion from "../../../mixins/SystemVersion.vue";
 
 export default {
   name: "DeviceSolarLogCounter",
-  mixins: [ComponentConfigMixin],
+  mixins: [ComponentConfigMixin, SystemVersion],
 };
 </script>
