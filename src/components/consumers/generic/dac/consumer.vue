@@ -5,7 +5,7 @@
       Der aktuelle Überschuss wird über Modbus an einen Digital-Analog-Wandler (DAC) übertragen. Es werden verschiedene
       Modelle unterstützt. Je nach Modell wird das an den DAC angeschlossene Gerät über ein Signal von 1-10V oder 4-20mA
       gesteuert. Falls erforderlich, kann auch der komplette Signalbereich (0-10V bzw. 0-20mA) genutzt werden, um die
-      Leistung des Verbrauchers zu steuern. Hierzu bitte die Option "Signalbereich" von "standard" auf "komplett"
+      Leistung des Verbrauchers zu steuern. Hierzu bitte die Option "Signalbereich" von "Standard" auf "Komplett"
       ändern.
     </openwb-base-alert>
     <openwb-base-text-input
@@ -38,12 +38,11 @@
       :model-value="consumer.configuration.model"
       @update:model-value="updateConfiguration($event, 'configuration.model')"
     />
-    <openwb-base-select-input
+    <openwb-base-button-group-input
       title="Signalbereich"
-      not-selected="Bitte auswählen"
-      :options="[
-        { text: 'Standard (1-10V bzw. 4-20mA)', value: false },
-        { text: 'Komplett (0-10V bzw. 0-20mA)', value: true },
+      :buttons="[
+        { text: 'Standard', buttonValue: false },
+        { text: 'Komplett', buttonValue: true },
       ]"
       :model-value="consumer.configuration.full_signal_range"
       @update:model-value="updateConfiguration($event, 'configuration.full_signal_range')"
@@ -55,7 +54,7 @@
         die Leistung des Verbrauchers zu steuern. Bitte beachte, dass dies je nach angeschlossenem Verbraucher zu einer
         anderen Leistungsregelung führt.
       </template>
-    </openwb-base-select-input>
+    </openwb-base-button-group-input>
   </div>
 </template>
 
