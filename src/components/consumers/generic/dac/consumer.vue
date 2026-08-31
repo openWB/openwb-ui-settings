@@ -2,8 +2,11 @@
   <div class="consumer-generic-dac">
     <openwb-base-heading>Einstellungen für DAC-Verbraucher</openwb-base-heading>
     <openwb-base-alert subtype="info">
-      Der anliegende Überschuss wird in eine Voltzahl zwischen 0.01V und 10.0V umgewandelt. Bezug wird als 0 Volt
-      übertragen.
+      Der aktuelle Überschuss wird über Modbus an einen Digital-Analog-Wandler (DAC) übertragen. Es werden verschiedene
+      Modelle unterstützt. Je nach Modell wird das an den DAC angeschlossene Gerät über ein Signal von 1-10V oder 4-20mA
+      gesteuert. Falls erforderlich, kann auch der komplette Signalbereich (0-10V bzw. 0-20mA) genutzt werden, um die
+      Leistung des Verbrauchers zu steuern. Hierzu bitte die Option "Signalbereich" von "standard" auf "komplett"
+      ändern.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
@@ -35,6 +38,24 @@
       :model-value="consumer.configuration.model"
       @update:model-value="updateConfiguration($event, 'configuration.model')"
     />
+    <openwb-base-select-input
+      title="Signalbereich"
+      not-selected="Bitte auswählen"
+      :options="[
+        { text: 'Standard (1-10V bzw. 4-20mA)', value: false },
+        { text: 'Komplett (0-10V bzw. 0-20mA)', value: true },
+      ]"
+      :model-value="consumer.configuration.full_signal_range"
+      @update:model-value="updateConfiguration($event, 'configuration.full_signal_range')"
+    >
+      <template #help>
+        Der Signalbereich kann je nach angeschlossenem Verbraucher angepasst werden. Standardmäßig wird der Bereich
+        1-10V bzw. 4-20mA ("Live Zero") genutzt. Werte kleiner 1V bzw. 4mA signalisieren dem Verbraucher einen
+        Verbindungsfehler. Falls erforderlich, kann auch der komplette Bereich 0-10V bzw. 0-20mA verwendet werden, um
+        die Leistung des Verbrauchers zu steuern. Bitte beachte, dass dies je nach angeschlossenem Verbraucher zu einer
+        anderen Leistungsregelung führt.
+      </template>
+    </openwb-base-select-input>
   </div>
 </template>
 
@@ -44,7 +65,8 @@ import ConsumerConfigMixin from "../../ConsumerConfigMixin.vue";
 const MODEL_OPTIONS = [
   { text: "N4Dac02", value: "N4Dac02" },
   { text: "DA02", value: "DA02" },
-  { text: "M120T", value: "M120T" },
+  { text: "M120T (Analogausgang 1)", value: "M120T-1" },
+  { text: "M120T (Analogausgang 2)", value: "M120T-2" },
   { text: "AA02B", value: "AA02B" },
 ];
 
