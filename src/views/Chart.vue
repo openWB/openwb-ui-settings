@@ -6,6 +6,12 @@
         findest alle Auswertungen in der openWB, welche sich im Steuerungsmodus "primary" befindet.
       </openwb-base-alert>
     </div>
+    <div v-else-if="!logDataMigrationCompleted">
+      <openwb-base-alert subtype="info">
+        Die Auswertungen sind derzeit noch nicht verfügbar, da die historischen Logdaten verarbeitet werden.
+        Sobald die Verarbeitung abgeschlossen ist, stehen die Diagramme automatisch wieder zur Verfügung.
+      </openwb-base-alert>
+    </div>
     <div v-else>
       <openwb-base-card
         title="Filter"
@@ -823,6 +829,7 @@ export default {
         { topic: "openWB/pv/+/get/power", writeable: false },
         { topic: "openWB/pv/get/power", writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
+        { topic: "openWB/system/log_totals_generation_finished", writeable: false },
         { topic: "openWB/system/security/user_management_active", writeable: false },
         { topic: "openWB/vehicle/+/info", writeable: false },
         { topic: "openWB/vehicle/+/name", writeable: false },
@@ -1000,6 +1007,9 @@ export default {
     };
   },
   computed: {
+    logDataMigrationCompleted() {
+      return this.$store.state.mqtt["openWB/system/log_totals_generation_finished"] === true;
+    },
     dateInput() {
       var dateObject = {
         title: "Datum",
@@ -1362,8 +1372,16 @@ export default {
     },
   },
   watch: {
+    logDataMigrationCompleted(newValue, oldValue) {
+      if (newValue === true && oldValue !== true) {
+        this.init();
+      }
+    },
     chartRange() {
-      this.init();
+      if (this.logDataMigrationCompleted) {
+        this.init();
+      }
+
     },
     chartDataRead: {
       handler(newValue) {
@@ -1375,7 +1393,9 @@ export default {
     },
   },
   mounted() {
-    this.init();
+    if (this.logDataMigrationCompleted) {
+        this.init();
+    }
   },
   methods: {
     handleChartClick(event) {
@@ -1935,6 +1955,9 @@ export default {
      * If the chart form is invalid, a warning is logged and the function returns.
      */
     requestChart() {
+      if (!this.logDataMigrationCompleted) {
+        return;
+      }
       let myForm = document.forms["chartFilterForm"];
       if (!myForm?.reportValidity()) {
         console.warn("form invalid");
