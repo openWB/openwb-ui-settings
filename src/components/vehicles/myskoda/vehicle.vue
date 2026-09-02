@@ -29,14 +29,42 @@
     >
       <template #help> Die Fahrgestellnummer des Fahrzeugs. </template>
     </openwb-base-text-input>
+
+    <openwb-base-alert
+      v-if="vehicle.configuration.key_expires_at"
+      :subtype="keyExpirySubtype"
+    >
+      <b>API-Schlüssel gültig bis:</b> {{ keyExpiryFormatted }}
+      <span v-if="keyExpirySoon"><br />Läuft bald ab - bitte rechtzeitig in der MyŠkoda-App erneuern.</span>
+    </openwb-base-alert>
   </div>
 </template>
 
 <script>
 import VehicleConfigMixin from "../VehicleConfigMixin.vue";
 
+// Ab wie vielen Tagen vor Ablauf die Warnfarbe greift (deckt sich mit KEY_EXPIRY_WARN_DAYS in api.py)
+const KEY_EXPIRY_WARN_DAYS = 14;
+
 export default {
   name: "VehicleSocMyskoda",
   mixins: [VehicleConfigMixin],
+  computed: {
+    keyExpiryDate() {
+      const raw = this.vehicle.configuration.key_expires_at;
+      return raw ? new Date(raw) : null;
+    },
+    keyExpiryFormatted() {
+      return this.keyExpiryDate ? this.keyExpiryDate.toLocaleDateString("de-DE") : "";
+    },
+    keyExpirySoon() {
+      if (!this.keyExpiryDate) return false;
+      const daysLeft = (this.keyExpiryDate - new Date()) / (1000 * 60 * 60 * 24);
+      return daysLeft <= KEY_EXPIRY_WARN_DAYS;
+    },
+    keyExpirySubtype() {
+      return this.keyExpirySoon ? "warning" : "secondary";
+    },
+  },
 };
 </script>
