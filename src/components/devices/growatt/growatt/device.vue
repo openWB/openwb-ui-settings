@@ -28,16 +28,21 @@
       title="Version"
       not-selected="Bitte auswählen"
       :options="[
-        { value: 'MAX', text: 'MAX Series' },
-        { value: 'TL-X', text: 'TL-X Inverter' },
+        { value: 'TL-X', text: 'TL-X / TL-XH / TL3-XH (inkl. MOD-XH mit Batterie)' },
+        { value: 'SPH', text: 'SPH / SPA Hybrid mit Speicher' },
+        { value: 'VPP', text: 'VPP-Protokoll (neuere Firmware, MOD/MIN/SPH/WIT)' },
       ]"
       :model-value="device.configuration.version"
       required
       @update:model-value="updateConfiguration($event, 'configuration.version')"
     >
       <template #help>
-        Die Wahl der API-Version beeinflusst die Auslesung der Speicherleistung und der Import/ Export Werte des
-        Zählers.
+        Die Wahl der Registerkarte beeinflusst die Auslesung von Wechselrichter-, Zähler- und
+        Speicherwerten. "TL-X" passt für die meisten MOD/MIN/TL-XH-Geräte inkl. Batterie am
+        Wechselrichter selbst. "SPH/SPA" gilt für Hybridwechselrichter mit separatem
+        Speicherblock (vorher als "MAX Series" genannt). "VPP" ist ein neueres, paralleles
+        Protokoll auf denselben Geräten - falls unsicher, zuerst "TL-X" probieren, bei
+        fehlenden/falschen Speicherwerten "VPP" testen.
       </template>
     </openwb-base-select-input>
   </div>
