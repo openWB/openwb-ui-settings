@@ -156,7 +156,7 @@
           @update:model-value="updateState('openWB/general/legacy_smarthome_active', $event)"
         >
           <template #help>
-            Aktiviert die alte, eigenständige Smarthome-Steuerung (Geräte über "openWB/LegacySmartHome/..."-Topics). Wer
+            Aktiviert die alte, eigenständige SmartHome-Steuerung (Geräte über "openWB/LegacySmartHome/..."-Topics). Wer
             keine solchen Geräte eingerichtet hat, kann sie hier deaktivieren.
           </template>
         </openwb-base-button-group-input>
