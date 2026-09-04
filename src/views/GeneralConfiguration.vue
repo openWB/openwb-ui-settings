@@ -136,10 +136,10 @@
       </openwb-base-card>
       <openwb-base-card
         v-if="!installAssistantActive"
-        title="Smarthome"
+        title="SmartHome"
       >
         <openwb-base-button-group-input
-          title="Smarthome (Legacy)"
+          title="SmartHome (veraltet)"
           :buttons="[
             {
               buttonValue: false,
