@@ -200,11 +200,11 @@
               Ein-/Ausgänge
             </router-link>
             <div
-              v-if="accessAllowed('LegacySmartHomeConfiguration')"
+              v-if="accessAllowed('LegacySmartHomeConfiguration') && legacySmarthomeActive"
               class="dropdown-divider"
             />
             <a
-              v-if="accessAllowed('LegacySmartHomeConfiguration')"
+              v-if="accessAllowed('LegacySmartHomeConfiguration') && legacySmarthomeActive"
               href="modules/legacy_smart_home/smarthomeconfig.php"
               class="dropdown-item"
               target="_blank"
@@ -368,7 +368,10 @@ export default {
   mixins: [ComponentState],
   data() {
     return {
-      mqttTopics: [{ topic: "openWB/system/security/access/+", writeable: false }],
+      mqttTopics: [
+        { topic: "openWB/system/security/access/+", writeable: false },
+        { topic: "openWB/general/legacy_smarthome_active", writeable: false },
+      ],
     };
   },
   computed: {
@@ -379,6 +382,9 @@ export default {
       return (page) => {
         return this.$store.state.mqtt[`openWB/system/security/access/${page}`] === true;
       };
+    },
+    legacySmarthomeActive() {
+      return this.$store.state.mqtt["openWB/general/legacy_smarthome_active"] !== false;
     },
   },
   watch: {

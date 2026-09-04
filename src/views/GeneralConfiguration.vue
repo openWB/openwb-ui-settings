@@ -134,6 +134,33 @@
           </openwb-base-alert>
         </div>
       </openwb-base-card>
+      <openwb-base-card
+        v-if="!installAssistantActive"
+        title="SmartHome"
+      >
+        <openwb-base-button-group-input
+          title="SmartHome (veraltet)"
+          :buttons="[
+            {
+              buttonValue: false,
+              text: 'Aus',
+              class: 'btn-outline-danger',
+            },
+            {
+              buttonValue: true,
+              text: 'An',
+              class: 'btn-outline-success',
+            },
+          ]"
+          :model-value="$store.state.mqtt['openWB/general/legacy_smarthome_active']"
+          @update:model-value="updateState('openWB/general/legacy_smarthome_active', $event)"
+        >
+          <template #help>
+            Aktiviert die alte, eigenständige SmartHome-Steuerung (Geräte über "openWB/LegacySmartHome/..."-Topics). Wer
+            keine solchen Geräte eingerichtet hat, kann sie hier deaktivieren.
+          </template>
+        </openwb-base-button-group-input>
+      </openwb-base-card>
       <div v-if="!installAssistantActive">
         <openwb-base-card title="Hardware">
           <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
@@ -822,6 +849,7 @@ export default {
         { topic: "openWB/general/extern", writeable: true },
         { topic: "openWB/general/grid_protection_configured", writeable: true },
         { topic: "openWB/general/http_api", writeable: true },
+        { topic: "openWB/general/legacy_smarthome_active", writeable: true },
         { topic: "openWB/general/modbus_control", writeable: true },
         { topic: "openWB/general/range_unit", writeable: true },
         { topic: "openWB/general/temporary_charge_templates_active", writeable: true },
