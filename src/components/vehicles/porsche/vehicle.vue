@@ -170,7 +170,12 @@ export default {
           this.sid = data.sid;
           this.authStatus = { message: "", error: "", captchaImage: data.image, justConnected: false };
         } else {
-          this.authStatus = { message: "", error: data.message || "Unbekannter Fehler.", captchaImage: "", justConnected: false };
+          this.authStatus = {
+            message: "",
+            error: data.message || "Unbekannter Fehler.",
+            captchaImage: "",
+            justConnected: false,
+          };
         }
       } catch (e) {
         this.authStatus = { message: "", error: "Netzwerkfehler: " + e, captchaImage: "", justConnected: false };
