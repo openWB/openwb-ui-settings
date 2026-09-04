@@ -35,7 +35,12 @@
       :subtype="keyExpirySubtype"
     >
       <b>API-Schlüssel gültig bis:</b> {{ keyExpiryFormatted }}
-      <span v-if="keyExpirySoon"><br />Läuft bald ab - bitte rechtzeitig in der MyŠkoda-App erneuern.</span>
+      <span v-if="keyExpirySoon">
+        <br />
+        <template v-if="keyExpiryDaysLeft > 0">Läuft in {{ keyExpiryDaysLeft }} Tagen ab</template>
+        <template v-else>Ist abgelaufen</template>
+        - bitte rechtzeitig in der MyŠkoda-App erneuern.
+      </span>
     </openwb-base-alert>
   </div>
 </template>
@@ -57,10 +62,12 @@ export default {
     keyExpiryFormatted() {
       return this.keyExpiryDate ? this.keyExpiryDate.toLocaleDateString("de-DE") : "";
     },
+    keyExpiryDaysLeft() {
+      if (!this.keyExpiryDate) return null;
+      return Math.ceil((this.keyExpiryDate - new Date()) / (1000 * 60 * 60 * 24));
+    },
     keyExpirySoon() {
-      if (!this.keyExpiryDate) return false;
-      const daysLeft = (this.keyExpiryDate - new Date()) / (1000 * 60 * 60 * 24);
-      return daysLeft <= KEY_EXPIRY_WARN_DAYS;
+      return this.keyExpiryDaysLeft !== null && this.keyExpiryDaysLeft <= KEY_EXPIRY_WARN_DAYS;
     },
     keyExpirySubtype() {
       return this.keyExpirySoon ? "warning" : "secondary";
