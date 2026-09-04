@@ -133,6 +133,7 @@ export default {
         daily_totals: "Tageswerte",
         history_chart: "Verlaufsdiagramm",
         flow_diagram: "Energiefluss",
+        sankey_chart: "Sankey-Diagramm",
       },
     };
   },
@@ -143,6 +144,7 @@ export default {
           "flow_diagram",
           "history_chart",
           "daily_totals",
+          "sankey_chart",
         ];
         return slideOrder.map((id) => ({ id }));
       },
