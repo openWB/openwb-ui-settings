@@ -3,12 +3,14 @@
     <openwb-base-text-input
       title="URL"
       required
+      subtype="url"
       :model-value="displayTheme.configuration.url"
       @update:model-value="updateConfiguration($event, 'configuration.url')"
     >
       <template #help>
-        Diese Adresse wird vom Display-Browser ge&ouml;ffnet, zum Beispiel http://192.168.1.20/. Adressen ohne Schema
-        k&ouml;nnen eingegeben werden; Normalisierung und Pr&uuml;fung erfolgen im Backend.
+        Diese Adresse im Display dargestellt. Das Ziel
+        muss sich im lokalen Netzwerk oder dem privaten (RFC1918) Addressraum befinden. Andere Ziele werden
+        nicht akzeptiert.
       </template>
     </openwb-base-text-input>
   </div>
