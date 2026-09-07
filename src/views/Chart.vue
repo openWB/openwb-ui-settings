@@ -8,8 +8,8 @@
     </div>
     <div v-else-if="!logDataMigrationCompleted">
       <openwb-base-alert subtype="info">
-        Die Auswertungen sind derzeit noch nicht verfügbar, da die historischen Logdaten verarbeitet werden.
-        Sobald die Verarbeitung abgeschlossen ist, stehen die Diagramme automatisch wieder zur Verfügung.
+        Die Auswertungen sind derzeit noch nicht verfügbar, da die historischen Logdaten verarbeitet werden. Sobald die
+        Verarbeitung abgeschlossen ist, stehen die Diagramme automatisch wieder zur Verfügung.
       </openwb-base-alert>
     </div>
     <div v-else>
@@ -829,7 +829,7 @@ export default {
         { topic: "openWB/pv/+/get/power", writeable: false },
         { topic: "openWB/pv/get/power", writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
-        { topic: "openWB/system/log_totals_generation_finished", writeable: false },
+        { topic: "openWB/system/log_data_ready", writeable: false },
         { topic: "openWB/system/security/user_management_active", writeable: false },
         { topic: "openWB/vehicle/+/info", writeable: false },
         { topic: "openWB/vehicle/+/name", writeable: false },
@@ -1008,7 +1008,7 @@ export default {
   },
   computed: {
     logDataMigrationCompleted() {
-      return this.$store.state.mqtt["openWB/system/log_totals_generation_finished"] === true;
+      return this.$store.state.mqtt["openWB/system/log_data_ready"] === true;
     },
     dateInput() {
       var dateObject = {
@@ -1381,7 +1381,6 @@ export default {
       if (this.logDataMigrationCompleted) {
         this.init();
       }
-
     },
     chartDataRead: {
       handler(newValue) {
@@ -1394,7 +1393,7 @@ export default {
   },
   mounted() {
     if (this.logDataMigrationCompleted) {
-        this.init();
+      this.init();
     }
   },
   methods: {
