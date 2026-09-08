@@ -132,7 +132,7 @@
               <span v-else-if="installedConsumer.consumerUsage?.type === 'self_controlled'">
                 <ul class="mb-0">
                   <li>Die Wärmepumpe übernimmt die Steuerung selbst.</li>
-                  <li>openWB liefert sendet Regelparameter, wie zB EVU- und PV-Leistung</li>
+                  <li>openWB sendet Regelparameter an die Wärmepumpe, wie zB EVU- und PV-Leistung</li>
                   <li>Zwei unabhängige Regelsysteme können zu Schwingungen und unerwünschten Effekten führen.</li>
                 </ul>
               </span>
