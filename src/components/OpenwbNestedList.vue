@@ -1,44 +1,85 @@
 <template>
   <draggable
+    v-model="list"
     class="dragArea w-100 mb-0"
     tag="ul"
-    :list="list"
-    :group="{ name: 'g1' }"
-    item-key="id"
+    :group="dragGroup"
+    :item-key="elementKey"
     handle=".handle"
   >
-    <template #item="{ element }">
-      <li>
+    <template #item="{ element, index }">
+      <li v-show="!isHidden(element)">
         <div
           class="element-titel"
           :class="classes(element)"
         >
           <span>
+            <span
+              v-if="showPriority && currentNestingDepth === 0"
+              class="badge badge-pill badge-light mr-1"
+            >
+              <span class="priority-prefix">Prio&nbsp;</span>{{ index + 1 }}
+            </span>
             <font-awesome-icon
               class="handle"
               :icon="['fas', nesting ? 'arrows-alt' : 'arrows-up-down']"
             />
-            <div class="element-label">
-              <font-awesome-icon
-                v-if="getElementIcon(element)"
-                :icon="getElementIcon(element)"
-              />
-              {{ getElementLabel(element.id) }}
-            </div>
-          </span>
-          <!-- <span class="element-actions">
             <font-awesome-icon
-
-              :icon="['fas', 'edit']"
-              @click="elementEdit(element.id)"
+              v-if="getElementIcon(element)"
+              :icon="getElementIcon(element)"
             />
-          </span> -->
+            <span v-if="editingGroupId !== element.id">
+              <span
+                style="cursor: pointer"
+                @click="startEditing(element)"
+              >
+                {{ getElementLabel(element) }}
+              </span>
+            </span>
+            <input
+              v-else
+              v-model="editingValue"
+              class="group-rename-input"
+              @keyup.enter="finishEditing(element.id)"
+              @blur="finishEditing(element.id)"
+            />
+          </span>
+          <span
+            v-if="element.type === 'group'"
+            class="element-actions"
+          >
+            <font-awesome-icon
+              class="mr-2"
+              :icon="['fas', 'pen']"
+              @click.stop="startEditing(element)"
+            />
+            <font-awesome-icon
+              :icon="['fas', 'trash']"
+              @click.stop="$emit('delete-group', element.id)"
+            />
+          </span>
+          <span
+            v-else-if="linkedMeterName(element)"
+            class="element-linked-meter"
+            :title="linkedMeterName(element)"
+          >
+            <span class="linked-meter-name">{{ linkedMeterName(element) }}</span>
+            <font-awesome-icon :icon="['fas', 'link']" />
+          </span>
         </div>
         <openwb-nested-list
-          v-if="nesting && element.children"
+          v-if="nesting && element.children && currentNestingDepth < maxNestingDepth"
           v-model="element.children"
           :labels="labels"
+          :linked-meters="linkedMeters"
+          :hidden-ids="hiddenIds"
           :nesting="nesting"
+          :max-nesting-depth="maxNestingDepth"
+          :current-nesting-depth="currentNestingDepth + 1"
+          :show-priority="showPriority"
+          :group-name="resolvedGroupName"
+          @delete-group="$emit('delete-group', $event)"
+          @rename-group="$emit('rename-group', $event)"
         />
       </li>
     </template>
@@ -56,10 +97,30 @@ import {
   faCarBattery as fasCarBattery,
   faSolarPanel as fasSolarPanel,
   faGaugeHigh as fasGaugeHigh,
+  faTrash as fasTrash,
+  faPen as fasPen,
+  faCar as fasCar,
+  faPlug as fasPlug,
+  faLink as fasLink,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasArrowsAlt, fasArrowsUpDown, fasChargingStation, fasCarBattery, fasSolarPanel, fasGaugeHigh);
+library.add(
+  fasArrowsAlt,
+  fasArrowsUpDown,
+  fasChargingStation,
+  fasCarBattery,
+  fasSolarPanel,
+  fasGaugeHigh,
+  fasTrash,
+  fasPen,
+  fasCar,
+  fasPlug,
+  fasLink,
+);
+// each top level list gets its own SortableJS group name, otherwise items could be dragged
+// between unrelated lists (e.g. from the hierarchy into the priority list)
+let nextSortableGroupId = 0;
 
 export default {
   name: "OpenwbNestedList",
@@ -68,9 +129,56 @@ export default {
     FontAwesomeIcon,
   },
   props: {
-    list: { type: Object, required: false, default: undefined },
+    modelValue: { type: Array, required: false, default: () => [] },
     labels: { type: Object, required: false, default: undefined },
+    linkedMeters: { type: Object, required: false, default: undefined },
+    hiddenIds: { type: Array, required: false, default: undefined },
     nesting: { type: Boolean, default: true },
+    maxNestingDepth: { type: Number, default: Infinity },
+    currentNestingDepth: { type: Number, default: 0 },
+    showPriority: { type: Boolean, default: false },
+    groupName: { type: String, required: false, default: undefined },
+  },
+  emits: ["update:modelValue", "delete-group", "rename-group"],
+  data() {
+    return {
+      editingGroupId: null,
+      editingValue: "",
+      ownGroupName: `openwb-sortable-${++nextSortableGroupId}`,
+    };
+  },
+  computed: {
+    list: {
+      get() {
+        return this.modelValue;
+      },
+      set(val) {
+        this.$emit("update:modelValue", val);
+      },
+    },
+    // nested lists inherit the name from their root, so items move within one list only
+    resolvedGroupName() {
+      return this.groupName ?? this.ownGroupName;
+    },
+    dragGroup() {
+      if (this.currentNestingDepth === 0) {
+        return {
+          name: this.resolvedGroupName,
+          pull: true,
+          put: [this.resolvedGroupName],
+        };
+      }
+      return {
+        name: this.resolvedGroupName,
+        pull: true,
+        put: (to, from, dragEl) => {
+          if (to.options.group.name !== from.options.group.name) return false;
+          const draggedItem = dragEl?.__draggable_context?.element;
+          if (!draggedItem) return true;
+          return draggedItem.type !== "group";
+        },
+      };
+    },
   },
   methods: {
     classes(element) {
@@ -88,11 +196,29 @@ export default {
       }
       return myClasses;
     },
-    getElementLabel(elementId) {
-      if (this.labels && elementId in this.labels) {
-        return this.labels[elementId];
+    // ids are only unique per type (a vehicle and a consumer may share an id), so maps are
+    // looked up by "<type>-<id>" first. Lists without such collisions may key by plain id.
+    elementKey(element) {
+      return element.type === undefined ? String(element.id) : `${element.type}-${element.id}`;
+    },
+    lookupByElement(map, element) {
+      if (!map) {
+        return undefined;
       }
-      return elementId;
+      const typedKey = this.elementKey(element);
+      if (typedKey in map) {
+        return map[typedKey];
+      }
+      return map[element.id];
+    },
+    getElementLabel(element) {
+      return this.lookupByElement(this.labels, element) ?? element.id;
+    },
+    linkedMeterName(element) {
+      return this.lookupByElement(this.linkedMeters, element) ?? undefined;
+    },
+    isHidden(element) {
+      return element.type === "counter" && !!this.hiddenIds?.some((id) => String(id) === String(element.id));
     },
     getElementIcon(element) {
       switch (element.type) {
@@ -102,11 +228,39 @@ export default {
           return ["fas", "gauge-high"];
         case "cp":
           return ["fas", "charging-station"];
+        case "vehicle":
+          return ["fas", "car"];
+        case "consumer":
+          return ["fas", "plug"];
         case "inverter":
           return ["fas", "solar-panel"];
         default:
           return undefined;
       }
+    },
+    startEditing(element) {
+      if (element.type !== "group") return;
+
+      this.editingGroupId = element.id;
+      this.editingValue = element.label;
+
+      this.$nextTick(() => {
+        const input = this.$el.querySelector(".group-rename-input");
+        input?.focus();
+        input?.select();
+      });
+    },
+
+    finishEditing(groupId) {
+      if (!this.editingValue.trim()) {
+        this.editingGroupId = null;
+        return;
+      }
+      this.$emit("rename-group", {
+        id: groupId,
+        label: this.editingValue.trim(),
+      });
+      this.editingGroupId = null;
     },
   },
 };
@@ -117,7 +271,7 @@ export default {
   min-height: 40px;
   color: #e9ecef;
   list-style-type: none;
-  border: 1px solid var(--secondary);
+  border: 1px solid #ced4da;
   border-radius: 3px;
   padding: 0px;
 }
@@ -179,7 +333,47 @@ export default {
   gap: 0.5rem;
 }
 
+.element-titel.consumer {
+  background-color: var(--purple);
+}
+
+.element-titel.group {
+  background-color: var(--secondary);
+}
+
+.group-rename-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--light);
+  color: var(--light);
+  font: inherit;
+  outline: none;
+  width: 100%;
+}
+
 .element-actions {
   cursor: pointer;
+}
+
+.element-linked-meter {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  margin-left: 8px;
+  opacity: 0.9;
+}
+
+.linked-meter-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 575.98px) {
+  .priority-prefix,
+  .linked-meter-name {
+    display: none;
+  }
 }
 </style>
