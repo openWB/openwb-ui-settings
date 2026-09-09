@@ -30,10 +30,10 @@
       max="255"
       @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
     />
-    <openwb-base-text-input
-      title="Model"
-      subtype="text"
-      required
+    <openwb-base-select-input
+      title="Modell"
+      not-selected="Bitte auswählen"
+      :options="modelOptions"
       :model-value="consumer.configuration.model"
       @update:model-value="updateConfiguration($event, 'configuration.model')"
     />
@@ -42,6 +42,7 @@
       required
       :model-value="consumer.configuration.max_power"
       min="1"
+      unit="W"
       @update:model-value="updateConfiguration($event, 'configuration.max_power')"
     />
   </div>
@@ -50,8 +51,24 @@
 <script>
 import ConsumerConfigMixin from "../../ConsumerConfigMixin.vue";
 
+const MODEL_OPTIONS = [
+  { text: "9s45", value: "9s45" },
+  { text: "9s27", value: "9s27" },
+  { text: "9s18", value: "9s18" },
+  { text: "9s", value: "9s" },
+  { text: "M3", value: "M3" },
+  { text: "E2M1", value: "E2M1" },
+  { text: "E2M3", value: "E2M3" },
+  { text: "M1", value: "M1" },
+];
+
 export default {
   name: "ConsumerMyPvActhor",
   mixins: [ConsumerConfigMixin],
+  data() {
+    return {
+      modelOptions: MODEL_OPTIONS,
+    };
+  },
 };
 </script>
