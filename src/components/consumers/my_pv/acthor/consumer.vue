@@ -31,7 +31,7 @@
       @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
     />
     <openwb-base-select-input
-      title="Model"
+      title="Modell"
       not-selected="Bitte auswählen"
       :options="modelOptions"
       :model-value="consumer.configuration.model"
@@ -42,7 +42,7 @@
       required
       :model-value="consumer.configuration.max_power"
       min="1"
-      unit="kWh"
+      unit="W"
       @update:model-value="updateConfiguration($event, 'configuration.max_power')"
     />
   </div>
