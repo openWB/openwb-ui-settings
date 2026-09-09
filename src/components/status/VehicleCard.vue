@@ -18,10 +18,17 @@
       {{ name }}
     </template>
     <template
-      v-if="soc != '-'"
+      v-if="soc != '-' || priority !== null"
       #header-right
     >
-      {{ soc }}&nbsp;%
+      <span
+        v-if="priority !== null"
+        class="badge badge-pill badge-light mr-2"
+        title="Rangfolge in der Prioritäten-Steuerung"
+      >
+        Prio {{ priority }}
+      </span>
+      <template v-if="soc != '-'">{{ soc }}&nbsp;%</template>
     </template>
     <!-- Fahrzeugdaten -->
     <openwb-base-card
@@ -63,11 +70,37 @@
         <div class="col text-right text-monospace">{{ socOdometer }}&nbsp;km</div>
       </div>
     </openwb-base-card>
+    <openwb-base-card
+      v-if="priority !== null"
+      title="Priorität"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <div class="row">
+        <div class="col pr-0 text-right">Rangfolge</div>
+        <div class="col text-right text-monospace">Prio {{ priority }}</div>
+      </div>
+      <div
+        v-if="prioritySharedGroup"
+        class="row"
+      >
+        <div class="col text-right">
+          <small>Gleichrangig mit anderen Geräten der selben Gruppe.</small>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-right">
+          <small>Die Rangfolge lässt sich unter „Lastmanagement“ anpassen.</small>
+        </div>
+      </div>
+    </openwb-base-card>
   </status-card>
 </template>
 
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
+import LoadManagementPriority from "../mixins/LoadManagementPriority.vue";
 import StatusCard from "./StatusCard.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -82,7 +115,7 @@ export default {
     StatusCard,
     FontAwesomeIcon,
   },
-  mixins: [ComponentState],
+  mixins: [ComponentState, LoadManagementPriority],
   props: {
     vehicleId: { type: Number, required: true },
   },
@@ -160,6 +193,16 @@ export default {
     baseTopic: {
       get() {
         return "openWB/vehicle/" + this.vehicleId;
+      },
+    },
+    priority: {
+      get() {
+        return this.loadManagementPriority("vehicle", this.vehicleId);
+      },
+    },
+    prioritySharedGroup: {
+      get() {
+        return this.loadManagementPriorityShared("vehicle", this.vehicleId);
       },
     },
   },

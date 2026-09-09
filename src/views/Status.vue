@@ -36,6 +36,14 @@
       :key="vehicleId"
       :vehicle-id="vehicleId"
     />
+    <!-- all consumers -->
+    <consumer-sum-card v-if="showConsumerSumCard" />
+    <!-- individual consumers -->
+    <consumer-card
+      v-for="consumerId in installedConsumers"
+      :key="consumerId"
+      :consumer-id="consumerId"
+    />
     <!-- io devices -->
     <io-device-card
       v-for="ioDevice in ioDeviceConfigs"
@@ -57,6 +65,8 @@ import BatterySumCard from "../components/status/BatterySumCard.vue";
 import BatteryCard from "../components/status/BatteryCard.vue";
 import IoDeviceCard from "../components/status/IoDeviceCard.vue";
 import VehicleCard from "../components/status/VehicleCard.vue";
+import ConsumerSumCard from "../components/status/ConsumerSumCard.vue";
+import ConsumerCard from "../components/status/ConsumerCard.vue";
 import ElectricityPricingCard from "../components/status/ElectricityPricingCard.vue";
 import ComponentState from "../components/mixins/ComponentState.vue";
 
@@ -72,6 +82,8 @@ export default {
     BatteryCard,
     IoDeviceCard,
     VehicleCard,
+    ConsumerSumCard,
+    ConsumerCard,
     ElectricityPricingCard,
   },
   mixins: [ComponentState],
@@ -87,6 +99,7 @@ export default {
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
         { topic: "openWB/system/io/+/config", writeable: false },
         { topic: "openWB/vehicle/+/info", writeable: false },
+        { topic: "openWB/consumer/+/module", writeable: false },
       ],
     };
   },
@@ -169,6 +182,24 @@ export default {
           let match = topic.match(/^openWB\/vehicle\/(\d+)\/info$/);
           return match ? parseInt(match[1]) : null;
         });
+      },
+    },
+    installedConsumers: {
+      get() {
+        if (this.$store.state.mqtt["openWB/general/extern"] === true) {
+          return []; // return empty array if extern is true, no consumers should be shown
+        }
+        return Object.keys(this.getWildcardTopics("openWB/consumer/+/module"))
+          .map((topic) => {
+            let match = topic.match(/^openWB\/consumer\/(\d+)\/module$/);
+            return match ? parseInt(match[1]) : null;
+          })
+          .filter((id) => id !== null);
+      },
+    },
+    showConsumerSumCard: {
+      get() {
+        return this.$store.state.mqtt["openWB/general/extern"] === false && this.installedConsumers.length > 1;
       },
     },
     ioDeviceConfigs: {
