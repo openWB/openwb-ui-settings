@@ -15,7 +15,6 @@
     <openwb-base-text-input
       title="Benutzername"
       subtype="user"
-      required
       :model-value="consumer.configuration.username"
       @update:model-value="updateConfiguration($event, 'configuration.username')"
     >
@@ -26,7 +25,6 @@
     <openwb-base-text-input
       title="Passwort"
       subtype="password"
-      required
       :model-value="consumer.configuration.password"
       @update:model-value="updateConfiguration($event, 'configuration.password')"
     >
@@ -42,15 +40,6 @@
       @update:model-value="updateConfiguration($event, 'configuration.channel')"
     >
       <template #help> Gibt den Schaltkanal des Shelly an (z. B. 0 oder 1, abhängig vom Modell). </template>
-    </openwb-base-number-input>
-    <openwb-base-number-input
-      title="Phase 1 des Verbraucheranschlusses"
-      required
-      :min="1"
-      :max="3"
-      :model-value="consumer.configuration.phase"
-      @update:model-value="updateConfiguration($event, 'configuration.phase')"
-    >
     </openwb-base-number-input>
     <openwb-base-number-input
       title="Faktor"

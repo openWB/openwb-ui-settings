@@ -176,8 +176,13 @@
               @update:model-value="updateState(`openWB/consumer/${installedConsumer.id}/config`, $event, 'max_power')"
             >
               <template #help>
-                Maximale Leistungsaufnahme des Geräts. Wird im Sofort-, Zeit- und Eco-Betrieb (bei günstigem Preis) als
-                Sollleistung verwendet.
+                Maximale Leistungsaufnahme des Geräts.
+                <span v-if="installedConsumer.consumerUsage?.type === 'suspendable_tunable'">
+                  Wird im Sofort-, Zeit- und Eco-Betrieb (bei günstigem Preis) als Sollleistung verwendet.
+                </span>
+                <span v-else>
+                  Wird als Sollleistung verwendet.
+                </span>
               </template>
             </openwb-base-number-input>
             <openwb-base-number-input
