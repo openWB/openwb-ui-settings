@@ -15,7 +15,6 @@
     <openwb-base-text-input
       title="Benutzername"
       subtype="user"
-      required
       :model-value="consumer.configuration.username"
       @update:model-value="updateConfiguration($event, 'configuration.username')"
     >
@@ -27,7 +26,6 @@
     <openwb-base-text-input
       title="Passwort"
       subtype="password"
-      required
       :model-value="consumer.configuration.password"
       @update:model-value="updateConfiguration($event, 'configuration.password')"
     >
