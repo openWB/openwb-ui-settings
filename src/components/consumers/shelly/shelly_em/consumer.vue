@@ -3,7 +3,7 @@
     <openwb-base-heading> Einstellungen für Shelly EM (Messen) </openwb-base-heading>
     <openwb-base-alert subtype="info">
       Unterstützt werden theoretisch alle ein- und dreiphasigen Shelly der Generation 1-3. Getestete Modelle sind Shelly
-      1pm, 1pm plus, Pro Pro 3EM, Plug S.
+      1pm, 1pm plus, Pro, Pro 3EM, Plug S.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
@@ -34,15 +34,6 @@
         Plus.</template
       >
     </openwb-base-text-input>
-    <openwb-base-number-input
-      title="Phase 1 des Verbraucheranschlusses"
-      required
-      :min="1"
-      :max="3"
-      :model-value="consumer.configuration.phase"
-      @update:model-value="updateConfiguration($event, 'configuration.phase')"
-    >
-    </openwb-base-number-input>
     <openwb-base-number-input
       title="Faktor"
       required

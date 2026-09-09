@@ -42,15 +42,6 @@
       <template #help> Gibt den Schaltkanal des Shelly an (z. B. 0 oder 1, abhängig vom Modell). </template>
     </openwb-base-number-input>
     <openwb-base-number-input
-      title="Phase 1 des Verbraucheranschlusses"
-      required
-      :min="1"
-      :max="3"
-      :model-value="consumer.configuration.phase"
-      @update:model-value="updateConfiguration($event, 'configuration.phase')"
-    >
-    </openwb-base-number-input>
-    <openwb-base-number-input
       title="Faktor"
       required
       step="any"
