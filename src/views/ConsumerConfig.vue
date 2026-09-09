@@ -114,7 +114,7 @@
                 <ul class="mb-0">
                   <li>Steuerung über Ein/Aus-Signale und Geräte mit SG-Ready-Kontakt</li>
                   <li>Unterbrechung im laufenden Betrieb möglich</li>
-                  <li>Wärempumpen, die durch die openWB gesteuert werden sollen (wie im SmartHome)</li>
+                  <li>Wärmepumpen, die durch die openWB gesteuert werden sollen (wie im SmartHome)</li>
                 </ul>
               </span>
               <span v-else-if="installedConsumer.consumerUsage?.type === 'suspendable_tunable'">
@@ -312,7 +312,7 @@
                 @update:model-value="updateUsage(installedConsumer.id, $event, 'wait_for_start_active')"
               >
                 <template #help>
-                  Die Anlauferkennung ist in den Betriebsmodi PV, Eco und Ziel aktiv und wird bei Ablauf eines Zielplans
+                  Die Anlauferkennung ist in den Betriebsmodi PV, Eco und Ziel aktiv und wird bei Ablauf eines Zielplans, um Mitternacht
                   sowie beim Ändern des Betriebsmodus zurückgesetzt.<br />
                   Das Gerät wird eingeschaltet, um seine Startsequenz (z. B. Befüllen, Türverriegelung) abzuwarten.
                   Sobald der Strom den eingestellten Minimalstrom übersteigt, wird das Gerät als aktiv erkannt, das
