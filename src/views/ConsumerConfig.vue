@@ -206,13 +206,13 @@
               :step="0.1"
               :model-value="
                 installedConsumer.config?.min_interval != null
-                  ? parseFloat(installedConsumer.config.min_interval / 60).toFixed(2)
+                  ? parseFloat((installedConsumer.config.min_interval / 60).toFixed(2))
                   : null
               "
               @update:model-value="
                 updateState(
                   `openWB/consumer/${installedConsumer.id}/config`,
-                  parseFloat($event * 60).toFixed(0),
+                  parseFloat(($event * 60).toFixed(0)),
                   'min_interval',
                 )
               "
@@ -312,8 +312,8 @@
                 @update:model-value="updateUsage(installedConsumer.id, $event, 'wait_for_start_active')"
               >
                 <template #help>
-                  Die Anlauferkennung ist in den Betriebsmodi PV, Eco und Ziel aktiv und wird bei Ablauf eines Zielplans, um Mitternacht
-                  sowie beim Ändern des Betriebsmodus zurückgesetzt.<br />
+                  Die Anlauferkennung ist in den Betriebsmodi PV, Eco und Ziel aktiv und wird bei Ablauf eines
+                  Zielplans, um Mitternacht sowie beim Ändern des Betriebsmodus zurückgesetzt.<br />
                   Das Gerät wird eingeschaltet, um seine Startsequenz (z. B. Befüllen, Türverriegelung) abzuwarten.
                   Sobald der Strom den eingestellten Minimalstrom übersteigt, wird das Gerät als aktiv erkannt, das
                   Gerät abgeschaltet und es übernimmt der gewählte Betriebsmodus. So kann z. B. eine Waschmaschine
