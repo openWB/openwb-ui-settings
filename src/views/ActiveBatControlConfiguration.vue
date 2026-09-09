@@ -64,14 +64,14 @@
               :step="1"
               unit="%"
               required
-              :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/min_bat_soc']"
+              :model-value="$store.state.mqtt['openWB/general/chargemode_config/bat/min_soc']"
               @update:model-value="
-                (updateState('openWB/general/chargemode_config/pv_charging/min_bat_soc', $event),
+                (updateState('openWB/general/chargemode_config/bat/min_soc', $event),
                 updateState(
-                  'openWB/general/chargemode_config/pv_charging/max_bat_soc',
-                  $store.state.mqtt['openWB/general/chargemode_config/pv_charging/min_bat_soc'] <
-                    $store.state.mqtt['openWB/general/chargemode_config/pv_charging/max_bat_soc']
-                    ? $store.state.mqtt['openWB/general/chargemode_config/pv_charging/max_bat_soc']
+                  'openWB/general/chargemode_config/bat/max_soc',
+                  $store.state.mqtt['openWB/general/chargemode_config/bat/min_soc'] <
+                    $store.state.mqtt['openWB/general/chargemode_config/bat/max_soc']
+                    ? $store.state.mqtt['openWB/general/chargemode_config/bat/max_soc']
                     : $event,
                 ))
               "
@@ -88,14 +88,14 @@
               :step="1"
               unit="%"
               required
-              :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/max_bat_soc']"
+              :model-value="$store.state.mqtt['openWB/general/chargemode_config/bat/max_soc']"
               @update:model-value="
-                (updateState('openWB/general/chargemode_config/pv_charging/max_bat_soc', $event),
+                (updateState('openWB/general/chargemode_config/bat/max_soc', $event),
                 updateState(
-                  'openWB/general/chargemode_config/pv_charging/min_bat_soc',
-                  $store.state.mqtt['openWB/general/chargemode_config/pv_charging/max_bat_soc'] >
-                    $store.state.mqtt['openWB/general/chargemode_config/pv_charging/min_bat_soc']
-                    ? $store.state.mqtt['openWB/general/chargemode_config/pv_charging/min_bat_soc']
+                  'openWB/general/chargemode_config/bat/min_soc',
+                  $store.state.mqtt['openWB/general/chargemode_config/bat/max_soc'] >
+                    $store.state.mqtt['openWB/general/chargemode_config/bat/min_soc']
+                    ? $store.state.mqtt['openWB/general/chargemode_config/bat/min_soc']
                     : $event,
                 ))
               "
@@ -107,8 +107,8 @@
             </openwb-base-range-input>
             <openwb-base-alert
               v-if="
-                $store.state.mqtt['openWB/general/chargemode_config/pv_charging/min_bat_soc'] ==
-                $store.state.mqtt['openWB/general/chargemode_config/pv_charging/max_bat_soc']
+                $store.state.mqtt['openWB/general/chargemode_config/bat/min_soc'] ==
+                $store.state.mqtt['openWB/general/chargemode_config/bat/max_soc']
               "
               subtype="info"
             >
@@ -129,13 +129,11 @@
                   class: 'btn-outline-success',
                 },
               ]"
-              :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/bat_power_reserve_active']"
-              @update:model-value="
-                updateState('openWB/general/chargemode_config/pv_charging/bat_power_reserve_active', $event)
-              "
+              :model-value="$store.state.mqtt['openWB/general/chargemode_config/bat/power_reserve_active']"
+              @update:model-value="updateState('openWB/general/chargemode_config/bat/power_reserve_active', $event)"
             >
               <template
-                v-if="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/bat_power_reserve_active']"
+                v-if="$store.state.mqtt['openWB/general/chargemode_config/bat/power_reserve_active']"
                 #help
               >
                 ACHTUNG: Der hier eingestellte Wert darf die maximale Ladeleistung des Speichers nicht überschreiten!<br />
@@ -150,16 +148,14 @@
               </template>
             </openwb-base-button-group-input>
             <openwb-base-number-input
-              v-if="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/bat_power_reserve_active']"
+              v-if="$store.state.mqtt['openWB/general/chargemode_config/bat/power_reserve_active']"
               title="Reservierte Ladeleistung"
               :min="0.1"
               :step="0.1"
               unit="kW"
               required
-              :model-value="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/bat_power_reserve'] / 1000"
-              @update:model-value="
-                updateState('openWB/general/chargemode_config/pv_charging/bat_power_reserve', $event * 1000)
-              "
+              :model-value="$store.state.mqtt['openWB/general/chargemode_config/bat/power_reserve'] / 1000"
+              @update:model-value="updateState('openWB/general/chargemode_config/bat/power_reserve', $event * 1000)"
             />
             <openwb-base-heading> Speicher-SoC oberhalb Maximal-SoC </openwb-base-heading>
             <openwb-base-button-group-input
@@ -176,15 +172,11 @@
                   class: 'btn-outline-success',
                 },
               ]"
-              :model-value="
-                $store.state.mqtt['openWB/general/chargemode_config/pv_charging/bat_power_discharge_active']
-              "
-              @update:model-value="
-                updateState('openWB/general/chargemode_config/pv_charging/bat_power_discharge_active', $event)
-              "
+              :model-value="$store.state.mqtt['openWB/general/chargemode_config/bat/power_discharge_active']"
+              @update:model-value="updateState('openWB/general/chargemode_config/bat/power_discharge_active', $event)"
             >
               <template
-                v-if="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/bat_power_discharge_active']"
+                v-if="$store.state.mqtt['openWB/general/chargemode_config/bat/power_discharge_active']"
                 #help
               >
                 ACHTUNG: Der hier eingestellte Wert darf die maximale Entladeleistung des Speichers nicht überschreiten!
@@ -200,18 +192,14 @@
               </template>
             </openwb-base-button-group-input>
             <openwb-base-number-input
-              v-if="$store.state.mqtt['openWB/general/chargemode_config/pv_charging/bat_power_discharge_active']"
+              v-if="$store.state.mqtt['openWB/general/chargemode_config/bat/power_discharge_active']"
               title="Erlaubte Entladeleistung"
               :min="0.1"
               :step="0.1"
               unit="kW"
               required
-              :model-value="
-                $store.state.mqtt['openWB/general/chargemode_config/pv_charging/bat_power_discharge'] / 1000
-              "
-              @update:model-value="
-                updateState('openWB/general/chargemode_config/pv_charging/bat_power_discharge', $event * 1000)
-              "
+              :model-value="$store.state.mqtt['openWB/general/chargemode_config/bat/power_discharge'] / 1000"
+              @update:model-value="updateState('openWB/general/chargemode_config/bat/power_discharge', $event * 1000)"
             />
           </div>
         </div>
@@ -677,13 +665,13 @@ export default {
         { topic: "openWB/bat/config/price_charge_activated", writeable: true },
         { topic: "openWB/bat/config/price_limit", writeable: true },
         { topic: "openWB/bat/config/price_limit_activated", writeable: true },
-        { topic: "openWB/general/chargemode_config/pv_charging/bat_mode", writeable: true },
-        { topic: "openWB/general/chargemode_config/pv_charging/bat_power_discharge", writeable: true },
-        { topic: "openWB/general/chargemode_config/pv_charging/bat_power_discharge_active", writeable: true },
-        { topic: "openWB/general/chargemode_config/pv_charging/bat_power_reserve", writeable: true },
-        { topic: "openWB/general/chargemode_config/pv_charging/bat_power_reserve_active", writeable: true },
-        { topic: "openWB/general/chargemode_config/pv_charging/max_bat_soc", writeable: true },
-        { topic: "openWB/general/chargemode_config/pv_charging/min_bat_soc", writeable: true },
+        { topic: "openWB/general/chargemode_config/bat/mode", writeable: true },
+        { topic: "openWB/general/chargemode_config/bat/power_discharge", writeable: true },
+        { topic: "openWB/general/chargemode_config/bat/power_discharge_active", writeable: true },
+        { topic: "openWB/general/chargemode_config/bat/power_reserve", writeable: true },
+        { topic: "openWB/general/chargemode_config/bat/power_reserve_active", writeable: true },
+        { topic: "openWB/general/chargemode_config/bat/max_soc", writeable: true },
+        { topic: "openWB/general/chargemode_config/bat/min_soc", writeable: true },
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
         { topic: "openWB/optional/ep/configured", writeable: false },
@@ -693,10 +681,10 @@ export default {
   computed: {
     batMode: {
       get() {
-        return this.$store.state.mqtt["openWB/general/chargemode_config/pv_charging/bat_mode"];
+        return this.$store.state.mqtt["openWB/general/chargemode_config/bat/mode"];
       },
       set(newMode) {
-        this.updateState("openWB/general/chargemode_config/pv_charging/bat_mode", newMode);
+        this.updateState("openWB/general/chargemode_config/bat/mode", newMode);
       },
     },
     numBatteriesInstalled() {
