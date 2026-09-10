@@ -10,7 +10,7 @@
       @update:model-value="updateConfiguration($event, 'configuration.meter_id')"
     />
     <openwb-base-text-input
-      title="Username"
+      title="Benutzername"
       required
       :model-value="component.configuration.username"
       @update:model-value="updateConfiguration($event, 'configuration.username')"
