@@ -635,6 +635,7 @@ export default {
         });
       };
       this.loadManagementPriorityList = rename(this.loadManagementPriorityList);
+    },
     getHomeConsumptionCounterMode(counterId) {
       const counterModeTopic = `openWB/counter/${counterId}/config/is_home_consumption_counter`;
       const counterModeValue = this.$store.state.mqtt[counterModeTopic];
