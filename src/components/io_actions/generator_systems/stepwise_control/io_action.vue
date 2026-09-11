@@ -26,7 +26,12 @@
       Erzeugungsanlagen angezeigt.
       <template v-if="ioDevice?.type === 'eebus'">
         <hr />
-        <strong>
+        <strong v-if="ioAction.configuration.passthrough_enabled">
+          Zugeordnete WR werden aktuell noch nicht direkt vom openWB-EMS per EEBUS in ihrer Leistung begrenzt (LPP -
+          limit power production), da hierfür Gerätetreiber nötig sind, die eine vollständige EEBUS-Dokumentation der
+          WR-Hersteller bedingen.
+        </strong>
+        <strong v-else>
           Zugeordnete WR werden aktuell noch nicht vom openWB-EMS per EEBUS in ihrer Leistung begrenzt (LPP - limit
           power production), da hierfür Gerätetreiber nötig sind, die eine vollständige EEBUS-Dokumentation der
           WR-Hersteller bedingen.
@@ -34,8 +39,9 @@
       </template>
       <template v-if="ioAction.configuration.passthrough_enabled">
         <hr />
-        Die Leistungsstufe wird über die unten konfigurierten Ausgänge ausgegeben. Damit die Wechselrichter gedrosselt
-        werden, müssen sie an diese Ausgänge angeschlossen sein.
+        Da "Ausgänge aktivieren" eingeschaltet ist, wird die empfangene Leistungsstufe über die Kontakte des unten
+        konfigurierten Ausgangs-Geräts an die Wechselrichter weitergegeben. Dafür müssen die Wechselrichter an diese
+        Ausgänge angeschlossen sein.
       </template>
       <template v-else>
         <hr />
