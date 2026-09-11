@@ -13,7 +13,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            {{ topicPrefix }}/get/power
+            {{ publishTopicPrefix }}/get/power
           </openwb-base-copy-to-clipboard>
           <br />
           Bezugsleistung in Watt, Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
@@ -28,7 +28,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            {{ topicPrefix }}/get/imported
+            {{ publishTopicPrefix }}/get/imported
           </openwb-base-copy-to-clipboard>
           <br />
           Bezogene Energie in Wh, Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
@@ -40,7 +40,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            {{ topicPrefix }}/get/exported
+            {{ publishTopicPrefix }}/get/exported
           </openwb-base-copy-to-clipboard>
           <br />
           Eingespeiste Energie in Wh, Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
@@ -52,7 +52,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            {{ topicPrefix }}/get/currents
+            {{ publishTopicPrefix }}/get/currents
           </openwb-base-copy-to-clipboard>
           <br />
           Array mit den Strömen je Phase in Ampere, mit Nachkommastellen (Float), positiv Bezug, negativ Einspeisung<br />
@@ -63,7 +63,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            {{ topicPrefix }}/get/voltages
+            {{ publishTopicPrefix }}/get/voltages
           </openwb-base-copy-to-clipboard>
           <br />
           Array mit den Spannungen je Phase in Volt, mit Nachkommastellen (Float)<br />
@@ -77,7 +77,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            {{ topicPrefix }}/get/powers
+            {{ publishTopicPrefix }}/get/powers
           </openwb-base-copy-to-clipboard>
           <br />
           Array mit den Leistungen je Phase in Watt, mit Nachkommastellen (Float)<br />
@@ -92,7 +92,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            {{ topicPrefix }}/set/power
+            {{ subscribeTopicPrefix }}/set/power
           </openwb-base-copy-to-clipboard>
           <br />
           Sollleistung in Watt, Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
@@ -108,7 +108,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            {{ topicPrefix }}/set/switch
+            {{ subscribeTopicPrefix }}/set/switch
           </openwb-base-copy-to-clipboard>
           <br />
           Vorgegebener Schaltzustand, true für ein, false für aus<br />
@@ -123,7 +123,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            {{ topicPrefix }}/set/evu_power
+            {{ subscribeTopicPrefix }}/set/evu_power
           </openwb-base-copy-to-clipboard>
           <br />
           Aktuelle EVU-Leistung in Watt, Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
@@ -135,7 +135,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            {{ topicPrefix }}/set/pv_power
+            {{ subscribeTopicPrefix }}/set/pv_power
           </openwb-base-copy-to-clipboard>
           <br />
           Aktuelle PV-Leistung in Watt, Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
@@ -147,7 +147,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            {{ topicPrefix }}/set/bat_power
+            {{ subscribeTopicPrefix }}/set/bat_power
           </openwb-base-copy-to-clipboard>
           <br />
           Aktuelle Batterieleistung in Watt, Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
@@ -159,7 +159,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            {{ topicPrefix }}/set/bat_soc
+            {{ subscribeTopicPrefix }}/set/bat_soc
           </openwb-base-copy-to-clipboard>
           <br />
           Aktueller Batterieladestand in Prozent, Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt
@@ -171,7 +171,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            {{ topicPrefix }}/set/home_consumption
+            {{ subscribeTopicPrefix }}/set/home_consumption
           </openwb-base-copy-to-clipboard>
           <br />
           Aktueller Hausverbrauch in Watt, Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem Punkt als
@@ -183,7 +183,7 @@
             class="text-info"
             tooltip="Topic kopieren"
           >
-            {{ topicPrefix }}/set/cp_power
+            {{ subscribeTopicPrefix }}/set/cp_power
           </openwb-base-copy-to-clipboard>
           <br />
           Aktuelle Leistung aller Ladepunkte in Watt, Zahl mit oder ohne Nachkommastellen (Float, Integer) und einem
@@ -203,12 +203,16 @@ export default {
   mixins: [ConsumerDeviceConfigMixin],
   data() {
     return {
-      baseTopic: "openWB/set/mqtt/consumer",
+      publishBaseTopic: "openWB/set/mqtt/consumer",
+      subscribeBaseTopic: "openWB/mqtt/consumer",
     };
   },
   computed: {
-    topicPrefix() {
-      return `${this.baseTopic}/${this.consumer.id}`;
+    publishTopicPrefix() {
+      return `${this.publishBaseTopic}/${this.consumer.id}`;
+    },
+    subscribeTopicPrefix() {
+      return `${this.subscribeBaseTopic}/${this.consumer.id}`;
     },
   },
 };
