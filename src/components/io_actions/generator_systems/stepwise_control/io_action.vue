@@ -31,7 +31,6 @@
           power production), da hierfür Gerätetreiber nötig sind, die eine vollständige EEBUS-Dokumentation der
           WR-Hersteller bedingen.
         </strong>
-        Stattdessen zeigt openWB die aktuell gültige Leistungsstufe der zugeordneten Erzeugungsanlagen im Status an.
       </template>
       <template v-if="ioAction.configuration.passthrough_enabled">
         <hr />
@@ -41,7 +40,7 @@
       <template v-else>
         <hr />
         Die zugeordneten Erzeugungsanlagen werden von openWB nicht selbst gedrosselt. Über "Ausgänge aktivieren" kann
-        die Leistungsstufe an Ausgänge durchgereicht werden.
+        die Leistungsstufe an die Ausgänge eines Dimm- & Control-Kits oder einer AddOn-Platine durchgereicht werden.
       </template>
     </template>
   </openwb-base-select-input>
