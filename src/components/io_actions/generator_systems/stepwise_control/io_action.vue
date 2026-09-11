@@ -4,7 +4,7 @@
     v-slot="slotProps"
     v-model="ioAction.configuration.input_pattern"
     :contacts="ioDevice.input.digital"
-    action-title="Begrenzung"
+    action-title="Leistungsstufen"
     :enable-add-delete="false"
     class="text-center"
   >
@@ -22,12 +22,30 @@
   >
     <template #help>
       Bitte die Erzeugungsanlagen auswählen, welche mit dieser Aktion gekoppelt sind. Es können mehrere
-      Erzeugungsanlagen ausgewählt werden.<br />
-      Diese Zuordnung ist rein informativ und hat noch keine Auswirkungen auf die Funktionalität. Die Begrenzung der
-      zugeordneten Erzeugungsanlagen wird im Status angezeigt.
+      Erzeugungsanlagen ausgewählt werden. Die aktuell gültige Leistungsstufe wird im Status der zugeordneten
+      Erzeugungsanlagen angezeigt.
+      <template v-if="ioDevice?.type === 'eebus'">
+        <hr />
+        <strong>
+          Zugeordnete WR werden aktuell noch nicht vom openWB-EMS per EEBUS in ihrer Leistung begrenzt (LPP - limit
+          power production), da hierfür Gerätetreiber nötig sind, die eine vollständige EEBUS-Dokumentation der
+          WR-Hersteller bedingen.
+        </strong>
+        Stattdessen zeigt openWB die aktuell gültige Leistungsstufe der zugeordneten Erzeugungsanlagen im Status an.
+      </template>
+      <template v-if="ioAction.configuration.passthrough_enabled">
+        <hr />
+        Die Leistungsstufe wird über die unten konfigurierten Ausgänge ausgegeben. Damit die Wechselrichter gedrosselt
+        werden, müssen sie an diese Ausgänge angeschlossen sein.
+      </template>
+      <template v-else>
+        <hr />
+        Die zugeordneten Erzeugungsanlagen werden von openWB nicht selbst gedrosselt. Über "Ausgänge aktivieren" kann
+        die Leistungsstufe an Ausgänge durchgereicht werden.
+      </template>
     </template>
   </openwb-base-select-input>
-  <hr v-if="ioDevice?.type !== 'eebus'" />
+  <hr />
   <openwb-base-button-group-input
     v-model="ioAction.configuration.passthrough_enabled"
     title="Ausgänge aktivieren"
@@ -39,8 +57,10 @@
     required
   >
     <template #help>
-      Optional kann das Signal der konfigurierten Eingänge an Ausgänge durchgereicht ("durchgeschliffen") werden. Wird
-      z.B. das Muster für 60% als aktiv erkannt, dann wird auch das hier festgelegte Ausgangsmuster für 60% aktiviert.
+      Optional kann die erkannte Leistungsstufe an Ausgänge durchgereicht ("durchgeschliffen") werden. Wird z.B. die
+      Leistungsstufe 60% erkannt, dann wird das hier festgelegte Ausgangsmuster für 60% aktiviert. Die Leistungsstufe
+      kann dabei über Eingangskontakte oder per EEBus empfangen werden. Damit die Erzeugungsanlagen gedrosselt werden,
+      müssen sie an die Ausgänge angeschlossen sein.
     </template>
   </openwb-base-button-group-input>
   <openwb-base-select-input
@@ -64,7 +84,7 @@
     v-model="ioAction.configuration.output_pattern"
     :contacts="outputContacts"
     title="Ausgangsmuster"
-    action-title="Begrenzung"
+    action-title="Leistungsstufen"
     :enable-add-delete="false"
     class="text-center"
   >

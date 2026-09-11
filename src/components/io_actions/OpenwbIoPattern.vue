@@ -129,7 +129,7 @@
           class="pl-2"
           :colspan="enableAddDelete ? 3 : 2"
         >
-          Simulierter Eingang
+          Simulierte Kontakte
         </td>
       </tr>
     </tbody>
@@ -137,17 +137,16 @@
   <openwb-base-button-group-input
     v-if="showCheckPattern"
     v-model="showTestPattern"
-    title="Simulierter Eingang"
+    title="Simulierte Kontakte"
     :buttons="[
       { buttonValue: false, text: 'Verbergen' },
       { buttonValue: true, text: 'Anzeigen' },
     ]"
   >
     <template #help>
-      Der simulierte Eingang ist eine Hilfe um zu testen, ob die Eingangsmuster zum gewünschten Verhalten passen. Ein
-      grüner Haken in der Spalte "Prüfergebnis" zeigt an, dass das Eingangsmuster zum simulierten Eingang passt.
-      Eingangsmuster mit unterschiedlichem Verhalten dürfen nicht gleichzeitig passen, da sonst das Verhalten nicht
-      eindeutig ist.
+      Die simulierten Kontakte sind eine Hilfe, um zu testen, ob die Muster zum gewünschten Verhalten passen. Ein grüner
+      Haken in der Spalte "Prüfergebnis" zeigt an, dass das Muster zu den simulierten Kontakten passt. Muster mit
+      unterschiedlichem Verhalten dürfen nicht gleichzeitig passen, da sonst das Verhalten nicht eindeutig ist.
     </template>
   </openwb-base-button-group-input>
 </template>
