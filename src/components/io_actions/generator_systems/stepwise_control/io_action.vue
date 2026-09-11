@@ -29,7 +29,6 @@
   </openwb-base-select-input>
   <hr v-if="ioDevice?.type !== 'eebus'" />
   <openwb-base-button-group-input
-    v-if="ioDevice?.type !== 'eebus'"
     v-model="ioAction.configuration.passthrough_enabled"
     title="Ausgänge aktivieren"
     :buttons="[
@@ -44,16 +43,30 @@
       z.B. das Muster für 60% als aktiv erkannt, dann wird auch das hier festgelegte Ausgangsmuster für 60% aktiviert.
     </template>
   </openwb-base-button-group-input>
-  <openwb-io-pattern
+  <openwb-base-select-input
     v-if="ioAction.configuration.passthrough_enabled"
+    title="Ausgangs-Gerät"
+    not-selected="Bitte auswählen"
+    :empty-value="null"
+    required
+    :options="ioDeviceList"
+    :model-value="ioAction?.configuration.io_output_device"
+    @update:model-value="updateIoDevice($event)"
+  >
+    <template #help>
+      Bitte das Gerät auswählen, über das der Schaltbefehl ausgegeben werden soll. Für jede Aktion kann nur ein Gerät
+      ausgewählt werden.
+    </template>
+  </openwb-base-select-input>
+  <openwb-io-pattern
+    v-if="ioAction.configuration.passthrough_enabled && outputIoDevice"
     v-slot="slotProps"
     v-model="ioAction.configuration.output_pattern"
-    :contacts="ioDevice.output.digital"
+    :contacts="outputContacts"
     title="Ausgangsmuster"
     action-title="Begrenzung"
     :enable-add-delete="false"
     class="text-center"
-    :show-check-pattern="false"
   >
     {{ slotProps.pattern.value * 100 + "%" }}
   </openwb-io-pattern>
@@ -70,6 +83,21 @@ export default {
   },
   mixins: [OpenwbIoActionConfigMixin],
   computed: {
+    ioDeviceList() {
+      return this.availableIoDevices
+        .filter((device) => device?.type !== "eebus")
+        .map((device) => ({ value: device?.id, text: device?.name }));
+    },
+    outputIoDevice() {
+      return (
+        this.availableIoDevices.find(
+          (device) => device?.id === this.ioAction?.configuration?.io_output_device && device?.type !== "eebus",
+        ) || null
+      );
+    },
+    outputContacts() {
+      return this.outputIoDevice?.output?.digital || {};
+    },
     availableDevices() {
       let options = this.availableComponents
         .filter((component) => component.type === "inverter")
@@ -83,6 +111,17 @@ export default {
           options: options,
         },
       ];
+    },
+  },
+  methods: {
+    updateIoDevice(value) {
+      this.updateConfiguration(value, "configuration.io_output_device");
+      if (Array.isArray(this.ioAction.configuration?.output_pattern)) {
+        let clearedOutputPattern = this.ioAction.configuration.output_pattern.map((output) => {
+          return { value: output.value, matrix: {} };
+        });
+        this.updateConfiguration(clearedOutputPattern, "configuration.output_pattern");
+      }
     },
   },
 };
