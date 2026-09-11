@@ -31,11 +31,15 @@
       max="255"
       @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
     />
-    <openwb-base-number-input
+    <openwb-base-select-input
       title="Version"
-      required
+      not-selected="Bitte auswählen"
+      :options="[
+        { value: 1, text: 'Navigator 1.7' },
+        { value: 2, text: 'Navigator 2.0' },
+      ]"
       :model-value="consumer.configuration.version"
-      min="1"
+      required
       @update:model-value="updateConfiguration($event, 'configuration.version')"
     />
   </div>
