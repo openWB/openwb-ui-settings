@@ -167,6 +167,28 @@
               @update:model-value="updateState(`openWB/consumer/${installedConsumer.id}/config`, $event, 'phase_1')"
             >
             </openwb-base-button-group-input>
+            <openwb-base-button-group-input
+              title="Im Hausverbrauch berücksichtigen?"
+              :buttons="[
+                { buttonValue: 'home_consumption', text: 'Ja', class: 'btn-outline-success' },
+                { buttonValue: 'auto_home_consumption', text: 'Automatisch', class: 'btn-outline-info' },
+                { buttonValue: 'no_home_consumption', text: 'Nein', class: 'btn-outline-danger' },
+              ]"
+              :model-value="installedConsumer?.config?.is_home_consumption_consumer ?? 'auto_home_consumption'"
+              @update:model-value="
+                updateState(
+                  `openWB/consumer/${installedConsumer.id}/config`,
+                  $event,
+                  'is_home_consumption_consumer',
+                )
+              "
+            >
+              <template #help>
+                Ja: Verbraucher wird im Hausverbrauch berücksichtigt.
+                Nein: Verbraucher wird nicht berücksichtigt.
+                Automatisch: Verbraucher übernimmt die Einstellung des übergeordneten Zählers.
+              </template>
+            </openwb-base-button-group-input>
             <openwb-base-number-input
               v-if="showModeSettings(installedConsumer)"
               title="Maximale Leistung"
