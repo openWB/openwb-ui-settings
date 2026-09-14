@@ -46,8 +46,9 @@
             @update:model-value="updateState('openWB/general/legacy_smarthome_active', $event)"
           >
             <template #help>
-              Aktiviert die alte, eigenständige SmartHome-Steuerung (Geräte über "openWB/LegacySmartHome/..."-Topics).
-              Wer keine solchen Geräte eingerichtet hat, kann sie hier deaktivieren.
+              Aktiviert die bisherige, eigenständige SmartHome-Steuerung (Geräte über
+              "openWB/LegacySmartHome/..."-Topics). Wer keine solchen Geräte eingerichtet hat, kann sie hier
+              deaktivieren.
             </template>
           </openwb-base-button-group-input>
           <openwb-base-alert
@@ -57,7 +58,7 @@
             Die alte SmartHome-Steuerung ist aktiv. Die Verbrauchersteuerung auf dieser Seite ist ihr Nachfolger.
             Bestehende SmartHome-Geräte funktionieren weiterhin; beim Umstieg sollte jedes Gerät aber nur in einem der
             beiden Systeme eingerichtet sein, da eine gleichzeitige Steuerung zu unerwünschtem Schaltverhalten führen
-            kann. Sind alle Geräte umgezogen, kann das alte SmartHome hier abgeschaltet werden.
+            kann. Sind alle Geräte umgezogen, kann das bisherige SmartHome hier abgeschaltet werden.
           </openwb-base-alert>
           <hr />
           <!-- Individual Consumer cards -->
