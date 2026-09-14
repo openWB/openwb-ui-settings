@@ -34,14 +34,22 @@
         Plus.</template
       >
     </openwb-base-text-input>
-    <openwb-base-number-input
-      title="Faktor"
-      required
-      step="any"
+    <openwb-base-select-input
+      title="Vorzeichen invertieren"
+      not-selected="Bitte auswählen"
+      :options="[
+        { value: -1, text: 'ja' },
+        { value: 1, text: 'nein' },
+      ]"
       :model-value="consumer.configuration.factor"
+      required
       @update:model-value="updateConfiguration($event, 'configuration.factor')"
     >
-    </openwb-base-number-input>
+      <template #help>
+        Einige Shelly Modelle liefern die Leistung mit umgedrehtem Vorzeichen. Falls dies der Fall sein sollte, das
+        Vorzeichen invertieren.
+      </template>
+    </openwb-base-select-input>
   </div>
 </template>
 
