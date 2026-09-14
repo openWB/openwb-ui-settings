@@ -69,6 +69,17 @@
           Array mit den Spannungen je Phase in Volt, mit Nachkommastellen (Float)<br />
           Beispiel: <span class="text-info">[222.2,223.3,222.3]</span>
         </li>
+        <li>
+          <openwb-base-copy-to-clipboard
+            class="text-info"
+            tooltip="Topic kopieren"
+          >
+            {{ publishTopicPrefix }}/get/temperatures
+          </openwb-base-copy-to-clipboard>
+          <br />
+          Array mit Temperaturwerten in Grad Celsius, mit Nachkommastellen (Float)<br />
+          Beispiel: <span class="text-info">[38.5,41.2]</span>
+        </li>
       </ul>
       Die Leistungen jeder Phase werden ausschließlich zu Anzeigezwecken verwendet:
       <ul>
