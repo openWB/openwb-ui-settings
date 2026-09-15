@@ -1,6 +1,6 @@
 <template>
-  <div class="device-fronius-counter-sm">
-    <openwb-base-heading> Einstellungen für Fronius SmartMeter </openwb-base-heading>
+  <div class="device-fronius-counter">
+    <openwb-base-heading> Einstellungen für Fronius Zähler </openwb-base-heading>
     <openwb-base-select-input
       title="Kompatibilitätsmodus"
       not-selected="Bitte auswählen"
@@ -9,17 +9,21 @@
         { value: 0, text: 'Aus' },
         { value: 1, text: 'Variante 1' },
         { value: 2, text: 'Variante 2' },
+        { value: 3, text: 'S0 (im Wechselrichter integriert)' },
       ]"
       :model-value="component.configuration.variant"
       @update:model-value="updateConfiguration($event, 'configuration.variant')"
     >
       <template #help>
-        Gegebenenfalls auch für alte Modelle nach einem Softwareupdate erforderlich. Fronius hat derzeit keine
-        Konsistente Schnittstelle. Speziell beim Gen24 kann Variante 1 oder 2 erforderlich sein. Nach speichern sollten
-        nach etwa 10-20 Sekunden Daten angezeigt werden. Ist dies nicht der Fall die andere Variante ausprobieren.
+        "S0" wählen, wenn kein eigenes SmartMeter vorhanden ist und stattdessen der im Wechselrichter integrierte
+        S0-Zähler genutzt werden soll. Für ein separates SmartMeter gegebenenfalls auch für alte Modelle nach einem
+        Softwareupdate "Variante 1" oder "2" erforderlich. Fronius hat derzeit keine konsistente Schnittstelle. Speziell
+        beim Gen24 kann Variante 1 oder 2 erforderlich sein. Nach speichern sollten nach etwa 10-20 Sekunden Daten
+        angezeigt werden. Ist dies nicht der Fall die andere Variante ausprobieren.
       </template>
     </openwb-base-select-input>
     <openwb-base-number-input
+      v-if="component.configuration.variant !== 3"
       title="Meter ID"
       required
       min="0"
@@ -49,7 +53,7 @@
 import ComponentConfigMixin from "../../ComponentConfigMixin.vue";
 
 export default {
-  name: "DeviceFroniusCounterSM",
+  name: "DeviceFroniusCounter",
   mixins: [ComponentConfigMixin],
   computed: {
     meterRealtimeUrl: {
