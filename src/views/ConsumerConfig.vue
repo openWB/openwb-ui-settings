@@ -27,6 +27,40 @@
           </openwb-base-alert>
         </div>
         <div v-else>
+          <!-- legacy SmartHome switch -->
+          <openwb-base-button-group-input
+            title="SmartHome (veraltet)"
+            :buttons="[
+              {
+                buttonValue: false,
+                text: 'Aus',
+                class: 'btn-outline-danger',
+              },
+              {
+                buttonValue: true,
+                text: 'An',
+                class: 'btn-outline-success',
+              },
+            ]"
+            :model-value="$store.state.mqtt['openWB/general/legacy_smarthome_active']"
+            @update:model-value="updateState('openWB/general/legacy_smarthome_active', $event)"
+          >
+            <template #help>
+              Aktiviert die bisherige, eigenständige SmartHome-Steuerung (Geräte über
+              "openWB/LegacySmartHome/..."-Topics). Wer keine solchen Geräte eingerichtet hat, kann sie hier
+              deaktivieren.
+            </template>
+          </openwb-base-button-group-input>
+          <openwb-base-alert
+            v-if="$store.state.mqtt['openWB/general/legacy_smarthome_active'] === true"
+            subtype="warning"
+          >
+            Die alte SmartHome-Steuerung ist aktiv. Die Verbrauchersteuerung auf dieser Seite ist ihr Nachfolger.
+            Bestehende SmartHome-Geräte funktionieren weiterhin; beim Umstieg sollte jedes Gerät aber nur in einem der
+            beiden Systeme eingerichtet sein, da eine gleichzeitige Steuerung zu unerwünschtem Schaltverhalten führen
+            kann. Sind alle Geräte umgezogen, kann das bisherige SmartHome hier abgeschaltet werden.
+          </openwb-base-alert>
+          <hr />
           <!-- Individual Consumer cards -->
           <openwb-base-card
             v-for="(installedConsumer, installedConsumerKey) in installedConsumers"
@@ -202,9 +236,7 @@
                 <span v-if="installedConsumer.consumerUsage?.type === 'suspendable_tunable'">
                   Wird im Sofort-, Zeit- und Eco-Betrieb (bei günstigem Preis) als Sollleistung verwendet.
                 </span>
-                <span v-else>
-                  Wird als Sollleistung verwendet.
-                </span>
+                <span v-else> Wird als Sollleistung verwendet. </span>
               </template>
             </openwb-base-number-input>
             <openwb-base-number-input
@@ -679,6 +711,7 @@ export default {
     return {
       mqttTopics: [
         { topic: "openWB/general/extern", writeable: false },
+        { topic: "openWB/general/legacy_smarthome_active", writeable: true },
         { topic: "openWB/consumer/+/module", writeable: true },
         { topic: "openWB/consumer/+/config", writeable: true },
         { topic: "openWB/consumer/+/usage", writeable: true },
