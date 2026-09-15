@@ -202,9 +202,7 @@
                 <span v-if="installedConsumer.consumerUsage?.type === 'suspendable_tunable'">
                   Wird im Sofort-, Zeit- und Eco-Betrieb (bei günstigem Preis) als Sollleistung verwendet.
                 </span>
-                <span v-else>
-                  Wird als Sollleistung verwendet.
-                </span>
+                <span v-else> Wird als Sollleistung verwendet. </span>
               </template>
             </openwb-base-number-input>
             <openwb-base-number-input
@@ -607,8 +605,8 @@
             <openwb-base-heading> Separate Leistungsmessung </openwb-base-heading>
             <openwb-base-alert subtype="info">
               Lege den Zähler zuerst unter <router-link to="/HardwareInstallation">Geräte und Komponenten</router-link>
-              an und verknüpfe ihn anschließend hier mit dem Verbraucher. Der EVU-Zähler sowie Zähler, die bereits einem
-              anderen Verbraucher zugeordnet sind, stehen nicht zur Auswahl.
+              an und verknüpfe ihn anschließend hier mit dem Verbraucher. Der EVU-Zähler, virtuelle Zähler sowie Zähler,
+              die bereits einem anderen Verbraucher zugeordnet sind, stehen nicht zur Auswahl.
             </openwb-base-alert>
             <openwb-base-select-input
               title="Zähler"
@@ -683,6 +681,7 @@ export default {
         { topic: "openWB/consumer/+/config", writeable: true },
         { topic: "openWB/consumer/+/usage", writeable: true },
         { topic: "openWB/consumer/+/extra_meter", writeable: true },
+        { topic: "openWB/system/device/+/config", writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
         { topic: "openWB/counter/get/hierarchy", writeable: false },
         { topic: "openWB/system/configurable/consumers", writeable: false },
@@ -775,6 +774,19 @@ export default {
     componentConfigurations() {
       return this.getWildcardTopics("openWB/system/device/+/component/+/config");
     },
+    // ids of components belonging to a virtual device; virtual counters provide no real measurement
+    virtualComponentIds() {
+      const devices = this.getWildcardTopics("openWB/system/device/+/config");
+      const virtualDeviceIds = Object.values(devices)
+        .filter((device) => device?.type === "virtual")
+        .map((device) => device.id);
+      return Object.entries(this.componentConfigurations)
+        .filter(([topic]) => {
+          const match = topic.match(/openWB\/system\/device\/(\d+)\/component\//);
+          return match && virtualDeviceIds.includes(parseInt(match[1]));
+        })
+        .map(([, component]) => component?.id);
+    },
     // id of the EVU/grid counter (root of the counter hierarchy), which must not be selectable
     evuCounterId() {
       const hierarchy = this.$store.state.mqtt["openWB/counter/get/hierarchy"];
@@ -854,7 +866,7 @@ export default {
       this.updateState(`openWB/consumer/${consumerId}/extra_meter`, counterId ?? null);
     },
     // counters selectable for this consumer: type counter, excluding the EVU/grid
-    // counter and counters already linked to another consumer
+    // counter, virtual counters and counters already linked to another consumer
     availableCounterOptions(consumerId) {
       const linkedElsewhere = this.extraMeterLinks
         .filter((link) => link.consumerId !== consumerId && link.counterId != null)
@@ -862,6 +874,7 @@ export default {
       const counters = Object.values(this.componentConfigurations)
         .filter((component) => component && this.isComponentType(component.type, "counter"))
         .filter((component) => component.id !== this.evuCounterId)
+        .filter((component) => !this.virtualComponentIds.includes(component.id))
         .filter((component) => !linkedElsewhere.includes(component.id))
         .map((component) => ({ value: component.id, text: component.name }))
         .sort((a, b) => a.text.localeCompare(b.text));
