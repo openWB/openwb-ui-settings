@@ -1374,7 +1374,11 @@ export default {
   watch: {
     logDataMigrationCompleted(newValue, oldValue) {
       if (newValue === true && oldValue !== true) {
-        this.init();
+        this.$nextTick(() => {
+          if (this.logDataMigrationCompleted) {
+            this.init();
+          }
+        });
       }
     },
     chartRange() {
