@@ -164,23 +164,21 @@
                 },
               ]"
               :model-value="getHomeConsumptionCounterMode(counter.id)"
-              @update:model-value="
-                setHomeConsumptionCounterMode(counter.id, $event)
-              "
+              @update:model-value="setHomeConsumptionCounterMode(counter.id, $event)"
             >
-              <template #help>               
-                Mit dieser Einstellung legen Sie fest, ob ein Zähler in die Hausverbrauchsberechnung einfließt. <br>
-                Ja: Der lokale Verbrauch dieses Zählers wird als Hausverbrauch berücksichtigt. <br>
-                Nein: Der Zähler wird nicht als Hausverbrauch berücksichtigt. <br>
-                Automatisch: Der Zähler übernimmt die Einstellung des übergeordneten Zählers. <br>
+              <template #help>
+                Mit dieser Einstellung legen Sie fest, ob ein Zähler in die Hausverbrauchsberechnung einfließt. <br />
+                Ja: Der lokale Verbrauch dieses Zählers wird als Hausverbrauch berücksichtigt. <br />
+                Nein: Der Zähler wird nicht als Hausverbrauch berücksichtigt. <br />
+                Automatisch: Der Zähler übernimmt die Einstellung des übergeordneten Zählers. <br />
 
-                Der Hausverbrauch entspricht dem Verbrauch am jeweiligen Zähler abzüglich der Leistungen von Batterien, Ladepunkten, Wechselrichtern und Unterzählern.
-                "Automatisch" ist die Standardeinstellung und eignet sich, wenn die Einstellung für mehrere Zähler übernommen werden soll.
-
-                Wichtig: Wenn alle Zähler auf "Automatisch" stehen, wird die Einstellung entlang der Zählerhierarchie weitervererbt. 
-                Für den obersten Zähler wird "Automatisch" wie "Nein" behandelt. Dadurch wird zunächst kein Hausverbrauch erfasst.
-                Daher muss mindestens ein relevanter Zähler explizit auf "Ja" gesetzt werden, damit der Hausverbrauch erfasst wird.
-
+                Der Hausverbrauch entspricht dem Verbrauch am jeweiligen Zähler abzüglich der Leistungen von Batterien,
+                Ladepunkten, Wechselrichtern und Unterzählern. "Automatisch" ist die Standardeinstellung und eignet
+                sich, wenn die Einstellung für mehrere Zähler übernommen werden soll. Wichtig: Wenn alle Zähler auf
+                "Automatisch" stehen, wird die Einstellung entlang der Zählerhierarchie weitervererbt. Für den obersten
+                Zähler wird "Automatisch" wie "Nein" behandelt. Dadurch wird zunächst kein Hausverbrauch erfasst. Daher
+                muss mindestens ein relevanter Zähler explizit auf "Ja" gesetzt werden, damit der Hausverbrauch erfasst
+                wird.
               </template>
             </openwb-base-button-group-input>
           </openwb-base-card>
@@ -644,14 +642,12 @@ export default {
         return "auto_home_consumption";
       }
 
-      if (counterModeValue === "home_consumption"){
+      if (counterModeValue === "home_consumption") {
         return "home_consumption";
-      }
-      else if (counterModeValue === "no_home_consumption" ){
+      } else if (counterModeValue === "no_home_consumption") {
         return "no_home_consumption";
-      }
-      else{
-        return "auto_home_consumption"
+      } else {
+        return "auto_home_consumption";
       }
     },
     setHomeConsumptionCounterMode(counterId, value) {
@@ -659,8 +655,7 @@ export default {
       if (value === "home_consumption") {
         this.updateState(counterModeTopic, "home_consumption");
         return;
-      }
-      else if (value === "no_home_consumption") {
+      } else if (value === "no_home_consumption") {
         this.updateState(counterModeTopic, "no_home_consumption");
         return;
       }
