@@ -1,8 +1,6 @@
 <template>
   <div class="device-sunenergyxt">
-    <openwb-base-heading>
-      Einstellungen für SunEnergyXT 500 Series
-    </openwb-base-heading>
+    <openwb-base-heading> Einstellungen für SunEnergyXT 500 Series </openwb-base-heading>
     <openwb-base-text-input
       title="IP-Adresse oder Hostname"
       subtype="host"
@@ -10,9 +8,7 @@
       :model-value="device.configuration.ip_address"
       @update:model-value="updateConfiguration($event, 'configuration.ip_address')"
     >
-      <template #help>
-        IP-Adresse des SunEnergyXT-Geräts im lokalen Netzwerk
-      </template>
+      <template #help> IP-Adresse des SunEnergyXT-Geräts im lokalen Netzwerk </template>
     </openwb-base-text-input>
   </div>
 </template>
