@@ -192,6 +192,7 @@
               Fahrzeuge
             </router-link>
             <router-link
+              v-if="accessAllowed('ConsumerConfiguration')"
               to="/ConsumerConfiguration"
               class="dropdown-item"
               active-class="active disabled"
