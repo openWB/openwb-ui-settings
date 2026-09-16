@@ -37,12 +37,11 @@
       @update:model-value="updateConfiguration($event, 'configuration.version')"
     >
       <template #help>
-        Die Wahl der Registerkarte beeinflusst die Auslesung von Wechselrichter-, Zähler- und
-        Speicherwerten. "TL-X" passt für die meisten MOD/MIN/TL-XH-Geräte inkl. Batterie am
-        Wechselrichter selbst. "SPH/SPA" gilt für Hybridwechselrichter mit separatem
-        Speicherblock (vorher als "MAX Series" genannt). "VPP" ist ein neueres, paralleles
-        Protokoll auf denselben Geräten - falls unsicher, zuerst "TL-X" probieren, bei
-        fehlenden/falschen Speicherwerten "VPP" testen.
+        Die Wahl der Registerkarte beeinflusst die Auslesung von Wechselrichter-, Zähler- und Speicherwerten. "TL-X"
+        passt für die meisten MOD/MIN/TL-XH-Geräte inkl. Batterie am Wechselrichter selbst. "SPH/SPA" gilt für
+        Hybridwechselrichter mit separatem Speicherblock (vorher als "MAX Series" genannt). "VPP" ist ein neueres,
+        paralleles Protokoll auf denselben Geräten - falls unsicher, zuerst "TL-X" probieren, bei fehlenden/falschen
+        Speicherwerten "VPP" testen.
       </template>
     </openwb-base-select-input>
   </div>

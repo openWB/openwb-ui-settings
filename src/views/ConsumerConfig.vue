@@ -210,16 +210,11 @@
               ]"
               :model-value="installedConsumer?.config?.is_home_consumption_consumer ?? 'auto_home_consumption'"
               @update:model-value="
-                updateState(
-                  `openWB/consumer/${installedConsumer.id}/config`,
-                  $event,
-                  'is_home_consumption_consumer',
-                )
+                updateState(`openWB/consumer/${installedConsumer.id}/config`, $event, 'is_home_consumption_consumer')
               "
             >
               <template #help>
-                Ja: Verbraucher wird im Hausverbrauch berücksichtigt.
-                Nein: Verbraucher wird nicht berücksichtigt.
+                Ja: Verbraucher wird im Hausverbrauch berücksichtigt. Nein: Verbraucher wird nicht berücksichtigt.
                 Automatisch: Verbraucher übernimmt die Einstellung des übergeordneten Zählers.
               </template>
             </openwb-base-button-group-input>
