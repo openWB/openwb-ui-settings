@@ -231,7 +231,11 @@
                 <span v-if="installedConsumer.consumerUsage?.type === 'suspendable_tunable'">
                   Wird im Sofort-, Zeit- und Eco-Betrieb (bei günstigem Preis) als Sollleistung verwendet.
                 </span>
-                <span v-else> Wird als Sollleistung verwendet. </span>
+                <span v-else>
+                  Wird im Sofort-, Zeit- und Eco-Betrieb (bei günstigem Preis) als Sollleistung verwendet. Im PV- und
+                  Eco-Betrieb wird das Gerät nur eingeschaltet, wenn mindestens diese Leistung als Überschuss verfügbar
+                  ist.</span
+                >
               </template>
             </openwb-base-number-input>
             <openwb-base-number-input
