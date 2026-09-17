@@ -667,6 +667,7 @@ export default {
       mqttTopics: [
         { topic: "$CONTROL/dynamic-security/v1/response", writeable: false },
         { topic: "openWB/chargepoint/+/config", writeable: false },
+        { topic: "openWB/consumer/+/config", writeable: false },
         { topic: "openWB/general/allow_unencrypted_access", writeable: true },
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/general/web_theme", writeable: false },
@@ -780,6 +781,12 @@ export default {
         return this.$store.state.mqtt[nameTopic] || undefined;
       };
     },
+    consumerName() {
+      return (consumerId) => {
+        const nameTopic = `openWB/consumer/${consumerId}/config`;
+        return this.$store.state.mqtt[nameTopic]?.name || undefined;
+      };
+    },
     ioDeviceName() {
       return (deviceId) => {
         const nameTopic = `openWB/system/io/${deviceId}/config`;
@@ -827,6 +834,8 @@ export default {
               return "Ladepunkt";
             case "vehicle":
               return "Fahrzeug";
+            case "consumer":
+              return "Verbraucher";
             case "io":
               switch (parts[1]) {
                 case "device":
@@ -856,6 +865,9 @@ export default {
               break;
             case "vehicle":
               name = this.vehicleName(id) || id;
+              break;
+            case "consumer":
+              name = this.consumerName(id) || id;
               break;
             case "io":
               id = parts[2];
@@ -937,9 +949,14 @@ export default {
               return "Daten: Speicher Summendaten lesen";
             case "chargepoint":
               return "Daten: Ladepunkt Summendaten lesen";
+            case "consumer":
+              return "Daten: Verbraucher Summendaten lesen";
           }
         }
-        if (!isNaN(roleParts[1]) && ["counter", "inverter", "bat", "chargepoint", "vehicle"].includes(roleParts[0])) {
+        if (
+          !isNaN(roleParts[1]) &&
+          ["counter", "inverter", "bat", "chargepoint", "vehicle", "consumer"].includes(roleParts[0])
+        ) {
           return buildDataName(roleParts);
         }
         switch (roleParts[0]) {
