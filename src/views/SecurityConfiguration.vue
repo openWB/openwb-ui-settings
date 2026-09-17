@@ -667,7 +667,7 @@ export default {
       mqttTopics: [
         { topic: "$CONTROL/dynamic-security/v1/response", writeable: false },
         { topic: "openWB/chargepoint/+/config", writeable: false },
-        { topic: "openWB/consumer/+/config", writeable: false },
+        { topic: "openWB/consumer/+/module", writeable: false },
         { topic: "openWB/general/allow_unencrypted_access", writeable: true },
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/general/web_theme", writeable: false },
@@ -783,7 +783,7 @@ export default {
     },
     consumerName() {
       return (consumerId) => {
-        const nameTopic = `openWB/consumer/${consumerId}/config`;
+        const nameTopic = `openWB/consumer/${consumerId}/module`;
         return this.$store.state.mqtt[nameTopic]?.name || undefined;
       };
     },
