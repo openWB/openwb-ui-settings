@@ -106,6 +106,15 @@ const routes = [
     component: () => import("../views/LoadManagementConfiguration.vue"),
   },
   {
+    path: "/ForecastConfiguration",
+    name: "ForecastConfiguration",
+    meta: {
+      heading: "Konfiguration - PV-Prognose",
+      checkPermissions: true,
+    },
+    component: () => import("../views/ForecastConfiguration.vue"),
+  },
+  {
     path: "/ChargePointInstallation",
     name: "ChargePointInstallation",
     meta: {
