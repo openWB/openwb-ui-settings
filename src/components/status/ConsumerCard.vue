@@ -63,6 +63,24 @@
       </div>
     </openwb-base-card>
     <openwb-base-card
+      v-if="temperatures.length > 0"
+      title="Temperaturen"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <div
+        v-for="sensor in temperatures"
+        :key="sensor.index"
+        class="row"
+      >
+        <div class="col pr-0 text-right">
+          {{ temperatureReadingCount > 1 ? `Sensor ${sensor.index + 1}` : "Temperatur" }}
+        </div>
+        <div class="col text-right text-monospace">{{ sensor.value }}&nbsp;°C</div>
+      </div>
+    </openwb-base-card>
+    <openwb-base-card
       v-if="priority !== null"
       title="Priorität"
       subtype="white"
@@ -238,6 +256,26 @@ export default {
     prioritySharedGroup: {
       get() {
         return this.loadManagementPriorityShared("consumer", this.consumerId);
+      },
+    },
+    temperatureReadingCount: {
+      get() {
+        const temperatures = this.$store.state.mqtt[this.baseTopic + "/get/temperatures"];
+        return Array.isArray(temperatures) ? temperatures.length : 0;
+      },
+    },
+    temperatures: {
+      get() {
+        const temperatures = this.$store.state.mqtt[this.baseTopic + "/get/temperatures"];
+        if (!Array.isArray(temperatures)) {
+          return [];
+        }
+        // modules without a temperature source publish [null]; keep the original index so a sensor
+        // keeps its number even when earlier sensors report nothing
+        return temperatures
+          .map((value, index) => ({ index, value }))
+          .filter((sensor) => typeof sensor.value === "number")
+          .map((sensor) => ({ index: sensor.index, value: this.formatNumber(sensor.value, 1) }));
       },
     },
     hasPhaseData: {
