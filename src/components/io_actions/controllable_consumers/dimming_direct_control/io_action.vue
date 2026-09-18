@@ -25,9 +25,9 @@
     @update:model-value="updateConfiguration($event, 'configuration.devices')"
   >
     <template #help>
-      Bitte die Ladepunkte und/oder digitalen Ausgänge auswählen, auf welche das Verhalten angewendet werden soll. Es
-      können mehrere Einträge ausgewählt werden. Ladepunkte werden auf 4,2kW gedimmt, eine Verrechnung mit PV-Erzeugung
-      findet nicht statt.
+      Bitte die Ladepunkte, Verbraucher und/oder digitalen Ausgänge auswählen, auf welche das Verhalten angewendet
+      werden soll. Es können mehrere Einträge ausgewählt werden. Ladepunkte und Verbraucher werden auf 4,2kW gedimmt,
+      eine Verrechnung mit PV-Erzeugung findet nicht statt.
     </template>
   </openwb-base-select-input>
 </template>
@@ -76,6 +76,20 @@ export default {
       }
       return deviceGroups;
     },
+    consumerOptions() {
+      if (this.availableConsumers.length === 0) {
+        return [];
+      }
+      return [
+        {
+          label: "Verbraucher",
+          options: this.availableConsumers.map((consumer) => ({
+            value: { type: "consumer", id: consumer.value },
+            text: consumer.text,
+          })),
+        },
+      ];
+    },
     availableDevices() {
       let label = this.availableChargePoints.length > 0 ? "Ladepunkte" : "Keine Ladepunkte verfügbar";
       return [
@@ -83,7 +97,9 @@ export default {
           label: label,
           options: this.availableChargePoints.map((cp) => ({ value: { type: "cp", id: cp.value }, text: cp.text })),
         },
-      ].concat(this.ioDevicesOutputOptions);
+      ]
+        .concat(this.consumerOptions)
+        .concat(this.ioDevicesOutputOptions);
     },
   },
 };
