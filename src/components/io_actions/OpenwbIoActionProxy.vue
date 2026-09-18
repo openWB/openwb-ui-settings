@@ -64,7 +64,10 @@ export default {
     },
     availableConsumers() {
       return Object.values(this.installedConsumers)
-        .filter((consumer) => !["meter_only", "self_controlled"].includes(consumer?.consumerUsage?.type))
+        .filter((consumer) => {
+          const usageType = consumer?.consumerUsage?.type;
+          return usageType != null && !["meter_only", "self_controlled"].includes(usageType);
+        })
         .map((consumer) => ({ value: consumer?.id, text: consumer?.name }));
     },
     availableComponents() {
