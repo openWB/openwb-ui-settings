@@ -131,7 +131,7 @@
               <template #help> Maximal zulässiger Strom für die Phase 3 dieses (Zwischen-)Zählers. </template>
             </openwb-base-number-input>
             <openwb-base-number-input
-              title="Maximale Leistung im Fehlerfall"
+              title="Verfügbare Leistung im Fehlerfall"
               :min="0"
               :step="0.1"
               unit="kW"
@@ -141,7 +141,10 @@
               "
             >
               <template #help>
-                Angenommen Leistung für diesen (Zwischen-)Zähler, falls vom Zähler keine Werte abgefragt werden können.
+                Leistung, die im Fehlerfall dieses (Zwischen-)Zählers für die darunter angeschlossenen Ladepunkte und
+                Verbraucher als verfügbar angenommen wird - kein Wert, der vom Zähler abgezogen wird. Die Leistung wird
+                als gleicher Strom auf allen 3 Phasen angenommen: Bei einphasiger Ladung steht daher nur ca. 1/3 dieser
+                Leistung zur Verfügung.
               </template>
             </openwb-base-number-input>
             <openwb-base-button-group-input
