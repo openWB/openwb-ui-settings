@@ -50,8 +50,9 @@
                 Fahrzeuge geladen.
               </div>
               <div v-if="batMode === 'min_soc_bat_mode'">
-                Verhält sich bis zum Erreichen des Mindest-SoC wie "Ladepriorität Speicher" und oberhalb des Mindest-SoC
-                wie "Ladepriorität Fahrzeuge". Die maximale Leistung der Speicherbe- und entladung lässt sich hier
+                Verhält sich bis zum Erreichen des Mindest-SoC wie "Ladepriorität Speicher" und danach wie
+                "Ladepriorität Fahrzeuge" - fällt der Speicher wieder unter den Mindest-SoC, erhält er erneut Vorrang,
+                bis er den Maximal-SoC erreicht hat. Die maximale Leistung der Speicherbe- und entladung lässt sich hier
                 festlegen.
               </div>
             </template>
@@ -78,7 +79,8 @@
             >
               <template #help>
                 Unterhalb des Mindest-SoC wird vorhandener PV-Überschuss bevorzugt in den Speicher geladen. Oberhalb des
-                Mindest-SoC hat die Fahrzeugladung Priorität.
+                Mindest-SoC hat die Fahrzeugladung Priorität - außer der Speicher ist zuvor unter den Mindest-SoC
+                gefallen: dann behält der Speicher die Priorität, bis er den Maximal-SoC erreicht hat.
               </template>
             </openwb-base-range-input>
             <openwb-base-range-input
