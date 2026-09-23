@@ -147,7 +147,7 @@
               </template>
             </openwb-base-number-input>
             <openwb-base-button-group-input
-              title="Im Hausverbrauch berücksichtigen?"
+              title="Als Hausverbrauch berücksichtigen?"
               :buttons="[
                 {
                   buttonValue: 'home_consumption',
@@ -178,9 +178,7 @@
                 Ladepunkten, Wechselrichtern und Unterzählern. "Automatisch" ist die Standardeinstellung und eignet
                 sich, wenn die Einstellung für mehrere Zähler übernommen werden soll. Wichtig: Wenn alle Zähler auf
                 "Automatisch" stehen, wird die Einstellung entlang der Zählerhierarchie weitervererbt. Für den obersten
-                Zähler wird "Automatisch" wie "Nein" behandelt. Dadurch wird zunächst kein Hausverbrauch erfasst. Daher
-                muss mindestens ein relevanter Zähler explizit auf "Ja" gesetzt werden, damit der Hausverbrauch erfasst
-                wird.
+                Zähler wird "Automatisch" wie "Ja" behandelt. Dadurch wird standardmäßig der Hausverbrauch erfasst.
               </template>
             </openwb-base-button-group-input>
           </openwb-base-card>
