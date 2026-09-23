@@ -875,7 +875,6 @@
                 v-if="dcChargingEnabled === true"
                 title="Soll-Ladeleistung (DC)"
                 unit="kW"
-                :min="0"
                 :model-value="ac_current2dc_power(template.chargemode.instant_charging.dc_current)"
                 @update:model-value="
                   updateState(templateKey, dc_power2ac_current($event), 'chargemode.instant_charging.dc_current')
