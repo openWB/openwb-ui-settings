@@ -4,7 +4,7 @@
       <openwb-base-card
         title="Einstellungen"
         :collapsible="true"
-        :collapsed="false"
+        :collapsed="true"
       >
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
           <openwb-base-alert subtype="info">
@@ -254,9 +254,9 @@
         </div>
       </openwb-base-card>
       <openwb-base-card
-        title="Struktur"
+        title="Prioritäten"
         :collapsible="true"
-        :collapsed="true"
+        :collapsed="false"
       >
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
           <openwb-base-alert subtype="info">
@@ -264,25 +264,6 @@
           </openwb-base-alert>
         </div>
         <div v-else>
-          <sortable-list
-            title="Anordnung der Komponenten"
-            :model-value="$store.state.mqtt['openWB/counter/get/hierarchy']"
-            :labels="hierarchyLabels"
-            :linked-meters="consumerLinkedMeterNames"
-            :hidden-ids="hiddenCounterIds"
-            @update:model-value="updateState('openWB/counter/get/hierarchy', $event)"
-          >
-            <template #help>
-              Durch die Anordnung der Komponenten werden Abhängigkeiten abgebildet.<br />
-              An erster Stelle muss eine Zählerkomponente stehen, die den Netzanschlusspunkt erfasst. Dafür kann auch
-              ein virtueller Zähler genutzt werden.<br />
-              Die weiteren Komponenten müssen hierarchisch so angeordnet werden, wie sie auch physisch im Stromnetz
-              angeschlossen werden.<br />
-              Bei DC-gekoppelten Speichern sind diese hinter dem zugehörigen Wechselrichter zu platzieren, damit die
-              Abhängigkeit in der Regelung berücksichtigt werden kann.
-            </template>
-          </sortable-list>
-          <hr />
           <sortable-list
             v-model="loadManagementPriorityList"
             title="Prioritätenliste"
@@ -316,6 +297,37 @@
               die enthaltenen Elemente erhalten und werden eine Ebene nach oben verschoben.
             </template>
           </openwb-base-text-input>
+        </div>
+      </openwb-base-card>
+      <openwb-base-card
+        title="Struktur"
+        :collapsible="true"
+        :collapsed="true"
+      >
+        <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+          <openwb-base-alert subtype="info">
+            Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
+          </openwb-base-alert>
+        </div>
+        <div v-else>
+          <sortable-list
+            title="Anordnung der Komponenten"
+            :model-value="$store.state.mqtt['openWB/counter/get/hierarchy']"
+            :labels="hierarchyLabels"
+            :linked-meters="consumerLinkedMeterNames"
+            :hidden-ids="hiddenCounterIds"
+            @update:model-value="updateState('openWB/counter/get/hierarchy', $event)"
+          >
+            <template #help>
+              Durch die Anordnung der Komponenten werden Abhängigkeiten abgebildet.<br />
+              An erster Stelle muss eine Zählerkomponente stehen, die den Netzanschlusspunkt erfasst. Dafür kann auch
+              ein virtueller Zähler genutzt werden.<br />
+              Die weiteren Komponenten müssen hierarchisch so angeordnet werden, wie sie auch physisch im Stromnetz
+              angeschlossen werden.<br />
+              Bei DC-gekoppelten Speichern sind diese hinter dem zugehörigen Wechselrichter zu platzieren, damit die
+              Abhängigkeit in der Regelung berücksichtigt werden kann.
+            </template>
+          </sortable-list>
         </div>
       </openwb-base-card>
       <openwb-base-submit-buttons
