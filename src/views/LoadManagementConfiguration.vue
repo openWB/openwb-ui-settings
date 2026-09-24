@@ -256,7 +256,7 @@
       <openwb-base-card
         title="Prioritäten"
         :collapsible="true"
-        :collapsed="false"
+        :collapsed="true"
       >
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
           <openwb-base-alert subtype="info">
