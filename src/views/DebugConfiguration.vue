@@ -76,6 +76,10 @@ export default {
           fileName: "/openWB/ramdisk/mqtt.log",
         },
         {
+          title: "Forecast-Log",
+          fileName: "/openWB/ramdisk/forecast.log",
+        },
+        {
           title: "SoC-Log",
           fileName: "/openWB/ramdisk/soc.log",
         },
