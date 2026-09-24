@@ -1,10 +1,8 @@
 <template>
-  <div class="consumer-daikin-homehub-air2air">
-    <openwb-base-heading> Einstellungen für Daikin Air2Air (HomeHub EKRHH) </openwb-base-heading>
+  <div class="consumer-daikin-homehub-altherma">
+    <openwb-base-heading> Einstellungen für Daikin Altherma (HomeHub) </openwb-base-heading>
     <openwb-base-alert subtype="info">
-      Für die HomeHub-Anbindung (EKRHH-Adapter) von Daikin Air2Air-Klimaanlagen. Es steht keine Leistungsmessung zur
-      Verfügung - wer den Verbrauch erfassen will, braucht eine separate Leistungsmessung (zB
-      Zwischenzähler/Smart-Plug), die diesem Verbraucher zugeordnet wird.
+      Für die HomeHub-Anbindung (EKRHH-Adapter) von Daikin Altherma Wärmepumpen.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
@@ -36,7 +34,7 @@
 import ConsumerConfigMixin from "../../ConsumerConfigMixin.vue";
 
 export default {
-  name: "ConsumerDaikinHomehubAir2air",
+  name: "ConsumerDaikinHomehubAltherma",
   mixins: [ConsumerConfigMixin],
 };
 </script>
