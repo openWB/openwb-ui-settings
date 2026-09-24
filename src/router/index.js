@@ -128,6 +128,7 @@ const routes = [
     name: "ConsumerConfiguration",
     meta: {
       heading: "Konfiguration - Verbraucher",
+      checkPermissions: true,
     },
     component: () => import("../views/ConsumerConfig.vue"),
   },
