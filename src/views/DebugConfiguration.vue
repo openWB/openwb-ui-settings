@@ -108,6 +108,10 @@ export default {
           fileName: "/openWB/data/log/steuve_control_command.log",
         },
         {
+          title: "Protokoll der Summenberechnung",
+          fileName: "/openWB/ramdisk/generate_totals.log",
+        },
+        {
           title: "Thread-Errors",
           fileName: "/openWB/ramdisk/thread_errors.log",
         },
