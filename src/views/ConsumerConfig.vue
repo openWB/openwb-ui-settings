@@ -310,40 +310,55 @@
               <hr />
               <openwb-base-heading> Betriebsmodus umstellen </openwb-base-heading>
               <openwb-base-button-group-input
-                title="Umstellen"
+                title="Betriebsmodus automatisch umstellen"
                 :buttons="[
-                  { buttonValue: 'never', text: 'Nie', class: 'btn-outline-secondary' },
-                  { buttonValue: 'midnight', text: 'Mitternacht', class: 'btn-outline-info' },
-                  { buttonValue: 'time', text: 'Zeitpunkt', class: 'btn-outline-info' },
+                  { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
+                  { buttonValue: true, text: 'Ja', class: 'btn-outline-success' },
                 ]"
-                :model-value="installedConsumer.consumerUsage.reset_chargemode?.mode ?? 'never'"
-                @update:model-value="updateUsage(installedConsumer.id, $event, 'reset_chargemode.mode')"
+                :model-value="isResetModeEnabled(installedConsumer)"
+                @update:model-value="setResetEnabled(installedConsumer, $event)"
               >
                 <template #help>
-                  <template v-if="installedConsumer.consumerUsage.reset_chargemode?.mode === 'midnight'">
-                    Stellt den Betriebsmodus automatisch auf einen anderen Modus um: "Mitternacht" täglich um 0:00 Uhr
-                  </template>
-                  <template v-else-if="installedConsumer.consumerUsage.reset_chargemode?.mode === 'time'">
-                    Stellt den Betriebsmodus automatisch auf einen anderen Modus um, einmalig zum angegebenen Zeitpunkt.
-                  </template>
-                  <template v-else> Stellt den Betriebsmodus nicht automatisch um. </template>
+                  Schaltet den Verbraucher automatisch zum eingestellten Termin in den Zielmodus um.
                 </template>
               </openwb-base-button-group-input>
-              <template v-if="(installedConsumer.consumerUsage.reset_chargemode?.mode ?? 'never') !== 'never'">
+              <template v-if="isResetModeEnabled(installedConsumer)">
                 <openwb-base-text-input
-                  v-if="installedConsumer.consumerUsage.reset_chargemode?.mode === 'time'"
-                  title="Datum"
-                  subtype="date"
-                  :model-value="resetDateParts(installedConsumer).date"
-                  @update:model-value="setResetDate(installedConsumer, $event)"
-                />
-                <openwb-base-text-input
-                  v-if="installedConsumer.consumerUsage.reset_chargemode?.mode === 'time'"
                   title="Uhrzeit"
                   subtype="time"
-                  :model-value="resetDateParts(installedConsumer).time"
-                  @update:model-value="setResetTime(installedConsumer, $event)"
+                  :model-value="getResetClockTime(installedConsumer)"
+                  @update:model-value="setResetClockTime(installedConsumer, $event)"
                 />
+                <openwb-base-button-group-input
+                  title="Wiederholung"
+                  :buttons="[
+                    { buttonValue: 'once', text: 'Einmalig', class: 'btn-outline-info' },
+                    { buttonValue: 'daily', text: 'Täglich', class: 'btn-outline-info' },
+                    { buttonValue: 'weekly', text: 'Wöchentlich', class: 'btn-outline-info' },
+                  ]"
+                  :model-value="currentResetMode(installedConsumer)"
+                  @update:model-value="setResetMode(installedConsumer, $event)"
+                />
+                <openwb-base-text-input
+                  v-if="currentResetMode(installedConsumer) === 'once'"
+                  title="Datum"
+                  subtype="date"
+                  :model-value="getResetOnceDate(installedConsumer)"
+                  @update:model-value="setResetOnceDate(installedConsumer, $event)"
+                />
+                <div v-if="currentResetMode(installedConsumer) === 'weekly'">
+                  <openwb-base-button-group-input
+                    v-for="(day, dayIndex) in weekdays"
+                    :key="dayIndex"
+                    :title="day"
+                    :buttons="[
+                      { buttonValue: false, text: 'Aus', class: 'btn-outline-danger' },
+                      { buttonValue: true, text: 'An', class: 'btn-outline-success' },
+                    ]"
+                    :model-value="getResetWeeklyDay(installedConsumer, dayIndex)"
+                    @update:model-value="setResetWeeklyDay(installedConsumer, dayIndex, $event)"
+                  />
+                </div>
                 <openwb-base-button-group-input
                   title="Zielmodus"
                   :buttons="[
@@ -371,7 +386,7 @@
               >
                 <template #help>
                   Die Anlauferkennung ist in den Betriebsmodi PV, Eco und Ziel aktiv und wird bei Ablauf eines
-                  Zielplans, um Mitternacht sowie beim Ändern des Betriebsmodus zurückgesetzt.<br />
+                  Zielplans, beim Tageswechsel sowie beim Ändern des Betriebsmodus zurückgesetzt.<br />
                   Das Gerät wird eingeschaltet, um seine Startsequenz (z. B. Befüllen, Türverriegelung) abzuwarten.
                   Sobald der Strom den eingestellten Minimalstrom übersteigt, wird das Gerät als aktiv erkannt, das
                   Gerät abgeschaltet und es übernimmt der gewählte Betriebsmodus. So kann z. B. eine Waschmaschine
@@ -969,28 +984,83 @@ export default {
         });
       });
     },
-    // reset_chargemode.time is stored as an absolute epoch (seconds). Split it into
-    // the date/time strings the inputs expect, defaulting to "now" when unset.
-    resetDateParts(consumer) {
-      const epoch = consumer.consumerUsage?.reset_chargemode?.time;
-      const date = epoch ? new Date(epoch * 1000) : new Date();
+    todayDateString() {
+      const date = new Date();
       const pad = (dateTimePart) => String(dateTimePart).padStart(2, "0");
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+    },
+    defaultClockTime() {
+      return "00:00";
+    },
+    isResetModeEnabled(consumer) {
+      return (consumer.consumerUsage?.reset_chargemode?.mode ?? "never") !== "never";
+    },
+    currentResetMode(consumer) {
+      const mode = consumer.consumerUsage?.reset_chargemode?.mode;
+      if (mode === "once" || mode === "daily" || mode === "weekly") {
+        return mode;
+      }
+      const selected = consumer.consumerUsage?.reset_chargemode?.frequency?.selected;
+      return selected === "once" || selected === "daily" || selected === "weekly" ? selected : "daily";
+    },
+    setResetEnabled(consumer, active) {
+      if (!active) {
+        this.updateUsage(consumer.id, "never", "reset_chargemode.mode");
+        return;
+      }
+
+      const mode = this.currentResetMode(consumer);
+      this.setResetMode(consumer, mode);
+      this.setResetClockTime(consumer, this.getResetClockTime(consumer));
+    },
+    defaultWeekly() {
+      return [false, false, false, false, false, false, false];
+    },
+    normalizedResetFrequency(consumer) {
+      const frequency = consumer.consumerUsage?.reset_chargemode?.frequency;
+      const selected = this.currentResetMode(consumer);
       return {
-        date: `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`,
-        time: `${pad(date.getHours())}:${pad(date.getMinutes())}`,
+        selected,
+        once: frequency?.once ?? this.todayDateString(),
+        weekly:
+          Array.isArray(frequency?.weekly) && frequency.weekly.length === 7 ? frequency.weekly : this.defaultWeekly(),
       };
     },
-    setResetDate(consumer, dateString) {
-      this.writeResetTime(consumer.id, dateString, this.resetDateParts(consumer).time);
+    getResetClockTime(consumer) {
+      const clockTime = consumer.consumerUsage?.reset_chargemode?.clock_time;
+      return typeof clockTime === "string" && clockTime ? clockTime : this.defaultClockTime();
     },
-    setResetTime(consumer, timeString) {
-      this.writeResetTime(consumer.id, this.resetDateParts(consumer).date, timeString);
+    setResetClockTime(consumer, clockTime) {
+      if (!clockTime) return;
+      this.updateUsage(consumer.id, clockTime, "reset_chargemode.clock_time");
     },
-    writeResetTime(consumerId, dateString, timeString) {
-      if (!dateString || !timeString) return;
-      const epoch = Math.floor(new Date(`${dateString}T${timeString}`).getTime() / 1000);
-      if (Number.isNaN(epoch)) return;
-      this.updateUsage(consumerId, epoch, "reset_chargemode.time");
+    setResetMode(consumer, mode) {
+      if (mode !== "once" && mode !== "daily" && mode !== "weekly") return;
+      this.updateUsage(consumer.id, mode, "reset_chargemode.mode");
+      const frequency = this.normalizedResetFrequency(consumer);
+      frequency.selected = mode;
+      if (mode === "weekly" && !frequency.weekly.some((enabled) => enabled)) {
+        const weekdayIndex = (new Date().getDay() + 6) % 7;
+        frequency.weekly[weekdayIndex] = true;
+      }
+      this.updateUsage(consumer.id, frequency, "reset_chargemode.frequency");
+    },
+    getResetOnceDate(consumer) {
+      return this.normalizedResetFrequency(consumer).once;
+    },
+    setResetOnceDate(consumer, dateString) {
+      if (!dateString) return;
+      const frequency = this.normalizedResetFrequency(consumer);
+      frequency.once = dateString;
+      this.updateUsage(consumer.id, frequency, "reset_chargemode.frequency");
+    },
+    getResetWeeklyDay(consumer, dayIndex) {
+      return this.normalizedResetFrequency(consumer).weekly[dayIndex];
+    },
+    setResetWeeklyDay(consumer, dayIndex, value) {
+      const frequency = this.normalizedResetFrequency(consumer);
+      frequency.weekly[dayIndex] = value;
+      this.updateUsage(consumer.id, frequency, "reset_chargemode.frequency");
     },
     commandAfterSavingConsumerUsage(command, data, hideSaveModal = false) {
       this.commandQueue.push({ command, data });
