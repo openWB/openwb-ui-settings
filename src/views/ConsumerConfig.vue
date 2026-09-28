@@ -993,7 +993,7 @@ export default {
       return "00:00";
     },
     isResetModeEnabled(consumer) {
-      return (consumer.consumerUsage?.reset_chargemode?.mode ?? "never") !== "never";
+      return consumer.consumerUsage?.reset_chargemode?.active;
     },
     currentResetMode(consumer) {
       const mode = consumer.consumerUsage?.reset_chargemode?.mode;
@@ -1005,10 +1005,11 @@ export default {
     },
     setResetEnabled(consumer, active) {
       if (!active) {
-        this.updateUsage(consumer.id, "never", "reset_chargemode.mode");
+        this.updateUsage(consumer.id, false, "reset_chargemode.active");
         return;
       }
 
+      this.updateUsage(consumer.id, true, "reset_chargemode.active");
       const mode = this.currentResetMode(consumer);
       this.setResetMode(consumer, mode);
       this.setResetClockTime(consumer, this.getResetClockTime(consumer));
@@ -1036,7 +1037,6 @@ export default {
     },
     setResetMode(consumer, mode) {
       if (mode !== "once" && mode !== "daily" && mode !== "weekly") return;
-      this.updateUsage(consumer.id, mode, "reset_chargemode.mode");
       const frequency = this.normalizedResetFrequency(consumer);
       frequency.selected = mode;
       if (mode === "weekly" && !frequency.weekly.some((enabled) => enabled)) {
