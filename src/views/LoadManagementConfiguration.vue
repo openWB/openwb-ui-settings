@@ -267,7 +267,6 @@
             :model-value="$store.state.mqtt['openWB/counter/get/hierarchy']"
             :labels="hierarchyLabels"
             :linked-meters="consumerLinkedMeterNames"
-            :hidden-ids="hiddenCounterIds"
             @update:model-value="updateState('openWB/counter/get/hierarchy', $event)"
           >
             <template #help>
@@ -440,23 +439,18 @@ export default {
         return labels;
       },
     },
-    extraMeterLinks() {
+    consumerLinkedMeterNames() {
       const topics = this.getWildcardTopics("openWB/consumer/+/extra_meter") || {};
-      const links = [];
+      const extraMeterLinks = [];
       for (const [topic, counterId] of Object.entries(topics)) {
         if (counterId === null || counterId === undefined) continue;
         const match = topic.match(/^openWB\/consumer\/([^/]+)\/extra_meter$/);
         if (!match) continue;
-        links.push({ consumerId: String(match[1]), counterId: String(counterId) });
+        extraMeterLinks.push({ consumerId: String(match[1]), counterId: String(counterId) });
       }
-      return links;
-    },
-    hiddenCounterIds() {
-      return Array.from(new Set(this.extraMeterLinks.map((link) => link.counterId)));
-    },
-    consumerLinkedMeterNames() {
+      
       const names = {};
-      for (const { consumerId, counterId } of this.extraMeterLinks) {
+      for (const { consumerId, counterId } of extraMeterLinks) {
         const component = this.getComponent(counterId);
         names[consumerId] = component?.name ?? counterId;
       }
