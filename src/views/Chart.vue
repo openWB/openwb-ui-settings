@@ -6,7 +6,7 @@
         findest alle Auswertungen in der openWB, welche sich im Steuerungsmodus "primary" befindet.
       </openwb-base-alert>
     </div>
-    <div v-else-if="!logDataMigrationCompleted">
+    <div v-else-if="!logDataReady">
       <openwb-base-alert subtype="info">
         Die Auswertungen sind derzeit noch nicht verfügbar, da die historischen Logdaten verarbeitet werden. Sobald die
         Verarbeitung abgeschlossen ist, stehen die Diagramme automatisch wieder zur Verfügung.
@@ -1007,7 +1007,7 @@ export default {
     };
   },
   computed: {
-    logDataMigrationCompleted() {
+    logDataReady() {
       return this.$store.state.mqtt["openWB/system/log_data_ready"] === true;
     },
     dateInput() {
@@ -1372,17 +1372,17 @@ export default {
     },
   },
   watch: {
-    logDataMigrationCompleted(newValue, oldValue) {
+    logDataReady(newValue, oldValue) {
       if (newValue === true && oldValue !== true) {
         this.$nextTick(() => {
-          if (this.logDataMigrationCompleted) {
+          if (this.logDataReady) {
             this.init();
           }
         });
       }
     },
     chartRange() {
-      if (this.logDataMigrationCompleted) {
+      if (this.logDataReady) {
         this.init();
       }
     },
@@ -1396,7 +1396,7 @@ export default {
     },
   },
   mounted() {
-    if (this.logDataMigrationCompleted) {
+    if (this.logDataReady) {
       this.init();
     }
   },
@@ -1958,7 +1958,7 @@ export default {
      * If the chart form is invalid, a warning is logged and the function returns.
      */
     requestChart() {
-      if (!this.logDataMigrationCompleted) {
+      if (!this.logDataReady) {
         return;
       }
       let myForm = document.forms["chartFilterForm"];
