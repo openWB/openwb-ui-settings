@@ -942,6 +942,8 @@ export default {
               return "Daten: Speicher Summendaten lesen";
             case "chargepoint":
               return "Daten: Ladepunkt Summendaten lesen";
+            case "consumer":
+              return "Daten: Verbraucher Summendaten lesen";
           }
         }
         if (!isNaN(roleParts[1]) && ["counter", "inverter", "bat", "chargepoint", "vehicle"].includes(roleParts[0])) {
