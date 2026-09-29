@@ -5,7 +5,7 @@
     </openwb-base-alert>
     <openwb-base-number-input
       title="Breitengrad"
-      :step="0.000001"
+      :step="0.0000001"
       required
       :model-value="forecast.configuration.latitude"
       @update:model-value="updateConfiguration($event, 'configuration.latitude')"
@@ -14,7 +14,7 @@
     </openwb-base-number-input>
     <openwb-base-number-input
       title="Längengrad"
-      :step="0.000001"
+      :step="0.0000001"
       required
       :model-value="forecast.configuration.longitude"
       @update:model-value="updateConfiguration($event, 'configuration.longitude')"
@@ -103,26 +103,27 @@
         Ausrichtung: 0&deg; = S&uuml;den | -90&deg; = Osten | 90&deg; = Westen | 180&deg; = Norden
       </openwb-base-alert>
       <div class="d-flex justify-content-end">
-        <button
-          type="button"
-          class="btn btn-danger btn-sm"
+        <openwb-base-avatar
+          class="bg-danger clickable"
           title="Dachfläche entfernen"
-          @click="removeStringRow(index)"
+          @click.stop="removeStringRow(index)"
         >
           <font-awesome-icon :icon="['fas', 'trash']" />
-        </button>
+        </openwb-base-avatar>
       </div>
     </openwb-base-card>
-    <button
-      type="button"
-      class="btn btn-success btn-sm mb-2"
-      :disabled="stringRows.length >= 6"
-      title="Dachfläche hinzufügen"
-      @click="addStringRow"
+    <div
+      v-if="stringRows.length < 6"
+      class="d-flex justify-content-end mb-2"
     >
-      <font-awesome-icon :icon="['fas', 'plus']" />
-      Dachfläche hinzufügen
-    </button>
+      <openwb-base-avatar
+        class="bg-success clickable"
+        title="Dachfläche hinzufügen"
+        @click="addStringRow"
+      >
+        <font-awesome-icon :icon="['fas', 'plus']" />
+      </openwb-base-avatar>
+    </div>
   </div>
 </template>
 
@@ -142,6 +143,11 @@ export default {
     stringRows() {
       return Array.isArray(this.forecast.configuration.strings) ? this.forecast.configuration.strings : [];
     },
+  },
+  mounted() {
+    if (this.stringRows.length === 0) {
+      this.addStringRow();
+    }
   },
   methods: {
     addStringRow() {

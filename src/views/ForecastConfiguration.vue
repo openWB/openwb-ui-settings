@@ -30,22 +30,20 @@
 
         <div class="row justify-content-center mb-1 w-100">
           <div class="col-md-4 d-flex py-1 justify-content-center">
-            <button
-              type="button"
-              class="btn btn-success btn-block btn-sm"
-              @click="$emit('save', mqttTopicsToPublish)"
+            <openwb-base-click-button
+              class="btn-success btn-sm"
+              @button-clicked="$emit('save', mqttTopicsToPublish)"
             >
               Einstellungen Speichern
-            </button>
+            </openwb-base-click-button>
           </div>
           <div class="col-md-4 d-flex py-1 justify-content-center">
-            <button
-              type="button"
-              class="btn btn-danger btn-block btn-sm"
-              @click="resetProviderAndForecastData"
+            <openwb-base-click-button
+              class="btn-danger btn-sm"
+              @button-clicked="resetProviderAndForecastData"
             >
               Anbieter entfernen und Prognose zurücksetzen
-            </button>
+            </openwb-base-click-button>
           </div>
         </div>
       </openwb-base-card>
@@ -235,23 +233,10 @@ export default {
     },
     currentForecastProvider() {
       const provider = this.currentForecastProviderRaw;
-      if (provider && typeof provider === "object") {
-        return this.normalizeProviderObject(provider);
-      }
-      if (typeof provider === "string") {
-        const normalizedType = this.normalizeProviderType(provider);
-        if (normalizedType) {
-          return this.createProviderByType(normalizedType);
-        }
-      }
-      return { type: null, configuration: {} };
+      return provider && typeof provider === "object" ? provider : { type: null, configuration: {} };
     },
     selectedProviderType() {
-      if (typeof this.currentForecastProviderRaw === "string") {
-        return this.normalizeProviderType(this.currentForecastProviderRaw) || this.currentForecastProviderRaw || "";
-      }
-      const currentType = this.currentForecastProvider?.type;
-      return this.normalizeProviderType(currentType) || currentType || "";
+      return this.currentForecastProvider?.type || "";
     },
     forecastValues() {
       const values = this.$store.state.mqtt["openWB/optional/forecast/get/values"];
@@ -374,66 +359,20 @@ export default {
     },
   },
   watch: {
-    currentForecastProviderRaw() {
-      this.cacheProviderConfiguration(this.currentForecastProviderRaw);
-      this.normalizeProviderTopic();
+    currentForecastProviderRaw(provider) {
+      this.cacheProviderConfiguration(provider);
     },
   },
   mounted() {
-    this.normalizeProviderTopic();
+    this.cacheProviderConfiguration(this.currentForecastProviderRaw);
   },
   methods: {
-    areProvidersEqual(a, b) {
-      if (!a || !b || typeof a !== "object" || typeof b !== "object") {
-        return a === b;
-      }
-      const aConfig = a.configuration && typeof a.configuration === "object" ? a.configuration : {};
-      const bConfig = b.configuration && typeof b.configuration === "object" ? b.configuration : {};
-      return (
-        (a.type || null) === (b.type || null) &&
-        (a.name || null) === (b.name || null) &&
-        Boolean(a.official) === Boolean(b.official) &&
-        JSON.stringify(aConfig) === JSON.stringify(bConfig)
-      );
-    },
     normalizeProviderType(type) {
       if (typeof type !== "string") {
         return null;
       }
       const trimmed = type.trim();
-      if (!trimmed) {
-        return null;
-      }
-      if (this.providerDefinitionByType[trimmed]) {
-        return trimmed;
-      }
-      const lowered = trimmed.toLowerCase();
-      const knownTypes = Object.keys(this.providerDefinitionByType);
-      if (knownTypes.includes(lowered)) {
-        return lowered;
-      }
-      const simplified = lowered.replace(/[^a-z0-9]/g, "");
-      const match = knownTypes.find(
-        (providerType) => providerType.toLowerCase().replace(/[^a-z0-9]/g, "") === simplified,
-      );
-      return match || trimmed;
-    },
-    normalizeProviderObject(provider) {
-      if (!provider || typeof provider !== "object") {
-        return { type: null, configuration: {} };
-      }
-      const normalizedType = this.normalizeProviderType(provider.type || provider.name);
-      if (!normalizedType) {
-        return provider;
-      }
-      const definition = this.providerDefinitionByType[normalizedType];
-      return {
-        ...provider,
-        name: provider.name || definition?.text || normalizedType,
-        type: normalizedType,
-        official: typeof provider.official === "boolean" ? provider.official : definition?.official,
-        configuration: this.ensureProviderConfiguration(normalizedType, provider.configuration || {}),
-      };
+      return trimmed || null;
     },
     publishForecastProvider(providerConfig) {
       this.$root.doPublish("openWB/set/optional/forecast/provider", providerConfig);
@@ -470,26 +409,6 @@ export default {
           provider.configuration && typeof provider.configuration === "object" ? { ...provider.configuration } : {},
       };
     },
-    ensureProviderConfiguration(type, configuration = {}) {
-      const nextConfiguration = {
-        ...configuration,
-      };
-      const hasStringsKey = Object.prototype.hasOwnProperty.call(nextConfiguration, "strings");
-      if (hasStringsKey) {
-        const hasStrings = Array.isArray(nextConfiguration.strings) && nextConfiguration.strings.length > 0;
-        if (!hasStrings) {
-          nextConfiguration.strings = [
-            {
-              name: "Ausrichtung 1",
-              peak_power_kw: nextConfiguration.peak_power_kw || 1,
-              tilt: nextConfiguration.tilt ?? 30,
-              azimuth: nextConfiguration.azimuth ?? 0,
-            },
-          ];
-        }
-      }
-      return nextConfiguration;
-    },
     createProviderByType(type, configuration = undefined) {
       const definition = this.providerDefinitionByType[type];
       const cachedProvider = this.providerConfigCache[type];
@@ -502,10 +421,10 @@ export default {
           name: type,
           type,
           official: false,
-          configuration: this.ensureProviderConfiguration(type, {
+          configuration: {
             ...cachedConfiguration,
             ...(configuration && typeof configuration === "object" ? configuration : {}),
-          }),
+          },
         };
       }
       const defaults =
@@ -517,27 +436,12 @@ export default {
         name: defaults.name || definition.text || type,
         type,
         official: typeof defaults.official === "boolean" ? defaults.official : Boolean(definition.official),
-        configuration: this.ensureProviderConfiguration(type, {
+        configuration: {
           ...(defaults.configuration && typeof defaults.configuration === "object" ? defaults.configuration : {}),
           ...cachedConfiguration,
           ...(configuration && typeof configuration === "object" ? configuration : {}),
-        }),
+        },
       };
-    },
-    normalizeProviderTopic() {
-      const provider = this.currentForecastProviderRaw;
-      if (typeof provider === "string") {
-        const normalizedType = this.normalizeProviderType(provider);
-        if (normalizedType) {
-          this.updateState("openWB/optional/forecast/provider", this.createProviderByType(normalizedType));
-        }
-        return;
-      }
-      const normalizedProvider = this.normalizeProviderObject(provider);
-      this.cacheProviderConfiguration(normalizedProvider);
-      if (provider && !this.areProvidersEqual(normalizedProvider, provider)) {
-        this.updateState("openWB/optional/forecast/provider", normalizedProvider);
-      }
     },
     ensureEditableProviderTopic() {
       const topic = "openWB/optional/forecast/provider";
@@ -545,10 +449,7 @@ export default {
       if (provider && typeof provider === "object") {
         return;
       }
-      const fallbackType =
-        this.selectedProviderType ||
-        (typeof this.currentForecastProviderRaw === "string" ? this.currentForecastProviderRaw : null);
-      const normalizedType = this.normalizeProviderType(fallbackType);
+      const normalizedType = this.normalizeProviderType(this.selectedProviderType);
       if (!normalizedType) {
         return;
       }
