@@ -448,7 +448,7 @@ export default {
         if (!match) continue;
         extraMeterLinks.push({ consumerId: String(match[1]), counterId: String(counterId) });
       }
-      
+
       const names = {};
       for (const { consumerId, counterId } of extraMeterLinks) {
         const component = this.getComponent(counterId);

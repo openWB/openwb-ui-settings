@@ -27,7 +27,6 @@
         class="form-control variable-height"
         :labels="labels"
         :linked-meters="linkedMeters"
-        :hidden-ids="hiddenIds"
         :nesting="nesting"
         :max-nesting-depth="maxNestingDepth"
         :show-priority="showPriority"
@@ -55,7 +54,6 @@ export default {
     modelValue: { type: Array, required: false, default: undefined },
     labels: { type: Object, default: undefined },
     linkedMeters: { type: Object, default: undefined },
-    hiddenIds: { type: Array, default: undefined },
     nesting: { type: Boolean, default: true },
     maxNestingDepth: { type: Number, default: Infinity },
     showPriority: { type: Boolean, default: false },
