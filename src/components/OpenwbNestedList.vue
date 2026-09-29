@@ -8,7 +8,7 @@
     handle=".handle"
   >
     <template #item="{ element, index }">
-      <li v-show="!isHidden(element)">
+      <li>
         <div
           class="element-titel"
           :class="classes(element)"
@@ -72,7 +72,6 @@
           v-model="element.children"
           :labels="labels"
           :linked-meters="linkedMeters"
-          :hidden-ids="hiddenIds"
           :nesting="nesting"
           :max-nesting-depth="maxNestingDepth"
           :current-nesting-depth="currentNestingDepth + 1"
@@ -132,7 +131,6 @@ export default {
     modelValue: { type: Array, required: false, default: () => [] },
     labels: { type: Object, required: false, default: undefined },
     linkedMeters: { type: Object, required: false, default: undefined },
-    hiddenIds: { type: Array, required: false, default: undefined },
     nesting: { type: Boolean, default: true },
     maxNestingDepth: { type: Number, default: Infinity },
     currentNestingDepth: { type: Number, default: 0 },
@@ -216,9 +214,6 @@ export default {
     },
     linkedMeterName(element) {
       return this.lookupByElement(this.linkedMeters, element) ?? undefined;
-    },
-    isHidden(element) {
-      return element.type === "counter" && !!this.hiddenIds?.some((id) => String(id) === String(element.id));
     },
     getElementIcon(element) {
       switch (element.type) {
