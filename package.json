@@ -9,6 +9,7 @@
     "preview": "vite preview --host",
     "test:unit": "vitest run --environment jsdom --root src/",
     "lint": "eslint . --fix",
+    "lint:check": "eslint .",
     "build-dev": "vite build --mode=development --out-dir=/var/www/html/openWB/web/settings --emptyOutDir",
     "build-prod": "vite build --out-dir=/var/www/html/openWB/web/settings --emptyOutDir"
   },
