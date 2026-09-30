@@ -326,8 +326,8 @@
                 <openwb-base-text-input
                   title="Uhrzeit"
                   subtype="time"
-                  :model-value="getResetClockTime(installedConsumer)"
-                  @update:model-value="setResetClockTime(installedConsumer, $event)"
+                  :model-value="getResetTime(installedConsumer)"
+                  @update:model-value="setResetTime(installedConsumer, $event)"
                 />
                 <openwb-base-button-group-input
                   title="Wiederholung"
@@ -989,30 +989,24 @@ export default {
       const pad = (dateTimePart) => String(dateTimePart).padStart(2, "0");
       return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
     },
-    defaultClockTime() {
+    defaultResetTime() {
       return "00:00";
     },
     isResetModeEnabled(consumer) {
       return consumer.consumerUsage?.reset_chargemode?.active;
     },
     currentResetMode(consumer) {
-      const mode = consumer.consumerUsage?.reset_chargemode?.mode;
-      if (mode === "once" || mode === "daily" || mode === "weekly") {
-        return mode;
-      }
       const selected = consumer.consumerUsage?.reset_chargemode?.frequency?.selected;
       return selected === "once" || selected === "daily" || selected === "weekly" ? selected : "daily";
     },
     setResetEnabled(consumer, active) {
-      if (!active) {
-        this.updateUsage(consumer.id, false, "reset_chargemode.active");
-        return;
-      }
+      this.updateUsage(consumer.id, active, "reset_chargemode.active");
+      if (!active) return;
 
       this.updateUsage(consumer.id, true, "reset_chargemode.active");
       const mode = this.currentResetMode(consumer);
       this.setResetMode(consumer, mode);
-      this.setResetClockTime(consumer, this.getResetClockTime(consumer));
+      this.setResetTime(consumer, this.getResetTime(consumer));
     },
     defaultWeekly() {
       return [false, false, false, false, false, false, false];
@@ -1027,13 +1021,13 @@ export default {
           Array.isArray(frequency?.weekly) && frequency.weekly.length === 7 ? frequency.weekly : this.defaultWeekly(),
       };
     },
-    getResetClockTime(consumer) {
-      const clockTime = consumer.consumerUsage?.reset_chargemode?.clock_time;
-      return typeof clockTime === "string" && clockTime ? clockTime : this.defaultClockTime();
+    getResetTime(consumer) {
+      const time = consumer.consumerUsage?.reset_chargemode?.time;
+      return typeof time === "string" && time ? time : this.defaultResetTime();
     },
-    setResetClockTime(consumer, clockTime) {
-      if (!clockTime) return;
-      this.updateUsage(consumer.id, clockTime, "reset_chargemode.clock_time");
+    setResetTime(consumer, time) {
+      if (!time) return;
+      this.updateUsage(consumer.id, time, "reset_chargemode.time");
     },
     setResetMode(consumer, mode) {
       if (mode !== "once" && mode !== "daily" && mode !== "weekly") return;
