@@ -712,7 +712,7 @@ export default {
     },
     allowClientAction() {
       return (client) => {
-        return this.loggedInUser !== client && this.clientDetails[client]?.username !== "admin";
+        return this.loggedInUser !== client && client !== "admin";
       };
     },
     userManagementActive: {
@@ -1170,8 +1170,8 @@ export default {
         this.$root.postClientMessage("Der aktuell angemeldete Benutzer kann nicht gelöscht werden.", "danger");
         return;
       }
-      if (this.clientDetails[client].username === "admin") {
-        console.error("Cannot delete admin user:", client);
+      if (client === "admin") {
+        console.error("Cannot delete admin user!");
         this.$root.postClientMessage("Der Admin-Benutzer kann nicht gelöscht werden.", "danger");
         return;
       }
@@ -1184,8 +1184,8 @@ export default {
         this.$root.postClientMessage("Der aktuell angemeldete Benutzer kann nicht deaktiviert werden.", "danger");
         return;
       }
-      if (this.clientDetails[client].username === "admin") {
-        console.error("Cannot disable admin user:", client);
+      if (client === "admin") {
+        console.error("Cannot disable admin user!");
         this.$root.postClientMessage("Der Admin-Benutzer kann nicht deaktiviert werden.", "danger");
         return;
       }
@@ -1209,10 +1209,10 @@ export default {
         this.clientDetails[client].roles.push({ rolename: this.dynSecAdminRoleName });
       }
       if (
-        this.clientDetails[client].username === "admin" &&
+        client === "admin" &&
         !this.clientDetails[client]?.roles.map((role) => role.rolename).includes(this.dynSecAdminRoleName)
       ) {
-        console.error(`Cannot remove ${this.dynSecAdminRoleName} role from admin user:`, client);
+        console.error(`Cannot remove ${this.dynSecAdminRoleName} role from admin user!`);
         this.$root.postClientMessage(
           `Die Rolle '${this.friendlyRoleName(this.dynSecAdminRoleName)}' kann vom Admin-Benutzer nicht entfernt werden ` +
             "und wird automatisch wieder hinzugefügt, da sie für die Verwaltung der Benutzerrechte benötigt wird.",
@@ -1223,7 +1223,7 @@ export default {
       if ([null, undefined, ""].includes(this.clientDetails[client].password)) {
         // remove password field to avoid resetting password to empty
         delete this.clientDetails[client].password;
-      } else if (this.clientDetails[client].username === "admin") {
+      } else if (client === "admin") {
         console.warn("Admin password change requested, sending updateAdminPassword command to openWB.");
         this.$emit("sendCommand", {
           command: "updateAdminPassword",
