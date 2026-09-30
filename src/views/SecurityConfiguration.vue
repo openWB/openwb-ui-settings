@@ -263,22 +263,22 @@
                   class="pill mr-2"
                   :class="[
                     clientDetails[client]?.disabled ? 'bg-danger' : 'bg-success',
-                    { clickable: loggedInUser !== client },
+                    { clickable: allowClientAction(client) },
                   ]"
                   :title="
-                    loggedInUser !== client
+                    allowClientAction(client)
                       ? `Benutzer ${clientDetails[client]?.disabled ? 'aktivieren' : 'deaktivieren'}`
-                      : 'Der aktuell angemeldete Benutzer kann nicht deaktiviert werden.'
+                      : 'Der aktuell angemeldete Benutzer oder Admin-Benutzer kann nicht deaktiviert werden.'
                   "
-                  @click.stop="if (loggedInUser !== client) toggleClientDisabled(client);"
+                  @click.stop="if (allowClientAction(client)) toggleClientDisabled(client);"
                 >
                   {{ clientDetails[client]?.disabled ? "Deaktiviert" : "Aktiv" }}
                 </span>
                 <openwb-base-avatar
-                  v-if="!slotProps.collapsed && loggedInUser !== client && !client.startsWith('Display-')"
+                  v-if="!slotProps.collapsed && allowClientAction(client) && !client.startsWith('Display-')"
                   class="bg-danger clickable"
                   title="Benutzer löschen"
-                  @click.stop="if (loggedInUser !== client) deleteClient(client);"
+                  @click.stop="if (allowClientAction(client)) deleteClient(client);"
                 >
                   <font-awesome-icon :icon="['fas', 'trash']" />
                 </openwb-base-avatar>
@@ -710,6 +710,11 @@ export default {
     loggedInUser() {
       return this.$store.state.local.username || null;
     },
+    allowClientAction() {
+      return (client) => {
+        return this.loggedInUser !== client && client !== "admin";
+      };
+    },
     userManagementActive: {
       get() {
         return this.$store.state.mqtt["openWB/system/security/user_management_active"] === true;
@@ -937,6 +942,8 @@ export default {
               return "Daten: Speicher Summendaten lesen";
             case "chargepoint":
               return "Daten: Ladepunkt Summendaten lesen";
+            case "consumer":
+              return "Daten: Verbraucher Summendaten lesen";
           }
         }
         if (!isNaN(roleParts[1]) && ["counter", "inverter", "bat", "chargepoint", "vehicle"].includes(roleParts[0])) {
@@ -1163,6 +1170,11 @@ export default {
         this.$root.postClientMessage("Der aktuell angemeldete Benutzer kann nicht gelöscht werden.", "danger");
         return;
       }
+      if (client === "admin") {
+        console.error("Cannot delete admin user!");
+        this.$root.postClientMessage("Der Admin-Benutzer kann nicht gelöscht werden.", "danger");
+        return;
+      }
       this.queueControlCommand("deleteClient", { username: client });
     },
     toggleClientDisabled(client) {
@@ -1170,6 +1182,11 @@ export default {
       if (client === this.loggedInUser && isDisabled === false) {
         console.error("Cannot disable currently logged in user:", client);
         this.$root.postClientMessage("Der aktuell angemeldete Benutzer kann nicht deaktiviert werden.", "danger");
+        return;
+      }
+      if (client === "admin") {
+        console.error("Cannot disable admin user!");
+        this.$root.postClientMessage("Der Admin-Benutzer kann nicht deaktiviert werden.", "danger");
         return;
       }
       this.queueControlCommand(isDisabled ? "enableClient" : "disableClient", {
@@ -1191,10 +1208,22 @@ export default {
         );
         this.clientDetails[client].roles.push({ rolename: this.dynSecAdminRoleName });
       }
+      if (
+        client === "admin" &&
+        !this.clientDetails[client]?.roles.map((role) => role.rolename).includes(this.dynSecAdminRoleName)
+      ) {
+        console.error(`Cannot remove ${this.dynSecAdminRoleName} role from admin user!`);
+        this.$root.postClientMessage(
+          `Die Rolle '${this.friendlyRoleName(this.dynSecAdminRoleName)}' kann vom Admin-Benutzer nicht entfernt werden ` +
+            "und wird automatisch wieder hinzugefügt, da sie für die Verwaltung der Benutzerrechte benötigt wird.",
+          "danger",
+        );
+        this.clientDetails[client].roles.push({ rolename: this.dynSecAdminRoleName });
+      }
       if ([null, undefined, ""].includes(this.clientDetails[client].password)) {
         // remove password field to avoid resetting password to empty
         delete this.clientDetails[client].password;
-      } else if (this.clientDetails[client].username === "admin") {
+      } else if (client === "admin") {
         console.warn("Admin password change requested, sending updateAdminPassword command to openWB.");
         this.$emit("sendCommand", {
           command: "updateAdminPassword",
