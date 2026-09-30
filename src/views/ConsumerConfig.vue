@@ -202,6 +202,7 @@
             >
             </openwb-base-button-group-input>
             <openwb-base-button-group-input
+              v-if="hasIntegratedCounter[installedConsumer.id] || hasExtraMeter(installedConsumer.id)"
               title="Im Hausverbrauch berücksichtigen?"
               :buttons="[
                 { buttonValue: 'home_consumption', text: 'Ja', class: 'btn-outline-success' },
