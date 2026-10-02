@@ -17,7 +17,8 @@
       oben nach unten geschaltet) und dem Mindeststrom des jeweiligen Geräts: Bei geringem Überschuss wird das erste
       Gerät in der Liste geschaltet, dessen Mindeststrom erreicht ist. Die Rangfolge lässt sich unter
       <router-link to="/LoadManagementConfiguration"> Lastmanagement </router-link>
-      anpassen.
+      anpassen. Angesteuert werden können Geräte mit einer Leistungsaufnahme von mehr als 35W pro Phase. Leistungen
+      darunter werden als Standby gezählt.
     </openwb-base-alert>
     <form name="consumerConfigForm">
       <openwb-base-card title="Verbraucher">
@@ -374,10 +375,10 @@
                   Die Anlauferkennung ist in den Betriebsmodi PV, Eco und Ziel aktiv und wird bei Ablauf eines
                   Zielplans, um Mitternacht sowie beim Ändern des Betriebsmodus zurückgesetzt.<br />
                   Das Gerät wird eingeschaltet, um seine Startsequenz (z. B. Befüllen, Türverriegelung) abzuwarten.
-                  Sobald der Strom den eingestellten Minimalstrom übersteigt, wird das Gerät als aktiv erkannt, das
-                  Gerät abgeschaltet und es übernimmt der gewählte Betriebsmodus. So kann z. B. eine Waschmaschine
-                  morgens befüllt werden und läuft erst an, wenn genug Überschuss vorhanden ist. Für Geräte ohne
-                  Anlaufsequenz (z. B. Wärmepumpen) deaktivieren.
+                  Sobald der Strom 35W pro Phase bzw den konfigurierten Mindeststrom übersteigt, wird das Gerät als
+                  aktiv erkannt, abgeschaltet und es übernimmt der gewählte Betriebsmodus. So kann z. B. eine
+                  Waschmaschine morgens befüllt werden und läuft erst an, wenn genug Überschuss vorhanden ist. Für
+                  Geräte ohne Anlaufsequenz (z. B. Wärmepumpen) deaktivieren.
                 </template>
               </openwb-base-button-group-input>
               <hr />
