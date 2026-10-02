@@ -17,7 +17,10 @@
     </div>
   </div>
   <page-footer />
-  <mqtt-connection-state :connected="connected" />
+  <mqtt-connection-state
+    :connected="connected"
+    :initial-connection-pending="initialConnectionState === 'pending'"
+  />
   <user-info @send-command="sendCommand" />
   <messages />
   <blocker />
@@ -31,6 +34,8 @@ import MqttConnectionState from "./components/OpenwbPageMqttConnectionState.vue"
 import Messages from "./components/OpenwbPageMessages.vue";
 import Blocker from "./components/OpenwbPageBlocker.vue";
 import mqtt from "mqtt";
+
+const CONNECTING_GRACE_PERIOD = 10000;
 
 export default {
   name: "OpenwbSettingsApp",
@@ -46,6 +51,9 @@ export default {
     return {
       client: null,
       connected: false,
+      // state of the first connection after page load: "pending", "established" or "failed"
+      initialConnectionState: "pending",
+      initialConnectionTimeout: null,
       reconnecting: false,
       reconnectAttempts: 0,
       reconnectBackoff: 2000,
@@ -92,6 +100,12 @@ export default {
     },
   },
   created() {
+    this.initialConnectionTimeout = setTimeout(() => {
+      if (this.initialConnectionState === "pending") {
+        console.warn("MQTT connection could not be established within grace period");
+        this.initialConnectionState = "failed";
+      }
+    }, CONNECTING_GRACE_PERIOD);
     this.createConnection();
   },
   methods: {
@@ -221,6 +235,8 @@ export default {
       // reset backoff on successful connection
       this.client.on("connect", () => {
         this.connected = true;
+        this.initialConnectionState = "established";
+        clearTimeout(this.initialConnectionTimeout);
         this.reconnectAttempts = 0;
         this.reconnectBackoff = 2000;
         this.reconnecting = false;
