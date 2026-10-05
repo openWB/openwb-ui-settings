@@ -18,7 +18,9 @@
         v-bind="$attrs"
         @button-clicked="handleClick"
       >
-        {{ buttonText }}
+        <slot name="buttonText">
+          {{ buttonText }}
+        </slot>
       </openwb-base-click-button>
     </template>
   </openwb-base-setting-element>
