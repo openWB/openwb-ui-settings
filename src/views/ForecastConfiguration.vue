@@ -1,11 +1,11 @@
 <template>
   <div class="forecastConfig">
-    <form name="forecastConfigForm">
-      <openwb-base-card title="PV-Prognose">
-        <openwb-base-alert subtype="info">
-          Wähle einen Forecast-Anbieter und hinterlege die erforderlichen Zugangsdaten bzw. Standortparameter.
-        </openwb-base-alert>
+    <openwb-base-card title="PV-Prognose">
+      <openwb-base-alert subtype="info">
+        Wähle einen Prognose-Anbieter und hinterlege die erforderlichen Zugangsdaten bzw. Standortparameter.
+      </openwb-base-alert>
 
+      <form name="forecastConfigForm">
         <openwb-base-select-input
           title="Anbieter"
           :options="providerOptions"
@@ -23,32 +23,23 @@
           v-else
           subtype="warning"
         >
-          Es ist derzeit kein Forecast-Anbieter aktiv.
+          Es ist derzeit kein Prognose-Anbieter aktiv.
         </openwb-base-alert>
+      </form>
+      <template #footer>
+        <openwb-base-submit-buttons
+          form-name="forecastConfigForm"
+          @save="$emit('save', mqttTopicsToPublish)"
+          @reset="$emit('reset')"
+        />
+      </template>
+    </openwb-base-card>
 
-        <hr />
-
-        <div class="row justify-content-center mb-1 w-100">
-          <div class="col-md-4 d-flex py-1 justify-content-center">
-            <openwb-base-click-button
-              class="btn-success btn-sm"
-              @button-clicked="$emit('save', mqttTopicsToPublish)"
-            >
-              Einstellungen Speichern
-            </openwb-base-click-button>
-          </div>
-          <div class="col-md-4 d-flex py-1 justify-content-center">
-            <openwb-base-click-button
-              class="btn-danger btn-sm"
-              @button-clicked="resetProviderAndForecastData"
-            >
-              Anbieter entfernen und Prognose zurücksetzen
-            </openwb-base-click-button>
-          </div>
-        </div>
-      </openwb-base-card>
-
-      <openwb-base-card title="Prognose-Info">
+    <openwb-base-card
+      v-if="currentForecastProvider?.type !== null"
+      title="Prognose-Info"
+    >
+      <form name="forecastInfoForm">
         <openwb-base-alert subtype="info">
           Aktuelle Prognose: Heute
           {{ formatNumber($store.state.mqtt["openWB/optional/forecast/get/today_kwh"], 2, 2) || "0.00" }}
@@ -60,7 +51,11 @@
           title="Letzte Aktualisierung"
           readonly
           :model-value="lastUpdateTimeText"
-        />
+        >
+          <template #prepend>
+            <font-awesome-icon :icon="['fas', 'calendar-day']" />
+          </template>
+        </openwb-base-text-input>
         <openwb-base-text-input
           title="Nächste Aktualisierung"
           readonly
@@ -69,30 +64,50 @@
           <template #help>
             Die Prognose wird automatisch um 05:00, 08:00, 11:00, 14:00, 17:00 und 20:00 Uhr aktualisiert.
           </template>
+          <template #prepend>
+            <font-awesome-icon :icon="['fas', 'calendar-day']" />
+          </template>
         </openwb-base-text-input>
         <openwb-base-text-input
           title="Status"
           readonly
-          :model-value="faultStatusText"
-        />
+          :model-value="faultStateText"
+        >
+          <template #prepend>
+            <font-awesome-icon
+              :class="stateClass"
+              :icon="stateIcon"
+            />
+          </template>
+        </openwb-base-text-input>
         <div class="row justify-content-center mb-1 w-100">
           <div class="col-md-4 d-flex py-1 justify-content-center">
-            <button
-              type="button"
-              class="btn btn-outline-primary btn-block btn-sm"
+            <openwb-base-click-button
+              class="btn-primary"
               @click="triggerForecastUpdate"
             >
               Prognose aktualisieren
-            </button>
+            </openwb-base-click-button>
           </div>
         </div>
         <openwb-base-alert subtype="warning">
           Je nach Anbieter ist die Anzahl der API-Aufrufe pro Stunde begrenzt (z.B. Forecast.Solar: 12 Aufrufe/Stunde).
           Ein manuelles Aktualisieren kann daher fehlschlagen, wenn das Limit bereits erreicht wurde.
         </openwb-base-alert>
-      </openwb-base-card>
+      </form>
+    </openwb-base-card>
 
-      <openwb-base-card title="Prognose-Verlauf (Leistung)">
+    <openwb-base-card
+      v-if="currentForecastProvider?.type !== null"
+      title="Prognose-Verlauf (Leistung)"
+    >
+      <openwb-base-alert
+        v-if="!hasForecastValues"
+        subtype="info"
+      >
+        Noch keine Prognose-Werte vorhanden. Führe ggf. "Prognose aktualisieren" aus.
+      </openwb-base-alert>
+      <div v-else>
         <div class="d-flex justify-content-center mb-2">
           <div class="btn-group btn-group-sm">
             <button
@@ -118,33 +133,29 @@
             </button>
           </div>
         </div>
-        <openwb-base-alert
-          v-if="!hasForecastValues"
-          subtype="info"
-        >
-          Noch keine Prognose-Werte vorhanden. Führe ggf. "Prognose aktualisieren" aus.
-        </openwb-base-alert>
-        <div
-          v-else
-          class="openwb-chart"
-        >
+        <div class="openwb-chart">
           <chartjs-line
             :data="forecastChartData"
             :options="forecastChartOptions"
           />
         </div>
-      </openwb-base-card>
-
-      <openwb-base-submit-buttons
-        form-name="forecastConfigForm"
-        @save="$emit('save', mqttTopicsToPublish)"
-        @reset="$emit('reset')"
-      />
-    </form>
+      </div>
+    </openwb-base-card>
   </div>
 </template>
 
 <script>
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faCalendarDay as fasCalendarDay,
+  faCircleCheck as fasCircleCheck,
+  faExclamationTriangle as fasExclamationTriangle,
+  faTimesCircle as fasTimesCircle,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(fasCalendarDay, fasCircleCheck, fasExclamationTriangle, fasTimesCircle);
+
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbForecastProxy from "../components/forecast/OpenwbForecastProxy.vue";
 import { Line as ChartjsLine } from "vue-chartjs";
@@ -166,6 +177,7 @@ Chart.register(Tooltip, Legend, LineController, LineElement, PointElement, Linea
 export default {
   name: "OpenwbForecastConfiguration",
   components: {
+    FontAwesomeIcon,
     OpenwbForecastProxy,
     ChartjsLine,
   },
@@ -342,7 +354,32 @@ export default {
       }
       return new Date(Number(timestamp) * 1000).toLocaleString();
     },
-    faultStatusText() {
+    faultState() {
+      return this.$store.state.mqtt["openWB/optional/forecast/get/fault_state"] || 0;
+    },
+    stateIcon() {
+      switch (this.faultState) {
+        case 1:
+          return ["fas", "exclamation-triangle"];
+        case 2:
+          return ["fas", "times-circle"];
+        default:
+          return ["fas", "check-circle"];
+      }
+    },
+    stateClass() {
+      switch (this.faultState) {
+        case 0:
+          return "success";
+        case 1:
+          return "warning";
+        case 2:
+          return "danger";
+        default:
+          return "dark"; // Default case for all other values
+      }
+    },
+    faultStateText() {
       const faultText = this.$store.state.mqtt["openWB/optional/forecast/get/fault_str"];
       if (!faultText || faultText.length === 0) {
         return "OK";
@@ -353,7 +390,7 @@ export default {
           hour: "2-digit",
           minute: "2-digit",
         });
-        return `${faultText} Nächster Versuch: ${timeStr} Uhr.`;
+        return `${faultText} Nächste Aktualisierung: ${timeStr} Uhr.`;
       }
       return faultText;
     },
@@ -367,44 +404,20 @@ export default {
     this.cacheProviderConfiguration(this.currentForecastProviderRaw);
   },
   methods: {
-    normalizeProviderType(type) {
-      if (typeof type !== "string") {
-        return null;
-      }
-      const trimmed = type.trim();
-      return trimmed || null;
-    },
     publishForecastProvider(providerConfig) {
       this.$root.doPublish("openWB/set/optional/forecast/provider", providerConfig);
-    },
-    resetProviderAndForecastData() {
-      this.providerConfigCache = {};
-      const resetProvider = { type: null, configuration: {} };
-      this.updateState("openWB/optional/forecast/provider", resetProvider);
-      this.publishForecastProvider(resetProvider);
-      this.updateState("openWB/optional/forecast/configured", false);
-      this.updateState("openWB/optional/forecast/get/values", {});
-      this.updateState("openWB/optional/forecast/get/today_values", {});
-      this.updateState("openWB/optional/forecast/get/tomorrow_values", {});
-      this.updateState("openWB/optional/forecast/get/daily_kwh", {});
-      this.updateState("openWB/optional/forecast/get/today_kwh", 0);
-      this.updateState("openWB/optional/forecast/get/tomorrow_kwh", 0);
-      this.updateState("openWB/optional/forecast/get/next_query_time", null);
-      this.updateState("openWB/optional/forecast/get/fault_state", 0);
-      this.updateState("openWB/optional/forecast/get/fault_str", "Kein Fehler.");
-      this.$emit("save", this.mqttTopicsToPublish);
     },
     cacheProviderConfiguration(provider) {
       if (!provider || typeof provider !== "object") {
         return;
       }
-      const normalizedType = this.normalizeProviderType(provider.type || provider.name);
-      if (!normalizedType) {
+      const providerType = provider.type;
+      if (typeof providerType !== "string" || !providerType) {
         return;
       }
-      this.providerConfigCache[normalizedType] = {
+      this.providerConfigCache[providerType] = {
         ...provider,
-        type: normalizedType,
+        type: providerType,
         configuration:
           provider.configuration && typeof provider.configuration === "object" ? { ...provider.configuration } : {},
       };
@@ -443,18 +456,6 @@ export default {
         },
       };
     },
-    ensureEditableProviderTopic() {
-      const topic = "openWB/optional/forecast/provider";
-      const provider = this.$store.state.mqtt[topic];
-      if (provider && typeof provider === "object") {
-        return;
-      }
-      const normalizedType = this.normalizeProviderType(this.selectedProviderType);
-      if (!normalizedType) {
-        return;
-      }
-      this.updateState(topic, this.createProviderByType(normalizedType));
-    },
     updateProviderType(type) {
       this.cacheProviderConfiguration(this.currentForecastProviderRaw);
       if (!type) {
@@ -468,23 +469,13 @@ export default {
         this.publishForecastProvider(resetProvider);
         return;
       }
-      const normalizedType = this.normalizeProviderType(type);
-      if (!normalizedType) {
-        return;
-      }
       const existing = this.currentForecastProvider;
-      const nextProvider = this.createProviderByType(
-        normalizedType,
-        existing.type === normalizedType ? existing.configuration : {},
-      );
+      const nextProvider = this.createProviderByType(type, existing.type === type ? existing.configuration : {});
       this.updateState("openWB/optional/forecast/provider", nextProvider);
       // Persist provider switch immediately to avoid race conditions with retained state.
-      this.publishForecastProvider(nextProvider);
+      // this.publishForecastProvider(nextProvider);
     },
     updateConfiguration(topic, event) {
-      if (topic === "openWB/optional/forecast/provider" && event?.object) {
-        this.ensureEditableProviderTopic();
-      }
       this.updateState(topic, event.value, event.object);
     },
     triggerForecastUpdate() {
@@ -497,5 +488,21 @@ export default {
 <style scoped>
 .openwb-chart {
   min-height: 420px;
+}
+
+.success {
+  color: var(--success);
+}
+
+.warning {
+  color: var(--warning);
+}
+
+.danger {
+  color: var(--danger);
+}
+
+.dark {
+  color: var(--dark);
 }
 </style>
