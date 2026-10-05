@@ -297,7 +297,7 @@ export default {
           });
         }
         dataObject.datasets[0].data = myData;
-        lastTimestampPriceSums = dataObject.datasets[0].data.slice(-1)[0].timestamp;
+        lastTimestampPriceSums = dataObject.datasets[0].data.slice(-1)[0]?.timestamp || null;
       } else {
         dataObject.datasets[0].hidden = true;
       }
