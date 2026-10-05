@@ -4,14 +4,14 @@
     subtype="success"
   >
     <font-awesome-icon :icon="['fas', 'certificate']" />
-    Das ausgewählte Fahrzeug-Modul "{{ forecast.name }}" wird von openWB gepflegt.
+    Das ausgewählte Prognose-Modul "{{ forecast.name }}" wird von openWB gepflegt.
   </openwb-base-alert>
   <openwb-base-alert
     v-else
     subtype="info"
   >
     <font-awesome-icon :icon="['fas', 'people-group']" />
-    Das ausgewählte Fahrzeug-Modul "{{ forecast.name }}" wird in unserer Community gepflegt. Rückfragen oder Probleme
+    Das ausgewählte Prognose-Modul "{{ forecast.name }}" wird in unserer Community gepflegt. Rückfragen oder Probleme
     bitte im Forum diskutieren.
   </openwb-base-alert>
   <openwb-base-heading> Einstellungen für Modul "{{ forecast.name }}" </openwb-base-heading>
