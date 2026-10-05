@@ -91,8 +91,8 @@
           </div>
         </div>
         <openwb-base-alert subtype="warning">
-          Je nach Anbieter ist die Anzahl der API-Aufrufe pro Stunde begrenzt (z.B. Forecast.Solar: 12 Aufrufe/Stunde).
-          Ein manuelles Aktualisieren kann daher fehlschlagen, wenn das Limit bereits erreicht wurde.
+          Je nach Anbieter kann die Anzahl der API-Abrufe begrenzt sein. Ein manuelles Aktualisieren kann daher
+          fehlschlagen, wenn das Limit bereits erreicht wurde.
         </openwb-base-alert>
       </form>
     </openwb-base-card>
@@ -332,6 +332,9 @@ export default {
               display: true,
               text: "Zeit",
             },
+            ticks: {
+              callback: this.formatTickLabel,
+            },
           },
           y: {
             title: {
@@ -404,6 +407,16 @@ export default {
     this.cacheProviderConfiguration(this.currentForecastProviderRaw);
   },
   methods: {
+    getEndOfToday() {
+      return new Date().setHours(23, 59, 59, 999).valueOf();
+    },
+    formatTickLabel(timeValue) {
+      const date = new Date(timeValue);
+      // Prüfe ob das Datum zum nächsten Tag gehört
+      const isTomorrow = this.getEndOfToday() < date;
+      // Zeige nur den Zeitwert, wenn es nicht morgen ist
+      return `${isTomorrow ? date.toLocaleDateString(undefined, { day: "2-digit", month: "2-digit" }) + " " : ""}${date.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}`;
+    },
     publishForecastProvider(providerConfig) {
       this.$root.doPublish("openWB/set/optional/forecast/provider", providerConfig);
     },
