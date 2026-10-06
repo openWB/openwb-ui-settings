@@ -68,7 +68,7 @@
           </span>
         </div>
         <openwb-nested-list
-          v-if="nesting && element.children && currentNestingDepth < maxNestingDepth"
+          v-if="showDropTarget(element)"
           v-model="element.children"
           :labels="labels"
           :linked-meters="linkedMeters"
@@ -154,6 +154,16 @@ export default {
         this.$emit("update:modelValue", val);
       },
     },
+    showDropTarget() {
+      return (element) => {
+        return (
+          this.nesting &&
+          element.children &&
+          this.currentNestingDepth < this.maxNestingDepth &&
+          ["group", "counter", "inverter"].includes(element.type)
+        );
+      };
+    },
     // nested lists inherit the name from their root, so items move within one list only
     resolvedGroupName() {
       return this.groupName ?? this.ownGroupName;
@@ -170,10 +180,25 @@ export default {
         name: this.resolvedGroupName,
         pull: true,
         put: (to, from, dragEl) => {
-          if (to.options.group.name !== from.options.group.name) return false;
+          // Prevent dragging items between different top-level groups
+          if (to.options.group.name !== from.options.group.name) {
+            return false;
+          }
           const draggedItem = dragEl?.__draggable_context?.element;
-          if (!draggedItem) return true;
-          return draggedItem.type !== "group";
+          if (!draggedItem) {
+            return true;
+          }
+          const targetItem = to.el.parentElement?.__draggable_context?.element;
+          if (["cp", "consumer", "bat", "vehicle"].includes(targetItem?.type)) {
+            return false;
+          }
+          if (targetItem?.type === "inverter") {
+            return draggedItem?.type === "bat";
+          }
+          if (draggedItem.type === "group") {
+            return false;
+          }
+          return true;
         },
       };
     },
@@ -238,14 +263,12 @@ export default {
 
       this.editingGroupId = element.id;
       this.editingValue = element.label;
-
       this.$nextTick(() => {
         const input = this.$el.querySelector(".group-rename-input");
         input?.focus();
         input?.select();
       });
     },
-
     finishEditing(groupId) {
       if (!this.editingValue.trim()) {
         this.editingGroupId = null;
@@ -273,6 +296,7 @@ export default {
 
 .dragArea ul {
   background-color: var(--light);
+  /* background: url("img/openWB_logo_light.png") no-repeat center center; */
 }
 
 .dragArea li {
