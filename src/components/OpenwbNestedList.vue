@@ -156,6 +156,10 @@ export default {
     },
     showDropTarget() {
       return (element) => {
+        // always show the drop target if the element already has children for compatibility with previous nested lists
+        if (element.children?.length > 0) {
+          return true;
+        }
         return (
           this.nesting &&
           element.children &&
@@ -289,14 +293,13 @@ export default {
   min-height: 40px;
   color: #e9ecef;
   list-style-type: none;
-  border: 1px solid #ced4da;
+  border: 1px solid var(--dark);
   border-radius: 3px;
   padding: 0px;
 }
 
 .dragArea ul {
   background-color: var(--light);
-  /* background: url("img/openWB_logo_light.png") no-repeat center center; */
 }
 
 .dragArea li {
@@ -326,6 +329,8 @@ export default {
   justify-content: space-between;
   padding: 7px;
   background: var(--info);
+  border: 1px solid var(--dark);
+  border-radius: 3px;
 }
 
 .element-titel.counter {
