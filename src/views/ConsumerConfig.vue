@@ -241,17 +241,17 @@
               </template>
             </openwb-base-number-input>
             <openwb-base-number-input
-              v-if="showMinCurrent(installedConsumer)"
-              title="Minimaler Betriebsstrom"
-              unit="A"
+              v-if="showMinPower(installedConsumer)"
+              title="Minimale Leistung"
+              unit="W"
               :min="0"
-              :step="0.1"
-              :model-value="installedConsumer.config?.min_current"
-              @update:model-value="updateState(`openWB/consumer/${installedConsumer.id}/config`, $event, 'min_current')"
+              :step="10"
+              :model-value="installedConsumer.config?.min_power"
+              @update:model-value="updateState(`openWB/consumer/${installedConsumer.id}/config`, $event, 'min_power')"
             >
               <template #help>
-                Mindeststrom, den das Gerät zum Betrieb benötigt. Im PV- und Eco-Betrieb wird das Gerät nur
-                eingeschaltet, wenn mindestens dieser Strom als Überschuss verfügbar ist.
+                Mindestleistung, die das Gerät zum Betrieb benötigt. Im PV- und Eco-Betrieb wird das Gerät nur
+                eingeschaltet, wenn mindestens diese Leistung als Überschuss verfügbar ist.
               </template>
             </openwb-base-number-input>
             <openwb-base-number-input
@@ -743,7 +743,7 @@ export default {
       showConsumerRemoveModal: false,
       modalConsumer: undefined,
       modalConsumerName: "",
-      CONSUMER_CONFIG_FIELDS: ["connected_phases", "phase_1", "max_power"],
+      CONSUMER_CONFIG_FIELDS: ["connected_phases", "phase_1", "max_power", "min_power"],
       commandQueue: [],
       consumerDefaultColor: "#6f42c1",
     };
@@ -947,7 +947,7 @@ export default {
       const type = consumer.consumerUsage?.type;
       return type != null && type !== "meter_only" && type !== "self_controlled";
     },
-    showMinCurrent(consumer) {
+    showMinPower(consumer) {
       const type = consumer.consumerUsage?.type;
       return (
         type !== "suspendable_onoff" && type !== "continuous" && type !== "meter_only" && type !== "self_controlled"
