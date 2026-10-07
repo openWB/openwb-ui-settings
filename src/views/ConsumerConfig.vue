@@ -14,8 +14,8 @@
   <div class="consumerConfig">
     <openwb-base-alert subtype="info">
       Das Einschalten der Verbraucher richtet sich nach der Rangfolge in der Prioritäten-Steuerung (Geräte werden von
-      oben nach unten geschaltet) und dem Mindeststrom des jeweiligen Geräts: Bei geringem Überschuss wird das erste
-      Gerät in der Liste geschaltet, dessen Mindeststrom erreicht ist. Die Rangfolge lässt sich unter
+      oben nach unten geschaltet) und der Mindestleistung des jeweiligen Geräts: Bei geringem Überschuss wird das
+      erste Gerät in der Liste geschaltet, dessen Mindestleistung erreicht ist. Die Rangfolge lässt sich unter
       <router-link to="/LoadManagementConfiguration"> Lastmanagement </router-link>
       anpassen. Angesteuert werden können Geräte mit einer Leistungsaufnahme von mehr als 35W pro Phase. Leistungen
       darunter werden als Standby gezählt.
@@ -390,8 +390,8 @@
                   Die Anlauferkennung ist in den Betriebsmodi PV, Eco und Ziel aktiv und wird bei Ablauf eines
                   Zielplans, beim Tageswechsel sowie beim Ändern des Betriebsmodus zurückgesetzt.<br />
                   Das Gerät wird eingeschaltet, um seine Startsequenz (z. B. Befüllen, Türverriegelung) abzuwarten.
-                  Sobald der Strom 35W pro Phase bzw den konfigurierten Mindeststrom übersteigt, wird das Gerät als
-                  aktiv erkannt, abgeschaltet und es übernimmt der gewählte Betriebsmodus. So kann z. B. eine
+                  Sobald die Leistungsaufnahme 35W pro Phase bzw. die  konfigurierte Mindestleistung übersteigt, wird das Gerät als aktiv erkannt, abgeschaltet und es
+                  übernimmt der gewählte Betriebsmodus. So kann z. B. eine
                   Waschmaschine morgens befüllt werden und läuft erst an, wenn genug Überschuss vorhanden ist. Für
                   Geräte ohne Anlaufsequenz (z. B. Wärmepumpen) deaktivieren.
                 </template>
@@ -428,7 +428,7 @@
                   v-if="installedConsumer.consumerUsage.type === 'suspendable_onoff'"
                   subtype="info"
                 >
-                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
+                  Das Gerät wird eingeschaltet, wenn die maximale Leistung für die Dauer der Einschaltverzögerung
                   überschritten wurde. Das Gerät wird frühestens wieder ausgeschaltet, wenn die minimale Betriebsdauer
                   erreicht wurde, um sicherzustellen, dass das Programm vollständig durchlaufen kann.
                 </openwb-base-alert>
@@ -436,14 +436,14 @@
                   v-else-if="installedConsumer.consumerUsage.type === 'suspendable_tunable'"
                   subtype="info"
                 >
-                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
+                  Das Gerät wird eingeschaltet, wenn die minimale Leistung für die Dauer der Einschaltverzögerung
                   überschritten wurde und bei ausreichend Überschuss hoch geregelt.
                 </openwb-base-alert>
                 <openwb-base-alert
                   v-else
                   subtype="info"
                 >
-                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
+                  Das Gerät wird eingeschaltet, wenn die maximale Leistung für die Dauer der Einschaltverzögerung
                   überschritten wurde.
                 </openwb-base-alert>
               </openwb-base-card>
@@ -520,7 +520,7 @@
                   v-if="installedConsumer.consumerUsage.type === 'suspendable_onoff'"
                   subtype="info"
                 >
-                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
+                  Das Gerät wird eingeschaltet, wenn die maximale Leistung für die Dauer der Einschaltverzögerung
                   überschritten wurde oder der Preis unter die Strompreisgrenze fällt. Das Gerät wird frühestens wieder
                   ausgeschaltet, wenn die minimale Betriebsdauer erreicht wurde, um sicherzustellen, dass das Programm
                   vollständig durchlaufen kann.
@@ -529,7 +529,7 @@
                   v-else-if="installedConsumer.consumerUsage.type === 'suspendable_tunable'"
                   subtype="info"
                 >
-                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
+                  Das Gerät wird eingeschaltet, wenn die minimale Leistung für die Dauer der Einschaltverzögerung
                   überschritten wurde und bei ausreichend Überschuss hoch geregelt oder mit maximaler Leistung
                   eingeschaltet, wenn der Preis unter die Strompreisgrenze fällt.
                 </openwb-base-alert>
@@ -537,7 +537,7 @@
                   v-else
                   subtype="info"
                 >
-                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
+                  Das Gerät wird eingeschaltet, wenn die maximale Leistung für die Dauer der Einschaltverzögerung
                   überschritten wurde oder der Preis unter die Strompreisgrenze fällt.
                 </openwb-base-alert>
                 <openwb-base-number-input
