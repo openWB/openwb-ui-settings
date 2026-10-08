@@ -14,14 +14,21 @@ import VueAxios from "vue-axios";
 
 import VueCookies from "vue-cookies";
 
+import VueDOMPurifyHTML from "vue-dompurify-html";
+
 const vApp = createApp(App);
-vApp.use(store).use(router).use(VueAxios, axios).use(VueCookies, {
-  expire: "30d",
-  path: "/",
-  domain: "",
-  secure: true, // user management and cookie handling is only enabled in secure contexts
-  sameSite: "Lax",
-});
+vApp
+  .use(store)
+  .use(router)
+  .use(VueAxios, axios)
+  .use(VueCookies, {
+    expire: "30d",
+    path: "/",
+    domain: "",
+    secure: true, // user management and cookie handling is only enabled in secure contexts
+    sameSite: "Lax",
+  })
+  .use(VueDOMPurifyHTML);
 
 // automatic global registering of our base components
 const componentFiles = import.meta.glob("./components/OpenwbBase*.vue", {
