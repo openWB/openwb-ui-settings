@@ -26,11 +26,11 @@
     @update:model-value="updateConfiguration($event, 'configuration.devices')"
   >
     <template #help>
-      Bitte die Ladepunkte und/oder digitale Ausgänge auswählen, welche berücksichtigt werden sollen. Es können mehrere
-      Einträge ausgewählt werden. Bei steuerbaren Verbrauchseinrichtungen, die über einen digitalen Ausgang angesteuert
-      werden, wird eine Leistung von 4,2 kW bei aktiver Dimmung angenommen. Ladepunkte werden so gesteuert, dass die
-      angegebene Leistung am EVU-Punkt nicht überschritten wird. Eigene PV-Erzeugung und vorhandene Speicher werden
-      berücksichtigt und zusätzlich genutzt.<br />
+      Bitte die Ladepunkte, Verbraucher und/oder digitale Ausgänge auswählen, welche berücksichtigt werden sollen. Es
+      können mehrere Einträge ausgewählt werden. Bei steuerbaren Verbrauchseinrichtungen, die über einen digitalen
+      Ausgang angesteuert werden, wird eine Leistung von 4,2 kW bei aktiver Dimmung angenommen. Ladepunkte und
+      Verbraucher werden so gesteuert, dass die angegebene Leistung am EVU-Punkt nicht überschritten wird. Eigene
+      PV-Erzeugung und vorhandene Speicher werden berücksichtigt und zusätzlich genutzt.<br />
       Zugeordnete digitale Ausgänge werden im nicht gedimmten Zustand aktiviert und im gedimmten Zustand deaktiviert. So
       ist sichergestellt, dass bei einem Verbindungsabbruch oder einem Ausfall der Steuerung die Verbraucher nicht
       ungewollt mit voller Leistung betrieben werden. An den digitalen Ausgängen gibt es Anschlussmöglichkeiten für
@@ -81,6 +81,20 @@ export default {
       });
       return deviceGroups;
     },
+    consumerOptions() {
+      if (!this.availableConsumers?.length) {
+        return [];
+      }
+      return [
+        {
+          label: "Verbraucher",
+          options: this.availableConsumers.map((consumer) => ({
+            value: { type: "consumer", id: consumer.value },
+            text: consumer.text,
+          })),
+        },
+      ];
+    },
     availableDevices() {
       const chargePointsGroup = {
         label: "Ladepunkte",
@@ -90,7 +104,7 @@ export default {
             text: cp.text,
           })) || [],
       };
-      return [chargePointsGroup].concat(this.ioDevicesOutputOptions);
+      return [chargePointsGroup].concat(this.consumerOptions).concat(this.ioDevicesOutputOptions);
     },
   },
 };

@@ -137,3 +137,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+select[multiple] {
+  resize: vertical;
+}
+</style>

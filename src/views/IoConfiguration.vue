@@ -121,6 +121,7 @@
               :io-devices="installedIoDevices"
               :installed-charge-points="installedChargePoints"
               :installed-components="installedComponents"
+              :installed-consumers="installedConsumers"
               @update:configuration="updateConfiguration(installedIoActionKey, $event)"
             />
           </openwb-base-card>
@@ -187,6 +188,8 @@ export default {
     return {
       mqttTopics: [
         { topic: "openWB/chargepoint/+/config", writeable: false },
+        { topic: "openWB/consumer/+/module", writeable: false },
+        { topic: "openWB/consumer/+/usage", writeable: false },
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/io/action/+/config", writeable: true },
         { topic: "openWB/system/configurable/io_actions", writeable: false },
@@ -254,6 +257,17 @@ export default {
     installedComponents: {
       get() {
         return this.getWildcardTopics("openWB/system/device/+/component/+/config");
+      },
+    },
+    installedConsumers: {
+      get() {
+        const usages = this.getWildcardTopics("openWB/consumer/+/usage");
+        return Object.fromEntries(
+          Object.entries(this.getWildcardTopics("openWB/consumer/+/module")).map(([topic, consumer]) => [
+            topic,
+            { ...consumer, consumerUsage: usages[`openWB/consumer/${consumer?.id}/usage`] ?? null },
+          ]),
+        );
       },
     },
   },
