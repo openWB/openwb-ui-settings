@@ -53,7 +53,7 @@
       @dismiss="dismissMessage"
       @hide="hideMessage"
     >
-      <span v-html="message.message" />
+      <span v-dompurify-html="message.message" />
     </openwb-base-toast>
   </div>
 </template>
