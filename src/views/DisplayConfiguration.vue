@@ -127,14 +127,63 @@
             </template>
           </openwb-base-range-input>
         </div>
-        <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+        <div v-if="isSecondary">
           <hr />
+          <openwb-base-select-input
+            title="Display-Quelle"
+            :model-value="displayMode"
+            :disabled="displayMode === undefined"
+            not-selected="Bitte auswählen"
+            :options="[
+              { value: 'primary', text: 'Display der primary openWB' },
+              { value: 'local', text: 'Lokal konfiguriertes Display' },
+            ]"
+            @update:model-value="updateState('openWB/general/extern_display_mode', $event)"
+          >
+            <template #help>
+              "Display der primary openWB" verwendet das Theme und die Konfiguration der primary openWB. "Lokal
+              konfiguriertes Display" verwendet das auf dieser secondary openWB gespeicherte Theme und dessen
+              Konfiguration. Die Auswahl gilt auch für externe Browser, unabhängig vom integrierten Display. Sie ändert
+              nur die Display-Weiterleitung, nicht die Lade- oder Modbus-Steuerung.
+            </template>
+          </openwb-base-select-input>
+          <openwb-base-alert
+            v-if="!displayModeKnown"
+            subtype="warning"
+          >
+            <template v-if="displayMode === undefined">
+              Die Display-Quelle wurde noch nicht geladen oder wird von dieser Core-Version nicht bereitgestellt. Es
+              wird kein Wert automatisch gesetzt. Der Backend-Standard ist "primary".
+            </template>
+            <template v-else>
+              Unbekannte Display-Quelle: {{ displayMode }}. Bitte eine unterstützte Quelle auswählen. Der gespeicherte
+              Wert wird nicht automatisch geändert.
+            </template>
+          </openwb-base-alert>
+          <openwb-base-alert
+            v-if="displayMode === 'primary'"
+            subtype="info"
+          >
+            Theme und Display-Konfiguration werden auf der primary openWB eingestellt. Das lokal gespeicherte Theme
+            bleibt für eine spätere lokale Anzeige erhalten. Lokale Theme-Änderungen werden nur mit der Display-Quelle
+            "Lokal konfiguriertes Display" gespeichert.
+          </openwb-base-alert>
+          <openwb-base-alert
+            v-if="displayMode === 'local'"
+            subtype="info"
+          >
+            Die folgenden Theme-Einstellungen gelten für diese secondary openWB. Das Theme wird über den Host dieser
+            secondary geladen. Ladedaten der primary stehen dadurch in Cards/Colors nicht automatisch zur Verfügung.
+          </openwb-base-alert>
           <openwb-base-alert subtype="info">
-            Weitere Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary"
-            befindet.
+            Lokale Anzeige erfordert eine Core-Version mit Unterstützung für lokales Rendering auf secondary openWB.
+            Ältere Versionen zeigen weiterhin das Display der primary an.<br />
+            Wurde der Display-Browser bereits zur primary weitergeleitet, muss er gegebenenfalls neu gestartet oder an
+            der Display-Einstiegsseite der secondary openWB erneut geöffnet werden. Ein Neuladen der Seite auf der
+            primary reicht nicht aus.
           </openwb-base-alert>
         </div>
-        <div v-else>
+        <div v-if="isPrimary">
           <hr />
           <openwb-base-button-group-input
             title="Ladepunkte auf secondary openWB"
@@ -155,7 +204,8 @@
           >
             <template #help>
               Hiermit kann festgelegt werden, ob an angebundenen secondary openWB alle oder nur die jeweils lokalen
-              Ladepunkte angezeigt werden sollen.
+              Ladepunkte im Display der primary angezeigt werden sollen. Diese Einstellung wählt keine lokale
+              Display-Anzeige auf der secondary aus.
             </template>
           </openwb-base-button-group-input>
           <openwb-base-alert
@@ -179,8 +229,10 @@
               secondary openWB steht, angelegt.
             </p>
           </openwb-base-alert>
+        </div>
+        <div v-if="showThemeSettings">
           <hr />
-          <div v-if="$store.state.mqtt['openWB/optional/int_display/theme'] !== undefined">
+          <div v-if="themeSettingsReady">
             <openwb-base-select-input
               class="mb-2"
               title="Theme des Displays"
@@ -199,10 +251,18 @@
               @update:configuration="updateConfiguration('openWB/optional/int_display/theme', $event)"
             />
           </div>
+          <openwb-base-alert
+            v-else
+            subtype="warning"
+          >
+            Die Theme-Konfiguration, die verfügbaren Themes oder die Einstellungen zur Benutzerverwaltung sind noch
+            nicht vollständig geladen. Speichern ist erst mit vollständiger Konfiguration möglich.
+          </openwb-base-alert>
         </div>
       </openwb-base-card>
       <openwb-base-submit-buttons
         form-name="optionalComponentsForm"
+        :save-disabled="showThemeSettings && !themeSettingsReady"
         @save="$emit('save', mqttTopicsToPublish)"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
@@ -232,10 +292,60 @@ export default {
         { topic: "openWB/optional/int_display/theme", writeable: true },
         { topic: "openWB/system/configurable/display_themes", writeable: false },
         { topic: "openWB/system/security/user_management_active", writeable: false },
+        // Publish the complete theme before enabling local rendering.
+        { topic: "openWB/general/extern_display_mode", writeable: true },
       ],
     };
   },
   computed: {
+    isPrimary() {
+      return this.$store.state.mqtt["openWB/general/extern"] === false;
+    },
+    isSecondary() {
+      return this.$store.state.mqtt["openWB/general/extern"] === true;
+    },
+    displayMode() {
+      return this.$store.state.mqtt["openWB/general/extern_display_mode"];
+    },
+    displayModeKnown() {
+      return ["primary", "local"].includes(this.displayMode);
+    },
+    showThemeSettings() {
+      return this.isPrimary || (this.isSecondary && this.displayMode === "local");
+    },
+    themeConfigurationLoaded() {
+      const theme = this.$store.state.mqtt["openWB/optional/int_display/theme"];
+      return (
+        typeof theme?.type === "string" &&
+        theme.type.length > 0 &&
+        theme.configuration !== null &&
+        typeof theme.configuration === "object" &&
+        !Array.isArray(theme.configuration)
+      );
+    },
+    themeSettingsReady() {
+      return (
+        this.themeConfigurationLoaded &&
+        Array.isArray(this.displayThemeList) &&
+        typeof this.$store.state.mqtt["openWB/system/security/user_management_active"] === "boolean"
+      );
+    },
+    mqttTopicsToPublish() {
+      return this.mqttTopics
+        .filter(({ topic, writeable }) => {
+          if (!writeable || this.$store.state.mqtt[topic] === undefined) {
+            return false;
+          }
+          if (topic === "openWB/general/extern_display_mode") {
+            return this.displayModeKnown;
+          }
+          if (topic === "openWB/optional/int_display/theme") {
+            return this.showThemeSettings;
+          }
+          return true;
+        })
+        .map(({ topic }) => topic);
+    },
     displayThemeList() {
       return this.$store.state.mqtt["openWB/system/configurable/display_themes"];
     },
