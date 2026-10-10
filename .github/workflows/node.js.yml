@@ -30,3 +30,22 @@ jobs:
     - run: npm run test:unit
     - run: npm run lint
     - run: npm run build --if-present
+    - name: Verify Nissan endpoint delivery
+      run: |
+        cmp public/modules/vehicles/nissanconnect/test_connection.php dist/modules/vehicles/nissanconnect/test_connection.php
+        cmp public/modules/vehicles/nissanconnect/connection_test_lib.php dist/modules/vehicles/nissanconnect/connection_test_lib.php
+
+  nissan-php-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+    - name: Check PHP runtime and endpoint syntax
+      run: |
+        php -n -v
+        php -n -l public/modules/vehicles/nissanconnect/test_connection.php
+        php -n -l public/modules/vehicles/nissanconnect/connection_test_lib.php
+    - name: Run synthetic endpoint tests
+      run: |
+        python3 -m venv /tmp/nissan-test-venv
+        /tmp/nissan-test-venv/bin/python -m pip install pytest==8.3.5
+        /tmp/nissan-test-venv/bin/python -m pytest -q tests/nissanconnect

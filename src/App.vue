@@ -144,7 +144,7 @@ export default {
             continue;
           }
           let setTopic = topic.replace("openWB/", "openWB/set/");
-          console.debug("saving data:", setTopic, payload);
+          console.debug("saving data:", setTopic);
           this.doPublish(setTopic, payload);
           // publishing without sleeping is inconsistent! (mqtt v4.3.7)
           // This may change with newer versions.
