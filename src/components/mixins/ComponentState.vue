@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     updateState(topic, value, objectPath = undefined) {
-      console.debug("updateState:", topic, value, objectPath);
+      console.debug("updateState:", topic, objectPath);
       this.$store.commit({
         type: "updateTopic",
         topic: topic,

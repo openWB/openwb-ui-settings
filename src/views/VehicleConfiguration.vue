@@ -1554,7 +1554,7 @@ export default {
   },
   methods: {
     updateConfiguration(key, event) {
-      console.debug("updateConfiguration", key, event);
+      console.debug("updateConfiguration", key, event.object);
       this.updateState(key, event.value, event.object);
     },
     /* vehicle management */
