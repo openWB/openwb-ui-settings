@@ -37,8 +37,8 @@
     @update:model-value="updateConfiguration($event, 'configuration.devices')"
   >
     <template #help>
-      Bitte die Ladepunkte auswählen, auf die das Verhalten angewendet werden soll. Es können mehrere Einträge
-      ausgewählt werden.
+      Bitte die Ladepunkte und/oder Verbraucher auswählen, auf die das Verhalten angewendet werden soll. Es können
+      mehrere Einträge ausgewählt werden.
     </template>
   </openwb-base-select-input>
 </template>
@@ -62,6 +62,20 @@ export default {
         this.updateConfiguration(newValue, "configuration.input_pattern");
       },
     },
+    consumerOptions() {
+      if (this.availableConsumers.length === 0) {
+        return [];
+      }
+      return [
+        {
+          label: "Verbraucher",
+          options: this.availableConsumers.map((consumer) => ({
+            value: { type: "consumer", id: consumer.value },
+            text: consumer.text,
+          })),
+        },
+      ];
+    },
     availableDevices() {
       const label = this.availableChargePoints.length > 0 ? "Ladepunkte" : "Keine Ladepunkte verfügbar";
       return [
@@ -69,7 +83,7 @@ export default {
           label: label,
           options: this.availableChargePoints.map((cp) => ({ value: { type: "cp", id: cp.value }, text: cp.text })),
         },
-      ];
+      ].concat(this.consumerOptions);
     },
   },
 };
