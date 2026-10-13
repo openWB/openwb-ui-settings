@@ -245,7 +245,7 @@
               title="Minimale Leistung"
               unit="W"
               :min="0"
-              :step="10"
+              :step="5"
               :model-value="installedConsumer.config?.min_power"
               @update:model-value="updateState(`openWB/consumer/${installedConsumer.id}/config`, $event, 'min_power')"
             >
