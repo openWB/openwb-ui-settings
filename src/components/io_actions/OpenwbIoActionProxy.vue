@@ -52,9 +52,13 @@ export default {
       });
     },
     ioDeviceList() {
-      return Object.keys(this.ioDevices).map((key) => {
-        return { value: this.ioDevices[key]?.id, text: this.ioDevices[key]?.name };
-      });
+      return Object.values(this.ioDevices)
+        .filter((device) =>
+          this.ioAction?.type === "load_manager"
+            ? device?.type === "load_manager"
+            : Object.keys(device?.input?.digital || {}).length > 0,
+        )
+        .map((device) => ({ value: device?.id, text: device?.name }));
     },
     availableIoDevices() {
       return Object.values(this.ioDevices);
