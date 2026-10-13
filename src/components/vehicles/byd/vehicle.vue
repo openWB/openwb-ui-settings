@@ -43,12 +43,11 @@
     </openwb-base-text-input>
     <openwb-base-text-input
       title="VIN"
+      required
       :model-value="vehicle.configuration.vin"
       @update:model-value="updateConfiguration($event, 'configuration.vin')"
     >
-      <template #help>
-        Nur nötig, falls mehrere Fahrzeuge am Account hängen - sonst wird automatisch das einzige Fahrzeug verwendet.
-      </template>
+      <template #help> Fahrgestellnummer des Fahrzeugs, zu finden in der BYD-App. </template>
     </openwb-base-text-input>
     <openwb-base-text-input
       title="Land"
