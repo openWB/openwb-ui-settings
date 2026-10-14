@@ -419,6 +419,32 @@
                 class: 'btn-outline-success',
               },
             ]"
+            :model-value="$store.state.mqtt['openWB/general/charge_log_data_config']?.data_tariff_split"
+            @update:model-value="updateState('openWB/general/charge_log_data_config', $event, 'data_tariff_split')"
+          >
+            <template #title>
+              <font-awesome-icon :icon="['fas', 'coins']" />
+              Tarifaufteilung
+            </template>
+            <template #help>
+              Zeigt den Netzbezug und seine Kosten je Tarifzeitraum, z.B. Hoch- und Niedertarif. Die Aufteilung gibt es
+              nur, wenn alle konfigurierten Strompreis-Module "Feste Tarifstunden" verwenden. Bei dynamischen Tarifen
+              bleibt es bei den Gesamtkosten. PV- und Speicheranteile findest Du weiterhin in der Energieaufteilung.
+            </template>
+          </openwb-base-button-group-input>
+          <openwb-base-button-group-input
+            :buttons="[
+              {
+                buttonValue: false,
+                text: 'Nein',
+                class: 'btn-outline-danger',
+              },
+              {
+                buttonValue: true,
+                text: 'Ja',
+                class: 'btn-outline-success',
+              },
+            ]"
             :model-value="$store.state.mqtt['openWB/general/charge_log_data_config']?.vehicle_name"
             @update:model-value="updateState('openWB/general/charge_log_data_config', $event, 'vehicle_name')"
           >
