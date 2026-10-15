@@ -427,9 +427,9 @@
               Tarifaufteilung
             </template>
             <template #help>
-              Zeigt den Netzbezug und seine Kosten je Tarifzeitraum, z.B. Hoch- und Niedertarif. Die Aufteilung gibt es
-              nur, wenn alle konfigurierten Strompreis-Module "Feste Tarifstunden" verwenden. Bei dynamischen Tarifen
-              bleibt es bei den Gesamtkosten. PV- und Speicheranteile findest Du weiterhin in der Energieaufteilung.
+              Zeigt die geladene Energie (Zähler des Ladepunkts) und ihre Kosten je Tarifzeitraum, z.B. Hoch- und
+              Niedertarif. Die Aufteilung gibt es nur, wenn alle konfigurierten Strompreis-Module "Feste Tarifstunden"
+              verwenden. Bei dynamischen Tarifen bleibt es bei den Gesamtkosten.
             </template>
           </openwb-base-button-group-input>
           <openwb-base-button-group-input

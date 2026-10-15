@@ -736,8 +736,8 @@ export default {
             '"Energie seit Anstecken"',
             '"Entladene Energie seit Anstecken"',
             ...this.chargeLogTariffNames.flatMap((name) => [
-              this.formatCsvString("Netzbezug " + name),
-              this.formatCsvString("Kosten Netzbezug " + name),
+              this.formatCsvString("Energie " + name),
+              this.formatCsvString("Kosten " + name),
             ]),
           ],
           ...this.chargeLogDataset.map((row) => [
