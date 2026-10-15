@@ -72,7 +72,7 @@ export default {
       // reconnect mqtt
       this.$root.reconnectMqttClient();
       // reload page
-      location.reload();
+      location.href = location.href.split("#")[0] ?? "/";
     },
     goToTheme() {
       location.href = "/";
