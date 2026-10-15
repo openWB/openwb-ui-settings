@@ -1,18 +1,9 @@
 <template>
   <div class="errorPage">
-    <openwb-base-alert
-      v-if="routeExists"
-      subtype="danger"
-    >
+    <openwb-base-alert subtype="danger">
       Dir fehlen Berechtigungen, um auf die Seite
       {{ $route.redirectedFrom.name ? '"' + $route.redirectedFrom.name + '" ' : "" }} zuzugreifen.<br />
       Wende Dich an Deinen Administrator, falls Du der Meinung bist, dass dies ein Fehler ist.
-    </openwb-base-alert>
-    <openwb-base-alert
-      v-else
-      subtype="danger"
-    >
-      Die angeforderte Seite "{{ $route.path }}" konnte nicht gefunden werden.
     </openwb-base-alert>
     <div class="row justify-content-center w-100">
       <openwb-base-click-button
@@ -48,14 +39,6 @@ export default {
     return {
       mqttTopics: [{ topic: "openWB/system/security/user_management_active", writeable: false }],
     };
-  },
-  computed: {
-    userManagementActive() {
-      return this.$store.state.mqtt["openWB/system/security/user_management_active"] === true;
-    },
-    routeExists() {
-      return this.$route.redirectedFrom ? true : false;
-    },
   },
   methods: {
     logout() {
