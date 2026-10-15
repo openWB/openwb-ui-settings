@@ -2,7 +2,7 @@
   <div class="errorPage">
     <openwb-base-alert subtype="danger">
       Dir fehlen Berechtigungen, um auf die Seite
-      {{ $route.redirectedFrom.name ? '"' + $route.redirectedFrom.name + '" ' : "" }} zuzugreifen.<br />
+      {{ $route.redirectedFrom?.name ? '"' + $route.redirectedFrom.name + '" ' : "" }} zuzugreifen.<br />
       Wende Dich an Deinen Administrator, falls Du der Meinung bist, dass dies ein Fehler ist.
     </openwb-base-alert>
     <div class="row justify-content-center w-100">
