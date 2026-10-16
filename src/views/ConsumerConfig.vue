@@ -221,7 +221,6 @@
               </template>
             </openwb-base-button-group-input>
             <openwb-base-number-input
-              v-if="showModeSettings(installedConsumer)"
               title="Maximale Leistung"
               unit="W"
               :min="1"
