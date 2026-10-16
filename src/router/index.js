@@ -232,13 +232,22 @@ const routes = [
     component: () => import("../views/TenantEnergyBilling.vue"),
   },
   {
-    path: "/Error",
-    name: "Error",
+    path: "/PermissionError",
+    name: "PermissionError",
     meta: {
-      heading: "Fehler",
+      heading: "Keine Berechtigung",
       checkPermissions: false,
     },
-    component: () => import("../views/Error.vue"),
+    component: () => import("../views/PermissionError.vue"),
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "NotFound",
+    meta: {
+      heading: "Seite nicht gefunden",
+      checkPermissions: false,
+    },
+    component: () => import("../views/NotFound.vue"),
   },
 ];
 /* examples for development only start here */
@@ -274,7 +283,7 @@ router.beforeEach(async (to) => {
         console.warn("no permission to access", to.name);
         if (store.state.local.username) {
           // logged in but no permission
-          return { name: "Error" };
+          return { name: "PermissionError" };
         }
         console.debug("not logged in, cancel navigation to", to.name);
         routeDone = true;
