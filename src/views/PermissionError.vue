@@ -46,7 +46,7 @@ library.add(fasHouse, fasArrowRightFromBracket);
 import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
-  name: "OpenwbErrorView",
+  name: "OpenwbPermissionError",
   components: {
     FontAwesomeIcon,
   },
