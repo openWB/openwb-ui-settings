@@ -19,9 +19,6 @@
       >
         <template #help> Bitte prüfe, ob die Eingaben richtig interpretiert werden. </template>
       </openwb-base-textarea>
-      <openwb-base-alert subtype="info">
-        <pre>{{ JSON.stringify(forecast.configuration, undefined, 2) }}</pre>
-      </openwb-base-alert>
     </div>
   </div>
 </template>

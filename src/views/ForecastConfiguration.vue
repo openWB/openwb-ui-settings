@@ -413,6 +413,9 @@ export default {
       this.updateState("openWB/optional/forecast/provider", event, "type");
       this.updateState("openWB/optional/forecast/provider", this.getProviderDefaultConfiguration(event));
     },
+    updateConfiguration(topic, event) {
+      this.updateState(topic, event.value, event.object);
+    },
     triggerForecastUpdate() {
       this.$root.doPublish("openWB/set/optional/forecast/get/force_update", true, false);
     },
