@@ -180,6 +180,17 @@
                 -
               </div>
             </template>
+            <template #data_tariff_split="data">
+              <div class="td-end">
+                <div
+                  v-for="(line, index) in formatTariffSplit(data.value.data_tariff_split)"
+                  :key="index"
+                  class="no-wrap"
+                >
+                  {{ line }}
+                </div>
+              </div>
+            </template>
             <template #vehicle_chargemode="data">
               <div
                 class="td-center tag"
@@ -289,7 +300,7 @@
               class="charge-log-totals"
               :is-static-mode="true"
               :is-hide-paging="true"
-              :columns="totals.columns"
+              :columns="chargeLogTotalsColumns"
               :rows="chargeLogTotals"
               :total="1"
               :is-slot-mode="true"
@@ -317,6 +328,17 @@
               <template #costs="data">
                 <div class="td-end">
                   {{ formatCosts(data.value.costs) }}
+                </div>
+              </template>
+              <template #tariff_split="data">
+                <div class="td-end">
+                  <div
+                    v-for="(line, index) in formatTariffSplit(data.value.tariff_split)"
+                    :key="index"
+                    class="no-wrap"
+                  >
+                    {{ line }}
+                  </div>
                 </div>
               </template>
             </vue3-table-lite>
@@ -418,6 +440,12 @@ export default {
             label: "Energieaufteilung",
             field: "data_power_source",
             sortable: false,
+          },
+          {
+            label: "Tarifaufteilung",
+            field: "data_tariff_split",
+            sortable: false,
+            hiddenByDefault: true,
           },
           {
             label: "Fahrzeug",
@@ -532,6 +560,13 @@ export default {
             field: "costs",
             sortable: false,
           },
+          {
+            label: "Tarifaufteilung",
+            field: "tariff_split",
+            sortable: false,
+            configField: "data_tariff_split",
+            hiddenByDefault: true,
+          },
         ],
       },
     };
@@ -577,10 +612,34 @@ export default {
       return this.table.columns.map((column) => {
         return {
           ...column,
-          headerClasses: this.addClasses(column.field),
-          columnClasses: this.addClasses(column.field),
+          headerClasses: this.addClasses(column.field, column.hiddenByDefault),
+          columnClasses: this.addClasses(column.field, column.hiddenByDefault),
         };
       });
+    },
+    chargeLogTotalsColumns() {
+      return this.totals.columns.map((column) => {
+        if (!column.configField) {
+          return column;
+        }
+        return {
+          ...column,
+          headerClasses: this.addClasses(column.configField, column.hiddenByDefault),
+          columnClasses: this.addClasses(column.configField, column.hiddenByDefault),
+        };
+      });
+    },
+    chargeLogTariffNames() {
+      // Tarifzeiträume in der Reihenfolge ihres ersten Auftretens, für die CSV-Spalten
+      const names = [];
+      this.chargeLogDataset.forEach((row) => {
+        Object.keys(row.data_tariff_split || {}).forEach((name) => {
+          if (!names.includes(name)) {
+            names.push(name);
+          }
+        });
+      });
+      return names;
     },
     chargeLogDataset: {
       get() {
@@ -624,6 +683,7 @@ export default {
                     cp: entry["data"]["power_source"]["cp"] * 100,
                   }
                 : undefined,
+              data_tariff_split: entry["data"]["tariff_split"] ? entry["data"]["tariff_split"] : undefined,
               data_range_charged: entry["data"]["range_charged"],
               data_costs: entry["data"]["costs"],
               data_imported_since_plugged: entry["data"]["imported_since_plugged"],
@@ -675,6 +735,10 @@ export default {
             '"Zählerstand Entladen Ende"',
             '"Energie seit Anstecken"',
             '"Entladene Energie seit Anstecken"',
+            ...this.chargeLogTariffNames.flatMap((name) => [
+              this.formatCsvString("Energie " + name),
+              this.formatCsvString("Kosten " + name),
+            ]),
           ],
           ...this.chargeLogDataset.map((row) => [
             row.time_begin == undefined ? "" : '"' + row.time_begin + '"',
@@ -710,6 +774,13 @@ export default {
             this.formatNumber((row.chargepoint_exported_at_end || 0) / 1000, 2),
             this.formatNumber(row.data_imported_since_plugged / 1000, 2),
             this.formatNumber((row.data_exported_since_plugged || 0) / 1000, 2),
+            ...this.chargeLogTariffNames.flatMap((name) => {
+              const tariff = row.data_tariff_split?.[name];
+              return [
+                tariff?.energy == undefined ? "" : this.formatNumber(tariff.energy / 1000, 2),
+                tariff?.costs == undefined ? "" : this.formatCosts(tariff.costs, false),
+              ];
+            }),
           ]),
         ]
           .map((element) => element.join(";"))
@@ -845,14 +916,25 @@ export default {
       this.$refs.downloadChargeLogLink.href = this.makeTextFile(this.chargeLogCsv);
       this.$refs.downloadChargeLogLink.dispatchEvent(new MouseEvent("click"));
     },
-    addClasses(fieldName) {
+    addClasses(fieldName, hiddenByDefault = false) {
       if (
         this.$store.state.mqtt["openWB/general/charge_log_data_config"] !== undefined &&
         Object.hasOwn(this.$store.state.mqtt["openWB/general/charge_log_data_config"], fieldName)
       ) {
         return this.$store.state.mqtt["openWB/general/charge_log_data_config"][fieldName] ? [] : ["d-none"];
       }
-      return [];
+      return hiddenByDefault ? ["d-none"] : [];
+    },
+    formatTariffSplit(tariffSplit) {
+      if (!tariffSplit || Object.keys(tariffSplit).length === 0) {
+        return ["-"];
+      }
+      return Object.entries(tariffSplit).map(
+        ([name, tariff]) => `${name}: ${this.formatWh(tariff?.energy)} / ${this.formatCosts(tariff?.costs)}`,
+      );
+    },
+    formatCsvString(value) {
+      return '"' + String(value).replaceAll('"', '""') + '"';
     },
     getProgressTitle(powerSource) {
       return (
