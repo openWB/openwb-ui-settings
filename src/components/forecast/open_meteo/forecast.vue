@@ -3,16 +3,20 @@
     <openwb-base-alert subtype="info">
       Open-Meteo wird von einer Community gepflegt. Es wird kein Account und kein API Key benötigt.
     </openwb-base-alert>
-    <openwb-base-button-input
+    <div
       v-if="geolocationSupported"
-      subtype="primary"
-      @click="readGeolocation"
+      class="row justify-content-center mb-1 w-100"
     >
-      <template #buttonText>
-        <font-awesome-icon :icon="['fas', 'location-crosshairs']" />
-        Standort ermitteln
-      </template>
-    </openwb-base-button-input>
+      <div class="col-md-4 d-flex py-1 justify-content-center">
+        <openwb-base-click-button
+          class="btn-primary"
+          @click="readGeolocation"
+        >
+          <font-awesome-icon :icon="['fas', 'location-crosshairs']" />
+          Standort ermitteln
+        </openwb-base-click-button>
+      </div>
+    </div>
     <openwb-base-number-input
       v-model="forecastConfiguration.latitude"
       title="Breitengrad"
@@ -41,7 +45,14 @@
       required
     >
       <template #help>
-        IANA-Zeitzone, z.B. Europe/Berlin. Liste: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+        IANA-Zeitzone, z.B. Europe/Berlin. Liste:
+        <a
+          href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Wikipedia
+        </a>
       </template>
       <template #prepend>
         <font-awesome-icon :icon="['fas', 'globe']" />
@@ -72,6 +83,10 @@
           <font-awesome-icon :icon="['fas', 'plus']" />
         </openwb-base-avatar>
       </template>
+      <openwb-base-alert subtype="info">
+        Ausrichtung der Dachflächen: Süden=0&deg;, Osten=-90&deg;, Westen=90&deg;, Norden=180&deg;<br />
+        Neigung der Dachflächen: horizontal=0&deg;, senkrecht=90&deg;
+      </openwb-base-alert>
       <openwb-base-alert
         v-if="forecastConfiguration.strings.length >= 6"
         subtype="warning"
@@ -128,7 +143,7 @@
           :step="1"
           required
         >
-          <template #help> Dachneigung in Grad. </template>
+          <template #help> Dachneigung in Grad. horizontal=0&deg;, senkrecht=90&deg;</template>
           <template #prepend>
             <font-awesome-icon :icon="['fas', 'lines-leaning']" />
           </template>
@@ -142,9 +157,7 @@
           :step="1"
           required
         >
-          <template #help>
-            Ausrichtung: 0&deg; = S&uuml;den | -90&deg; = Osten | 90&deg; = Westen | 180&deg; = Norden
-          </template>
+          <template #help> Ausrichtung: Süden=0&deg;, Osten=-90&deg;, Westen=90&deg;, Norden=180&deg; </template>
           <template #prepend>
             <font-awesome-icon :icon="['fas', 'compass']" />
           </template>
@@ -199,10 +212,10 @@ export default {
       const next = [
         ...this.forecastConfiguration.strings,
         {
-          name: `Ausrichtung ${this.forecastConfiguration.strings.length + 1}`,
-          peak_power_kw: this.forecastConfiguration.peak_power_kw || 1,
-          tilt: this.forecastConfiguration.tilt ?? 30,
-          azimuth: this.forecastConfiguration.azimuth ?? 0,
+          name: `Dachfläche ${this.forecastConfiguration.strings.length + 1}`,
+          peak_power_kw: undefined,
+          tilt: undefined,
+          azimuth: undefined,
         },
       ];
       this.updateConfiguration(next, "configuration.strings");

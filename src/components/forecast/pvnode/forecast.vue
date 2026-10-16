@@ -23,7 +23,11 @@
       v-model="forecastConfiguration.plant_id"
       title="Standort-ID"
       required
-    />
+    >
+      <template #prepend>
+        <font-awesome-icon :icon="['fas', 'map-location-dot']" />
+      </template>
+    </openwb-base-text-input>
     <openwb-base-text-input
       v-model="forecastConfiguration.api_key"
       title="API Schlüssel"
@@ -35,9 +39,17 @@
 
 <script>
 import ForecastConfigMixin from "../ForecastConfigMixin.vue";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faMapLocationDot as fasMapLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(fasMapLocationDot);
 
 export default {
   name: "PvNodeForecastConfig",
+  components: {
+    FontAwesomeIcon,
+  },
   mixins: [ForecastConfigMixin],
 };
 </script>
