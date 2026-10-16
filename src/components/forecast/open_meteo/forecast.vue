@@ -105,7 +105,7 @@
         :title="row.name"
         class="mb-2"
         :collapsible="true"
-        :collapsed="true"
+        :collapsed="index !== lastAddedStringIndex"
       >
         <template #actions="{ collapsed }">
           <openwb-base-avatar
@@ -199,6 +199,11 @@ export default {
   name: "OpenMeteoForecastConfig",
   components: { FontAwesomeIcon },
   mixins: [ForecastConfigMixin],
+  data() {
+    return {
+      lastAddedStringIndex: null,
+    };
+  },
   computed: {
     geolocationSupported() {
       return "geolocation" in navigator;
@@ -218,6 +223,7 @@ export default {
           azimuth: undefined,
         },
       ];
+      this.lastAddedStringIndex = next.length - 1;
       this.updateConfiguration(next, "configuration.strings");
     },
     removeStringRow(index) {
