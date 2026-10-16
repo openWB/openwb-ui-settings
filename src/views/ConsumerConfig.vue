@@ -237,6 +237,7 @@
                   Eco-Betrieb wird das Gerät nur eingeschaltet, wenn mindestens diese Leistung als Überschuss verfügbar
                   ist.</span
                 >
+                Die maximale Leistung wird außerdem zur Plausibilitätsprüfung der Messwerte (Peak-Filter) verwendet.
               </template>
             </openwb-base-number-input>
             <openwb-base-number-input
