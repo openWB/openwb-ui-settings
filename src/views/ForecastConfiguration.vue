@@ -204,7 +204,6 @@ export default {
   data() {
     return {
       mqttTopics: [
-        { topic: "openWB/system/configurable/forecasts", writeable: false },
         { topic: "openWB/optional/forecast/configured", writeable: false },
         { topic: "openWB/optional/forecast/get/daily_kwh", writeable: false },
         { topic: "openWB/optional/forecast/get/fault_state", writeable: false },
@@ -217,6 +216,7 @@ export default {
         { topic: "openWB/optional/forecast/get/tomorrow_values", writeable: false },
         { topic: "openWB/optional/forecast/get/values", writeable: false },
         { topic: "openWB/optional/forecast/provider", writeable: true },
+        { topic: "openWB/system/configurable/forecasts", writeable: false },
       ],
       forecastDayFilter: "both",
     };
