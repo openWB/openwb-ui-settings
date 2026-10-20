@@ -1146,13 +1146,16 @@
                 :buttons="[
                   { buttonValue: 1, text: '1' },
                   { buttonValue: 3, text: 'Maximum' },
+                  { buttonValue: 0, text: 'Automatik' },
                 ]"
                 :model-value="template.chargemode.pv_charging.phases_to_use_min_soc"
                 @update:model-value="updateState(templateKey, $event, 'chargemode.pv_charging.phases_to_use_min_soc')"
               >
                 <template #help>
                   Hier kann eingestellt werden, ob Ladevorgänge mit einer Phase oder dem möglichen Maximum in
-                  Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Voraussetzung ist die
+                  Abhängigkeit der "Ladepunkt"- und "Fahrzeug"-Einstellungen durchgeführt werden. Im Modus "Automatik"
+                  bleibt die "Mindest-SoC-Leistung" als Untergrenze bestehen, es wird aber bei ausreichendem Überschuss
+                  auf mehr Phasen hochgeschaltet, statt durchgehend nur einphasig zu laden. Voraussetzung ist die
                   verbaute Umschaltmöglichkeit zwischen einer und mehreren Phasen (sog. 1p3p).
                 </template>
               </openwb-base-button-group-input>
