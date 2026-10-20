@@ -425,7 +425,7 @@ export default {
         { topic: "openWB/system/ip_address", writeable: false },
         { topic: "openWB/system/mac_address", writeable: false },
         { topic: "openWB/system/pnp_ip", writeable: true },
-        { topic: "openWB/system/secondary_auto_update", writeable: false },
+        { topic: "openWB/system/secondary_auto_update", writeable: false }, // exclude from generic saves.
         { topic: "openWB/system/serial_number", writeable: false },
         { topic: "openWB/system/version", writeable: false },
       ],
