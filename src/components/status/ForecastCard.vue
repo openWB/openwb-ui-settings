@@ -25,6 +25,15 @@
           {{ providerName }}
         </div>
       </div>
+      <div
+        v-if="providerName"
+        class="row"
+      >
+        <div class="col-xl-3 pr-0">Energie:</div>
+        <div class="col ml-3">
+          heute {{ todayEnergyForecast }}&nbsp;kWh, morgen {{ tomorrowEnergyForecast }}&nbsp;kWh
+        </div>
+      </div>
     </openwb-base-card>
     <openwb-base-card
       subtype="white"
@@ -84,6 +93,8 @@ export default {
         { topic: "openWB/optional/forecast/configured", writeable: false },
         { topic: "openWB/optional/forecast/get/fault_state", writeable: false },
         { topic: "openWB/optional/forecast/get/fault_str", writeable: false },
+        { topic: "openWB/optional/forecast/get/today_kwh", writeable: false },
+        { topic: "openWB/optional/forecast/get/tomorrow_kwh", writeable: false },
         { topic: "openWB/optional/forecast/get/values", writeable: false },
         { topic: "openWB/optional/forecast/provider", writeable: false },
       ],
@@ -249,7 +260,8 @@ export default {
       }
       const now = Date.now();
       const entries = this.chartDataObject.datasets[0].data;
-      // letzter Slot, dessen Start nicht in der Zukunft liegt; sonst der erste verfügbare Slot
+      // anders als bei den Strompreisen enthalten die Prognosewerte auch bereits vergangene
+      // Slots des Tages, daher reicht hier nicht einfach der erste Eintrag
       const currentSlot = [...entries].reverse().find((entry) => entry.timestamp <= now) || entries[0];
       return this.formatNumber(currentSlot.power || 0, 2);
     },
@@ -263,7 +275,13 @@ export default {
       if (!this.providerName) {
         return undefined;
       }
-      return this.faultState > 0 ? this.$store.state.mqtt["openWB/optional/forecast/get/fault_str"] : "Kein Fehler.";
+      return this.$store.state.mqtt["openWB/optional/forecast/get/fault_str"];
+    },
+    todayEnergyForecast() {
+      return this.formatNumber(this.$store.state.mqtt["openWB/optional/forecast/get/today_kwh"], 2, 2) || "0.00";
+    },
+    tomorrowEnergyForecast() {
+      return this.formatNumber(this.$store.state.mqtt["openWB/optional/forecast/get/tomorrow_kwh"], 2, 2) || "0.00";
     },
     showLegend() {
       return false;
