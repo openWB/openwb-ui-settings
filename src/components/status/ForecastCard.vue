@@ -25,14 +25,25 @@
           {{ providerName }}
         </div>
       </div>
-      <div
-        v-if="providerName"
-        class="row"
-      >
-        <div class="col-xl-3 pr-0">Energie:</div>
-        <div class="col ml-3">
-          heute {{ todayEnergyForecast }}&nbsp;kWh, morgen {{ tomorrowEnergyForecast }}&nbsp;kWh
-        </div>
+    </openwb-base-card>
+    <openwb-base-card
+      v-if="providerName"
+      title="Prognostizierte Erzeugung"
+      subtype="white"
+      body-bg="white"
+      class="py-1 mb-2"
+    >
+      <div class="row">
+        <div class="col"></div>
+        <div class="col text-right">Energie</div>
+      </div>
+      <div class="row">
+        <div class="col text-right">Heute</div>
+        <div class="col text-right text-monospace">{{ todayEnergyForecast }}&nbsp;kWh</div>
+      </div>
+      <div class="row">
+        <div class="col text-right">Morgen</div>
+        <div class="col text-right text-monospace">{{ tomorrowEnergyForecast }}&nbsp;kWh</div>
       </div>
     </openwb-base-card>
     <openwb-base-card
