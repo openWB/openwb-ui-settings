@@ -195,9 +195,8 @@ export default {
       if (this.geolocationSupported) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            const { latitude, longitude } = position.coords;
-            this.updateConfiguration(latitude, "configuration.latitude");
-            this.updateConfiguration(longitude, "configuration.longitude");
+            this.forecastConfiguration.latitude = position.coords.latitude;
+            this.forecastConfiguration.longitude = position.coords.longitude;
           },
           (error) => {
             console.error("Geolocation error:", error);
@@ -219,11 +218,11 @@ export default {
         },
       ];
       this.lastAddedStringIndex = next.length - 1;
-      this.updateConfiguration(next, "configuration.strings");
+      this.forecastConfiguration.strings = next;
     },
     removeStringRow(index) {
       const next = this.forecastConfiguration.strings.filter((_, rowIndex) => rowIndex !== index);
-      this.updateConfiguration(next, "configuration.strings");
+      this.forecastConfiguration.strings = next;
     },
     updateStringField(index, key, value) {
       const next = this.forecastConfiguration.strings.map((row, rowIndex) => {
@@ -235,7 +234,7 @@ export default {
           [key]: value,
         };
       });
-      this.updateConfiguration(next, "configuration.strings");
+      this.forecastConfiguration.strings = next;
     },
   },
 };

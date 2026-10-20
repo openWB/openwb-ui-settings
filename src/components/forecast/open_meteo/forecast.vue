@@ -224,11 +224,11 @@ export default {
         },
       ];
       this.lastAddedStringIndex = next.length - 1;
-      this.updateConfiguration(next, "configuration.strings");
+      this.forecastConfiguration.strings = next;
     },
     removeStringRow(index) {
       const next = this.forecastConfiguration.strings.filter((_, rowIndex) => rowIndex !== index);
-      this.updateConfiguration(next, "configuration.strings");
+      this.forecastConfiguration.strings = next;
     },
     updateStringField(index, key, value) {
       const next = this.forecastConfiguration.strings.map((row, rowIndex) => {
@@ -240,7 +240,7 @@ export default {
           [key]: value,
         };
       });
-      this.updateConfiguration(next, "configuration.strings");
+      this.forecastConfiguration.strings = next;
     },
     readGeolocation() {
       if (navigator.geolocation) {
