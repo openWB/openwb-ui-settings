@@ -368,8 +368,8 @@ export default {
       mqttTopics: [
         { topic: "openWB/bat/+/config/max_power", writeable: true },
         { topic: "openWB/chargepoint/+/config", writeable: false },
-        { topic: "openWB/consumer/+/module", writeable: false },
         { topic: "openWB/consumer/+/extra_meter", writeable: false },
+        { topic: "openWB/consumer/+/module", writeable: false },
         { topic: "openWB/counter/+/config/is_home_consumption_counter", writeable: true },
         { topic: "openWB/counter/+/config/max_currents", writeable: true },
         { topic: "openWB/counter/+/config/max_power_errorcase", writeable: true },
@@ -379,8 +379,8 @@ export default {
         { topic: "openWB/counter/get/loadmanagement_prios", writeable: true },
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/pv/+/config/max_ac_out", writeable: true },
-        { topic: "openWB/vehicle/+/name", writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
+        { topic: "openWB/vehicle/+/name", writeable: false },
       ],
       newGroupName: null,
     };

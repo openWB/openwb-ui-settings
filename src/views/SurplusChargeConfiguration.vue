@@ -411,6 +411,9 @@ export default {
     return {
       showFeedInHelp: false,
       mqttTopics: [
+        { topic: "openWB/general/chargemode_config/surplus/consumer/switch_off_delay", writeable: true },
+        { topic: "openWB/general/chargemode_config/surplus/consumer/switch_off_threshold", writeable: true },
+        { topic: "openWB/general/chargemode_config/surplus/consumer/switch_on_delay", writeable: true },
         { topic: "openWB/general/chargemode_config/surplus/control_range", writeable: true },
         { topic: "openWB/general/chargemode_config/surplus/feed_in_limit", writeable: true },
         { topic: "openWB/general/chargemode_config/surplus/feed_in_yield", writeable: true },
@@ -420,9 +423,6 @@ export default {
         { topic: "openWB/general/chargemode_config/surplus/vehicle/switch_off_threshold", writeable: true },
         { topic: "openWB/general/chargemode_config/surplus/vehicle/switch_on_delay", writeable: true },
         { topic: "openWB/general/chargemode_config/surplus/vehicle/switch_on_threshold", writeable: true },
-        { topic: "openWB/general/chargemode_config/surplus/consumer/switch_off_delay", writeable: true },
-        { topic: "openWB/general/chargemode_config/surplus/consumer/switch_off_threshold", writeable: true },
-        { topic: "openWB/general/chargemode_config/surplus/consumer/switch_on_delay", writeable: true },
         { topic: "openWB/general/extern", writeable: false },
       ],
       calculatedControlMode: undefined,

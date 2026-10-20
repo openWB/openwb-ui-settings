@@ -258,18 +258,18 @@ export default {
   data() {
     return {
       mqttTopics: [
-        { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/general/chargemode_config/unbalanced_load", writeable: true },
         { topic: "openWB/general/chargemode_config/unbalanced_load_limit", writeable: true },
+        { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/general/prices/bat", writeable: true },
         { topic: "openWB/general/prices/grid", writeable: true },
         { topic: "openWB/general/prices/pv", writeable: true },
+        { topic: "openWB/optional/ep/configured", writeable: false },
         { topic: "openWB/optional/ep/flexible_tariff/provider", writeable: true },
         { topic: "openWB/optional/ep/grid_fee/provider", writeable: true },
         { topic: "openWB/optional/ocpp/config", writeable: true },
         { topic: "openWB/system/configurable/flexible_tariffs", writeable: false },
         { topic: "openWB/system/configurable/grid_fees", writeable: false },
-        { topic: "openWB/optional/ep/configured", writeable: false },
       ],
     };
   },

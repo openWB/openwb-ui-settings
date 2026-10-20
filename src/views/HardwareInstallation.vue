@@ -292,12 +292,12 @@ export default {
   data() {
     return {
       mqttTopics: [
+        { topic: "openWB/chargepoint/+/config", writeable: false },
         { topic: "openWB/counter/get/hierarchy", writeable: false },
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/system/configurable/devices_components", writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: true },
         { topic: "openWB/system/device/+/config", writeable: true },
-        { topic: "openWB/chargepoint/+/config", writeable: false },
       ],
       selectedVendor: undefined,
       deviceToAdd: undefined,
