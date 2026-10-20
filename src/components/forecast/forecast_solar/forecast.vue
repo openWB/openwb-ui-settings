@@ -187,7 +187,7 @@ export default {
   },
   computed: {
     geolocationSupported() {
-      return "geolocation" in navigator;
+      return window.isSecureContext && "geolocation" in navigator;
     },
   },
   methods: {
@@ -200,8 +200,12 @@ export default {
           },
           (error) => {
             console.error("Geolocation error:", error);
+            this.$root.postClientMessage("Standort konnte nicht bestimmt werden.", "danger");
           },
         );
+      } else {
+        console.error("Geolocation is not supported by this browser.");
+        this.$root.postClientMessage("Geolocation wird von diesem Browser nicht unterstützt.", "danger");
       }
     },
     addStringRow() {
