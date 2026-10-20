@@ -90,17 +90,16 @@ export default {
       chartDatasets: {
         datasets: [
           {
-            label: "Prognostizierte Leistung",
+            label: "Prognose Leistung",
             unit: "kW",
             type: "line",
-            stepped: true,
-            borderColor: "rgba(255, 153, 0, 0.9)",
-            backgroundColor: "rgba(255, 153, 0, 0.7)",
-            fill: false,
+            borderColor: "#28a745",
+            backgroundColor: "rgba(40, 167, 69, 0.2)",
+            fill: true,
             pointStyle: "circle",
             pointRadius: 0,
             pointHoverRadius: 4,
-            cubicInterpolationMode: "monotone",
+            tension: 0.2,
             hidden: false,
             borderWidth: 1,
             data: undefined,
@@ -261,7 +260,10 @@ export default {
       return this.$store.state.mqtt["openWB/optional/forecast/get/fault_state"] || 0;
     },
     faultStateMessage() {
-      return this.faultState > 0 ? this.$store.state.mqtt["openWB/optional/forecast/get/fault_str"] : undefined;
+      if (!this.providerName) {
+        return undefined;
+      }
+      return this.faultState > 0 ? this.$store.state.mqtt["openWB/optional/forecast/get/fault_str"] : "Kein Fehler.";
     },
     showLegend() {
       return false;
