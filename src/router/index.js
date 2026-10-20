@@ -139,7 +139,7 @@ const routes = [
       heading: "Konfiguration - Verbraucher",
       checkPermissions: true,
     },
-    component: () => import("../views/ConsumerConfig.vue"),
+    component: () => import("../views/ConsumerConfiguration.vue"),
   },
   {
     path: "/IoConfiguration",
