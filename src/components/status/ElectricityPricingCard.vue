@@ -98,17 +98,30 @@ export default {
         .map(([key, value]) => ({ timestamp: Number(key) * 1000, value: value * 100000 }))
         .sort((a, b) => a.timestamp - b.timestamp);
     },
+    // Stromtarif/Netzentgelt dürfen nicht weiter reichen als der Gesamtpreis.
+    totalPriceCutoff() {
+      const entries = this.totalPriceEntries;
+      if (entries.length === 0) {
+        return null;
+      }
+      const last = entries[entries.length - 1];
+      if (entries.length === 1) {
+        return new Date().setHours(23, 59, 59, 999).valueOf();
+      }
+      const previous = entries[entries.length - 2];
+      return last.timestamp + (last.timestamp - previous.timestamp) - 1;
+    },
     tariffEntries() {
       if (!this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/provider"]?.type) {
         return [];
       }
-      return this.todayPriceEntries(this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/get/prices"]);
+      return this.crossReferencedPriceEntries(this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/get/prices"]);
     },
     gridFeeEntries() {
       if (!this.$store.state.mqtt["openWB/optional/ep/grid_fee/provider"]?.type) {
         return [];
       }
-      return this.todayPriceEntries(this.$store.state.mqtt["openWB/optional/ep/grid_fee/get/prices"]);
+      return this.crossReferencedPriceEntries(this.$store.state.mqtt["openWB/optional/ep/grid_fee/get/prices"]);
     },
     chartDatasets() {
       return [
@@ -188,14 +201,14 @@ export default {
     },
   },
   methods: {
-    todayPriceEntries(entries) {
+    crossReferencedPriceEntries(entries) {
       if (!entries) {
         return [];
       }
-      const endOfToday = new Date().setHours(23, 59, 59, 999).valueOf();
+      const cutoff = this.totalPriceCutoff;
       return Object.entries(entries)
         .map(([key, value]) => ({ timestamp: Number(key) * 1000, value: value * 100000 }))
-        .filter((entry) => entry.timestamp <= endOfToday)
+        .filter((entry) => cutoff === null || entry.timestamp <= cutoff)
         .sort((a, b) => a.timestamp - b.timestamp);
     },
   },

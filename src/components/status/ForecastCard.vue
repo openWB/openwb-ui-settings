@@ -95,8 +95,7 @@ export default {
     forecastConfigured() {
       return this.$store.state.mqtt["openWB/optional/forecast/configured"];
     },
-    // Manche Anbieter liefern mehrere Tage Prognose; die Kachel zeigt bewusst nur heute + morgen,
-    // analog zu "Gesamt" auf der Konfigurationsseite - dort bleibt die volle Historie einsehbar.
+    // bewusst auf heute + morgen begrenzt, analog zu "Gesamt" auf der Konfigurationsseite
     forecastEntries() {
       const values = this.$store.state.mqtt["openWB/optional/forecast/get/values"];
       if (!values) {
