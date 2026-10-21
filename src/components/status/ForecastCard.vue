@@ -51,14 +51,12 @@
       body-bg="white"
       class="py-1 mb-2"
     >
-      <div class="openwb-chart">
-        <chartjs-line
-          v-if="chartDataRead"
-          ref="myChart"
-          :data="chartDataObject"
-          :options="dynamicChartOptions"
-        />
-      </div>
+      <openwb-base-time-series-chart
+        :datasets="chartDatasets"
+        y-axis-label="Leistung [kW]"
+        :zoomable="true"
+        :show-legend="false"
+      />
     </openwb-base-card>
   </status-card>
 </template>
@@ -73,29 +71,11 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasCloudSun);
 
-import { Line as ChartjsLine } from "vue-chartjs";
-import "chartjs-adapter-luxon";
-import "hammerjs";
-import ZoomPlugin from "chartjs-plugin-zoom";
-import {
-  Chart,
-  Tooltip,
-  Legend,
-  LineController,
-  LineElement,
-  PointElement,
-  LinearScale,
-  TimeScale,
-  Filler,
-} from "chart.js";
-Chart.register(Tooltip, Legend, LineController, LineElement, PointElement, LinearScale, TimeScale, Filler, ZoomPlugin);
-
 export default {
   name: "ForecastCard",
   components: {
     StatusCard,
     FontAwesomeIcon,
-    ChartjsLine,
   },
   mixins: [ComponentState],
   data() {
@@ -109,172 +89,51 @@ export default {
         { topic: "openWB/optional/forecast/get/values", writeable: false },
         { topic: "openWB/optional/forecast/provider", writeable: false },
       ],
-      chartDatasets: {
-        datasets: [
-          {
-            label: "Prognose Leistung",
-            unit: "kW",
-            type: "line",
-            borderColor: "#28a745",
-            backgroundColor: "rgba(40, 167, 69, 0.2)",
-            fill: true,
-            pointStyle: "circle",
-            pointRadius: 0,
-            pointHoverRadius: 4,
-            tension: 0.2,
-            hidden: false,
-            borderWidth: 1,
-            data: undefined,
-            yAxisID: "y",
-            parsing: {
-              xAxisKey: "timestamp",
-              yAxisKey: "power",
-            },
-          },
-        ],
-      },
-      chartOptions: {
-        plugins: {
-          title: {
-            display: false,
-          },
-          tooltip: {
-            enabled: true,
-          },
-          legend: {
-            display: true,
-            position: "top",
-            labels: {
-              filter: function (legendItem, chartData) {
-                // Nur sichtbare Datasets in der Legende anzeigen
-                return !chartData.datasets[legendItem.datasetIndex].hidden;
-              },
-            },
-          },
-        },
-        elements: {
-          point: {
-            radius: 2,
-          },
-        },
-        responsive: true,
-        maintainAspectRatio: false,
-        interaction: {
-          mode: "index",
-          intersect: false,
-        },
-        scales: {
-          x: {
-            type: "time",
-            time: {
-              unit: "hour",
-              // tooltipFormat: "DD T",
-              text: "Zeit",
-              maxTicksLimit: 24,
-            },
-            display: true,
-            title: {
-              display: true,
-              text: "Uhrzeit",
-            },
-            ticks: {
-              font: {
-                size: 12,
-              },
-              callback: this.formatTickLabel,
-              // color: tickColor,
-              maxTicksLimit: 0,
-            },
-            grid: {
-              // color: xGridColor,
-            },
-          },
-          y: {
-            position: "left",
-            type: "linear",
-            display: "auto",
-            suggestedMin: 0,
-            title: {
-              font: {
-                size: 12,
-              },
-              display: true,
-              text: "Leistung [kW]",
-              // color: fontColor
-            },
-            grid: {
-              // color: gridColor
-            },
-            ticks: {
-              font: {
-                size: 12,
-              },
-              maxTicksLimit: 11,
-              // color: tickColor
-            },
-          },
-        },
-      },
     };
   },
   computed: {
     forecastConfigured() {
       return this.$store.state.mqtt["openWB/optional/forecast/configured"];
     },
-    chartDataRead() {
-      const datasets = this.chartDataObject.datasets;
-      // Prüfe, ob mindestens ein Dataset Daten hat
-      return datasets.some((dataset) => dataset.data !== undefined && !dataset.hidden);
-    },
-    chartDataObject() {
-      const dataObject = JSON.parse(JSON.stringify(this.chartDatasets)); // Deep copy
-      const endOfToday = this.getEndOfToday();
-
-      if (this.$store.state.mqtt["openWB/optional/forecast/get/values"]) {
-        var chartEntries = this.$store.state.mqtt["openWB/optional/forecast/get/values"];
-        var myData = [];
-        // proper scaling:
-        // timestamp: seconds -> milliseconds
-        // power: Wh je Intervall -> kW
-        for (const [key, value] of Object.entries(chartEntries)) {
-          myData.push({
-            timestamp: key * 1000,
-            power: value / 1000,
-          });
-        }
-        myData.sort((a, b) => a.timestamp - b.timestamp);
-        // repeat last dataset
-        if (myData.length > 0) {
-          const lastData = myData.slice(-1)[0];
-          // midnight as default
-          let nextTimestamp = endOfToday;
-          if (myData.length > 1) {
-            // same offset minus 1ms as the last one
-            const previousData = myData.slice(-2, -1)[0];
-            nextTimestamp = lastData.timestamp + lastData.timestamp - previousData.timestamp - 1;
-          }
-          myData.push({
-            timestamp: nextTimestamp,
-            power: lastData.power,
-          });
-        }
-        dataObject.datasets[0].data = myData;
-      } else {
-        dataObject.datasets[0].hidden = true;
+    // Manche Anbieter liefern mehrere Tage Prognose; die Kachel zeigt bewusst nur heute + morgen,
+    // analog zu "Gesamt" auf der Konfigurationsseite - dort bleibt die volle Historie einsehbar.
+    forecastEntries() {
+      const values = this.$store.state.mqtt["openWB/optional/forecast/get/values"];
+      if (!values) {
+        return [];
       }
-
-      return dataObject;
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+      const rangeStart = todayStart.getTime();
+      const rangeEnd = rangeStart + 2 * 86400 * 1000;
+      return Object.entries(values)
+        .map(([key, value]) => ({ timestamp: Number(key) * 1000, value: Number(value) / 1000 }))
+        .filter((entry) => entry.timestamp >= rangeStart && entry.timestamp < rangeEnd)
+        .sort((a, b) => a.timestamp - b.timestamp);
+    },
+    chartDatasets() {
+      return [
+        {
+          label: "Prognose Leistung",
+          unit: "kW",
+          color: "#28a745",
+          backgroundColor: "rgba(40, 167, 69, 0.2)",
+          fill: true,
+          tension: 0.2,
+          data: this.forecastEntries,
+        },
+      ];
     },
     currentForecast() {
-      if (this.chartDataObject.datasets[0].data === undefined || this.chartDataObject.datasets[0].data.length === 0) {
+      if (this.forecastEntries.length === 0) {
         return this.formatNumber(0, 2);
       }
       const now = Date.now();
-      const entries = this.chartDataObject.datasets[0].data;
       // anders als bei den Strompreisen enthalten die Prognosewerte auch bereits vergangene
       // Slots des Tages, daher reicht hier nicht einfach der erste Eintrag
-      const currentSlot = [...entries].reverse().find((entry) => entry.timestamp <= now) || entries[0];
-      return this.formatNumber(currentSlot.power || 0, 2);
+      const currentSlot =
+        [...this.forecastEntries].reverse().find((entry) => entry.timestamp <= now) || this.forecastEntries[0];
+      return this.formatNumber(currentSlot.value || 0, 2);
     },
     providerName() {
       return this.$store.state.mqtt["openWB/optional/forecast/provider"]?.name || null;
@@ -294,34 +153,6 @@ export default {
     tomorrowEnergyForecast() {
       return this.formatNumber(this.$store.state.mqtt["openWB/optional/forecast/get/tomorrow_kwh"], 2, 2) || "0.00";
     },
-    showLegend() {
-      return false;
-    },
-    dynamicChartOptions() {
-      const options = JSON.parse(JSON.stringify(this.chartOptions)); // Deep copy
-      options.plugins.legend.display = this.showLegend;
-      // Setze den korrekten Callback für die Tick-Labels
-      options.scales.x.ticks.callback = this.formatTickLabel;
-      return options;
-    },
-  },
-  methods: {
-    getEndOfToday() {
-      return new Date().setHours(23, 59, 59, 999).valueOf();
-    },
-    formatTickLabel(timeValue) {
-      const date = new Date(timeValue);
-      // Prüfe ob das Datum zum nächsten Tag gehört
-      const isTomorrow = this.getEndOfToday() < date;
-      // Zeige nur den Zeitwert, wenn es nicht morgen ist
-      return `${isTomorrow ? date.toLocaleDateString(undefined, { day: "2-digit", month: "2-digit" }) + " " : ""}${date.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}`;
-    },
   },
 };
 </script>
-
-<style scoped>
-.openwb-chart {
-  min-height: 250px;
-}
-</style>

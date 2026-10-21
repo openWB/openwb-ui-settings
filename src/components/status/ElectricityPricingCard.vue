@@ -40,14 +40,13 @@
       body-bg="white"
       class="py-1 mb-2"
     >
-      <div class="openwb-chart">
-        <chartjs-line
-          v-if="chartDataRead"
-          ref="myChart"
-          :data="chartDataObject"
-          :options="dynamicChartOptions"
-        />
-      </div>
+      <openwb-base-time-series-chart
+        :datasets="chartDatasets"
+        y-axis-label="Preis [ct/kWh]"
+        :zoomable="true"
+        :show-legend="showLegend"
+        :y-axis-step-size="0.01"
+      />
     </openwb-base-card>
   </status-card>
 </template>
@@ -62,29 +61,11 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasRankingStar);
 
-import { Line as ChartjsLine } from "vue-chartjs";
-import "chartjs-adapter-luxon";
-import "hammerjs";
-import ZoomPlugin from "chartjs-plugin-zoom";
-import {
-  Chart,
-  Tooltip,
-  Legend,
-  LineController,
-  LineElement,
-  PointElement,
-  LinearScale,
-  TimeScale,
-  Filler,
-} from "chart.js";
-Chart.register(Tooltip, Legend, LineController, LineElement, PointElement, LinearScale, TimeScale, Filler, ZoomPlugin);
-
 export default {
   name: "ElectricityPricingCard",
   components: {
     StatusCard,
     FontAwesomeIcon,
-    ChartjsLine,
   },
   mixins: [ComponentState],
   data() {
@@ -101,284 +82,67 @@ export default {
         { topic: "openWB/optional/ep/grid_fee/get/prices", writeable: false },
         { topic: "openWB/optional/ep/grid_fee/provider", writeable: false },
       ],
-      chartDatasets: {
-        datasets: [
-          {
-            label: "Gesamtpreis",
-            unit: "ct/kWh",
-            type: "line",
-            stepped: true,
-            borderColor: "rgba(0, 149, 0, 0.9)",
-            backgroundColor: "rgba(0, 149, 0, 0.7)",
-            fill: false,
-            pointStyle: "circle",
-            pointRadius: 0,
-            pointHoverRadius: 4,
-            cubicInterpolationMode: "monotone",
-            hidden: false,
-            borderWidth: 1,
-            data: undefined,
-            yAxisID: "y",
-            parsing: {
-              xAxisKey: "timestamp",
-              yAxisKey: "price",
-            },
-          },
-          {
-            label: "Stromtarif",
-            unit: "ct/kWh",
-            type: "line",
-            stepped: true,
-            borderColor: "rgba(139, 0, 0, 0.9)",
-            backgroundColor: "rgba(139, 0, 0, 0.9)",
-            fill: false,
-            pointStyle: "circle",
-            pointRadius: 0,
-            pointHoverRadius: 4,
-            cubicInterpolationMode: "monotone",
-            hidden: false,
-            borderWidth: 1,
-            data: undefined,
-            yAxisID: "y",
-            parsing: {
-              xAxisKey: "timestamp",
-              yAxisKey: "price",
-            },
-          },
-          {
-            label: "Netzentgelt",
-            unit: "ct/kWh",
-            type: "line",
-            stepped: true,
-            borderColor: "rgba(255, 0, 0, 0.4)",
-            backgroundColor: "rgba(255, 0, 0, 0.4)",
-            fill: false,
-            pointStyle: "circle",
-            pointRadius: 0,
-            pointHoverRadius: 4,
-            cubicInterpolationMode: "monotone",
-            hidden: false,
-            borderWidth: 1,
-            data: undefined,
-            yAxisID: "y",
-            parsing: {
-              xAxisKey: "timestamp",
-              yAxisKey: "price",
-            },
-          },
-        ],
-      },
-      chartOptions: {
-        plugins: {
-          title: {
-            display: false,
-          },
-          tooltip: {
-            enabled: true,
-          },
-          legend: {
-            display: true,
-            position: "top",
-            labels: {
-              filter: function (legendItem, chartData) {
-                // Nur sichtbare Datasets in der Legende anzeigen
-                return !chartData.datasets[legendItem.datasetIndex].hidden;
-              },
-            },
-          },
-        },
-        elements: {
-          point: {
-            radius: 2,
-          },
-        },
-        responsive: true,
-        maintainAspectRatio: false,
-        interaction: {
-          mode: "index",
-          intersect: false,
-        },
-        scales: {
-          x: {
-            type: "time",
-            time: {
-              unit: "hour",
-              // tooltipFormat: "DD T",
-              text: "Zeit",
-              maxTicksLimit: 24,
-            },
-            display: true,
-            title: {
-              display: true,
-              text: "Uhrzeit",
-            },
-            ticks: {
-              font: {
-                size: 12,
-              },
-              callback: this.formatTickLabel,
-              // color: tickColor,
-              maxTicksLimit: 0,
-            },
-            grid: {
-              // color: xGridColor,
-            },
-          },
-          y: {
-            position: "left",
-            type: "linear",
-            display: "auto",
-            // suggestedMin: 0,
-            // suggestedMax: 0,
-            title: {
-              font: {
-                size: 12,
-              },
-              display: true,
-              text: "Preis [ct/kWh]",
-              // color: fontColor
-            },
-            grid: {
-              // color: gridColor
-            },
-            ticks: {
-              font: {
-                size: 12,
-              },
-              stepSize: 0.01,
-              maxTicksLimit: 11,
-              // color: tickColor
-            },
-          },
-        },
-      },
     };
   },
   computed: {
     electricityPricingConfigured() {
       return this.$store.state.mqtt["openWB/optional/ep/configured"];
     },
-    chartDataRead() {
-      const datasets = this.chartDataObject.datasets;
-      // Prüfe, ob mindestens ein Dataset Daten hat
-      return datasets.some((dataset) => dataset.data !== undefined && !dataset.hidden);
+    // proper scaling: timestamp seconds -> milliseconds, price €/Wh -> ct/kWh
+    totalPriceEntries() {
+      const entries = this.$store.state.mqtt["openWB/optional/ep/get/prices"];
+      if (!entries) {
+        return [];
+      }
+      return Object.entries(entries)
+        .map(([key, value]) => ({ timestamp: Number(key) * 1000, value: value * 100000 }))
+        .sort((a, b) => a.timestamp - b.timestamp);
     },
-    chartDataObject() {
-      const dataObject = JSON.parse(JSON.stringify(this.chartDatasets)); // Deep copy
-      const endOfToday = this.getEndOfToday();
-
-      // Hauptpreis-Feed (Gesamtpreis)
-      let lastTimestampPriceSums = null;
-      if (this.$store.state.mqtt["openWB/optional/ep/get/prices"]) {
-        var chartEntries = this.$store.state.mqtt["openWB/optional/ep/get/prices"];
-        var myData = [];
-        // proper scaling:
-        // timestamp: seconds -> milliseconds
-        // price: €/Wh -> €/kWh
-        for (const [key, value] of Object.entries(chartEntries)) {
-          myData.push({
-            timestamp: key * 1000,
-            price: value * 100000,
-          });
-        }
-        // repeat last dataset
-        if (myData.length > 0) {
-          const lastData = myData.slice(-1)[0];
-          // midnight as default
-          let nextTimestamp = endOfToday;
-          if (myData.length > 1) {
-            // same offset minus 1ms as the last one
-            const previousData = myData.slice(-2, -1)[0];
-            nextTimestamp = lastData.timestamp + lastData.timestamp - previousData.timestamp - 1;
-          }
-          myData.push({
-            timestamp: nextTimestamp,
-            price: lastData.price,
-          });
-        }
-        dataObject.datasets[0].data = myData;
-        lastTimestampPriceSums = dataObject.datasets[0].data.slice(-1)[0]?.timestamp || null;
-      } else {
-        dataObject.datasets[0].hidden = true;
+    tariffEntries() {
+      if (!this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/provider"]?.type) {
+        return [];
       }
-
-      // Stromtarif-Preise
-      if (
-        this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/provider"]?.type &&
-        this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/get/prices"]
-      ) {
-        var flexibleTariffEntries = this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/get/prices"];
-        var flexibleTariffData = [];
-        for (const [key, value] of Object.entries(flexibleTariffEntries)) {
-          if (lastTimestampPriceSums && key * 1000 > lastTimestampPriceSums) {
-            // ignore entries that are newer than the last timestamp of the main price feed
-            continue;
-          }
-          flexibleTariffData.push({
-            timestamp: key * 1000,
-            price: value * 100000,
-          });
-        }
-        // repeat last dataset
-        if (flexibleTariffData.length > 0) {
-          const lastData = flexibleTariffData.slice(-1)[0];
-          let nextTimestamp = endOfToday;
-          if (flexibleTariffData.length > 1) {
-            const previousData = flexibleTariffData.slice(-2, -1)[0];
-            nextTimestamp = lastData.timestamp + lastData.timestamp - previousData.timestamp - 1;
-          }
-          flexibleTariffData.push({
-            timestamp: nextTimestamp,
-            price: lastData.price,
-          });
-        }
-        dataObject.datasets[1].data = flexibleTariffData;
-      } else {
-        dataObject.datasets[1].hidden = true;
+      return this.todayPriceEntries(this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/get/prices"]);
+    },
+    gridFeeEntries() {
+      if (!this.$store.state.mqtt["openWB/optional/ep/grid_fee/provider"]?.type) {
+        return [];
       }
-
-      // Netzentgelt-Preise
-      if (
-        this.$store.state.mqtt["openWB/optional/ep/grid_fee/provider"]?.type &&
-        this.$store.state.mqtt["openWB/optional/ep/grid_fee/get/prices"]
-      ) {
-        var gridFeeEntries = this.$store.state.mqtt["openWB/optional/ep/grid_fee/get/prices"];
-        var gridFeeData = [];
-        for (const [key, value] of Object.entries(gridFeeEntries)) {
-          if (lastTimestampPriceSums && key * 1000 > lastTimestampPriceSums) {
-            // ignore entries that are newer than the last timestamp of the main price feed
-            continue;
-          }
-          gridFeeData.push({
-            timestamp: key * 1000,
-            price: value * 100000,
-          });
-        }
-        // repeat last dataset
-        if (gridFeeData.length > 0) {
-          const lastData = gridFeeData.slice(-1)[0];
-          let nextTimestamp = endOfToday;
-          if (gridFeeData.length > 1) {
-            const previousData = gridFeeData.slice(-2, -1)[0];
-            nextTimestamp = lastData.timestamp + lastData.timestamp - previousData.timestamp - 1;
-          }
-          gridFeeData.push({
-            timestamp: nextTimestamp,
-            price: lastData.price,
-          });
-        }
-        dataObject.datasets[2].data = gridFeeData;
-      } else {
-        dataObject.datasets[2].hidden = true;
-      }
-
-      return dataObject;
+      return this.todayPriceEntries(this.$store.state.mqtt["openWB/optional/ep/grid_fee/get/prices"]);
+    },
+    chartDatasets() {
+      return [
+        {
+          label: "Gesamtpreis",
+          unit: "ct/kWh",
+          color: "rgba(0, 149, 0, 0.9)",
+          backgroundColor: "rgba(0, 149, 0, 0.7)",
+          stepped: true,
+          data: this.totalPriceEntries,
+        },
+        {
+          label: "Stromtarif",
+          unit: "ct/kWh",
+          color: "rgba(139, 0, 0, 0.9)",
+          backgroundColor: "rgba(139, 0, 0, 0.9)",
+          stepped: true,
+          data: this.tariffEntries,
+        },
+        {
+          label: "Netzentgelt",
+          unit: "ct/kWh",
+          color: "rgba(255, 0, 0, 0.4)",
+          backgroundColor: "rgba(255, 0, 0, 0.4)",
+          stepped: true,
+          data: this.gridFeeEntries,
+        },
+      ];
     },
     currentPrice() {
-      if (this.chartDataObject.datasets[0].data === undefined || this.chartDataObject.datasets[0].data.length === 0) {
+      if (this.totalPriceEntries.length === 0) {
         return this.formatNumber(0, 2);
       }
-      return this.formatNumber(this.chartDataObject.datasets[0].data[0].price || 0, 2);
+      return this.formatNumber(this.totalPriceEntries[0].value || 0, 2);
     },
     baseTopic: {
       get() {
@@ -422,31 +186,18 @@ export default {
       const gridFeeConfigured = this.$store.state.mqtt["openWB/optional/ep/grid_fee/provider"]?.type;
       return flexibleTariffConfigured && gridFeeConfigured;
     },
-    dynamicChartOptions() {
-      const options = JSON.parse(JSON.stringify(this.chartOptions)); // Deep copy
-      options.plugins.legend.display = this.showLegend;
-      // Setze den korrekten Callback für die Tick-Labels
-      options.scales.x.ticks.callback = this.formatTickLabel;
-      return options;
-    },
   },
   methods: {
-    getEndOfToday() {
-      return new Date().setHours(23, 59, 59, 999).valueOf();
-    },
-    formatTickLabel(timeValue) {
-      const date = new Date(timeValue);
-      // Prüfe ob das Datum zum nächsten Tag gehört
-      const isTomorrow = this.getEndOfToday() < date;
-      // Zeige nur den Zeitwert, wenn es nicht morgen ist
-      return `${isTomorrow ? date.toLocaleDateString(undefined, { day: "2-digit", month: "2-digit" }) + " " : ""}${date.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}`;
+    todayPriceEntries(entries) {
+      if (!entries) {
+        return [];
+      }
+      const endOfToday = new Date().setHours(23, 59, 59, 999).valueOf();
+      return Object.entries(entries)
+        .map(([key, value]) => ({ timestamp: Number(key) * 1000, value: value * 100000 }))
+        .filter((entry) => entry.timestamp <= endOfToday)
+        .sort((a, b) => a.timestamp - b.timestamp);
     },
   },
 };
 </script>
-
-<style scoped>
-.openwb-chart {
-  min-height: 250px;
-}
-</style>
