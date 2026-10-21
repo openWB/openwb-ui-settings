@@ -131,6 +131,24 @@
             />
             <hr />
             <openwb-base-heading> Verwendung Optionen </openwb-base-heading>
+            <openwb-base-button-group-input
+              v-if="['mqtt'].includes(installedConsumer.type)"
+              title="Per RFID freischalten"
+              :buttons="[
+                { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
+                { buttonValue: true, text: 'Ja', class: 'btn-outline-success' },
+              ]"
+              :model-value="installedConsumer.config?.rfid_enabled ?? false"
+              @update:model-value="
+                updateState(`openWB/consumer/${installedConsumer.id}/config`, $event, 'rfid_enabled')
+              "
+            >
+              <template #help>
+                Die ID-Tags und das automatische Zurücksetzen werden unter
+                <router-link to="/IdentificationConfiguration">Identifikation</router-link> eingerichtet. Dafür muss die
+                Identifikation aktiviert sein.
+              </template>
+            </openwb-base-button-group-input>
             <openwb-base-select-input
               title="Verwendung"
               not-selected="Bitte auswählen"

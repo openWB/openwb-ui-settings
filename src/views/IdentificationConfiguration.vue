@@ -13,8 +13,8 @@
               Wiki-Beitrag zur Identifikation
             </a>
           </p>
-          Die Identifikation kann zum Entsperren von Ladepunkten und/oder zur Zuordnung von Fahrzeugen genutzt werden
-          und kann auf mehreren Wegen erfolgen:
+          Die Identifikation kann zum Entsperren von Ladepunkten und Verbrauchern sowie zur Zuordnung von Fahrzeugen
+          genutzt werden und kann auf mehreren Wegen erfolgen:
           <ul>
             <li>Über einen RFID-Reader (optional in der openWB verbaut, z.B. anhand des Lieferscheins prüfen).</li>
             <li>
@@ -241,6 +241,72 @@
           </div>
         </div>
       </openwb-base-card>
+      <template v-if="Object.keys(rfidConsumers).length > 0">
+        <openwb-base-heading> Freischalten von Verbrauchern </openwb-base-heading>
+        <openwb-base-card
+          title="Verbraucher"
+          subtype="purple"
+          :collapsible="true"
+          :collapsed="true"
+        >
+          <openwb-base-alert
+            v-if="$store.state.mqtt['openWB/general/extern'] === true"
+            subtype="info"
+          >
+            Die Verbraucher-Freischaltung bitte auf der "primary" openWB konfigurieren.
+          </openwb-base-alert>
+          <openwb-base-alert
+            v-else-if="$store.state.mqtt['openWB/optional/rfid/active'] !== true"
+            subtype="info"
+          >
+            Diese Einstellungen sind nur verfügbar, wenn Identifikation aktiviert ist.
+          </openwb-base-alert>
+          <div v-else>
+            <openwb-base-alert subtype="info">
+              Zugeordnete ID-Tags schalten den Verbraucher für den eingestellten Betriebsmodus frei. Der RFID-Reader der
+              openWB wird gemeinsam mit den Ladepunkten genutzt. MQTT-Verbraucher empfangen Tags zusätzlich über
+              openWB/set/mqtt/consumer/&lt;ID&gt;/get/rfid.
+            </openwb-base-alert>
+            <div
+              v-for="(consumer, topic) in rfidConsumers"
+              :key="topic"
+            >
+              <openwb-base-heading>{{ consumer.name }}</openwb-base-heading>
+              <openwb-base-array-input
+                title="Zugeordnete ID-Tags"
+                :no-elements-message="`&quot;${consumer.name}&quot; sind keine ID-Tags zugeordnet.`"
+                pattern="^[^\s].*[^\s]$"
+                :model-value="consumer.config.valid_tags ?? []"
+                @update:model-value="updateState(topic, $event, 'valid_tags')"
+              />
+              <openwb-base-select-input
+                title="RFID-Tag zurücksetzen"
+                :options="[
+                  { value: 'after_time', text: 'Nach Zeit ab Freischaltung' },
+                  { value: 'after_power_end', text: 'Nach Zeit nach Ende der Leistungsaufnahme' },
+                ]"
+                :model-value="consumer.config.rfid_reset ?? 'after_time'"
+                @update:model-value="updateState(topic, $event, 'rfid_reset')"
+              >
+                <template #help>
+                  Nach Ende der Leistungsaufnahme: Die Wartezeit beginnt, sobald der zuvor laufende Verbraucher
+                  höchstens noch Standby-Leistung (35 W pro Phase) aufnimmt. Nimmt er wieder Leistung auf, beginnt die
+                  Wartezeit beim nächsten Ende erneut.
+                </template>
+              </openwb-base-select-input>
+              <openwb-base-number-input
+                title="Wartezeit bis zum Zurücksetzen"
+                unit="min"
+                :min="1"
+                :model-value="(consumer.config.rfid_timeout ?? 300) / 60"
+                @update:model-value="updateState(topic, $event * 60, 'rfid_timeout')"
+              >
+                <template #help>Nach dem Zurücksetzen ist erneut eine Freischaltung per RFID erforderlich.</template>
+              </openwb-base-number-input>
+            </div>
+          </div>
+        </openwb-base-card>
+      </template>
       <openwb-base-submit-buttons
         form-name="optionalComponentsForm"
         @save="$emit('save', mqttTopicsToPublish)"
@@ -277,6 +343,10 @@ export default {
         { topic: "openWB/chargepoint/+/get/vehicle_id", writeable: false },
         { topic: "openWB/chargepoint/+/set/rfid", writeable: false },
         { topic: "openWB/chargepoint/template/+", writeable: true },
+        { topic: "openWB/consumer/+/module", writeable: false },
+        { topic: "openWB/consumer/+/config", writeable: true },
+        { topic: "openWB/consumer/+/get/rfid", writeable: false },
+        { topic: "openWB/consumer/+/set/rfid", writeable: false },
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/optional/rfid/active", writeable: true },
         { topic: "openWB/vehicle/+/charge_template", writeable: false },
@@ -289,6 +359,18 @@ export default {
     };
   },
   computed: {
+    rfidConsumers() {
+      const modules = this.getWildcardTopics("openWB/consumer/+/module");
+      return Object.fromEntries(
+        Object.values(modules)
+          .filter((consumer) => ["mqtt"].includes(consumer.type))
+          .map((consumer) => {
+            const topic = `openWB/consumer/${consumer.id}/config`;
+            return [topic, { ...consumer, config: this.$store.state.mqtt[topic] ?? {} }];
+          })
+          .filter(([, consumer]) => consumer.config.rfid_enabled),
+      );
+    },
     idTagList() {
       return Object.values(this.updateIdTagList());
     },
@@ -316,6 +398,13 @@ export default {
           this.tempIdTagList[entry[1]] = `${entry[1]} (${
             entry[0].includes("/set/") ? "zugewiesen" : "erfasst"
           } an ${this.getChargePointName(this.getIdFromTopic(entry[0]))})`;
+        }
+      });
+      Object.entries(this.getWildcardTopics("^openWB/consumer/[^+/]+/[gs]et/rfid$", true)).forEach(([topic, tag]) => {
+        if (tag !== null) {
+          const id = this.getIdFromTopic(topic);
+          const name = this.$store.state.mqtt[`openWB/consumer/${id}/module`]?.name ?? `Verbraucher ${id}`;
+          this.tempIdTagList[tag] = `${tag} (${topic.includes("/set/") ? "zugewiesen" : "erfasst"} an ${name})`;
         }
       });
       return this.tempIdTagList;
