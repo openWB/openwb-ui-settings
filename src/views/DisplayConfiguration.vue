@@ -127,14 +127,7 @@
             </template>
           </openwb-base-range-input>
         </div>
-        <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-          <hr />
-          <openwb-base-alert subtype="info">
-            Weitere Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary"
-            befindet.
-          </openwb-base-alert>
-        </div>
-        <div v-else>
+        <div v-if="$store.state.mqtt['openWB/general/extern'] !== true">
           <hr />
           <openwb-base-button-group-input
             title="Ladepunkte auf secondary openWB"
@@ -180,25 +173,60 @@
             </p>
           </openwb-base-alert>
           <hr />
-          <div v-if="$store.state.mqtt['openWB/optional/int_display/theme'] !== undefined">
-            <openwb-base-select-input
-              class="mb-2"
-              title="Theme des Displays"
-              :groups="displayThemeGroupList"
-              :model-value="$store.state.mqtt['openWB/optional/int_display/theme'].type"
-              @update:model-value="updateSelectedDisplayTheme($event)"
-            >
-              <template #help>
-                Hier können unterschiedliche Display-Anzeigen, s.g. Themes, ausgewählt werden. Die Anzahl der Themes
-                wird sich mit zukünftigen Releases erhöhen.
-              </template>
-            </openwb-base-select-input>
-            <openwb-display-theme-proxy
-              v-if="$store.state.mqtt['openWB/optional/int_display/theme'].type"
-              :display-theme="$store.state.mqtt['openWB/optional/int_display/theme']"
-              @update:configuration="updateConfiguration('openWB/optional/int_display/theme', $event)"
-            />
-          </div>
+        </div>
+        <div v-else>
+          <hr />
+          <openwb-base-alert
+            subtype="warning"
+            class="mb-3"
+          >
+            Im Normalfall sind hier keine Konfigurationen notwendig. Die übergeordnete openWB steuert das Display Theme.
+            Die Theme-Konfiguration für Displays auf secondary openWB ist nur in Ausnahmefällen notwendig, z.b. bei
+            Steuerung durch eine fremdes System.
+          </openwb-base-alert>
+          <openwb-base-button-group-input
+            title="Display Theme-Konfiguration für secondary openWB erlauben"
+            :model-value="allowSecondaryDisplayThemeConfiguration"
+            :buttons="[
+              {
+                buttonValue: false,
+                text: 'Nein',
+                class: 'btn-outline-danger',
+              },
+              {
+                buttonValue: true,
+                text: 'Ja',
+                class: 'btn-outline-success',
+              },
+            ]"
+            @update:model-value="allowSecondaryDisplayThemeConfiguration = $event"
+          >
+          </openwb-base-button-group-input>
+          <hr />
+        </div>
+        <div
+          v-if="
+            $store.state.mqtt['openWB/optional/int_display/theme'] !== undefined &&
+            ($store.state.mqtt['openWB/general/extern'] !== true || allowSecondaryDisplayThemeConfiguration === true)
+          "
+        >
+          <openwb-base-select-input
+            class="mb-2"
+            title="Theme des Displays"
+            :groups="displayThemeGroupList"
+            :model-value="$store.state.mqtt['openWB/optional/int_display/theme'].type"
+            @update:model-value="updateSelectedDisplayTheme($event)"
+          >
+            <template #help>
+              Hier können unterschiedliche Display-Anzeigen, s.g. Themes, ausgewählt werden. Die Anzahl der Themes wird
+              sich mit zukünftigen Releases erhöhen.
+            </template>
+          </openwb-base-select-input>
+          <openwb-display-theme-proxy
+            v-if="$store.state.mqtt['openWB/optional/int_display/theme'].type"
+            :display-theme="$store.state.mqtt['openWB/optional/int_display/theme']"
+            @update:configuration="updateConfiguration('openWB/optional/int_display/theme', $event)"
+          />
         </div>
       </openwb-base-card>
       <openwb-base-submit-buttons
@@ -222,6 +250,7 @@ export default {
   emits: ["save", "reset", "defaults"],
   data() {
     return {
+      allowSecondaryDisplayThemeConfiguration: false,
       mqttTopics: [
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/optional/int_display/active", writeable: true },
