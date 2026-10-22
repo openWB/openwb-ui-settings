@@ -151,10 +151,11 @@
             <span class="no-wrap">{{ tomorrowEnergyForecast }} kWh</span>
           </span>
         </openwb-base-alert>
-        <openwb-base-time-series-chart
+        <openwb-time-series-chart
           :datasets="chartDatasets"
           y-axis-label="Leistung (kW)"
-          :extend-to-end-of-day="false"
+          :tooltip-decimals="2"
+          :extend-last-interval="false"
           :min-height="420"
         />
       </div>
@@ -176,12 +177,14 @@ library.add(fasCalendarDay, fasCircleCheck, fasExclamationTriangle, fasTimesCirc
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbForecastProxy from "../components/forecast/OpenwbForecastProxy.vue";
+import OpenwbTimeSeriesChart from "../components/OpenwbTimeSeriesChart.vue";
 
 export default {
   name: "OpenwbForecastConfiguration",
   components: {
     FontAwesomeIcon,
     OpenwbForecastProxy,
+    OpenwbTimeSeriesChart,
   },
   mixins: [ComponentState],
   emits: ["save", "reset"],

@@ -51,9 +51,10 @@
       body-bg="white"
       class="py-1 mb-2"
     >
-      <openwb-base-time-series-chart
+      <openwb-time-series-chart
         :datasets="chartDatasets"
         y-axis-label="Leistung [kW]"
+        :tooltip-decimals="2"
         :zoomable="true"
         :show-legend="false"
       />
@@ -64,6 +65,7 @@
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
 import StatusCard from "./StatusCard.vue";
+import OpenwbTimeSeriesChart from "../OpenwbTimeSeriesChart.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faCloudSun as fasCloudSun } from "@fortawesome/free-solid-svg-icons";
@@ -76,6 +78,7 @@ export default {
   components: {
     StatusCard,
     FontAwesomeIcon,
+    OpenwbTimeSeriesChart,
   },
   mixins: [ComponentState],
   data() {

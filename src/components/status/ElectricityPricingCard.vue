@@ -40,7 +40,7 @@
       body-bg="white"
       class="py-1 mb-2"
     >
-      <openwb-base-time-series-chart
+      <openwb-time-series-chart
         :datasets="chartDatasets"
         y-axis-label="Preis [ct/kWh]"
         :zoomable="true"
@@ -54,6 +54,7 @@
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
 import StatusCard from "./StatusCard.vue";
+import OpenwbTimeSeriesChart from "../OpenwbTimeSeriesChart.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faRankingStar as fasRankingStar } from "@fortawesome/free-solid-svg-icons";
@@ -66,6 +67,7 @@ export default {
   components: {
     StatusCard,
     FontAwesomeIcon,
+    OpenwbTimeSeriesChart,
   },
   mixins: [ComponentState],
   data() {

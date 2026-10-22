@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="openwb-timeseries-chart"
-    :style="{ minHeight: `${minHeight}px` }"
-  >
+  <div class="openwb-time-series-chart">
     <chartjs-line
       v-if="chartDataRead"
       :data="chartDataObject"
@@ -31,7 +28,7 @@ import {
 Chart.register(Tooltip, Legend, LineController, LineElement, PointElement, LinearScale, TimeScale, Filler, ZoomPlugin);
 
 export default {
-  name: "OpenwbBaseTimeSeriesChart",
+  name: "OpenwbTimeSeriesChart",
   components: {
     ChartjsLine,
   },
@@ -44,15 +41,18 @@ export default {
     showLegend: { type: Boolean, default: true },
     minHeight: { type: Number, default: 250 },
     yAxisStepSize: { type: Number, default: undefined },
-    // Extends the last point of each dataset to the end of the current day, so the line
-    // doesn't visually stop mid-chart when no further data exists yet.
-    extendToEndOfDay: { type: Boolean, default: true },
+    // Number of decimal places shown in tooltips; undefined shows the raw, unrounded value.
+    tooltipDecimals: { type: Number, default: undefined },
+    // Extends the last point of each dataset by the interval of the previous two entries,
+    // so the line doesn't visually stop mid-chart when no further data exists yet. Falls
+    // back to the end of the current day only when a dataset has a single point.
+    extendLastInterval: { type: Boolean, default: true },
   },
   computed: {
     chartDataObject() {
       return {
         datasets: this.datasets.map((dataset) => {
-          const data = this.extendToEndOfDay ? this.padToEndOfDay(dataset.data) : dataset.data || [];
+          const data = this.extendLastInterval ? this.padLastInterval(dataset.data) : dataset.data || [];
           return {
             label: dataset.label,
             unit: dataset.unit,
@@ -86,7 +86,11 @@ export default {
             callbacks: {
               label: (context) => {
                 const unit = context.dataset.unit ? ` ${context.dataset.unit}` : "";
-                return `${context.dataset.label}: ${context.parsed.y?.toFixed(2)}${unit}`;
+                const value =
+                  this.tooltipDecimals === undefined
+                    ? context.parsed.y
+                    : context.parsed.y?.toFixed(this.tooltipDecimals);
+                return `${context.dataset.label}: ${value}${unit}`;
               },
             },
           },
@@ -140,7 +144,7 @@ export default {
       }
       return label;
     },
-    padToEndOfDay(data) {
+    padLastInterval(data) {
       if (!Array.isArray(data) || data.length === 0) {
         return data || [];
       }
@@ -156,3 +160,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.openwb-time-series-chart {
+  min-height: v-bind("minHeight + 'px'");
+}
+</style>
