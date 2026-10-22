@@ -52,6 +52,8 @@
     />
     <!-- electricity tariff -->
     <electricity-pricing-card v-if="showElectricityPricingCard" />
+    <!-- pv forecast -->
+    <forecast-card v-if="showForecastCard" />
   </div>
 </template>
 
@@ -68,6 +70,7 @@ import VehicleCard from "../components/status/VehicleCard.vue";
 import ConsumerSumCard from "../components/status/ConsumerSumCard.vue";
 import ConsumerCard from "../components/status/ConsumerCard.vue";
 import ElectricityPricingCard from "../components/status/ElectricityPricingCard.vue";
+import ForecastCard from "../components/status/ForecastCard.vue";
 import ComponentState from "../components/mixins/ComponentState.vue";
 
 export default {
@@ -85,6 +88,7 @@ export default {
     ConsumerSumCard,
     ConsumerCard,
     ElectricityPricingCard,
+    ForecastCard,
   },
   mixins: [ComponentState],
   data() {
@@ -96,6 +100,7 @@ export default {
         { topic: "openWB/consumer/+/module", writeable: false },
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/optional/ep/configured", writeable: false },
+        { topic: "openWB/optional/forecast/configured", writeable: false },
         { topic: "openWB/pv/get/power", writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
         { topic: "openWB/system/io/+/config", writeable: false },
@@ -211,6 +216,14 @@ export default {
       get() {
         return (
           this.$store.state.mqtt["openWB/optional/ep/configured"] === true &&
+          this.$store.state.mqtt["openWB/general/extern"] === false
+        );
+      },
+    },
+    showForecastCard: {
+      get() {
+        return (
+          this.$store.state.mqtt["openWB/optional/forecast/configured"] === true &&
           this.$store.state.mqtt["openWB/general/extern"] === false
         );
       },
