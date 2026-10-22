@@ -172,14 +172,16 @@
               <template #help>
                 Mit dieser Einstellung legen Sie fest, ob ein Zähler in die Hausverbrauchsberechnung einfließt. <br />
                 Ja: Der lokale Verbrauch dieses Zählers wird als Hausverbrauch berücksichtigt. <br />
-                Nein: Der Zähler wird nicht als Hausverbrauch berücksichtigt. <br />
+                Nein: Der lokale Verbrauch dieses Zählers wird getrennt vom Hausverbrauch erfasst. <br />
                 Automatisch: Der Zähler übernimmt die Einstellung des übergeordneten Zählers. <br />
 
-                Der Hausverbrauch entspricht dem Verbrauch am jeweiligen Zähler abzüglich der Leistungen von Batterien,
-                Ladepunkten, Wechselrichtern und Unterzählern. "Automatisch" ist die Standardeinstellung und eignet
-                sich, wenn die Einstellung für mehrere Zähler übernommen werden soll. Wichtig: Wenn alle Zähler auf
-                "Automatisch" stehen, wird die Einstellung entlang der Zählerhierarchie weitervererbt. Für den obersten
-                Zähler wird "Automatisch" wie "Ja" behandelt. Dadurch wird standardmäßig der Hausverbrauch erfasst.
+                Der lokale Verbrauch entspricht der Leistung am jeweiligen Zähler abzüglich der vorzeichenbehafteten
+                Leistungen der direkt untergeordneten Komponenten, Ladepunkte und Verbraucher. Für untergeordnete Zähler
+                und Verbraucher wird jeweils separat ausgewertet, ob ihr Verbrauch zum Hausverbrauch zählt. <br />
+                "Automatisch" ist die Standardeinstellung und eignet sich, wenn die Einstellung für mehrere Zähler
+                übernommen werden soll. Wichtig: Wenn alle Zähler auf "Automatisch" stehen, wird die Einstellung entlang
+                der Zählerhierarchie weitervererbt. Für den obersten Zähler wird "Automatisch" wie "Ja" behandelt.
+                Dadurch wird standardmäßig der Hausverbrauch erfasst.
               </template>
             </openwb-base-button-group-input>
           </openwb-base-card>
