@@ -151,12 +151,13 @@
             <span class="no-wrap">{{ tomorrowEnergyForecast }} kWh</span>
           </span>
         </openwb-base-alert>
-        <div class="openwb-chart">
-          <chartjs-line
-            :data="forecastChartData"
-            :options="forecastChartOptions"
-          />
-        </div>
+        <openwb-time-series-chart
+          :datasets="chartDatasets"
+          y-axis-label="Leistung (kW)"
+          :tooltip-decimals="2"
+          :extend-last-interval="false"
+          :min-height="420"
+        />
       </div>
     </openwb-base-card>
   </div>
@@ -176,28 +177,14 @@ library.add(fasCalendarDay, fasCircleCheck, fasExclamationTriangle, fasTimesCirc
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbForecastProxy from "../components/forecast/OpenwbForecastProxy.vue";
-import { Line as ChartjsLine } from "vue-chartjs";
-import "chartjs-adapter-luxon";
-import {
-  Chart,
-  Tooltip,
-  Legend,
-  LineController,
-  LineElement,
-  PointElement,
-  LinearScale,
-  TimeScale,
-  Filler,
-} from "chart.js";
-
-Chart.register(Tooltip, Legend, LineController, LineElement, PointElement, LinearScale, TimeScale, Filler);
+import OpenwbTimeSeriesChart from "../components/OpenwbTimeSeriesChart.vue";
 
 export default {
   name: "OpenwbForecastConfiguration",
   components: {
     FontAwesomeIcon,
     OpenwbForecastProxy,
-    ChartjsLine,
+    OpenwbTimeSeriesChart,
   },
   mixins: [ComponentState],
   emits: ["save", "reset"],
@@ -251,77 +238,27 @@ export default {
     hasForecastValues() {
       return Object.keys(this.forecastValues48h).length > 0;
     },
-    forecastChartData() {
+    chartDatasets() {
       const points = Object.entries(this.forecastValues48h)
         .map(([timestamp, value]) => ({
-          x: Number(timestamp) * 1000,
-          y: Number(value) / 1000,
+          timestamp: Number(timestamp) * 1000,
+          value: Number(value) / 1000,
         }))
-        .filter((item) => Number.isFinite(item.x) && Number.isFinite(item.y))
-        .sort((a, b) => a.x - b.x);
+        .filter((item) => Number.isFinite(item.timestamp) && Number.isFinite(item.value))
+        .sort((a, b) => a.timestamp - b.timestamp);
 
-      return {
-        datasets: [
-          {
-            label: "Prognose Leistung",
-            borderColor: "#28a745",
-            backgroundColor: "rgba(40, 167, 69, 0.2)",
-            fill: true,
-            pointRadius: 0,
-            pointHoverRadius: 3,
-            borderWidth: 2,
-            tension: 0.2,
-            data: points,
-          },
-        ],
-      };
-    },
-    forecastChartOptions() {
-      return {
-        responsive: true,
-        maintainAspectRatio: false,
-        parsing: false,
-        interaction: {
-          mode: "index",
-          intersect: false,
+      return [
+        {
+          label: "Prognose Leistung",
+          unit: "kW",
+          color: "#28a745",
+          backgroundColor: "rgba(40, 167, 69, 0.2)",
+          fill: true,
+          tension: 0.2,
+          borderWidth: 2,
+          data: points,
         },
-        plugins: {
-          legend: { display: true },
-          tooltip: {
-            callbacks: {
-              title: (items) =>
-                items[0]
-                  ? new Date(items[0].parsed.x).toLocaleString([], { dateStyle: "short", timeStyle: "short" })
-                  : "",
-              label: (item) => ` ${item.parsed.y.toFixed(2)} kW`,
-            },
-          },
-        },
-        scales: {
-          x: {
-            type: "time",
-            time: {
-              tooltipFormat: "dd.MM.yyyy HH:mm",
-              displayFormats: {
-                hour: "dd.MM HH:mm",
-              },
-            },
-            title: {
-              display: true,
-              text: "Zeit",
-            },
-            ticks: {
-              callback: this.formatTickLabel,
-            },
-          },
-          y: {
-            title: {
-              display: true,
-              text: "Leistung (kW)",
-            },
-          },
-        },
-      };
+      ];
     },
     lastUpdateTimeText() {
       const timestamp = this.$store.state.mqtt["openWB/optional/forecast/get/last_update_time"];
@@ -381,23 +318,8 @@ export default {
     },
   },
   methods: {
-    saveForecastConfiguration(event) {
-      console.log("Saving forecast configuration:", event);
+    saveForecastConfiguration() {
       this.$emit("save", this.mqttTopicsToPublish);
-    },
-    getEndOfToday() {
-      return new Date().setHours(23, 59, 59, 999).valueOf();
-    },
-    formatTickLabel(timeValue) {
-      const date = new Date(timeValue);
-      // Prüfe ob das Datum zum nächsten Tag gehört
-      const isTomorrow = this.getEndOfToday() < date;
-      // Zeige nur den Zeitwert, wenn es nicht morgen ist
-      let label = date.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
-      if (isTomorrow) {
-        label = date.toLocaleDateString(undefined, { day: "2-digit", month: "2-digit" }) + " " + label;
-      }
-      return label;
     },
     getProviderDefaultConfiguration(type) {
       const providerDefaults = this.configurableProviders.find((element) => element.value == type);
@@ -424,10 +346,6 @@ export default {
 </script>
 
 <style scoped>
-.openwb-chart {
-  min-height: 420px;
-}
-
 .success {
   color: var(--success);
 }
