@@ -255,9 +255,10 @@
       ]"
     >
       <template #help>
-        Zeitladen wird nur aktiviert, wenn der SoC des Hausspeichers über dem hier eingestellten SoC liegt. Lädt die
-        aktive Speichersteuerung gerade aktive den Speicher, wird kein Zeitladen gestartet. Da der Speicher nicht
-        gleichzeitig aktiv geladen und vom Fahrzeug entladen werden kann.
+        Bei konfiguriertem Hausspeicher wird Zeitladen nur ausgeführt, solange dessen SoC nicht unter dem eingestellten
+        Wert liegt. Bei "Aus" wird der Speicher-SoC nicht berücksichtigt. So kann der Speicher beispielsweise morgens
+        das Fahrzeug versorgen und tagsüber wieder geladen werden. Bei einem Konflikt mit der aktiven Speichersteuerung
+        wird das speicherabhängige Zeitladen nicht ausgeführt.
       </template>
     </openwb-base-range-input>
   </openwb-base-card>

@@ -72,7 +72,8 @@
                 v-if="showFeedInHelp"
                 class="form-text alert alert-info mt-2 small"
               >
-                Ein Wert größer 0kW bewirkt, dass weniger PV-Leistung zum Laden benutzt wird.<br />
+                Ein Wert größer 0kW bewirkt, dass weniger PV-Leistung für die Fahrzeugladung und den Betrieb der
+                gesteuerten Verbraucher benutzt wird.<br />
                 Die Nutzung dieser Option ergibt nur Sinn, wenn ein Wechselrichter in irgendeiner Form abgeregelt wird.
                 Weitere Infos dazu im
                 <a
@@ -82,11 +83,11 @@
                 >
                   Wiki-Beitrag zur Beachtung der Einspeisegrenze </a
                 >.<br />
-                Bei Erreichen dieses Werts wird die PV-Ladung nacheinander für jedes Fahrzeug im PV-Modus gestartet.
-                Dies setzt die Einschaltschwelle außer Kraft!<br />
+                Bei Erreichen dieses Werts werden die Fahrzeugladung und der Betrieb der gesteuerten Verbraucher mit
+                Überschuss nacheinander freigegeben. Dieser Wert ersetzt die jeweiligen Einschaltschwellen!<br />
                 Zur optimalen Eigenverbrauchssteuerung sollte der Wert einige hundert Watt UNTER der im Wechselrichter
-                hinterlegten EVU-Einspeiseleistungsgrenze liegen, damit openWB die Ladung freigibt, BEVOR der
-                Wechselrichter begrenzt wird.
+                hinterlegten EVU-Einspeiseleistungsgrenze liegen, damit openWB die Fahrzeugladung bzw. den Betrieb der
+                Verbraucher freigibt, BEVOR der Wechselrichter begrenzt wird.
               </div>
             </div>
           </div>
@@ -102,10 +103,10 @@
             ]"
           >
             <template #help>
-              Die Ladeleistung kann nicht mit absoluter Genauigkeit eingestellt werden, sodass am EVU-Punkt nicht auf
-              exakt 0W geregelt werden kann. Der Regelmodus legt fest, ob diese Differenz am EVU-Punkt (ca. 200-300W) zu
-              geringem Netzbezug oder geringer Netzeinspeisung führen soll. Liegt die Leistung am EVU-Punkt innerhalb
-              des Regelbereichs, wird nicht nachgeregelt.<br />
+              Die Leistung der Fahrzeuge und gesteuerten Verbraucher kann nicht mit absoluter Genauigkeit eingestellt
+              werden, sodass am EVU-Punkt nicht auf exakt 0W geregelt werden kann. Der Regelmodus legt fest, ob diese
+              Differenz am EVU-Punkt (ca. 200-300W) zu geringem Netzbezug oder geringer Netzeinspeisung führen soll.
+              Liegt die Leistung am EVU-Punkt innerhalb des Regelbereichs, wird nicht nachgeregelt.<br />
               Bei Speichervorrang erzeugt die Regelung bei Bedarf unabhängig vom eingestellten Regelmodus Einspeisung,
               damit der Speicher seine Ladeleistung erhöht.<br />
               Achtung: bei unlogischen Einstellungen kann die Regelung gestört werden! Im Zweifel bitte unsere
@@ -228,8 +229,8 @@
             <template #help>
               Übersteigt der Netzbezug die Abschaltschwelle, wird die Ladung beendet. Eine Abschaltschwelle, die
               Netzbezug erlaubt, führt in einem System ohne steuerbaren Speicher zur Entladung des Speichers. Der
-              Speicher wird dann auch über den eingestellten Mindest-SoC hinaus entladen (siehe Speicherbeachtung
-              unten).
+              Speicher wird dann auch über den eingestellten Mindest-SoC hinaus entladen (siehe Einstellungen zur
+              Speicherbeachtung).
             </template>
           </openwb-base-number-input>
           <openwb-base-number-input
@@ -358,7 +359,7 @@
               Übersteigt der Netzbezug die Abschaltschwelle, wird der Betrieb beendet, sofern das minimale
               Regelintervall überschritten wurde. Eine Abschaltschwelle, die Netzbezug erlaubt, führt in einem System
               ohne steuerbaren Speicher zur Entladung des Speichers. Der Speicher wird dann auch über den eingestellten
-              Mindest-SoC hinaus entladen (siehe Speicherbeachtung unten).
+              Mindest-SoC hinaus entladen (siehe Einstellungen zur Speicherbeachtung).
             </template>
           </openwb-base-number-input>
           <openwb-base-number-input

@@ -24,11 +24,15 @@
       <p>
         Der EVU-Zähler (rot) schließt alle weiteren Komponenten wie WR und Speicher unter sich ein. Bei AC-eingebundenen
         Speichern befinden sich WR und Speicher in derselben Ebene, bei DC-eingebundenen Speichern (Hybrid) der Speicher
-        unterhalb des WR. Die Ladepunkte (z.B. "secondary openWB") befinden sich auf derselben Ebene wie der WR und
-        unterhalb des EVU-Zählers. Anpassungen der Anordnungen sind über die Pfeil-Bereiche der Komponenten durch
-        einfaches Verschieben mit der Maus oder am Smartphone möglich.
+        unterhalb des WR. Die Ladepunkte (z.B. "secondary openWB") und gesteuerten Verbraucher werden entsprechend ihrem
+        elektrischen Anschluss unter dem zugehörigen Zähler eingeordnet. Ladepunkte befinden sich häufig auf derselben
+        Ebene wie der WR und unterhalb des EVU-Zählers. Anpassungen der Anordnungen sind über die Pfeil-Bereiche der
+        Komponenten durch einfaches Verschieben mit der Maus oder am Smartphone möglich.
       </p>
-      <p />
+      <p>
+        Fahrzeuge und Verbraucher werden gemeinsam über die Prioritätenliste im Lastmanagement eingeordnet. Außerdem
+        lässt sich für Zähler und Verbraucher festlegen, ob ihr Verbrauch zum Hausverbrauch gezählt werden soll.
+      </p>
       <p class="font-weight-bold">Änderungen werden nur durch Klicken auf Speichern wirksam!</p>
     </template>
     <template #content>

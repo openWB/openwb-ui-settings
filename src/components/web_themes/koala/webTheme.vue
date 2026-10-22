@@ -42,7 +42,7 @@
       :labels="numberedSlideLabels"
       :nesting="false"
     >
-      <template #help> Anordnung/Reihenfolge des oberen Informationsbereiches. </template>
+      <template #help> Legt die Reihenfolge der Ansichten im oberen Informationsbereich fest. </template>
     </sortable-list>
     <hr />
     <openwb-base-number-input

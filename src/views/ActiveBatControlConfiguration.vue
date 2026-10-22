@@ -9,9 +9,10 @@
         </div>
         <div v-else>
           <openwb-base-alert subtype="info">
-            Die Regelmodi der Speicherbeachtung erfolgen "passiv" durch Anpassung der Fahrzeug-Ladeleistung.
-            PV-Überschuss wird, je nach Konfiguration, entweder dem Fahrzeug zugeteilt oder dem Speicher überlassen.
-            Netz- und Speicherbezug wird, sofern nicht anders konfiguriert, vermieden.
+            Die Regelmodi der Speicherbeachtung erfolgen "passiv" durch Anpassung der Ladeleistung der Fahrzeuge und der
+            Leistung der gesteuerten Verbraucher. PV-Überschuss wird, je nach Konfiguration, den Fahrzeugen und
+            Verbrauchern zugeteilt oder dem Speicher überlassen. Netz- und Speicherbezug wird, sofern nicht anders
+            konfiguriert, vermieden.
           </openwb-base-alert>
           <openwb-base-button-group-input
             v-model="batMode"
@@ -23,7 +24,7 @@
                 fixed-width
                 :icon="['fas', 'car-side']"
               />
-              Fahrzeuge
+              Fahrzeuge und Verbraucher
             </template>
             <template #label-bat_mode>
               <font-awesome-icon
@@ -41,19 +42,20 @@
             </template>
             <template #help>
               <div v-if="batMode === 'ev_mode'">
-                Der gesamte Überschuss wird in das EV geladen. Wird mehr Überschuss erzeugt als die Fahrzeuge abnehmen,
-                findet auch eine Speicherladung statt.
+                Der Überschuss wird vorrangig für die Fahrzeugladung und den Betrieb der gesteuerten Verbraucher
+                verwendet. Können Fahrzeuge und Verbraucher nicht den gesamten Überschuss nutzen, wird der verbleibende
+                Überschuss in den Speicher geladen.
               </div>
               <div v-if="batMode === 'bat_mode'">
                 Der gesamte Überschuss wird in den Speicher geladen. Ist die maximale Ladeleistung des Speichers
-                erreicht und es wird eingespeist, wird dieser Überschuss unter Beachtung der Einschaltschwelle in die
-                Fahrzeuge geladen.
+                erreicht und es wird eingespeist, steht dieser Überschuss unter Beachtung der jeweiligen
+                Einschaltbedingungen für die Fahrzeugladung und den Betrieb der gesteuerten Verbraucher zur Verfügung.
               </div>
               <div v-if="batMode === 'min_soc_bat_mode'">
                 Verhält sich bis zum Erreichen des Mindest-SoC wie "Ladepriorität Speicher" und danach wie
-                "Ladepriorität Fahrzeuge" - fällt der Speicher wieder unter den Mindest-SoC, erhält er erneut Vorrang,
-                bis er den Maximal-SoC erreicht hat. Die maximale Leistung der Speicherbe- und entladung lässt sich hier
-                festlegen.
+                "Ladepriorität Fahrzeuge und Verbraucher" - fällt der Speicher wieder unter den Mindest-SoC, erhält er
+                erneut Vorrang, bis er den Maximal-SoC erreicht hat. Die maximale Leistung der Speicherbe- und entladung
+                lässt sich hier festlegen.
               </div>
             </template>
           </openwb-base-button-group-input>
@@ -79,8 +81,9 @@
             >
               <template #help>
                 Unterhalb des Mindest-SoC wird vorhandener PV-Überschuss bevorzugt in den Speicher geladen. Oberhalb des
-                Mindest-SoC hat die Fahrzeugladung Priorität - außer der Speicher ist zuvor unter den Mindest-SoC
-                gefallen: dann behält der Speicher die Priorität, bis er den Maximal-SoC erreicht hat.
+                Mindest-SoC haben die Fahrzeugladung und der Betrieb der gesteuerten Verbraucher Priorität - außer der
+                Speicher ist zuvor unter den Mindest-SoC gefallen: dann behält der Speicher die Priorität, bis er den
+                Maximal-SoC erreicht hat.
               </template>
             </openwb-base-range-input>
             <openwb-base-range-input
@@ -104,7 +107,7 @@
             >
               <template #help>
                 Wird der Maximal-SoC überschritten, darf der Speicher bis zum Erreichen des Mindest-SoC zur
-                Fahrzeugladung mitbenutzt werden.
+                Fahrzeugladung und zum Betrieb der gesteuerten Verbraucher mitbenutzt werden.
               </template>
             </openwb-base-range-input>
             <openwb-base-alert
@@ -140,7 +143,8 @@
               >
                 ACHTUNG: Der hier eingestellte Wert darf die maximale Ladeleistung des Speichers nicht überschreiten!<br />
                 Befindet sich der Speicher unterhalb des Mindest-SoC, wird er mit der hier eingestellten
-                Speicherladeleistung geladen. Verbleibender Überschuss wird in die Fahrzeuge geladen.
+                Speicherladeleistung geladen. Verbleibender Überschuss steht für die Fahrzeugladung und den Betrieb der
+                gesteuerten Verbraucher zur Verfügung.
               </template>
               <template
                 v-else
@@ -182,15 +186,17 @@
                 #help
               >
                 ACHTUNG: Der hier eingestellte Wert darf die maximale Entladeleistung des Speichers nicht überschreiten!
-                Wird der Maximal-SoC überschritten, wird die PV-Ladung mit der hier eingestellten
-                Speicherentladeleistung unterstützt. Der Speicher darf bis zum Mindest-SoC entladen werden. Die erlaubte
-                Entladeleistung des Speichers wird dem Überschuss zum Erreichen der Einschaltschwelle hinzugerechnet.
+                Wird der Maximal-SoC überschritten, werden die Fahrzeugladung und der Betrieb der gesteuerten
+                Verbraucher mit der hier eingestellten Speicherentladeleistung unterstützt. Der Speicher darf bis zum
+                Mindest-SoC entladen werden. Die erlaubte Entladeleistung des Speichers wird dem Überschuss zum
+                Erreichen der Einschaltschwelle hinzugerechnet.
               </template>
               <template
                 v-else
                 #help
               >
-                Oberhalb des Maximal-SoC wird der Speicher nicht für die Fahrzeugladung mitgenutzt.
+                Oberhalb des Maximal-SoC wird der Speicher nicht für die Fahrzeugladung oder den Betrieb der gesteuerten
+                Verbraucher mitgenutzt.
               </template>
             </openwb-base-button-group-input>
             <openwb-base-number-input
@@ -259,7 +265,9 @@
           <openwb-base-alert subtype="info">
             Die aktive Speichersteuerung kann Speicherentladung begrenzen oder den Speicher zur Ladung zwingen. Die
             erlaubte Entladeleistung des Speichers (Speicherbeachtung PV) wird bei aktiver Speichersteuerung
-            überschrieben, da Speicherentladung unter Umständen aktiv begrenzt wird.
+            überschrieben, da Speicherentladung unter Umständen aktiv begrenzt wird.<br />
+            Ob gesteuerte Verbraucher bei den folgenden Regelmodi zum Hausverbrauch zählen, hängt von der Einstellung
+            "Im Hausverbrauch berücksichtigen?" des jeweiligen Verbrauchers bzw. des übergeordneten Zählers ab.
           </openwb-base-alert>
         </div>
         <div v-if="$store.state.mqtt['openWB/bat/config/bat_control_activated']">
@@ -381,7 +389,7 @@
                 },
                 {
                   buttonValue: 'vehicle_charging',
-                  text: 'Fahrzeugladung aktiv',
+                  text: 'Fahrzeugladung oder Verbraucherbetrieb aktiv',
                 },
                 {
                   buttonValue: 'price_limit',
@@ -396,7 +404,8 @@
                   Der Speicher regelt direkt entsprechend der manuellen Einstellung.
                 </div>
                 <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'vehicle_charging'">
-                  Der unten eingestellte Regelmodus wird angewendet, sobald ein oder mehrere Fahrzeuge Laden.
+                  Der unten eingestellte Regelmodus wird angewendet, sobald ein oder mehrere Fahrzeuge laden oder
+                  gesteuerte Verbraucher Leistung beziehen.
                 </div>
                 <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'price_limit'">
                   Regelung nach Preisgrenze bei variablen Strompreisen.
@@ -414,7 +423,7 @@
                 {{
                   $store.state.mqtt["openWB/bat/config/power_limit_condition"] === "manual"
                     ? "Manuell"
-                    : "Fahrzeugladung aktiv"
+                    : "Fahrzeugladung oder Verbraucherbetrieb aktiv"
                 }}
               </openwb-base-heading>
               <openwb-base-button-group-input
@@ -473,8 +482,8 @@
               >
                 <template #help>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'mode_no_discharge'">
-                    Die Speicherentladung wird komplett gesperrt! Alle Verbraucher (Fahrzeuge, Hausverbrauch) werden
-                    durch Netzstrom und ggfs. vorhandenen PV-Überschuss versorgt.
+                    Die Speicherentladung wird komplett gesperrt! Fahrzeuge, gesteuerte Verbraucher und der übrige
+                    Hausverbrauch werden durch Netzstrom und ggfs. vorhandenen PV-Überschuss versorgt.
                   </div>
                   <div
                     v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'mode_discharge_home_consumption'"
@@ -552,8 +561,8 @@
               >
                 <template #help>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'mode_no_discharge'">
-                    Die Speicherentladung wird komplett gesperrt! Alle Verbraucher (Fahrzeuge, Hausverbrauch) werden
-                    durch Netzstrom und ggfs. vorhandenen PV-Überschuss versorgt.
+                    Die Speicherentladung wird komplett gesperrt! Fahrzeuge, gesteuerte Verbraucher und der übrige
+                    Hausverbrauch werden durch Netzstrom und ggfs. vorhandenen PV-Überschuss versorgt.
                   </div>
                   <div
                     v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'mode_discharge_home_consumption'"
@@ -565,7 +574,7 @@
                   </div>
                   <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_mode'] === 'mode_charge_pv_production'">
                     PV-Ertrag wird vorrangig in den Speicher geladen (aktive Ladung)! Weiterer Verbrauch (Hausverbrauch/
-                    Fahrzeugladung) erzeugt Netzbezug.
+                    Fahrzeugladung/gesteuerte Verbraucher) erzeugt Netzbezug.
                   </div>
                 </template>
               </openwb-base-button-group-input>
@@ -615,7 +624,7 @@
           </div>
           <div v-else>
             <openwb-base-alert subtype="info">
-              Die Speicher-Entladung ins Fahrzeug kann nicht gesteuert werden, da die Entladeleistung nicht an den/die
+              Die Speicherentladung kann nicht aktiv gesteuert werden, da die Entladeleistung nicht an den/die
               konfigurierten Speicher übergeben werden kann.
             </openwb-base-alert>
           </div>
@@ -743,7 +752,9 @@ export default {
         lines.push("Die Konfiguration wird dauerhaft angewendet.");
       }
       if (condition === "vehicle_charging") {
-        lines.push("Die Konfiguration wird angewendet, sobald ein Fahrzeug lädt.");
+        lines.push(
+          "Die Konfiguration wird angewendet, sobald ein Fahrzeug lädt oder ein gesteuerter Verbraucher Leistung bezieht.",
+        );
       }
       if (condition === "price_limit") {
         lines.push(
