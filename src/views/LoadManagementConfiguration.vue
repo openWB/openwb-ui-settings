@@ -40,19 +40,20 @@
               <p>
                 Wenn angesteckte Fahrzeuge, die nicht oder nicht mit der Sollstromstärke laden, im Lastmanagement
                 berücksichtigt werden, wird für diese der Sollstrom reserviert. Dadurch können bei Eingreifen des
-                Lastmanagements andere Fahrzeuge möglicherweise nur mit reduzierter Stromstärke laden und der
-                reservierte Strom wird nicht genutzt. Wenn die Fahrzeuge wieder Leistung beziehen, z.B. um zu
-                klimatisieren, nutzen sie den für sie reservierten Strom.
+                Lastmanagements andere Fahrzeuge und gesteuerte Verbraucher möglicherweise nur mit reduzierter Leistung
+                betrieben werden und der reservierte Strom wird nicht genutzt. Wenn die Fahrzeuge wieder Leistung
+                beziehen, z.B. um zu klimatisieren, nutzen sie den für sie reservierten Strom.
               </p>
               <p>
                 Wenn angesteckte Fahrzeuge, die nicht oder nicht mit der Sollstromstärke laden, nicht im Lastmanagement
                 berücksichtigt werden, wird für diese auch kein Strom bei vorliegender Ladefreigabe reserviert bzw. es
-                wird nur der tatsächlich genutzte Strom im Lastmanagement berücksichtigt. Andere Fahrzeuge können
-                dadurch mit höherer Stromstärke laden. Wenn die maximalen Lastmanagement-Grenzen fast erreicht sind und
-                die Fahrzeuge wieder Leistung beziehen, z.B. um zu klimatisieren, kann es zu einer kurzzeitigen
-                Überschreitung der Lastmanagement-Grenzen kommen, bis im nächsten Zyklus die Stromstärken aller
-                Ladepunkte an die neue Situation angepasst wurden. Das kurzzeitige Überschreiten der Maximal-Werte
-                stellt für die Sicherungen in der Regel kein Problem dar.
+                wird nur der tatsächlich genutzte Strom im Lastmanagement berücksichtigt. Andere Fahrzeuge und
+                gesteuerte Verbraucher können dadurch mit höherer Leistung betrieben werden. Wenn die maximalen
+                Lastmanagement-Grenzen fast erreicht sind und die Fahrzeuge wieder Leistung beziehen, z.B. um zu
+                klimatisieren, kann es zu einer kurzzeitigen Überschreitung der Lastmanagement-Grenzen kommen, bis im
+                nächsten Zyklus die Stromstärken aller Ladepunkte und gesteuerten Verbraucher an die neue Situation
+                angepasst wurden. Das kurzzeitige Überschreiten der Maximal-Werte stellt für die Sicherungen in der
+                Regel kein Problem dar.
               </p>
             </template>
           </openwb-base-button-group-input>
