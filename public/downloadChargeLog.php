@@ -15,7 +15,7 @@ $csv_format = [
   "vehicle name" => ["header" => "Fahrzeug", "type" => "string"],
   "vehicle id" => ["header" => "Fahrzeug-ID", "type" => "int"],
   "vehicle chargemode" => ["header" => "Lademodus", "type" => "chargemode"],
-  "vehicle prio" => ["header" => "Priorität", "type" => "bool"],
+  "vehicle prio" => ["header" => "Priorität", "type" => "int"],
   "vehicle rfid" => ["header" => "ID-Tag", "type" => "string"],
   "vehicle odometer" => ["header" => "Kilometerstand", "type" => "int"],
   "vehicle soc_at_start" => ["header" => "SoC Beginn", "type" => "int"],
