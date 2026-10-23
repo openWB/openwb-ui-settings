@@ -198,6 +198,23 @@
             <hr />
             <openwb-base-heading> Elektrischer Anschluss </openwb-base-heading>
             <openwb-base-button-group-input
+              v-if="installedConsumer.type === 'mqtt' && !hasExtraMeter(installedConsumer.id)"
+              title="Per RFID freischalten"
+              :buttons="[
+                { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
+                { buttonValue: true, text: 'Ja', class: 'btn-outline-success' },
+              ]"
+              :model-value="installedConsumer.config?.rfid_enabled ?? false"
+              @update:model-value="
+                updateState(`openWB/consumer/${installedConsumer.id}/config`, $event, 'rfid_enabled')
+              "
+            >
+              <template #help>
+                Die Zuordnung der ID-Tags und die automatische Rücksetzung werden unter Identifikation konfiguriert.
+                RFID setzt die Verwendung des integrierten Zählers voraus.
+              </template>
+            </openwb-base-button-group-input>
+            <openwb-base-button-group-input
               title="Anzahl angeschlossener Phasen"
               :buttons="[
                 { buttonValue: 1, text: '1' },

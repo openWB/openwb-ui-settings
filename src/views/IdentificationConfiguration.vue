@@ -263,9 +263,9 @@
           </openwb-base-alert>
           <div v-else>
             <openwb-base-alert subtype="info">
-              Zugeordnete ID-Tags schalten den Verbraucher für den eingestellten Betriebsmodus frei. Der RFID-Reader der
-              openWB wird gemeinsam mit den Ladepunkten genutzt. MQTT-Verbraucher empfangen Tags zusätzlich über
-              openWB/set/mqtt/consumer/&lt;ID&gt;/get/rfid.
+              Zugeordnete ID-Tags schalten den Verbraucher für den eingestellten Betriebsmodus frei. Die Freischaltung
+              wird nach der eingestellten Wartezeit zurückgesetzt. RFID setzt die Verwendung des integrierten Zählers
+              voraus.
             </openwb-base-alert>
             <div
               v-for="(consumer, topic) in rfidConsumers"
@@ -344,6 +344,7 @@ export default {
         { topic: "openWB/chargepoint/+/set/rfid", writeable: false },
         { topic: "openWB/chargepoint/template/+", writeable: true },
         { topic: "openWB/consumer/+/module", writeable: false },
+        { topic: "openWB/consumer/+/extra_meter", writeable: false },
         { topic: "openWB/consumer/+/config", writeable: true },
         { topic: "openWB/consumer/+/get/rfid", writeable: false },
         { topic: "openWB/consumer/+/set/rfid", writeable: false },
@@ -363,7 +364,10 @@ export default {
       const modules = this.getWildcardTopics("openWB/consumer/+/module");
       return Object.fromEntries(
         Object.values(modules)
-          .filter((consumer) => ["mqtt"].includes(consumer.type))
+          .filter(
+            (consumer) =>
+              consumer.type === "mqtt" && this.$store.state.mqtt[`openWB/consumer/${consumer.id}/extra_meter`] == null,
+          )
           .map((consumer) => {
             const topic = `openWB/consumer/${consumer.id}/config`;
             return [topic, { ...consumer, config: this.$store.state.mqtt[topic] ?? {} }];
