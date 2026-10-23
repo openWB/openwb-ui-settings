@@ -27,28 +27,6 @@
               <font-awesome-icon :icon="['fas', 'filter']" />
               Erweiterte Optionen
             </template>
-            <openwb-base-button-group-input
-              v-model="chargeLogRequestData.filter.vehicle.prio"
-              title="Priorität"
-              :buttons="[
-                {
-                  buttonValue: null,
-                  text: 'Alle',
-                  class: 'btn-outline-info',
-                },
-                {
-                  buttonValue: false,
-                  text: 'Nein',
-                  class: 'btn-outline-danger',
-                },
-                {
-                  buttonValue: true,
-                  text: 'Ja',
-                  class: 'btn-outline-success',
-                },
-              ]"
-              @update:model-value="requestChargeLog()"
-            />
             <openwb-base-select-input
               v-model="chargeLogRequestData.filter.vehicle.chargemode"
               title="Lademodus"
@@ -189,11 +167,8 @@
               </div>
             </template>
             <template #vehicle_prio="data">
-              <div
-                class="td-center tag"
-                :class="data.value.vehicle_prio ? 'bg-success' : 'bg-danger'"
-              >
-                {{ formatBool(data.value.vehicle_prio) }}
+              <div class="td-center tag">
+                {{ data.value.vehicle_prio }}
               </div>
             </template>
             <template #vehicle_rfid="data">
@@ -690,7 +665,7 @@ export default {
             '"' + row.vehicle_name + '"',
             row.vehicle_id,
             '"' + row.vehicle_chargemode + '"',
-            '"' + this.formatBool(row.vehicle_prio) + '"',
+            '"' + row.vehicle_prio + '"',
             row.vehicle_rfid == undefined ? "" : '"' + row.vehicle_rfid + '"',
             row.vehicle_odometer == undefined ? "" : '"' + row.vehicle_odometer + '"',
             row.vehicle_soc_at_start == undefined ? "" : this.formatNumber(row.vehicle_soc_at_start, 0),

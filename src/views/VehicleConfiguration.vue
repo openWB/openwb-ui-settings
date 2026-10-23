@@ -802,31 +802,6 @@
               </template>
             </openwb-base-button-group-input>
             <div v-if="!installAssistantActive">
-              <openwb-base-button-group-input
-                title="Priorität"
-                :buttons="[
-                  {
-                    buttonValue: false,
-                    text: 'Nein',
-                    class: 'btn-outline-danger',
-                  },
-                  {
-                    buttonValue: true,
-                    text: 'Ja',
-                    class: 'btn-outline-success',
-                  },
-                ]"
-                :model-value="template.prio"
-                @update:model-value="updateState(templateKey, $event, 'prio')"
-              >
-                <template #help>
-                  Die Ladefreigabe mit dem jeweils eingestellten Mindeststrom erfolgt für alle Fahrzeuge, soweit die
-                  verfügbare Leistung ausreicht. Fahrzeuge mit Priorität werden bevorzugt mit mehr Leistung geladen,
-                  falls verfügbar. Erst wenn alle priorisierten Fahrzeuge die maximale Ladeleistung bekommen und noch
-                  zusätzlicher Überschuss vorhanden ist, wird auch für Fahrzeuge ohne Priorität mehr Leistung
-                  freigegeben.
-                </template>
-              </openwb-base-button-group-input>
               <!-- Standard nach Abstecken kann auch ohne RFID genutzt werden.
                 Die Option ist zusätzlich im Lade-Profil verfügbar
               -->
