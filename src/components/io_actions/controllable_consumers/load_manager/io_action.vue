@@ -1,6 +1,11 @@
 <template>
   <openwb-base-alert subtype="info">
-    <p>Über dieses MQTT-Topic können die Parameter des Lastmanagers gesetzt werden.</p>
+    <p>
+      Der openWB Lastmanager koordiniert die verfügbare Leistung in größeren Installationen mit mehreren Häusern,
+      beispielsweise in Wohnquartieren. Diese Aktion berücksichtigt die vom übergeordneten Lastmanager vorgegebenen
+      Leistungs- und Stromgrenzen in der lokalen Regelung.
+    </p>
+    <p>Über dieses MQTT-Topic werden die Vorgaben des Lastmanagers übermittelt.</p>
     <ol>
       <li>
         <openwb-base-copy-to-clipboard
@@ -10,7 +15,8 @@
           openWB/set/mqtt/loadmanager/{{ ioAction.id }}/set/loadmanager
         </openwb-base-copy-to-clipboard>
         <br />
-        Das Topic erwartet ein JSON-Objekt mit den Parametern des Lastmanagements.
+        Das Topic erwartet ein JSON-Objekt mit der verfügbaren Leistung "max_power" in Watt, den verfügbaren
+        Phasenströmen "max_current" in Ampere und dem Unix-Zeitstempel "timestamp" in Sekunden.
         <br />
         Beispiel:
         <span class="text-info">

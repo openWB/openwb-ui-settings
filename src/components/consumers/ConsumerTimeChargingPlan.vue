@@ -121,9 +121,9 @@
       :labels="minBatSocLabels"
     >
       <template #help>
-        Zeitladen wird nur ausgeführt, solange der Speicher-SoC über diesem Wert liegt. Bei "Aus" wird der Speicher-SoC
-        nicht berücksichtigt. Lädt die aktive Speichersteuerung gerade den Speicher, wird kein Zeitladen gestartet, da
-        der Speicher nicht gleichzeitig geladen und entladen werden kann.
+        Bei konfiguriertem Hausspeicher wird Zeitladen nur ausgeführt, solange dessen SoC nicht unter diesem Wert liegt.
+        Bei "Aus" wird der Speicher-SoC nicht berücksichtigt. Bei einem Konflikt mit der aktiven Speichersteuerung wird
+        das speicherabhängige Zeitladen nicht ausgeführt.
       </template>
     </openwb-base-range-input>
   </openwb-base-card>

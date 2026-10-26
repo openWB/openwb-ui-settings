@@ -216,8 +216,9 @@
               "
             >
               <template #help>
-                Ja: Verbraucher wird im Hausverbrauch berücksichtigt. Nein: Verbraucher wird nicht berücksichtigt.
-                Automatisch: Verbraucher übernimmt die Einstellung des übergeordneten Zählers.
+                Ja: Der Verbrauch wird zum Hausverbrauch gezählt. Nein: Der Verbrauch wird getrennt vom Hausverbrauch
+                erfasst. Automatisch: Der Verbraucher übernimmt die Einstellung des übergeordneten Zählers. Diese
+                Auswahl ändert die Zuordnung zum Hausverbrauch, nicht die Berücksichtigung im Lastmanagement.
               </template>
             </openwb-base-button-group-input>
             <openwb-base-number-input
@@ -321,7 +322,8 @@
                 @update:model-value="setResetEnabled(installedConsumer, $event)"
               >
                 <template #help>
-                  Schaltet den Verbraucher automatisch zum eingestellten Termin in den Zielmodus um.
+                  Schaltet den Verbraucher automatisch zum eingestellten Termin in den unter "Zielmodus" ausgewählten
+                  Betriebsmodus um.
                 </template>
               </openwb-base-button-group-input>
               <template v-if="isResetModeEnabled(installedConsumer)">
@@ -581,8 +583,9 @@
                 @update:model-value="updateUsage(installedConsumer.id, $event, 'time_charging.active')"
               >
                 <template #help>
-                  Zeit-Pläne schalten das Gerät innerhalb der festgelegten Zeit-Plan ein, unabhängig vom oben gewählten
-                  Betriebsmodus.
+                  Zeit-Pläne ermöglichen den Betrieb innerhalb der festgelegten Zeitfenster, unabhängig vom oben
+                  gewählten Betriebsmodus. Eine im Zeitplan konfigurierte Speicher-SoC-Bedingung muss dabei erfüllt
+                  sein.
                 </template>
               </openwb-base-button-group-input>
               <openwb-base-card
