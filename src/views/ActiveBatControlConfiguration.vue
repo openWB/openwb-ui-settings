@@ -24,7 +24,7 @@
                 fixed-width
                 :icon="['fas', 'car-side']"
               />
-              Fahrzeuge und Verbraucher
+              Fahrzeuge
             </template>
             <template #label-bat_mode>
               <font-awesome-icon
@@ -389,7 +389,7 @@
                 },
                 {
                   buttonValue: 'vehicle_charging',
-                  text: 'Fahrzeugladung oder Verbraucherbetrieb aktiv',
+                  text: 'Fahrzeugladung aktiv',
                 },
                 {
                   buttonValue: 'price_limit',
