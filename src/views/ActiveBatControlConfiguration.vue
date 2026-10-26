@@ -24,7 +24,12 @@
                 fixed-width
                 :icon="['fas', 'car-side']"
               />
-              Fahrzeuge
+              /
+              <font-awesome-icon
+                fixed-width
+                :icon="['fas', 'plug']"
+              />
+              Verbraucher
             </template>
             <template #label-bat_mode>
               <font-awesome-icon
@@ -647,11 +652,12 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faCarBattery as fasCarBattery,
   faCarSide as fasCarSide,
+  faPlug as fasPlug,
   faBatteryHalf as fasBatteryHalf,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasCarBattery, fasCarSide, fasBatteryHalf);
+library.add(fasCarBattery, fasCarSide, fasPlug, fasBatteryHalf);
 
 export default {
   name: "OpenwbActiveBatControlConfigurationView",
