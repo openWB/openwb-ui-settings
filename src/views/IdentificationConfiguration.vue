@@ -265,7 +265,7 @@
             <openwb-base-alert subtype="info">
               Zugeordnete ID-Tags schalten den Verbraucher für den eingestellten Betriebsmodus frei. Die Freischaltung
               wird nach der eingestellten Wartezeit zurückgesetzt. RFID setzt die Verwendung des integrierten Zählers
-              voraus.
+              voraus. Der RFID-Reader der openWB wird gemeinsam mit den Ladepunkten genutzt.
             </openwb-base-alert>
             <div
               v-for="(consumer, topic) in rfidConsumers"
@@ -364,7 +364,7 @@ export default {
       const modules = this.getWildcardTopics("openWB/consumer/+/module");
       return Object.fromEntries(
         Object.values(modules)
-          .filter((consumer) => consumer.type === "mqtt")
+          .filter((consumer) => ["mqtt", "wallbox_socket"].includes(consumer.type))
           .map((consumer) => {
             const topic = `openWB/consumer/${consumer.id}/config`;
             return [topic, { ...consumer, config: this.$store.state.mqtt[topic] ?? {} }];
