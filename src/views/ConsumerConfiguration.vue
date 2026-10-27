@@ -132,7 +132,7 @@
             <hr />
             <openwb-base-heading> Verwendung Optionen </openwb-base-heading>
             <openwb-base-button-group-input
-              v-if="installedConsumer.type === 'mqtt'"
+              v-if="['mqtt', 'wallbox_socket'].includes(installedConsumer.type)"
               title="Per RFID freischalten"
               :buttons="[
                 { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
@@ -155,7 +155,7 @@
               </template>
             </openwb-base-button-group-input>
             <openwb-base-alert
-              v-if="installedConsumer.type === 'mqtt' && hasExtraMeter(installedConsumer.id)"
+              v-if="['mqtt', 'wallbox_socket'].includes(installedConsumer.type) && hasExtraMeter(installedConsumer.id)"
               subtype="info"
             >
               RFID-Freischaltung kann nicht aktiviert werden, solange ein separater Zähler zugeordnet ist. Bitte zuerst
@@ -766,6 +766,7 @@ export default {
   data() {
     return {
       mqttTopics: [
+        { topic: "openWB/chargepoint/+/config", writeable: false },
         { topic: "openWB/consumer/+/config", writeable: true },
         { topic: "openWB/consumer/+/extra_meter", writeable: true },
         { topic: "openWB/consumer/+/module", writeable: true },
