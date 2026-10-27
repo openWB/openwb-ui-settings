@@ -29,7 +29,7 @@
                 fixed-width
                 :icon="['fas', 'plug']"
               />
-              Verbraucher
+              Fzg./Verbr.
             </template>
             <template #label-bat_mode>
               <font-awesome-icon
