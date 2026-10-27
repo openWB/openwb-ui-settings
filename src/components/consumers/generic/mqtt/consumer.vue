@@ -81,6 +81,20 @@
           Beispiel: <span class="text-info">[38.5,41.2]</span>
         </li>
       </ul>
+      Bei aktivierter RFID-Freischaltung kann ein gescannter ID-Tag übergeben werden:
+      <ul>
+        <li>
+          <openwb-base-copy-to-clipboard
+            class="text-info"
+            tooltip="Topic kopieren"
+          >
+            {{ publishTopicPrefix }}/get/rfid
+          </openwb-base-copy-to-clipboard>
+          <br />
+          ID-Tag als JSON-Zeichenkette, zum Beispiel <span class="text-info">"0012345678"</span>. Die Zuordnung der Tags
+          erfolgt unter Identifikation. Nach der Übernahme setzt openWB das Topic auf null.
+        </li>
+      </ul>
       Die Leistungen jeder Phase werden ausschließlich zu Anzeigezwecken verwendet:
       <ul>
         <li>
