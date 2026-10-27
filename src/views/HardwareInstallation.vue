@@ -61,6 +61,14 @@
               </openwb-base-avatar>
               <div v-else>
                 <openwb-base-avatar
+                  v-if="!deviceHasConfiguredComponents(installedDevice?.id)"
+                  class="bg-warning"
+                >
+                  <openwb-base-tooltip description="Keine Komponente angelegt">
+                    <font-awesome-icon :icon="['fas', 'exclamation-triangle']" />
+                  </openwb-base-tooltip>
+                </openwb-base-avatar>
+                <openwb-base-avatar
                   v-for="installedComponent in getMyInstalledComponents(installedDevice?.id)"
                   :key="installedComponent?.id"
                   class="ml-1"
@@ -248,7 +256,7 @@
 
       <openwb-base-submit-buttons
         form-name="hardwareInstallationForm"
-        @save="$emit('save', mqttTopicsToPublish)"
+        @save="saveSettings"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -266,10 +274,20 @@ import {
   faCarBattery as fasCarBattery,
   faSolarPanel as fasSolarPanel,
   faGaugeHigh as fasGaugeHigh,
+  faExclamationTriangle as fasExclamationTriangle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasPlus, fasNetworkWired, fasMicrochip, fasTrash, fasCarBattery, fasSolarPanel, fasGaugeHigh);
+library.add(
+  fasPlus,
+  fasNetworkWired,
+  fasMicrochip,
+  fasTrash,
+  fasCarBattery,
+  fasSolarPanel,
+  fasGaugeHigh,
+  fasExclamationTriangle,
+);
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbConfigProxy from "../components/devices/OpenwbConfigProxy.vue";
@@ -477,6 +495,21 @@ export default {
     },
     deviceHasConfiguredComponents(deviceId) {
       return Object.keys(this.getMyInstalledComponents(deviceId)).length > 0;
+    },
+    saveSettings() {
+      const devicesWithoutComponents = Object.values(this.installedDevices).filter(
+        (device) => !this.deviceHasConfiguredComponents(device.id),
+      );
+      if (devicesWithoutComponents.length > 0) {
+        const deviceNames = devicesWithoutComponents.map((device) => `"${device.name}"`).join(", ");
+        this.$root.postClientMessage(
+          `Speichern nicht möglich! Folgende Geräte haben keine Komponente: ${deviceNames}<br />` +
+            "Bitte eine Komponente hinzufügen oder das Gerät löschen.",
+          "warning",
+        );
+        return;
+      }
+      this.$emit("save", this.mqttTopicsToPublish);
     },
     addDevice() {
       this.$emit("sendCommand", {
