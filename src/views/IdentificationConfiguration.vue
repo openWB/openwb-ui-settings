@@ -297,7 +297,7 @@
               <openwb-base-number-input
                 title="Wartezeit bis zum Zurücksetzen"
                 unit="min"
-                :min="1"
+                :min="0"
                 :model-value="(consumer.config.rfid_timeout ?? 300) / 60"
                 @update:model-value="updateState(topic, $event * 60, 'rfid_timeout')"
               >
