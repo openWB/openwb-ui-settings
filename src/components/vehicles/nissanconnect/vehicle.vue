@@ -43,9 +43,28 @@
         bleiben.
       </template>
     </openwb-base-text-input>
+    <openwb-base-button-group-input
+      title="Batteriedaten beim Anstecken und während der Ladung aktiv aktualisieren"
+      :buttons="[
+        { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
+        { buttonValue: true, text: 'Ja', class: 'btn-outline-success' },
+      ]"
+      :model-value="vehicle.configuration.refresh_while_charging === true"
+      @update:model-value="updateConfiguration($event, 'configuration.refresh_while_charging')"
+    >
+      <template #help>
+        Standardmäßig ausgeschaltet. Fordert bei jedem neu erkannten Anstecken aktuelle Batteriedaten vom Fahrzeug an,
+        auch wenn der letzte Versuch weniger als eine Stunde zurückliegt. Dabei kann das Fahrzeug aufgeweckt werden.
+        Während der Ladung erfolgen weitere Versuche frühestens nach einer Stunde. Auch fehlgeschlagene Versuche zählen
+        für diesen Abstand; Ladepausen ohne Abstecken lösen keinen zusätzlichen Versuch aus. Nach Neustart des Dienstes
+        oder Neuladen der Modulkonfiguration beginnt die Erkennung neu: Ein bereits angestecktes Fahrzeug zählt dann
+        einmalig als neu angesteckt. Die Aktualisierung benötigt zusätzliche Anfragen und Wartezeit; neue Fahrzeugdaten
+        sind nicht garantiert.
+      </template>
+    </openwb-base-button-group-input>
     <openwb-base-alert subtype="info">
-      Ruft die bei Nissan gespeicherten Batteriedaten einschließlich ihres Messzeitpunkts ab. Das Fahrzeug wird dabei
-      nicht aktiv aufgeweckt. Ältere Werte behalten ihren ursprünglichen Zeitstempel. Der gespeicherte Kilometerstand
+      Ohne aktive Aktualisierung liest das Modul die bei Nissan gespeicherten Batteriedaten. Ältere Werte behalten ihren
+      ursprünglichen Messzeitpunkt, auch nach einem erfolglosen Aktualisierungsversuch. Der gespeicherte Kilometerstand
       wird ebenfalls abgerufen, sofern verfügbar. Abfrageintervalle und Ladegrenzen werden in openWB eingestellt.
     </openwb-base-alert>
   </div>
