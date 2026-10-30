@@ -127,8 +127,8 @@
             @update:model-value="updateState(installedChargePointKey, $event, 'ocpp_chargebox_password')"
           >
             <template #help>
-              Trage hier das Passwort ein, das im OCPP-Backend für diese Chargebox-ID hinterlegt ist. 
-              Es wird zur Anmeldung des Ladepunkts verwendet. Wenn im Backend kein Passwort eingerichtet ist, lasse das Feld leer.
+              Trage hier das Passwort ein, das im OCPP-Backend für diese Chargebox-ID hinterlegt ist. Es wird zur
+              Anmeldung des Ladepunkts verwendet. Wenn im Backend kein Passwort eingerichtet ist, lasse das Feld leer.
             </template>
           </openwb-base-text-input>
           <hr />
