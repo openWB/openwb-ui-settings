@@ -1,5 +1,16 @@
 <template>
   <div class="vehicle-soc-pleos">
+    <openwb-base-alert subtype="info">
+      Client-ID und Client-Secret erhältst Du über die Anleitung
+      <a
+        href="https://document.pleos.ai/en/api-reference/vehicle-data-api/getting-started/for-private-users/request-my-vehicle-api-key"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Request my Vehicle API Key
+      </a>
+      im Pleos Playground (Anmeldung mit dem eigenen Hyundai-/Kia-/Genesis-Account erforderlich).
+    </openwb-base-alert>
     <openwb-base-select-input
       title="Hersteller"
       required
