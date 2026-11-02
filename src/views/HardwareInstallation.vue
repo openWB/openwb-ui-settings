@@ -23,11 +23,10 @@
   <openwb-base-modal-dialog
     :show="showLeaveModal"
     title="Geräte ohne Komponente"
-    subtype="warning"
+    subtype="danger"
     :buttons="[
       { text: 'Geräte löschen', event: 'remove', subtype: 'danger' },
-      { text: 'Trotzdem verlassen', event: 'leave', subtype: 'warning' },
-      { text: 'Auf Seite bleiben', event: 'close' },
+      { text: 'Abbrechen', event: 'close' },
     ]"
     @modal-result="handleLeaveModal"
   >
@@ -74,14 +73,16 @@
                 <font-awesome-icon :icon="['fas', 'trash']" />
               </openwb-base-avatar>
               <div v-else>
-                <openwb-base-avatar
+                <openwb-base-tooltip
                   v-if="!deviceHasConfiguredComponents(installedDevice?.id)"
-                  class="bg-warning"
+                  description="Keine Komponente angelegt"
                 >
-                  <openwb-base-tooltip description="Keine Komponente angelegt">
-                    <font-awesome-icon :icon="['fas', 'exclamation-triangle']" />
-                  </openwb-base-tooltip>
-                </openwb-base-avatar>
+                  <font-awesome-icon
+                    class="text-danger border-danger"
+                    :icon="['fas', 'exclamation-triangle']"
+                    size="xl"
+                  />
+                </openwb-base-tooltip>
                 <openwb-base-avatar
                   v-for="installedComponent in getMyInstalledComponents(installedDevice?.id)"
                   :key="installedComponent?.id"
@@ -112,7 +113,7 @@
             <openwb-base-heading>Komponenten</openwb-base-heading>
             <openwb-base-alert
               v-if="!deviceHasConfiguredComponents(installedDevice?.id)"
-              subtype="warning"
+              subtype="danger"
             >
               Es wurden noch keine Komponenten zu diesem Gerät angelegt.
             </openwb-base-alert>
@@ -313,7 +314,6 @@ export default {
     OpenwbConfigProxy,
   },
   mixins: [ComponentState],
-
   beforeRouteLeave(to) {
     if (this.leaveConfirmed || this.devicesWithoutComponents.length === 0) {
       return true;
@@ -536,7 +536,7 @@ export default {
         this.$root.postClientMessage(
           `Speichern nicht möglich! Folgende Geräte haben keine Komponente: ${this.devicesWithoutComponentsNames}<br />` +
             "Bitte eine Komponente hinzufügen oder das Gerät löschen.",
-          "warning",
+          "danger",
         );
         return;
       }
