@@ -20,9 +20,7 @@
       required
       @update:model-value="updateConfiguration($event, 'configuration.mppt_index_discharge')"
     >
-      <template #help>
-        Der MPPT-Kanal, der die Entladeleistung des Speichers liefert.
-      </template>
+      <template #help> Der MPPT-Kanal, der die Entladeleistung des Speichers liefert. </template>
     </openwb-base-number-input>
   </div>
 </template>
