@@ -2,9 +2,9 @@
   <div class="consumer-shelly-relais">
     <openwb-base-heading> Einstellungen für Shelly PM (Messen & Schalten) </openwb-base-heading>
     <openwb-base-alert subtype="info">
-      Unterstützt werden theoretisch alle Shelly Relais bis Generation 4. Getestete Modelle sind
-      Shelly 1 Gen4. Laut Doku kompatibel sind (Gen2 - Gen4) Shelly 1, 1L, 1 PM, 2 2L, 2PM, 1 Mini,
-      1 PM Mini, Plug S, Plug M, Plus 1, Plus 1 Mini, Plus 1 PM.
+      Unterstützt werden theoretisch alle Shelly Relais bis Generation 4. Getestete Modelle sind Shelly 1 Gen4. Laut
+      Doku kompatibel sind (Gen2 - Gen4) Shelly 1, 1L, 1 PM, 2 2L, 2PM, 1 Mini, 1 PM Mini, Plug S, Plug M, Plus 1, Plus
+      1 Mini, Plus 1 PM.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
