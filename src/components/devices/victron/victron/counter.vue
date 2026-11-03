@@ -2,13 +2,17 @@
   <div class="device-victron-counter">
     <openwb-base-heading> Einstellungen für Victron Zähler </openwb-base-heading>
     <openwb-base-number-input
-      title="Modbus ID"
+      title="Geräte-ID"
       required
       :model-value="component.configuration.modbus_id"
       min="1"
       max="255"
       @update:model-value="updateConfiguration($event, 'configuration.modbus_id')"
-    />
+    >
+      <template #help>
+        Die Geräte-ID ist in Victron Venus OS unter Einstellungen → Dienste → Verfügbare Dienste zu finden.
+      </template>
+    </openwb-base-number-input>
     <openwb-base-button-group-input
       title="Messgerät"
       :buttons="[

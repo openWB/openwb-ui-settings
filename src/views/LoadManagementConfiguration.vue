@@ -4,7 +4,7 @@
       <openwb-base-card
         title="Einstellungen"
         :collapsible="true"
-        :collapsed="false"
+        :collapsed="true"
       >
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
           <openwb-base-alert subtype="info">
@@ -40,19 +40,20 @@
               <p>
                 Wenn angesteckte Fahrzeuge, die nicht oder nicht mit der Sollstromstärke laden, im Lastmanagement
                 berücksichtigt werden, wird für diese der Sollstrom reserviert. Dadurch können bei Eingreifen des
-                Lastmanagements andere Fahrzeuge möglicherweise nur mit reduzierter Stromstärke laden und der
-                reservierte Strom wird nicht genutzt. Wenn die Fahrzeuge wieder Leistung beziehen, z.B. um zu
-                klimatisieren, nutzen sie den für sie reservierten Strom.
+                Lastmanagements andere Fahrzeuge und gesteuerte Verbraucher möglicherweise nur mit reduzierter Leistung
+                betrieben werden und der reservierte Strom wird nicht genutzt. Wenn die Fahrzeuge wieder Leistung
+                beziehen, z.B. um zu klimatisieren, nutzen sie den für sie reservierten Strom.
               </p>
               <p>
                 Wenn angesteckte Fahrzeuge, die nicht oder nicht mit der Sollstromstärke laden, nicht im Lastmanagement
                 berücksichtigt werden, wird für diese auch kein Strom bei vorliegender Ladefreigabe reserviert bzw. es
-                wird nur der tatsächlich genutzte Strom im Lastmanagement berücksichtigt. Andere Fahrzeuge können
-                dadurch mit höherer Stromstärke laden. Wenn die maximalen Lastmanagement-Grenzen fast erreicht sind und
-                die Fahrzeuge wieder Leistung beziehen, z.B. um zu klimatisieren, kann es zu einer kurzzeitigen
-                Überschreitung der Lastmanagement-Grenzen kommen, bis im nächsten Zyklus die Stromstärken aller
-                Ladepunkte an die neue Situation angepasst wurden. Das kurzzeitige Überschreiten der Maximal-Werte
-                stellt für die Sicherungen in der Regel kein Problem dar.
+                wird nur der tatsächlich genutzte Strom im Lastmanagement berücksichtigt. Andere Fahrzeuge und
+                gesteuerte Verbraucher können dadurch mit höherer Leistung betrieben werden. Wenn die maximalen
+                Lastmanagement-Grenzen fast erreicht sind und die Fahrzeuge wieder Leistung beziehen, z.B. um zu
+                klimatisieren, kann es zu einer kurzzeitigen Überschreitung der Lastmanagement-Grenzen kommen, bis im
+                nächsten Zyklus die Stromstärken aller Ladepunkte und gesteuerten Verbraucher an die neue Situation
+                angepasst wurden. Das kurzzeitige Überschreiten der Maximal-Werte stellt für die Sicherungen in der
+                Regel kein Problem dar.
               </p>
             </template>
           </openwb-base-button-group-input>
@@ -171,14 +172,16 @@
               <template #help>
                 Mit dieser Einstellung legen Sie fest, ob ein Zähler in die Hausverbrauchsberechnung einfließt. <br />
                 Ja: Der lokale Verbrauch dieses Zählers wird als Hausverbrauch berücksichtigt. <br />
-                Nein: Der Zähler wird nicht als Hausverbrauch berücksichtigt. <br />
+                Nein: Der lokale Verbrauch dieses Zählers wird getrennt vom Hausverbrauch erfasst. <br />
                 Automatisch: Der Zähler übernimmt die Einstellung des übergeordneten Zählers. <br />
 
-                Der Hausverbrauch entspricht dem Verbrauch am jeweiligen Zähler abzüglich der Leistungen von Batterien,
-                Ladepunkten, Wechselrichtern und Unterzählern. "Automatisch" ist die Standardeinstellung und eignet
-                sich, wenn die Einstellung für mehrere Zähler übernommen werden soll. Wichtig: Wenn alle Zähler auf
-                "Automatisch" stehen, wird die Einstellung entlang der Zählerhierarchie weitervererbt. Für den obersten
-                Zähler wird "Automatisch" wie "Ja" behandelt. Dadurch wird standardmäßig der Hausverbrauch erfasst.
+                Der lokale Verbrauch entspricht der Leistung am jeweiligen Zähler abzüglich der vorzeichenbehafteten
+                Leistungen der direkt untergeordneten Komponenten, Ladepunkte und Verbraucher. Für untergeordnete Zähler
+                und Verbraucher wird jeweils separat ausgewertet, ob ihr Verbrauch zum Hausverbrauch zählt. <br />
+                "Automatisch" ist die Standardeinstellung und eignet sich, wenn die Einstellung für mehrere Zähler
+                übernommen werden soll. Wichtig: Wenn alle Zähler auf "Automatisch" stehen, wird die Einstellung entlang
+                der Zählerhierarchie weitervererbt. Für den obersten Zähler wird "Automatisch" wie "Ja" behandelt.
+                Dadurch wird standardmäßig der Hausverbrauch erfasst.
               </template>
             </openwb-base-button-group-input>
           </openwb-base-card>
@@ -252,7 +255,7 @@
         </div>
       </openwb-base-card>
       <openwb-base-card
-        title="Struktur"
+        title="Prioritäten"
         :collapsible="true"
         :collapsed="true"
       >
@@ -262,24 +265,6 @@
           </openwb-base-alert>
         </div>
         <div v-else>
-          <sortable-list
-            title="Anordnung der Komponenten"
-            :model-value="$store.state.mqtt['openWB/counter/get/hierarchy']"
-            :labels="hierarchyLabels"
-            :linked-meters="consumerLinkedMeterNames"
-            @update:model-value="updateState('openWB/counter/get/hierarchy', $event)"
-          >
-            <template #help>
-              Durch die Anordnung der Komponenten werden Abhängigkeiten abgebildet.<br />
-              An erster Stelle muss eine Zählerkomponente stehen, die den Netzanschlusspunkt erfasst. Dafür kann auch
-              ein virtueller Zähler genutzt werden.<br />
-              Die weiteren Komponenten müssen hierarchisch so angeordnet werden, wie sie auch physisch im Stromnetz
-              angeschlossen werden.<br />
-              Bei DC-gekoppelten Speichern sind diese hinter dem zugehörigen Wechselrichter zu platzieren, damit die
-              Abhängigkeit in der Regelung berücksichtigt werden kann.
-            </template>
-          </sortable-list>
-          <hr />
           <sortable-list
             v-model="loadManagementPriorityList"
             title="Prioritätenliste"
@@ -313,6 +298,36 @@
               die enthaltenen Elemente erhalten und werden eine Ebene nach oben verschoben.
             </template>
           </openwb-base-text-input>
+        </div>
+      </openwb-base-card>
+      <openwb-base-card
+        title="Struktur"
+        :collapsible="true"
+        :collapsed="true"
+      >
+        <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+          <openwb-base-alert subtype="info">
+            Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
+          </openwb-base-alert>
+        </div>
+        <div v-else>
+          <sortable-list
+            title="Anordnung der Komponenten"
+            :model-value="$store.state.mqtt['openWB/counter/get/hierarchy']"
+            :labels="hierarchyLabels"
+            :linked-meters="consumerLinkedMeterNames"
+            @update:model-value="updateState('openWB/counter/get/hierarchy', $event)"
+          >
+            <template #help>
+              Durch die Anordnung der Komponenten werden Abhängigkeiten abgebildet.<br />
+              An erster Stelle muss eine Zählerkomponente stehen, die den Netzanschlusspunkt erfasst. Dafür kann auch
+              ein virtueller Zähler genutzt werden.<br />
+              Die weiteren Komponenten müssen hierarchisch so angeordnet werden, wie sie auch physisch im Stromnetz
+              angeschlossen werden.<br />
+              Bei DC-gekoppelten Speichern sind diese hinter dem zugehörigen Wechselrichter zu platzieren, damit die
+              Abhängigkeit in der Regelung berücksichtigt werden kann.
+            </template>
+          </sortable-list>
         </div>
       </openwb-base-card>
       <openwb-base-submit-buttons
@@ -356,8 +371,8 @@ export default {
       mqttTopics: [
         { topic: "openWB/bat/+/config/max_power", writeable: true },
         { topic: "openWB/chargepoint/+/config", writeable: false },
-        { topic: "openWB/consumer/+/module", writeable: false },
         { topic: "openWB/consumer/+/extra_meter", writeable: false },
+        { topic: "openWB/consumer/+/module", writeable: false },
         { topic: "openWB/counter/+/config/is_home_consumption_counter", writeable: true },
         { topic: "openWB/counter/+/config/max_currents", writeable: true },
         { topic: "openWB/counter/+/config/max_power_errorcase", writeable: true },
@@ -367,8 +382,8 @@ export default {
         { topic: "openWB/counter/get/loadmanagement_prios", writeable: true },
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/pv/+/config/max_ac_out", writeable: true },
-        { topic: "openWB/vehicle/+/name", writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
+        { topic: "openWB/vehicle/+/name", writeable: false },
       ],
       newGroupName: null,
     };

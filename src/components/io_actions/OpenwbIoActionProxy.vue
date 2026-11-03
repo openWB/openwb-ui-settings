@@ -22,6 +22,7 @@
       :io-device="ioDevices[`openWB/system/io/${ioAction.configuration.io_device}/config`]"
       :available-charge-points="availableChargePoints"
       :available-components="availableComponents"
+      :available-consumers="availableConsumers"
       :available-io-devices="availableIoDevices"
       @update:configuration="updateConfiguration($event)"
     />
@@ -39,6 +40,7 @@ export default {
     ioDevices: { type: Object, required: true },
     installedChargePoints: { type: Object, required: true },
     installedComponents: { type: Object, required: true },
+    installedConsumers: { type: Object, required: false, default: () => ({}) },
   },
   emits: ["update:configuration", "sendCommand"],
   computed: {
@@ -50,15 +52,27 @@ export default {
       });
     },
     ioDeviceList() {
-      return Object.keys(this.ioDevices).map((key) => {
-        return { value: this.ioDevices[key]?.id, text: this.ioDevices[key]?.name };
-      });
+      return Object.values(this.ioDevices)
+        .filter((device) =>
+          this.ioAction?.type === "load_manager"
+            ? device?.type === "load_manager"
+            : Object.keys(device?.input?.digital || {}).length > 0,
+        )
+        .map((device) => ({ value: device?.id, text: device?.name }));
     },
     availableIoDevices() {
       return Object.values(this.ioDevices);
     },
     availableChargePoints() {
       return Object.values(this.installedChargePoints).map((cp) => ({ value: cp?.id, text: cp?.name }));
+    },
+    availableConsumers() {
+      return Object.values(this.installedConsumers)
+        .filter((consumer) => {
+          const usageType = consumer?.consumerUsage?.type;
+          return usageType != null && !["meter_only", "self_controlled"].includes(usageType);
+        })
+        .map((consumer) => ({ value: consumer?.id, text: consumer?.name }));
     },
     availableComponents() {
       return Object.values(this.installedComponents).map((component) => ({

@@ -477,10 +477,10 @@ export default {
         { topic: "openWB/LegacySmartHome/config/get/Devices/+/device_name", writeable: false },
         { topic: "openWB/chargepoint/+/config", writeable: false },
         { topic: "openWB/general/extern", writeable: false },
-        { topic: "openWB/optional/monitoring/config", writeable: false },
-        { topic: "openWB/system/backup_cloud/backup_before_update", writeable: false },
-        { topic: "openWB/system/backup_cloud/config", writeable: false },
-        { topic: "openWB/system/backup_password", writeable: false },
+        { topic: "openWB/optional/monitoring/config", writeable: false }, // exclude from generic saves.
+        { topic: "openWB/system/backup_cloud/backup_before_update", writeable: false }, // exclude from generic saves.
+        { topic: "openWB/system/backup_cloud/config", writeable: false }, // exclude from generic saves.
+        { topic: "openWB/system/backup_password", writeable: false }, // exclude from generic saves.
         { topic: "openWB/system/configurable/backup_clouds", writeable: false },
         { topic: "openWB/system/configurable/monitoring", writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: false },

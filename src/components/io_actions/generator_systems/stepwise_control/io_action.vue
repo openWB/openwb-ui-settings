@@ -110,7 +110,7 @@ export default {
   computed: {
     ioDeviceList() {
       return this.availableIoDevices
-        .filter((device) => device?.type !== "eebus")
+        .filter((device) => Object.keys(device?.output?.digital || {}).length > 0)
         .map((device) => ({ value: device?.id, text: device?.name }));
     },
     outputIoDevice() {

@@ -271,6 +271,9 @@ export default {
     window.removeEventListener("resize", this.updateScreenSize);
   },
   methods: {
+    redirectToSettingsBaseUrl() {
+      location.href = location.href.split("#")[0] ?? "/";
+    },
     updateScreenSize() {
       this.smallScreen = window.innerWidth < 576;
     },
@@ -296,8 +299,8 @@ export default {
           this.$cookies.set("mqtt", `${this.username}:${this.password}`);
           // reconnect mqtt
           this.$root.reconnectMqttClient();
-          // reload page
-          location.reload();
+          // reload page without url part beginning with #
+          this.redirectToSettingsBaseUrl();
           break;
         case "forgot_password":
           console.warn("Password reset requested for user:", this.username);
@@ -385,7 +388,7 @@ export default {
         // reconnect mqtt
         this.$root.reconnectMqttClient();
         // reload page
-        location.reload();
+        this.redirectToSettingsBaseUrl();
       }
     },
   },

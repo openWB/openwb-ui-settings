@@ -14,10 +14,11 @@
   <div class="consumerConfig">
     <openwb-base-alert subtype="info">
       Das Einschalten der Verbraucher richtet sich nach der Rangfolge in der Prioritäten-Steuerung (Geräte werden von
-      oben nach unten geschaltet) und dem Mindeststrom des jeweiligen Geräts: Bei geringem Überschuss wird das erste
-      Gerät in der Liste geschaltet, dessen Mindeststrom erreicht ist. Die Rangfolge lässt sich unter
+      oben nach unten geschaltet) und der Mindestleistung des jeweiligen Geräts: Bei geringem Überschuss wird das erste
+      Gerät in der Liste geschaltet, dessen Mindestleistung erreicht ist. Die Rangfolge lässt sich unter
       <router-link to="/LoadManagementConfiguration"> Lastmanagement </router-link>
-      anpassen.
+      anpassen. Angesteuert werden können Geräte mit einer Leistungsaufnahme von mehr als 35W pro Phase. Leistungen
+      darunter werden als Standby gezählt.
     </openwb-base-alert>
     <form name="consumerConfigForm">
       <openwb-base-card title="Verbraucher">
@@ -215,12 +216,12 @@
               "
             >
               <template #help>
-                Ja: Verbraucher wird im Hausverbrauch berücksichtigt. Nein: Verbraucher wird nicht berücksichtigt.
-                Automatisch: Verbraucher übernimmt die Einstellung des übergeordneten Zählers.
+                Ja: Der Verbrauch wird zum Hausverbrauch gezählt. Nein: Der Verbrauch wird getrennt vom Hausverbrauch
+                erfasst. Automatisch: Der Verbraucher übernimmt die Einstellung des übergeordneten Zählers. Diese
+                Auswahl ändert die Zuordnung zum Hausverbrauch, nicht die Berücksichtigung im Lastmanagement.
               </template>
             </openwb-base-button-group-input>
             <openwb-base-number-input
-              v-if="showModeSettings(installedConsumer)"
               title="Maximale Leistung"
               unit="W"
               :min="1"
@@ -232,25 +233,26 @@
                 <span v-if="installedConsumer.consumerUsage?.type === 'suspendable_tunable'">
                   Wird im Sofort-, Zeit- und Eco-Betrieb (bei günstigem Preis) als Sollleistung verwendet.
                 </span>
-                <span v-else>
+                <span v-else-if="showModeSettings(installedConsumer)">
                   Wird im Sofort-, Zeit- und Eco-Betrieb (bei günstigem Preis) als Sollleistung verwendet. Im PV- und
                   Eco-Betrieb wird das Gerät nur eingeschaltet, wenn mindestens diese Leistung als Überschuss verfügbar
                   ist.</span
                 >
+                Die maximale Leistung wird außerdem zur Plausibilitätsprüfung der Messwerte (Peak-Filter) verwendet.
               </template>
             </openwb-base-number-input>
             <openwb-base-number-input
-              v-if="showMinCurrent(installedConsumer)"
-              title="Minimaler Betriebsstrom"
-              unit="A"
+              v-if="showMinPower(installedConsumer)"
+              title="Minimale Leistung"
+              unit="W"
               :min="0"
-              :step="0.1"
-              :model-value="installedConsumer.config?.min_current"
-              @update:model-value="updateState(`openWB/consumer/${installedConsumer.id}/config`, $event, 'min_current')"
+              :step="5"
+              :model-value="installedConsumer.config?.min_power"
+              @update:model-value="updateState(`openWB/consumer/${installedConsumer.id}/config`, $event, 'min_power')"
             >
               <template #help>
-                Mindeststrom, den das Gerät zum Betrieb benötigt. Im PV- und Eco-Betrieb wird das Gerät nur
-                eingeschaltet, wenn mindestens dieser Strom als Überschuss verfügbar ist.
+                Mindestleistung, die das Gerät zum Betrieb benötigt. Im PV- und Eco-Betrieb wird das Gerät nur
+                eingeschaltet, wenn mindestens diese Leistung als Überschuss verfügbar ist.
               </template>
             </openwb-base-number-input>
             <openwb-base-number-input
@@ -311,40 +313,56 @@
               <hr />
               <openwb-base-heading> Betriebsmodus umstellen </openwb-base-heading>
               <openwb-base-button-group-input
-                title="Umstellen"
+                title="Betriebsmodus automatisch umstellen"
                 :buttons="[
-                  { buttonValue: 'never', text: 'Nie', class: 'btn-outline-secondary' },
-                  { buttonValue: 'midnight', text: 'Mitternacht', class: 'btn-outline-info' },
-                  { buttonValue: 'time', text: 'Zeitpunkt', class: 'btn-outline-info' },
+                  { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
+                  { buttonValue: true, text: 'Ja', class: 'btn-outline-success' },
                 ]"
-                :model-value="installedConsumer.consumerUsage.reset_chargemode?.mode ?? 'never'"
-                @update:model-value="updateUsage(installedConsumer.id, $event, 'reset_chargemode.mode')"
+                :model-value="isResetModeEnabled(installedConsumer)"
+                @update:model-value="setResetEnabled(installedConsumer, $event)"
               >
                 <template #help>
-                  <template v-if="installedConsumer.consumerUsage.reset_chargemode?.mode === 'midnight'">
-                    Stellt den Betriebsmodus automatisch auf einen anderen Modus um: "Mitternacht" täglich um 0:00 Uhr
-                  </template>
-                  <template v-else-if="installedConsumer.consumerUsage.reset_chargemode?.mode === 'time'">
-                    Stellt den Betriebsmodus automatisch auf einen anderen Modus um, einmalig zum angegebenen Zeitpunkt.
-                  </template>
-                  <template v-else> Stellt den Betriebsmodus nicht automatisch um. </template>
+                  Schaltet den Verbraucher automatisch zum eingestellten Termin in den unter "Zielmodus" ausgewählten
+                  Betriebsmodus um.
                 </template>
               </openwb-base-button-group-input>
-              <template v-if="(installedConsumer.consumerUsage.reset_chargemode?.mode ?? 'never') !== 'never'">
+              <template v-if="isResetModeEnabled(installedConsumer)">
                 <openwb-base-text-input
-                  v-if="installedConsumer.consumerUsage.reset_chargemode?.mode === 'time'"
-                  title="Datum"
-                  subtype="date"
-                  :model-value="resetDateParts(installedConsumer).date"
-                  @update:model-value="setResetDate(installedConsumer, $event)"
-                />
-                <openwb-base-text-input
-                  v-if="installedConsumer.consumerUsage.reset_chargemode?.mode === 'time'"
                   title="Uhrzeit"
                   subtype="time"
-                  :model-value="resetDateParts(installedConsumer).time"
+                  :model-value="getResetTime(installedConsumer)"
                   @update:model-value="setResetTime(installedConsumer, $event)"
                 />
+                <openwb-base-button-group-input
+                  title="Wiederholung"
+                  :buttons="[
+                    { buttonValue: 'once', text: 'Einmalig', class: 'btn-outline-info' },
+                    { buttonValue: 'daily', text: 'Täglich', class: 'btn-outline-info' },
+                    { buttonValue: 'weekly', text: 'Wöchentlich', class: 'btn-outline-info' },
+                  ]"
+                  :model-value="currentResetMode(installedConsumer)"
+                  @update:model-value="setResetMode(installedConsumer, $event)"
+                />
+                <openwb-base-text-input
+                  v-if="currentResetMode(installedConsumer) === 'once'"
+                  title="Datum"
+                  subtype="date"
+                  :model-value="getResetOnceDate(installedConsumer)"
+                  @update:model-value="setResetOnceDate(installedConsumer, $event)"
+                />
+                <div v-if="currentResetMode(installedConsumer) === 'weekly'">
+                  <openwb-base-button-group-input
+                    v-for="(day, dayIndex) in weekdays"
+                    :key="dayIndex"
+                    :title="day"
+                    :buttons="[
+                      { buttonValue: false, text: 'Aus', class: 'btn-outline-danger' },
+                      { buttonValue: true, text: 'An', class: 'btn-outline-success' },
+                    ]"
+                    :model-value="getResetWeeklyDay(installedConsumer, dayIndex)"
+                    @update:model-value="setResetWeeklyDay(installedConsumer, dayIndex, $event)"
+                  />
+                </div>
                 <openwb-base-button-group-input
                   title="Zielmodus"
                   :buttons="[
@@ -372,12 +390,12 @@
               >
                 <template #help>
                   Die Anlauferkennung ist in den Betriebsmodi PV, Eco und Ziel aktiv und wird bei Ablauf eines
-                  Zielplans, um Mitternacht sowie beim Ändern des Betriebsmodus zurückgesetzt.<br />
+                  Zielplans, beim Tageswechsel sowie beim Ändern des Betriebsmodus zurückgesetzt.<br />
                   Das Gerät wird eingeschaltet, um seine Startsequenz (z. B. Befüllen, Türverriegelung) abzuwarten.
-                  Sobald der Strom den eingestellten Minimalstrom übersteigt, wird das Gerät als aktiv erkannt, das
-                  Gerät abgeschaltet und es übernimmt der gewählte Betriebsmodus. So kann z. B. eine Waschmaschine
-                  morgens befüllt werden und läuft erst an, wenn genug Überschuss vorhanden ist. Für Geräte ohne
-                  Anlaufsequenz (z. B. Wärmepumpen) deaktivieren.
+                  Sobald die Leistungsaufnahme 35W pro Phase bzw. die konfigurierte Mindestleistung übersteigt, wird das
+                  Gerät als aktiv erkannt, abgeschaltet und es übernimmt der gewählte Betriebsmodus. So kann z. B. eine
+                  Waschmaschine morgens befüllt werden und läuft erst an, wenn genug Überschuss vorhanden ist. Für
+                  Geräte ohne Anlaufsequenz (z. B. Wärmepumpen) deaktivieren.
                 </template>
               </openwb-base-button-group-input>
               <hr />
@@ -412,7 +430,7 @@
                   v-if="installedConsumer.consumerUsage.type === 'suspendable_onoff'"
                   subtype="info"
                 >
-                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
+                  Das Gerät wird eingeschaltet, wenn die maximale Leistung für die Dauer der Einschaltverzögerung
                   überschritten wurde. Das Gerät wird frühestens wieder ausgeschaltet, wenn die minimale Betriebsdauer
                   erreicht wurde, um sicherzustellen, dass das Programm vollständig durchlaufen kann.
                 </openwb-base-alert>
@@ -420,14 +438,14 @@
                   v-else-if="installedConsumer.consumerUsage.type === 'suspendable_tunable'"
                   subtype="info"
                 >
-                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
+                  Das Gerät wird eingeschaltet, wenn die minimale Leistung für die Dauer der Einschaltverzögerung
                   überschritten wurde und bei ausreichend Überschuss hoch geregelt.
                 </openwb-base-alert>
                 <openwb-base-alert
                   v-else
                   subtype="info"
                 >
-                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
+                  Das Gerät wird eingeschaltet, wenn die maximale Leistung für die Dauer der Einschaltverzögerung
                   überschritten wurde.
                 </openwb-base-alert>
               </openwb-base-card>
@@ -504,7 +522,7 @@
                   v-if="installedConsumer.consumerUsage.type === 'suspendable_onoff'"
                   subtype="info"
                 >
-                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
+                  Das Gerät wird eingeschaltet, wenn die maximale Leistung für die Dauer der Einschaltverzögerung
                   überschritten wurde oder der Preis unter die Strompreisgrenze fällt. Das Gerät wird frühestens wieder
                   ausgeschaltet, wenn die minimale Betriebsdauer erreicht wurde, um sicherzustellen, dass das Programm
                   vollständig durchlaufen kann.
@@ -513,7 +531,7 @@
                   v-else-if="installedConsumer.consumerUsage.type === 'suspendable_tunable'"
                   subtype="info"
                 >
-                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
+                  Das Gerät wird eingeschaltet, wenn die minimale Leistung für die Dauer der Einschaltverzögerung
                   überschritten wurde und bei ausreichend Überschuss hoch geregelt oder mit maximaler Leistung
                   eingeschaltet, wenn der Preis unter die Strompreisgrenze fällt.
                 </openwb-base-alert>
@@ -521,7 +539,7 @@
                   v-else
                   subtype="info"
                 >
-                  Das Gerät wird eingeschaltet, wenn der min. Betriebsstrom für die Dauer der Einschaltverzögerung
+                  Das Gerät wird eingeschaltet, wenn die maximale Leistung für die Dauer der Einschaltverzögerung
                   überschritten wurde oder der Preis unter die Strompreisgrenze fällt.
                 </openwb-base-alert>
                 <openwb-base-number-input
@@ -565,8 +583,9 @@
                 @update:model-value="updateUsage(installedConsumer.id, $event, 'time_charging.active')"
               >
                 <template #help>
-                  Zeit-Pläne schalten das Gerät innerhalb der festgelegten Zeit-Plan ein, unabhängig vom oben gewählten
-                  Betriebsmodus.
+                  Zeit-Pläne ermöglichen den Betrieb innerhalb der festgelegten Zeitfenster, unabhängig vom oben
+                  gewählten Betriebsmodus. Eine im Zeitplan konfigurierte Speicher-SoC-Bedingung muss dabei erfüllt
+                  sein.
                 </template>
               </openwb-base-button-group-input>
               <openwb-base-card
@@ -710,24 +729,24 @@ export default {
   data() {
     return {
       mqttTopics: [
+        { topic: "openWB/consumer/+/config", writeable: true },
+        { topic: "openWB/consumer/+/extra_meter", writeable: true },
+        { topic: "openWB/consumer/+/module", writeable: true },
+        { topic: "openWB/consumer/+/usage", writeable: true },
+        { topic: "openWB/counter/get/hierarchy", writeable: false },
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/general/legacy_smarthome_active", writeable: true },
-        { topic: "openWB/consumer/+/module", writeable: true },
-        { topic: "openWB/consumer/+/config", writeable: true },
-        { topic: "openWB/consumer/+/usage", writeable: true },
-        { topic: "openWB/consumer/+/extra_meter", writeable: true },
-        { topic: "openWB/system/device/+/config", writeable: false },
-        { topic: "openWB/system/device/+/component/+/config", writeable: false },
-        { topic: "openWB/counter/get/hierarchy", writeable: false },
-        { topic: "openWB/system/configurable/consumers", writeable: false },
         { topic: "openWB/optional/ep/configured", writeable: false },
+        { topic: "openWB/system/configurable/consumers", writeable: false },
+        { topic: "openWB/system/device/+/component/+/config", writeable: false },
+        { topic: "openWB/system/device/+/config", writeable: false },
       ],
       selectedVendor: undefined,
       consumerToAdd: undefined,
       showConsumerRemoveModal: false,
       modalConsumer: undefined,
       modalConsumerName: "",
-      CONSUMER_CONFIG_FIELDS: ["connected_phases", "phase_1", "max_power"],
+      CONSUMER_CONFIG_FIELDS: ["connected_phases", "phase_1", "max_power", "min_power"],
       commandQueue: [],
       consumerDefaultColor: "#6f42c1",
     };
@@ -931,7 +950,7 @@ export default {
       const type = consumer.consumerUsage?.type;
       return type != null && type !== "meter_only" && type !== "self_controlled";
     },
-    showMinCurrent(consumer) {
+    showMinPower(consumer) {
       const type = consumer.consumerUsage?.type;
       return (
         type !== "suspendable_onoff" && type !== "continuous" && type !== "meter_only" && type !== "self_controlled"
@@ -970,28 +989,77 @@ export default {
         });
       });
     },
-    // reset_chargemode.time is stored as an absolute epoch (seconds). Split it into
-    // the date/time strings the inputs expect, defaulting to "now" when unset.
-    resetDateParts(consumer) {
-      const epoch = consumer.consumerUsage?.reset_chargemode?.time;
-      const date = epoch ? new Date(epoch * 1000) : new Date();
+    todayDateString() {
+      const date = new Date();
       const pad = (dateTimePart) => String(dateTimePart).padStart(2, "0");
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+    },
+    defaultResetTime() {
+      return "00:00";
+    },
+    isResetModeEnabled(consumer) {
+      return consumer.consumerUsage?.reset_chargemode?.active;
+    },
+    currentResetMode(consumer) {
+      const selected = consumer.consumerUsage?.reset_chargemode?.frequency?.selected;
+      return selected === "once" || selected === "daily" || selected === "weekly" ? selected : "daily";
+    },
+    setResetEnabled(consumer, active) {
+      this.updateUsage(consumer.id, active, "reset_chargemode.active");
+      if (!active) return;
+
+      this.updateUsage(consumer.id, true, "reset_chargemode.active");
+      const mode = this.currentResetMode(consumer);
+      this.setResetMode(consumer, mode);
+      this.setResetTime(consumer, this.getResetTime(consumer));
+    },
+    defaultWeekly() {
+      return [false, false, false, false, false, false, false];
+    },
+    normalizedResetFrequency(consumer) {
+      const frequency = consumer.consumerUsage?.reset_chargemode?.frequency;
+      const selected = this.currentResetMode(consumer);
       return {
-        date: `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`,
-        time: `${pad(date.getHours())}:${pad(date.getMinutes())}`,
+        selected,
+        once: frequency?.once ?? this.todayDateString(),
+        weekly:
+          Array.isArray(frequency?.weekly) && frequency.weekly.length === 7 ? frequency.weekly : this.defaultWeekly(),
       };
     },
-    setResetDate(consumer, dateString) {
-      this.writeResetTime(consumer.id, dateString, this.resetDateParts(consumer).time);
+    getResetTime(consumer) {
+      const time = consumer.consumerUsage?.reset_chargemode?.time;
+      return typeof time === "string" && time ? time : this.defaultResetTime();
     },
-    setResetTime(consumer, timeString) {
-      this.writeResetTime(consumer.id, this.resetDateParts(consumer).date, timeString);
+    setResetTime(consumer, time) {
+      if (!time) return;
+      this.updateUsage(consumer.id, time, "reset_chargemode.time");
     },
-    writeResetTime(consumerId, dateString, timeString) {
-      if (!dateString || !timeString) return;
-      const epoch = Math.floor(new Date(`${dateString}T${timeString}`).getTime() / 1000);
-      if (Number.isNaN(epoch)) return;
-      this.updateUsage(consumerId, epoch, "reset_chargemode.time");
+    setResetMode(consumer, mode) {
+      if (mode !== "once" && mode !== "daily" && mode !== "weekly") return;
+      const frequency = this.normalizedResetFrequency(consumer);
+      frequency.selected = mode;
+      if (mode === "weekly" && !frequency.weekly.some((enabled) => enabled)) {
+        const weekdayIndex = (new Date().getDay() + 6) % 7;
+        frequency.weekly[weekdayIndex] = true;
+      }
+      this.updateUsage(consumer.id, frequency, "reset_chargemode.frequency");
+    },
+    getResetOnceDate(consumer) {
+      return this.normalizedResetFrequency(consumer).once;
+    },
+    setResetOnceDate(consumer, dateString) {
+      if (!dateString) return;
+      const frequency = this.normalizedResetFrequency(consumer);
+      frequency.once = dateString;
+      this.updateUsage(consumer.id, frequency, "reset_chargemode.frequency");
+    },
+    getResetWeeklyDay(consumer, dayIndex) {
+      return this.normalizedResetFrequency(consumer).weekly[dayIndex];
+    },
+    setResetWeeklyDay(consumer, dayIndex, value) {
+      const frequency = this.normalizedResetFrequency(consumer);
+      frequency.weekly[dayIndex] = value;
+      this.updateUsage(consumer.id, frequency, "reset_chargemode.frequency");
     },
     commandAfterSavingConsumerUsage(command, data, hideSaveModal = false) {
       this.commandQueue.push({ command, data });

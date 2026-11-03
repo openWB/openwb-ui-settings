@@ -15,7 +15,9 @@
       <div class="input-group">
         <div class="input-group-prepend">
           <div class="input-group-text">
-            <font-awesome-icon :icon="['fas', 'calculator']" />
+            <slot name="prepend">
+              <font-awesome-icon :icon="['fas', 'calculator']" />
+            </slot>
           </div>
         </div>
         <input

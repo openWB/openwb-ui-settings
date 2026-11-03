@@ -111,7 +111,6 @@
           title="8. Text (mit Add-Button)"
           subtype="text"
           add-button
-          class="mb-2"
           :model-value="$store.state.examples.text8"
           @update:model-value="updateState('text8', $event)"
           @input:add="alert('Add button clicked!')"

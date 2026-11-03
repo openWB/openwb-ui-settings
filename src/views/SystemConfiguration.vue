@@ -425,7 +425,7 @@ export default {
         { topic: "openWB/system/ip_address", writeable: false },
         { topic: "openWB/system/mac_address", writeable: false },
         { topic: "openWB/system/pnp_ip", writeable: true },
-        { topic: "openWB/system/secondary_auto_update", writeable: false },
+        { topic: "openWB/system/secondary_auto_update", writeable: false }, // exclude from generic saves.
         { topic: "openWB/system/serial_number", writeable: false },
         { topic: "openWB/system/version", writeable: false },
       ],
@@ -543,14 +543,19 @@ export default {
     },
     branchTagOptions() {
       const compareTags = (a, b) => {
+        if (a.value == b.value) return 0;
+        if (a.value == "*HEAD*") return -1;
+        if (b.value == "*HEAD*") return 1;
+
         const splitVersion = (version) => {
           const versionParts = version.split("-");
-          const versionSemver = versionParts[0].split(".");
+          const versionSemver = versionParts[0].split(".").map(Number);
           let versionSuffix;
           if (versionParts.length > 1) {
             versionSuffix = versionParts[1].split(".");
+            versionSuffix[1] = Number(versionSuffix[1]);
           } else {
-            versionSuffix = ["release", "0"];
+            versionSuffix = ["release", 0];
           }
           return {
             semver: versionSemver,
@@ -560,8 +565,6 @@ export default {
 
         const aVersion = splitVersion(a.value);
         const bVersion = splitVersion(b.value);
-        if (aVersion.semver[0] == "*HEAD*") return -1;
-        if (bVersion.semver[0] == "*HEAD*") return 1;
         if (aVersion.semver[0] > bVersion.semver[0]) return -1;
         if (aVersion.semver[0] < bVersion.semver[0]) return 1;
         if (aVersion.semver[1] > bVersion.semver[1]) return -1;

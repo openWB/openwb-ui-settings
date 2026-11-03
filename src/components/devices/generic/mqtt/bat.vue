@@ -83,8 +83,8 @@
     <openwb-base-heading> Optionale Einstellungen </openwb-base-heading>
     <openwb-base-alert subtype="info">
       Wenn der Speicher die aktive Steuerung durch openWB unterstützt, kann die Option "Speicherleistung steuerbar" auf
-      "Ja" gesetzt werden. Der Modus, um die Speicher-Entladung ins Fahrzeug zu steuern, kann in den übergreifenden
-      Ladeeinstellungen gesetzt werden. Über folgendes Topic wird dem Speicher die Entladeleistung mitgeteilt.
+      "Ja" gesetzt werden. Der Regelmodus für die aktive Speichersteuerung kann unter "Ladeeinstellungen -
+      Speichersteuerung" gesetzt werden. Über folgendes Topic wird dem Speicher die Entladeleistung mitgeteilt.
       <ul>
         <li>
           <openwb-base-copy-to-clipboard

@@ -106,6 +106,15 @@ const routes = [
     component: () => import("../views/LoadManagementConfiguration.vue"),
   },
   {
+    path: "/ForecastConfiguration",
+    name: "ForecastConfiguration",
+    meta: {
+      heading: "Konfiguration - PV-Prognose",
+      checkPermissions: true,
+    },
+    component: () => import("../views/ForecastConfiguration.vue"),
+  },
+  {
     path: "/ChargePointInstallation",
     name: "ChargePointInstallation",
     meta: {
@@ -128,8 +137,9 @@ const routes = [
     name: "ConsumerConfiguration",
     meta: {
       heading: "Konfiguration - Verbraucher",
+      checkPermissions: true,
     },
-    component: () => import("../views/ConsumerConfig.vue"),
+    component: () => import("../views/ConsumerConfiguration.vue"),
   },
   {
     path: "/IoConfiguration",
@@ -231,13 +241,22 @@ const routes = [
     component: () => import("../views/TenantEnergyBilling.vue"),
   },
   {
-    path: "/Error",
-    name: "Error",
+    path: "/PermissionError",
+    name: "PermissionError",
     meta: {
-      heading: "Fehler",
+      heading: "Keine Berechtigung",
       checkPermissions: false,
     },
-    component: () => import("../views/Error.vue"),
+    component: () => import("../views/PermissionError.vue"),
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "NotFound",
+    meta: {
+      heading: "Seite nicht gefunden",
+      checkPermissions: false,
+    },
+    component: () => import("../views/NotFound.vue"),
   },
 ];
 /* examples for development only start here */
@@ -273,7 +292,7 @@ router.beforeEach(async (to) => {
         console.warn("no permission to access", to.name);
         if (store.state.local.username) {
           // logged in but no permission
-          return { name: "Error" };
+          return { name: "PermissionError" };
         }
         console.debug("not logged in, cancel navigation to", to.name);
         routeDone = true;

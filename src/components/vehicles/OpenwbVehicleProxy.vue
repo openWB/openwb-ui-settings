@@ -1,7 +1,7 @@
 <template>
   <openwb-base-alert
     v-if="vehicle.official"
-    subtype="info"
+    subtype="success"
   >
     <font-awesome-icon :icon="['fas', 'certificate']" />
     Das ausgewählte Fahrzeug-Modul "{{ vehicle.name }}" wird von openWB gepflegt.
@@ -29,6 +29,7 @@ import { faPeopleGroup as fasPeopleGroup, faCertificate as fasCertificate } from
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasPeopleGroup, fasCertificate);
+
 import { defineAsyncComponent } from "vue";
 import OpenwbVehicleFallback from "./OpenwbVehicleConfigFallback.vue";
 

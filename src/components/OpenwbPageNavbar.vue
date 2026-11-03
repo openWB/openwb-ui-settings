@@ -176,6 +176,14 @@
               Lastmanagement
             </router-link>
             <router-link
+              v-if="accessAllowed('ForecastConfiguration')"
+              to="/ForecastConfiguration"
+              class="dropdown-item"
+              active-class="active disabled"
+            >
+              PV-Prognose
+            </router-link>
+            <router-link
               v-if="accessAllowed('ChargePointInstallation')"
               to="/ChargePointInstallation"
               class="dropdown-item"
@@ -192,6 +200,7 @@
               Fahrzeuge
             </router-link>
             <router-link
+              v-if="accessAllowed('ConsumerConfiguration')"
               to="/ConsumerConfiguration"
               class="dropdown-item"
               active-class="active disabled"

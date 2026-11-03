@@ -17,7 +17,10 @@
     </div>
   </div>
   <page-footer />
-  <mqtt-connection-state :connected="connected" />
+  <mqtt-connection-state
+    :connected="connected"
+    :initial-connection-pending="initialConnectionState === 'pending'"
+  />
   <user-info @send-command="sendCommand" />
   <messages />
   <blocker />
@@ -31,6 +34,8 @@ import MqttConnectionState from "./components/OpenwbPageMqttConnectionState.vue"
 import Messages from "./components/OpenwbPageMessages.vue";
 import Blocker from "./components/OpenwbPageBlocker.vue";
 import mqtt from "mqtt";
+
+const CONNECTING_GRACE_PERIOD = 10000;
 
 export default {
   name: "OpenwbSettingsApp",
@@ -46,6 +51,9 @@ export default {
     return {
       client: null,
       connected: false,
+      // state of the first connection after page load: "pending", "established" or "failed"
+      initialConnectionState: "pending",
+      initialConnectionTimeout: null,
       reconnecting: false,
       reconnectAttempts: 0,
       reconnectBackoff: 2000,
@@ -56,7 +64,11 @@ export default {
         host: location.hostname,
         port: parseInt(location.port) || (location.protocol == "https:" ? 443 : 80),
         path: "/ws",
+        // keep the client id across reconnects, topics such as "openWB/log/<clientId>/data" depend on it
+        clientId: "openwb_settings_" + Math.random().toString(16).substring(2, 10),
         connectTimeout: 4000,
+        // ping more often than the idle timeout of proxies (e.g. cloud access) to keep the connection alive
+        keepalive: 30,
         reconnectPeriod: 0, // we handle reconnection manually with linear backoff
         resubscribe: true,
         properties: {
@@ -72,12 +84,7 @@ export default {
      * @return {Str} - Mqtt client id of our connection
      */
     mqttClientId() {
-      try {
-        return this.client.options.clientId;
-      } catch (error) {
-        console.error("mqttClientId error", error);
-        return undefined;
-      }
+      return this.connection.clientId;
     },
     /**
      * @return {Array} - Array of topics (String)
@@ -92,6 +99,12 @@ export default {
     },
   },
   created() {
+    this.initialConnectionTimeout = setTimeout(() => {
+      if (this.initialConnectionState === "pending") {
+        console.warn("MQTT connection could not be established within grace period");
+        this.initialConnectionState = "failed";
+      }
+    }, CONNECTING_GRACE_PERIOD);
     this.createConnection();
   },
   methods: {
@@ -180,7 +193,7 @@ export default {
      */
     sendCommand(event) {
       console.debug("sendCommand:", event);
-      this.doPublish(`openWB/set/command/${this.client.options.clientId}/todo/${event.command}`, event, false);
+      this.doPublish(`openWB/set/command/${this.mqttClientId}/todo/${event.command}`, event, false);
     },
     /**
      * Establishes a connection to the configured broker
@@ -220,7 +233,10 @@ export default {
       this.client = mqtt.connect(connectUrl, options);
       // reset backoff on successful connection
       this.client.on("connect", () => {
+        const isReconnect = this.initialConnectionState === "established";
         this.connected = true;
+        this.initialConnectionState = "established";
+        clearTimeout(this.initialConnectionTimeout);
         this.reconnectAttempts = 0;
         this.reconnectBackoff = 2000;
         this.reconnecting = false;
@@ -249,17 +265,29 @@ export default {
             // );
           }
         }, 5000);
-        // required for route guards
-        this.doSubscribe(
-          [
-            "openWB/system/boot_done",
-            "openWB/system/dataprotection_acknowledged",
-            "openWB/system/usage_terms_acknowledged",
-            "openWB/system/installAssistantDone",
-            "openWB/system/security/access/+",
-          ],
-          true,
-        );
+        if (isReconnect) {
+          const activeTopics = Object.keys(this.$store.state.mqttSubscriptions);
+          console.debug("Restoring subscriptions after reconnect:", activeTopics);
+          if (activeTopics.length > 0) {
+            this.client.subscribe(activeTopics, {}, (error) => {
+              if (error) {
+                console.error("Restoring subscriptions failed", error);
+              }
+            });
+          }
+        } else {
+          // required for route guards
+          this.doSubscribe(
+            [
+              "openWB/system/boot_done",
+              "openWB/system/dataprotection_acknowledged",
+              "openWB/system/usage_terms_acknowledged",
+              "openWB/system/installAssistantDone",
+              "openWB/system/security/access/+",
+            ],
+            true,
+          );
+        }
       });
       this.client.on("error", (error) => {
         this.connected = false;
