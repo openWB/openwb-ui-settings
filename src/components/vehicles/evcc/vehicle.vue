@@ -100,8 +100,7 @@
     >
       <template #help>
         Berechnet den Ladestand (SoC) während der Ladung. Dies ist notwendig, wenn der SoC nicht zuverlässig über EVCC
-        abgerufen werden kann, z.B. weil sich das Fahrzeug im Tiefschlaf befindet. Die Berechnung erfolgt über die
-        Ladeleistung und die Ladedauer.
+        abgerufen werden kann. Die Berechnung erfolgt über die Ladeleistung und die Ladedauer.
       </template>
     </openwb-base-button-group-input>
   </div>
