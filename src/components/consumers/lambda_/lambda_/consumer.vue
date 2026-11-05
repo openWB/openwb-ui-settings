@@ -7,6 +7,10 @@
       Client" umgestellt werden, sonst wertet die Wärmepumpe den Wert nicht aus. Bei "Stufenlos regelbar" schreibt
       openWB stattdessen die Sollleistung in dasselbe Register, wodurch der an die Wärmepumpe gemeldete Netzbezug
       verfälscht wird.
+      <br /><br />
+      Am E-Manager muss außerdem "Neg. E-Überschuss" als Messpunkt-Einstellung gewählt sein - openWB meldet PV-Überschuss
+      als negativen und Netzbezug als positiven Wert. Mit "Pos. E-Überschuss" oder "E-Eintrag" eingestellt interpretiert
+      die Wärmepumpe die übermittelten Werte falsch.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
