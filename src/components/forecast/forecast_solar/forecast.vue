@@ -138,7 +138,9 @@
           :step="1"
           required
         >
-          <template #help> Ausrichtung: Süden = 0&deg;, Osten = -90&deg;, Westen = 90&deg;, Norden = 180&deg; </template>
+          <template #help>
+            Ausrichtung: Süden = 0&deg;, Osten = -90&deg;, Westen = 90&deg;, Norden = 180&deg;
+          </template>
           <template #prepend>
             <font-awesome-icon :icon="['fas', 'compass']" />
           </template>
