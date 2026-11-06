@@ -265,7 +265,7 @@
             <openwb-base-alert subtype="info">
               Zugeordnete ID-Tags schalten den Verbraucher für den eingestellten Betriebsmodus frei. Die Freischaltung
               wird nach der eingestellten Wartezeit zurückgesetzt. RFID setzt die Verwendung des integrierten Zählers
-              voraus.
+              voraus. Der RFID-Reader der openWB wird gemeinsam mit den Ladepunkten genutzt.
             </openwb-base-alert>
             <div
               v-for="(consumer, topic) in rfidConsumers"
@@ -297,7 +297,7 @@
               <openwb-base-number-input
                 title="Wartezeit bis zum Zurücksetzen"
                 unit="min"
-                :min="0"
+                :min="consumer.config.rfid_reset === 'after_power_end' ? 0 : 1"
                 :model-value="(consumer.config.rfid_timeout ?? 300) / 60"
                 @update:model-value="updateState(topic, $event * 60, 'rfid_timeout')"
               >
@@ -364,7 +364,7 @@ export default {
       const modules = this.getWildcardTopics("openWB/consumer/+/module");
       return Object.fromEntries(
         Object.values(modules)
-          .filter((consumer) => consumer.type === "mqtt")
+          .filter((consumer) => ["mqtt", "wallbox_socket"].includes(consumer.type))
           .map((consumer) => {
             const topic = `openWB/consumer/${consumer.id}/config`;
             return [topic, { ...consumer, config: this.$store.state.mqtt[topic] ?? {} }];
