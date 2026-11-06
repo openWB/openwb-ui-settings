@@ -65,8 +65,8 @@
         </openwb-base-avatar>
       </template>
       <openwb-base-alert subtype="info">
-        Ausrichtung der Dachflächen: Süden=0&deg;, Osten=-90&deg;, Westen=90&deg;, Norden=180&deg;<br />
-        Neigung der Dachflächen: horizontal=0&deg;, senkrecht=90&deg;
+        Ausrichtung der Dachflächen: Süden = 0&deg;, Osten = -90&deg;, Westen = 90&deg;, Norden = 180&deg;<br />
+        Neigung der Dachflächen: horizontal = 0&deg;, senkrecht = 90&deg;
       </openwb-base-alert>
       <openwb-base-alert
         v-if="forecastConfiguration.strings.length >= 6"
@@ -124,7 +124,7 @@
           :step="1"
           required
         >
-          <template #help> Dachneigung in Grad. horizontal=0&deg;, senkrecht=90&deg;</template>
+          <template #help> Dachneigung in Grad. horizontal = 0&deg;, senkrecht = 90&deg;</template>
           <template #prepend>
             <font-awesome-icon :icon="['fas', 'lines-leaning']" />
           </template>
@@ -138,7 +138,9 @@
           :step="1"
           required
         >
-          <template #help> Ausrichtung: Süden=0&deg;, Osten=-90&deg;, Westen=90&deg;, Norden=180&deg; </template>
+          <template #help>
+            Ausrichtung: Süden = 0&deg;, Osten = -90&deg;, Westen = 90&deg;, Norden = 180&deg;
+          </template>
           <template #prepend>
             <font-awesome-icon :icon="['fas', 'compass']" />
           </template>
