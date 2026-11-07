@@ -133,7 +133,9 @@
             title="URL der anzuzeigenden Webseite"
             subtype="url"
             :model-value="$store.state.mqtt['openWB/optional/int_display/display_url']"
-            @update:model-value="updateState('openWB/optional/int_display/display_url', $event)"
+            :empty-value="''"
+            :validator="validateDisplayUrl"
+            @update:model-value="updateDisplayUrl"
           >
             <template #help>
               Die URL wird auf dem Display dieser secondary openWB angezeigt. Leer lassen, um die automatische Erkennung
@@ -279,6 +281,26 @@ export default {
     },
   },
   methods: {
+    validateDisplayUrl(value) {
+      if (value === "") {
+        return true;
+      }
+      try {
+        const protocol = new URL(value).protocol;
+        return (
+          protocol === "http:" ||
+          protocol === "https:" ||
+          "Bitte eine gültige HTTP- oder HTTPS-URL angeben."
+        );
+      } catch {
+        return "Bitte eine gültige HTTP- oder HTTPS-URL angeben.";
+      }
+    },
+    updateDisplayUrl(value) {
+      if (this.validateDisplayUrl(value) === true) {
+        this.updateState("openWB/optional/int_display/display_url", value);
+      }
+    },
     getDisplayThemeDefaults(displayThemeType) {
       const displayThemeDefaults = this.displayThemeList.find((element) => element.value == displayThemeType);
       if (Object.prototype.hasOwnProperty.call(displayThemeDefaults, "defaults")) {
