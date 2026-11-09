@@ -34,6 +34,25 @@
       </template>
     </openwb-base-number-input>
 
+    <openwb-base-number-input
+      title="Börsenpreisobergrenze (netto, optional)"
+      :step="0.001"
+      :precision="3"
+      unit="ct/kWh"
+      :model-value="
+        flexibleTariff.configuration.price_cap == null
+          ? undefined
+          : parseFloat((flexibleTariff.configuration.price_cap * 100000).toFixed(4))
+      "
+      @update:model-value="updateConfiguration($event == null ? null : $event / 100000, 'configuration.price_cap')"
+    >
+      <template #help>
+        Vertragliche Obergrenze für den reinen Börsenpreis, z.B. bei Tarifen mit Preislimit. Der Börsenpreis wird je
+        Zeitintervall vor Addition des Aufschlags und der Mehrwertsteuer begrenzt. Der Aufschlag wird nicht gedeckelt.
+        Die Obergrenze immer netto eingeben, auch bei Preisart Brutto. Leer lassen für Tarife ohne Preislimit.
+      </template>
+    </openwb-base-number-input>
+
     <openwb-base-button-group-input
       title="Preisart"
       :buttons="[
