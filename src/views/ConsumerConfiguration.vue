@@ -131,6 +131,36 @@
             />
             <hr />
             <openwb-base-heading> Verwendung Optionen </openwb-base-heading>
+            <openwb-base-button-group-input
+              v-if="installedConsumer.type === 'mqtt'"
+              title="Per RFID freischalten"
+              :buttons="[
+                { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
+                {
+                  buttonValue: true,
+                  text: 'Ja',
+                  class: 'btn-outline-success',
+                  disabled: hasExtraMeter(installedConsumer.id),
+                },
+              ]"
+              :model-value="installedConsumer.config?.rfid_enabled ?? false"
+              @update:model-value="
+                updateState(`openWB/consumer/${installedConsumer.id}/config`, $event, 'rfid_enabled')
+              "
+            >
+              <template #help>
+                Die ID-Tags und das automatische Zurücksetzen werden unter
+                <router-link to="/IdentificationConfiguration">Identifikation</router-link> eingerichtet. Dafür muss die
+                Identifikation aktiviert sein.
+              </template>
+            </openwb-base-button-group-input>
+            <openwb-base-alert
+              v-if="installedConsumer.type === 'mqtt' && hasExtraMeter(installedConsumer.id)"
+              subtype="info"
+            >
+              RFID-Freischaltung kann nicht aktiviert werden, solange ein separater Zähler zugeordnet ist. Bitte zuerst
+              die Zuordnung unter „Separate Leistungsmessung“ entfernen.
+            </openwb-base-alert>
             <openwb-base-select-input
               title="Verwendung"
               not-selected="Bitte auswählen"
@@ -657,13 +687,20 @@
             <hr />
             <openwb-base-heading> Separate Leistungsmessung </openwb-base-heading>
             <openwb-base-alert subtype="info">
-              Lege den Zähler zuerst unter <router-link to="/HardwareInstallation">Geräte und Komponenten</router-link>
-              an und verknüpfe ihn anschließend hier mit dem Verbraucher. Der EVU-Zähler, virtuelle Zähler sowie Zähler,
-              die bereits einem anderen Verbraucher zugeordnet sind, stehen nicht zur Auswahl.
+              <template v-if="installedConsumer.config?.rfid_enabled === true">
+                Für separate Leistungsmessung zuerst RFID deaktivieren.
+              </template>
+              <template v-else>
+                Lege den Zähler zuerst unter
+                <router-link to="/HardwareInstallation">Geräte und Komponenten</router-link>
+                an und verknüpfe ihn anschließend hier mit dem Verbraucher. Der EVU-Zähler, virtuelle Zähler sowie
+                Zähler, die bereits einem anderen Verbraucher zugeordnet sind, stehen nicht zur Auswahl.
+              </template>
             </openwb-base-alert>
             <openwb-base-select-input
               title="Zähler"
               :options="availableCounterOptions(installedConsumer.id)"
+              :disabled="installedConsumer.config?.rfid_enabled === true"
               :model-value="getExtraMeter(installedConsumer.id) ?? null"
               @update:model-value="setExtraMeter(installedConsumer.id, $event)"
             >
