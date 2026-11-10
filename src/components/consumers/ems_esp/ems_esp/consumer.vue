@@ -5,7 +5,9 @@
       Für EMS-Bus-Wärmepumpen (zB Buderus, Bosch, Junkers) über einen EMS-ESP32-Gateway. Der Zugriff erfolgt über die
       REST-API des Gateways (Bearer-Token, in der EMS-ESP-Weboberfläche unter "Security" einsehbar). Ob SG-Ready-Boost
       und PV-Überschusskompensation (pvmaxcomp) tatsächlich wirken, ist modellabhängig - laut EMS-ESP32-Community
-      funktioniert es zB auf einer Buderus WLW186i-12E, nicht jedoch auf einer Bosch Compress CS7000iAW.
+      funktioniert es zB auf einer Buderus WLW186i-12E, nicht jedoch auf einer Bosch Compress CS7000iAW.<br />
+      openWB schaltet dafür Eingang 4 der Wärmepumpe. Dieser Eingang muss an der Wärmepumpe selbst noch der PV-Funktion
+      zugewiesen werden - ab Werk ist er meist unbelegt.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
