@@ -271,7 +271,18 @@
               v-for="(consumer, topic) in rfidConsumers"
               :key="topic"
             >
-              <openwb-base-heading>{{ consumer.name }}</openwb-base-heading>
+              <openwb-base-heading>
+                <font-awesome-icon
+                  :icon="['fas', 'plug']"
+                  class="fa-border"
+                  size="xs"
+                  :style="{
+                    backgroundColor: consumer.color,
+                    color: getContrastColor(consumer.color),
+                  }"
+                />
+                {{ consumer.name }}
+              </openwb-base-heading>
               <openwb-base-array-input
                 title="Zugeordnete ID-Tags"
                 :no-elements-message="`&quot;${consumer.name}&quot; sind keine ID-Tags zugeordnet.`"
@@ -319,10 +330,11 @@
 
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faCar as fasCar } from "@fortawesome/free-solid-svg-icons";
+import { faCar as fasCar, faPlug as fasPlug } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasCar);
+library.add(fasCar, fasPlug);
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 import SystemVersion from "../components/mixins/SystemVersion.vue";
