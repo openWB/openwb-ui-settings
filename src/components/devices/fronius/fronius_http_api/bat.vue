@@ -14,6 +14,10 @@
       Nur erforderlich, wenn der Speicher aktiv gesteuert werden soll (siehe Einstellungen -> Speicher). Ohne
       Zugangsdaten wird der Speicher weiterhin normal ausgelesen, kann aber nicht gesteuert werden.
     </openwb-base-alert>
+    <openwb-base-alert subtype="warning">
+      Aktive Speichersteuerung nur nutzen, wenn am Wechselrichter unter "Energiemanagement" -> "Batteriemanagement"
+      keine eigene zeitabhängige Speichersteuerung eingerichtet ist - bestehende Einträge werden sonst überschrieben.
+    </openwb-base-alert>
     <openwb-base-text-input
       title="Username"
       :model-value="component.configuration.username"
