@@ -12,8 +12,8 @@
       @update:model-value="updateConfiguration($event, 'configuration.battery_index')"
     >
       <template #help>
-        Nur bei Gen5-Wechselrichtern mit einem zweiten Batteriemodul relevant, hier dann Index 2 wählen. Im
-        Normalfall immer 1 lassen.
+        Nur bei Gen5-Wechselrichtern mit einem zweiten Batteriemodul relevant, hier dann Index 2 wählen. Im Normalfall
+        immer 1 lassen.
       </template>
     </openwb-base-select-input>
   </div>
