@@ -2,7 +2,7 @@
   <div>
     <openwb-base-alert subtype="info">
       <p>
-        PVNode wird von der Community gepflegt und liefert die Prognosewerte direkt aus der API-Response. Bitte richte
+        pvnode wird von der Community gepflegt und liefert die Prognosewerte direkt aus der API-Response. Bitte richte
         vorher Standort und PV-Flächen auf
         <a
           href="https://pvnode.com"
