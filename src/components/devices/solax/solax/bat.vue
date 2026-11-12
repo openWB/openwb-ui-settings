@@ -1,18 +1,21 @@
 <template>
   <div class="device-solax-bat">
     <openwb-base-heading> Einstellungen für Solax Batteriespeicher </openwb-base-heading>
-    <openwb-base-number-input
+    <openwb-base-select-input
       title="Batterie-Index"
+      :options="[
+        { value: 1, text: '1' },
+        { value: 2, text: '2' },
+      ]"
       :model-value="component.configuration.battery_index"
-      min="1"
-      max="2"
+      required
       @update:model-value="updateConfiguration($event, 'configuration.battery_index')"
     >
       <template #help>
-        Nur bei Gen5-Wechselrichtern mit einem zweiten Batteriemodul relevant, hier dann Index 2 eintragen. Im
-        Normalfall immer 1 eintragen.
+        Nur bei Gen5-Wechselrichtern mit einem zweiten Batteriemodul relevant, hier dann Index 2 wählen. Im
+        Normalfall immer 1 lassen.
       </template>
-    </openwb-base-number-input>
+    </openwb-base-select-input>
   </div>
 </template>
 
