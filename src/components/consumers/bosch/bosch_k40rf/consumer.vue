@@ -24,7 +24,6 @@
       required
       :min="1"
       :max="65535"
-      :placeholder="9443"
       :model-value="consumer.configuration.port"
       @update:model-value="updateConfiguration($event, 'configuration.port')"
     />
