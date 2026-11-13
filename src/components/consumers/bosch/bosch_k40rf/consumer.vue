@@ -4,8 +4,13 @@
     <openwb-base-alert subtype="info">
       Für Bosch, Buderus, IVT, Vulcano und Worcester Wärmepumpen/Hybridgeräte mit K 40 RF Gateway (bei Buderus als MX400
       bezeichnet). Nur Leistungs- und Energiewerte, keine Steuerung möglich - die API ist nur lesend. Zugangstoken
-      einmalig per WLAN- und Wireless-Taste am Gateway und einem curl-Aufruf gegen Port 9442 erzeugen (siehe
-      Bosch-Dokumentation), dann hier eintragen.
+      einmalig per WLAN- und Wireless-Taste am Gateway und einem curl-Aufruf gegen Port 9442 erzeugen, siehe
+      <a
+        href="https://github.com/bosch-home-comfort/api-docs/blob/main/docs/k-40-rf.md"
+        target="_blank"
+        rel="noopener noreferrer"
+        >Bosch-Dokumentation</a
+      >, dann hier eintragen.
     </openwb-base-alert>
     <openwb-base-text-input
       title="IP oder Hostname"
