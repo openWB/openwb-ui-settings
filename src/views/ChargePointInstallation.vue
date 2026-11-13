@@ -119,6 +119,18 @@
               Daten dieses Ladepunktes nicht an ein OCPP-Backend übertragen werden, lasse dieses Feld leer.
             </template>
           </openwb-base-text-input>
+          <openwb-base-text-input
+            v-if="$store.state.mqtt['openWB/optional/ocpp/config']?.['active'] === true"
+            title="OCPP-Chargebox Password"
+            subtype="password"
+            :model-value="installedChargePoint?.ocpp_chargebox_password"
+            @update:model-value="updateState(installedChargePointKey, $event, 'ocpp_chargebox_password')"
+          >
+            <template #help>
+              Trage hier das Passwort ein, das im OCPP-Backend für diese Chargebox-ID hinterlegt ist. Es wird zur
+              Anmeldung des Ladepunkts verwendet. Wenn im Backend kein Passwort eingerichtet ist, lasse das Feld leer.
+            </template>
+          </openwb-base-text-input>
           <hr />
           <openwb-charge-point-proxy
             :charge-point="installedChargePoint"
