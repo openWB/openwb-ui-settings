@@ -284,7 +284,7 @@
               required
               :model-value="$store.state.mqtt['openWB/general/prices/fixed_price'] * 100000"
               @update:model-value="
-                updateState('openWB/general/prices/fixed_price', parseFloat(($event / 100000).toFixed(7)))
+                updateState('openWB/general/prices/fixed_price', parseFloat(($event / 100000).toFixed(8)))
               "
             />
           </div>
@@ -495,7 +495,7 @@ export default {
     setSourcePrice(source, value) {
       this.updateState(
         `openWB/optional/ep/${source}/provider`,
-        parseFloat((value / 100000).toFixed(7)),
+        parseFloat((value / 100000).toFixed(8)),
         "configuration.default_price",
       );
     },

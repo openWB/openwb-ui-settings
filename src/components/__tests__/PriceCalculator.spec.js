@@ -50,4 +50,16 @@ describe("PriceCalculator.vue", () => {
     expect(mountCalculator("bat", { batCapacity: 0 }).vm.resultText).toBe("-");
     expect(mountCalculator("pv", { pvYield: 0 }).vm.result).toBeUndefined();
   });
+
+  it("gives no PV price for a degradation above 100 percent", () => {
+    const wrapper = mountCalculator("pv", {
+      interestRate: 0,
+      pvDegradation: 150,
+      pvInvestment: 12000,
+      pvYears: 25,
+      pvYield: 9000,
+      pvRunningCosts: 100,
+    });
+    expect(wrapper.vm.result).toBeUndefined();
+  });
 });

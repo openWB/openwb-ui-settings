@@ -65,6 +65,7 @@
           title="Degradation pro Jahr"
           unit="%"
           :min="0"
+          :max="100"
           step="any"
           :precision="1"
         />
@@ -203,7 +204,7 @@ export default {
     },
     // PV-Stromgestehungskosten in ct/kWh (abgezinste LCOE-Methode)
     pvLcoe() {
-      if (!(this.pvYears > 0) || !(this.pvYield > 0)) {
+      if (!(this.pvYears > 0) || !(this.pvYield > 0) || !(this.pvDegradation >= 0 && this.pvDegradation <= 100)) {
         return undefined;
       }
       const costs = this.pvInvestment + discountedSum(() => this.pvRunningCosts, this.pvYears, this.rate);
@@ -212,6 +213,9 @@ export default {
         this.pvYears,
         this.rate,
       );
+      if (!(energy > 0)) {
+        return undefined;
+      }
       return (costs / energy) * 100;
     },
     // Speicherkosten pro entladener kWh in ct/kWh, ohne Kosten der geladenen Energie

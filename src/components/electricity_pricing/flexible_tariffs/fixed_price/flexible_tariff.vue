@@ -12,7 +12,7 @@
       :min="0"
       unit="ct/kWh"
       :model-value="parseFloat((flexibleTariff.configuration.default_price * 100000).toFixed(4))"
-      @update:model-value="updateConfiguration(parseFloat(($event / 100000).toFixed(7)), 'configuration.default_price')"
+      @update:model-value="updateConfiguration(parseFloat(($event / 100000).toFixed(8)), 'configuration.default_price')"
     />
   </div>
 </template>
