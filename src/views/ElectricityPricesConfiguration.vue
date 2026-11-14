@@ -62,7 +62,7 @@
       </openwb-base-card>
 
       <openwb-base-card
-        v-if="flexibleTariffProvider?.type"
+        v-if="flexibleTariffProvider?.type && selectedPriceType === 'dynamic'"
         title="Allgemeine Informationen Stromtarif"
       >
         <div>
@@ -124,7 +124,7 @@
       </openwb-base-card>
 
       <openwb-base-card
-        v-if="gridFeeProvider?.type"
+        v-if="gridFeeProvider?.type && gridFeeProvider.type !== 'fixed_hours'"
         title="Allgemeine Informationen Netzentgelte"
       >
         <div>
