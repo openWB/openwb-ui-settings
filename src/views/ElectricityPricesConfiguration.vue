@@ -265,7 +265,7 @@
           :datasets="chartDatasets"
           y-axis-label="Preis (ct/kWh)"
           :tooltip-decimals="2"
-          :min-height="320"
+          :min-height="480"
         />
       </openwb-base-card>
       <openwb-base-submit-buttons
@@ -362,13 +362,16 @@ export default {
             },
           ]
         : [{ label: "Strompreis", prices: combinedPrices, color: "#dc3545" }];
+      // feste Preise reichen weiter als die Strompreise, deshalb am Ende der Strompreise abschneiden
+      const until = lastCombinedTimestamp > 0 ? lastCombinedTimestamp : undefined;
       series.push(
-        { label: "PV-Preis", prices: mqtt["openWB/optional/ep/pv_price/get/prices"], color: "#f0ad4e" },
-        { label: "Speicherpreis", prices: mqtt["openWB/optional/ep/bat_price/get/prices"], color: "#007bff" },
+        { label: "PV-Preis", prices: mqtt["openWB/optional/ep/pv_price/get/prices"], color: "#795548", until },
+        { label: "Speicherpreis", prices: mqtt["openWB/optional/ep/bat_price/get/prices"], color: "#343a40", until },
         {
           label: "Einspeisevergütung",
           prices: mqtt["openWB/optional/ep/feed_in_price/get/prices"],
-          color: "#6f42c1",
+          color: "#d63384",
+          until,
         },
       );
       return series
