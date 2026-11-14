@@ -15,13 +15,15 @@
               subtype="warning"
             >
               Es ist kein Stromtarif eingerichtet. Die Ladekosten werden mit {{ fallbackPriceText }} berechnet. Wähle
-              einen Anbieter, z. B. "Fester Stromtarif" für einen gleichbleibenden Preis.
+              die Art des Stromtarifs, z. B. "Fester Preis" für einen gleichbleibenden Preis.
             </openwb-base-alert>
             <openwb-base-alert subtype="info">
               <p>
                 Der Stromtarif ist der Preis für Strom aus dem Netz. Er wird für die Berechnung der Ladekosten und für
-                das preisbasierte Laden verwendet. Ein fester Preis kann als "Fester Stromtarif" eingetragen werden,
-                auch mit Hoch- und Niedertarif.
+                das preisbasierte Laden verwendet. Es gibt drei Arten: Ein "Fester Preis" ist ein gleichbleibender Preis
+                nur für die Ladekosten. Ein "Zeitabhängiger Tarif" hat Preise für bestimmte Zeiten (Hoch- und
+                Niedertarif). Dynamische Anbieter liefern Börsenpreise. Preisbasiertes Laden ist mit zeitabhängigen und
+                dynamischen Tarifen möglich.
               </p>
               <p>
                 Ist in den Lademodi Eco und Zeitladen "Preisbasiertes Laden" gewählt, wird nur geladen, wenn der
@@ -36,8 +38,16 @@
             </openwb-base-alert>
             <openwb-base-select-input
               class="mb-2"
+              title="Art des Stromtarifs"
+              :options="priceTypeOptions"
+              :model-value="selectedPriceType"
+              @update:model-value="updateSelectedPriceType($event)"
+            />
+            <openwb-base-select-input
+              v-if="providersOfSelectedPriceType.length > 1"
+              class="mb-2"
               title="Anbieter"
-              :options="flexibleTariffList"
+              :options="providerOptionsOfSelectedPriceType"
               :model-value="flexibleTariffProvider ? flexibleTariffProvider.type : ''"
               @update:model-value="updateSelectedFlexibleTariff($event)"
             />
@@ -60,7 +70,7 @@
         </div>
         <template #footer>
           <openwb-base-alert
-            v-if="flexibleTariffProvider.type !== 'fixed_hours'"
+            v-if="selectedPriceType === 'dynamic'"
             subtype="warning"
           >
             Je nach Anbieter kann die Anzahl der API-Abrufe begrenzt sein. Ein manuelles Aktualisieren kann daher
@@ -288,6 +298,12 @@ import OpenwbTimeSeriesChart from "../components/OpenwbTimeSeriesChart.vue";
 
 // Rückfallpreis des Backends, solange kein Stromtarif eingerichtet ist (€/Wh)
 const FALLBACK_GRID_PRICE = 0.0003;
+const PRICE_TYPE_OPTIONS = [
+  { value: "none", text: "- kein Stromtarif -" },
+  { value: "fixed", text: "Fester Preis" },
+  { value: "time_dependent", text: "Zeitabhängiger Tarif (Hoch-/Niedertarif)" },
+  { value: "dynamic", text: "Dynamischer Tarif (Börsenpreis)" },
+];
 const PRICE_SOURCES = ["flexible_tariff", "grid_fee", "pv_price", "bat_price", "feed_in_price"];
 
 export default {
@@ -321,6 +337,8 @@ export default {
       mqttTopics,
       showPvCalculator: false,
       showBatCalculator: false,
+      // gewählte Art des Stromtarifs, solange noch kein Anbieter ausgewählt ist
+      chosenPriceType: undefined,
     };
   },
   computed: {
@@ -329,6 +347,28 @@ export default {
     },
     gridFeeList() {
       return this.$store.state.mqtt["openWB/system/configurable/grid_fees"];
+    },
+    priceTypeOptions() {
+      return PRICE_TYPE_OPTIONS;
+    },
+    selectedPriceType() {
+      const type = this.flexibleTariffProvider?.type;
+      if (type) {
+        const entry = (this.flexibleTariffList || []).find((element) => element.value === type);
+        if (entry?.price_type) {
+          return entry.price_type;
+        }
+      }
+      return this.chosenPriceType ?? "none";
+    },
+    providersOfSelectedPriceType() {
+      return (this.flexibleTariffList || []).filter(
+        (element) => element.value && element.price_type === this.selectedPriceType,
+      );
+    },
+    providerOptionsOfSelectedPriceType() {
+      const noProvider = (this.flexibleTariffList || []).filter((element) => !element.value);
+      return [...noProvider, ...this.providersOfSelectedPriceType];
     },
     flexibleTariffProvider() {
       return this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/provider"];
@@ -432,6 +472,14 @@ export default {
       }
       console.warn("no default configuration found for provider type!", type);
       return {};
+    },
+    updateSelectedPriceType($event) {
+      this.chosenPriceType = $event;
+      const providers = (this.flexibleTariffList || []).filter(
+        (element) => element.value && element.price_type === $event,
+      );
+      // bei nur einem Anbieter (z. B. fester Preis) wird dieser direkt ausgewählt
+      this.updateSelectedFlexibleTariff(providers.length === 1 ? providers[0].value : null);
     },
     updateSelectedFlexibleTariff($event) {
       this.updateState("openWB/optional/ep/flexible_tariff/provider", $event, "type");

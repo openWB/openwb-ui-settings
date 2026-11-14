@@ -509,11 +509,11 @@
             <div v-if="$store.state.mqtt['openWB/bat/config/power_limit_condition'] === 'price_limit'">
               <openwb-base-heading class="mt-0"> Preisgrenze (Variable Strompreise) </openwb-base-heading>
               <openwb-base-alert
-                v-if="!$store.state.mqtt['openWB/optional/ep/configured']"
+                v-if="!$store.state.mqtt['openWB/optional/ep/controllable']"
                 subtype="warning"
               >
-                Bitte in den übergreifenden Ladeeinstellungen einen Strompreis-Anbieter konfigurieren. Ohne
-                Strompreis-Anbieter schaltet der Speicher auf Eigenregelung.
+                Bitte unter Konfiguration - Energiekosten einen dynamischen Strompreis-Anbieter oder einen
+                zeitabhängigen Tarif (HT/NT) konfigurieren. Ohne diese schaltet der Speicher auf Eigenregelung.
               </openwb-base-alert>
               <openwb-base-button-group-input
                 title="Preisgrenze für Netzbezug statt Speicherentladung"
@@ -690,7 +690,7 @@ export default {
         { topic: "openWB/general/chargemode_config/bat/power_reserve", writeable: true },
         { topic: "openWB/general/chargemode_config/bat/power_reserve_active", writeable: true },
         { topic: "openWB/general/extern", writeable: false },
-        { topic: "openWB/optional/ep/configured", writeable: false },
+        { topic: "openWB/optional/ep/controllable", writeable: false },
         { topic: "openWB/system/device/+/component/+/config", writeable: false },
       ],
     };

@@ -1282,11 +1282,12 @@
                 <template #help> Die geladene Energiemenge wird nach dem Anstecken neu gezählt. </template>
               </openwb-base-number-input>
               <openwb-base-alert
-                v-if="!$store.state.mqtt['openWB/optional/ep/configured']"
+                v-if="!$store.state.mqtt['openWB/optional/ep/controllable']"
                 subtype="warning"
               >
-                Bitte in den übergreifenden Ladeeinstellungen einen Strompreis-Anbieter konfigurieren. Ohne
-                Strompreis-Anbieter wird im Modus Eco nur geladen, wenn Überschuss vorhanden ist.
+                Bitte unter Konfiguration - Energiekosten einen dynamischen Strompreis-Anbieter oder einen
+                zeitabhängigen Tarif (HT/NT) konfigurieren. Ohne diese wird im Modus Eco nur geladen, wenn Überschuss
+                vorhanden ist.
               </openwb-base-alert>
               <openwb-base-number-input
                 title="Preisgrenze für strompreisbasiertes Laden"
@@ -1453,7 +1454,7 @@ export default {
       mqttTopics: [
         { topic: "openWB/general/extern", writeable: false },
         { topic: "openWB/optional/dc_charging", writeable: false },
-        { topic: "openWB/optional/ep/configured", writeable: false },
+        { topic: "openWB/optional/ep/controllable", writeable: false },
         { topic: "openWB/optional/rfid/active", writeable: false },
         { topic: "openWB/system/configurable/soc_modules", writeable: false },
         { topic: "openWB/vehicle/+/charge_template", writeable: true },
