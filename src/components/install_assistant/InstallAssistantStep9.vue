@@ -21,7 +21,6 @@
       <ElectricityPricesConfigurationView
         @save="$emit('save', $event)"
         @reset="$emit('reset')"
-        @defaults="$emit('defaults')"
       />
     </template>
   </InstallAssistantStepTemplate>
@@ -39,7 +38,7 @@ export default {
     ElectricityPricesConfigurationView,
   },
   mixins: [ComponentState],
-  emits: ["save", "reset", "defaults", "sendCommand", "switchPage", "endAssistant"],
+  emits: ["save", "reset", "switchPage", "endAssistant"],
   data: () => ({
     mqttTopics: [],
   }),

@@ -308,9 +308,8 @@
       </openwb-base-card>
       <openwb-base-submit-buttons
         form-name="electricityPricesConfigForm"
-        @save="$emit('save', mqttTopicsToPublish)"
+        @save="saveElectricityPricesConfiguration"
         @reset="$emit('reset')"
-        @defaults="$emit('defaults')"
       />
     </form>
   </div>
@@ -344,7 +343,7 @@ export default {
     OpenwbTimeSeriesChart,
   },
   mixins: [ComponentState],
-  emits: ["save", "reset", "defaults"],
+  emits: ["save", "reset"],
   data() {
     const mqttTopics = [
       { topic: "openWB/general/extern", writeable: false },
@@ -357,12 +356,17 @@ export default {
     ];
     PRICE_SOURCES.forEach((source) => {
       mqttTopics.push({ topic: `openWB/optional/ep/${source}/provider`, writeable: true });
-      ["fault_state", "fault_str", "last_update_time", "next_query_time", "prices"].forEach((name) => {
+      mqttTopics.push({ topic: `openWB/optional/ep/${source}/get/prices`, writeable: false });
+    });
+    // Status nur für Stromtarif und Netzentgelte
+    ["flexible_tariff", "grid_fee"].forEach((source) => {
+      ["fault_state", "fault_str", "last_update_time", "next_query_time"].forEach((name) => {
         mqttTopics.push({ topic: `openWB/optional/ep/${source}/get/${name}`, writeable: false });
       });
     });
     return {
       mqttTopics,
+      priceTypeOptions: PRICE_TYPE_OPTIONS,
       showPvCalculator: false,
       showBatCalculator: false,
       // gewählte Art des Stromtarifs, solange noch kein Anbieter ausgewählt ist
@@ -375,9 +379,6 @@ export default {
     },
     gridFeeList() {
       return this.$store.state.mqtt["openWB/system/configurable/grid_fees"];
-    },
-    priceTypeOptions() {
-      return PRICE_TYPE_OPTIONS;
     },
     selectedPriceType() {
       const type = this.flexibleTariffProvider?.type;
@@ -452,7 +453,7 @@ export default {
           until,
         },
       );
-      // Preis für Erzeugung, Preis für Speicherentladung und Einspeisevergütung sind in der Legende anwählbar, aber zunächst ausgeblendet
+      // in der Legende anwählbar, aber zunächst ausgeblendet
       const hiddenByDefault = ["Preis für Erzeugung", "Preis für Speicherentladung", "Einspeisevergütung"];
       return series
         .map((entry) => ({
@@ -473,6 +474,9 @@ export default {
     },
   },
   methods: {
+    saveElectricityPricesConfiguration() {
+      this.$emit("save", this.mqttTopicsToPublish);
+    },
     // €/Wh -> ct/kWh, Sekunden -> Millisekunden
     pricePoints(prices, untilTimestamp = undefined) {
       if (!prices || typeof prices !== "object") {

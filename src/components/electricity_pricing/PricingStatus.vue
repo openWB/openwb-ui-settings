@@ -49,7 +49,7 @@ export default {
   name: "OpenwbPricingStatus",
   components: { FontAwesomeIcon },
   props: {
-    // flexible_tariff, grid_fee, pv_price oder bat_price
+    // flexible_tariff oder grid_fee
     source: { type: String, required: true },
   },
   computed: {
