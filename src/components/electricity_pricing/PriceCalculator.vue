@@ -1,8 +1,25 @@
 <template>
   <div class="price-calculator">
     <openwb-base-alert subtype="info">
-      Hilfsrechner: Das Ergebnis ist nur ein Vorschlag. Du kannst den Preis danach übernehmen oder oben direkt einen
-      eigenen Preis eintragen.
+      <p>
+        Das Ergebnis ist nur ein Vorschlag. Du kannst den Preis danach übernehmen oder oben direkt einen eigenen Preis
+        eintragen.
+      </p>
+      <p
+        v-if="type === 'pv'"
+        class="mb-0"
+      >
+        Berechnet werden die Stromgestehungskosten (LCOE, Levelized Cost of Energy): Investition und Betriebskosten über
+        die Nutzungsdauer, geteilt durch die erzeugte Energie. Kosten und Erträge werden dabei abgezinst.
+      </p>
+      <p
+        v-else
+        class="mb-0"
+      >
+        Berechnet werden die Speicherkosten pro entladener kWh (LCOS, Levelized Cost of Storage). Das ist die gleiche
+        Methode wie bei den Stromgestehungskosten (LCOE): Investition und Betriebskosten über die Lebensdauer, geteilt
+        durch die entladene Energie, abgezinst.
+      </p>
     </openwb-base-alert>
     <div v-if="type === 'pv'">
       <openwb-base-number-input
@@ -26,11 +43,15 @@
         :min="1"
         :step="1"
       />
-      <openwb-base-button-input
-        :title="showAdvanced ? 'Weitere Annahmen ausblenden' : 'Weitere Annahmen'"
-        :button-text="showAdvanced ? 'Ausblenden' : 'Einblenden'"
-        @button-clicked="showAdvanced = !showAdvanced"
-      />
+      <openwb-base-setting-element>
+        <template #title> Weitere Annahmen </template>
+        <openwb-base-click-button
+          class="btn-secondary btn-sm w-auto px-4"
+          @button-clicked="showAdvanced = !showAdvanced"
+        >
+          {{ showAdvanced ? "Ausblenden" : "Einblenden" }}
+        </openwb-base-click-button>
+      </openwb-base-setting-element>
       <div v-if="showAdvanced">
         <openwb-base-number-input
           v-model="pvRunningCosts"
@@ -95,11 +116,15 @@
         :min="1"
         :step="1"
       />
-      <openwb-base-button-input
-        :title="showAdvanced ? 'Weitere Annahmen ausblenden' : 'Weitere Annahmen'"
-        :button-text="showAdvanced ? 'Ausblenden' : 'Einblenden'"
-        @button-clicked="showAdvanced = !showAdvanced"
-      />
+      <openwb-base-setting-element>
+        <template #title> Weitere Annahmen </template>
+        <openwb-base-click-button
+          class="btn-secondary btn-sm w-auto px-4"
+          @button-clicked="showAdvanced = !showAdvanced"
+        >
+          {{ showAdvanced ? "Ausblenden" : "Einblenden" }}
+        </openwb-base-click-button>
+      </openwb-base-setting-element>
       <div v-if="showAdvanced">
         <openwb-base-number-input
           v-model="batRunningCosts"
@@ -125,14 +150,16 @@
     <openwb-base-alert subtype="success">
       Ergebnis: <strong>{{ resultText }}</strong>
     </openwb-base-alert>
-    <div class="d-flex justify-content-end">
-      <openwb-base-click-button
-        class="btn-success"
-        :disabled="result === undefined"
-        @click="$emit('apply', result)"
-      >
-        Preis übernehmen
-      </openwb-base-click-button>
+    <div class="row justify-content-center w-100 mx-0">
+      <div class="col-md-4 d-flex py-1 justify-content-center">
+        <openwb-base-click-button
+          class="btn-success"
+          :disabled="result === undefined"
+          @click="$emit('apply', result)"
+        >
+          Preis übernehmen
+        </openwb-base-click-button>
+      </div>
     </div>
   </div>
 </template>

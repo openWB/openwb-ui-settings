@@ -33,7 +33,8 @@ export default {
     ChartjsLine,
   },
   props: {
-    // Each entry: { label, color, backgroundColor, fill, stepped, tension, borderWidth, unit, data }
+    // Each entry: { label, color, backgroundColor, fill, stepped, tension, borderWidth, unit, data, hiddenByDefault }
+    // hiddenByDefault: the line is off initially, the legend entry stays so it can be switched on by a click.
     // data is an array of { timestamp (ms), value } points, already day-filtered/scaled by the caller.
     datasets: { type: Array, required: true },
     yAxisLabel: { type: String, required: true },
@@ -66,7 +67,7 @@ export default {
             pointRadius: 0,
             pointHoverRadius: 4,
             borderWidth: dataset.borderWidth ?? 1,
-            hidden: data.length === 0,
+            hidden: data.length === 0 || dataset.hiddenByDefault === true,
             data,
             yAxisID: "y",
             parsing: { xAxisKey: "timestamp", yAxisKey: "value" },
@@ -75,7 +76,7 @@ export default {
       };
     },
     chartDataRead() {
-      return this.chartDataObject.datasets.some((dataset) => dataset.data.length > 0 && !dataset.hidden);
+      return this.chartDataObject.datasets.some((dataset) => dataset.data.length > 0);
     },
     dynamicChartOptions() {
       return {
@@ -98,7 +99,8 @@ export default {
             display: this.showLegend,
             position: "top",
             labels: {
-              filter: (legendItem, chartData) => !chartData.datasets[legendItem.datasetIndex].hidden,
+              // Datasets ohne Daten werden nicht in der Legende angezeigt
+              filter: (legendItem, chartData) => chartData.datasets[legendItem.datasetIndex].data.length > 0,
             },
           },
           zoom: this.zoomable

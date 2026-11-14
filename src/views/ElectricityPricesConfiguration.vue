@@ -20,21 +20,30 @@
             <openwb-base-alert subtype="info">
               <p>
                 Der Stromtarif ist der Preis für Strom aus dem Netz. Er wird für die Berechnung der Ladekosten und für
-                das preisbasierte Laden verwendet. Es gibt drei Arten: Ein "Fester Preis" ist ein gleichbleibender Preis
-                nur für die Ladekosten. Ein "Zeitabhängiger Tarif" hat Preise für bestimmte Zeiten (Hoch- und
-                Niedertarif). Dynamische Anbieter liefern Börsenpreise. Preisbasiertes Laden ist mit zeitabhängigen und
-                dynamischen Tarifen möglich.
+                das preisbasierte Laden verwendet. Es gibt drei Arten:
               </p>
-              <p>
-                Ist in den Lademodi Eco und Zeitladen "Preisbasiertes Laden" gewählt, wird nur geladen, wenn der
-                Strompreis unter dem angegebenen maximalen Strompreis liegt. Für Zielladen wird die Ladedauer ermittelt
-                und dann zu den günstigsten Zeiten geladen.
-              </p>
-              <p>
-                Wenn keine Preise abgefragt werden können oder "Preisbasiertes Laden" abgewählt wurde, wird in Modus Eco
-                immer geladen bzw. bei Zielladen zunächst mit PV-Überschuss und zum Erreichen des Zieltermins mit
-                Netzstrom.
-              </p>
+              <ul>
+                <li><strong>Fester Preis:</strong> ein gleichbleibender Preis, nur für die Ladekosten.</li>
+                <li>
+                  <strong>Zeitabhängiger Tarif (HT/NT):</strong> Preise für bestimmte Zeiten, z. B. Hoch- und
+                  Niedertarif oder §14a EnWG Modul 3.
+                </li>
+                <li><strong>Dynamischer Tarif:</strong> Börsenpreise eines Anbieters.</li>
+              </ul>
+              <p>Preisbasiertes Laden ist mit zeitabhängigen und dynamischen Tarifen möglich:</p>
+              <ul class="mb-0">
+                <li>
+                  <strong>Eco und Zeitladen:</strong> Ist "Preisbasiertes Laden" gewählt, wird nur geladen, wenn der
+                  Strompreis unter dem angegebenen maximalen Strompreis liegt.
+                </li>
+                <li>
+                  <strong>Zielladen:</strong> Die Ladedauer wird ermittelt und dann zu den günstigsten Zeiten geladen.
+                </li>
+                <li>
+                  <strong>Keine Preise abrufbar oder "Preisbasiertes Laden" abgewählt:</strong> Im Modus Eco wird immer
+                  geladen, bei Zielladen zunächst mit PV-Überschuss und zum Erreichen des Zieltermins mit Netzstrom.
+                </li>
+              </ul>
             </openwb-base-alert>
             <openwb-base-select-input
               class="mb-2"
@@ -99,12 +108,21 @@
           </div>
           <div v-else>
             <openwb-base-alert subtype="info">
-              Wenn sowohl ein Stromtarif als auch Netzentgelte konfiguriert sind, werden beide zum Gesamt-Strompreis
-              verrechnet. Dabei wird angenommen, dass der Standardpreis der Netzentgelte in dem Stromtarif enthalten
-              ist. Dementsprechend wird die Differenz zwischen dem Standardpreis der Netzentgelte und den aktuellen
-              Netzentgelten zum Strompreis addiert, um den Gesamt-Strompreis zu ermitteln.<br />
-              Beispiel: Standardpreis der Netzentgelte 10 ct/kWh, aktueller Preis 5 ct/kWh, Strompreis 20 ct/kWh. Der
-              Gesamt-Strompreis ist 20 + (5 - 10) = 15 ct/kWh.
+              <p>
+                Wenn sowohl ein Stromtarif als auch Netzentgelte konfiguriert sind, werden beide zum Gesamt-Strompreis
+                verrechnet:
+              </p>
+              <ul>
+                <li>Der Standardpreis der Netzentgelte ist im Stromtarif enthalten.</li>
+                <li>
+                  Die Differenz zwischen dem Standardpreis der Netzentgelte und den aktuellen Netzentgelten wird zum
+                  Strompreis addiert.
+                </li>
+              </ul>
+              <p class="mb-0">
+                Beispiel: Standardpreis der Netzentgelte 10 ct/kWh, aktueller Preis 5 ct/kWh, Strompreis 20 ct/kWh. Der
+                Gesamt-Strompreis ist 20 + (5 - 10) = 15 ct/kWh.
+              </p>
             </openwb-base-alert>
             <openwb-base-select-input
               class="mb-2"
@@ -144,7 +162,7 @@
         </template>
       </openwb-base-card>
 
-      <openwb-base-card title="PV-Strom, Speicher und Einspeisevergütung">
+      <openwb-base-card title="Erzeugung, Speicherentladung und Einspeisevergütung">
         <div>
           <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
             <openwb-base-alert subtype="info">
@@ -154,12 +172,12 @@
           </div>
           <div v-else>
             <openwb-base-alert subtype="info">
-              Mit den Preisen für PV-Strom und Speicher wird der Strom aus PV-Anlage und Speicher bewertet, wenn die
-              Ladekosten nach dem Strommix berechnet werden. Die Einspeisevergütung ist das, was du für eingespeisten
-              Strom erhältst. Die Preise für PV-Strom und Speicher können mit einem Hilfsrechner ermittelt werden.
+              Mit dem Preis für Erzeugung und dem Preis für Speicherentladung wird der Strom aus PV-Anlage und Speicher
+              bewertet, wenn die Ladekosten nach dem Strommix berechnet werden. Die Preise können mit einem Hilfsrechner
+              ermittelt werden.
             </openwb-base-alert>
             <openwb-base-number-input
-              title="Preis für PV-Strom"
+              title="Preis für Erzeugung"
               :step="0.001"
               :precision="3"
               unit="ct/kWh"
@@ -168,11 +186,15 @@
               :model-value="sourcePrice('pv_price')"
               @update:model-value="setSourcePrice('pv_price', $event)"
             />
-            <openwb-base-button-input
-              :title="showPvCalculator ? 'Hilfsrechner ausblenden' : 'Hilfsrechner für PV-Preis'"
-              :button-text="showPvCalculator ? 'Ausblenden' : 'Einblenden'"
-              @button-clicked="showPvCalculator = !showPvCalculator"
-            />
+            <openwb-base-setting-element>
+              <template #title> Hilfsrechner </template>
+              <openwb-base-click-button
+                class="btn-secondary btn-sm w-auto px-4"
+                @button-clicked="showPvCalculator = !showPvCalculator"
+              >
+                {{ showPvCalculator ? "Ausblenden" : "Einblenden" }}
+              </openwb-base-click-button>
+            </openwb-base-setting-element>
             <openwb-price-calculator
               v-if="showPvCalculator"
               type="pv"
@@ -189,11 +211,15 @@
               :model-value="sourcePrice('bat_price')"
               @update:model-value="setSourcePrice('bat_price', $event)"
             />
-            <openwb-base-button-input
-              :title="showBatCalculator ? 'Hilfsrechner ausblenden' : 'Hilfsrechner für Speicherpreis'"
-              :button-text="showBatCalculator ? 'Ausblenden' : 'Einblenden'"
-              @button-clicked="showBatCalculator = !showBatCalculator"
-            />
+            <openwb-base-setting-element>
+              <template #title> Hilfsrechner </template>
+              <openwb-base-click-button
+                class="btn-secondary btn-sm w-auto px-4"
+                @button-clicked="showBatCalculator = !showBatCalculator"
+              >
+                {{ showBatCalculator ? "Ausblenden" : "Einblenden" }}
+              </openwb-base-click-button>
+            </openwb-base-setting-element>
             <openwb-price-calculator
               v-if="showBatCalculator"
               type="bat"
@@ -209,12 +235,7 @@
               required
               :model-value="sourcePrice('feed_in_price')"
               @update:model-value="setSourcePrice('feed_in_price', $event)"
-            >
-              <template #help>
-                Vergütung für eingespeisten Strom. Sie wird für den Vergleich zwischen Einspeisen, Netzbezug und
-                Speicherentladung verwendet.
-              </template>
-            </openwb-base-number-input>
+            />
           </div>
         </div>
       </openwb-base-card>
@@ -229,21 +250,28 @@
           </div>
           <div v-else>
             <openwb-base-button-group-input
-              title="Berechnung der Ladekosten"
+              title="Berechnung der Ladekosten nach"
               :buttons="[
-                { buttonValue: 'mix', text: 'Nach Strommix' },
+                { buttonValue: 'mix', text: 'Strommix' },
                 { buttonValue: 'grid', text: 'Strompreis' },
-                { buttonValue: 'fixed', text: 'Eigener Preis' },
+                { buttonValue: 'fixed', text: 'Eigenem Preis' },
               ]"
               :model-value="$store.state.mqtt['openWB/general/prices/cost_mode']"
               @update:model-value="updateState('openWB/general/prices/cost_mode', $event)"
             >
               <template #help>
-                Nach Strommix: Im Lade-Protokoll werden die Anteile der Stromquellen (Netz, PV, Speicher) berechnet und
-                mit den jeweiligen Preisen multipliziert.<br />
-                Strompreis: Die gesamte Energie wird zum Preis des Stromtarifs berechnet.<br />
-                Eigener Preis: Die gesamte Energie wird zu einem festen Preis berechnet, z. B. wenn die Abrechnung mit
-                dem Arbeitgeber vereinbart ist. Die übrigen Preise und Statistiken bleiben unverändert.
+                <ul class="mb-0">
+                  <li>
+                    <strong>Strommix:</strong> Im Lade-Protokoll werden die Anteile der Stromquellen (Netz, PV,
+                    Speicher) berechnet und mit den jeweiligen Preisen multipliziert.
+                  </li>
+                  <li><strong>Strompreis:</strong> Die gesamte Energie wird zum Preis des Stromtarifs berechnet.</li>
+                  <li>
+                    <strong>Eigenem Preis:</strong> Die gesamte Energie wird zu einem festen Preis berechnet, z. B. wenn
+                    die Abrechnung mit dem Arbeitgeber vereinbart ist. Die übrigen Preise und Statistiken bleiben
+                    unverändert.
+                  </li>
+                </ul>
               </template>
             </openwb-base-button-group-input>
             <openwb-base-number-input
@@ -301,7 +329,7 @@ const FALLBACK_GRID_PRICE = 0.0003;
 const PRICE_TYPE_OPTIONS = [
   { value: "none", text: "- kein Stromtarif -" },
   { value: "fixed", text: "Fester Preis" },
-  { value: "time_dependent", text: "Zeitabhängiger Tarif (Hoch-/Niedertarif)" },
+  { value: "time_dependent", text: "Zeitabhängiger Tarif (HT/NT)" },
   { value: "dynamic", text: "Dynamischer Tarif (Börsenpreis)" },
 ];
 const PRICE_SOURCES = ["flexible_tariff", "grid_fee", "pv_price", "bat_price", "feed_in_price"];
@@ -405,8 +433,18 @@ export default {
       // feste Preise reichen weiter als die Strompreise, deshalb am Ende der Strompreise abschneiden
       const until = lastCombinedTimestamp > 0 ? lastCombinedTimestamp : undefined;
       series.push(
-        { label: "PV-Preis", prices: mqtt["openWB/optional/ep/pv_price/get/prices"], color: "#795548", until },
-        { label: "Speicherpreis", prices: mqtt["openWB/optional/ep/bat_price/get/prices"], color: "#343a40", until },
+        {
+          label: "Preis für Erzeugung",
+          prices: mqtt["openWB/optional/ep/pv_price/get/prices"],
+          color: "#795548",
+          until,
+        },
+        {
+          label: "Preis für Speicherentladung",
+          prices: mqtt["openWB/optional/ep/bat_price/get/prices"],
+          color: "#343a40",
+          until,
+        },
         {
           label: "Einspeisevergütung",
           prices: mqtt["openWB/optional/ep/feed_in_price/get/prices"],
@@ -414,6 +452,8 @@ export default {
           until,
         },
       );
+      // Preis für Erzeugung, Preis für Speicherentladung und Einspeisevergütung sind in der Legende anwählbar, aber zunächst ausgeblendet
+      const hiddenByDefault = ["Preis für Erzeugung", "Preis für Speicherentladung", "Einspeisevergütung"];
       return series
         .map((entry) => ({
           label: entry.label,
@@ -423,6 +463,7 @@ export default {
           fill: false,
           stepped: true,
           borderWidth: 2,
+          hiddenByDefault: hiddenByDefault.includes(entry.label),
           data: this.pricePoints(entry.prices, entry.until),
         }))
         .filter((dataset) => dataset.data.length > 0);

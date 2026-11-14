@@ -8,12 +8,12 @@
     <template #help>
       <p>
         Der Stromtarif wird für die Berechnung der Ladekosten und für das preisbasierte Laden verwendet. Trage hier
-        einen Anbieter mit dynamischen Preisen ein oder wähle "Fester Stromtarif" und gib einen gleichbleibenden Preis
-        an (auch mit Hoch- und Niedertarif möglich).
+        einen Anbieter mit dynamischen Preisen ein, wähle "Fester Preis" für einen gleichbleibenden Preis oder
+        "Zeitabhängiger Tarif (HT/NT)" für Hoch- und Niedertarif.
       </p>
       <p>
-        Wird kein Stromtarif eingerichtet, rechnet openWB die Ladekosten mit einem Standardpreis. Die Preise für
-        PV-Strom und Speicherentladung können hier ebenfalls angepasst werden.
+        Wird kein Stromtarif eingerichtet, rechnet openWB die Ladekosten mit einem Standardpreis. Der Preis für
+        Erzeugung und der Preis für Speicherentladung können hier ebenfalls angepasst werden.
       </p>
       <p class="font-weight-bold">Änderungen werden nur durch Klicken auf Speichern wirksam!</p>
     </template>
