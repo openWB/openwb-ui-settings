@@ -50,7 +50,7 @@ export default {
   }),
   methods: {
     nextPage() {
-      this.$emit("switchPage", 9);
+      this.$emit("switchPage", 10);
     },
     previousPage() {
       this.$emit("switchPage", 3);

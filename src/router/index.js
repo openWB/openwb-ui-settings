@@ -115,6 +115,15 @@ const routes = [
     component: () => import("../views/ForecastConfiguration.vue"),
   },
   {
+    path: "/ElectricityPricesConfiguration",
+    name: "ElectricityPricesConfiguration",
+    meta: {
+      heading: "Konfiguration - Strompreise",
+      checkPermissions: true,
+    },
+    component: () => import("../views/ElectricityPricesConfiguration.vue"),
+  },
+  {
     path: "/ChargePointInstallation",
     name: "ChargePointInstallation",
     meta: {
