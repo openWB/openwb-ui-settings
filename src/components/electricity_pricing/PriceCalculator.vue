@@ -10,14 +10,14 @@
         title="Investition (Module, Wechselrichter, Montage)"
         unit="€"
         :min="0"
-        :step="100"
+        step="any"
       />
       <openwb-base-number-input
         v-model="pvYield"
         title="Ertrag im ersten Jahr"
         unit="kWh"
         :min="1"
-        :step="50"
+        step="any"
       />
       <openwb-base-number-input
         v-model="pvYears"
@@ -37,14 +37,14 @@
           title="Betriebskosten pro Jahr"
           unit="€"
           :min="0"
-          :step="10"
+          step="any"
         />
         <openwb-base-number-input
           v-model="pvDegradation"
           title="Degradation pro Jahr"
           unit="%"
           :min="0"
-          :step="0.1"
+          step="any"
           :precision="1"
         />
         <openwb-base-number-input
@@ -52,7 +52,7 @@
           title="Kalkulationszinssatz"
           unit="%"
           :min="0"
-          :step="0.1"
+          step="any"
           :precision="1"
         >
           <template #help>
@@ -67,14 +67,14 @@
         title="Investition Speicher"
         unit="€"
         :min="0"
-        :step="100"
+        step="any"
       />
       <openwb-base-number-input
         v-model="batCapacity"
         title="Nutzbare Kapazität"
         unit="kWh"
         :min="0.1"
-        :step="0.5"
+        step="any"
         :precision="1"
       />
       <openwb-base-number-input
@@ -82,7 +82,7 @@
         title="Volllastzyklen pro Jahr"
         unit=""
         :min="1"
-        :step="5"
+        step="any"
       >
         <template #help>
           Entladene Energie pro Jahr geteilt durch die nutzbare Kapazität, typisch 200 bis 300.
@@ -106,14 +106,14 @@
           title="Betriebskosten pro Jahr"
           unit="€"
           :min="0"
-          :step="5"
+          step="any"
         />
         <openwb-base-number-input
           v-model="interestRate"
           title="Kalkulationszinssatz"
           unit="%"
           :min="0"
-          :step="0.1"
+          step="any"
           :precision="1"
         />
       </div>
