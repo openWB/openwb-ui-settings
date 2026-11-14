@@ -37,6 +37,27 @@
     >
       <template #help> Die Fahrgestellnummer des Fahrzeugs. </template>
     </openwb-base-text-input>
+    <openwb-base-button-group-input
+      title="SoC während der Ladung berechnen"
+      :buttons="[
+        {
+          buttonValue: false,
+          text: 'Nein',
+          class: 'btn-outline-danger',
+        },
+        {
+          buttonValue: true,
+          text: 'Ja',
+          class: 'btn-outline-success',
+        },
+      ]"
+      :model-value="vehicle.configuration.calculate_soc"
+      @update:model-value="updateConfiguration($event, 'configuration.calculate_soc')"
+    >
+      <template #help>
+        openWB berechnet den Ladestand während der Ladung selbst, wenn die MyŠkoda API keine Werte liefert.
+      </template>
+    </openwb-base-button-group-input>
 
     <openwb-base-alert
       v-if="vehicle.configuration.key_expires_at"
