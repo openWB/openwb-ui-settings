@@ -118,7 +118,7 @@ const routes = [
     path: "/ElectricityPricesConfiguration",
     name: "ElectricityPricesConfiguration",
     meta: {
-      heading: "Konfiguration - Strompreise",
+      heading: "Konfiguration - Energiekosten",
       checkPermissions: true,
     },
     component: () => import("../views/ElectricityPricesConfiguration.vue"),

@@ -189,7 +189,7 @@
               class="dropdown-item"
               active-class="active disabled"
             >
-              Strompreise
+              Energiekosten
             </router-link>
             <router-link
               v-if="accessAllowed('ChargePointInstallation')"

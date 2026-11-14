@@ -1,6 +1,6 @@
 <template>
   <InstallAssistantStepTemplate
-    title="9. Strompreise"
+    title="9. Energiekosten"
     @next-page="nextPage"
     @previous-page="previousPage"
     @end-assistant="endAssistant"
