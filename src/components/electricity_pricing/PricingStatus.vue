@@ -30,14 +30,6 @@
         />
       </template>
     </openwb-base-text-input>
-    <div class="d-flex justify-content-end">
-      <openwb-base-click-button
-        class="btn-primary"
-        @click="triggerUpdate"
-      >
-        Jetzt aktualisieren
-      </openwb-base-click-button>
-    </div>
   </div>
 </template>
 
@@ -99,9 +91,6 @@ export default {
       const timestamp = this.$store.state.mqtt[`${this.baseTopic}/get/${name}`];
       if (!timestamp) return "-";
       return new Date(Number(timestamp) * 1000).toLocaleString();
-    },
-    triggerUpdate() {
-      this.$root.doPublish(`openWB/set/optional/ep/${this.source}/get/force_update`, true, false);
     },
   },
 };

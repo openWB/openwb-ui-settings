@@ -2,200 +2,254 @@
   <div class="electricityPricesConfig">
     <form name="electricityPricesConfigForm">
       <openwb-base-card title="Stromtarif">
-        <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-          <openwb-base-alert subtype="info">
-            Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
-          </openwb-base-alert>
-        </div>
-        <div v-else>
-          <openwb-base-alert
-            v-if="!flexibleTariffProvider?.type"
-            subtype="warning"
-          >
-            Es ist kein Stromtarif eingerichtet. Die Ladekosten werden mit {{ fallbackPriceText }} berechnet. Wähle
-            einen Anbieter, z. B. "Fester Stromtarif" für einen gleichbleibenden Preis.
-          </openwb-base-alert>
-          <openwb-base-alert subtype="info">
-            <p>
-              Der Stromtarif ist der Preis für Strom aus dem Netz. Er wird für die Berechnung der Ladekosten und für das
-              preisbasierte Laden verwendet. Ein fester Preis kann als "Fester Stromtarif" eingetragen werden, auch mit
-              Hoch- und Niedertarif.
-            </p>
-            <p>
-              Ist in den Lademodi Eco und Zeitladen "Preisbasiertes Laden" gewählt, wird nur geladen, wenn der
-              Strompreis unter dem angegebenen maximalen Strompreis liegt. Für Zielladen wird die Ladedauer ermittelt
-              und dann zu den günstigsten Zeiten geladen.
-            </p>
-            <p>
-              Wenn keine Preise abgefragt werden können oder "Preisbasiertes Laden" abgewählt wurde, wird in Modus Eco
-              immer geladen bzw. bei Zielladen zunächst mit PV-Überschuss und zum Erreichen des Zieltermins mit
-              Netzstrom.
-            </p>
-          </openwb-base-alert>
-          <openwb-base-select-input
-            class="mb-2"
-            title="Anbieter"
-            :options="flexibleTariffList"
-            :model-value="flexibleTariffProvider ? flexibleTariffProvider.type : ''"
-            @update:model-value="updateSelectedFlexibleTariff($event)"
-          />
-          <div v-if="flexibleTariffProvider?.type">
-            <openwb-flexible-tariff-proxy
-              :flexible-tariff="flexibleTariffProvider"
-              @update:configuration="updateConfiguration('openWB/optional/ep/flexible_tariff/provider', $event)"
+        <div>
+          <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+            <openwb-base-alert subtype="info">
+              Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary"
+              befindet.
+            </openwb-base-alert>
+          </div>
+          <div v-else>
+            <openwb-base-alert
+              v-if="!flexibleTariffProvider?.type"
+              subtype="warning"
+            >
+              Es ist kein Stromtarif eingerichtet. Die Ladekosten werden mit {{ fallbackPriceText }} berechnet. Wähle
+              einen Anbieter, z. B. "Fester Stromtarif" für einen gleichbleibenden Preis.
+            </openwb-base-alert>
+            <openwb-base-alert subtype="info">
+              <p>
+                Der Stromtarif ist der Preis für Strom aus dem Netz. Er wird für die Berechnung der Ladekosten und für
+                das preisbasierte Laden verwendet. Ein fester Preis kann als "Fester Stromtarif" eingetragen werden,
+                auch mit Hoch- und Niedertarif.
+              </p>
+              <p>
+                Ist in den Lademodi Eco und Zeitladen "Preisbasiertes Laden" gewählt, wird nur geladen, wenn der
+                Strompreis unter dem angegebenen maximalen Strompreis liegt. Für Zielladen wird die Ladedauer ermittelt
+                und dann zu den günstigsten Zeiten geladen.
+              </p>
+              <p>
+                Wenn keine Preise abgefragt werden können oder "Preisbasiertes Laden" abgewählt wurde, wird in Modus Eco
+                immer geladen bzw. bei Zielladen zunächst mit PV-Überschuss und zum Erreichen des Zieltermins mit
+                Netzstrom.
+              </p>
+            </openwb-base-alert>
+            <openwb-base-select-input
+              class="mb-2"
+              title="Anbieter"
+              :options="flexibleTariffList"
+              :model-value="flexibleTariffProvider ? flexibleTariffProvider.type : ''"
+              @update:model-value="updateSelectedFlexibleTariff($event)"
             />
-            <hr />
-            <openwb-pricing-status source="flexible_tariff" />
+            <div v-if="flexibleTariffProvider?.type">
+              <openwb-flexible-tariff-proxy
+                :flexible-tariff="flexibleTariffProvider"
+                @update:configuration="updateConfiguration('openWB/optional/ep/flexible_tariff/provider', $event)"
+              />
+            </div>
           </div>
         </div>
+      </openwb-base-card>
+
+      <openwb-base-card
+        v-if="flexibleTariffProvider?.type"
+        title="Allgemeine Informationen Stromtarif"
+      >
+        <div>
+          <openwb-pricing-status source="flexible_tariff" />
+        </div>
+        <template #footer>
+          <openwb-base-alert
+            v-if="flexibleTariffProvider.type !== 'fixed_hours'"
+            subtype="warning"
+          >
+            Je nach Anbieter kann die Anzahl der API-Abrufe begrenzt sein. Ein manuelles Aktualisieren kann daher
+            fehlschlagen, wenn das Limit bereits erreicht wurde.
+          </openwb-base-alert>
+          <div class="row justify-content-center w-100">
+            <div class="col-md-4 d-flex py-1 justify-content-center">
+              <openwb-base-click-button
+                class="btn-primary"
+                @click="triggerUpdate('flexible_tariff')"
+              >
+                Strompreise aktualisieren
+              </openwb-base-click-button>
+            </div>
+          </div>
+        </template>
       </openwb-base-card>
 
       <openwb-base-card title="Netzentgelte">
-        <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-          <openwb-base-alert subtype="info">
-            Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
-          </openwb-base-alert>
-        </div>
-        <div v-else>
-          <openwb-base-alert subtype="info">
-            Wenn sowohl ein Stromtarif als auch Netzentgelte konfiguriert sind, werden beide zum Gesamt-Strompreis
-            verrechnet. Dabei wird angenommen, dass der Standardpreis der Netzentgelte in dem Stromtarif enthalten ist.
-            Dementsprechend wird die Differenz zwischen dem Standardpreis der Netzentgelte und den aktuellen
-            Netzentgelten zum Strompreis addiert, um den Gesamt-Strompreis zu ermitteln.<br />
-            Beispiel: Standardpreis der Netzentgelte 10 ct/kWh, aktueller Preis 5 ct/kWh, Strompreis 20 ct/kWh. Der
-            Gesamt-Strompreis ist 20 + (5 - 10) = 15 ct/kWh.
-          </openwb-base-alert>
-          <openwb-base-select-input
-            class="mb-2"
-            title="Anbieter"
-            :options="gridFeeList"
-            :model-value="gridFeeProvider ? gridFeeProvider.type : ''"
-            @update:model-value="updateSelectedGridFee($event)"
-          />
-          <div v-if="gridFeeProvider?.type">
-            <openwb-grid-fee-proxy
-              :grid-fee="gridFeeProvider"
-              @update:configuration="updateConfiguration('openWB/optional/ep/grid_fee/provider', $event)"
+        <div>
+          <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+            <openwb-base-alert subtype="info">
+              Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary"
+              befindet.
+            </openwb-base-alert>
+          </div>
+          <div v-else>
+            <openwb-base-alert subtype="info">
+              Wenn sowohl ein Stromtarif als auch Netzentgelte konfiguriert sind, werden beide zum Gesamt-Strompreis
+              verrechnet. Dabei wird angenommen, dass der Standardpreis der Netzentgelte in dem Stromtarif enthalten
+              ist. Dementsprechend wird die Differenz zwischen dem Standardpreis der Netzentgelte und den aktuellen
+              Netzentgelten zum Strompreis addiert, um den Gesamt-Strompreis zu ermitteln.<br />
+              Beispiel: Standardpreis der Netzentgelte 10 ct/kWh, aktueller Preis 5 ct/kWh, Strompreis 20 ct/kWh. Der
+              Gesamt-Strompreis ist 20 + (5 - 10) = 15 ct/kWh.
+            </openwb-base-alert>
+            <openwb-base-select-input
+              class="mb-2"
+              title="Anbieter"
+              :options="gridFeeList"
+              :model-value="gridFeeProvider ? gridFeeProvider.type : ''"
+              @update:model-value="updateSelectedGridFee($event)"
             />
-            <hr />
-            <openwb-pricing-status source="grid_fee" />
+            <div v-if="gridFeeProvider?.type">
+              <openwb-grid-fee-proxy
+                :grid-fee="gridFeeProvider"
+                @update:configuration="updateConfiguration('openWB/optional/ep/grid_fee/provider', $event)"
+              />
+            </div>
           </div>
         </div>
       </openwb-base-card>
 
-      <openwb-base-card title="Preise für PV-Strom, Speicherentladung und Einspeisung">
-        <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-          <openwb-base-alert subtype="info">
-            Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
-          </openwb-base-alert>
+      <openwb-base-card
+        v-if="gridFeeProvider?.type"
+        title="Allgemeine Informationen Netzentgelte"
+      >
+        <div>
+          <openwb-pricing-status source="grid_fee" />
         </div>
-        <div v-else>
-          <openwb-base-alert subtype="info">
-            Mit den Preisen für PV-Strom und Speicher wird der Strom aus PV-Anlage und Speicher bewertet, wenn die
-            Ladekosten nach dem Strommix berechnet werden. Der Einspeisepreis ist die Vergütung, die du für
-            eingespeisten Strom erhältst. Die Preise für PV-Strom und Speicher können mit einem Hilfsrechner ermittelt
-            werden.
-          </openwb-base-alert>
-          <openwb-base-number-input
-            title="Preis für PV-Strom"
-            :step="0.001"
-            :precision="3"
-            unit="ct/kWh"
-            :min="0"
-            required
-            :model-value="sourcePrice('pv_price')"
-            @update:model-value="setSourcePrice('pv_price', $event)"
-          />
-          <openwb-base-button-input
-            :title="showPvCalculator ? 'Hilfsrechner ausblenden' : 'Hilfsrechner für PV-Preis'"
-            :button-text="showPvCalculator ? 'Ausblenden' : 'Einblenden'"
-            @button-clicked="showPvCalculator = !showPvCalculator"
-          />
-          <openwb-price-calculator
-            v-if="showPvCalculator"
-            type="pv"
-            :feed-in-price="sourcePrice('feed_in_price')"
-            @apply="applyCalculatedPrice('pv_price', $event)"
-          />
-          <hr />
-          <openwb-base-number-input
-            title="Preis für Speicherentladung"
-            :step="0.001"
-            :precision="3"
-            unit="ct/kWh"
-            :min="0"
-            required
-            :model-value="sourcePrice('bat_price')"
-            @update:model-value="setSourcePrice('bat_price', $event)"
-          />
-          <openwb-base-button-input
-            :title="showBatCalculator ? 'Hilfsrechner ausblenden' : 'Hilfsrechner für Speicherpreis'"
-            :button-text="showBatCalculator ? 'Ausblenden' : 'Einblenden'"
-            @button-clicked="showBatCalculator = !showBatCalculator"
-          />
-          <openwb-price-calculator
-            v-if="showBatCalculator"
-            type="bat"
-            :pv-price="sourcePrice('pv_price')"
-            @apply="applyCalculatedPrice('bat_price', $event)"
-          />
-          <hr />
-          <openwb-base-number-input
-            title="Einspeisepreis"
-            :step="0.001"
-            :precision="3"
-            unit="ct/kWh"
-            :min="0"
-            required
-            :model-value="sourcePrice('feed_in_price')"
-            @update:model-value="setSourcePrice('feed_in_price', $event)"
-          >
-            <template #help>
-              Vergütung für eingespeisten Strom. Sie wird für den Vergleich zwischen Einspeisen, Netzbezug und
-              Speicherentladung verwendet.
-            </template>
-          </openwb-base-number-input>
+        <template #footer>
+          <div class="row justify-content-center w-100">
+            <div class="col-md-4 d-flex py-1 justify-content-center">
+              <openwb-base-click-button
+                class="btn-primary"
+                @click="triggerUpdate('grid_fee')"
+              >
+                Netzentgelte aktualisieren
+              </openwb-base-click-button>
+            </div>
+          </div>
+        </template>
+      </openwb-base-card>
+
+      <openwb-base-card title="PV-Strom, Speicher und Einspeisevergütung">
+        <div>
+          <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+            <openwb-base-alert subtype="info">
+              Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary"
+              befindet.
+            </openwb-base-alert>
+          </div>
+          <div v-else>
+            <openwb-base-alert subtype="info">
+              Mit den Preisen für PV-Strom und Speicher wird der Strom aus PV-Anlage und Speicher bewertet, wenn die
+              Ladekosten nach dem Strommix berechnet werden. Die Einspeisevergütung ist das, was du für eingespeisten
+              Strom erhältst. Die Preise für PV-Strom und Speicher können mit einem Hilfsrechner ermittelt werden.
+            </openwb-base-alert>
+            <openwb-base-number-input
+              title="Preis für PV-Strom"
+              :step="0.001"
+              :precision="3"
+              unit="ct/kWh"
+              :min="0"
+              required
+              :model-value="sourcePrice('pv_price')"
+              @update:model-value="setSourcePrice('pv_price', $event)"
+            />
+            <openwb-base-button-input
+              :title="showPvCalculator ? 'Hilfsrechner ausblenden' : 'Hilfsrechner für PV-Preis'"
+              :button-text="showPvCalculator ? 'Ausblenden' : 'Einblenden'"
+              @button-clicked="showPvCalculator = !showPvCalculator"
+            />
+            <openwb-price-calculator
+              v-if="showPvCalculator"
+              type="pv"
+              @apply="applyCalculatedPrice('pv_price', $event)"
+            />
+            <hr />
+            <openwb-base-number-input
+              title="Preis für Speicherentladung"
+              :step="0.001"
+              :precision="3"
+              unit="ct/kWh"
+              :min="0"
+              required
+              :model-value="sourcePrice('bat_price')"
+              @update:model-value="setSourcePrice('bat_price', $event)"
+            />
+            <openwb-base-button-input
+              :title="showBatCalculator ? 'Hilfsrechner ausblenden' : 'Hilfsrechner für Speicherpreis'"
+              :button-text="showBatCalculator ? 'Ausblenden' : 'Einblenden'"
+              @button-clicked="showBatCalculator = !showBatCalculator"
+            />
+            <openwb-price-calculator
+              v-if="showBatCalculator"
+              type="bat"
+              @apply="applyCalculatedPrice('bat_price', $event)"
+            />
+            <hr />
+            <openwb-base-number-input
+              title="Einspeisevergütung"
+              :step="0.001"
+              :precision="3"
+              unit="ct/kWh"
+              :min="0"
+              required
+              :model-value="sourcePrice('feed_in_price')"
+              @update:model-value="setSourcePrice('feed_in_price', $event)"
+            >
+              <template #help>
+                Vergütung für eingespeisten Strom. Sie wird für den Vergleich zwischen Einspeisen, Netzbezug und
+                Speicherentladung verwendet.
+              </template>
+            </openwb-base-number-input>
+          </div>
         </div>
       </openwb-base-card>
 
       <openwb-base-card title="Abrechnung der Ladekosten">
-        <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-          <openwb-base-alert subtype="info">
-            Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
-          </openwb-base-alert>
-        </div>
-        <div v-else>
-          <openwb-base-button-group-input
-            title="Berechnung der Ladekosten"
-            :buttons="[
-              { buttonValue: 'mix', text: 'Nach Strommix' },
-              { buttonValue: 'grid', text: 'Strompreis' },
-              { buttonValue: 'fixed', text: 'Eigener Preis' },
-            ]"
-            :model-value="$store.state.mqtt['openWB/general/prices/cost_mode']"
-            @update:model-value="updateState('openWB/general/prices/cost_mode', $event)"
-          >
-            <template #help>
-              Nach Strommix: Im Lade-Protokoll werden die Anteile der Stromquellen (Netz, PV, Speicher) berechnet und
-              mit den jeweiligen Preisen multipliziert.<br />
-              Strompreis: Die gesamte Energie wird zum Preis des Stromtarifs berechnet.<br />
-              Eigener Preis: Die gesamte Energie wird zu einem festen Preis berechnet, z. B. wenn die Abrechnung mit dem
-              Arbeitgeber vereinbart ist. Die übrigen Preise und Statistiken bleiben unverändert.
-            </template>
-          </openwb-base-button-group-input>
-          <openwb-base-number-input
-            v-if="$store.state.mqtt['openWB/general/prices/cost_mode'] === 'fixed'"
-            title="Eigener Preis"
-            :step="0.001"
-            :precision="3"
-            unit="ct/kWh"
-            :min="0"
-            required
-            :model-value="$store.state.mqtt['openWB/general/prices/fixed_price'] * 100000"
-            @update:model-value="
-              updateState('openWB/general/prices/fixed_price', parseFloat(($event / 100000).toFixed(7)))
-            "
-          />
+        <div>
+          <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
+            <openwb-base-alert subtype="info">
+              Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary"
+              befindet.
+            </openwb-base-alert>
+          </div>
+          <div v-else>
+            <openwb-base-button-group-input
+              title="Berechnung der Ladekosten"
+              :buttons="[
+                { buttonValue: 'mix', text: 'Nach Strommix' },
+                { buttonValue: 'grid', text: 'Strompreis' },
+                { buttonValue: 'fixed', text: 'Eigener Preis' },
+              ]"
+              :model-value="$store.state.mqtt['openWB/general/prices/cost_mode']"
+              @update:model-value="updateState('openWB/general/prices/cost_mode', $event)"
+            >
+              <template #help>
+                Nach Strommix: Im Lade-Protokoll werden die Anteile der Stromquellen (Netz, PV, Speicher) berechnet und
+                mit den jeweiligen Preisen multipliziert.<br />
+                Strompreis: Die gesamte Energie wird zum Preis des Stromtarifs berechnet.<br />
+                Eigener Preis: Die gesamte Energie wird zu einem festen Preis berechnet, z. B. wenn die Abrechnung mit
+                dem Arbeitgeber vereinbart ist. Die übrigen Preise und Statistiken bleiben unverändert.
+              </template>
+            </openwb-base-button-group-input>
+            <openwb-base-number-input
+              v-if="$store.state.mqtt['openWB/general/prices/cost_mode'] === 'fixed'"
+              title="Eigener Preis"
+              :step="0.001"
+              :precision="3"
+              unit="ct/kWh"
+              :min="0"
+              required
+              :model-value="$store.state.mqtt['openWB/general/prices/fixed_price'] * 100000"
+              @update:model-value="
+                updateState('openWB/general/prices/fixed_price', parseFloat(($event / 100000).toFixed(7)))
+              "
+            />
+          </div>
         </div>
       </openwb-base-card>
 
@@ -214,7 +268,6 @@
           :min-height="320"
         />
       </openwb-base-card>
-
       <openwb-base-submit-buttons
         form-name="electricityPricesConfigForm"
         @save="$emit('save', mqttTopicsToPublish)"
@@ -287,33 +340,47 @@ export default {
       return `${(FALLBACK_GRID_PRICE * 100000).toFixed(0)} ct/kWh`;
     },
     chartDatasets() {
-      const sources = [
+      const mqtt = this.$store.state.mqtt;
+      const combinedPrices = mqtt["openWB/optional/ep/configured"] ? mqtt["openWB/optional/ep/get/prices"] : undefined;
+      const lastCombinedTimestamp = Math.max(0, ...Object.keys(combinedPrices || {}).map(Number));
+      const tariffAndGridFee = this.flexibleTariffProvider?.type && this.gridFeeProvider?.type;
+      // wie die Status-Karte: bei Stromtarif und Netzentgelt Gesamtpreis und Einzelpreise, sonst nur ein Strompreis
+      const series = tariffAndGridFee
+        ? [
+            { label: "Gesamtpreis", prices: combinedPrices, color: "#28a745" },
+            {
+              label: "Stromtarif",
+              prices: mqtt["openWB/optional/ep/flexible_tariff/get/prices"],
+              color: "#8b1a1a",
+              until: lastCombinedTimestamp,
+            },
+            {
+              label: "Netzentgelt",
+              prices: mqtt["openWB/optional/ep/grid_fee/get/prices"],
+              color: "#ff9ea5",
+              until: lastCombinedTimestamp,
+            },
+          ]
+        : [{ label: "Strompreis", prices: combinedPrices, color: "#dc3545" }];
+      series.push(
+        { label: "PV-Preis", prices: mqtt["openWB/optional/ep/pv_price/get/prices"], color: "#f0ad4e" },
+        { label: "Speicherpreis", prices: mqtt["openWB/optional/ep/bat_price/get/prices"], color: "#007bff" },
         {
-          label: "Strompreis",
-          topic: "openWB/optional/ep/get/prices",
-          color: "#dc3545",
-          visible: this.$store.state.mqtt["openWB/optional/ep/configured"],
+          label: "Einspeisevergütung",
+          prices: mqtt["openWB/optional/ep/feed_in_price/get/prices"],
+          color: "#6f42c1",
         },
-        { label: "PV-Preis", topic: "openWB/optional/ep/pv_price/get/prices", color: "#28a745", visible: true },
-        { label: "Speicherpreis", topic: "openWB/optional/ep/bat_price/get/prices", color: "#007bff", visible: true },
-        {
-          label: "Einspeisepreis",
-          topic: "openWB/optional/ep/feed_in_price/get/prices",
-          color: "#fd7e14",
-          visible: true,
-        },
-      ];
-      return sources
-        .filter((source) => source.visible)
-        .map((source) => ({
-          label: source.label,
+      );
+      return series
+        .map((entry) => ({
+          label: entry.label,
           unit: "ct/kWh",
-          color: source.color,
-          backgroundColor: source.color,
+          color: entry.color,
+          backgroundColor: entry.color,
           fill: false,
           stepped: true,
           borderWidth: 2,
-          data: this.pricePoints(this.$store.state.mqtt[source.topic]),
+          data: this.pricePoints(entry.prices, entry.until),
         }))
         .filter((dataset) => dataset.data.length > 0);
     },
@@ -323,11 +390,12 @@ export default {
   },
   methods: {
     // €/Wh -> ct/kWh, Sekunden -> Millisekunden
-    pricePoints(prices) {
+    pricePoints(prices, untilTimestamp = undefined) {
       if (!prices || typeof prices !== "object") {
         return [];
       }
       return Object.entries(prices)
+        .filter(([timestamp]) => untilTimestamp === undefined || Number(timestamp) <= untilTimestamp)
         .map(([timestamp, value]) => ({ timestamp: Number(timestamp) * 1000, value: Number(value) * 100000 }))
         .filter((point) => Number.isFinite(point.timestamp) && Number.isFinite(point.value))
         .sort((a, b) => a.timestamp - b.timestamp);
@@ -350,6 +418,9 @@ export default {
       } else {
         this.showBatCalculator = false;
       }
+    },
+    triggerUpdate(source) {
+      this.$root.doPublish(`openWB/set/optional/ep/${source}/get/force_update`, true, false);
     },
     getDefaultConfiguration(list, type) {
       const defaults = list.find((element) => element.value == type);
