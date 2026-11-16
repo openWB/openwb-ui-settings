@@ -27,6 +27,17 @@ function pattern_from_files($files)
   return '^(' . implode('|', array_map('preg_quote', $files)) . ')$';
 }
 
+// Überprüfe ob Archiv relative Pfade mit ../ enthält (Path-Traversal-Angriff)
+function check_path_traversal($path)
+{
+  $cmd = "tar --list --file=" . escapeshellarg($path) . " | grep -c '\\.\\./'";
+  exec($cmd, $out, $rc);
+  $count = ($rc === 0 && isset($out[0])) ? (int)$out[0] : 0;
+  if ($count > 0) {
+    exit_with_error("Das Archiv enthält ungültige relative Pfade ('../') und wird aus Sicherheitsgründen abgelehnt.");
+  }
+}
+
 // Schneller Inhaltscheck für Restore-Archiv
 function check_restore_file_contents($path)
 {
@@ -150,11 +161,13 @@ if (isset($_POST["target"])) {
         $work_file = $decrypted_temp;
       }
       check_gzip($work_file);
+      check_path_traversal($work_file);
       check_restore_file_contents($work_file);
       break;
     case 'migrate':
       $target_file = $target_dir . "data_migration/" . "data_migration.tar.gz";
       check_gzip($work_file);
+      check_path_traversal($work_file);
       break;
     default:
       exit_with_error("Fehlender oder ungültiger Parameter!");
