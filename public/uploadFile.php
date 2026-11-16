@@ -33,6 +33,16 @@ function pattern_from_files($files)
   return '^(' . implode('|', array_map('preg_quote', $files)) . ')$';
 }
 
+// Berechne SHA256-Checksumme und speichere sie in separater Datei (TOCTOU-Schutz)
+function save_archive_checksum($file_path)
+{
+  $checksum = hash_file('sha256', $file_path);
+  if ($checksum === false) {
+    exit_with_error("Konnte Checksumme der Datei nicht berechnen.");
+  }
+  file_put_contents($file_path . '.sha256', $checksum);
+}
+
 // Überprüfe ob Archiv sicher ist: gültig, keine Path-Traversal, keine Links
 function check_archive_integrity($path)
 {
@@ -223,10 +233,12 @@ if ($is_gpg) {
   }
   // Aufräumen: hochgeladenes (verschlüsseltes) Original entfernen
   @unlink($uploaded_tmp);
+  save_archive_checksum($target_file);
   echo "Die Datei " . htmlspecialchars(basename($_FILES["file"]["name"])) . " wurde hochgeladen und entschlüsselt (GPG erkannt).";
 } else {
   // Unverschlüsselt: normales move_uploaded_file
   if (move_uploaded_file($uploaded_tmp, $target_file)) {
+    save_archive_checksum($target_file);
     echo "Die Datei " . htmlspecialchars(basename($_FILES["file"]["name"])) . " wurde hochgeladen.";
   } else {
     if ($decrypted_temp && file_exists($decrypted_temp)) @unlink($decrypted_temp);
