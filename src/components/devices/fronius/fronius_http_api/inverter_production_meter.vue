@@ -39,8 +39,7 @@
           target="_blank"
           rel="noopener noreferrer"
         >
-          {{ meterRealtimeUrl }} </a
-        ><br />
+          {{ meterRealtimeUrl }} </a><br />
         Im Abschnitt "Body" -> "Data" werden die installierten SmartMeter mit aktuellen Messwerten angezeigt. Die Meter
         ID ist die Zahl vor dem Doppelpunkt und den zugehörigen Messwerten.
       </template>
