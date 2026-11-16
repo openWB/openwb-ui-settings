@@ -6,9 +6,15 @@ $BACKUP_KEY_FILE = "/home/openwb/backup.key";
 
 function exit_with_error($message)
 {
+  global $decrypted_temp;
+
   http_response_code(400);
   echo "Beim Upload der Datei ist ein Fehler aufgetreten!<br />";
   echo $message;
+  // Entschlüsseltes Temp-File sollte bereits verschoben/gelöscht sein; Sicherheits-Cleanup:
+  if ($decrypted_temp && file_exists($decrypted_temp)) {
+    @unlink($decrypted_temp);
+  }
   exit(1);
 }
 
@@ -36,7 +42,7 @@ function check_archive_integrity($path)
   if ($rc_check !== 0) {
     exit_with_error("Das Archiv konnte nicht gelesen werden oder ist beschädigt!");
   }
-  
+
   // Prüfung auf Path-Traversal
   $cmd = "tar --list --file=" . escapeshellarg($path) . " | grep -c '\\.\\./'";
   exec($cmd, $out, $rc);
@@ -44,7 +50,7 @@ function check_archive_integrity($path)
   if ($count > 0) {
     exit_with_error("Das Archiv enthält ungültige relative Pfade ('../') und wird aus Sicherheitsgründen abgelehnt.");
   }
-  
+
   // Check für symbolische Links (Anfangsbuchstabe 'l' in tar -v Ausgabe)
   $cmd_symlinks = "tar --verbose --list --file=" . escapeshellarg($path) . " | grep -c '^l'";
   exec($cmd_symlinks, $out_sym, $rc_sym);
@@ -52,7 +58,7 @@ function check_archive_integrity($path)
   if ($symlink_count > 0) {
     exit_with_error("Das Archiv enthält Symbolische Links und wird aus Sicherheitsgründen abgelehnt.");
   }
-  
+
   // Check für Hardlinks (Link count > 1 in tar -v Ausgabe, Spalte 6)
   $cmd_hardlinks = "tar --verbose --list --file=" . escapeshellarg($path) . " | awk '{print $6}' | grep -E '^[2-9]$|^[0-9]{2,}$' | wc -l";
   exec($cmd_hardlinks, $out_hard, $rc_hard);
