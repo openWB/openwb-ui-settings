@@ -42,6 +42,7 @@
           <router-link to="/System/LegalSettings"> Datenschutzerklärung </router-link>
           zugestimmt und kannst Systemberichte senden.
         </openwb-base-alert>
+        <support-self-test-card />
         <openwb-base-card title="Systembericht">
           <div v-if="$store.state.mqtt['openWB/system/dataprotection_acknowledged'] === true">
             <openwb-base-alert subtype="danger">
@@ -197,11 +198,13 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fasCheck);
 
 import ComponentState from "../components/mixins/ComponentState.vue";
+import SupportSelfTestCard from "../components/support/SelfTestCard.vue";
 
 export default {
   name: "OpenwbSupportView",
   components: {
     FontAwesomeIcon,
+    SupportSelfTestCard,
   },
   mixins: [ComponentState],
   emits: ["sendCommand"],
