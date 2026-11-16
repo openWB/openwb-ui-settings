@@ -27,14 +27,38 @@ function pattern_from_files($files)
   return '^(' . implode('|', array_map('preg_quote', $files)) . ')$';
 }
 
-// Überprüfe ob Archiv relative Pfade mit ../ enthält (Path-Traversal-Angriff)
-function check_path_traversal($path)
+// Überprüfe ob Archiv sicher ist: gültig, keine Path-Traversal, keine Links
+function check_archive_integrity($path)
 {
+  // Zuerst tar-Status prüfen - wenn tar fehlschlägt, Archiv ablehnen
+  $cmd_check = "tar --list --file=" . escapeshellarg($path) . " >/dev/null 2>&1";
+  exec($cmd_check, $out_check, $rc_check);
+  if ($rc_check !== 0) {
+    exit_with_error("Das Archiv konnte nicht gelesen werden oder ist beschädigt!");
+  }
+  
+  // Prüfung auf Path-Traversal
   $cmd = "tar --list --file=" . escapeshellarg($path) . " | grep -c '\\.\\./'";
   exec($cmd, $out, $rc);
   $count = ($rc === 0 && isset($out[0])) ? (int)$out[0] : 0;
   if ($count > 0) {
     exit_with_error("Das Archiv enthält ungültige relative Pfade ('../') und wird aus Sicherheitsgründen abgelehnt.");
+  }
+  
+  // Check für symbolische Links (Anfangsbuchstabe 'l' in tar -v Ausgabe)
+  $cmd_symlinks = "tar --verbose --list --file=" . escapeshellarg($path) . " | grep -c '^l'";
+  exec($cmd_symlinks, $out_sym, $rc_sym);
+  $symlink_count = ($rc_sym === 0 && isset($out_sym[0])) ? (int)$out_sym[0] : 0;
+  if ($symlink_count > 0) {
+    exit_with_error("Das Archiv enthält Symbolische Links und wird aus Sicherheitsgründen abgelehnt.");
+  }
+  
+  // Check für Hardlinks (Link count > 1 in tar -v Ausgabe, Spalte 6)
+  $cmd_hardlinks = "tar --verbose --list --file=" . escapeshellarg($path) . " | awk '{print $6}' | grep -E '^[2-9]$|^[0-9]{2,}$' | wc -l";
+  exec($cmd_hardlinks, $out_hard, $rc_hard);
+  $hardlink_count = ($rc_hard === 0 && isset($out_hard[0])) ? (int)$out_hard[0] : 0;
+  if ($hardlink_count > 0) {
+    exit_with_error("Das Archiv enthält Hardlinks und wird aus Sicherheitsgründen abgelehnt.");
   }
 }
 
@@ -161,13 +185,13 @@ if (isset($_POST["target"])) {
         $work_file = $decrypted_temp;
       }
       check_gzip($work_file);
-      check_path_traversal($work_file);
+      check_archive_integrity($work_file);
       check_restore_file_contents($work_file);
       break;
     case 'migrate':
       $target_file = $target_dir . "data_migration/" . "data_migration.tar.gz";
       check_gzip($work_file);
-      check_path_traversal($work_file);
+      check_archive_integrity($work_file);
       break;
     default:
       exit_with_error("Fehlender oder ungültiger Parameter!");
