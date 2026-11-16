@@ -20,6 +20,19 @@
     Willst Du die Komponente "{{ modalComponentName }}" wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht
     werden!
   </openwb-base-modal-dialog>
+  <openwb-base-modal-dialog
+    :show="showLeaveModal"
+    title="Geräte ohne Komponente"
+    subtype="danger"
+    :buttons="[
+      { text: 'Geräte löschen', event: 'remove', subtype: 'danger' },
+      { text: 'Abbrechen', event: 'close' },
+    ]"
+    @modal-result="handleLeaveModal"
+  >
+    Folgende Geräte haben keine Komponente: {{ devicesWithoutComponentsNames }}<br />
+    Ohne Komponente liefert ein Gerät keine Daten. Sollen diese Geräte gelöscht werden?
+  </openwb-base-modal-dialog>
   <!-- main content -->
   <div class="hardwareInstallation">
     <form name="hardwareInstallationForm">
@@ -60,6 +73,16 @@
                 <font-awesome-icon :icon="['fas', 'trash']" />
               </openwb-base-avatar>
               <div v-else>
+                <openwb-base-tooltip
+                  v-if="!deviceHasConfiguredComponents(installedDevice?.id)"
+                  description="Keine Komponente angelegt"
+                >
+                  <font-awesome-icon
+                    class="text-danger border-danger"
+                    :icon="['fas', 'exclamation-triangle']"
+                    size="xl"
+                  />
+                </openwb-base-tooltip>
                 <openwb-base-avatar
                   v-for="installedComponent in getMyInstalledComponents(installedDevice?.id)"
                   :key="installedComponent?.id"
@@ -90,7 +113,7 @@
             <openwb-base-heading>Komponenten</openwb-base-heading>
             <openwb-base-alert
               v-if="!deviceHasConfiguredComponents(installedDevice?.id)"
-              subtype="warning"
+              subtype="danger"
             >
               Es wurden noch keine Komponenten zu diesem Gerät angelegt.
             </openwb-base-alert>
@@ -248,7 +271,7 @@
 
       <openwb-base-submit-buttons
         form-name="hardwareInstallationForm"
-        @save="$emit('save', mqttTopicsToPublish)"
+        @save="saveSettings"
         @reset="$emit('reset')"
         @defaults="$emit('defaults')"
       />
@@ -266,10 +289,20 @@ import {
   faCarBattery as fasCarBattery,
   faSolarPanel as fasSolarPanel,
   faGaugeHigh as fasGaugeHigh,
+  faExclamationTriangle as fasExclamationTriangle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(fasPlus, fasNetworkWired, fasMicrochip, fasTrash, fasCarBattery, fasSolarPanel, fasGaugeHigh);
+library.add(
+  fasPlus,
+  fasNetworkWired,
+  fasMicrochip,
+  fasTrash,
+  fasCarBattery,
+  fasSolarPanel,
+  fasGaugeHigh,
+  fasExclamationTriangle,
+);
 
 import ComponentState from "../components/mixins/ComponentState.vue";
 import OpenwbConfigProxy from "../components/devices/OpenwbConfigProxy.vue";
@@ -281,6 +314,14 @@ export default {
     OpenwbConfigProxy,
   },
   mixins: [ComponentState],
+  beforeRouteLeave(to) {
+    if (this.leaveConfirmed || this.devicesWithoutComponents.length === 0) {
+      return true;
+    }
+    this.pendingRoute = to.fullPath;
+    this.showLeaveModal = true;
+    return false;
+  },
   props: {
     installAssistantActive: {
       type: Boolean,
@@ -308,6 +349,9 @@ export default {
       showComponentRemoveModal: false,
       modalComponent: undefined,
       modalComponentName: "",
+      showLeaveModal: false,
+      pendingRoute: undefined,
+      leaveConfirmed: false,
     };
   },
   computed: {
@@ -322,6 +366,15 @@ export default {
       return Object.fromEntries(
         Object.entries(installedComponents).filter(([, template]) => template && typeof template === "object"),
       );
+    },
+    devicesWithoutComponents() {
+      if (this.$store.state.mqtt["openWB/general/extern"] === true) {
+        return [];
+      }
+      return Object.values(this.installedDevices).filter((device) => !this.deviceHasConfiguredComponents(device.id));
+    },
+    devicesWithoutComponentsNames() {
+      return this.devicesWithoutComponents.map((device) => `"${device.name}"`).join(", ");
     },
     gridId() {
       let hierarchy = this.$store.state.mqtt["openWB/counter/get/hierarchy"];
@@ -477,6 +530,34 @@ export default {
     },
     deviceHasConfiguredComponents(deviceId) {
       return Object.keys(this.getMyInstalledComponents(deviceId)).length > 0;
+    },
+    saveSettings() {
+      if (this.devicesWithoutComponents.length > 0) {
+        this.$root.postClientMessage(
+          `Speichern nicht möglich! Folgende Geräte haben keine Komponente: ${this.devicesWithoutComponentsNames}<br />` +
+            "Bitte eine Komponente hinzufügen oder das Gerät löschen.",
+          "danger",
+        );
+        return;
+      }
+      this.$emit("save", this.mqttTopicsToPublish);
+    },
+    handleLeaveModal(event) {
+      this.showLeaveModal = false;
+      if (event == "close") {
+        this.pendingRoute = undefined;
+        return;
+      }
+      if (event == "remove") {
+        this.devicesWithoutComponents.forEach((device) => {
+          this.$emit("sendCommand", {
+            command: "removeDevice",
+            data: { id: device.id },
+          });
+        });
+      }
+      this.leaveConfirmed = true;
+      this.$router.push(this.pendingRoute);
     },
     addDevice() {
       this.$emit("sendCommand", {
