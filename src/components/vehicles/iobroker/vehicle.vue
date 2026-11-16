@@ -67,27 +67,20 @@
     >
       <template #help>Optional. Leer lassen, wenn nicht verfügbar.</template>
     </openwb-base-text-input>
-    <openwb-base-button-group-input
-      title="SoC während der Ladung berechnen"
-      :buttons="[
-        { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
-        { buttonValue: true, text: 'Ja', class: 'btn-outline-success' },
-      ]"
+    <openwb-vehicle-calculate-soc-input
       :model-value="vehicle.configuration.calculate_soc"
       @update:model-value="updateConfiguration($event, 'configuration.calculate_soc')"
-    >
-      <template #help>
-        Berechnet den Ladestand (SoC) während der Ladung, falls ioBroker den Wert nicht laufend aktualisiert.
-      </template>
-    </openwb-base-button-group-input>
+    />
   </div>
 </template>
 
 <script>
 import VehicleConfigMixin from "../VehicleConfigMixin.vue";
+import OpenwbVehicleCalculateSocInput from "../OpenwbVehicleCalculateSocInput.vue";
 
 export default {
   name: "VehicleSocIoBroker",
+  components: { OpenwbVehicleCalculateSocInput },
   mixins: [VehicleConfigMixin],
 };
 </script>

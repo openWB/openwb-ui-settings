@@ -89,17 +89,10 @@
       {{ authStatus.error }}
     </openwb-base-alert>
 
-    <openwb-base-button-group-input
-      title="SoC während der Ladung berechnen"
-      :buttons="[
-        { buttonValue: false, text: 'Nein', class: 'btn-outline-danger' },
-        { buttonValue: true, text: 'Ja', class: 'btn-outline-success' },
-      ]"
+    <openwb-vehicle-calculate-soc-input
       :model-value="vehicle.configuration.calculate_soc"
       @update:model-value="updateConfiguration($event, 'configuration.calculate_soc')"
-    >
-      <template #help> openWB berechnet den Ladestand während der Ladung selbst. </template>
-    </openwb-base-button-group-input>
+    />
 
     <openwb-base-alert subtype="secondary">
       <b>Technische Hinweise:</b><br />
@@ -112,9 +105,11 @@
 
 <script>
 import VehicleConfigMixin from "../VehicleConfigMixin.vue";
+import OpenwbVehicleCalculateSocInput from "../OpenwbVehicleCalculateSocInput.vue";
 
 export default {
   name: "VehicleSocBmwCardata",
+  components: { OpenwbVehicleCalculateSocInput },
   mixins: [VehicleConfigMixin],
   data() {
     return {
