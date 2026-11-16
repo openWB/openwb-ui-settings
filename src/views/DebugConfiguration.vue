@@ -80,6 +80,10 @@ export default {
           fileName: "/openWB/ramdisk/forecast.log",
         },
         {
+          title: "OCPP-Log",
+          fileName: "/openWB/ramdisk/ocpp.log",
+        },
+        {
           title: "SoC-Log",
           fileName: "/openWB/ramdisk/soc.log",
         },
