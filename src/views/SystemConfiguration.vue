@@ -58,6 +58,11 @@
             required
             readonly
           />
+          <openwb-base-text-input
+            v-model="$store.state.mqtt['openWB/system/os_version']"
+            title="OS-Version"
+            readonly
+          />
           <!-- <openwb-base-submit-buttons
             form-name="systemInfoForm"
             :hide-defaults="true"
@@ -424,6 +429,7 @@ export default {
         { topic: "openWB/system/hostname", writeable: false },
         { topic: "openWB/system/ip_address", writeable: false },
         { topic: "openWB/system/mac_address", writeable: false },
+        { topic: "openWB/system/os_version", writeable: false },
         { topic: "openWB/system/pnp_ip", writeable: true },
         { topic: "openWB/system/secondary_auto_update", writeable: false }, // exclude from generic saves.
         { topic: "openWB/system/serial_number", writeable: false },
