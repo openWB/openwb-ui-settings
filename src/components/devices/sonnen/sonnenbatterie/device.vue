@@ -35,30 +35,28 @@
           target="_blank"
           rel="noopener noreferrer"
         >
-          {{ linkRestApi1 }} </a
-        ><br />
+          {{ linkRestApi1 }} </a><br />
         Rest-API 2:
         <a
           :href="linkRestApi2"
           target="_blank"
           rel="noopener noreferrer"
-          >{{ linkRestApi2 }}</a
-        ><br />
+        >
+          {{ linkRestApi2 }}</a><br />
         JSON-API v1:
         <a
           :href="linkJsonApi1"
           target="_blank"
           rel="noopener noreferrer"
         >
-          {{ linkJsonApi1 }} </a
-        ><br />
+          {{ linkJsonApi1 }} </a><br />
         JSON-API v2:
         <a
           :href="linkJsonApi2"
           target="_blank"
           rel="noopener noreferrer"
-          >{{ linkJsonApi2 }}</a
-        ><br />
+        >
+          {{ linkJsonApi2 }}</a><br />
       </template>
     </openwb-base-select-input>
     <openwb-base-text-input

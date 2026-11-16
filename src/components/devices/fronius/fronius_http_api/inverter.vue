@@ -28,8 +28,7 @@
           target="_blank"
           rel="noopener noreferrer"
         >
-          {{ powerFlowUrl }} </a
-        ><br />
+          {{ powerFlowUrl }} </a><br />
         Im Abschnitt "Body" -> "Data" -> "SecondaryMeters" werden die installierten Zähler angezeigt. Die ID ist die
         Zahl vor dem Doppelpunkt und den zugehörigen Daten.
       </template>
