@@ -86,6 +86,7 @@
               {{ counter.name }}
             </template>
             <openwb-base-number-input
+              v-if="counter.id == gridCounterId"
               title="Maximale Leistung"
               :min="1"
               :step="0.1"
@@ -427,6 +428,11 @@ export default {
         }
         return a.text > b.text ? 1 : -1;
       });
+    },
+    gridCounterId() {
+      const hierarchy = this.$store.state.mqtt["openWB/counter/get/hierarchy"];
+      if (!Array.isArray(hierarchy) || hierarchy.length === 0) return undefined;
+      return hierarchy[0]?.id;
     },
     inverterConfigs: {
       get() {
