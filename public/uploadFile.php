@@ -40,7 +40,7 @@ function save_archive_checksum($file_path)
   if ($checksum === false) {
     exit_with_error("Konnte Checksumme der Datei nicht berechnen.");
   }
-  file_put_contents($file_path . '.sha256', $checksum);
+  file_put_contents($file_path . '.sha256', $checksum . '  ' . basename($file_path) . PHP_EOL);
 }
 
 // Überprüfe ob Archiv sicher ist: gültig, keine Path-Traversal, keine Links
