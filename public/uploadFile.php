@@ -6,9 +6,15 @@ $BACKUP_KEY_FILE = "/home/openwb/backup.key";
 
 function exit_with_error($message)
 {
+  global $decrypted_temp;
+
   http_response_code(400);
   echo "Beim Upload der Datei ist ein Fehler aufgetreten!<br />";
   echo $message;
+  // Entschlüsseltes Temp-File sollte bereits verschoben/gelöscht sein; Sicherheits-Cleanup:
+  if ($decrypted_temp && file_exists($decrypted_temp)) {
+    @unlink($decrypted_temp);
+  }
   exit(1);
 }
 
@@ -25,6 +31,51 @@ function check_gzip($path)
 function pattern_from_files($files)
 {
   return '^(' . implode('|', array_map('preg_quote', $files)) . ')$';
+}
+
+// Berechne SHA256-Checksumme und speichere sie in separater Datei (TOCTOU-Schutz)
+function save_archive_checksum($file_path)
+{
+  $checksum = hash_file('sha256', $file_path);
+  if ($checksum === false) {
+    exit_with_error("Konnte Checksumme der Datei nicht berechnen.");
+  }
+  file_put_contents($file_path . '.sha256', $checksum . '  ' . basename($file_path) . PHP_EOL);
+}
+
+// Überprüfe ob Archiv sicher ist: gültig, keine Path-Traversal, keine Links
+function check_archive_integrity($path)
+{
+  // Zuerst tar-Status prüfen - wenn tar fehlschlägt, Archiv ablehnen
+  $cmd_check = "tar --list --file=" . escapeshellarg($path) . " >/dev/null 2>&1";
+  exec($cmd_check, $out_check, $rc_check);
+  if ($rc_check !== 0) {
+    exit_with_error("Das Archiv konnte nicht gelesen werden oder ist beschädigt!");
+  }
+
+  // Prüfung auf Path-Traversal
+  $cmd = "tar --list --file=" . escapeshellarg($path) . " | grep -c '\\.\\./'";
+  exec($cmd, $out, $rc);
+  $count = ($rc === 0 && isset($out[0])) ? (int)$out[0] : 0;
+  if ($count > 0) {
+    exit_with_error("Das Archiv enthält ungültige relative Pfade ('../') und wird aus Sicherheitsgründen abgelehnt.");
+  }
+
+  // Check für symbolische Links (Anfangsbuchstabe 'l' in tar -v Ausgabe)
+  $cmd_symlinks = "tar --verbose --list --file=" . escapeshellarg($path) . " | grep -c '^l'";
+  exec($cmd_symlinks, $out_sym, $rc_sym);
+  $symlink_count = ($rc_sym === 0 && isset($out_sym[0])) ? (int)$out_sym[0] : 0;
+  if ($symlink_count > 0) {
+    exit_with_error("Das Archiv enthält Symbolische Links und wird aus Sicherheitsgründen abgelehnt.");
+  }
+
+  // Check für Hardlinks (Link count > 1 in tar -v Ausgabe, Spalte 6)
+  $cmd_hardlinks = "tar --verbose --list --file=" . escapeshellarg($path) . " | awk '{print $6}' | grep -E '^[2-9]$|^[0-9]{2,}$' | wc -l";
+  exec($cmd_hardlinks, $out_hard, $rc_hard);
+  $hardlink_count = ($rc_hard === 0 && isset($out_hard[0])) ? (int)$out_hard[0] : 0;
+  if ($hardlink_count > 0) {
+    exit_with_error("Das Archiv enthält Hardlinks und wird aus Sicherheitsgründen abgelehnt.");
+  }
 }
 
 // Schneller Inhaltscheck für Restore-Archiv
@@ -150,11 +201,13 @@ if (isset($_POST["target"])) {
         $work_file = $decrypted_temp;
       }
       check_gzip($work_file);
+      check_archive_integrity($work_file);
       check_restore_file_contents($work_file);
       break;
     case 'migrate':
       $target_file = $target_dir . "data_migration/" . "data_migration.tar.gz";
       check_gzip($work_file);
+      check_archive_integrity($work_file);
       break;
     default:
       exit_with_error("Fehlender oder ungültiger Parameter!");
@@ -180,10 +233,12 @@ if ($is_gpg) {
   }
   // Aufräumen: hochgeladenes (verschlüsseltes) Original entfernen
   @unlink($uploaded_tmp);
+  save_archive_checksum($target_file);
   echo "Die Datei " . htmlspecialchars(basename($_FILES["file"]["name"])) . " wurde hochgeladen und entschlüsselt (GPG erkannt).";
 } else {
   // Unverschlüsselt: normales move_uploaded_file
   if (move_uploaded_file($uploaded_tmp, $target_file)) {
+    save_archive_checksum($target_file);
     echo "Die Datei " . htmlspecialchars(basename($_FILES["file"]["name"])) . " wurde hochgeladen.";
   } else {
     if ($decrypted_temp && file_exists($decrypted_temp)) @unlink($decrypted_temp);
