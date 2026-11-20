@@ -52,135 +52,6 @@
           </openwb-base-range-input>
         </div>
       </openwb-base-card>
-      <openwb-base-card title="Energiekosten">
-        <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
-          <openwb-base-alert subtype="info">
-            Diese Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary" befindet.
-          </openwb-base-alert>
-        </div>
-        <div v-else>
-          <openwb-base-heading class="mt-0">
-            Berechnung der Ladekosten
-            <template #help>
-              Zur Berechnung der Ladekosten im Lade-Protokoll werden stundenweise die Anteile der Stromquellen
-              (Speicher, Netz, PV) berechnet und mit den hier angegebenen Preisen multipliziert.<br />
-              Ist die Abrechnung über das Ladeprotokoll, z.B. mit dem Arbeitgeber, vereinbart, ist bei allen drei
-              Feldern der vereinbarte Preis einzutragen.
-            </template>
-          </openwb-base-heading>
-          <openwb-base-alert
-            v-if="$store.state.mqtt['openWB/optional/ep/configured']"
-            subtype="info"
-          >
-            Für den Netzbezug wird der dynamische Strompreis des Anbieters für variable Stromtarife verwendet. Wenn
-            keine dynamischen Strompreise abgefragt werden können, wird der eingetragene Preis für den Netzbezug
-            verwendet.
-          </openwb-base-alert>
-          <openwb-base-number-input
-            title="Preis für Netzbezug"
-            :step="0.001"
-            :precision="3"
-            unit="ct/kWh"
-            :min="0"
-            required
-            :model-value="$store.state.mqtt['openWB/general/prices/grid'] * 100000"
-            @update:model-value="updateState('openWB/general/prices/grid', parseFloat(($event / 100000).toFixed(7)))"
-          />
-          <openwb-base-number-input
-            title="Preis für Speicherentladung"
-            :step="0.001"
-            :precision="3"
-            unit="ct/kWh"
-            :min="0"
-            required
-            :model-value="$store.state.mqtt['openWB/general/prices/bat'] * 100000"
-            @update:model-value="updateState('openWB/general/prices/bat', parseFloat(($event / 100000).toFixed(7)))"
-          />
-          <openwb-base-number-input
-            title="Preis für PV-Strom"
-            :step="0.001"
-            :precision="3"
-            unit="ct/kWh"
-            :min="0"
-            required
-            :model-value="$store.state.mqtt['openWB/general/prices/pv'] * 100000"
-            @update:model-value="updateState('openWB/general/prices/pv', parseFloat(($event / 100000).toFixed(7)))"
-          />
-          <hr />
-          <openwb-base-heading> Variable Strompreise </openwb-base-heading>
-          <openwb-base-alert subtype="info">
-            <p>
-              Ist in den Lademodi Eco und Zeitladen "Preisbasiertes Laden" gewählt, wird nur geladen, wenn der
-              Strompreis unter dem angegebenen maximalen Strompreis liegt. Für Zielladen wird die Ladedauer ermittelt
-              und dann zu den günstigsten Zeiten geladen.
-            </p>
-            <p>
-              Wenn keine Preise abgefragt werden können oder "Preisbasiertes Laden" abgewählt wurde, wird in Modus Eco
-              immer geladen bzw. bei Zielladen zunächst mit PV-Überschuss und zum Erreichen des Zieltermins mit
-              Netzstrom.
-            </p>
-            <p>
-              Wenn sowohl dynamische Stromtarife als auch Netzentgelte konfiguriert sind, werden beide zum
-              Gesamt-Strompreis verrechnet. Dabei wird angenommen, dass der Standardpreis der Netzentgelte in dem
-              Stromtarif enthalten ist. Dementsprechend wird die Differenz zwischen dem Standardpreis der Netzentgelte
-              und den aktuellen Netzentgelten zum Strompreis addiert, um den Gesamt-Strompreis zu ermitteln.
-            </p>
-            <p>Beispiel:</p>
-            <ul>
-              <li>Standardpreis der Netzentgelte: 10 ct/kWh</li>
-              <li>Aktueller Preis der Netzentgelte: 5 ct/kWh</li>
-              <li>Strompreis: 20 ct/kWh</li>
-              <li>Gesamt-Strompreis: 20 + (5 - 10) = 15 ct/kWh</li>
-            </ul>
-          </openwb-base-alert>
-          <openwb-base-heading> Dynamische Stromtarife </openwb-base-heading>
-          <openwb-base-select-input
-            class="mb-2"
-            title="Anbieter"
-            :options="flexibleTariffList"
-            :model-value="
-              $store.state.mqtt['openWB/optional/ep/flexible_tariff/provider']
-                ? $store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'].type
-                : ''
-            "
-            @update:model-value="updateSelectedFlexibleTariff($event)"
-          />
-          <div
-            v-if="
-              $store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'] &&
-              $store.state.mqtt['openWB/optional/ep/flexible_tariff/provider'].type
-            "
-          >
-            <openwb-flexible-tariff-proxy
-              :flexible-tariff="$store.state.mqtt['openWB/optional/ep/flexible_tariff/provider']"
-              @update:configuration="updateConfiguration('openWB/optional/ep/flexible_tariff/provider', $event)"
-            />
-          </div>
-          <openwb-base-heading> Dynamische Netzentgelte </openwb-base-heading>
-          <openwb-base-select-input
-            class="mb-2"
-            title="Anbieter"
-            :options="gridFeeList"
-            :model-value="
-              $store.state.mqtt['openWB/optional/ep/grid_fee/provider']
-                ? $store.state.mqtt['openWB/optional/ep/grid_fee/provider'].type
-                : ''
-            "
-            @update:model-value="updateSelectedGridFee($event)"
-          />
-          <div
-            v-if="
-              $store.state.mqtt['openWB/optional/ep/grid_fee/provider'] &&
-              $store.state.mqtt['openWB/optional/ep/grid_fee/provider'].type
-            "
-          >
-            <openwb-grid-fee-proxy
-              :grid-fee="$store.state.mqtt['openWB/optional/ep/grid_fee/provider']"
-              @update:configuration="updateConfiguration('openWB/optional/ep/grid_fee/provider', $event)"
-            />
-          </div>
-        </div>
-      </openwb-base-card>
       <openwb-base-card title="OCPP Anbindung">
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
           <openwb-base-alert subtype="info">
@@ -244,15 +115,9 @@
 
 <script>
 import ComponentState from "../components/mixins/ComponentState.vue";
-import OpenwbFlexibleTariffProxy from "../components/electricity_pricing/flexible_tariffs/OpenwbFlexibleTariffProxy.vue";
-import OpenwbGridFeeProxy from "../components/electricity_pricing/grid_fees/OpenwbGridFeeProxy.vue";
 
 export default {
   name: "OpenwbGeneralChargeConfigView",
-  components: {
-    OpenwbFlexibleTariffProxy,
-    OpenwbGridFeeProxy,
-  },
   mixins: [ComponentState],
   emits: ["save", "reset", "defaults"],
   data() {
@@ -261,58 +126,9 @@ export default {
         { topic: "openWB/general/chargemode_config/unbalanced_load", writeable: true },
         { topic: "openWB/general/chargemode_config/unbalanced_load_limit", writeable: true },
         { topic: "openWB/general/extern", writeable: false },
-        { topic: "openWB/general/prices/bat", writeable: true },
-        { topic: "openWB/general/prices/grid", writeable: true },
-        { topic: "openWB/general/prices/pv", writeable: true },
-        { topic: "openWB/optional/ep/configured", writeable: false },
-        { topic: "openWB/optional/ep/flexible_tariff/provider", writeable: true },
-        { topic: "openWB/optional/ep/grid_fee/provider", writeable: true },
         { topic: "openWB/optional/ocpp/config", writeable: true },
-        { topic: "openWB/system/configurable/flexible_tariffs", writeable: false },
-        { topic: "openWB/system/configurable/grid_fees", writeable: false },
       ],
     };
-  },
-  computed: {
-    flexibleTariffList() {
-      return this.$store.state.mqtt["openWB/system/configurable/flexible_tariffs"];
-    },
-    gridFeeList() {
-      return this.$store.state.mqtt["openWB/system/configurable/grid_fees"];
-    },
-  },
-  methods: {
-    getFlexibleTariffDefaultConfiguration(flexibleTariffType) {
-      const flexibleTariffDefaults = this.flexibleTariffList.find((element) => element.value == flexibleTariffType);
-      if (Object.prototype.hasOwnProperty.call(flexibleTariffDefaults, "defaults")) {
-        return { ...flexibleTariffDefaults.defaults };
-      }
-      console.warn("no default configuration found for electricity tariff type!", flexibleTariffType);
-      return {};
-    },
-    updateSelectedFlexibleTariff($event) {
-      this.updateState("openWB/optional/ep/flexible_tariff/provider", $event, "type");
-      this.updateState(
-        "openWB/optional/ep/flexible_tariff/provider",
-        this.getFlexibleTariffDefaultConfiguration($event),
-      );
-    },
-    getGridFeeDefaultConfiguration(gridFeeType) {
-      const gridFeeDefaults = this.gridFeeList.find((element) => element.value == gridFeeType);
-      if (gridFeeDefaults && Object.prototype.hasOwnProperty.call(gridFeeDefaults, "defaults")) {
-        return { ...gridFeeDefaults.defaults };
-      }
-      console.warn("no default configuration found for grid fee type!", gridFeeType);
-      return {};
-    },
-    updateSelectedGridFee($event) {
-      this.updateState("openWB/optional/ep/grid_fee/provider", $event, "type");
-      this.updateState("openWB/optional/ep/grid_fee/provider", this.getGridFeeDefaultConfiguration($event));
-    },
-    updateConfiguration(key, event) {
-      console.debug("updateConfiguration", key, event);
-      this.updateState(key, event.value, event.object);
-    },
   },
 };
 </script>

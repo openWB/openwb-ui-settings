@@ -271,10 +271,11 @@
       ]"
     />
     <openwb-base-alert
-      v-if="plan.et_active == true && !$store.state.mqtt['openWB/optional/ep/configured']"
+      v-if="plan.et_active == true && !$store.state.mqtt['openWB/optional/ep/controllable']"
       subtype="danger"
     >
-      Bitte in den übergreifenden Ladeeinstellungen einen Strompreis-Anbieter konfigurieren.
+      Bitte unter Konfiguration - Energiekosten einen dynamischen Strompreis-Anbieter oder einen zeitabhängigen Tarif
+      (HT/NT) konfigurieren.
     </openwb-base-alert>
     <div v-if="plan.limit.selected == 'soc'">
       <hr />
@@ -373,7 +374,7 @@ export default {
   emits: ["update:modelValue", "sendCommand"],
   data() {
     return {
-      mqttTopics: [{ topic: "openWB/optional/ep/configured", writeable: false }],
+      mqttTopics: [{ topic: "openWB/optional/ep/controllable", writeable: false }],
       showRemoveModal: false,
     };
   },

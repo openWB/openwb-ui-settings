@@ -7,7 +7,7 @@
   >
     <template #header-left>
       <font-awesome-icon :icon="['fas', 'ranking-star']" />
-      Variable Strompreise
+      Strompreise
     </template>
     <template #header-right>{{ currentPrice }}&nbsp;ct/kWh</template>
     <openwb-base-card
@@ -17,21 +17,13 @@
     >
       <template #header>Tarifinformationen</template>
       <div
-        v-if="tariffProvider"
+        v-for="channel in channels"
+        :key="channel.key"
         class="row"
       >
-        <div class="col-xl-3 pr-0">Stromtarif:</div>
+        <div class="col-xl-4 pr-0">{{ channel.label }}:</div>
         <div class="col ml-3">
-          {{ tariffProvider }}
-        </div>
-      </div>
-      <div
-        v-if="gridFeeProvider"
-        class="row"
-      >
-        <div class="col-xl-3 pr-0">Netzentgelte:</div>
-        <div class="col ml-3">
-          {{ gridFeeProvider }}
+          {{ channel.providerName }}
         </div>
       </div>
     </openwb-base-card>
@@ -62,6 +54,22 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(fasRankingStar);
 
+const TOPIC_PREFIX = "openWB/optional/ep";
+
+// Price channels besides the combined price. Sources of the energy mix are off in the chart until
+// switched on in the legend, because they would only clutter the grid price most users care about.
+const PRICE_CHANNELS = [
+  { key: "flexible_tariff", label: "Stromtarif", color: "rgba(139, 0, 0, 0.9)" },
+  { key: "grid_fee", label: "Netzentgelt", color: "rgba(255, 0, 0, 0.4)" },
+  { key: "pv_price", label: "Preis für Erzeugung", color: "rgba(255, 140, 0, 0.9)", hiddenByDefault: true },
+  { key: "bat_price", label: "Preis für Speicherentladung", color: "rgba(0, 90, 200, 0.9)", hiddenByDefault: true },
+  { key: "feed_in_price", label: "Einspeisevergütung", color: "rgba(120, 60, 180, 0.9)", hiddenByDefault: true },
+];
+
+const CHANNEL_TOPICS = PRICE_CHANNELS.flatMap(({ key }) =>
+  ["get/fault_state", "get/fault_str", "get/prices", "provider"].map((suffix) => `${TOPIC_PREFIX}/${key}/${suffix}`),
+);
+
 export default {
   name: "ElectricityPricingCard",
   components: {
@@ -72,27 +80,19 @@ export default {
   mixins: [ComponentState],
   data() {
     return {
-      mqttTopics: [
-        { topic: "openWB/optional/ep/configured", writeable: false },
-        { topic: "openWB/optional/ep/flexible_tariff/get/fault_state", writeable: false },
-        { topic: "openWB/optional/ep/flexible_tariff/get/fault_str", writeable: false },
-        { topic: "openWB/optional/ep/flexible_tariff/get/prices", writeable: false },
-        { topic: "openWB/optional/ep/flexible_tariff/provider", writeable: false },
-        { topic: "openWB/optional/ep/get/prices", writeable: false },
-        { topic: "openWB/optional/ep/grid_fee/get/fault_state", writeable: false },
-        { topic: "openWB/optional/ep/grid_fee/get/fault_str", writeable: false },
-        { topic: "openWB/optional/ep/grid_fee/get/prices", writeable: false },
-        { topic: "openWB/optional/ep/grid_fee/provider", writeable: false },
-      ],
+      mqttTopics: [`${TOPIC_PREFIX}/configured`, `${TOPIC_PREFIX}/get/prices`, ...CHANNEL_TOPICS].map((topic) => ({
+        topic,
+        writeable: false,
+      })),
     };
   },
   computed: {
     electricityPricingConfigured() {
-      return this.$store.state.mqtt["openWB/optional/ep/configured"];
+      return this.epValue("configured");
     },
     // proper scaling: timestamp seconds -> milliseconds, price €/Wh -> ct/kWh
     totalPriceEntries() {
-      const entries = this.$store.state.mqtt["openWB/optional/ep/get/prices"];
+      const entries = this.epValue("get/prices");
       if (!entries) {
         return [];
       }
@@ -100,7 +100,7 @@ export default {
         .map(([key, value]) => ({ timestamp: Number(key) * 1000, value: value * 100000 }))
         .sort((a, b) => a.timestamp - b.timestamp);
     },
-    // Stromtarif/Netzentgelt dürfen nicht weiter reichen als der Gesamtpreis.
+    // Die Einzelpreise dürfen nicht weiter reichen als der Gesamtpreis.
     totalPriceCutoff() {
       const entries = this.totalPriceEntries;
       if (entries.length === 0) {
@@ -113,17 +113,21 @@ export default {
       const previous = entries[entries.length - 2];
       return last.timestamp + (last.timestamp - previous.timestamp) - 1;
     },
-    tariffEntries() {
-      if (!this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/provider"]?.type) {
-        return [];
-      }
-      return this.crossReferencedPriceEntries(this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/get/prices"]);
-    },
-    gridFeeEntries() {
-      if (!this.$store.state.mqtt["openWB/optional/ep/grid_fee/provider"]?.type) {
-        return [];
-      }
-      return this.crossReferencedPriceEntries(this.$store.state.mqtt["openWB/optional/ep/grid_fee/get/prices"]);
+    // Only channels with a configured provider
+    channels() {
+      return PRICE_CHANNELS.flatMap((channel) => {
+        const provider = this.epValue(`${channel.key}/provider`);
+        if (!provider?.type) {
+          return [];
+        }
+        return {
+          ...channel,
+          providerName: provider.name,
+          entries: this.crossReferencedPriceEntries(this.epValue(`${channel.key}/get/prices`)),
+          faultState: this.epValue(`${channel.key}/get/fault_state`) || 0,
+          faultMessage: this.epValue(`${channel.key}/get/fault_str`),
+        };
+      });
     },
     chartDatasets() {
       return [
@@ -135,22 +139,15 @@ export default {
           stepped: true,
           data: this.totalPriceEntries,
         },
-        {
-          label: "Stromtarif",
+        ...this.channels.map((channel) => ({
+          label: channel.label,
           unit: "ct/kWh",
-          color: "rgba(139, 0, 0, 0.9)",
-          backgroundColor: "rgba(139, 0, 0, 0.9)",
+          color: channel.color,
+          backgroundColor: channel.color,
           stepped: true,
-          data: this.tariffEntries,
-        },
-        {
-          label: "Netzentgelt",
-          unit: "ct/kWh",
-          color: "rgba(255, 0, 0, 0.4)",
-          backgroundColor: "rgba(255, 0, 0, 0.4)",
-          stepped: true,
-          data: this.gridFeeEntries,
-        },
+          hiddenByDefault: channel.hiddenByDefault,
+          data: channel.entries,
+        })),
       ];
     },
     currentPrice() {
@@ -165,44 +162,22 @@ export default {
       },
     },
     combinedState() {
-      const flexibleTariffState = this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/get/fault_state"] || 0;
-      const gridFeeState = this.$store.state.mqtt["openWB/optional/ep/grid_fee/get/fault_state"] || 0;
-      return Math.max(flexibleTariffState, gridFeeState);
+      return Math.max(0, ...this.channels.map((channel) => channel.faultState));
     },
     combinedStateMessage() {
-      const messages = [];
-
-      // Flexible Tariff
-      if (this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/provider"]?.type) {
-        const state = this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/get/fault_state"] || 0;
-        const message =
-          state > 0 ? this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/get/fault_str"] : "Kein Fehler.";
-        messages.push(`Stromtarif: ${message}`);
-      }
-
-      // Grid Fee
-      if (this.$store.state.mqtt["openWB/optional/ep/grid_fee/provider"]?.type) {
-        const state = this.$store.state.mqtt["openWB/optional/ep/grid_fee/get/fault_state"] || 0;
-        const message =
-          state > 0 ? this.$store.state.mqtt["openWB/optional/ep/grid_fee/get/fault_str"] : "Kein Fehler.";
-        messages.push(`Netzentgelt: ${message}`);
-      }
-
+      const messages = this.channels.map(
+        (channel) => `${channel.label}: ${channel.faultState > 0 ? channel.faultMessage : "Kein Fehler."}`,
+      );
       return messages.length > 0 ? messages.join("\n") : undefined;
     },
-    tariffProvider() {
-      return this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/provider"]?.name || null;
-    },
-    gridFeeProvider() {
-      return this.$store.state.mqtt["openWB/optional/ep/grid_fee/provider"]?.name || null;
-    },
     showLegend() {
-      const flexibleTariffConfigured = this.$store.state.mqtt["openWB/optional/ep/flexible_tariff/provider"]?.type;
-      const gridFeeConfigured = this.$store.state.mqtt["openWB/optional/ep/grid_fee/provider"]?.type;
-      return flexibleTariffConfigured && gridFeeConfigured;
+      return this.channels.length > 1;
     },
   },
   methods: {
+    epValue(path) {
+      return this.$store.state.mqtt[`${TOPIC_PREFIX}/${path}`];
+    },
     crossReferencedPriceEntries(entries) {
       if (!entries) {
         return [];

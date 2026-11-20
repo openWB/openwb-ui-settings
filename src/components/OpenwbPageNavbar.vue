@@ -184,6 +184,14 @@
               PV-Prognose
             </router-link>
             <router-link
+              v-if="accessAllowed('ElectricityPricesConfiguration')"
+              to="/ElectricityPricesConfiguration"
+              class="dropdown-item"
+              active-class="active disabled"
+            >
+              Energiekosten
+            </router-link>
+            <router-link
               v-if="accessAllowed('ChargePointInstallation')"
               to="/ChargePointInstallation"
               class="dropdown-item"

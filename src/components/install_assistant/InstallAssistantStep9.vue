@@ -1,26 +1,26 @@
 <template>
   <InstallAssistantStepTemplate
-    :title="`${stepNumber}. Datensicherung der neuen Konfiguration`"
+    title="9. Energiekosten"
     @next-page="nextPage"
     @previous-page="previousPage"
     @end-assistant="endAssistant"
   >
     <template #help>
       <p>
-        Wir empfehlen an dieser Stelle eine manuell initiierte Sicherung der neu konfigurierten openWB zu erstellen.
+        Der Stromtarif wird für die Berechnung der Ladekosten und für das preisbasierte Laden verwendet. Trage hier
+        einen Anbieter mit dynamischen Preisen ein, wähle "Fester Preis" für einen gleichbleibenden Preis oder
+        "Zeitabhängiger Tarif (HT/NT)" für Hoch- und Niedertarif.
       </p>
       <p>
-        Dieser Vorgang sollte im Betrieb regelmäßig wiederholt werden (mindestens vor Updates), um sowohl die
-        individuellen Log-Daten als auch auf ältere Konfigurationen zurückgreifen zu können (Backups).
+        Wird kein Stromtarif eingerichtet, rechnet openWB die Ladekosten mit einem Standardpreis. Der Preis für
+        Erzeugung und der Preis für Speicherentladung können hier ebenfalls angepasst werden.
       </p>
+      <p class="font-weight-bold">Änderungen werden nur durch Klicken auf Speichern wirksam!</p>
     </template>
     <template #content>
-      <DataManagement
-        :install-assistant-active="true"
-        @send-command="$emit('sendCommand', $event)"
+      <ElectricityPricesConfigurationView
         @save="$emit('save', $event)"
         @reset="$emit('reset')"
-        @defaults="$emit('defaults')"
       />
     </template>
   </InstallAssistantStepTemplate>
@@ -29,30 +29,25 @@
 <script>
 import ComponentState from "../mixins/ComponentState.vue";
 import InstallAssistantStepTemplate from "./InstallAssistantStepTemplate.vue";
-import DataManagement from "../../views/DataManagement.vue";
+import ElectricityPricesConfigurationView from "../../views/ElectricityPricesConfiguration.vue";
 
 export default {
   name: "InstallAssistantStep9",
   components: {
     InstallAssistantStepTemplate,
-    DataManagement,
+    ElectricityPricesConfigurationView,
   },
   mixins: [ComponentState],
-  emits: ["save", "reset", "defaults", "sendCommand", "switchPage", "endAssistant"],
+  emits: ["save", "reset", "switchPage", "endAssistant"],
   data: () => ({
-    mqttTopics: [{ topic: "openWB/general/extern", writeable: false }],
+    mqttTopics: [],
   }),
-  computed: {
-    stepNumber() {
-      return this.$store.state.mqtt["openWB/general/extern"] ? 5 : 9;
-    },
-  },
   methods: {
     nextPage() {
       this.$emit("switchPage", 10);
     },
     previousPage() {
-      this.$emit("switchPage", this.$store.state.mqtt["openWB/general/extern"] ? 20 : 8);
+      this.$emit("switchPage", 8);
     },
     endAssistant() {
       this.$emit("endAssistant");
