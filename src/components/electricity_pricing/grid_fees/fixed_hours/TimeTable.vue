@@ -36,47 +36,17 @@
         :key="index"
       >
         <template #start>
-          <select
+          <time-select
             v-model="time[0]"
-            class="form-control"
-            required
-            @change="updateEndOptions(index)"
-          >
-            <option
-              value=""
-              disabled
-            >
-              -- Bitte auswählen --
-            </option>
-            <option
-              v-for="option in generateTimeOptions('00:00', '23:00')"
-              :key="option.value"
-              :value="option.value"
-            >
-              {{ option.text }}
-            </option>
-          </select>
+            @update:model-value="clearEndIfNotAfterStart(time)"
+          />
         </template>
         <template #end>
-          <select
+          <time-select
             v-model="time[1]"
-            class="form-control"
-            required
-          >
-            <option
-              value=""
-              disabled
-            >
-              -- Bitte auswählen --
-            </option>
-            <option
-              v-for="option in endOptions[index]"
-              :key="option.value"
-              :value="option.value"
-            >
-              {{ option.text }}
-            </option>
-          </select>
+            :after="time[0]"
+            :max-hour="24"
+          />
         </template>
         <template #action>
           <openwb-base-avatar
@@ -95,6 +65,7 @@
 
 <script>
 import TimeRow from "./TimeRow.vue";
+import TimeSelect from "./TimeSelect.vue";
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -107,6 +78,7 @@ export default {
   components: {
     FontAwesomeIcon,
     TimeRow,
+    TimeSelect,
   },
   inheritAttrs: false,
   props: {
@@ -119,11 +91,6 @@ export default {
     },
   },
   emits: ["update:modelValue"],
-  data() {
-    return {
-      endOptions: this.modelValue.map(() => this.generateTimeOptions("01:00", "24:00")),
-    };
-  },
   computed: {
     value: {
       get() {
@@ -135,31 +102,15 @@ export default {
     },
   },
   methods: {
-    generateTimeOptions(start, end) {
-      const options = [];
-      const startHour = parseInt(start.split(":")[0], 10);
-      const endHour = parseInt(end.split(":")[0], 10);
-      for (let hour = startHour; hour <= endHour; hour++) {
-        const hourString = hour.toString().padStart(2, "0");
-        const timeString = `${hourString}:00`;
-        options.push({ value: timeString, text: timeString });
-      }
-      return options;
-    },
     addTime() {
       this.value.push(["", ""]);
     },
     removeTime(timeIndex) {
       this.value.splice(timeIndex, 1);
     },
-    updateEndOptions(index) {
-      const startTime = this.value[index][0];
-      if (startTime) {
-        const startHour = parseInt(startTime.split(":")[0], 10) + 1;
-        const startString = startHour.toString().padStart(2, "0") + ":00";
-        this.endOptions[index] = this.generateTimeOptions(startString, "24:00");
-      } else {
-        this.endOptions[index] = this.generateTimeOptions("01:00", "24:00");
+    clearEndIfNotAfterStart(time) {
+      if (time[1] <= time[0]) {
+        time[1] = "";
       }
     },
   },
