@@ -55,7 +55,7 @@
       @update:model-value="updateConfiguration($event, 'configuration.calculate_soc')"
     >
       <template #help>
-        Berechnet den Ladestand (SoC) während der Ladung aus Ladeleistung und Ladedauer, ausgehend vom zuletzt 
+        Berechnet den Ladestand (SoC) während der Ladung aus Ladeleistung und Ladedauer, ausgehend vom zuletzt
         abgerufenen SoC. Ist die Einstellung aktiv, wird während der Ladung immer berechnet.
         <br />
         Sinnvoll, wenn der SoC während der Ladung nicht oder nicht oft genug von der Schnittstelle aktualisiert wird.
