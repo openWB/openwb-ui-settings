@@ -74,30 +74,12 @@
       </template>
     </openwb-base-text-input>
 
-    <openwb-base-button-group-input
-      title="SoC während der Ladung berechnen"
-      :buttons="[
-        {
-          buttonValue: false,
-          text: 'Nein',
-          class: 'btn-outline-danger',
-        },
-        {
-          buttonValue: true,
-          text: 'Ja',
-          class: 'btn-outline-success',
-        },
-      ]"
+    <openwb-vehicle-calculate-soc-input
       :model-value="vehicle.configuration.calculate_soc"
       @update:model-value="updateConfiguration($event, 'configuration.calculate_soc')"
     >
-      <template #help>
-        Berechnet den Ladestand (SoC) während der Ladung. Dies ist notwendig, wenn der SoC nicht über die Schnittstelle
-        des Fahrzeugs abgerufen werden kann. Die Berechnung erfolgt über die Ladeleistung und die Ladedauer.
-        <br />
-        Derzeit u.a. notwendig für Peugeot, Opel, Citroen und DS.
-      </template>
-    </openwb-base-button-group-input>
+      Derzeit u.a. notwendig für Peugeot, Opel, Citroen und DS.
+    </openwb-vehicle-calculate-soc-input>
     <openwb-base-number-input
       title="Timeout für http-Abfragen"
       subtype="number"
@@ -114,9 +96,11 @@
 
 <script>
 import VehicleConfigMixin from "../VehicleConfigMixin.vue";
+import OpenwbVehicleCalculateSocInput from "../OpenwbVehicleCalculateSocInput.vue";
 
 export default {
   name: "VehicleSocJson",
+  components: { OpenwbVehicleCalculateSocInput },
   mixins: [VehicleConfigMixin],
 };
 </script>

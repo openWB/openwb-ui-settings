@@ -37,30 +37,10 @@
     >
       <template #help> Die Fahrgestellnummer des Fahrzeugs. </template>
     </openwb-base-text-input>
-    <openwb-base-button-group-input
-      title="SoC während der Ladung berechnen"
-      :buttons="[
-        {
-          buttonValue: false,
-          text: 'Nein',
-          class: 'btn-outline-danger',
-        },
-        {
-          buttonValue: true,
-          text: 'Ja',
-          class: 'btn-outline-success',
-        },
-      ]"
+    <openwb-vehicle-calculate-soc-input
       :model-value="vehicle.configuration.calculate_soc"
       @update:model-value="updateConfiguration($event, 'configuration.calculate_soc')"
-    >
-      <template #help>
-        Berechnet den Ladestand (SoC) während der Ladung aus Ladeleistung und Ladedauer, ausgehend vom zuletzt
-        abgerufenen SoC. Ist die Einstellung aktiv, wird während der Ladung immer berechnet.
-        <br />
-        Sinnvoll, wenn der SoC während der Ladung nicht oder nicht oft genug von der Schnittstelle aktualisiert wird.
-      </template>
-    </openwb-base-button-group-input>
+    />
 
     <openwb-base-alert
       v-if="vehicle.configuration.key_expires_at"
@@ -79,12 +59,14 @@
 
 <script>
 import VehicleConfigMixin from "../VehicleConfigMixin.vue";
+import OpenwbVehicleCalculateSocInput from "../OpenwbVehicleCalculateSocInput.vue";
 
 // Ab wie vielen Tagen vor Ablauf die Warnfarbe greift (deckt sich mit KEY_EXPIRY_WARN_DAYS in api.py)
 const KEY_EXPIRY_WARN_DAYS = 14;
 
 export default {
   name: "VehicleSocMyskoda",
+  components: { OpenwbVehicleCalculateSocInput },
   mixins: [VehicleConfigMixin],
   computed: {
     keyExpiryDate() {
