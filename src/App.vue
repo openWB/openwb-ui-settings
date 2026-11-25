@@ -50,8 +50,18 @@ export default {
     Blocker,
     UpdateFeedback,
   },
+  provide() {
+    return { updateFeedbackState: this.updateFeedbackState };
+  },
   data() {
     return {
+      updateFeedbackState: {
+        expectedValue: undefined,
+        waiting: false,
+        timeout: null,
+        error: "",
+        messageKey: null,
+      },
       client: null,
       connected: false,
       // state of the first connection after page load: "pending", "established" or "failed"

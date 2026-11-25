@@ -76,6 +76,7 @@ export default {
   name: "OpenwbUpdateFeedback",
   components: { OpenwbUpdateFeedbackNotice },
   mixins: [ComponentState],
+  inject: ["updateFeedbackState"],
   props: {
     prompt: { type: Boolean, default: false },
   },
@@ -88,9 +89,7 @@ export default {
         { topic: "openWB/system/boot_done", writeable: false },
         { topic: "openWB/system/update_in_progress", writeable: false },
       ],
-      pendingValue: undefined,
-      saveTimeout: null,
-      error: "",
+      unsubscribeSaveUpdates: null,
     };
   },
   computed: {
@@ -109,7 +108,10 @@ export default {
       );
     },
     saving() {
-      return this.pendingValue !== undefined;
+      return this.updateFeedbackState.waiting;
+    },
+    error() {
+      return this.updateFeedbackState.error;
     },
     showPrompt() {
       // null is the backend's explicit "not decided" state. Missing data is not consent
@@ -120,39 +122,85 @@ export default {
   watch: {
     decision(value) {
       // Wait for the backend's retained state, not a local optimistic UI update.
-      if (this.saving && value === this.pendingValue) {
-        clearTimeout(this.saveTimeout);
-        this.saveTimeout = null;
-        this.pendingValue = undefined;
-        this.error = "";
-      }
+      // The persistent prompt instance also handles confirmations after a route
+      // change or timeout. Keep the expected value until confirmation or retry.
+      this.confirmChoice(value);
     },
   },
+  mounted() {
+    if (this.prompt) {
+      // A repeated retained value can also acknowledge a retry, without
+      // triggering Vue's value watcher.
+      this.unsubscribeSaveUpdates = this.$store.subscribe((mutation) => {
+        if (mutation.type === "updateTopic" && mutation.payload.topic === UPDATE_FEEDBACK_TOPIC) {
+          this.confirmChoice(mutation.payload.payload);
+        }
+      });
+    }
+  },
   beforeUnmount() {
-    clearTimeout(this.saveTimeout);
+    if (this.prompt) {
+      clearTimeout(this.updateFeedbackState.timeout);
+      this.unsubscribeSaveUpdates?.();
+    }
   },
   methods: {
+    confirmChoice(value) {
+      if (this.prompt && typeof value === "boolean" && value === this.updateFeedbackState.expectedValue) {
+        this.clearSaveState();
+      }
+    },
+    clearSaveState() {
+      const state = this.updateFeedbackState;
+      clearTimeout(state.timeout);
+      state.timeout = null;
+      state.expectedValue = undefined;
+      state.waiting = false;
+      state.error = "";
+      if (state.messageKey !== null) {
+        this.$store.commit("removeClientMessage", state.messageKey);
+        state.messageKey = null;
+      }
+    },
     onModalResult(result) {
       if (result === "accept") this.choose(true);
       if (result === "decline") this.choose(false);
     },
     choose(value) {
       if (typeof value !== "boolean" || !this.ready || this.saving) return;
-      this.error = "";
-      if (value === this.decision) return;
-      this.pendingValue = value;
-      this.saveTimeout = setTimeout(() => {
-        this.pendingValue = undefined;
-        this.error =
-          "Die Speicherung wurde nicht bestätigt. Bitte Verbindung und Berechtigung prüfen und erneut wählen.";
+      const shouldPublish = value !== this.decision || this.updateFeedbackState.expectedValue !== undefined;
+      this.clearSaveState();
+      if (!shouldPublish) return;
+      const state = this.updateFeedbackState;
+      const store = this.$store;
+      state.expectedValue = value;
+      state.waiting = true;
+      // Capture shared state, not the settings instance that can be unmounted.
+      const reportFailure = (message) => {
+        clearTimeout(state.timeout);
+        state.timeout = null;
+        state.waiting = false;
+        state.error = message;
+        state.messageKey = "update-feedback-save-" + Date.now();
+        store.commit("addClientMessage", {
+          timestamp: state.messageKey,
+          payload: {
+            message,
+            type: "danger",
+            source: "client",
+            timestamp: Math.floor(Date.now() / 1000),
+          },
+        });
+      };
+      state.timeout = setTimeout(() => {
+        reportFailure(
+          "Die Speicherung wurde nicht bestätigt. Bitte Verbindung und Berechtigung prüfen und erneut wählen.",
+        );
       }, 6000);
       try {
         this.$root.doPublish(UPDATE_FEEDBACK_TOPIC.replace("openWB/", "openWB/set/"), value);
       } catch {
-        clearTimeout(this.saveTimeout);
-        this.saveTimeout = null;
-        this.pendingValue = undefined;
-        this.error = "Die Auswahl konnte nicht gespeichert werden. Bitte erneut versuchen.";
+        reportFailure("Die Auswahl konnte nicht gespeichert werden. Bitte erneut versuchen.");
       }
     },
   },
