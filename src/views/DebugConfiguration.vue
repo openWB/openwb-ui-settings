@@ -80,6 +80,10 @@ export default {
           fileName: "/openWB/ramdisk/forecast.log",
         },
         {
+          title: "Strompreise-Log",
+          fileName: "/openWB/ramdisk/tariff.log",
+        },
+        {
           title: "SoC-Log",
           fileName: "/openWB/ramdisk/soc.log",
         },
