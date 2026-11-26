@@ -68,6 +68,7 @@
           Wenn Du nicht einwilligst, wird eine ggf. konfigurierte Cloud-Anbindung gelöscht. Die openWB arbeitet autark
           wie gewohnt weiter. Fernzugriff und Remote-Support sind dann nicht mehr möglich!
         </openwb-base-alert>
+        <openwb-update-feedback />
         <template #footer>
           <openwb-base-submit-buttons
             form-name="dataProtectionForm"
@@ -88,11 +89,13 @@ library.add(fasPowerOff);
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import ComponentState from "../components/mixins/ComponentState.vue";
+import OpenwbUpdateFeedback from "../components/OpenwbUpdateFeedback.vue";
 
 export default {
   name: "OpenwbDataProtectionView",
   components: {
     FontAwesomeIcon,
+    OpenwbUpdateFeedback,
   },
   mixins: [ComponentState],
   emits: ["sendCommand", "save"],

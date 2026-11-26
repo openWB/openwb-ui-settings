@@ -24,6 +24,7 @@
   <user-info @send-command="sendCommand" />
   <messages />
   <blocker />
+  <update-feedback :prompt="true" />
 </template>
 
 <script>
@@ -33,6 +34,7 @@ import UserInfo from "./components/OpenwbPageUser.vue";
 import MqttConnectionState from "./components/OpenwbPageMqttConnectionState.vue";
 import Messages from "./components/OpenwbPageMessages.vue";
 import Blocker from "./components/OpenwbPageBlocker.vue";
+import UpdateFeedback from "./components/OpenwbUpdateFeedback.vue";
 import mqtt from "mqtt";
 
 const CONNECTING_GRACE_PERIOD = 10000;
@@ -46,9 +48,20 @@ export default {
     MqttConnectionState,
     Messages,
     Blocker,
+    UpdateFeedback,
+  },
+  provide() {
+    return { updateFeedbackState: this.updateFeedbackState };
   },
   data() {
     return {
+      updateFeedbackState: {
+        expectedValue: undefined,
+        waiting: false,
+        timeout: null,
+        error: "",
+        messageKey: null,
+      },
       client: null,
       connected: false,
       // state of the first connection after page load: "pending", "established" or "failed"
