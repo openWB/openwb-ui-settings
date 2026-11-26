@@ -180,6 +180,15 @@
                 -
               </div>
             </template>
+            <template #data_used_fallback="data">
+              <div
+                v-if="data.value.data_used_fallback === true"
+                class="fallback-notice"
+              >
+                Energieaufteilung mit Ersatzwerten berechnet, da Komponentenwerte fehlten oder fehlerhaft waren.
+              </div>
+              <span v-else>–</span>
+            </template>
             <template #vehicle_chargemode="data">
               <div
                 class="td-center tag"
@@ -420,6 +429,11 @@ export default {
             sortable: false,
           },
           {
+            label: "Berechnungshinweis",
+            field: "data_used_fallback",
+            sortable: false,
+          },
+          {
             label: "Fahrzeug",
             field: "vehicle_name",
             sortable: true,
@@ -574,13 +588,19 @@ export default {
       }
     },
     chargeLogColumns() {
-      return this.table.columns.map((column) => {
-        return {
-          ...column,
-          headerClasses: this.addClasses(column.field),
-          columnClasses: this.addClasses(column.field),
-        };
-      });
+      return this.table.columns
+        .filter((column) => column.field !== "data_used_fallback" || this.chargeLogHasFallback)
+        .map((column) => {
+          return {
+            ...column,
+            headerClasses: this.addClasses(column.field),
+            columnClasses: this.addClasses(column.field),
+          };
+        });
+    },
+    chargeLogHasFallback() {
+      // Check the complete returned/filtered list, not just the current table page.
+      return this.chargeLogDataset.some((entry) => entry.data_used_fallback === true);
     },
     chargeLogDataset: {
       get() {
@@ -626,6 +646,7 @@ export default {
                 : undefined,
               data_range_charged: entry["data"]["range_charged"],
               data_costs: entry["data"]["costs"],
+              data_used_fallback: entry["data"]["used_fallback"],
               data_imported_since_plugged: entry["data"]["imported_since_plugged"],
               data_imported_since_mode_switch: entry["data"]["imported_since_mode_switch"],
               data_exported_since_plugged: entry["data"]["exported_since_plugged"],
@@ -920,6 +941,16 @@ export default {
 </script>
 
 <style scoped>
+.fallback-notice {
+  min-width: 14rem;
+  max-width: 22rem;
+  white-space: normal;
+  padding: 0.5rem;
+  border-left: 3px solid #ffc107;
+  background-color: #fff3cd;
+  color: #664d03;
+}
+
 .hide {
   display: none;
 }
