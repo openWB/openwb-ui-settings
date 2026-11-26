@@ -129,6 +129,24 @@
         </div>
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
           <hr />
+          <openwb-base-text-input
+            title="URL der anzuzeigenden Webseite"
+            subtype="url"
+            :model-value="$store.state.mqtt['openWB/optional/int_display/display_url']"
+            :empty-value="''"
+            :validator="validateDisplayUrl"
+            @update:model-value="updateDisplayUrl"
+          >
+            <template #help>
+              Die URL wird auf dem Display dieser secondary openWB angezeigt. Leer lassen, um die automatische Erkennung
+              der anzuzeigenden URL zu verwenden.
+            </template>
+          </openwb-base-text-input>
+          <openwb-base-alert subtype="danger">
+            <strong>Wichtig:</strong> Bitte beachten, dass die URL in einem Browser auf dieser secondary openWB geladen
+             wird. Nur vertrauenswürdige Webseiten sollten hier angegeben werden. Aufwändige Webseiten mit Effekten und
+             Animationen können die Regelung der Ladepunkte negativ beeinflussen. 
+          </openwb-base-alert>
           <openwb-base-alert subtype="info">
             Weitere Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary"
             befindet.
@@ -227,6 +245,7 @@ export default {
         { topic: "openWB/optional/int_display/active", writeable: true },
         { topic: "openWB/optional/int_display/on_if_plugged_in", writeable: true }, // not yet implemented!
         { topic: "openWB/optional/int_display/only_local_charge_points", writeable: true },
+        { topic: "openWB/optional/int_display/display_url", writeable: true },
         { topic: "openWB/optional/int_display/rotation", writeable: true },
         { topic: "openWB/optional/int_display/standby", writeable: true },
         { topic: "openWB/optional/int_display/theme", writeable: true },
@@ -262,6 +281,26 @@ export default {
     },
   },
   methods: {
+    validateDisplayUrl(value) {
+      if (value === "") {
+        return true;
+      }
+      try {
+        const protocol = new URL(value).protocol;
+        return (
+          protocol === "http:" ||
+          protocol === "https:" ||
+          "Bitte eine gültige HTTP- oder HTTPS-URL angeben."
+        );
+      } catch {
+        return "Bitte eine gültige HTTP- oder HTTPS-URL angeben.";
+      }
+    },
+    updateDisplayUrl(value) {
+      if (this.validateDisplayUrl(value) === true) {
+        this.updateState("openWB/optional/int_display/display_url", value);
+      }
+    },
     getDisplayThemeDefaults(displayThemeType) {
       const displayThemeDefaults = this.displayThemeList.find((element) => element.value == displayThemeType);
       if (Object.prototype.hasOwnProperty.call(displayThemeDefaults, "defaults")) {
