@@ -6,6 +6,26 @@ export function logMessage(log) {
   return typeof log?.message === "string" ? log.message.trim() : "";
 }
 
+const timeFormatter = new Intl.DateTimeFormat("de-DE", {
+  hour: "2-digit",
+  minute: "2-digit",
+  hourCycle: "h23",
+});
+
+function entryTime(entry) {
+  if (typeof entry?.date === "string" && entry.date.trim()) {
+    return entry.date.trim();
+  }
+  // chartLog contains Unix seconds; use the chart's default browser-local time zone.
+  if (typeof entry?.timestamp === "number" && Number.isFinite(entry.timestamp)) {
+    const date = new Date(entry.timestamp * 1000);
+    if (Number.isFinite(date.getTime())) {
+      return timeFormatter.format(date);
+    }
+  }
+  return "Zeitpunkt unbekannt";
+}
+
 export function analyseLogQuality(log, accessible = () => true) {
   const entries = Array.isArray(log?.entries) ? log.entries : [];
   const steps = entries
@@ -24,7 +44,7 @@ export function analyseLogQuality(log, accessible = () => true) {
     const step = entry?.timestamp - previous?.timestamp;
     const gap = cadence !== undefined && step > cadence * 1.5;
     if (gap) {
-      gaps.push({ from: previous.date, to: entry.date });
+      gaps.push({ from: entryTime(previous), to: entryTime(entry) });
     }
     energyGroups.forEach((group) => {
       const modules = entry?.[group] || {};
@@ -52,10 +72,10 @@ export function analyseLogQuality(log, accessible = () => true) {
         const ranges = components.get(id).ranges;
         const last = ranges.at(-1);
         if (last && last.index === index - 1 && !gap && Number.isFinite(step) && step > 0) {
-          last.to = entry.date;
+          last.to = entryTime(entry);
           last.index = index;
         } else {
-          ranges.push({ from: entry.date, to: entry.date, index });
+          ranges.push({ from: entryTime(entry), to: entryTime(entry), index });
         }
       });
     });

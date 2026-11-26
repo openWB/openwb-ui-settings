@@ -1,15 +1,26 @@
 <template>
   <div
-    v-if="message"
+    v-if="message || hasRecordingGaps || hasRecordedFaults"
     class="chart-data-quality"
   >
     <openwb-base-card
-      title="Energieverteilung nur eingeschränkt berechenbar"
+      :title="
+        message || hasRecordedFaults ? 'Energieverteilung nur eingeschränkt berechenbar' : 'Lücken in der Aufzeichnung'
+      "
       subtype="warning"
     >
-      <p>
+      <p v-if="message">
         Für den gewählten Zeitraum liegen Berechnungsmeldungen vor. Die angezeigten Summen und Energieanteile sind
         deshalb nicht durchgehend als vollständige, verlässliche Messung zu verstehen.
+      </p>
+      <p v-else-if="hasRecordedFaults">
+        Für den gewählten Tag sind Fehlerzustände in den Komponentenwerten aufgezeichnet. Die Energieaufteilung ist
+        deshalb nur eingeschränkt beurteilbar. Eine bestimmte Ersatzberechnung ist durch diese Statuswerte allein nicht
+        nachgewiesen.
+      </p>
+      <p v-else>
+        Für den gewählten Tag wurden Lücken in der Aufzeichnung erkannt. Dadurch kann die zeitliche Zuordnung der
+        Energie eingeschränkt sein. Eine Aufzeichnungslücke allein belegt keinen Gerätefehler.
       </p>
       <ul
         v-if="gridFallback || zeroFallback"
@@ -24,10 +35,10 @@
           bedeutet nicht automatisch, dass kein Verbrauch stattgefunden hat.
         </li>
       </ul>
-      <p>
+      <p v-if="message || hasRecordedFaults">
         openWB kann fehlende oder fehlerhafte Eingangswerte nicht durch eine vollständige Messung ersetzen. Die
-        Meldungen zeigen, wo die Datenbasis eingeschränkt war; die genaue Ursache muss am Gerät und an dessen Anbindung
-        geprüft werden.
+        folgenden Details zeigen, wo die Datenbasis eingeschränkt war; die genaue Ursache muss am Gerät und an dessen
+        Anbindung geprüft werden.
       </p>
 
       <details class="quality-details">
@@ -71,16 +82,20 @@
               <p class="mb-0">{{ helpText(component.group) }}</p>
             </section>
           </template>
-          <p v-else>
+          <p v-else-if="message">
             Aus diesen Meldungen lassen sich keine verlässlichen gerätebezogenen Fehlerzeiträume für diese Ansicht
             ableiten. Prüfe die Tagesansicht und die Status- bzw. Gerätemeldungen des betroffenen Zeitraums.
           </p>
 
           <section
-            v-if="range === 'day' && quality.gaps.length"
+            v-if="hasRecordingGaps"
             class="component-issue"
           >
-            <h3 class="h6 font-weight-bold">Zusätzlich: Lücken in der Aufzeichnung</h3>
+            <h3 class="h6 font-weight-bold">
+              {{
+                message || hasRecordedFaults ? "Zusätzlich: Lücken in der Aufzeichnung" : "Lücken in der Aufzeichnung"
+              }}
+            </h3>
             <ul>
               <li
                 v-for="(gap, index) in quality.gaps"
@@ -100,7 +115,7 @@
             Nach Beheben der Ursache die aktuellen Werte und Statusmeldungen kontrollieren. Wieder verfügbare Livewerte
             ergänzen fehlende historische Daten nicht automatisch.
           </p>
-          <details v-if="quality.messagesVisible">
+          <details v-if="message && quality.messagesVisible">
             <summary>Technische Berechnungsmeldungen anzeigen</summary>
             <pre class="technical-messages mt-2 mb-0">{{ message }}</pre>
           </details>
@@ -128,6 +143,12 @@ export default {
     },
     quality() {
       return analyseLogQuality(this.log, this.accessible);
+    },
+    hasRecordingGaps() {
+      return this.range === "day" && this.quality.gaps.length > 0;
+    },
+    hasRecordedFaults() {
+      return this.range === "day" && this.quality.components.length > 0;
     },
     gridFallback() {
       return this.message.includes("Alle Verbräuche werden dem Netz zugerechnet.");

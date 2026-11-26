@@ -52,7 +52,7 @@
         >
           Es konnten keine Daten für diesen Zeitraum gefunden werden.
         </openwb-base-alert>
-        <div v-if="chartDataHasEntries || chartCalculationMessage">
+        <div v-if="chartDataHasEntries || chartHasQualityWarning">
           <openwb-base-card
             v-if="chartDataHasEntries"
             title="Diagramm"
@@ -84,7 +84,7 @@
             <template #header>
               <span>Summen</span>
               <span
-                v-if="chartCalculationMessage"
+                v-if="chartHasQualityWarning"
                 class="badge badge-warning ml-2"
                 >Datenbasis eingeschränkt</span
               >
@@ -211,7 +211,7 @@ Chart.register(
 );
 import ChartLegend from "../components/chart/ChartLegend.vue";
 import ChartDataQuality from "../components/chart/ChartDataQuality.vue";
-import { logMessage } from "../components/chart/logDataQuality.js";
+import { analyseLogQuality, logMessage } from "../components/chart/logDataQuality.js";
 import { markRaw, toRaw } from "vue";
 
 // list of keys in the chart data that contain objects with measurement values that should be included
@@ -1178,6 +1178,16 @@ export default {
     },
     chartCalculationMessage() {
       return logMessage(this.chartLog);
+    },
+    chartHasQualityWarning() {
+      if (this.chartCalculationMessage) {
+        return true;
+      }
+      if (this.chartRange !== "day") {
+        return false;
+      }
+      const quality = analyseLogQuality(this.chartLog, this.objectAccessible);
+      return quality.gaps.length > 0 || quality.components.length > 0;
     },
     logDataReady() {
       return this.$store.state.mqtt["openWB/system/log_data_ready"] === true;
