@@ -129,10 +129,22 @@
         </div>
         <div v-if="$store.state.mqtt['openWB/general/extern'] === true">
           <hr />
-          <openwb-base-alert subtype="info">
-            Weitere Einstellungen sind nicht verfügbar, solange sich diese openWB im Steuerungsmodus "secondary"
-            befindet.
-          </openwb-base-alert>
+          <openwb-base-select-input
+            title="Display-Quelle"
+            :model-value="$store.state.mqtt['openWB/general/extern_display_mode']"
+            not-selected="Bitte auswählen"
+            :options="[
+              { value: 'primary', text: 'Display der primary openWB' },
+              { value: 'local', text: 'Lokal konfiguriertes Display' },
+            ]"
+            @update:model-value="updateState('openWB/general/extern_display_mode', $event)"
+          >
+            <template #help>
+              "Display der primary openWB" verwendet das Theme der primary openWB. "Lokal konfiguriertes Display"
+              verwendet das auf dieser secondary openWB gespeicherte Theme, zum Beispiel um nur eine evcc-Seite
+              anzuzeigen. Ein bereits weitergeleiteter Display-Browser muss gegebenenfalls neu gestartet werden.
+            </template>
+          </openwb-base-select-input>
         </div>
         <div v-else>
           <hr />
@@ -179,6 +191,8 @@
               secondary openWB steht, angelegt.
             </p>
           </openwb-base-alert>
+        </div>
+        <div v-if="showThemeSettings">
           <hr />
           <div v-if="$store.state.mqtt['openWB/optional/int_display/theme'] !== undefined">
             <openwb-base-select-input
@@ -232,10 +246,15 @@ export default {
         { topic: "openWB/optional/int_display/theme", writeable: true },
         { topic: "openWB/system/configurable/display_themes", writeable: false },
         { topic: "openWB/system/security/user_management_active", writeable: false },
+        { topic: "openWB/general/extern_display_mode", writeable: true },
       ],
     };
   },
   computed: {
+    showThemeSettings() {
+      const extern = this.$store.state.mqtt["openWB/general/extern"];
+      return extern !== true || this.$store.state.mqtt["openWB/general/extern_display_mode"] === "local";
+    },
     displayThemeList() {
       return this.$store.state.mqtt["openWB/system/configurable/display_themes"];
     },
