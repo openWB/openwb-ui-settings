@@ -10,9 +10,10 @@
       @update:model-value="updateConfiguration($event, 'configuration.chargepoint_id')"
     >
       <template #help>
-        Den Ladepunkt der openWB auswählen, an der sich die Wallbox-Steckdose befindet. Die IP-Adresse wird aus dessen
-        Konfiguration übernommen. Die Wallbox-Steckdose muss nur auf der Primary konfiguriert werden. In der Secondary
-        wird diese automatisch erkannt.
+        Den Ladepunkt der openWB auswählen, an der sich die Wallbox-Steckdose befindet. IP-Adresse und Typ werden aus
+        dessen Konfiguration übernommen. Die passende Schnittstelle für Series oder Pro wird automatisch gewählt. Bei
+        einer Series muss die Wallbox-Steckdose nur auf der Primary konfiguriert werden. In der Secondary wird diese
+        automatisch erkannt.
       </template>
     </openwb-base-select-input>
   </div>
@@ -32,6 +33,7 @@ export default {
         if (
           match &&
           (chargepoint?.type === "external_openwb" ||
+            chargepoint?.type === "openwb_pro" ||
             (chargepoint?.type === "internal_openwb" && chargepoint.configuration?.mode === "series"))
         ) {
           const id = Number(match[1]);
