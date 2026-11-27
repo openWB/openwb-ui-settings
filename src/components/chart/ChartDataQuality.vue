@@ -1,11 +1,13 @@
 <template>
   <div
-    v-if="message || hasRecordingGaps || hasRecordedFaults"
+    v-if="message || hasRecordingGaps || hasRecordedFaults || hasRestrictedSummary"
     class="chart-data-quality"
   >
     <openwb-base-card
       :title="
-        message || hasRecordedFaults ? 'Energieverteilung nur eingeschränkt berechenbar' : 'Lücken in der Aufzeichnung'
+        message || hasRecordedFaults || hasRestrictedSummary
+          ? 'Energieverteilung nur eingeschränkt berechenbar'
+          : 'Lücken in der Aufzeichnung'
       "
       subtype="warning"
     >
@@ -18,9 +20,14 @@
         deshalb nur eingeschränkt beurteilbar. Eine bestimmte Ersatzberechnung ist durch diese Statuswerte allein nicht
         nachgewiesen.
       </p>
-      <p v-else>
+      <p v-else-if="hasRecordingGaps">
         Für den gewählten Tag wurden Lücken in der Aufzeichnung erkannt. Dadurch kann die zeitliche Zuordnung der
         Energie eingeschränkt sein. Eine Aufzeichnungslücke allein belegt keinen Gerätefehler.
+      </p>
+      <p v-else>
+        Für den gewählten Zeitraum ist eine eingeschränkte Datenbasis erfasst. Betroffene Tageswerte fließen auch in die
+        Monats- und Jahressummen ein; Summen und Energieanteile können deshalb voneinander abweichen. Prüfe für
+        Einzelheiten die Tagesansicht der betroffenen Tage.
       </p>
       <ul
         v-if="gridFallback || zeroFallback"
@@ -41,7 +48,10 @@
         Anbindung geprüft werden.
       </p>
 
-      <details class="quality-details">
+      <details
+        v-if="message || hasRecordingGaps || hasRecordedFaults"
+        class="quality-details"
+      >
         <summary>Betroffene Zeiträume und Hilfe anzeigen</summary>
         <div class="pt-3">
           <template v-if="range === 'day' && quality.components.length">
@@ -127,7 +137,7 @@
 
 <script>
 import OpenwbBaseCard from "../OpenwbBaseCard.vue";
-import { analyseLogQuality, logMessage } from "./logDataQuality.js";
+import { analyseLogQuality, hasRestrictedLogData, logMessage } from "./logDataQuality.js";
 
 export default {
   name: "ChartDataQuality",
@@ -143,6 +153,9 @@ export default {
     },
     quality() {
       return analyseLogQuality(this.log, this.accessible);
+    },
+    hasRestrictedSummary() {
+      return hasRestrictedLogData(this.log);
     },
     hasRecordingGaps() {
       return this.range === "day" && this.quality.gaps.length > 0;

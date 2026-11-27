@@ -214,7 +214,7 @@ Chart.register(
 );
 import ChartLegend from "../components/chart/ChartLegend.vue";
 import ChartDataQuality from "../components/chart/ChartDataQuality.vue";
-import { analyseLogQuality, logMessage } from "../components/chart/logDataQuality.js";
+import { analyseLogQuality, hasRestrictedLogData, logMessage } from "../components/chart/logDataQuality.js";
 import { markRaw, toRaw } from "vue";
 
 // list of keys in the chart data that contain objects with measurement values that should be included
@@ -1183,7 +1183,7 @@ export default {
       return logMessage(this.chartLog);
     },
     chartHasQualityWarning() {
-      if (this.chartCalculationMessage) {
+      if (this.chartCalculationMessage || hasRestrictedLogData(this.chartLog)) {
         return true;
       }
       if (this.chartRange !== "day") {

@@ -6,6 +6,10 @@ export function logMessage(log) {
   return typeof log?.message === "string" ? log.message.trim() : "";
 }
 
+export function hasRestrictedLogData(log) {
+  return log?.data_quality?.restricted === true;
+}
+
 const timeFormatter = new Intl.DateTimeFormat("de-DE", {
   hour: "2-digit",
   minute: "2-digit",
