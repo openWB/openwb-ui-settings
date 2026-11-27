@@ -98,7 +98,10 @@
                 openWB berechnet Summen und Energieanteile aus den Werten, die die eingebundenen Geräte liefern.
                 Abweichungen zu Speicher- oder Wechselrichterportalen sind möglich: Dort können beispielsweise
                 Eigenverbräuche, Speicherverluste, Messpunkte oder Zeiträume anders berücksichtigt werden. Zudem stammen
-                Gerätewerte häufig nicht aus geeichten Zählern.
+                Gerätewerte häufig nicht aus geeichten Zählern. Durch vorübergehende Verbindungsausfälle (z. B.
+                unterbrochene Netzwerkverbindung) kann es zu Lücken in den Verbrauchsdaten und Abweichungen bei der
+                Energieaufteilung kommen. Darum können Summen und aufaddierte Verbrauchsanteile manchmal voneinander
+                abweichen.
               </p>
             </aside>
             <form name="chartTotalsForm">
