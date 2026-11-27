@@ -52,8 +52,9 @@
         >
           Es konnten keine Daten für diesen Zeitraum gefunden werden.
         </openwb-base-alert>
-        <div v-else>
+        <div v-if="chartDataHasEntries || chartHasQualityWarning">
           <openwb-base-card
+            v-if="chartDataHasEntries"
             title="Diagramm"
             :collapsible="true"
             :collapsed="false"
@@ -80,10 +81,33 @@
             :collapsible="true"
             :collapsed="true"
           >
+            <template #header>
+              <span>Summen</span>
+              <span
+                v-if="chartHasQualityWarning"
+                class="badge badge-warning ml-2"
+                >Datenbasis eingeschränkt</span
+              >
+            </template>
+            <aside
+              class="calculation-basis mb-3"
+              aria-label="Grundlage der Berechnung"
+            >
+              <strong>So entstehen die Summen</strong>
+              <p class="mb-0">
+                openWB berechnet Summen und Energieanteile aus den Werten, die die eingebundenen Geräte liefern.
+                Abweichungen zu Speicher- oder Wechselrichterportalen sind möglich: Dort können beispielsweise
+                Eigenverbräuche, Speicherverluste, Messpunkte oder Zeiträume anders berücksichtigt werden. Zudem stammen
+                Gerätewerte häufig nicht aus geeichten Zählern. Durch vorübergehende Verbindungsausfälle (z. B.
+                unterbrochene Netzwerkverbindung) kann es zu Lücken in den Verbrauchsdaten und Abweichungen bei der
+                Energieaufteilung kommen. Darum können Summen und aufaddierte Verbrauchsanteile manchmal voneinander
+                abweichen.
+              </p>
+            </aside>
             <form name="chartTotalsForm">
               <openwb-base-card
                 v-for="(group, groupKey) in Object.fromEntries(
-                  Object.entries(chartTotals).filter(([_, value]) => Object.keys(value).length > 0),
+                  Object.entries(chartTotals || {}).filter(([_, value]) => Object.keys(value).length > 0),
                 )"
                 :key="groupKey"
                 :collapsible="true"
@@ -129,6 +153,11 @@
                 </div>
               </openwb-base-card>
             </form>
+            <ChartDataQuality
+              :log="chartLog"
+              :range="chartRange"
+              :accessible="objectAccessible"
+            />
           </openwb-base-card>
         </div>
       </div>
@@ -184,6 +213,8 @@ Chart.register(
   ZoomPlugin,
 );
 import ChartLegend from "../components/chart/ChartLegend.vue";
+import ChartDataQuality from "../components/chart/ChartDataQuality.vue";
+import { analyseLogQuality, hasRestrictedLogData, logMessage } from "../components/chart/logDataQuality.js";
 import { markRaw, toRaw } from "vue";
 
 // list of keys in the chart data that contain objects with measurement values that should be included
@@ -912,7 +943,7 @@ const datasetTemplates = {
 
 export default {
   name: "OpenwbChartView",
-  components: { ChartjsLine, FontAwesomeIcon, ChartLegend },
+  components: { ChartjsLine, FontAwesomeIcon, ChartLegend, ChartDataQuality },
   mixins: [ComponentState],
   props: {
     initialChartRange: {
@@ -1145,6 +1176,22 @@ export default {
     };
   },
   computed: {
+    chartLog() {
+      return this.$store.state.mqtt[this.baseTopic + this.commandData.date] || {};
+    },
+    chartCalculationMessage() {
+      return logMessage(this.chartLog);
+    },
+    chartHasQualityWarning() {
+      if (this.chartCalculationMessage || hasRestrictedLogData(this.chartLog)) {
+        return true;
+      }
+      if (this.chartRange !== "day") {
+        return false;
+      }
+      const quality = analyseLogQuality(this.chartLog, this.objectAccessible);
+      return quality.gaps.length > 0 || quality.components.length > 0;
+    },
     logDataReady() {
       return this.$store.state.mqtt["openWB/system/log_data_ready"] === true;
     },
@@ -2237,6 +2284,12 @@ export default {
 </script>
 
 <style scoped>
+.calculation-basis {
+  border-left: 3px solid #6c757d;
+  padding: 0.5rem 0 0.5rem 0.9rem;
+  font-size: 0.9rem;
+}
+
 .openwb-chart {
   min-height: 400px;
 }
