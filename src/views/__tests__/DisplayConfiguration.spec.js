@@ -108,6 +108,8 @@ describe("Display configuration", () => {
   it("publishes the theme before the display source", () => {
     mountView({ [externTopic]: true, [modeTopic]: "local" });
     const topics = wrapper.vm.mqttTopicsToPublish;
+    expect(topics).toContain(themeTopic);
+    expect(topics).toContain(modeTopic);
     expect(topics.indexOf(themeTopic)).toBeLessThan(topics.indexOf(modeTopic));
   });
 });
